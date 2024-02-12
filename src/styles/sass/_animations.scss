@@ -1,0 +1,165 @@
+@import '../../styles/sass/mixins';
+
+@keyframes cardswipe {
+	100% {
+		transform: translate(5vw, 10vh) rotate(0);
+	}
+}
+
+@keyframes cardreverseswipe {
+	0% {
+		transform: translate(5vw, 10vh) rotate(0);
+	}
+
+	100% {
+		transform: translate(0, 0) rotate(-45deg);
+	}
+}
+
+@keyframes cardrotate {
+	100% {
+		transform: rotateX(15deg) rotateY(10deg);
+	}
+}
+
+@keyframes cardreverserotate {
+	0% {
+		transform: rotateX(15deg) rotateY(10deg);
+	}
+
+	100% {
+		transform: rotateX(35deg) rotateY(15deg);
+	}
+}
+
+@keyframes tabletreversemoveup {
+	0% {
+		transform: rotate(-35deg) translate(8vw, 7vh);
+	}
+
+	100% {
+		transform: rotate(-35deg) translate(8vw, 12vh);
+	}
+}
+
+@keyframes textfadein {
+	0% {
+		transform: translateY(10vh);
+		opacity: 0;
+	}
+
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes navbarexpand {
+	0% {
+		width: 0;
+	}
+
+	100% {
+		width: 45vw;
+	}
+}
+
+@keyframes navbarshrink {
+	0% {
+		width: 45vw;
+	}
+
+	100% {
+		width: 0;
+	}
+}
+
+// MEDIA QUERIES
+
+@include media-ml {
+	@keyframes tabletmoveup {
+		100% {
+			transform: rotate(-35deg) translate(15vw, 7vh);
+		}
+	}
+
+	@keyframes tabletreversemoveup {
+		0% {
+			transform: rotate(-35deg) translate(15vw, 7vh);
+		}
+
+		100% {
+			transform: rotate(-35deg) translate(15vw, 12vh);
+		}
+	}
+}
+
+@include media-md {
+	@keyframes cardswipe {
+		100% {
+			transform: translate(7vw, 5vh);
+		}
+	}
+}
+
+@include media-sl {
+	@keyframes swipemovedown {
+		100% {
+			transform: rotate(-35deg) translate(11vw, 3vh);
+		}
+	}
+
+	@keyframes tabletmoveup {
+		100% {
+			transform: rotate(-35deg) translate(15vw, 0vh);
+		}
+	}
+
+	@keyframes swipereversemovedown {
+		0% {
+			transform: rotate(-35deg) translate(11vw, 3vh);
+		}
+
+		100% {
+			transform: rotate(-35deg) translate(11vw, -2vh);
+		}
+	}
+
+	@keyframes tabletreversemoveup {
+		0% {
+			transform: rotate(-35deg) translate(15vw, 0vh);
+		}
+
+		100% {
+			transform: rotate(-35deg) translate(15vw, 5vh);
+		}
+	}
+
+	@keyframes navbarexpand {
+		0% {
+			width: 0;
+		}
+
+		100% {
+			width: 70vw;
+		}
+	}
+
+	@keyframes navbarshrink {
+		0% {
+			width: 70vw;
+		}
+
+		100% {
+			width: 0;
+		}
+	}
+}
+
+@include media-ss {
+	@keyframes tabletmoveup {
+		100% {
+			transform: rotate(-35deg) translate(15vw, 2vh);
+		}
+	}
+}

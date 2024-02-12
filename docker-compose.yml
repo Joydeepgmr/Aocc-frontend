@@ -1,0 +1,11 @@
+version: "3.4"
+services:
+  frontend:
+    image: frontend
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: frontend
+    ports:
+      - 5003:80

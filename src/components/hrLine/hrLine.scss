@@ -1,0 +1,43 @@
+@import '../../styles/sass/mixins';
+@import '../../styles/sass/variables';
+
+.HrLine {
+	@include flex(center, space-between, row);
+	width: 100%;
+	margin: 1.5rem 0;
+	opacity: 0.6;
+	font-size: 1.2rem;
+	font-weight: 500;
+
+	&--Length {
+		width: 40%;
+	}
+}
+
+@include media-xl {
+	.HrLine {
+		font-size: 1.1rem;
+	}
+}
+
+@include media-l {
+	.HrLine {
+		font-size: 1rem;
+	}
+}
+
+@include media-ml {
+	.HrLine {
+		font-size: 0.9rem;
+	}
+}
+
+@include media-sl {
+	.HrLine {
+		font-size: 1.5rem;
+
+		&--Length {
+			width: 43%;
+		}
+	}
+}

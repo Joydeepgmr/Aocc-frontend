@@ -1,0 +1,88 @@
+@import './variables';
+
+// Flexbox
+@mixin flex($align, $justify, $direction) {
+	display: flex;
+	align-items: $align;
+	justify-content: $justify;
+	flex-direction: $direction;
+}
+
+@mixin transition($time, $motion) {
+	transition: all $time $motion;
+}
+
+@mixin animate($time, $motion, $delay, $count, $direction, $fillmode, $state, $name) {
+	animation: $time $motion $delay $count $direction $fillmode $state $name;
+}
+
+// To absolute center any element w.r.t viewport
+@mixin center {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+// To disable Scroll bar
+@mixin disableScroll {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	-ms-overflow-style: none;
+}
+
+// Mobile Responsivness Breakpoints
+@mixin media-xss {
+	@media screen and (max-width: 320px) {
+		@content;
+	}
+}
+
+@mixin media-ss {
+	@media screen and (max-width: 360px) {
+		@content;
+	}
+}
+
+@mixin media-sm {
+	@media screen and (max-width: 395px) {
+		@content;
+	}
+}
+
+@mixin media-sl {
+	@media screen and (max-width: 450px) {
+		@content;
+	}
+}
+
+@mixin media-md {
+	@media screen and (max-width: 812px) {
+		@content;
+	}
+}
+
+@mixin media-ml {
+	@media screen and (max-width: 1112px) {
+		@content;
+	}
+}
+
+@mixin media-l {
+	@media screen and (max-width: 1440px) {
+		@content;
+	}
+}
+
+@mixin media-xl {
+	@media screen and (max-width: 1600px) {
+		@content;
+	}
+}
+
+@mixin media-xxl {
+	@media screen and (max-width: 1920px) {
+		@content;
+	}
+}
