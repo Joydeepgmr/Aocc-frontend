@@ -1,0 +1,6 @@
+@import '../../styles/sass/utils';
+ 
+.checkbox-group{
+    @extend .flex-row;
+    justify-content: start;
+}
