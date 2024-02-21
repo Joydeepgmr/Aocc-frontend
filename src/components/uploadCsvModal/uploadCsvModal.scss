@@ -1,0 +1,56 @@
+@import '../../styles/sass/utils';
+@import '../../styles/sass/variables';
+
+.upload-csv-border{
+    border: 1px dashed $gray_400;
+    padding: 2.4rem;
+    border-radius: 1.2rem;
+    gap: 8rem;
+    height: 37.2rem;
+    width: 67.2rem;
+    align-items: center;
+}
+
+.csv-container{
+    @extend .flex-col;    
+    align-items: center;
+    gap: 2.4rem;
+    height: 100%;
+    p{
+        font-family: $tertiary_font;
+        font-weight: 400;
+        font-size: 1.6rem;
+        color: $dark_400;
+    }
+}
+
+.csv-line{
+    border: 1px solid $gray_300;
+    width: 22.5rem;
+}
+
+.csv-line-box{
+    @extend .flex-row;
+    gap: 1.5rem;
+}
+
+.browse-files-button{
+    padding: 1.2rem 2.4rem;
+    border-radius: 12px;
+    width: 14.3rem;
+    height: 4.4rem;
+    border: none;
+    background-color: $gray_200;
+}
+
+.support-csv{
+   position: absolute;
+    bottom: 4rem; /* Position 1 rem above the bottom */
+    text-align: center;
+    width: 87%;
+    color: $dark_300;
+    font-family: $tertiary_font;
+    font-size: 1.4rem;
+    font-weight: 400;
+
+}
