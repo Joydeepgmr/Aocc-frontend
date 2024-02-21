@@ -1,0 +1,11 @@
+@import '../../../styles/sass/utils';
+
+.hello{
+    width: 50rem;
+}
+
+.margin{
+    @extend .mt-2;
+    margin-left: 10px;
+}
+

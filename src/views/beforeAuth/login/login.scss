@@ -1,0 +1,19 @@
+@import '../../../styles/sass/utils';
+@import '../../../styles/sass/variables';
+
+
+.login-page{
+    @extend .flex-row;
+}
+
+.login-container{
+    width: 41%;
+}
+
+.login-image{
+    width: 59%;
+    height: 100vh; /* Set the height to cover the entire viewport */
+    // background-image: url('#{loginPageImage}');
+    background-size: cover;
+    background-position: center;
+}

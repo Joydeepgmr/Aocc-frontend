@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
-// import { setUserName } from './Redux/action'; "./Redux/action"
-import HrLine from '../../../components/hrLine/hrLine';
-// import Button from "../../../components/Button/Button";
 import { Pathname } from '../../../pathname';
 
 import { setUserName } from './redux/reducer';
@@ -69,7 +65,6 @@ export const Dashboard = () => {
 									</div>
 								</div>
 							</div>
-							<HrLine title="OR" />
 							<div className="Dashboard--HomeTopRightContent">
 								<h1 className="Dashboard--SubTitle">
 									<img className="Dashboard--SubTitleEmoji" /> Lazy to share?
