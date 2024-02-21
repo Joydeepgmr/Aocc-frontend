@@ -1,0 +1,81 @@
+@import '../../../styles/sass/variables';
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-savebutton {
+    color: white;
+    background-color: $button_color;
+    font-weight: $font_weight;
+    font-family: $button_font;
+    width: 8.5rem;
+    height: 4.4rem;
+    border-radius: 1.2rem;
+    padding: 1.2rem 2.4rem 1.2rem 2.4rem;
+    gap: 0.8rem;
+    line-height: 2.008rem;
+    margin-right: 2rem;
+}
+
+.custom-cancelbutton {
+    color: black;
+    background-color: #F1F3F5;
+    font-family: $button_font;
+    font-weight: $font_weight;
+    width: 9.9rem;
+    height: 4.4rem;
+    border-radius: 1.2rem;
+    padding: 1.2rem 2.4rem 1.2rem 2.4rem;
+    gap: 0.8rem;
+    line-height: 2.008rem;
+    margin-right: 2rem;
+}
+
+.custom-textbutton {
+    color: #196CFD;
+    background-color: white;
+    font-family: $button_font;
+    width: 14.578rem;
+    height: 4.2rem;
+    padding: 1.2rem;
+    font-weight: $font_weight;
+    margin-right: 2rem;
+    box-shadow: none;
+}
+
+.custom-buttonEdit {
+    color: black;
+    background-color: #F1F3F5;
+    width: 3.6rem;
+    height: 3.6rem;
+    padding: 0.8rem;
+    border-radius: 1.2rem;
+    gap: 0.8rem;
+    margin-right: 2rem;
+}
+
+
+.criticalChip {
+    color: white;
+    background-color: #FA5252;
+}
+
+.cancelledChip {
+    color: #FA5252;
+    background-color: #FFE5E5;
+}
+
+.delayChip {
+    color: #FFD43B;
+    background-color: #FFFAE5;
+}
+
+.chip {
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
