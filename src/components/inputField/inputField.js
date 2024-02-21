@@ -14,6 +14,7 @@ const InputField = ({
 	disabled,
 	className = '',
 	suffixText,
+	status,
 }) => {
 	const renderLabel = () => {
 		return (
@@ -92,6 +93,7 @@ const InputField = ({
 						className={`input-field ${className}`}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
+						status={status}
 					/>
 				</Form.Item>
 			)}

@@ -39,14 +39,7 @@ export const Components = () => {
 		<React.Fragment>
 			<div className="margin">
 				<Form form={form} layout="vertical" onFinish={onFinish}>
-					<div style={{ display: 'flex', alignContent: 'center' }}>
-						<InputField
-							label="Airport Name"
-							name="airportName"
-							placeholder="Write Airport Name"
-							required
-							warning="Required field"
-						/>
+					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<InputField
 							label="Airport Name"
 							name="airportName"
@@ -78,6 +71,16 @@ export const Components = () => {
 							required
 							suffixText="hours"
 							type="password"
+						/>
+					</div>
+					<div>
+						<InputField
+							label="Error State"
+							name="airportName"
+							placeholder="Error state"
+							required
+							warning="Required field"
+							status="error"
 						/>
 					</div>
 					<Divider />
