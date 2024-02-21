@@ -1,6 +1,7 @@
 @import '../../styles/sass/variables';
 
 .custom-tag {
+  cursor: pointer;
   font-family: $button_font;
   display: flex;
   align-items: center;
