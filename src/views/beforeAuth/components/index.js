@@ -6,22 +6,17 @@ import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
-import { Divider } from 'antd';
 
 
 const Components = () => {
-	const hello = () => {
-		alert('hello1');
-	}
-
 	const dropdownItems = [
 		{
-			label: <a href="https://www.antgroup.com">1st menu item</a>,
+			label: <a href="https://ant.design/docs/spec/shadow">1st menu item</a>,
 			value: 'assdf',
 			key: '0',
 		},
 		{
-			label: <a href="https://www.aliyun.com">2nd menu item</a>,
+			label: <a href="https://mui.com/material-ui/all-components/">2nd menu item</a>,
 			value: 'rgreg',
 			key: '1',
 		},
@@ -39,29 +34,52 @@ const Components = () => {
 
 	return (
 		<React.Fragment>
-			<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop:'3rem' }}>
 
-				<div className="button-container">
-					<Button onClick={hello} title="Save" type='text' className="custom-savebutton" />
-					<Button onClick={hello} title="Cancel" type='text' className="custom-cancelbutton" />
-					<Button onClick={hello} title="View Details" type='text' className="custom-textbutton" />
-					<Button onClick={hello} title='Edit' type='edit' className="custom-buttonEdit" />
-					<Button onClick={hello} title='Delete' type='delete' className="custom-buttonEdit" />
-					<Button onClick={hello} title='rightArrow' type='rightArrow' className="custom-buttonEdit" />
-					<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
-				</div>
-
-				<Divider />
-
-				<TextField />
-				
-				<Divider />
-
+			<div className="container">
+				<Button onClick={() => {
+					alert('Filled button');
+				}} title="Save" type='text' className="custom_savebutton" />
+				<Button onClick={() => {
+					alert('Filled button');
+				}} title="Cancel" type='text' className="custom_cancelbutton" />
+				<Button onClick={() => {
+					alert('Text button');
+				}} title="View Details" type='text' className="custom_textbutton" />
+				<Button onClick={() => {
+					alert('Edit button');
+				}} title='Edit' type='edit' className="custom_buttonEdit" />
+				<Button onClick={() => {
+					alert('Delete button');
+				}} title='Delete' type='delete' className="custom_buttonEdit" />
+				<Button onClick={() => {
+					alert('Arrow button');
+				}} title='Arrow' type='arrow' className="custom_arrow" />
+				<Button onClick={() => {
+					alert('Right Arrow button');
+				}} title='RightArrow' type='rightArrow' className="custom_arrowbutton" />
+				<Button onClick={() => {
+					alert('Left Arrow button');
+				}} title='LeftArrow' type='leftArrow' className="custom_arrowbutton" />
+				<Button onClick={() => {
+					alert('Filter button');
+				}} title='Filter' type='filter' className="custom_filter" />
+				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
 			</div>
-			<div className='chip'>
+
+			<hr />
+
+			<div className='container'>
+				<TextField row={6} placeholder={'Type in here....'} className='custom_field'/>
+			</div>
+
+			<hr />
+
+			<div className='container'>
 				<Chip text="Critical" className='criticalChip' />
 				<br />
 				<Chip text="Cancelled" className='cancelledChip' />
+				<br />
+				<Chip text="Notice" className='noticeChip' />
 				<br />
 				<Chip text="Delay" className='delayChip' />
 			</div>

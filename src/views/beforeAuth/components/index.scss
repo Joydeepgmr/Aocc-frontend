@@ -1,13 +1,15 @@
 @import '../../../styles/sass/variables';
 
-.button-container {
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 3rem 0;
+    // background-color: black;
 }
 
-.custom-savebutton {
-    color: white;
+.custom_savebutton {
+    color: $white;
     background-color: $button_color;
     font-weight: $font_weight;
     font-family: $button_font;
@@ -17,16 +19,11 @@
     padding: 1.2rem 2.4rem 1.2rem 2.4rem;
     gap: 0.8rem;
     line-height: 2.008rem;
-    margin-right: 2rem;
-
-    // &:hover{
-    //     color: white;
-    //     background-color:#114db6;
-    // }
+    margin: 0 2rem;
 }
 
-.custom-cancelbutton {
-    color: black;
+.custom_cancelbutton {
+    color: #000000;
     background-color: #F1F3F5;
     font-family: $button_font;
     font-weight: $font_weight;
@@ -36,51 +33,111 @@
     padding: 1.2rem 2.4rem 1.2rem 2.4rem;
     gap: 0.8rem;
     line-height: 2.008rem;
-    margin-right: 2rem;
+    margin: 0 2rem;
 }
 
-.custom-textbutton {
-    color: #196CFD;
+.custom_textbutton {
+    color: $button_color;
     background-color: white;
     font-family: $button_font;
     width: 14.578rem;
     height: 4.2rem;
     padding: 1.2rem;
     font-weight: $font_weight;
-    margin-right: 2rem;
+    margin: 0 2rem;
     box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.custom-buttonEdit {
-    color: black;
+.custom_buttonEdit {
     background-color: #F1F3F5;
     width: 3.6rem;
     height: 3.6rem;
     padding: 0.8rem;
     border-radius: 1.2rem;
     gap: 0.8rem;
-    margin-right: 2rem;
-}
-
-
-.criticalChip {
-    color: white;
-    background-color: #FA5252;
-}
-
-.cancelledChip {
-    color: #FA5252;
-    background-color: #FFE5E5;
-}
-
-.delayChip {
-    color: #FFD43B;
-    background-color: #FFFAE5;
-}
-
-.chip {
-    height: 5rem;
+    margin: 0 2rem;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+}
+
+.custom_arrow {
+    background-color: transparent;
+    width: 3.6rem;
+    height: 3.6rem;
+    padding: 0.8rem;
+    border-radius: 1.2rem;
+    gap: 0.8rem;
+    margin: 0 2rem;
+}
+
+.button{
+    &.custom_arrowbutton{
+        background-color: black;
+        width: 3.6rem;
+        height: 3.6rem;
+        padding: 0.8rem;
+        gap: 0.8rem;
+        margin: 0 2rem;
+        border-radius: 10rem;
+        border:0.1rem solid #E9ECEF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    &.custom_filter{
+        background-color: white;
+        width: 4.4rem;
+        height: 4.4rem;
+        padding: 0.8rem;
+        gap: 0.8rem;
+        margin: 0 2rem;
+        border-radius: 1.6rem;
+        border:0.1rem solid #E9ECEF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.custom_textarea{
+    &.custom_field{
+        background-color: #f0f2f5;
+        width: 30rem;
+    }
+}
+
+.custom_chip{
+    border: 0;
+    &.criticalChip {
+        color: white;
+        background-color: #FA5252;
+        width: 7rem;
+        height: 3rem;
+    }
+    
+    &.noticeChip{
+        color: #5C5F66;
+        background-color: #E9ECEF;
+        width: 7rem;
+        height: 3rem;
+    }
+    
+    &.cancelledChip {
+        color: #FA5252;
+        background-color: #FFE5E5;
+        width: 9rem;
+        height: 3rem;
+    }
+    
+    &.delayChip {
+        color: #FFD43B;
+        background-color: #FFFAE5;
+        width: 6rem;
+        height: 3rem;
+    }
 }
