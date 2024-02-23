@@ -1,12 +1,10 @@
 import React from 'react';
+import  {Tag}  from 'antd';
 import './chip.scss';
-import { Space, Tag } from 'antd';
 
-const Chip = ({ text, className }) => (
-  <>
-    <Space size={[0, 8]} wrap>
-      <Tag className={`custom-tag ${className}`}>{text}</Tag>
-    </Space>
+const Chip = ({ text, className, onClick, ...rest }) => (
+  <> 
+      <Tag className={`custom_chip ${className}`} onClick={onClick} {...rest}>{text}</Tag>
   </>
 );
 
