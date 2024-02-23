@@ -13,6 +13,7 @@ const CheckBoxField = ({
 	required,
 	label,
 	className = '',
+	rest,
 }) => {
 	return (
 		<>
@@ -26,6 +27,7 @@ const CheckBoxField = ({
 							message: message ? message : 'This field is required.',
 						},
 					]}
+					{...rest}
 				>
 					<Checkbox.Group className={`checkbox_group ${className}`}>
 						{options?.map((data, index) => {
@@ -38,7 +40,7 @@ const CheckBoxField = ({
 					</Checkbox.Group>
 				</Form.Item>
 			) : (
-				<Form.Item name={name} valuePropName="checked">
+				<Form.Item name={name} valuePropName="checked" {...rest}>
 					<Checkbox>{label}</Checkbox>
 				</Form.Item>
 			)}

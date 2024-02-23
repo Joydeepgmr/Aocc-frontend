@@ -15,6 +15,7 @@ const InputField = ({
 	className = '',
 	suffixText,
 	status,
+	rest,
 }) => {
 	const renderLabel = () => {
 		return (
@@ -49,6 +50,7 @@ const InputField = ({
 						disabled={disabled ? disabled : false}
 						className={`input_field ${className}`}
 						suffix={suffixText && <span>{suffixText}</span>}
+						{...rest}
 					/>
 				</Form.Item>
 			) : type === 'password' ? (
@@ -70,6 +72,7 @@ const InputField = ({
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
 						className={`input_field ${className}`}
+						{...rest}
 					/>
 				</Form.Item>
 			) : (
@@ -94,6 +97,7 @@ const InputField = ({
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
 						status={status}
+						{...rest}
 					/>
 				</Form.Item>
 			)}
