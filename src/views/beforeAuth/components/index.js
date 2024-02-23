@@ -136,6 +136,7 @@ export const Components = () => {
 
 					<div className="margin">
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 					</div>
 				</Form>
 			</div>
