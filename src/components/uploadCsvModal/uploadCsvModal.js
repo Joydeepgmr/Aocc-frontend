@@ -23,13 +23,13 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width }) => {
 	return (
 		<>
 			<ModalComponent title="Upload a CSV sheet" isModalOpen={isModalOpen} width={width} closeModal={closeModal}>
-				<div className="upload-csv-border" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
-					<div className="csv-container">
+				<div className="upload_csv_border" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
+					<div className="csv_container">
 						<p>Drag and Drop files here</p>
-						<div className="csv-line-box">
-							<div className="csv-line"></div>
+						<div className="csv_line_box">
+							<div className="csv_line"></div>
 							<div>OR</div>
-							<div className="csv-line"></div>
+							<div className="csv_line"></div>
 						</div>
 						<Upload
 							onChange={handleFileSelect}
@@ -42,10 +42,10 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width }) => {
 								return false;
 							}}
 						>
-							<Button className="browse-files-button">Browse Files</Button>
+							<Button className="browse_files_button">Browse Files</Button>
 						</Upload>
 					</div>
-					<div className="support-csv">Supports: CSV files</div>
+					<div className="support_csv">Supports: CSV files</div>
 				</div>
 			</ModalComponent>
 		</>

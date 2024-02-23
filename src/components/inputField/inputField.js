@@ -47,7 +47,7 @@ const InputField = ({
 					<Input
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input-field ${className}`}
+						className={`input_field ${className}`}
 						suffix={suffixText && <span>{suffixText}</span>}
 					/>
 				</Form.Item>
@@ -69,7 +69,7 @@ const InputField = ({
 					<Input.Password
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input-field ${className}`}
+						className={`input_field ${className}`}
 					/>
 				</Form.Item>
 			) : (
@@ -90,7 +90,7 @@ const InputField = ({
 					<Input
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input-field ${className}`}
+						className={`input_field ${className}`}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
 						status={status}

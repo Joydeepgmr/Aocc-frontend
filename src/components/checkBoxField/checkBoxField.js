@@ -27,7 +27,7 @@ const CheckBoxField = ({
 						},
 					]}
 				>
-					<Checkbox.Group className={`checkbox-group ${className}`}>
+					<Checkbox.Group className={`checkbox_group ${className}`}>
 						{options?.map((data, index) => {
 							return (
 								<Checkbox key={index} value={selectedValue ? data?.[selectedValue] : data}>
