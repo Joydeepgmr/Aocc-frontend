@@ -1,0 +1,13 @@
+@import '../../styles/sass/variables';
+
+.custom_chip {
+  cursor: pointer;
+  font-family: $button_font;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 1.2rem 0.4rem 1.2rem;
+  border-radius: 1.6rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+}

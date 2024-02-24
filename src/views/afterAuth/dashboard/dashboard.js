@@ -71,18 +71,6 @@ export const Dashboard = () => {
 								</h1>
 								<p className="Dashboard--Para Dashboard--ParaRubik">Skip waitlist.</p>
 							</div>
-							{/*<Button
-								title="Skip for ₹49"
-								type="action"
-								style={{
-									opacity: '1',
-									width: '45%',
-									borderRadius: '5rem',
-									fontFamily: "'Rubik', sans-serif",
-									padding: '1rem 0'
-								}}
-								onClick={""}
-							/>*/}
 						</div>
 					</div>
 					<a

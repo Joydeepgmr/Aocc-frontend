@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '../../../components/button/button';
+// import Button from '../../../components/button/button';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
 import './index.scss';
@@ -7,13 +7,39 @@ import ModalComponent from '../../../components/modalComponent/modalComponent';
 import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
 import { items } from './indexData';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import CheckBoxField from '../../../components/checkboxField/checkboxField';
+import CheckBoxField from '../../../components/checkBoxField/checkBoxField';
+import Button from '../../../components/button/button';
+import DropdownButton from '../../../components/dropdownButton/dropdownButton';
+import Chip from '../../../components/chip/chip';
+import TextField from '../../../components/textField/textField';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
 
+	const dropdownItems = [
+		{
+			label: <a href="https://ant.design/docs/spec/shadow">1st menu item</a>,
+			value: 'assdf',
+			key: '0',
+		},
+		{
+			label: <a href="https://mui.com/material-ui/all-components/">2nd menu item</a>,
+			value: 'rgreg',
+			key: '1',
+		},
+		{
+			label: <a href="https://mui.com/material-ui">3rd menu item</a>,
+			value: 'jdhfkd',
+			key: '2',
+		},
+		{
+			label: <a href="https://ant.design/components/icon">4th menu item</a>,
+			value: 'kndf',
+			key: '3',
+		},
+	];
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -97,7 +123,11 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button title="Open Modal" type="submit" onClick={openModal} />
+							<Button
+								title="Open Modal"
+								isSubmit="submit"
+								onClick={openModal}
+							/>
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -110,7 +140,11 @@ export const Components = () => {
 							</ModalComponent>
 						</div>
 						<div>
-							<Button title="Open CSV Modal" type="submit" onClick={openCsvModal} />
+							<Button
+								title="Open CSV Modal"
+								isSubmit="submit"
+								onClick={openCsvModal}
+							/>
 							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 						</div>
 					</div>
@@ -139,6 +173,99 @@ export const Components = () => {
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 					</div>
 				</Form>
+			</div>
+			<div className="container">
+				<Button
+					onClick={() => {
+						alert('Filled button');
+					}}
+					title="Save"
+					type="text"
+					className="custom_savebutton"
+				/>
+				<Button
+					onClick={() => {
+						alert('Filled button');
+					}}
+					title="Cancel"
+					type="text"
+					className="custom_cancelbutton"
+				/>
+				<Button
+					onClick={() => {
+						alert('Text button');
+					}}
+					title="View Details"
+					type="text"
+					className="custom_textbutton"
+				/>
+				<Button
+					onClick={() => {
+						alert('Edit button');
+					}}
+					title="Edit"
+					type="edit"
+					className="custom_buttonEdit"
+				/>
+				<Button
+					onClick={() => {
+						alert('Delete button');
+					}}
+					title="Delete"
+					type="delete"
+					className="custom_buttonEdit"
+				/>
+				<Button
+					onClick={() => {
+						alert('Arrow button');
+					}}
+					title="Arrow"
+					type="arrow"
+					className="custom_arrow"
+				/>
+				<Button
+					onClick={() => {
+						alert('Right Arrow button');
+					}}
+					title="RightArrow"
+					type="rightArrow"
+					className="custom_arrowbutton"
+				/>
+				<Button
+					onClick={() => {
+						alert('Left Arrow button');
+					}}
+					title="LeftArrow"
+					type="leftArrow"
+					className="custom_arrowbutton"
+				/>
+				<Button
+					onClick={() => {
+						alert('Filter button');
+					}}
+					title="Filter"
+					type="filter"
+					className="custom_filter"
+				/>
+				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+			</div>
+
+			<hr />
+
+			<div className="container">
+				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
+			</div>
+
+			<hr />
+
+			<div className="container">
+				<Chip text="Critical" className="criticalChip" />
+				<br />
+				<Chip text="Cancelled" className="cancelledChip" />
+				<br />
+				<Chip text="Notice" className="noticeChip" />
+				<br />
+				<Chip text="Delay" className="delayChip" />
 			</div>
 		</React.Fragment>
 	);
