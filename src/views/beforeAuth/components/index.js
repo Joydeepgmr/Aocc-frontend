@@ -123,11 +123,7 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button
-								title="Open Modal"
-								isSubmit="submit"
-								onClick={openModal}
-							/>
+							<Button title="Open Modal" isSubmit="submit" onClick={openModal} />
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -140,11 +136,7 @@ export const Components = () => {
 							</ModalComponent>
 						</div>
 						<div>
-							<Button
-								title="Open CSV Modal"
-								isSubmit="submit"
-								onClick={openCsvModal}
-							/>
+							<Button title="Open CSV Modal" isSubmit="submit" onClick={openCsvModal} />
 							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 						</div>
 					</div>
