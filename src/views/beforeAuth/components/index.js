@@ -6,6 +6,8 @@ import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
+import Bell from '../../../assets/Bell.svg';
+import RightArrow from '../../../assets/RightArrow.svg';
 
 
 const Components = () => {
@@ -38,38 +40,28 @@ const Components = () => {
 			<div className="container">
 				<Button onClick={() => {
 					alert('Filled button');
-				}} title="Save" type='text' className="custom_savebutton" />
-				<Button onClick={() => {
-					alert('Filled button');
-				}} title="Cancel" type='text' className="custom_cancelbutton" />
+				}} title="Save" type='filledText' className="custom_filledButton" />
+
 				<Button onClick={() => {
 					alert('Text button');
 				}} title="View Details" type='text' className="custom_textbutton" />
+
 				<Button onClick={() => {
-					alert('Edit button');
-				}} title='Edit' type='edit' className="custom_buttonEdit" />
+					alert('Icon Button with Border');
+				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon" className="custom_arrowbutton" />
+
 				<Button onClick={() => {
-					alert('Delete button');
-				}} title='Delete' type='delete' className="custom_buttonEdit" />
-				<Button onClick={() => {
-					alert('Arrow button');
-				}} title='Arrow' type='arrow' className="custom_arrow" />
-				<Button onClick={() => {
-					alert('Right Arrow button');
-				}} title='RightArrow' type='rightArrow' className="custom_arrowbutton" />
-				<Button onClick={() => {
-					alert('Left Arrow button');
-				}} title='LeftArrow' type='leftArrow' className="custom_arrowbutton" />
-				<Button onClick={() => {
-					alert('Filter button');
-				}} title='Filter' type='filter' className="custom_filter" />
+					alert('Icon Button');
+				}} icon={Bell} alt="bell icon" />
+
+
 				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
 			</div>
 
 			<hr />
 
 			<div className='container'>
-				<TextField row={6} placeholder={'Type in here....'} className='custom_field'/>
+				<TextField row={6} placeholder={'Type in here....'} className='custom_field' />
 			</div>
 
 			<hr />
