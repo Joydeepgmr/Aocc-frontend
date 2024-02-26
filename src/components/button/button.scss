@@ -10,13 +10,17 @@
 
 	&.button.filledTextButton:hover {
 		border: 0.1rem solid #c6cace;
-	  }
-	
-	  &.button.textButton:hover {
+	}
+
+	&.button.textButton:hover {
 		color: blue;
-	  }
-	
-	  &.button.iconBorderButton:hover {
+	}
+
+	&.button.iconBorderButton:hover {
 		border: 0.1rem solid $gray_700;
-	  }
+	}
+
+	&.button.iconButton:hover {
+		border: 0.1rem solid $gray_700;
+	}
 }
