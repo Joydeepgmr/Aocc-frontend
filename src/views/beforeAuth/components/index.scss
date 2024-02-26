@@ -18,7 +18,7 @@
     padding: 3rem 0;
 }
 
-.custom_filledButton {
+.filledButton {
     color: $white;
     background-color: $button_color;
     font-weight: $font_weight;
@@ -30,7 +30,7 @@
     line-height: 2.008rem;
 }
 
-.custom_textbutton {
+.textbutton {
     color: $button_color;
     background-color: white;
     font-family: $button_font;
@@ -44,8 +44,19 @@
     justify-content: center;
 }
 
-.custom_arrowbutton{
+.icon_withBorder{
     background-color: $gray_700;
+    width: 3.6rem;
+    height: 3.6rem;
+    padding: 0.8rem;
+    border-radius: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon_withoutBorder{
+    background-color: transparent;
     width: 3.6rem;
     height: 3.6rem;
     padding: 0.8rem;

@@ -168,100 +168,25 @@ export const Components = () => {
 					</div>
 				</Form>
 			</div>
-			<div className="container">
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Save"
-					type="text"
-					className="custom_savebutton"
-				/>
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Cancel"
-					type="text"
-					className="custom_cancelbutton"
-				/>
-				<Button
-					onClick={() => {
-						alert('Text button');
-					}}
-					title="View Details"
-					type="text"
-					className="custom_textbutton"
-				/>
-				<Button
-					onClick={() => {
-						alert('Edit button');
-					}}
-					title="Edit"
-					type="edit"
-					className="custom_buttonEdit"
-				/>
-				<Button
-					onClick={() => {
-						alert('Delete button');
-					}}
-					title="Delete"
-					type="delete"
-					className="custom_buttonEdit"
-				/>
-				<Button
-					onClick={() => {
-						alert('Arrow button');
-					}}
-					title="Arrow"
-					type="arrow"
-					className="custom_arrow"
-				/>
-				<Button
-					onClick={() => {
-						alert('Right Arrow button');
-					}}
-					title="RightArrow"
-					type="rightArrow"
-					className="custom_arrowbutton"
-				/>
-				<Button
-					onClick={() => {
-						alert('Left Arrow button');
-					}}
-					title="LeftArrow"
-					type="leftArrow"
-					className="custom_arrowbutton"
-				/>
-				<Button
-					onClick={() => {
-						alert('Filter button');
-					}}
-					title="Filter"
-					type="filter"
-					className="custom_filter"
-				/>
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
-			</div>
-
+			
 			<hr />
 
 			<div className="container">
 				<Button onClick={() => {
 					alert('Filled button');
-				}} title="Save" type='filledText' className="custom_filledButton" />
+				}} title="Save" type='filledText' className="filledButton" />
 
 				<Button onClick={() => {
 					alert('Text button');
-				}} title="View Details" type='text' className="custom_textbutton" />
+				}} title="View Details" type='text' className="textbutton" />
 
 				<Button onClick={() => {
 					alert('Icon Button with Border');
-				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon" className="custom_arrowbutton" />
+				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon" className="icon_withBorder" />
 
 				<Button onClick={() => {
 					alert('Icon Button');
-				}} icon={Bell} alt="bell icon" />
+				}} icon={Bell} alt="bell icon" className="icon_withoutBorder"/>
 
 
 				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
