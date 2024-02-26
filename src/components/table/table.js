@@ -28,8 +28,7 @@ const TableComponent = ({
     };
 
     return (
-        <div className='table-container'>
-            {tableTitle && <h3 className='table-title'>{tableTitle}</h3>}
+        <>
             <Table
                 columns={columns}
                 dataSource={data}
@@ -39,7 +38,7 @@ const TableComponent = ({
                     emptyText: <Empty description={emptyText} />
                 }}
             />
-        </div>
+        </>
     );
 };
 

@@ -295,7 +295,6 @@ export const Components = () => {
             		data={dummyData}
             		loading={loading}
             		onChange={handleTableChange}
-            		tableTitle="Dummy Table"
         		/> 
 
 			</div>
