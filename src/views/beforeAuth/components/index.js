@@ -12,6 +12,8 @@ import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
+import Bell from '../../../assets/Bell.svg';
+import RightArrow from '../../../assets/RightArrow.svg';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,23 +168,19 @@ export const Components = () => {
 					</div>
 				</Form>
 			</div>
+
+			<hr />
+
 			<div className="container">
 				<Button
 					onClick={() => {
 						alert('Filled button');
 					}}
 					title="Save"
-					type="text"
-					className="custom_savebutton"
+					type="filledText"
+					className="custom_filledButton"
 				/>
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Cancel"
-					type="text"
-					className="custom_cancelbutton"
-				/>
+
 				<Button
 					onClick={() => {
 						alert('Text button');
@@ -191,61 +189,26 @@ export const Components = () => {
 					type="text"
 					className="custom_textbutton"
 				/>
+
 				<Button
 					onClick={() => {
-						alert('Edit button');
+						alert('Icon Button with Border');
 					}}
-					title="Edit"
-					type="edit"
-					className="custom_buttonEdit"
-				/>
-				<Button
-					onClick={() => {
-						alert('Delete button');
-					}}
-					title="Delete"
-					type="delete"
-					className="custom_buttonEdit"
-				/>
-				<Button
-					onClick={() => {
-						alert('Arrow button');
-					}}
-					title="Arrow"
-					type="arrow"
-					className="custom_arrow"
-				/>
-				<Button
-					onClick={() => {
-						alert('Right Arrow button');
-					}}
-					title="RightArrow"
-					type="rightArrow"
+					type="iconWithBorder"
+					icon={RightArrow}
+					alt="arrow icon"
 					className="custom_arrowbutton"
 				/>
+
 				<Button
 					onClick={() => {
-						alert('Left Arrow button');
+						alert('Icon Button');
 					}}
-					title="LeftArrow"
-					type="leftArrow"
-					className="custom_arrowbutton"
+					icon={Bell}
+					alt="bell icon"
 				/>
-				<Button
-					onClick={() => {
-						alert('Filter button');
-					}}
-					title="Filter"
-					type="filter"
-					className="custom_filter"
-				/>
+
 				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
-			</div>
-
-			<hr />
-
-			<div className="container">
-				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
 			</div>
 
 			<hr />
