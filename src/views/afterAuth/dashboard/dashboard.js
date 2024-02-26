@@ -65,7 +65,6 @@ export const Dashboard = () => {
 									</div>
 								</div>
 							</div>
-						
 							<div className="Dashboard--HomeTopRightContent">
 								<h1 className="Dashboard--SubTitle">
 									<img className="Dashboard--SubTitleEmoji" /> Lazy to share?

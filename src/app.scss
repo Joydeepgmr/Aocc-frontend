@@ -5,6 +5,8 @@
 @import './styles/sass/variables';
 @import './styles/sass/mixins';
 
+
+
 * {
 	margin: 0;
 	padding: 0;
@@ -24,11 +26,10 @@ html {
 
 	body {
 		font-family: $main_font;
-		background-color: $light;
 		font-size: $text_size;
 		letter-spacing: 0.017rem;
 		line-height: 1;
-		overflow-x: hidden;
+		// overflow-x: hidden;
 		// background-color: $bgcolor;
 	}
 }
