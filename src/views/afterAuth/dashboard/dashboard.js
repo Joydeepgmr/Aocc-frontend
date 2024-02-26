@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
-// import { setUserName } from './Redux/action'; "./Redux/action"
-import HrLine from '../../../components/hrLine/hrLine';
-// import Button from "../../../components/Button/Button";
 import { Pathname } from '../../../pathname';
 
 import { setUserName } from './redux/reducer';
@@ -69,25 +65,12 @@ export const Dashboard = () => {
 									</div>
 								</div>
 							</div>
-							<HrLine title="OR" />
 							<div className="Dashboard--HomeTopRightContent">
 								<h1 className="Dashboard--SubTitle">
 									<img className="Dashboard--SubTitleEmoji" /> Lazy to share?
 								</h1>
 								<p className="Dashboard--Para Dashboard--ParaRubik">Skip waitlist.</p>
 							</div>
-							{/*<Button
-								title="Skip for ₹49"
-								type="action"
-								style={{
-									opacity: '1',
-									width: '45%',
-									borderRadius: '5rem',
-									fontFamily: "'Rubik', sans-serif",
-									padding: '1rem 0'
-								}}
-								onClick={""}
-							/>*/}
 						</div>
 					</div>
 					<a

@@ -1,0 +1,17 @@
+@import '../../styles/sass/variables';
+.custom_tabs_card .ant-tabs-nav .ant-tabs-tab {
+  background-color: white; /* Set the background color of non-active tabs to white */
+    border-top: white;
+    border-left: white;
+    border-right: white;
+
+}
+/* CustomTabs.css */
+.custom_tabs_card .ant-tabs-nav .ant-tabs-tab-active {
+  background-color: #196CFD; /* Set the background color of the active tab to blue */
+}
+
+.custom_tabs_card .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: white; /* Set the font color of the active tab to white */
+}
+
