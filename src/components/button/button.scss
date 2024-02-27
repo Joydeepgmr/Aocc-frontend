@@ -7,4 +7,16 @@
 	font-size: 1.6rem;
 	@include transition(0.2s, ease-in);
 	box-shadow: none;
+
+	&.button.filledTextButton:hover {
+		border: 0.1rem solid #c6cace;
+	  }
+	
+	  &.button.textButton:hover {
+		color: blue;
+	  }
+	
+	  &.button.iconBorderButton:hover {
+		border: 0.1rem solid $gray_700;
+	  }
 }
