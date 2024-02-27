@@ -12,11 +12,12 @@ import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
+import Bell from '../../../assets/Bell.svg';
+import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
-import Bell from '../../../assets/Bell.svg';
-import RightArrow from '../../../assets/RightArrow.svg';
+
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);

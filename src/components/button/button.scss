@@ -8,6 +8,18 @@
 	@include transition(0.2s, ease-in);
 	box-shadow: none;
 
+	&.button.filledTextButton {
+		color: $white;
+		background-color: $button_color;
+		font-weight: $font_weight;
+		font-family: $button_font;
+		width: 8.5rem;
+		height: 4.4rem;
+		border-radius: 1.2rem;
+		padding: 1.2rem 2.4rem 1.2rem 2.4rem;
+		line-height: 2.008rem;
+	}
+
 	&.button.filledTextButton:hover {
 		border: 0.1rem solid #c6cace;
 	}
