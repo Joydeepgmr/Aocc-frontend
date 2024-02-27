@@ -14,7 +14,7 @@ const Date = ({ label, placeholder, dateFormat = 'DD/MM/YYYY', handleChange,  ..
 					className="DateStyle"
 					placeholder={placeholder}
 					format={dateFormat}
-					// onChange={handleDateChange}
+					onChange={handleDateChange}
 				/>
 			</div>
 		</div>
