@@ -24,15 +24,53 @@
 		border: 0.1rem solid #c6cace;
 	}
 
+	&.button.textButton {
+		color: $button_color;
+		background-color: white;
+		font-family: $button_font;
+		width: 14.578rem;
+		height: 4.2rem;
+		padding: 1.2rem;
+		font-weight: $font_weight;
+		box-shadow: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	&.button.textButton:hover {
 		color: blue;
+	}
+
+	&.button.iconBorderButton {
+		background-color: $gray_700;
+		width: 3.6rem;
+		height: 3.6rem;
+		padding: 0.8rem;
+		border-radius: 10rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	&.button.iconBorderButton:hover {
 		border: 0.1rem solid $gray_700;
 	}
 
+	&.button.iconButton {
+		background-color: transparent;
+		width: 3.6rem;
+		height: 3.6rem;
+		padding: 0.8rem;
+		border-radius: 10rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	&.button.iconButton:hover {
 		border: 0.1rem solid $gray_700;
 	}
 }
+
+
