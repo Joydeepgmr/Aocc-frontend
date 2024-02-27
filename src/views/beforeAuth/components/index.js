@@ -20,6 +20,7 @@ import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 
+
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -216,47 +217,34 @@ export const Components = () => {
 					</div>
 				</Form>
 			</div>
-
+			
 			<hr />
 
 			<div className="container">
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Save"
-					type="filledText"
-					className="custom_filledButton"
-				/>
+				<Button onClick={() => {
+					alert('Filled button');
+				}} title="Save" type='filledText'/>
 
-				<Button
-					onClick={() => {
-						alert('Text button');
-					}}
-					title="View Details"
-					type="text"
-					className="custom_textbutton"
-				/>
+				<Button onClick={() => {
+					alert('Text button');
+				}} title="View Details" type='text'/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button with Border');
-					}}
-					type="iconWithBorder"
-					icon={RightArrow}
-					alt="arrow icon"
-					className="custom_arrowbutton"
-				/>
+				<Button onClick={() => {
+					alert('Icon Button with Border');
+				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon"/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button');
-					}}
-					icon={Bell}
-					alt="bell icon"
-				/>
+				<Button onClick={() => {
+					alert('Icon Button');
+				}} icon={Bell} alt="bell icon" className="icon_withoutBorder"/>
 
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+
+				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
+			</div>
+
+			<hr />
+
+			<div className='container'>
+				<TextField row={6} placeholder={'Type in here....'} className='custom_field'/>
 			</div>
 
 			<hr />
