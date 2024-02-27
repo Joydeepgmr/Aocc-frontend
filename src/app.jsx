@@ -6,8 +6,9 @@ import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Landing from './views/beforeAuth/landing/landing';
 import Login from './views/beforeAuth/login/login';
-
+import Plan from './views/afterAuth/plan/plan';
 import './app.scss';
+
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
@@ -20,6 +21,7 @@ export function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path={Pathname.LOGIN} element={<Login />} />
+					<Route path={Pathname.PLAN} element={<Plan />} />
 					<Route index path={Pathname.LANDING_PAGE} element={<Landing />} />
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route index element={<Dashboard />} />
