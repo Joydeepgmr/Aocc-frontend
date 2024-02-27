@@ -173,7 +173,7 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button title="Open Modal" isSubmit="submit" onClick={openModal} />
+							<Button title="Open Modal" type="filledText" isSubmit="submit" onClick={openModal} />
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -186,7 +186,7 @@ export const Components = () => {
 							</ModalComponent>
 						</div>
 						<div>
-							<Button title="Open CSV Modal" isSubmit="submit" onClick={openCsvModal} />
+							<Button title="Open CSV Modal" type="filledText"  isSubmit="submit" onClick={openCsvModal} />
 							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 						</div>
 					</div>
@@ -272,13 +272,7 @@ export const Components = () => {
 			</div>
 			<Divider />
 			<div className="margin">
-				<TableComponent
-					columns={columns}
-					data={dummyData}
-					loading={loading}
-					onChange={handleTableChange}
-					tableTitle="Dummy Table"
-				/>
+				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
 			</div>
 			<Divider />
 			<div className="container-column">
