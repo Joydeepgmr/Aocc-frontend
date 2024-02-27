@@ -318,7 +318,7 @@ export const Components = () => {
 			<Divider />
 			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />
-			<Date label="Date picker" placeholder="Date Picker" />
+			<Date label="Date picker" placeholder="Date Picker"  handleChange={handleChange}/>
 			<Divider />
 			<div className="container">
 				<MultiSelectComponent
