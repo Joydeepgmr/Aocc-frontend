@@ -20,7 +20,6 @@ import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 
-
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -187,7 +186,7 @@ export const Components = () => {
 							</ModalComponent>
 						</div>
 						<div>
-							<Button title="Open CSV Modal" type="filledText"  isSubmit="submit" onClick={openCsvModal} />
+							<Button title="Open CSV Modal" type="filledText" isSubmit="submit" onClick={openCsvModal} />
 							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 						</div>
 					</div>
@@ -217,34 +216,51 @@ export const Components = () => {
 					</div>
 				</Form>
 			</div>
-			
+
 			<hr />
 
 			<div className="container">
-				<Button onClick={() => {
-					alert('Filled button');
-				}} title="Save" type='filledText'/>
+				<Button
+					onClick={() => {
+						alert('Filled button');
+					}}
+					title="Save"
+					type="filledText"
+				/>
 
-				<Button onClick={() => {
-					alert('Text button');
-				}} title="View Details" type='text'/>
+				<Button
+					onClick={() => {
+						alert('Text button');
+					}}
+					title="View Details"
+					type="text"
+				/>
 
-				<Button onClick={() => {
-					alert('Icon Button with Border');
-				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon"/>
+				<Button
+					onClick={() => {
+						alert('Icon Button with Border');
+					}}
+					type="iconWithBorder"
+					icon={RightArrow}
+					alt="arrow icon"
+				/>
 
-				<Button onClick={() => {
-					alert('Icon Button');
-				}} icon={Bell} alt="bell icon" className="icon_withoutBorder"/>
+				<Button
+					onClick={() => {
+						alert('Icon Button');
+					}}
+					icon={Bell}
+					alt="bell icon"
+					className="icon_withoutBorder"
+				/>
 
-
-				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
+				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
 			</div>
 
 			<hr />
 
-			<div className='container'>
-				<TextField row={6} placeholder={'Type in here....'} className='custom_field'/>
+			<div className="container">
+				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
 			</div>
 
 			<hr />
@@ -300,7 +316,7 @@ export const Components = () => {
 			<Divider />
 			<Cards />
 			<Divider />
-			<CustomSelect SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
+			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />
 			<Date label="Date picker" placeholder="Date Picker" />
 			<Divider />

@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './planning.scss';
+import ShortTerm from '../shortterm/shortterm';
 const Planning = () => {
 	const [index, setIndex] = useState(0);
 	const items = [
 		{
 			key: '1',
-            label: 'Seasonal',
-          
-            
+			label: 'Seasonal',
 		},
 		{
 			key: '2',
 			label: 'Short Term',
+			children: <ShortTerm />,
 		},
 		{
 			key: '3',
@@ -26,7 +26,7 @@ const Planning = () => {
 	return (
 		<>
 			<div className="box">
-				<div className="mainhead">
+				<div>
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Operational Planning
 					</CustomTypography>
