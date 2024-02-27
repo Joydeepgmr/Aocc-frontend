@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-// import Button from '../../../components/button/button';
+import Cards from '../../../components/card/cards';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
+import CustomSelect from '../../../components/selectfield/select';
+import Date from '../../../components/datapicker/datepicker';
 import './index.scss';
 import ModalComponent from '../../../components/modalComponent/modalComponent';
 import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
@@ -47,6 +49,23 @@ export const Components = () => {
 			label: <a href="https://ant.design/components/icon">4th menu item</a>,
 			value: 'kndf',
 			key: '3',
+		},
+	];
+	const SelectData = [
+		{
+			id: '1',
+			label: 'options',
+			value: 'options',
+		},
+		{
+			id: '2',
+			label: 'options',
+			value: 'options',
+		},
+		{
+			id: '3',
+			label: 'options',
+			value: 'options',
 		},
 	];
 	const openModal = () => {
@@ -197,47 +216,34 @@ export const Components = () => {
 					</div>
 				</Form>
 			</div>
-
+			
 			<hr />
 
 			<div className="container">
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Save"
-					type="filledText"
-					className="custom_filledButton"
-				/>
+				<Button onClick={() => {
+					alert('Filled button');
+				}} title="Save" type='filledText'/>
 
-				<Button
-					onClick={() => {
-						alert('Text button');
-					}}
-					title="View Details"
-					type="text"
-					className="custom_textbutton"
-				/>
+				<Button onClick={() => {
+					alert('Text button');
+				}} title="View Details" type='text'/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button with Border');
-					}}
-					type="iconWithBorder"
-					icon={RightArrow}
-					alt="arrow icon"
-					className="custom_arrowbutton"
-				/>
+				<Button onClick={() => {
+					alert('Icon Button with Border');
+				}} type='iconWithBorder' icon={RightArrow} alt="arrow icon"/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button');
-					}}
-					icon={Bell}
-					alt="bell icon"
-				/>
+				<Button onClick={() => {
+					alert('Icon Button');
+				}} icon={Bell} alt="bell icon" className="icon_withoutBorder"/>
 
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+
+				<DropdownButton dropdownItems={dropdownItems} buttonText='Create' />
+			</div>
+
+			<hr />
+
+			<div className='container'>
+				<TextField row={6} placeholder={'Type in here....'} className='custom_field'/>
 			</div>
 
 			<hr />
@@ -296,6 +302,12 @@ export const Components = () => {
 					Subheading 3
 				</CustomTypography>
 			</div>
+			<Divider />
+			<Cards />
+			<Divider />
+			<CustomSelect SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
+			<Divider />
+			<Date label="Date picker" placeholder="Date Picker" />
 			<Divider />
 			<div className="container">
 				<MultiSelectComponent
