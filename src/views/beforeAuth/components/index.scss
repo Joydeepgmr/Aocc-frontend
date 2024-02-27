@@ -92,3 +92,12 @@
         height: 3rem;
     }
 }
+
+.container-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    // background-color: black;
+}
