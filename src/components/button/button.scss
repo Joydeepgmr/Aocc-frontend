@@ -1,97 +1,10 @@
 @import '../../styles/sass/mixins';
 @import '../../styles/sass/variables';
 
-.Button {
-	background-color: $orange;
-	font-family: $main_font;
+.button {
 	text-decoration: none;
 	border: none;
-	padding: 1rem 5rem;
-	font-size: 2rem;
-	border-radius: 1rem;
-	font-weight: 400;
-	box-shadow: 4px 4px 22px #00000040;
-	color: $light;
+	font-size: 1.6rem;
 	@include transition(0.2s, ease-in);
-}
-
-.ActionButton {
-	background-color: $orange;
-	font-family: $main_font;
-	text-decoration: none;
-	border: none;
-	padding: 0.5rem 0;
-	width: 100%;
-	font-size: 1.7rem;
-	border-radius: 0.5rem;
-	font-weight: 400;
 	box-shadow: none;
-	color: $light;
-	opacity: 0.5;
-	@include transition(0.1s, ease-in);
-
-	&--Loader {
-		@include flex(center, center, row);
-	}
-
-	&:focus {
-		outline: none;
-	}
-}
-
-@include media-xxl {
-	.Button {
-		font-size: 1.5rem;
-	}
-
-	.ActionButton {
-		font-size: 1.5rem;
-	}
-}
-
-@include media-xl {
-	.Button {
-		font-size: 1.3rem;
-	}
-
-	.ActionButton {
-		font-size: 1.3rem;
-	}
-}
-
-@include media-l {
-	.Button {
-		font-size: 1.2rem;
-	}
-
-	.ActionButton {
-		font-size: 1.1rem;
-	}
-}
-
-@include media-ml {
-	.Button {
-		font-size: 1.4rem;
-	}
-
-	.ActionButton {
-		font-size: 1.4rem;
-	}
-}
-
-@include media-sl {
-	.Button {
-		font-size: 1.8rem;
-		padding: 1rem 7rem;
-	}
-
-	.ActionButton {
-		font-size: 1.5rem;
-	}
-}
-
-@include media-sm {
-	.Button {
-		font-size: 1.7rem;
-	}
 }

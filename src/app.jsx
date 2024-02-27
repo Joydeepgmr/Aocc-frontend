@@ -5,7 +5,7 @@ import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Landing from './views/beforeAuth/landing/landing';
-import Login from './views/beforeAuth/login/index';
+import Login from './views/beforeAuth/login/login';
 
 import './app.scss';
 

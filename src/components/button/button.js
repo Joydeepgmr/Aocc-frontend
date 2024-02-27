@@ -1,37 +1,51 @@
 import React from 'react';
-import { Circles } from 'react-loader-spinner';
-import PropTypes from 'prop-types';
-
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './button.scss';
+import { Button } from 'antd';
+import Editicon from '../../assets/editButton.svg';
+import Deleteicon from '../../assets/deleteButton.svg';
+import Arrow from '../../assets/Arrow.svg';
+import RightArrow from '../../assets/RightArrow.svg';
+import LeftArrow from '../../assets/LeftArrow.svg';
+import Filter from '../../assets/Filter.svg';
 
-const Button = (props) => {
-	let { title, type, loading } = props;
-	return type === 'action' ? (
-		<button className="ActionButton" style={{ ...props.style }} {...props}>
-			{loading ? <Circles color="#fff" height={20} className="ActionButton--Loader" width="auto" /> : title}
-		</button>
-	) : (
-		<button
-			className="Button"
-			onClick={() => {
-				if (window.gtag) {
-					window.gtag('event', 'conversion', {
-						send_to: 'AW-10805417658/5_05CNy6pYMDELqttqAo',
-					});
-				}
-			}}
-			{...props}
+const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, ...rest}) => {
+	
+	let buttonContent;
+
+	switch (type) {
+		case 'edit':
+			buttonContent = <img src={Editicon} alt="Edit Icon" />;
+			break;
+		case 'delete':
+			buttonContent = <img src={Deleteicon} alt="Delete Icon" />;
+			break;
+		case 'arrow':
+			buttonContent = <img src={Arrow} alt="Arrow Icon" />;
+			break;
+		case 'rightArrow':
+			buttonContent = <img src={RightArrow} alt="RightArrow Icon" />;
+			break;
+		case 'leftArrow':
+			buttonContent = <img src={LeftArrow} alt="LeftArrow Icon" />;
+			break;
+		case 'filter':
+			buttonContent = <img src={Filter} alt="Filter Icon" />;
+			break;
+		default:
+			buttonContent = title;
+	}
+
+	return (
+		<Button
+			className={`button ${className}`}
+			htmlType={isSubmit ? "submit" : "button"}
+			onClick={onClick}
+			disabled={disabled}
+			{...rest}
 		>
-			{title}
-		</button>
-	);
+			{buttonContent}
+		</Button>
+	)
 };
 
-Button.prototype = {
-	title: PropTypes.string,
-	type: PropTypes.string,
-	loading: PropTypes.bool,
-};
-
-export default React.memo(Button);
+export default ButtonComponent;
