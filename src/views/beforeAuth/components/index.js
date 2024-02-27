@@ -261,12 +261,12 @@ export const Components = () => {
 			<Divider />
 			<div className="margin">
 				<TableComponent
-					columns={columns}
-					data={dummyData}
-					loading={loading}
-					onChange={handleTableChange}
-					tableTitle="Dummy Table"
-				/>
+            		columns={columns}
+            		data={dummyData}
+            		loading={loading}
+            		onChange={handleTableChange}
+        		/> 
+
 			</div>
 			<Divider />
 			<div className="container-column">
