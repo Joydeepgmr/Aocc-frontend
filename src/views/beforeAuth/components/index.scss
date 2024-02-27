@@ -18,54 +18,6 @@
     padding: 3rem 0;
 }
 
-.filledButton {
-    color: $white;
-    background-color: $button_color;
-    font-weight: $font_weight;
-    font-family: $button_font;
-    width: 8.5rem;
-    height: 4.4rem;
-    border-radius: 1.2rem;
-    padding: 1.2rem 2.4rem 1.2rem 2.4rem;
-    line-height: 2.008rem;
-}
-
-.textbutton {
-    color: $button_color;
-    background-color: white;
-    font-family: $button_font;
-    width: 14.578rem;
-    height: 4.2rem;
-    padding: 1.2rem;
-    font-weight: $font_weight;
-    box-shadow: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.icon_withBorder{
-    background-color: $gray_700;
-    width: 3.6rem;
-    height: 3.6rem;
-    padding: 0.8rem;
-    border-radius: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.icon_withoutBorder{
-    background-color: transparent;
-    width: 3.6rem;
-    height: 3.6rem;
-    padding: 0.8rem;
-    border-radius: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .custom_textarea{
     &.custom_field{
         background-color: #e8ebf0;
