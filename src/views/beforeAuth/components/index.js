@@ -20,6 +20,8 @@ import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 
+
+
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -326,6 +328,9 @@ export const Components = () => {
 					placeholder="Choose fruits"
 					onChange={handleSelectChange}
 				/>
+			</div>
+			<Divider />
+			<div className='main_form'>
 			</div>
 		</React.Fragment>
 	);
