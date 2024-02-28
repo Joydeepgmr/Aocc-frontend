@@ -116,7 +116,7 @@ const FormComponent = () => {
 
 					<div className="form_content">
 						<Date label="Absolute Period" required={true} placeholder="From" />
-						<Date label=""  placeholder="To" />
+						<Date label="" placeholder="To" />
 					</div>
 				</div>
 

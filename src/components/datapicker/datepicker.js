@@ -18,7 +18,7 @@ const Date = ({
 		<Form.Item
 			label={label}
 			name={name}
-			className="p-0"
+			className="p-10"
 			rules={[
 				{
 					required: required ? true : false,
@@ -28,7 +28,7 @@ const Date = ({
 		>
 			<DatePicker
 				placeholder={placeholder}
-				className="DateStyle"
+				className="date_style"
 				format={format}
 				disabledDate={(current) => {
 					if (acceptAllDate) {
@@ -47,4 +47,3 @@ const Date = ({
 };
 
 export default Date;
-
