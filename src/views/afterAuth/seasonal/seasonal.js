@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../components/button/button';
 import ModalComponent from '../../../components/modalComponent/modalComponent';
-import { Form } from 'antd';
 import './seasonal.scss';
-import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 
 
 const Seasonal = () => {
@@ -25,11 +23,7 @@ const Seasonal = () => {
                 <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
                 <ModalComponent isModalOpen={isModalOpen} width="400px" closeModal={closeModal} title="Collaborative Decision Making Schedule">
                     <div>
-                        <Form>
-                            <CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
-                                Flight Number
-                            </CustomTypography>
-                        </Form>
+                        <p>This is the form</p>
                     </div>
                 </ModalComponent>
                 <Button
