@@ -1,5 +1,6 @@
 @import '../../../styles/sass/mixins';
 @import '../../../styles/sass/variables';
+@import '../../../styles/sass/utils';
 
 .Dashboard {
 	@include flex(center, center, column);
