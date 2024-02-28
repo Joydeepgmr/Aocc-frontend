@@ -8,7 +8,7 @@ import Login from './views/beforeAuth/login/login';
 import Planning from './views/afterAuth/planning/planning';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
-import UserAccess from './views/afterAuth/userAccess/userAccess';
+// import UserAccess from './views/afterAuth/userAccess/userAccess';
 
 import './app.scss';
 
@@ -36,11 +36,11 @@ export function App() {
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>
-					<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
+					{/* <Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<UserAccess />} />
 						</Route>
-					</Route>
+					</Route> */}
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
