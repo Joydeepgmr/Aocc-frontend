@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import Button from '../../../components/button/button';
 import ModalComponent from '../../../components/modalComponent/modalComponent';
-import FormComponent from '../formComponent/formComponent';
+import './CDM.scss';
 
-import './shortterm.scss';
-const ShortTerm = () => {
+
+const CDM = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
@@ -25,15 +21,9 @@ const ShortTerm = () => {
 		<div className="mainHead">
 			<div className="container">
 				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-				<ModalComponent
-					isModalOpen={isModalOpen}
-					width="120rem"
-					closeModal={closeModal}
-					title="Short Term Planning"
-					id="modals_class"
-				>
-					<div className="modal-content">
-						<FormComponent />
+				<ModalComponent isModalOpen={isModalOpen} width="400px" closeModal={closeModal} title="Modal Heading">
+					<div>
+						<p>This is the content of the modal.</p>
 					</div>
 				</ModalComponent>
 				<Button
@@ -57,4 +47,4 @@ const ShortTerm = () => {
 	);
 };
 
-export default ShortTerm;
+export default CDM;

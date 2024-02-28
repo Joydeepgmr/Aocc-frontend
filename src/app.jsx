@@ -9,6 +9,7 @@ import Login from './views/beforeAuth/login/login';
 import Planning from './views/afterAuth/planning/planning';
 import './app.scss';
 
+
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
 const Components = React.lazy(() => import('./views/beforeAuth/components'));

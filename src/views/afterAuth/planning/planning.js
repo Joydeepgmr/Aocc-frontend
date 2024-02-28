@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './planning.scss';
+import Seasonal from '../seasonal/seasonal';
 import ShortTerm from '../shortterm/shortterm';
+import CDM from '../CDM/CDM';
+
+
 const Planning = () => {
 	const [index, setIndex] = useState(0);
 	const items = [
 		{
 			key: '1',
 			label: 'Seasonal',
+			children: <Seasonal />,
 		},
 		{
 			key: '2',
@@ -18,6 +23,7 @@ const Planning = () => {
 		{
 			key: '3',
 			label: 'CDM',
+			children: <CDM />,
 		},
 	];
 	const handleChange = (key) => {
