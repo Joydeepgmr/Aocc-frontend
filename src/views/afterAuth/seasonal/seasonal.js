@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from '../../../components/button/button';
 import ModalComponent from '../../../components/modalComponent/modalComponent';
 import './seasonal.scss';
+import FormComponent from '../formComponent/formComponent';
 
 
 const Seasonal = () => {
@@ -21,11 +22,12 @@ const Seasonal = () => {
         <div className="mainHead">
             <div className="container">
                 <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                <ModalComponent isModalOpen={isModalOpen} width="400px" closeModal={closeModal} title="Collaborative Decision Making Schedule">
-                    <div>
-                        <p>This is the form</p>
+                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Seasonal Planning" id="modals_class">
+                    <div className="modal-content">
+                        <FormComponent />
                     </div>
                 </ModalComponent>
+
                 <Button
                     id="btn"
                     title="Upload CSV"
@@ -48,8 +50,3 @@ const Seasonal = () => {
 };
 
 export default Seasonal;
-
-
-// Resolved merge conflicts due to changes in reusable components by other team members
-// Build 1st page of the seasonal component of the UI Part
-// build two separate pages of planning and shortterm section
