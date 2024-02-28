@@ -1,23 +1,23 @@
 import React from 'react';
-import { DatePicker } from 'antd';
+import { DatePicker, Form } from 'antd';
 import './datepicker.scss';
 
-const Date = ({ label, placeholder, dateFormat = 'DD/MM/YYYY', handleChange,  ...rest }) => {
-  const handleDateChange = (date,dateString) => {		
-		handleChange(dateString);
-  };
+const Date = ({ label, placeholder, required, dateFormat = 'DD/MM/YYYY', ...rest }) => {
+	const renderLabel = () => {
+		return (
+			<>
+				{label}
+				{required && <span style={{ color: 'red' }}> *</span>}
+			</>
+		);
+	};
 	return (
-		<div {...rest}>
+		<Form.Item>
 			<div className="dateStyle">
-				<label for="date">{label}</label>
-				<DatePicker
-					className="DateStyle"
-					placeholder={placeholder}
-					format={dateFormat}
-					onChange={handleDateChange}
-				/>
+				<label htmlFor="date">{renderLabel()}</label>
+				<DatePicker className="DateStyle" placeholder={placeholder} format={dateFormat} />
 			</div>
-		</div>
+		</Form.Item>
 	);
 };
 
