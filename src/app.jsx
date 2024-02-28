@@ -6,7 +6,7 @@ import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Landing from './views/beforeAuth/landing/landing';
 import Login from './views/beforeAuth/login/login';
-import Plan from './views/afterAuth/plan/plan';
+import Planning from './views/afterAuth/planning/planning';
 import './app.scss';
 
 
@@ -21,12 +21,11 @@ export function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path={Pathname.LOGIN} element={<Login />} />
-					<Route path={Pathname.PLAN} element={<Plan />} />
 					<Route index path={Pathname.LANDING_PAGE} element={<Landing />} />
+					<Route path="planning" element={<Planning />} />
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route index element={<Dashboard />} />
 						<Route path="orders" element={<Orders />} />
-						<Route path="*" element={<NotFound />} />
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
 					<Route path="*" component={NotFound} />
