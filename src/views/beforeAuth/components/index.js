@@ -19,6 +19,7 @@ import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import ButtonComponent from '../../../components/button/button';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,18 +55,24 @@ export const Components = () => {
 	const SelectData = [
 		{
 			id: '1',
-			label: 'options',
-			value: 'options',
+			label: 'Apple',
+			value: 'Apple',
 		},
+
 		{
 			id: '2',
-			label: 'options',
-			value: 'options',
+
+			label: 'cherry',
+
+			value: 'cherry',
 		},
+
 		{
 			id: '3',
-			label: 'options',
-			value: 'options',
+
+			label: 'banana',
+
+			value: 'banana',
 		},
 	];
 	const openModal = () => {
@@ -86,7 +93,7 @@ export const Components = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
+		console.log('onFinish', values);
 	};
 
 	const dummyData = [
@@ -113,8 +120,8 @@ export const Components = () => {
 
 	return (
 		<React.Fragment>
-			<div className="margin">
-				<Form form={form} layout="vertical" onFinish={onFinish}>
+			<Form form={form} layout="vertical" onFinish={onFinish}>
+				<div className="margin">
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<InputField
 							label="Airport Name"
@@ -173,7 +180,7 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button title="Open Modal" type="filledText" isSubmit="submit" onClick={openModal} />
+							<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -214,109 +221,107 @@ export const Components = () => {
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 					</div>
-				</Form>
-			</div>
+				</div>
 
-			<hr />
+				<hr />
 
-			<div className="container">
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Save"
-					type="filledText"
-				/>
+				<div className="container">
+					<Button
+						onClick={() => {
+							alert('Filled button');
+						}}
+						title="Save"
+						type="filledText"
+					/>
 
-				<Button
-					onClick={() => {
-						alert('Text button');
-					}}
-					title="View Details"
-					type="text"
-				/>
+					<Button
+						onClick={() => {
+							alert('Text button');
+						}}
+						title="View Details"
+						type="text"
+					/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button with Border');
-					}}
-					type="iconWithBorder"
-					icon={RightArrow}
-					alt="arrow icon"
-				/>
+					<Button
+						onClick={() => {
+							alert('Icon Button with Border');
+						}}
+						type="iconWithBorder"
+						icon={RightArrow}
+						alt="arrow icon"
+					/>
 
-				<Button
-					onClick={() => {
-						alert('Icon Button');
-					}}
-					icon={Bell}
-					alt="bell icon"
-					className="icon_withoutBorder"
-				/>
+					<Button
+						onClick={() => {
+							alert('Icon Button');
+						}}
+						icon={Bell}
+						alt="bell icon"
+						className="icon_withoutBorder"
+					/>
 
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
-			</div>
+					<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+				</div>
 
-			<hr />
+				<hr />
 
-			<div className="container">
-				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
-			</div>
+				<div className="container">
+					<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
+				</div>
 
-			<hr />
+				<hr />
 
-			<div className="container">
-				<Chip text="Critical" className="criticalChip" />
-				<br />
-				<Chip text="Cancelled" className="cancelledChip" />
-				<br />
-				<Chip text="Notice" className="noticeChip" />
-				<br />
-				<Chip text="Delay" className="delayChip" />
-			</div>
-			<Divider />
-			<div className="margin">
-				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
-			</div>
-			<Divider />
-			<div className="container-column">
-				<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
-					Heading 1
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
-					Heading 2
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-					Heading 3
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
-					Heading 4
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
-					Heading 5
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
-					Heading 6
-				</CustomTypography>
+				<div className="container">
+					<Chip text="Critical" className="criticalChip" />
+					<br />
+					<Chip text="Cancelled" className="cancelledChip" />
+					<br />
+					<Chip text="Notice" className="noticeChip" />
+					<br />
+					<Chip text="Delay" className="delayChip" />
+				</div>
+				<Divider />
+				<div className="margin">
+					<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
+				</div>
+				<Divider />
+				<div className="container-column">
+					<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
+						Heading 1
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
+						Heading 2
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+						Heading 3
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
+						Heading 4
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
+						Heading 5
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
+						Heading 6
+					</CustomTypography>
 
-				<CustomTypography type="paragraph" fontSize={16} color="black">
-					Paragraph Text
-				</CustomTypography>
+					<CustomTypography type="paragraph" fontSize={16} color="black">
+						Paragraph Text
+					</CustomTypography>
 
-				<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
-					Subheading 1
-				</CustomTypography>
-				<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
-					Subheading 2
-				</CustomTypography>
-				<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
-					Subheading 3
-				</CustomTypography>
-			</div>
-			<Divider />
-			<Cards />
-			<Divider />
-			<Form layout="vertical">
+					<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
+						Subheading 1
+					</CustomTypography>
+					<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
+						Subheading 2
+					</CustomTypography>
+					<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
+						Subheading 3
+					</CustomTypography>
+				</div>
+				<Divider />
+				<Cards />
+				<Divider />
 				<CustomSelect
 					required={true}
 					SelectData={SelectData}
@@ -332,6 +337,9 @@ export const Components = () => {
 						placeholder="Choose fruits"
 						onChange={handleSelectChange}
 					/>
+				</div>
+				<div>
+					<ButtonComponent title="Save" type="filledText" isSubmit={true} />
 				</div>
 			</Form>
 		</React.Fragment>

@@ -20,7 +20,6 @@ const CustomSelect = ({ SelectData, placeholder, label, required, ...rest }) => 
 				className="select"
 				rules={[
 					{
-					
 						message: 'This field is required.',
 					},
 				]}
@@ -28,9 +27,9 @@ const CustomSelect = ({ SelectData, placeholder, label, required, ...rest }) => 
 
 					<Select className="select_wrapper" placeholder={placeholder}>
 						{SelectData.map((option, index) => (
-							<Option key={option.index} value={option.value}>
+							<Select.Option key={index} value={option.value}>
 								{option.name}
-							</Option>
+							</Select.Option>
 						))}
 					</Select>
 			

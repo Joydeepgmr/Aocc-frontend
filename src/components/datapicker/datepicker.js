@@ -12,7 +12,7 @@ const Date = ({
 	disabledDate,
 	isDisabledDate = false,
 	acceptAllDate,
-	border,
+	format,
 }) => {
 	return (
 		<Form.Item
@@ -29,7 +29,7 @@ const Date = ({
 			<DatePicker
 				placeholder={placeholder}
 				className="DateStyle"
-				format={'YYYY/MM/DD'}
+				format={format}
 				disabledDate={(current) => {
 					if (acceptAllDate) {
 						return false;
@@ -47,3 +47,4 @@ const Date = ({
 };
 
 export default Date;
+
