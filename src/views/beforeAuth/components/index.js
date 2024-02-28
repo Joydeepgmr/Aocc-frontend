@@ -316,17 +316,24 @@ export const Components = () => {
 			<Divider />
 			<Cards />
 			<Divider />
-			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
-			<Divider />
-			<Date label="Date picker" required={true} placeholder="Date Picker" />
-			<Divider />
-			<div className="container">
-				<MultiSelectComponent
-					options={multiSelectOptions}
-					placeholder="Choose fruits"
-					onChange={handleSelectChange}
+			<Form layout="vertical">
+				<CustomSelect
+					required={true}
+					SelectData={SelectData}
+					label="Select field"
+					placeholder={'Select Field'}
 				/>
-			</div>
+				<Divider />
+				<Date label="Select Date" required={true} placeholder="Date Picker" />
+				<Divider />
+				<div className="container">
+					<MultiSelectComponent
+						options={multiSelectOptions}
+						placeholder="Choose fruits"
+						onChange={handleSelectChange}
+					/>
+				</div>
+			</Form>
 		</React.Fragment>
 	);
 };
