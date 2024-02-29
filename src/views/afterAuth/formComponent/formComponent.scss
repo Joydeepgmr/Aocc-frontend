@@ -1,28 +1,15 @@
-@import '../../../styles//sass//variables';
+@import '../../../styles/sass//variables';
+@import '../../../styles/sass/mixins';
 
 .form_section{
     padding-top: 2.4rem;
 }
 
 .form_content{
-    display: flex;
-    align-content: center;
-    gap: 1.6rem;
-}
-
-.form_bottomButton{
-    display: flex;
-    justify-content: end;
+    @include flex(stretch, flex-start, row);
     gap: 1.6rem;
 }
 
 #btn {
     padding: 2.2rem;
-}
-
-.button{
-    &.button.custom_svgButton {
-        color: $black;
-        background-color: $gray_200;
-    }
 }
