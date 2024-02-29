@@ -88,7 +88,7 @@ export const Components = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
+		console.log('Form values:', values);
 	};
 
 	const dummyData = [
@@ -256,7 +256,7 @@ export const Components = () => {
 					className="icon_withoutBorder"
 				/>
 
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+				<DropdownButton dropdownItems={dropdownItems} buttonText="Create"/>
 			</div>
 
 			<hr />
