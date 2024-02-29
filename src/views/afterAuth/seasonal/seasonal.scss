@@ -1,4 +1,5 @@
 @import '../../../styles/sass//variables';
+@import '../../../styles/sass/mixins';
 
 * {
     padding: 0;
@@ -7,9 +8,7 @@
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex(center, center, row);
     gap: 1rem;
     height: 50vh;
 }
@@ -20,10 +19,7 @@
 }
 .modal_content {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    @include flex(center, center, column);
     min-height: 40vh;
 }
 
@@ -42,4 +38,13 @@
     max-height: 50rem;
     overflow: auto;
     border-radius: 1rem;
+}
+
+.form_section{
+    padding-top: 2.4rem;
+}
+
+.form_bottomButton{
+    @include flex(stretch, end, row);
+    gap: 1.6rem;
 }
