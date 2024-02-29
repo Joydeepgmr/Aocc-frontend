@@ -1,15 +1,16 @@
 @import '../../styles/sass/variables';
 @import '../../styles/sass/utils';
+@import '../../styles/sass/mixins';
+
 
 .nav_container{
     background-color: $gray_100;
     height: 6.8rem;
     width: 100%;
-    @extend .flex-row;
-    justify-content: space-between;
+    @include flex(center, space-between, row); 
     padding: 0px 4rem;
     .nav_left_section{
-        @extend .flex-row;
+        @include flex(center,center, row); 
         width: 50%;
         gap: 8rem;
         .gmr_logo{
@@ -24,8 +25,7 @@
         }
 
         .tabs_container{
-            @extend .flex-row;
-            justify-content: space-between;
+           @include flex(center, space-between, row); 
             width: 74%;
             font-weight: 400;
             font-size: 1.6rem;
@@ -42,7 +42,7 @@
                 }
 
                 .tab.active {
-                color: black;
+                color: $black;
                 font-weight: 500;
                 }
 
@@ -52,7 +52,7 @@
                 left: 0;
                 width: 100%;
                 height: 4px;
-                background-color: blue;
+                background-color: $button_color;
                 }
 
         }
@@ -64,29 +64,28 @@
 
 
 .nav_right_section{
-    @extend .flex-row;
+    @include flex(center, space-between, row); 
     width: 54.2rem;
-    justify-content: space-between;
     .weather_details{
-        @extend .flex-row;
+    @include flex(center, center, row); 
         gap: 2.4rem;
         img{
             height: 1.8rem;
             width: 2rem;
         }
         .temperature_details{
-            @extend .flex-row;
+            @include flex(center, center, row); 
             gap: 0.8rem;
             div{
-                @extend .flex-col;
+                @include flex(center, center, column); 
                 gap: 0.7rem;
             }
         }
         .wind_details{
-            @extend .flex-row;
+            @include flex(center, center, row); 
             gap: 0.8rem;
              div{
-                @extend .flex-col;
+                @include flex(center, center, column); 
                 gap: 0.7rem;
             }
         }
@@ -97,7 +96,7 @@
     }
 
     .setting_bell{
-        @extend .flex-row;
+        @include flex(center, center, row); 
         gap: 1.4rem;
         img{
             cursor: pointer;
@@ -112,7 +111,7 @@
     }
 
     .user_info{
-        @extend .flex-row;
+        @include flex(center, center, row); 
         gap: 1.6rem;
         img{
             width: 4rem;
@@ -121,8 +120,7 @@
         }
 
         .user_details{
-            @extend .flex-col;
-            align-items: start;
+            @include flex(start, center, column); 
             gap: 0.4rem;
 
             p:first-child{
@@ -146,15 +144,14 @@
     border-radius: 1.2rem;
     border: 1px solid $gray_300;
     background-color: $gray_100;
-    @extend .flex-col;
-    justify-content: space-around;
+    @include flex(center, space-around, column); 
     position: absolute;
     left: 105rem;
     top: 5rem;
     p{
         width: 100%;
         height: 100%;
-        @extend .flex-row;
+        @include flex(center, center, row); 
         font-weight: 600;
         font-size: 1.6rem;
         line-height: 2.008rem;
@@ -162,13 +159,13 @@
          &:first-child:hover{
             border-radius: 1.2rem 1.2rem 0 0;
             background-color: $button_color;
-            color: white;
+            color: $white;
             cursor: pointer;
         }
         &:hover:not(:first-child)  {
             border-radius: 0 0 1.2rem 1.2rem;
             background-color: $button_color;
-            color: white;
+            color: $white;
             cursor: pointer;
         }
     }

@@ -1,5 +1,8 @@
 @import '../../../styles/sass/variables';
 @import '../../../styles/sass/utils';
+@import '../../../styles/sass/mixins';
+
+
 
 .user_access_container{
     width: 100%;
@@ -7,8 +10,7 @@
     .user_access_content{
         margin-top: 4rem;
         padding: 4rem;
-        @extend .flex-col;
-        align-items: start;
+        @include flex(start,center, column); 
         gap: 2.4rem;
         p:first-child{
             font-weight: 600;
@@ -24,7 +26,7 @@
        .filledTextButton{         
             &.custom_button{
                 background-color: $gray_100;
-                color: black;
+                color: $black;
                 height: 4.4rem;
                 padding: 1.2rem 2.4rem;
                 border-radius: 1.2rem;
@@ -41,8 +43,6 @@
                 height: 4.4rem;
             }
         }
-
-      
 
         .user_add_button{
             @extend .flex-row;
@@ -99,7 +99,7 @@
         margin-bottom: 1.4rem;
         .custom_button_cancel{
             background-color: $gray_100;
-            color: black;
+            color: $black;
             padding: 1.2rem 2.4rem;
             height: 4.4rem;
         }
