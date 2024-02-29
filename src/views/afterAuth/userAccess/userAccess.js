@@ -8,6 +8,8 @@ import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
 import { SelectData } from './userAccessData';
 import Date from '../../../components/datapicker/datepicker';
+import TopHeader from '../../../components/topHeader/topHeader';
+import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 
 const UserAccess = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,8 +31,12 @@ const UserAccess = () => {
 	return (
 		<div className="user_access_container">
 			<div className="user_access_content">
-				<p>Manage User Access</p>
-				<p>Overview of access management for airport operation system</p>
+				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineHeight="3.36rem">
+					Manage User Access
+				</CustomTypography>
+				<CustomTypography type="paragraph" fontSize={14} fontWeight="400" color="#909296" lineHeight="3.36rem">
+					Overview of access management for airport operating system
+				</CustomTypography>
 				<div className="user_add_button">
 					<div className="down_arrow_button">
 						<ButtonComponent
@@ -99,6 +105,7 @@ const UserAccess = () => {
 					</div>
 				</Form>
 			</ModalComponent>
+			<TopHeader />
 		</div>
 	);
 };

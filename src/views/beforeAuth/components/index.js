@@ -19,6 +19,7 @@ import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import TopHeader from '../../../components/topHeader/topHeader';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -327,6 +328,10 @@ export const Components = () => {
 					onChange={handleSelectChange}
 				/>
 			</div>
+			<TopHeader
+				heading="Manage User Access"
+				subHeading="Overview of access management for airport access management"
+			/>
 		</React.Fragment>
 	);
 };

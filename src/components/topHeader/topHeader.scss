@@ -1,0 +1,29 @@
+@import '../../styles/sass/mixins';
+@import '../../styles/sass/variables';
+@import '../../styles/sass/utils';
+
+
+
+.top_header_container{
+    width: 100%;
+    padding: 0rem 4rem;
+    @include flex(center, space-between, row);
+    .filter_search_container{
+        height: 4.4rem;
+        @include flex(center, center, row);
+        position: relative;
+        gap: 0.8rem;
+        .filter-icon{
+            width: 4.4rem;
+            height: 4.4rem;
+            @include flex(center, center, row);
+            border: 1px solid $gray_300;
+            border-radius: 100%;
+            position: absolute;
+            top: -0.8rem;
+            left: -6rem;
+        }
+
+    }
+}
+
