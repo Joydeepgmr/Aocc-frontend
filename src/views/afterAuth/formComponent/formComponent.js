@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'antd';
 import InputField from '../../../components/inputField/inputField';
 import './formComponent.scss';
-import ButtonComponent from '../../../components/button/button';
+import Button from '../../../components/button/button';
 
 const FormComponent = () => {
     const [form] = Form.useForm();
@@ -14,7 +14,7 @@ const FormComponent = () => {
     return (
         <div className="main_form">
             <Form form={form} layout="vertical" onFinish={onFinish}>
-                <div className='form_section'>
+                <div className='form_section ' >
                     <div className='form_content'>
                         <InputField
                             label="Flight Number"
@@ -130,7 +130,7 @@ const FormComponent = () => {
                             label=""
                             name=""
                             placeholder="to"
-                            required
+                            // required
                             warning="Required field"
                         />
 
@@ -155,7 +155,7 @@ const FormComponent = () => {
                             label=""
                             name=""
                             placeholder="to"
-                            required
+                            // required
                             warning="Required field"
                             type="number"
                         />
@@ -206,7 +206,13 @@ const FormComponent = () => {
                         />
                     </div>
                 </div>
-                <ButtonComponent />
+
+                <div className='form_section'>
+                    <div className='form_bottomButton'>
+                        <Button title="Save" type="filledText" id="btn" isSubmit="submit" onClick={() => {alert('Data Saved')}} />
+                        <Button title="Cancel" type="filledText" id="btn" isSubmit="submit" onClick={() => {alert('Cancel')}} className="custom_svgButton" />
+                    </div>
+                </div>
             </Form>
         </div>
     );
