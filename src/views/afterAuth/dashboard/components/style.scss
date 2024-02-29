@@ -1,0 +1,25 @@
+// @import '../../../styles/sass/mixins';
+@import '../../../../styles/sass/mixins';
+@import '../../../../styles/sass/variables';
+@import '../../../../styles/sass/utils';
+
+.body-container {
+    border: 1px solid $gray_300;
+    border-radius: 0.75rem;
+    padding-top: 0.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.filter-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
