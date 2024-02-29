@@ -21,7 +21,6 @@ import CustomTypography from '../../../components/typographyComponent/typography
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 
 
-
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -29,7 +28,7 @@ export const Components = () => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
-	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
+	const [form] = Form.useForm();
 
 	const dropdownItems = [
 		{
@@ -70,6 +69,7 @@ export const Components = () => {
 			value: 'options',
 		},
 	];
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
