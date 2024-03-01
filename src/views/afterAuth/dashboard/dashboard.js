@@ -8,6 +8,7 @@ import TableComponent from '../../../components/table/table';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 import FlightSchedule from './components/FlightSchedule';
+import ProgressionCard from './components/ProgressionCard';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -46,6 +47,14 @@ export const Dashboard = () => {
 		</div>
 		<div className='main-container'>
 		<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+		</div>
+		</div>
+		<div className='widgets-container'>
+		<div className='airport-info'>
+			<ProgressionCard />
+		</div>
+		<div className='airport-alerts'>
+
 		</div>
 		</div>
 	</div>

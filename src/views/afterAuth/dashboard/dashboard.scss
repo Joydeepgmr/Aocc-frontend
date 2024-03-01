@@ -3,9 +3,12 @@
 @import '../../../styles/sass/utils';
 
 .container-div{
+	display: flex;
+	flex-direction: column;
 	width: 100%;
 	padding-left: 2.5rem;
 	padding-right: 2.5rem;
+	gap: 0.8rem;
 }
 
 .top-div{
@@ -19,4 +22,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.6rem;
+}
+
+.widgets-container{
+	display: flex;
+	gap: 1rem;
 }

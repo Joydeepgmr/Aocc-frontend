@@ -21,5 +21,51 @@
 .filter-section{
     display: flex;
     flex-direction: row;
+    gap: 0.5rem;
     // align-items: center;
+}
+
+.filter-btn {
+    width: 50px;
+    height: 50px;
+    padding: 12px;
+    border: 1px solid $gray_300;
+    border-radius: 1rem;
+
+}
+
+.progress-card{
+    width: 31.4rem;
+    height: 17.6rem;
+    border-radius: 1.6rem;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress-body{
+    padding: 0.75rem;
+}
+
+.progress-status-body{
+    display: flex;
+    gap: 0.8rem;
+}
+
+.progress-status-item{
+    display: flex;
+    gap: 1.6rem;
+}
+
+.view-details {
+    display: flex;
+    justify-content: space-between;
+    background-color: $gray_100;
+    border: 1px solid $gray_300;
+    padding-top: 1.2rem;
+    padding-right: 2.4rem;
+    padding-bottom: 1.2rem;
+    padding-left: 2.4rem;
 }
