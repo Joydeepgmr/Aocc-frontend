@@ -13,12 +13,13 @@ const Date = ({
 	isDisabledDate = false,
 	acceptAllDate,
 	format,
+	className,
 }) => {
 	return (
 		<Form.Item
 			label={label}
 			name={name}
-			className="p-10"
+			className={`${className} date_form_item`}
 			rules={[
 				{
 					required: required ? true : false,

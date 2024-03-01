@@ -18,10 +18,6 @@ import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
-import ButtonComponent from '../../../components/button/button';
-import Cards from '../../../components/card/card';
-
-
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -224,7 +220,7 @@ export const Components = () => {
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 					</div>
 				</div>
-
+</Form>
 				<hr />
 
 				<div className="container">
@@ -311,39 +307,30 @@ export const Components = () => {
 						Paragraph Text
 					</CustomTypography>
 
-					<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
-						Subheading 1
-					</CustomTypography>
-					<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
-						Subheading 2
-					</CustomTypography>
-					<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
-						Subheading 3
-					</CustomTypography>
-				</div>
-				<Divider />
-				<Cards />
-				<Divider />
-				<CustomSelect
-					required={true}
-					SelectData={SelectData}
-					label="Select field"
-					placeholder={'Select Field'}
+				<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
+					Subheading 1
+				</CustomTypography>
+				<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
+					Subheading 2
+				</CustomTypography>
+				<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
+					Subheading 3
+				</CustomTypography>
+			</div>
+			<Divider />
+			<Cards />
+			<Divider />
+			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
+			<Divider />
+			<Date label="Date picker" placeholder="Date Picker"  handleChange={handleChange}/>
+			<Divider />
+			<div className="container">
+				<MultiSelectComponent
+					options={multiSelectOptions}
+					placeholder="Choose fruits"
+					onChange={handleSelectChange}
 				/>
-				<Divider />
-				<Date label="Select Date" required={true} placeholder="Date Picker" />
-				<Divider />
-				<div className="container">
-					<MultiSelectComponent
-						options={multiSelectOptions}
-						placeholder="Choose fruits"
-						onChange={handleSelectChange}
-					/>
-				</div>
-				<div>
-					<ButtonComponent title="Save" type="filledText" isSubmit={true} />
-				</div>
-			</Form>
+			</div>
 		</React.Fragment>
 	);
 };

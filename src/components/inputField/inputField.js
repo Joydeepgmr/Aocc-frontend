@@ -35,6 +35,7 @@ const InputField = ({
 				<Form.Item
 					label={renderLabel()}
 					name={name}
+					className={`${className} input_form_item`}
 					rules={[
 						{
 							message: warning ? warning : 'This field is required.',
@@ -48,7 +49,7 @@ const InputField = ({
 					<Input
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input_field ${className}`}
+						className={`input_field`}
 						suffix={suffixText && <span>{suffixText}</span>}
 						{...rest}
 					/>
@@ -57,6 +58,7 @@ const InputField = ({
 				<Form.Item
 					label={renderLabel()}
 					name={name}
+					className={`${className} input_form_item`}
 					rules={[
 						{
 							message: warning ? warning : 'This field is required.',
@@ -71,7 +73,7 @@ const InputField = ({
 					<Input.Password
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input_field ${className}`}
+						className={`input_field`}
 						{...rest}
 					/>
 				</Form.Item>
@@ -80,6 +82,7 @@ const InputField = ({
 					label={type !== 'search' ? renderLabel() : null}
 					name={name}
 					min="0"
+					className={`${className} input_form_item`}
 					rules={[
 						{
 							message: warning ? warning : 'This field is required.',
@@ -92,8 +95,8 @@ const InputField = ({
 				>
 					<Input
 						placeholder={placeholder}
+						className={`input_field`}
 						disabled={disabled ? disabled : false}
-						className={`input_field ${className}`}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
 						status={status}
