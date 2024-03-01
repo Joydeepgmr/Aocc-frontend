@@ -6,4 +6,5 @@ export let Pathname = {
 	DASHBOARD_TRANSACTIONS: '/dashboard/transactions',
 	COMPONENTS: '/components',
 	PLAN: '/plan',
+	
 };

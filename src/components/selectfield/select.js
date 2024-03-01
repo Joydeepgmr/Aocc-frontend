@@ -3,7 +3,7 @@ import React from 'react';
 import { Select, Form } from 'antd';
 import './select.scss';
 
-const CustomSelect = ({ SelectData, placeholder, label, required, ...rest }) => {
+const CustomSelect = ({ SelectData, placeholder, label, required, className, ...rest }) => {
 	const renderLabel = () => {
 		return (
 			<>
@@ -17,22 +17,20 @@ const CustomSelect = ({ SelectData, placeholder, label, required, ...rest }) => 
 			<Form.Item
 				name={label}
 				label={renderLabel()}
-				className="select"
+				className={`select ${className}`}
 				rules={[
 					{
 						message: 'This field is required.',
 					},
 				]}
 			>
-
-					<Select className="select_wrapper" placeholder={placeholder}>
-						{SelectData.map((option, index) => (
-							<Select.Option key={index} value={option.value}>
-								{option.name}
-							</Select.Option>
-						))}
-					</Select>
-			
+				<Select className="select_wrapper"  placeholder={placeholder}>
+					{SelectData.map((option, index) => (
+						<Select.Option key={index} value={option.value}>
+							{option.name}
+						</Select.Option>
+					))}
+				</Select>
 			</Form.Item>
 		</>
 	);

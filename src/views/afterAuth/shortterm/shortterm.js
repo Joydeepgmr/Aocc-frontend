@@ -30,7 +30,7 @@ const ShortTerm = () => {
 					width="120rem"
 					closeModal={closeModal}
 					title="Short Term Planning"
-					id="modals_class"
+					className="modals_class"
 				>
 					<div className="modal-content">
 						<FormComponent />

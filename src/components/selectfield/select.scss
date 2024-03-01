@@ -2,18 +2,16 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-}
-
-.select {
     font-size: 1.6rem;
     padding: 0.5rem;
     color: #121212;
-    font-weight:600;
+    font-weight: 600;
+    .select_wrapper {
+            width: 36.5rem;
+            height: 5rem;
+        }
 }
-.select_wrapper.select_wrapper{
- height:5rem;
- width: 36.5rem ;
-}
+
 .ant-select-selector{
     border-radius: 1.2rem  !important;
 }

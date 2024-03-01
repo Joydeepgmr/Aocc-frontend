@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
@@ -8,6 +7,7 @@ import Landing from './views/beforeAuth/landing/landing';
 import Login from './views/beforeAuth/login/login';
 import Planning from './views/afterAuth/planning/planning';
 import './app.scss';
+import DetailsTable from './components/detailsTable/detailsTable';
 
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
@@ -22,7 +22,8 @@ export function App() {
 				<Routes>
 					<Route path={Pathname.LOGIN} element={<Login />} />
 					<Route index path={Pathname.LANDING_PAGE} element={<Landing />} />
-					<Route path="planning" element={<Planning />} />
+					<Route path={Pathname.PLAN} element={<Planning />} />
+					<Route path="Details" element={<DetailsTable />} />
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route index element={<Dashboard />} />
 						<Route path="orders" element={<Orders />} />

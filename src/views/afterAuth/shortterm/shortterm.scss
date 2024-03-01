@@ -20,10 +20,21 @@
 #btn{
     padding:2.2rem ;
 }
-
+.modal-content{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+}
 .button{
     &.button.custom_svgButton {
         color: $black;
         background-color: $gray_200;
     }
+}
+.modals_class{
+    max-height: 50rem;
+    overflow: auto;
+    border-radius: 1rem;
 }

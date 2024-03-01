@@ -1,0 +1,28 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+.main-wrapper{
+    padding: 5rem;
+  
+}
+.wrapper{
+    width:132rem;
+    height:5rem;
+    display: flex; 
+    justify-content: space-between;
+}
+.main{
+    display: flex;
+}
+.wrapper-gap{
+    border: 1px solid #F1F3F5;
+    padding: 2rem;
+   display: flex;
+   flex-direction: column; 
+    border-radius: 1.2rem;
+}
+#search_input{
+    width:49px;
+}

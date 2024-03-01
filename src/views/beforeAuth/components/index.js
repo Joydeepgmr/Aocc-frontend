@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Cards from '../../../components/card/cards';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
@@ -20,6 +19,7 @@ import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 import ButtonComponent from '../../../components/button/button';
+import Cards from '../../../components/card/card';
 
 
 

@@ -22,7 +22,7 @@ const Seasonal = () => {
         <div className="mainHead">
             <div className="container">
                 <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Seasonal Planning" id="modals_class">
+                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Seasonal Planning" className="modals_class">
                     <div className="modal-content">
                         <FormComponent />
                     </div>
