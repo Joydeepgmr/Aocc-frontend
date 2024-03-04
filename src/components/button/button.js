@@ -3,7 +3,6 @@ import './button.scss';
 import { Button } from 'antd';
 
 const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, icon, alt, ...rest }) => {
-
 	let buttonContent;
 	let buttonTypeClass = '';
 
@@ -28,14 +27,14 @@ const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, 
 	return (
 		<Button
 			className={`button ${buttonTypeClass} ${className}`}
-			htmlType={isSubmit ? "submit" : "button"}
+			htmlType={isSubmit ? 'submit' : 'button'}
 			onClick={onClick}
 			disabled={disabled}
 			{...rest}
 		>
 			{buttonContent}
 		</Button>
-	)
+	);
 };
 
 export default ButtonComponent;
