@@ -11,6 +11,7 @@ import CustomTabs from '../../../components/customTabs/customTabs';
 import CheckBoxField from '../../../components/checkBoxField/checkBoxField';
 import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
+import Cards from '../../../components/card/card';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
 import Bell from '../../../assets/Bell.svg';
@@ -26,7 +27,7 @@ export const Components = () => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
-	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
+	const [form] = Form.useForm();
 
 	const dropdownItems = [
 		{
@@ -73,6 +74,7 @@ export const Components = () => {
 			value: 'banana',
 		},
 	];
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -318,7 +320,7 @@ export const Components = () => {
 				</CustomTypography>
 			</div>
 			<Divider />
-			<Cards />
+		     <Cards/>
 			<Divider />
 			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />

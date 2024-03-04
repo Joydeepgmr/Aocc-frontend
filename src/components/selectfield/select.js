@@ -14,24 +14,25 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, ...
 	};
 	return (
 		<>
-			<Form.Item
-				name={label}
-				label={renderLabel()}
-				className={`select ${className}`}
-				rules={[
-					{
-						message: 'This field is required.',
-					},
-				]}
-			>
-				<Select className="select_wrapper"  placeholder={placeholder}>
-					{SelectData.map((option, index) => (
-						<Select.Option key={index} value={option.value}>
-							{option.name}
-						</Select.Option>
-					))}
-				</Select>
-			</Form.Item>
+				<Form.Item
+					name={label}
+					label={renderLabel()}
+					className={`select ${className}`}
+					rules={[
+						{
+							message: 'This field is required.',
+						},
+					]}
+				>
+					<Select className="select_wrapper" placeholder={placeholder}>
+						{SelectData.map((option, index) => (
+							<Select.Option key={index} value={option.value}>
+								{option.name}
+							</Select.Option>
+						))}
+					</Select>
+				</Form.Item>
+		
 		</>
 	);
 };

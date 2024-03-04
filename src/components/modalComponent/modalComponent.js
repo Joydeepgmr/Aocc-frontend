@@ -1,13 +1,13 @@
 import { Modal } from 'antd';
 import React from 'react';
 
-const ModalComponent = ({ isModalOpen, children, width, closeModal, title }) => {
+const ModalComponent = ({ isModalOpen, children, width, closeModal, title, className }) => {
 	return (
 		<>
 			<Modal
 				open={isModalOpen}
 				closable={true}
-				className="modal"
+				className={`modal ${className}`}
 				width={width ? width : '32rem'}
 				centered
 				footer={null}

@@ -38,7 +38,7 @@ const Date = ({
 						return disabledDate(current);
 					} else {
 						let customDate = dayjs().format('YYYY/MM/DD');
-						return current && current > dayjs(customDate, 'YYYY/MM/DD');
+						return current && current < dayjs(customDate, 'YYYY/MM/DD');
 					}
 				}}
 				disabled={disabled ? true : false}

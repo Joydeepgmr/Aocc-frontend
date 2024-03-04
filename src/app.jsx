@@ -8,6 +8,7 @@ import Login from './views/beforeAuth/login/login';
 import Planning from './views/afterAuth/planning/planning';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
+
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 import './app.scss';
 
@@ -27,7 +28,7 @@ export function App() {
 						element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />}
 					/>
 					<Route path={Pathname.LOGIN} element={<Login />} />
-				
+					<Route path={Pathname.PLAN} element={<Planning />} />
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
@@ -41,7 +42,6 @@ export function App() {
 						</Route>
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
-						<Route path={Pathname.PLAN} element={<Planning />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>

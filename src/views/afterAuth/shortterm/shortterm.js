@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from '../../../components/button/button';
 import ModalComponent from '../../../components/modalComponent/modalComponent';
 import FormComponent from '../formComponent/formComponent';
-
+import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
 import './shortterm.scss';
 const ShortTerm = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,12 +30,34 @@ const ShortTerm = () => {
 					width="120rem"
 					closeModal={closeModal}
 					title="Short Term Planning"
-					className="modals_class"
+					className="custom_modal"
 				>
-					<div className="modal-content">
+					<div className="modal_content">
 						<FormComponent />
 					</div>
+					<div className="form_section">
+						<div className="form_bottomButton">
+							<Button
+								title="Save"
+								type="filledText"
+								id="btn"
+								isSubmit="submit"
+								onClick={() => {
+									alert('Data Saved');
+								}}
+							/>
+							<Button
+								title="Cancel"
+								type="filledText"
+								id="btn"
+								isSubmit="submit"
+								onClick={closeModal}
+								className="custom_svgButton"
+							/>
+						</div>
+					</div>
 				</ModalComponent>
+
 				<Button
 					id="btn"
 					title="Upload CSV"
@@ -44,6 +66,7 @@ const ShortTerm = () => {
 					isSubmit="submit"
 					onClick={openCsvModal}
 				/>
+				<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 				<Button
 					id="btn"
 					title="Download CSV Template"

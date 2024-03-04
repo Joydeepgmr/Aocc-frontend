@@ -1,40 +1,56 @@
 @import '../../../styles/sass//variables';
+@import '../../../styles/sass/mixins';
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-.container{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    gap:1rem;
-    height:50vh;
 
+.container {
+    @include flex(center, center, row);
+    gap: 1rem;
+    height: 50vh;
 }
-.mainHead{
-    border:1px dashed #F1F3F5;
-    height:55vh;    
+
+.main_Head {
+    border: 1px dashed #F1F3F5;
+    height: 55vh;
 }
-#btn{
-    padding:2.2rem ;
-}
-.modal-content{
+
+.modal_content {
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex(center, center, column);
     min-height: 40vh;
 }
-.button{
+
+#btn {
+    padding: 2.2rem;
+}
+
+.modals_class {
+    max-height: 50rem;
+    overflow: auto;
+}
+
+.button {
     &.button.custom_svgButton {
         color: $black;
         background-color: $gray_200;
     }
 }
-.modals_class{
+
+.custom_modal {
     max-height: 50rem;
     overflow: auto;
     border-radius: 1rem;
+}
+
+.form_section {
+    padding-top: 2.4rem;
+}
+
+.form_bottomButton {
+    @include flex(stretch, end, row);
+    gap: 1.6rem;
 }
