@@ -9,6 +9,7 @@ import CustomTabs from '../../../components/customTabs/customTabs';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 import FlightSchedule from './components/FlightSchedule';
 import ProgressionCard from './components/ProgressionCard';
+import GraphCard from './components/GraphCard';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -52,6 +53,15 @@ export const Dashboard = () => {
 		<div className='widgets-container'>
 		<div className='airport-info'>
 			<ProgressionCard />
+			<ProgressionCard />
+		</div>
+		<div className='airport-info'>
+			<GraphCard />
+			<GraphCard />
+		</div>
+		<div className='airport-info'>
+			<GraphCard />
+			<GraphCard />
 		</div>
 		<div className='airport-alerts'>
 

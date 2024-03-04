@@ -9,7 +9,7 @@ import RightArrow from '../../../../assets/RightArrow.svg'
 const ProgressionCard = () => {
   return (
     <>
-    <Card className=''>
+    <Card className='progress-card'>
     <div className='progress-card-body'>
             <div className='progress-body'>
             <div className='card-title'>
@@ -18,17 +18,23 @@ const ProgressionCard = () => {
             </div>
             <div className='progress-status-body'>
                 <div className='progress-status-item'>
-                    <img src={Airplane_1} alt="" />
-                    <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="On-time performance" />
-                    <Progress percent={30} />
+                    {/* <img src={Airplane_1} alt="" /> */}
+                    <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children="Airline 1"  />
+                    <Progress percent={50} />
                 </div>
+            </div>
+            <div className='progress-status-body'>
+                <div className='progress-status-item'>
+                    {/* <img src={Airplane_1} alt="" /> */}
+                    <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children="Airline 2"  />
+                    <Progress percent={70} />
+                </div>
+            </div>
             </div>
             <div className='view-details'>
             <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="View Details" />
             <img src={RightArrow} alt="arrow" />
             </div>
-            </div>
-            
         </div>
     </Card>
     </>  
