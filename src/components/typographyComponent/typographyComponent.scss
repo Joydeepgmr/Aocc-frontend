@@ -1,3 +1,7 @@
 @import '../../styles/sass/utils';
 @import '../../styles/sass/variables';
 
+.custom-font {
+    font-family: $tertiary_font;
+    margin: 0 !important;    
+}

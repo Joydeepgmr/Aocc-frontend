@@ -11,18 +11,7 @@
         margin-top: 4rem;
         padding: 4rem;
         @include flex(start,center, column); 
-        gap: 2.4rem;
-        p:first-child{
-            font-weight: 600;
-            font-size: 2.4rem;
-            line-height: 3.36rem;
-        }
-        p:nth-child(2){
-                font-weight: 400;
-                font-size: 1.4rem;
-                line-height: 1.757rem;
-                color: $dark_300;
-        }
+  
        .filledTextButton{         
             &.custom_button{
                 background-color: $gray_100;
