@@ -1,8 +1,8 @@
 import React,{useState} from 'react';
 import { Form } from 'antd';
-import InputField from '../../../components/inputField/inputField';
+import InputField from '../../../../../components/inputField/inputField';
 import './formComponent.scss';
-import Button from '../../../components/button/button';
+
 
 const FormComponent = () => {
     const [form] = Form.useForm();
