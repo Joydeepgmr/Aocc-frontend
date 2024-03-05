@@ -175,7 +175,7 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button title="Open Modal" type="filledText" isSubmit="submit" onClick={openModal} />
+							<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -320,7 +320,7 @@ export const Components = () => {
 			<Divider />
 			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />
-			<Date label="Date picker" placeholder="Date Picker"  handleChange={handleChange}/>
+			<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
 			<Divider />
 			<div className="container">
 				<MultiSelectComponent
