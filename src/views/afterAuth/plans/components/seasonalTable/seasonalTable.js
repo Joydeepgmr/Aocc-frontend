@@ -17,7 +17,7 @@ const SeasonalTable = () => {
                 </div>
                 <div className='button_container'>
                     <Button onClick={() => {
-                        alert('Icon Button with Border');
+                        alert('Filter Icon');
                     }}
                         type="iconWithBorder"
                         className={'custom_filter'}
@@ -25,7 +25,7 @@ const SeasonalTable = () => {
                         alt="arrow icon"
                     />
                     <Button onClick={() => {
-                        alert('Icon Button with Border');
+                        alert('Search Icon');
                     }}
                         type="iconWithBorder"
                         className={'custom_filter'}
