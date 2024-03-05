@@ -1,37 +1,52 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
-import Landing from './views/beforeAuth/landing/landing';
 import Login from './views/beforeAuth/login/login';
-import Planning from './views/afterAuth/planning/planning';
+import Plans from './views/afterAuth/plans/plans';
+import NotFound from './views/404';
+import Layout from './layouts/layout/layout';
+import UserAccess from './views/afterAuth/userAccess/userAccess';
 import './app.scss';
 
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
 const Components = React.lazy(() => import('./views/beforeAuth/components'));
-const NotFound = React.lazy(() => import('./views/404'));
 
 export function App() {
+	const token = localStorage.getItem('t_id');
+
 	return (
 		<Suspense fallback={<Loader />}>
 			<BrowserRouter>
 				<Routes>
+					<Route path="/" element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />} />
 					<Route path={Pathname.LOGIN} element={<Login />} />
-					<Route index path={Pathname.LANDING_PAGE} element={<Landing />} />
-					<Route path="planning" element={<Planning />} />
+					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<Plans />} />
+							<Route path="*" element={<NotFound />} />
+						</Route>
+					</Route>
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
-						<Route index element={<Dashboard />} />
-						<Route path="orders" element={<Orders />} />
+						<Route element={<Layout />}>
+							<Route index element={<Dashboard />} />
+							<Route path="orders" element={<Orders />} />
+							<Route path="*" element={<NotFound />} />
+						</Route>
+					</Route>
+					<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<UserAccess />} />
+						</Route>
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
-					<Route path="*" component={NotFound} />
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
-		</Suspense>
+		</Suspense >
 	);
 }
 
