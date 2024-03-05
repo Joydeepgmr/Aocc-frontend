@@ -1,14 +1,10 @@
-.dateStyle, .date{
-    font-size:1.5rem;
-    padding: 0.5rem;
-}
-.DateStyle {
-    width: 36.8rem;
-    height: 5rem;
-    border-radius: 0.4rem;
-}
-.dateStyle{
-    display: flex;
-    flex-direction: column;
-    gap:0.5rem;
+.date_form_item {
+	width: 36.8rem;
+	.date_style {
+        display: flex;
+		font-size: 1.5rem;
+		padding: 1rem;
+		height: 5rem;
+		border-radius: 1.2rem;
+	}
 }

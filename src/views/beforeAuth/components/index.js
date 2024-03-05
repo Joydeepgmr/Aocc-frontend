@@ -19,6 +19,8 @@ import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import TopHeader from '../../../components/topHeader/topHeader';
+import OtpField from '../../../components/otpField/otpField';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -173,7 +175,7 @@ export const Components = () => {
 
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<div>
-							<Button title="Open Modal" isSubmit="submit" onClick={openModal} />
+							<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
 							<ModalComponent
 								isModalOpen={isModalOpen}
 								width="400px"
@@ -186,7 +188,7 @@ export const Components = () => {
 							</ModalComponent>
 						</div>
 						<div>
-							<Button title="Open CSV Modal" isSubmit="submit" onClick={openCsvModal} />
+							<Button title="Open CSV Modal" type="filledText" isSubmit="submit" onClick={openCsvModal} />
 							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
 						</div>
 					</div>
@@ -226,7 +228,6 @@ export const Components = () => {
 					}}
 					title="Save"
 					type="filledText"
-					className="custom_filledButton"
 				/>
 
 				<Button
@@ -235,7 +236,6 @@ export const Components = () => {
 					}}
 					title="View Details"
 					type="text"
-					className="custom_textbutton"
 				/>
 
 				<Button
@@ -245,7 +245,6 @@ export const Components = () => {
 					type="iconWithBorder"
 					icon={RightArrow}
 					alt="arrow icon"
-					className="custom_arrowbutton"
 				/>
 
 				<Button
@@ -254,9 +253,16 @@ export const Components = () => {
 					}}
 					icon={Bell}
 					alt="bell icon"
+					className="icon_withoutBorder"
 				/>
 
 				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+			</div>
+
+			<hr />
+
+			<div className="container">
+				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
 			</div>
 
 			<hr />
@@ -272,13 +278,7 @@ export const Components = () => {
 			</div>
 			<Divider />
 			<div className="margin">
-				<TableComponent
-            		columns={columns}
-            		data={dummyData}
-            		loading={loading}
-            		onChange={handleTableChange}
-        		/> 
-
+				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
 			</div>
 			<Divider />
 			<div className="container-column">
@@ -318,9 +318,9 @@ export const Components = () => {
 			<Divider />
 			<Cards />
 			<Divider />
-			<CustomSelect SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
+			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />
-			<Date label="Date picker" placeholder="Date Picker" />
+			<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
 			<Divider />
 			<div className="container">
 				<MultiSelectComponent
@@ -328,6 +328,13 @@ export const Components = () => {
 					placeholder="Choose fruits"
 					onChange={handleSelectChange}
 				/>
+			</div>
+			<TopHeader
+				heading="Manage User Access"
+				subHeading="Overview of access management for airport access management"
+			/>
+			<div className='container'>
+				<OtpField otpLength={3} onFinish={(e) => console.log(e.target.value)}/>
 			</div>
 		</React.Fragment>
 	);
