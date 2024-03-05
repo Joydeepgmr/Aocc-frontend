@@ -1,0 +1,66 @@
+@import '../../../styles/sass/utils';
+
+.hello{
+    width: 50rem;
+}
+
+.margin{
+    @extend .mt-2;
+    margin-left: 10px;
+}
+
+@import '../../../styles/sass/variables';
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 3rem 0;
+}
+
+.custom_textarea{
+    &.custom_field{
+        background-color: #e8ebf0;
+        width: 30rem;
+    }
+}
+
+.custom_chip{
+    border: 0;
+    &.criticalChip {
+        color: white;
+        background-color: #FA5252;
+        width: 7rem;
+        height: 3rem;
+    }
+    
+    &.noticeChip{
+        color: #5C5F66;
+        background-color: #E9ECEF;
+        width: 7rem;
+        height: 3rem;
+    }
+    
+    &.cancelledChip {
+        color: #FA5252;
+        background-color: #FFE5E5;
+        width: 9rem;
+        height: 3rem;
+    }
+    
+    &.delayChip {
+        color: #FFD43B;
+        background-color: #FFFAE5;
+        width: 6rem;
+        height: 3rem;
+    }
+}
+
+.container-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    // background-color: black;
+}

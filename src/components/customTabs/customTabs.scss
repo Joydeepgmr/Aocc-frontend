@@ -1,0 +1,19 @@
+@import '../../styles/sass/variables';
+
+.custom_tabs_card {
+  .ant-tabs-nav {
+    .ant-tabs-tab {
+      background-color: $white;
+      border-top: $white;
+      border-left: $white;
+      border-right: $white;
+
+      &-active {
+        background-color: $button_color; 
+        .ant-tabs-tab-btn {
+          color: $white; 
+        }
+      }
+    }
+  }
+}

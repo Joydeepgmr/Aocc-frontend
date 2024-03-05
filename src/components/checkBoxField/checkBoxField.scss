@@ -1,0 +1,8 @@
+@import '../../styles/sass/utils';
+@import '../../styles/sass/mixins';
+ 
+.checkbox_group{
+    @include flex(center, start, row) 
+}
+
+

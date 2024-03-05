@@ -1,0 +1,102 @@
+@import '../../../styles/sass/variables';
+@import '../../../styles/sass/utils';
+@import '../../../styles/sass/mixins';
+
+
+
+.user_access_container{
+    width: 100%;
+    height: 100vh;
+    .user_access_content{
+        margin-top: 4rem;
+        padding: 4rem;
+        @include flex(start,center, column); 
+  
+       .filledTextButton{         
+            &.custom_button{
+                background-color: $gray_100;
+                color: $black;
+                height: 4.4rem;
+                padding: 1.2rem 2.4rem;
+                border-radius: 1.2rem;
+                font-size: 1.6rem;
+                font-weight: 600;
+                line-height: 2.008rem;
+            }
+        }
+
+         .filledTextButton{         
+            &.custom_button_add{
+                background-color: $button_color;
+                color: $white;
+                height: 4.4rem;
+            }
+        }
+
+        .user_add_button{
+            @extend .flex-row;
+            gap: 0.8rem;
+            border: 1px dashed $gray_400;
+            border-radius: 1.2rem;
+            height: 46.6vh;
+            width: 100%;
+            .down_arrow_button{
+                position: relative;
+                .down_arrow{
+                position: absolute; 
+                top: 40%;
+                left: 75%;   
+            }
+            }
+            
+        }
+
+    }
+}
+
+
+.user_add_form{
+    width: 100%;
+    
+
+    .user_input_fields{
+            display: flex; // Set display to flex
+            justify-content: start;
+            gap: 2rem;
+            width: 100%;
+            
+               .input_form_item{
+                    &.custom_input  {
+                    width: 45%;
+                }
+               } 
+                
+             .date_form_item{
+                .custom_date{
+                width: 45%;
+               }
+             }  
+               
+                  
+        }
+
+    .custom_buttons{
+        @extend .flex-row;
+        justify-content: end;
+        gap: 2rem;
+        margin-top: 2.4rem;
+        margin-bottom: 1.4rem;
+        .custom_button_cancel{
+            background-color: $gray_100;
+            color: $black;
+            padding: 1.2rem 2.4rem;
+            height: 4.4rem;
+        }
+        .custom_button_save{
+           
+            padding: 1.2rem 2.4rem;
+            height: 4.4rem;
+        }
+
+    }
+}

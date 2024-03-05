@@ -1,0 +1,17 @@
+.select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.select, .select_component {
+    font-size: 1.6rem;
+    padding: 0.5rem;
+}
+.select_wrapper.select_wrapper{
+ height:5rem;
+ width: 36.5rem ;
+}
+.ant-select-selector{
+    border-radius: 1.2rem  !important;
+}
