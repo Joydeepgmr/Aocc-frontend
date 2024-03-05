@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Button from '../../../components/button/button';
-import ModalComponent from '../../../components/modalComponent/modalComponent';
+import Button from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modalComponent/modalComponent';
 import FormComponent from '../formComponent/formComponent';
-import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import './CDM.scss';
 
 
@@ -23,7 +23,7 @@ const CDM = () => {
 		<div className="mainHead">
 			<div className="container">
 				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-				<ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Seasonal Planning" className="custom_modal">
+				<ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Collaborative Decision Making Schedule" className="custom_modal">
 					<div className="modal_content"><FormComponent /></div>
 					<div className='form_section'>
 						<div className='form_bottomButton'>
