@@ -1,0 +1,57 @@
+@import "../../../../../styles/sass/mixins";
+@import "../../../../../styles/sass/variables";
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    @include flex(center, center, row);
+    gap: 1rem;
+    height: 50vh;
+}
+
+.main_Head {
+    border: 1px dashed #F1F3F5;
+    height: 55vh;
+    width:150rem;
+}
+
+.modal_content {
+    position: relative;
+    @include flex(center, center, column);
+    min-height: 40vh;
+}
+
+#btn {
+    padding: 2.2rem;
+}
+
+.modals_class {
+    max-height: 50rem;
+    overflow: auto;
+}
+
+.button {
+    &.button.custom_svgButton {
+        color: $black;
+        background-color: $gray_200;
+    }
+}
+
+.custom_modal {
+    max-height: 50rem;
+    overflow: auto;
+    border-radius: 1rem;
+}
+
+.form_section {
+    padding-top: 2.4rem;
+}
+
+.form_bottomButton {
+    @include flex(stretch, end, row);
+    gap: 1.6rem;
+}

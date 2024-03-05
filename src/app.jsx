@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
@@ -11,6 +10,7 @@ import Layout from './layouts/layout/layout';
 
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 import './app.scss';
+import Airport from './views/afterAuth/airportMaster/airport';
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
@@ -33,12 +33,18 @@ export function App() {
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="orders" element={<Orders />} />
+
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>
 					<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<UserAccess />} />
+						</Route>
+					</Route>
+					<Route path={Pathname.AIRPORTMASTER} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<Airport />} />
 						</Route>
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />

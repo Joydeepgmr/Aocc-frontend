@@ -1,0 +1,15 @@
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+}
+.container-style{
+    display: flex;
+    flex-direction: column;
+}
+.header-style{
+   padding-top: 5rem;
+}
+.tabs{
+   padding-left: 3.5rem;
+}

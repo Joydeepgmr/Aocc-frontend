@@ -13,7 +13,7 @@ import { navMenu } from './navData';
 import { useNavigate } from 'react-router-dom';
 
 const TopNav = () => {
-	const [activeTab, setActiveTab] = useState(navMenu[0].key); // Set the default active tab
+	const [activeTab, setActiveTab] = useState(navMenu.link); // Set the default active tab
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false); // State to manage setting card visibility
 	const navigate = useNavigate();
 

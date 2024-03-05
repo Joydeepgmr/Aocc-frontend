@@ -1,3 +1,6 @@
+import React from 'react';
+import { Link, Route } from 'react-router-dom';
+import Airport from '../../views/afterAuth/airportMaster/airport';
 export const navMenu = [
 	{
 		key: '0',
@@ -16,12 +19,7 @@ export const navMenu = [
 	},
 	{
 		key: '3',
-		label: 'Global Masters',
-		children: 'import component Global masters',
-	},
-	{
-		key: '4',
 		label: 'Airport Masters',
-		children: 'import component Airport masters',
+		children: <Airport />,
 	},
 ];

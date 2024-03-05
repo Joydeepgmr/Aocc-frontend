@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cards from '../../../components/card/card';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
@@ -11,7 +12,6 @@ import CustomTabs from '../../../components/customTabs/customTabs';
 import CheckBoxField from '../../../components/checkBoxField/checkBoxField';
 import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
-import Cards from '../../../components/card/card';
 import Chip from '../../../components/chip/chip';
 import TextField from '../../../components/textField/textField';
 import Bell from '../../../assets/Bell.svg';
@@ -19,6 +19,7 @@ import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import TopHeader from '../../../components/topHeader/topHeader';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +28,7 @@ export const Components = () => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
-	const [form] = Form.useForm();
+	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
 
 	const dropdownItems = [
 		{
@@ -54,27 +55,20 @@ export const Components = () => {
 	const SelectData = [
 		{
 			id: '1',
-			label: 'Apple',
-			value: 'Apple',
+			label: 'options',
+			value: 'options',
 		},
-
 		{
 			id: '2',
-
-			label: 'cherry',
-
-			value: 'cherry',
+			label: 'options',
+			value: 'options',
 		},
-
 		{
 			id: '3',
-
-			label: 'banana',
-
-			value: 'banana',
+			label: 'options',
+			value: 'options',
 		},
 	];
-	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -93,7 +87,7 @@ export const Components = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log('onFinish', values);
+		console.log('Form values:', values); // Output form values to console
 	};
 
 	const dummyData = [
@@ -120,8 +114,8 @@ export const Components = () => {
 
 	return (
 		<React.Fragment>
-			<Form form={form} layout="vertical" onFinish={onFinish}>
-				<div className="margin">
+			<div className="margin">
+				<Form form={form} layout="vertical" onFinish={onFinish}>
 					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
 						<InputField
 							label="Airport Name"
@@ -221,93 +215,94 @@ export const Components = () => {
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
 						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 					</div>
-				</div>
-</Form>
-				<hr />
+				</Form>
+			</div>
 
-				<div className="container">
-					<Button
-						onClick={() => {
-							alert('Filled button');
-						}}
-						title="Save"
-						type="filledText"
-					/>
+			<hr />
 
-					<Button
-						onClick={() => {
-							alert('Text button');
-						}}
-						title="View Details"
-						type="text"
-					/>
+			<div className="container">
+				<Button
+					onClick={() => {
+						alert('Filled button');
+					}}
+					title="Save"
+					type="filledText"
+				/>
 
-					<Button
-						onClick={() => {
-							alert('Icon Button with Border');
-						}}
-						type="iconWithBorder"
-						icon={RightArrow}
-						alt="arrow icon"
-					/>
+				<Button
+					onClick={() => {
+						alert('Text button');
+					}}
+					title="View Details"
+					type="text"
+				/>
 
-					<Button
-						onClick={() => {
-							alert('Icon Button');
-						}}
-						icon={Bell}
-						alt="bell icon"
-						className="icon_withoutBorder"
-					/>
+				<Button
+					onClick={() => {
+						alert('Icon Button with Border');
+					}}
+					type="iconWithBorder"
+					icon={RightArrow}
+					alt="arrow icon"
+				/>
 
-					<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
-				</div>
+				<Button
+					onClick={() => {
+						alert('Icon Button');
+					}}
+					icon={Bell}
+					alt="bell icon"
+					className="icon_withoutBorder"
+				/>
 
-				<hr />
+				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+			</div>
 
-				<div className="container">
-					<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
-				</div>
+			<hr />
 
-				<hr />
+			<div className="container">
+				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
+			</div>
 
-				<div className="container">
-					<Chip text="Critical" className="criticalChip" />
-					<br />
-					<Chip text="Cancelled" className="cancelledChip" />
-					<br />
-					<Chip text="Notice" className="noticeChip" />
-					<br />
-					<Chip text="Delay" className="delayChip" />
-				</div>
-				<Divider />
-				<div className="margin">
-					<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
-				</div>
-				<Divider />
-				<div className="container-column">
-					<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
-						Heading 1
-					</CustomTypography>
-					<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
-						Heading 2
-					</CustomTypography>
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Heading 3
-					</CustomTypography>
-					<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
-						Heading 4
-					</CustomTypography>
-					<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
-						Heading 5
-					</CustomTypography>
-					<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
-						Heading 6
-					</CustomTypography>
+			<hr />
 
-					<CustomTypography type="paragraph" fontSize={16} color="black">
-						Paragraph Text
-					</CustomTypography>
+			<div className="container">
+				<Chip text="Critical" className="criticalChip" />
+				<br />
+				<Chip text="Cancelled" className="cancelledChip" />
+				<br />
+				<Chip text="Notice" className="noticeChip" />
+				<br />
+				<Chip text="Delay" className="delayChip" />
+			</div>
+			<Divider />
+			<div className="margin">
+				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
+			</div>
+			<Divider />
+			<div className="container-column">
+				<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
+					Heading 1
+				</CustomTypography>
+				<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
+					Heading 2
+				</CustomTypography>
+				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+					Heading 3
+				</CustomTypography>
+				<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
+					Heading 4
+				</CustomTypography>
+				<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
+					Heading 5
+				</CustomTypography>
+				<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
+					Heading 6
+				</CustomTypography>
+
+				<CustomTypography type="paragraph" fontSize={16} color="black">
+					Paragraph Text
+				</CustomTypography>
 
 				<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
 					Subheading 1
@@ -320,11 +315,11 @@ export const Components = () => {
 				</CustomTypography>
 			</div>
 			<Divider />
-		     <Cards/>
+			<Cards />
 			<Divider />
 			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
 			<Divider />
-			<Date label="Date picker" placeholder="Date Picker"  handleChange={handleChange}/>
+			<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
 			<Divider />
 			<div className="container">
 				<MultiSelectComponent
@@ -333,6 +328,10 @@ export const Components = () => {
 					onChange={handleSelectChange}
 				/>
 			</div>
+			<TopHeader
+				heading="Manage User Access"
+				subHeading="Overview of access management for airport access management"
+			/>
 		</React.Fragment>
 	);
 };
