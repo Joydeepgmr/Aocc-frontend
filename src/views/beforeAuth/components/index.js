@@ -20,6 +20,7 @@ import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
 import TopHeader from '../../../components/topHeader/topHeader';
+import OtpField from '../../../components/otpField/otpField';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -332,6 +333,9 @@ export const Components = () => {
 				heading="Manage User Access"
 				subHeading="Overview of access management for airport access management"
 			/>
+			<div className='container'>
+				<OtpField otpLength={3} onFinish={(e) => console.log(e.target.value)}/>
+			</div>
 		</React.Fragment>
 	);
 };
