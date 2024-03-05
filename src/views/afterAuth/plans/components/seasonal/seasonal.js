@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import Button from '../../../components/button/button';
-import ModalComponent from '../../../components/modalComponent/modalComponent';
-import './seasonal.scss';
+import Button from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modalComponent/modalComponent';
 import FormComponent from '../formComponent/formComponent';
-import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
-
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
+import './seasonal.scss';
 
 
 const Seasonal = () => {

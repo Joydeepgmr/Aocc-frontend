@@ -1,5 +1,5 @@
-@import '../../../styles/sass//variables';
-@import '../../../styles/sass/mixins';
+@import '../../../../../styles/sass/mixins';
+@import '../../../../../styles/sass/variables';
 
 * {
     padding: 0;
@@ -35,7 +35,7 @@
 }
 
 .custom_modal{
-    max-height: 50rem;
+    max-height: 85%;
     overflow: auto;
     border-radius: 1rem;
 }
