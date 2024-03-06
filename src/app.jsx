@@ -9,6 +9,7 @@ import Planning from './views/afterAuth/planning/planning';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
 import UserAccess from './views/afterAuth/userAccess/userAccess';
+import AirportMasters from './views/afterAuth/airportMasters/airportMasters';
 // import Dashboard from './views/afterAuth/dashboard/dashboard';
 import './app.scss';
 
@@ -34,6 +35,7 @@ export function App() {
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="orders" element={<Orders />} />
+							<Route path="airportMasters" element={<AirportMasters />} />
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>
