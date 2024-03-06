@@ -33,7 +33,7 @@
 		}
 
 		.user_add_button {
-			@extend .flex-row;
+			@include flex(center, center, row);
 			gap: 0.8rem;
 			border: 1px dashed $gray_400;
 			border-radius: 1.2rem;
@@ -116,8 +116,7 @@
 	width: 100%;
 
 	.user_input_fields {
-		display: flex; // Set display to flex
-		justify-content: start;
+		@include flex(center, start, row);
 		gap: 2rem;
 		width: 100%;
 
@@ -135,7 +134,7 @@
 	}
 
 	.custom_buttons {
-		@extend .flex-row;
+		@include flex(center, end, row);
 		justify-content: end;
 		gap: 2rem;
 		margin-top: 2.4rem;
