@@ -6,10 +6,11 @@ import ModalComponent from '../../../components/modalComponent/modalComponent';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
-import { SelectData } from './userAccessData';
+import { SelectData, columns, dummyData } from './userAccessData';
 import Date from '../../../components/datapicker/datepicker';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
+import TableComponent from '../../../components/table/table';
 
 const UserAccess = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,8 +23,8 @@ const UserAccess = () => {
 	};
 
 	const onFinishHanlder = (values) => {
-		values.validFrom = values.validFrom.toISOString();
-		values.validTo = values.validTo.toISOString();
+		values.validFrom = values?.validFrom?.toISOString();
+		values.validTo = values?.validTo?.toISOString();
 		console.log('onFinishHanlder', values);
 		closeAddUserModal();
 	};
@@ -47,8 +48,11 @@ const UserAccess = () => {
 						/>
 						<img src={downArrow} className="down_arrow" />
 					</div>
-					<ButtonComponent title="Upload CSV" type="filledText" className="custom_button" />
-					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
+					<div className="user_add_dropdown">
+						<p>Add Planner Access</p>
+						<div className="line"></div>
+						<p>Add Vendor Access</p>
+					</div>
 				</div>
 			</div>
 			<ModalComponent isModalOpen={isModalOpen} closeModal={closeAddUserModal} title="Add User" width="87.2rem">
@@ -105,7 +109,25 @@ const UserAccess = () => {
 					</div>
 				</Form>
 			</ModalComponent>
-			<TopHeader />
+			<div className="user-access-table-container">
+				<TopHeader
+					heading="Manage User Access"
+					subHeading="Overview of access management for airport access management"
+				/>
+
+				<div className="down_arrow_button">
+					<ButtonComponent
+						title="Add"
+						type="filledText"
+						className="custom_button_add"
+						onClick={openAddUserModal}
+					/>
+					<img src={downArrow} className="down_arrow" />
+				</div>
+			</div>
+			<div className="table_container">
+				<TableComponent data={dummyData} columns={columns} />
+			</div>
 		</div>
 	);
 };

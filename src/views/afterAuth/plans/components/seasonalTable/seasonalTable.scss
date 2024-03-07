@@ -1,0 +1,21 @@
+@import '../../../../../styles//sass/variables';
+@import '../../../../../styles//sass/mixins';
+
+.button {
+    &.button.iconBorderButton {
+        &.custom_filter {
+            background-color: $white;
+            border-radius: 1rem;
+            border: 0.1rem solid $gray_300;
+        }
+    }
+}
+
+.top_container{
+    @include flex(center, space-between, row);
+}
+
+.button_container{
+    display: flex;
+    
+}
