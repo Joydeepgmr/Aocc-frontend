@@ -20,13 +20,6 @@
     padding:2.2rem ;
 }
 
-.button{
-    &.button.custom_svgButton {
-        color: $black;
-        background-color: $gray_200;
-    }
-}
-
 .modal_content {
     position: relative;
     @include flex(center,center, column);
@@ -37,13 +30,4 @@
     max-height: 50rem;
     overflow: auto;
     border-radius: 1rem;
-}
-
-.form_section{
-    padding-top: 2.4rem;
-}
-
-.form_bottomButton{
-    @include flex(stretch, end, row);
-    gap: 1.6rem;
 }

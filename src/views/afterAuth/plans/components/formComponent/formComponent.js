@@ -1,6 +1,7 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { Form } from 'antd';
 import InputField from '../../../../../components/inputField/inputField';
+import Button from '../../../../../components/button/button';
 import './formComponent.scss';
 
 
@@ -9,12 +10,12 @@ const FormComponent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
-		setIsModalOpen(true);
-	};
+        setIsModalOpen(true);
+    };
 
-	const closeModal = () => {
-		setIsModalOpen(false);
-	};
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const onFinish = (values) => {
         console.log('Form values:', values);
@@ -213,6 +214,13 @@ const FormComponent = () => {
                             warning="Required field"
                             type="number"
                         />
+                    </div>
+                </div>
+
+                <div className='form_section'>
+                    <div className='form_bottomButton'>
+                        <Button title="Save" type="filledText" id="btn" isSubmit="submit" onClick={onFinish} />
+                        <Button title="Cancel" type="filledText" id="btn" isSubmit="submit" onClick={closeModal} className="custom_svgButton" />
                     </div>
                 </div>
             </Form>
