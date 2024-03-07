@@ -1,0 +1,35 @@
+
+@import '../../../../../styles/sass/variables';
+@import '../../../../../styles/sass/mixins';
+
+    .create_wrapper_table{
+		width: 100%;
+		height: 33.9rem;
+    	border-radius: 1.2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2.4rem;
+	
+		.table_container{
+			border-radius: 1.2rem;
+			border: 1px solid $gray_300;
+			padding: 2.4rem;
+			display: flex;
+			flex-direction: column;
+			gap: 2.4rem;
+		}
+        
+	}
+
+.action_buttons{
+    @include flex(center, center, row);
+    gap: 1.6rem;
+    // .iconBorderButton {
+	// 		&.custom_icon_buttons {
+	// 			background-color: $button_color;
+	// 			color: $white;
+	// 			height: 4.4rem;
+	// 		}
+	// 	}
+}
+       
