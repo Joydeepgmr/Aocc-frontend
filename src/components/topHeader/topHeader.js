@@ -23,10 +23,10 @@ const TopHeader = ({ heading, subHeading, className }) => {
 					</CustomTypography>
 				</div>
 				<div className="filter_search_container">
-					<div className="filter-icon">
+					<div className="filter_icon">
 						<img src={filterIcon} />
 					</div>
-					<div>
+					<div className="search_field">
 						<InputField type="search" name="search" placeholder="Search" className="custom_input1" />
 					</div>
 				</div>

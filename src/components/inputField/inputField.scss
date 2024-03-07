@@ -11,6 +11,20 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+ // Additional styles for country code input
+  .code_input {
+    display: flex;
+
+    .code_input_single {
+      border-radius: 1.2rem;
+      padding: 1.6rem;
+      width: 5rem; // Adjusted width for two small boxes with a small gap
+      height: 5rem;
+      margin-right: 0.8rem; // Margin between the two small input boxes
+    }
+  }
+
 }
 
 
