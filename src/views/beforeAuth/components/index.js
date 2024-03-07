@@ -330,6 +330,13 @@ export const Components = () => {
 					onChange={handleSelectChange}
 				/>
 			</div>
+			<TopHeader
+				heading="Manage User Access"
+				subHeading="Overview of access management for airport access management"
+			/>
+			<div className='container'>
+				<OtpField otpLength={3} required={true} disabled={false} label={"3-letter Code"}/>
+			</div>
 		</React.Fragment>
 	);
 };
