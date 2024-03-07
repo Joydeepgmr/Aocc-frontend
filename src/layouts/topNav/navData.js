@@ -1,3 +1,6 @@
+import React from 'react';
+import { Navigate } from 'react-router';
+
 export const navMenu = [
 	{
 		key: '0',
@@ -23,5 +26,18 @@ export const navMenu = [
 		key: '4',
 		label: 'Airport Masters',
 		children: 'import component Airport masters',
+	},
+];
+
+export const navMenuITadmin = [
+	{
+		key: '0',
+		label: 'Global Masters',
+		children: '/global-masters',
+	},
+	{
+		key: '1',
+		label: 'Airport Masters',
+		children: '/airport-masters',
 	},
 ];

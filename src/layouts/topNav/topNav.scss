@@ -5,6 +5,9 @@
 
 .nav_container{
     background-color: $gray_100;
+    position: sticky;
+    top: 0px;
+    z-index: 1;
     height: 6.8rem;
     width: 100%;
     @include flex(center, space-between, row); 
@@ -25,7 +28,8 @@
         }
 
         .tabs_container{
-           @include flex(center, space-between, row); 
+           @include flex(center, start, row);
+           gap: 1.6rem; 
             width: 74%;
             font-weight: 400;
             font-size: 1.6rem;
@@ -146,6 +150,7 @@
     background-color: $gray_100;
     @include flex(center, space-around, column); 
     position: absolute;
+    z-index: 1;
     left: 105rem;
     top: 5rem;
     p{
