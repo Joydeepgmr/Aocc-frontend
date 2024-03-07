@@ -41,6 +41,22 @@ const AirportMasters = () => {
             value: 'option3',
         },
     ];
+
+	const columns = [
+		{ title: 'Airport', dataIndex: 'airport', key: 'airport' },
+		{ title: '3 Letter Code', dataIndex: 'threeCode', key: 'threeCode' },
+		{ title: '4 Letter Code', dataIndex: 'fourCode', key: 'fourCode' },
+		{ title: 'City', dataIndex: 'city', key: 'city' },
+		{ title: 'Country', dataIndex: 'country', key: 'country'},
+		{ title: 'Email Address', dataIndex: 'email', key: 'email'},
+		{ title: 'Validity', dataIndex: 'validity', key: 'validity'},
+		{ title: 'Created By', dataIndex: 'createdBy', key: 'createdBy'},
+		{ title: 'Created On', dataIndex: 'createdOn', key: 'createdOn'},
+	];
+
+	const tableData = [
+
+	]
     return (
         <div className="user_access_container">
 			<div className="user_access_content">
