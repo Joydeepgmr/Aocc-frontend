@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { setUserName } from './redux/reducer';
 import { UsersFetchAction } from './redux/actionCreator';
-
 import './dashboard.scss';
+
 
 export const Dashboard = () => {
 	const dispatch = useDispatch();
@@ -12,8 +11,6 @@ export const Dashboard = () => {
 
 	useEffect(() => {
 		dispatch(setUserName('Shank'));
-
-		// Dummy API Call
 		dispatch(UsersFetchAction());
 	}, []);
 
