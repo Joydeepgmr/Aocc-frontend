@@ -37,6 +37,7 @@ const TableComponent = ({
                 locale={{
                     emptyText: <Empty description={emptyText} />
                 }}
+                pagination={false}
             />
         </>
     );

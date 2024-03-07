@@ -29,7 +29,7 @@ export const Components = () => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
-	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
+	const [form] = Form.useForm();
 
 	const dropdownItems = [
 		{
@@ -70,6 +70,7 @@ export const Components = () => {
 			value: 'options',
 		},
 	];
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -88,7 +89,7 @@ export const Components = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
+		console.log('Form values:', values);
 	};
 
 	const dummyData = [
@@ -256,7 +257,7 @@ export const Components = () => {
 					className="icon_withoutBorder"
 				/>
 
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+				<DropdownButton dropdownItems={dropdownItems} buttonText="Create"/>
 			</div>
 
 			<hr />
@@ -334,7 +335,7 @@ export const Components = () => {
 				subHeading="Overview of access management for airport access management"
 			/>
 			<div className='container'>
-				<OtpField otpLength={3} onFinish={(e) => console.log(e.target.value)}/>
+				<OtpField otpLength={3} required={true} disabled={false} label={"3-letter Code"}/>
 			</div>
 		</React.Fragment>
 	);

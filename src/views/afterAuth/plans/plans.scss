@@ -1,0 +1,14 @@
+@import '../../../styles/sass//variables';
+@import '../../../styles/sass/mixins';
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.box {
+    @include flex(stretch, center, column);
+    padding: 10rem 2rem 0rem 3rem;
+    gap: 2rem;
+}
