@@ -25,11 +25,10 @@ const OtpField = ({
     return (
         <>
             <Form.Item 
-            // label={otpLabel()}
+            label={otpLabel()}
             name="otp"
             className={`${className} otp_form_item`}
             >
-                <CustomTypography type="text" fontSize={16} fontWeight={600} color="#121212" children={otpLabel()} />
                 <InputOTP inputType="numeric" length={otpLength} disabled={disabled ? disabled : false} className="otp_field" />
             </Form.Item>
         </>    
