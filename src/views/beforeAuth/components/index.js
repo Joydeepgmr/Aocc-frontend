@@ -334,7 +334,7 @@ export const Components = () => {
 				subHeading="Overview of access management for airport access management"
 			/>
 			<div className='container'>
-				<OtpField otpLength={3} onFinish={(e) => console.log(e.target.value)}/>
+				<OtpField otpLength={3} required={true} disabled={false} label={"3-letter Code"}/>
 			</div>
 		</React.Fragment>
 	);
