@@ -1,15 +1,14 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
-import Plans from './views/afterAuth/plans/plans';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
 import UserAccess from './views/afterAuth/userAccess/userAccess';
-import AirportMasters from './views/afterAuth/airportMasters/airportMasters';
-// import Dashboard from './views/afterAuth/dashboard/dashboard';
+
 import './app.scss';
 import GlobalMasters from './views/afterAuth/globalMasters/globalMasters';
 
@@ -40,18 +39,11 @@ export function App() {
 						}
 					/>
 					<Route path={Pathname.LOGIN} element={<Login />} />
-					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<Plans />} />
-							<Route path="*" element={<NotFound />} />
-						</Route>
-					</Route>
-					<Route index path={Pathname.TEST} element={<Dashboard />} />
+
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="orders" element={<Orders />} />
-							<Route path="airportMasters" element={<AirportMasters />} />
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>
@@ -59,7 +51,6 @@ export function App() {
 						<Route element={<Layout />}>
 							<Route index element={<UserAccess />} />
 						</Route>
-						{/* <Route path={Pathname.DASHBOARD_TEST} element={<Dashboard />} /> */}
 					</Route>
 					<Route path={Pathname.GLOBALMASTERS} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
@@ -75,7 +66,7 @@ export function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
-		</Suspense >
+		</Suspense>
 	);
 }
 
