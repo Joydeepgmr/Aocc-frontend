@@ -10,13 +10,19 @@ export const globalMastersSlice = createSlice({
 		addAirport: (state, action) => {
 			state.additionalAirportData.push(action.payload);
 		},
+		formDisabled: (state, action) => {
+			state.disabled = !state.disabled;
+			// state.disabled = false;
+		},
+		updateAirportData: (state, action) => {
+			state.additionalAirportData = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(addAirportAction.pending, (state) => {
 			state.loading = true;
 		});
 		builder.addCase(addAirportAction.fulfilled, (state, action) => {
-			console.log(action);
 			state.loading = false;
 			state.error = '';
 			state.airportData = action.payload;
@@ -29,6 +35,6 @@ export const globalMastersSlice = createSlice({
 	},
 });
 
-export const { addAirport } = globalMastersSlice.actions;
+export const { addAirport, formDisabled, updateAirportData } = globalMastersSlice.actions;
 
 export default globalMastersSlice.reducer;
