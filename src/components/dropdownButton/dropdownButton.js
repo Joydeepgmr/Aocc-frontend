@@ -1,23 +1,34 @@
+// DropdownButton.js
 import React from 'react';
 import downOutLined from '../../assets/DownOutLined.svg';
-import { Dropdown, Space } from 'antd';
+import { Dropdown, Menu, Space } from 'antd';
 import './dropdownButton.scss';
 
+const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...rest }) => {
+	const handleItemClick = (e, item) => {
+		onChange(item.value);
+	};
 
-const DropdownButton = ({ dropdownItems, buttonText, className, onClick, ...rest }) => {
-  const defaultClickHandler = (e) => {
-    e.preventDefault();
-  };
+	const menu = (
+		<Menu>
+			{dropdownItems.map((item) => (
+				<Menu.Item key={item.key} onClick={(e) => handleItemClick(e, item)}>
+					{item.label}
+				</Menu.Item>
+			))}
+		</Menu>
+	);
 
-  const clickHandler = onClick ? onClick : defaultClickHandler;
-
-  return (
-    <Dropdown menu={{ items: dropdownItems }} trigger={['click']} >
-      <a onClick={clickHandler} className={`create ${className}`} {...rest} >
-        <Space>{buttonText}<img src={downOutLined}/></Space>
-      </a>
-    </Dropdown>
-  );
+	return (
+		<Dropdown overlay={menu} trigger={['click']}>
+			<a className={`create ${className}`} {...rest}>
+				<Space>
+					{buttonText}
+					<img src={downOutLined} alt="Dropdown Icon" />
+				</Space>
+			</a>
+		</Dropdown>
+	);
 };
 
 export default DropdownButton;

@@ -7,6 +7,7 @@ import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
 import Date from '../../../components/datapicker/datepicker';
 import TopHeader from '../../../components/topHeader/topHeader';
+import TableComponent from '../../../components/table/table';
 import './airportMasters.scss';
 const AirportMasters = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +24,9 @@ const AirportMasters = () => {
 		values.validTo = values.validTo.toISOString();
 		console.log('onFinishHanlder', values);
 		closeAddUserModal();
+	};
+	const handleTableChange = (pagination, filters, sorter) => {
+		console.log('Table changed:', pagination, filters, sorter);
 	};
     const SelectData = [
         {
@@ -55,7 +59,7 @@ const AirportMasters = () => {
 	];
 
 	const tableData = [
-
+		{key: "1", airport:"Airport 1", threeCode:"123", fourCode:"1234", city:"Delhi", country:"India", email:"John1@gmail.com", validity:"Valid", createdBy:"John Singh", createdOn:"27.02.2024"}
 	]
     return (
         <div className="user_access_container">
@@ -67,14 +71,15 @@ const AirportMasters = () => {
                 Overview of airport licenses for the Airport Operating System.
 				</CustomTypography>
 				<div className="user_add_button">
-					<div className="down_arrow_button">
+					{/* <div className="down_arrow_button">
 						<ButtonComponent
 							title="Add"
 							type="filledText"
 							className="custom_button_add"
 							onClick={openAddUserModal}
 						/>
-					</div>
+					</div> */}
+
 				</div>
 			</div>
 			<ModalComponent isModalOpen={isModalOpen} closeModal={closeAddUserModal} title="New Airport License" width="87.2rem">

@@ -1,5 +1,5 @@
 import { Form, Input, InputNumber } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import './inputField.scss';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -16,6 +16,7 @@ const InputField = ({
 	suffixText,
 	status,
 	rest,
+	codeLength,
 }) => {
 	const renderLabel = () => {
 		return (
@@ -28,6 +29,29 @@ const InputField = ({
 
 	const numberPattern = /^[0-9]*$/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	const inputs = [];
+	const [codeValue, setCodeValue] = useState('');
+
+	const handleCodeChange = (index, value) => {
+		const updatedCodeValue = codeValue.substring(0, index) + value + codeValue.substring(index + 1);
+		console.log(codeValue, 'codeValue');
+		return updatedCodeValue;
+	};
+
+	if (type === 'code') {
+		for (let i = 0; i < codeLength; i++) {
+			inputs.push(
+				<Input
+					disabled={disabled ? disabled : false}
+					className={`input_field code_input_single`}
+					maxLength={1}
+					max-
+					{...rest}
+					onChange={(e) => handleCodeChange(i, e.target.value)}
+				/>
+			);
+		}
+	}
 
 	return (
 		<>
@@ -76,6 +100,27 @@ const InputField = ({
 						className={`input_field`}
 						{...rest}
 					/>
+				</Form.Item>
+			) : type === 'code' ? (
+				<Form.Item
+					label={renderLabel()}
+					name={name}
+					className={`${className} input_form_item`}
+					rules={[
+						{
+							message: warning ? warning : 'This field is required.',
+						},
+						{
+							pattern: numberPattern,
+							message: 'Please enter only numbers',
+						},
+					]}
+				>
+					<div className="code_input">
+						{inputs.map((input, index) => (
+							<div key={index}>{input}</div>
+						))}
+					</div>
 				</Form.Item>
 			) : (
 				<Form.Item

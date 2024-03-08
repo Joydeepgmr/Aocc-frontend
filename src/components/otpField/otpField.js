@@ -36,8 +36,8 @@ const OtpField = ({
 };
 
 OtpField.propTypes = {
-    otpLength: PropTypes.number.isRequired,
-    onFinish: PropTypes.func.isRequired,
+	otpLength: PropTypes.number.isRequired,
+	onFinish: PropTypes.func.isRequired,
 };
 
 export default OtpField;
