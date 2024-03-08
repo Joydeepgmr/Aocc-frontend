@@ -7,9 +7,9 @@ import Login from './views/beforeAuth/login/login';
 import Plans from './views/afterAuth/plans/plans';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
+import AirportMaster from "./views/afterAuth/airportMaster/airport"
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 import './app.scss';
-
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
@@ -22,7 +22,10 @@ export function App() {
 		<Suspense fallback={<Loader />}>
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />} />
+					<Route
+						path="/"
+						element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />}
+					/>
 					<Route path={Pathname.LOGIN} element={<Login />} />
 					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
@@ -34,6 +37,7 @@ export function App() {
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="orders" element={<Orders />} />
+
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>
@@ -42,11 +46,18 @@ export function App() {
 							<Route index element={<UserAccess />} />
 						</Route>
 					</Route>
+					
+					<Route path={Pathname.AIRPORTMASTER} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<AirportMaster />} />
+							<Route path="*" element={<NotFound />} />
+						</Route>
+					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
-		</Suspense >
+		</Suspense>
 	);
 }
 

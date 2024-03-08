@@ -13,3 +13,15 @@
 #btn {
     padding: 2.2rem;
 }
+
+.button{
+    &.button.custom_svgButton {
+        color: $black;
+        background-color: $gray_200;
+    }
+}
+
+.form_bottomButton{
+    @include flex(stretch, end, row);
+    gap: 1.6rem;
+}

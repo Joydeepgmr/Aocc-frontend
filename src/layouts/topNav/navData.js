@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link, Route } from 'react-router-dom';
+import Airport from '../../views/afterAuth/airportMaster/airport';
 import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
 
@@ -21,7 +23,7 @@ export const navMenu = [
 	},
 	{
 		key: '3',
-		label: 'Airport Masters',
-		children: 'import component Airport masters',
+		label: 'AirportMasters',
+		children: <Airport />,
 	},
 ];

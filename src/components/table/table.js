@@ -12,13 +12,10 @@ const TableComponent = ({
     emptyText = 'No data available' 
 }) => {
 
-    // Function to handle table change events (pagination, filtering, sorting)
     const handleTableChange = (pagination, filters, sorter) => {
-        // Extract sortField and sortOrder from sorter object
         const sortField = sorter?.field;
         const sortOrder = sorter?.order;
         
-        // Call onChange prop with updated table state
         onChange({
             sortField,
             sortOrder,
