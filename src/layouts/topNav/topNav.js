@@ -9,7 +9,7 @@ import ellipse from '../../assets/logo/ellipse.svg';
 import line from '../../assets/logo/line.svg';
 
 import './topNav.scss';
-import { navMenu } from './navData';
+import { navMenu, navMenuITadmin } from './navData';
 import { useNavigate } from 'react-router-dom';
 
 const TopNav = () => {
@@ -21,6 +21,7 @@ const TopNav = () => {
 		setActiveTab(label);
 		console.log("what is key here", label);
 		navigate(`/${label.toLowerCase()}`)
+		navigate(navMenuITadmin[key].children);
 	};
 
 	const toggleSettingCard = () => {
@@ -46,7 +47,7 @@ const TopNav = () => {
 						<img src={gmrLogo} alt="GMR Logo" />
 					</div>
 					<div className="tabs_container">
-						{navMenu.map((menu) => (
+						{navMenuITadmin.map((menu) => (
 							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.label)}>
 								<div className={`tab ${activeTab === menu.key ? 'active' : ''}`}>{menu.label}</div>
 								{activeTab === menu.key && <div className="active-line" />}
@@ -97,9 +98,6 @@ const TopNav = () => {
 					<p onClick={logoutHandler}>Logout</p>
 				</div>
 			)}
-			{/* <div>
-				<p>{navMenu[activeTab].children}</p>
-			</div> */}
 		</>
 	);
 };

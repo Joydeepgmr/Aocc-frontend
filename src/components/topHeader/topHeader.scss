@@ -6,22 +6,26 @@
 
 .top_header_container{
     width: 100%;
-    padding: 0rem 4rem;
     @include flex(center, space-between, row);
     .filter_search_container{
         height: 4.4rem;
         @include flex(center, center, row);
         position: relative;
         gap: 0.8rem;
-        .filter-icon{
+        .filter_icon{
             width: 4.4rem;
             height: 4.4rem;
             @include flex(center, center, row);
             border: 1px solid $gray_300;
-            border-radius: 100%;
+            border-radius: 35%;
             position: absolute;
-            top: -0.8rem;
+            top: 0rem;
             left: -6rem;
+        }
+
+        .search_field{
+            position: relative;
+            top: 1rem;
         }
 
     }
