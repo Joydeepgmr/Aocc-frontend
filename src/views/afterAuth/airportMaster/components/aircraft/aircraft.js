@@ -4,6 +4,7 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import ModalComponent from '../../../../../components/modalComponent/modalComponent';
 import FormComponent from './formComponent/formComponent';
 import './aircraft.scss';
+import AircraftDetails from './aircraftDetails/aircraftDetails';
 const Aircrafts = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -23,7 +24,7 @@ const Aircrafts = () => {
 
 	return (
 		<>
-			<div className="aircraft-container">
+			{/* <div className="aircraft-container">
 				<div className="container">
 					<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
 					<ModalComponent
@@ -50,7 +51,8 @@ const Aircrafts = () => {
 						onClick={openCsvModal}
 					/>
 				</div>
-			</div>
+			</div> */}
+			<AircraftDetails />
 		</>
 	);
 };
