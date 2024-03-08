@@ -1,9 +1,10 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { Form } from 'antd';
-import InputField from '../../../components/inputField/inputField';
+import InputField from '../../../../../components/inputField/inputField';
+import Button from '../../../../../components/button/button';
 import './formComponent.scss';
-import ButtonComponent from '../../../components/button/button';
-import Date from '../../../components/datapicker/datepicker';
+import ButtonComponent from '../../../../../components/button/button';
+import Date from '../../../../../components/datapicker/datepicker';
 
 const FormComponent = () => {
 	const [form] = Form.useForm();

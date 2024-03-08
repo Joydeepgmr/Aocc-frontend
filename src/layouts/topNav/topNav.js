@@ -13,16 +13,18 @@ import { navMenu } from './navData';
 import { useNavigate } from 'react-router-dom';
 
 const TopNav = () => {
-	const [activeTab, setActiveTab] = useState(navMenu.link); // Set the default active tab
-	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false); // State to manage setting card visibility
+	const [activeTab, setActiveTab] = useState(navMenu[0].key);
+	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const navigate = useNavigate();
 
-	const handleTabClick = (key) => {
-		setActiveTab(key); // Set the clicked tab as active
+	const handleTabClick = (label) => {
+		setActiveTab(label);
+		console.log("what is key here", label);
+		navigate(`/${label.toLowerCase()}`)
 	};
 
 	const toggleSettingCard = () => {
-		setIsSettingCardOpen(!isSettingCardOpen); // Toggle setting card visibility
+		setIsSettingCardOpen(!isSettingCardOpen);
 	};
 
 	const logoutHandler = () => {
@@ -32,7 +34,7 @@ const TopNav = () => {
 	};
 
 	const manageAccessHandler = () => {
-		setIsSettingCardOpen(!isSettingCardOpen); // Toggle setting card visibility
+		setIsSettingCardOpen(!isSettingCardOpen);
 		navigate('/user-access');
 	};
 
@@ -45,7 +47,7 @@ const TopNav = () => {
 					</div>
 					<div className="tabs_container">
 						{navMenu.map((menu) => (
-							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.key)}>
+							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.label)}>
 								<div className={`tab ${activeTab === menu.key ? 'active' : ''}`}>{menu.label}</div>
 								{activeTab === menu.key && <div className="active-line" />}
 							</div>

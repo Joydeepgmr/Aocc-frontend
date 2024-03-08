@@ -5,11 +5,11 @@
 }
 .container-style{
     display: flex;
+    padding: 3.5rem;
     flex-direction: column;
+    gap:2rem;
+    width:135rem;
 }
-.header-style{
-   padding-top: 5rem;
-}
-.tabs{
-   padding-left: 3.5rem;
+.header-box{
+    padding:0px 0px;
 }

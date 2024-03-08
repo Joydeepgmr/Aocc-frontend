@@ -1,5 +1,5 @@
 @import '../../styles/sass/variables';
-
+ 
 .custom_tabs_card {
   .ant-tabs-nav {
     .ant-tabs-tab {
@@ -7,11 +7,25 @@
       border-top: $white;
       border-left: $white;
       border-right: $white;
-
+ 
       &-active {
-        background-color: $button_color; 
+        background-color: $button_color;
         .ant-tabs-tab-btn {
-          color: $white; 
+          color: $white;
+        }
+      }
+    }
+  }
+}
+ 
+.custom_tabs_plain{
+   .ant-tabs-nav {
+    .ant-tabs-tab {
+      &-active {
+        background-color: $white;
+        .ant-tabs-tab-btn {
+          color: $button_color;
+          border-bottom: black;
         }
       }
     }

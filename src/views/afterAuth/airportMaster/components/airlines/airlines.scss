@@ -1,5 +1,5 @@
-@import '../../../styles/sass//variables';
-@import '../../../styles/sass/mixins';
+@import "../../../../../styles/sass/mixins";
+@import "../../../../../styles/sass/variables";
 
 * {
     padding: 0;
@@ -13,10 +13,11 @@
     height: 50vh;
 }
 
-.main_Head {
+.aircraft_container {
     border: 1px dashed #F1F3F5;
     height: 55vh;
 }
+
 .modal_content {
     position: relative;
     @include flex(center, center, column);
@@ -26,29 +27,30 @@
 #btn {
     padding: 2.2rem;
 }
-.modals_class{
+
+.modals_class {
     max-height: 50rem;
     overflow: auto;
 }
 
-.button{
+.button {
     &.button.custom_svgButton {
         color: $black;
         background-color: $gray_200;
     }
 }
 
-.custom_modal{
+.custom_modal {
     max-height: 50rem;
     overflow: auto;
     border-radius: 1rem;
 }
 
-.form_section{
+.form_section {
     padding-top: 2.4rem;
 }
 
-.form_bottomButton{
+.form_bottomButton {
     @include flex(stretch, end, row);
     gap: 1.6rem;
 }

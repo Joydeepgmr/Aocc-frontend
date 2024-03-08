@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
+import Aircrafts from './components/aircraft/aircraft';
+import Airlines from './components/airlines/airlines';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './airport.scss';
-import Aircrafts from './components/aircraft/aircraft';
+
 
 const AirportMaster = () => {
 	const [index, setIndex] = useState(0);
@@ -10,25 +12,20 @@ const AirportMaster = () => {
 		{
 			key: '1',
 			label: 'Aircrafts',
-			children: <Aircrafts/>,
+			children: <Aircrafts />,
 		},
 		{
 			key: '2',
-			label: 'Aircrafts',
-			children: '',
+			label: 'Airlines',
+			children: <Airlines/>,
 		},
 		{
 			key: '3',
-			label: 'Airlines',
-			children: '',
-		},
-		{
-			key: '4',
 			label: 'Resources',
 			children: '',
 		},
 		{
-			key: '5',
+			key: '4',
 			label: 'Master Correlation',
 			children: '',
 		},
@@ -45,7 +42,7 @@ const AirportMaster = () => {
 		<>
 			<div className="container-style">
 				<TopHeader
-					className="header-style"
+					className="header-box"
 					heading={'Airport Reference Data'}
 					subHeading={'Overview of airport reference data'}
 					searchBox={false}

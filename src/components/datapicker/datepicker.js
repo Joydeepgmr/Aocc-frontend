@@ -15,17 +15,25 @@ const Date = ({
 	format,
 	className,
 }) => {
+	const renderLabel = () => {
+		return (
+			<>
+				{label}
+				{required && <span style={{ color: 'red' }}> *</span>}
+			</>
+		);
+	};
+
 	return (
 		<Form.Item
-			label={label}
+			label={renderLabel()}
 			name={name}
 			className={`${className} date_form_item`}
-			rules={[
-				{
-					required: required ? true : false,
-					message: 'This field is required.',
-				},
-			]}
+			// rules={[
+			// 	{
+			// 		message: 'This field is required.',
+			// 	},
+			// ]}
 		>
 			<DatePicker
 				placeholder={placeholder}
@@ -37,11 +45,10 @@ const Date = ({
 					} else if (isDisabledDate) {
 						return disabledDate(current);
 					} else {
-						let customDate = dayjs().format('YYYY/MM/DD');
-						return current && current < dayjs(customDate, 'YYYY/MM/DD');
+						let customDate = dayjs().format(format);
+						return current && current < dayjs(customDate, format);
 					}
 				}}
-				disabled={disabled ? true : false}
 			/>
 		</Form.Item>
 	);

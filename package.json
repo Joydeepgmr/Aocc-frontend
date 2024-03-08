@@ -25,6 +25,7 @@
 		"@reduxjs/toolkit": "^1.8.3",
 		"antd": "^5.14.1",
 		"antd-input-otp": "^2.1.0",
+		"axios": "^1.6.7",
 		"chart.js": "^4.4.1",
 		"dayjs": "^1.11.10",
 		"dotenv": "^16.3.1",

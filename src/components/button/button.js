@@ -2,8 +2,7 @@ import React from 'react';
 import './button.scss';
 import { Button } from 'antd';
 
-const ButtonComponent = ({ title, onClick, onClose, disabled, type, className, onCancel, isSubmit, icon, alt, ...rest }) => {
-
+const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, icon, alt, ...rest }) => {
 	let buttonContent;
 	let buttonTypeClass = '';
 
@@ -30,7 +29,6 @@ const ButtonComponent = ({ title, onClick, onClose, disabled, type, className, o
 			className={`button ${buttonTypeClass} ${className}`}
 			htmlType={isSubmit ? 'submit' : 'button'}
 			onClick={onClick}
-			onCancel={onCancel}
 			disabled={disabled}
 			{...rest}
 		>

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import FormComponent from './formComponent/formComponent';
-import './aircraft.scss';
-const Aircrafts = () => {
+const Airlines = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
@@ -20,10 +19,9 @@ const Aircrafts = () => {
 		setIsModalOpen(false);
 		setIsCsvModalOpen(false);
 	};
-
 	return (
 		<>
-			<div className="aircraft-container">
+			<div className="aircraft_container">
 				<div className="container">
 					<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
 					<ModalComponent
@@ -32,14 +30,14 @@ const Aircrafts = () => {
 						closeModal={closeModal}
 						title={
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Setup aircraft registration
+								Setup your airline
 							</CustomTypography>
 						}
 						className="custom_modal"
 					>
 						<div className="modal_content">
-							<FormComponent closeModal={closeModal} />
-						</div>
+						<FormComponent closeModal={closeModal} />
+					</div>
 					</ModalComponent>
 					<Button
 						id="btn"
@@ -55,4 +53,4 @@ const Aircrafts = () => {
 	);
 };
 
-export default React.memo(Aircrafts);
+export default React.memo(Airlines);

@@ -4,7 +4,7 @@ import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
-import Planning from './views/afterAuth/planning/planning';
+import Plans from './views/afterAuth/plans/plans';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
 
@@ -23,12 +23,14 @@ export function App() {
 		<Suspense fallback={<Loader />}>
 			<BrowserRouter>
 				<Routes>
-					<Route
-						path="/"
-						element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />}
-					/>
+					<Route path="/" element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />} />
 					<Route path={Pathname.LOGIN} element={<Login />} />
-					<Route path={Pathname.PLAN} element={<Planning />} />
+					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<Plans />} />
+							<Route path="*" element={<NotFound />} />
+						</Route>
+					</Route>
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
@@ -51,7 +53,7 @@ export function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
-		</Suspense>
+		</Suspense >
 	);
 }
 
