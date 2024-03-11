@@ -17,15 +17,15 @@
     }
   }
 }
- 
+
 .custom_tabs_plain{
    .ant-tabs-nav {
     .ant-tabs-tab {
       &-active {
-        background-color: $white;
+        background-color: $white; 
         .ant-tabs-tab-btn {
           color: $button_color;
-          border-bottom: black;
+          border-bottom: black; 
         }
       }
     }
