@@ -4,7 +4,7 @@ import Aircrafts from './components/aircraft/aircraft';
 import Airlines from './components/airlines/airlines';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './airport.scss';
-
+import Resources from './components/resource/resource';
 
 const AirportMaster = () => {
 	const [index, setIndex] = useState(0);
@@ -17,12 +17,12 @@ const AirportMaster = () => {
 		{
 			key: '2',
 			label: 'Airlines',
-			children: <Airlines/>,
+			children: <Airlines />,
 		},
 		{
 			key: '3',
 			label: 'Resources',
-			children: '',
+			children:<Resources/>,
 		},
 		{
 			key: '4',
@@ -46,6 +46,7 @@ const AirportMaster = () => {
 					heading={'Airport Reference Data'}
 					subHeading={'Overview of airport reference data'}
 					searchBox={false}
+					condition={false}
 				/>
 				<div className="tabs">
 					<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />

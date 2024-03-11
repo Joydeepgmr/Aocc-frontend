@@ -4,7 +4,7 @@ import InputField from '../inputField/inputField';
 import filterIcon from '../../assets/logo/filter-icon.svg';
 import './topHeader.scss';
 
-const TopHeader = ({ heading, subHeading, className, searchBox }) => {
+const TopHeader = ({ heading, subHeading, className, searchBox ,condition}) => {
 	return (
 		<>
 			<div className={`top_header_container ${className}`}>
@@ -22,14 +22,16 @@ const TopHeader = ({ heading, subHeading, className, searchBox }) => {
 						{subHeading}
 					</CustomTypography>
 				</div>
-				<div className="filter_search_container">
-					<div className="filter-icon">
-						<img src={filterIcon} />
-					</div>
-					<div>
-						<InputField type="search" name="search" placeholder="Search" className="custom_input1" />
-					</div>
-				</div>
+				{ condition ?
+					<div className="filter_search_container">
+						<div className="filter-icon">
+							<img src={filterIcon} />
+						</div>
+						<div>
+							<InputField type="search" name="search" placeholder="Search" className="custom_input1" />
+						</div>
+					</div>:""
+				}
 			</div>
 		</>
 	);

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
-import ModalComponent from '../../../../../../components/modalComponent/modalComponent';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import Delete from '../../../../../../assets/Delete.svg';
-import Edit from '../../../../../../assets/Edit.svg';
-import TableComponent from '../../../../../../components/table/table';
-import Button from '../../../../../../components/button/button';
-import ButtonComponent from '../../../../../../components/button/button';
-import './aircraftDetails.scss';
+import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import Delete from '../../../../../assets/Delete.svg';
+import Edit from '../../../../../assets/Edit.svg';
+import TableComponent from '../../../../../components/table/table';
+import ButtonComponent from '../../../../../components/button/button';
 
-const AircraftDetails = ({ ModalComponent }) => {
+import './common_table.scss';
+
+const Common_table = () => {
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dummyData = [
@@ -28,7 +27,7 @@ const AircraftDetails = ({ ModalComponent }) => {
 			homeairport: 'Airport 1',
 			nationality: 'Indian',
 			typeofuse: 'Usecase 1',
-			viewdetails: <Button title="View Details" type="text" />,
+			viewdetails: <ButtonComponent title="View Details" type="text" />,
 			age: 25,
 			address: 'Los Angeles',
 		},
@@ -47,7 +46,7 @@ const AircraftDetails = ({ ModalComponent }) => {
 			homeairport: 'Airport 1',
 			nationality: 'Indian',
 			typeofuse: 'Usecase 1',
-			viewdetails: <Button title="View Details" type="text" />,
+			viewdetails: <ButtonComponent title="View Details" type="text" />,
 			age: 25,
 			address: 'Los Angeles',
 		},
@@ -74,25 +73,18 @@ const AircraftDetails = ({ ModalComponent }) => {
 		{
 			key: '1',
 			label: 'Create',
+			children: '',
 		},
 		{
 			key: '2',
 			label: 'Import Global Reference',
-			// children:"",
+			children: '',
 		},
 	];
 	return (
 		<div className="airport_master_details">
 			<div className="custom_dropdown_style">
-				<DropdownButton
-					buttonText={'Create'}
-					className="custom_dropdown"
-					dropdownItems={items}
-                    onChange={(e) => {
-                        console.info
-						handleButtonChange();
-					}}
-				/>
+				<DropdownButton buttonText={'Create'} className="custom_dropdown" dropdownItems={items} />
 			</div>
 			<div className="custom_table">
 				<div className="details_table">
@@ -106,4 +98,4 @@ const AircraftDetails = ({ ModalComponent }) => {
 	);
 };
 
-export default AircraftDetails;
+export default Common_table;
