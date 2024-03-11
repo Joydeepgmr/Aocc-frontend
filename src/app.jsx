@@ -1,14 +1,15 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
-import Plans from './views/afterAuth/plans/plans';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
-import AirportMaster from "./views/afterAuth/airportMaster/airport"
+import  PlanAirportMaster from "./views/afterAuth/planairportMaster/planairportMaster"
 import UserAccess from './views/afterAuth/userAccess/userAccess';
+
 import './app.scss';
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
@@ -17,6 +18,7 @@ const Components = React.lazy(() => import('./views/beforeAuth/components'));
 
 export function App() {
 	const token = localStorage.getItem('t_id');
+	const role = 'ITAdmin';
 
 	return (
 		<Suspense fallback={<Loader />}>
@@ -24,15 +26,20 @@ export function App() {
 				<Routes>
 					<Route
 						path="/"
-						element={token ? <Navigate to={Pathname.DASHBOARD} /> : <Navigate to={Pathname.LOGIN} />}
+						element={
+							token ? (
+								role === 'ITAdmin' ? (
+									<Navigate to={Pathname.GLOBALMASTERS} />
+								) : (
+									<Navigate to={Pathname.DASHBOARD} />
+								)
+							) : (
+								<Navigate to={Pathname.LOGIN} />
+							)
+						}
 					/>
 					<Route path={Pathname.LOGIN} element={<Login />} />
-					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<Plans />} />
-							<Route path="*" element={<NotFound />} />
-						</Route>
-					</Route>
+
 					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
@@ -46,11 +53,9 @@ export function App() {
 							<Route index element={<UserAccess />} />
 						</Route>
 					</Route>
-					
-					<Route path={Pathname.AIRPORTMASTER} element={<PrivateOutlet />}>
+					<Route path={Pathname.PLANAIRPORTMASTER} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
-							<Route index element={<AirportMaster />} />
-							<Route path="*" element={<NotFound />} />
+							<Route index element={<PlanAirportMaster />} />
 						</Route>
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
