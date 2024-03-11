@@ -1,7 +1,5 @@
 import React from 'react';
 import { Navigate } from 'react-router';
-
-import React from 'react';
 import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
 

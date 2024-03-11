@@ -11,6 +11,7 @@ import UserAccess from './views/afterAuth/userAccess/userAccess';
 
 import './app.scss';
 import GlobalMasters from './views/afterAuth/globalMasters/globalMasters';
+import AirportMasters from './views/afterAuth/airportMasters/airportMasters';
 
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
@@ -59,7 +60,7 @@ export function App() {
 					</Route>
 					<Route path={Pathname.AIRPORTMASTERS} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
-							<Route index element={<NotFound />} />
+							<Route index element={<AirportMasters />} />
 						</Route>
 					</Route>
 					<Route path={Pathname.COMPONENTS} element={<Components />} />
