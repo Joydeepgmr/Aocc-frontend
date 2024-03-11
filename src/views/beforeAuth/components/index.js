@@ -116,227 +116,239 @@ export const Components = () => {
 
 	return (
 		<React.Fragment>
-			<div className="margin">
-				<Form form={form} layout="vertical" onFinish={onFinish}>
-					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
-						<InputField
-							label="Airport Name"
-							name="airportName"
-							placeholder="Write Airport Name"
-							required
-							warning="Required field"
-						/>
-						<InputField
-							label="Airport Number"
-							name="airportNumber"
-							placeholder="Write Input Number"
-							required
-							warning="Required field"
-							type="number"
-						/>
+			<Form layout="vertical">
+				<div className="margin">
+					<Form form={form} layout="vertical" onFinish={onFinish}>
+						<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
+							<InputField
+								label="Airport Name"
+								name="airportName"
+								placeholder="Write Airport Name"
+								required
+								warning="Required field"
+							/>
+							<InputField
+								label="Airport Number"
+								name="airportNumber"
+								placeholder="Write Input Number"
+								required
+								warning="Required field"
+								type="number"
+							/>
 
-						<InputField
-							label="Time Difference Summer"
-							name="timeDifferenceSummer"
-							placeholder="Time Difference Summer"
-							required
-							warning="Required field"
-							suffixText="hours"
-						/>
-						<InputField
-							label="Password"
-							name="password"
-							placeholder="Password"
-							required
-							suffixText="hours"
-							type="password"
-						/>
-					</div>
-					<div>
-						<InputField
-							label="Error State"
-							name="airportName"
-							placeholder="Error state"
-							required
-							warning="Required field"
-							status="error"
-						/>
-					</div>
-					<Divider />
-					<div>
-						<InputField
-							label="Airport Name"
-							name="search"
-							placeholder="Search"
-							warning="Required field"
-							type="search"
-						/>
-					</div>
-					<Divider />
-
-					<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
-						<div>
-							<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
-							<ModalComponent
-								isModalOpen={isModalOpen}
-								width="400px"
-								closeModal={closeModal}
-								title="Modal Heading"
-							>
-								<div>
-									<p>This is the content of the modal.</p>
-								</div>
-							</ModalComponent>
+							<InputField
+								label="Time Difference Summer"
+								name="timeDifferenceSummer"
+								placeholder="Time Difference Summer"
+								required
+								warning="Required field"
+								suffixText="hours"
+							/>
+							<InputField
+								label="Password"
+								name="password"
+								placeholder="Password"
+								required
+								suffixText="hours"
+								type="password"
+							/>
 						</div>
 						<div>
-							<Button title="Open CSV Modal" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-							<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
+							<InputField
+								label="Error State"
+								name="airportName"
+								placeholder="Error state"
+								required
+								warning="Required field"
+								status="error"
+							/>
 						</div>
-					</div>
-					<Divider />
+						<Divider />
+						<div>
+							<InputField
+								label="Airport Name"
+								name="search"
+								placeholder="Search"
+								warning="Required field"
+								type="search"
+							/>
+						</div>
+						<Divider />
 
-					<div className="margin">
-						<CheckBoxField name="single_checkbox" label="single checkbox" title="Single Checkbox" />
-					</div>
-					<div>
-						<CheckBoxField
-							name="multipleCheckbox"
-							title="Multiple Checkbox"
-							options={[
-								{ id: 1, name: 'Option 1' },
-								{ id: 2, name: 'Option 2' },
-								{ id: 3, name: 'Option 3' },
-							]}
-							selectedValue="id"
-							selectedName="name"
-						/>
-					</div>
-					<Divider />
+						<div style={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
+							<div>
+								<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
+								<ModalComponent
+									isModalOpen={isModalOpen}
+									width="400px"
+									closeModal={closeModal}
+									title="Modal Heading"
+								>
+									<div>
+										<p>This is the content of the modal.</p>
+									</div>
+								</ModalComponent>
+							</div>
+							<div>
+								<Button
+									title="Open CSV Modal"
+									type="filledText"
+									isSubmit="submit"
+									onClick={openCsvModal}
+								/>
+								<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
+							</div>
+						</div>
+						<Divider />
 
-					<div className="margin">
-						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-						<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
-					</div>
-				</Form>
-			</div>
+						<div className="margin">
+							<CheckBoxField name="single_checkbox" label="single checkbox" title="Single Checkbox" />
+						</div>
+						<div>
+							<CheckBoxField
+								name="multipleCheckbox"
+								title="Multiple Checkbox"
+								options={[
+									{ id: 1, name: 'Option 1' },
+									{ id: 2, name: 'Option 2' },
+									{ id: 3, name: 'Option 3' },
+								]}
+								selectedValue="id"
+								selectedName="name"
+							/>
+						</div>
+						<Divider />
 
-			<hr />
+						<div className="margin">
+							<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+							<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
+						</div>
+					</Form>
+				</div>
 
-			<div className="container">
-				<Button
-					onClick={() => {
-						alert('Filled button');
-					}}
-					title="Save"
-					type="filledText"
+				<hr />
+
+				<div className="container">
+					<Button
+						onClick={() => {
+							alert('Filled button');
+						}}
+						title="Save"
+						type="filledText"
+					/>
+
+					<Button
+						onClick={() => {
+							alert('Text button');
+						}}
+						title="View Details"
+						type="text"
+					/>
+
+					<Button
+						onClick={() => {
+							alert('Icon Button with Border');
+						}}
+						type="iconWithBorder"
+						icon={RightArrow}
+						alt="arrow icon"
+					/>
+
+					<Button
+						onClick={() => {
+							alert('Icon Button');
+						}}
+						icon={Bell}
+						alt="bell icon"
+						className="icon_withoutBorder"
+					/>
+
+					<DropdownButton dropdownItems={dropdownItems} buttonText="Create" />
+				</div>
+
+				<hr />
+
+				<div className="container">
+					<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
+				</div>
+
+				<hr />
+
+				<div className="container">
+					<Chip text="Critical" className="criticalChip" />
+					<br />
+					<Chip text="Cancelled" className="cancelledChip" />
+					<br />
+					<Chip text="Notice" className="noticeChip" />
+					<br />
+					<Chip text="Delay" className="delayChip" />
+				</div>
+				<Divider />
+				<div className="margin">
+					<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
+				</div>
+				<Divider />
+				<div className="container-column">
+					<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
+						Heading 1
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
+						Heading 2
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+						Heading 3
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
+						Heading 4
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
+						Heading 5
+					</CustomTypography>
+					<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
+						Heading 6
+					</CustomTypography>
+
+					<CustomTypography type="paragraph" fontSize={16} color="black">
+						Paragraph Text
+					</CustomTypography>
+
+					<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
+						Subheading 1
+					</CustomTypography>
+					<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
+						Subheading 2
+					</CustomTypography>
+					<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
+						Subheading 3
+					</CustomTypography>
+				</div>
+				<Divider />
+				<Cards />
+				<Divider />
+				<CustomSelect
+					required={true}
+					SelectData={SelectData}
+					label="Select field"
+					placeholder={'Select Field'}
 				/>
-
-				<Button
-					onClick={() => {
-						alert('Text button');
-					}}
-					title="View Details"
-					type="text"
+				<Divider />
+				<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
+				<Divider />
+				<div className="container">
+					<MultiSelectComponent
+						options={multiSelectOptions}
+						placeholder="Choose fruits"
+						onChange={handleSelectChange}
+					/>
+				</div>
+				<TopHeader
+					heading="Manage User Access"
+					subHeading="Overview of access management for airport access management"
 				/>
-
-				<Button
-					onClick={() => {
-						alert('Icon Button with Border');
-					}}
-					type="iconWithBorder"
-					icon={RightArrow}
-					alt="arrow icon"
-				/>
-
-				<Button
-					onClick={() => {
-						alert('Icon Button');
-					}}
-					icon={Bell}
-					alt="bell icon"
-					className="icon_withoutBorder"
-				/>
-
-				<DropdownButton dropdownItems={dropdownItems} buttonText="Create"/>
-			</div>
-
-			<hr />
-
-			<div className="container">
-				<TextField row={6} placeholder={'Type in here....'} className="custom_field" />
-			</div>
-
-			<hr />
-
-			<div className="container">
-				<Chip text="Critical" className="criticalChip" />
-				<br />
-				<Chip text="Cancelled" className="cancelledChip" />
-				<br />
-				<Chip text="Notice" className="noticeChip" />
-				<br />
-				<Chip text="Delay" className="delayChip" />
-			</div>
-			<Divider />
-			<div className="margin">
-				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
-			</div>
-			<Divider />
-			<div className="container-column">
-				<CustomTypography type="title" fontSize={32} fontWeight="600" color="black">
-					Heading 1
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={28} fontWeight="600" color="black">
-					Heading 2
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-					Heading 3
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={20} fontWeight="600" color="black">
-					Heading 4
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={16} fontWeight="600" color="black">
-					Heading 5
-				</CustomTypography>
-				<CustomTypography type="title" fontSize={14} fontWeight="600" color="black">
-					Heading 6
-				</CustomTypography>
-
-				<CustomTypography type="paragraph" fontSize={16} color="black">
-					Paragraph Text
-				</CustomTypography>
-
-				<CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
-					Subheading 1
-				</CustomTypography>
-				<CustomTypography type="text" fontSize={14} fontWeight="400" color="black">
-					Subheading 2
-				</CustomTypography>
-				<CustomTypography type="text" fontSize={12} fontWeight="400" color="black">
-					Subheading 3
-				</CustomTypography>
-			</div>
-			<Divider />
-			<Cards />
-			<Divider />
-			<CustomSelect required={true} SelectData={SelectData} label="Select field" placeholder={'Select Field'} />
-			<Divider />
-			<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
-			<Divider />
-			<div className="container">
-				<MultiSelectComponent
-					options={multiSelectOptions}
-					placeholder="Choose fruits"
-					onChange={handleSelectChange}
-				/>
-			</div>
-			<TopHeader
-				heading="Manage User Access"
-				subHeading="Overview of access management for airport access management"
-			/>
-			<div className='container'>
-				<OtpField otpLength={3} required={true} disabled={false} label={"3-letter Code"}/>
-			</div>
+				<div className="container">
+					<OtpField otpLength={3} label={'ATC Code'} required />
+				</div>
+			</Form>
 		</React.Fragment>
 	);
 };

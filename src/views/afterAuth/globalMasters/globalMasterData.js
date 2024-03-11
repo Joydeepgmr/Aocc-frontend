@@ -15,7 +15,7 @@ export const items = [
 				formComponent={<AirportSetupForm />}
 				title="Setup your Airport"
 				width="120rem"
-				tableComponent={<AirportSetupTable />}
+				tableComponent={<AirportSetupTable formComponent={<AirportSetupForm />} />}
 				action={addAirport}
 			/>
 		),
