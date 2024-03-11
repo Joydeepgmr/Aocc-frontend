@@ -4,15 +4,24 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import InputField from '../../../../../../components/inputField/inputField';
 import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
-
+import { addAircraftRegistration } from '../../../redux/actionCreator';
+import { useForm } from 'antd/lib/form/Form';
+import { useDispatch, useSelector } from 'react-redux';
 import './formComponent.scss';
+import { updateIsShowTableCompoenents } from '../../../redux/reducer';
 
 const FormComponent = ({ closeModal }) => {
+	const dispatch = useDispatch();
 	const [form] = Form.useForm();
-
-	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
-		localStorage.setItem('formValues', JSON.stringify(values));
+	const { additionalAircraftRegistration, disabled } = useSelector((state) => state.AirportMaster);
+	const onFinishHandler = (values) => {
+		form.resetFields();
+		dispatch(addAircraftRegistration(values));
+		if (values !== null) {
+			dispatch(updateIsShowTableCompoenents());
+		}
+		
+		closeModal();
 	};
 
 	return (
@@ -20,7 +29,40 @@ const FormComponent = ({ closeModal }) => {
 			<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
 				Airport
 			</CustomTypography>
-			<Form form={form} layout="vertical" onFinish={onFinish}>
+			<Form
+				form={form}
+				layout="vertical"
+				initialValues={{
+					registration: '',
+					SelectDate: '',
+					internal: '',
+					IcaoCode: '',
+					IcaoCodeModified: '',
+					atd: '',
+					HomeAirport: '',
+					nationality: '',
+					TypeofUse: '',
+					CockpitCrew: '',
+					CabinCrew: '',
+					NoofSeats: '',
+					NoofKitchens: '',
+					NoofToilets: '',
+					height: '',
+					length: '',
+					wingspan: '',
+					mtow: '',
+					Annex: '',
+					MainDeck: '',
+					Apuinop: '',
+					OwnerName: '',
+					DebitNumber: '',
+					address: '',
+					remarks: '',
+					ValidFrom: '',
+					ValidTo: '',
+				}}
+				onFinish={onFinishHandler}
+			>
 				<div className="form_section">
 					<div className="form_content">
 						<InputField
@@ -101,8 +143,8 @@ const FormComponent = ({ closeModal }) => {
 							warning="Required field"
 						/>
 						<InputField
-							label="Cockpit Crew"
-							name="CockpitCrew"
+							label="Cabin Crew"
+							name="CabinCrew"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>

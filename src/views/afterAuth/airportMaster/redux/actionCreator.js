@@ -1,12 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Server } from '../../../../server';
 
-export const setUserNameAction = (state, action) => {
-	state.user_name = action.payload;
-};
-
-
-export const UsersFetchAction = createAsyncThunk('dashboard/Users', () => {
-
-	Server.get('/users').then((response) => response);
+export const addAircraftRegistration = createAsyncThunk('airportMater/addAircraftRegistration', (value) => {
+	const finalData = [value];
+	return finalData;
+});
+export const updateAircraftRegistration = createAsyncThunk('airportMater/ updateAircraftRegistration', (id) => {
+	const finalData = [id];
+	return finalData;
+});
+export const deleteAircraftRegistration = createAsyncThunk('airportMater/ deleteAircraftRegistration', (id) => {
+	console.log("asbbdbdbh", id);
+	const finalData = [id];
+	return finalData;
 });

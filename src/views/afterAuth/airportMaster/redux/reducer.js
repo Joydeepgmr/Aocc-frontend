@@ -1,26 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import { addAircraftRegistration } from './actionCreator';
 import initialState from './state';
-export const airportMasterSlice = createSlice({
-    name: "airportMaster",
-    initialState,
-    reducers: {
-        
-    },
-    extraReducers: (builder) => {
-        builder.addCase(UsersFetchAction.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(UsersFetchAction.fulfilled, (state, action) => {
-            console.log(action);
-            state.loading = false;
-    
-            state.error = '';
-        });
-        builder.addCase(UsersFetchAction.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
-        });
-    }
-    
-})
-export default airportMasterSlice.reducer;
+
+export const AirportMasterSlice = createSlice({
+	name: 'AirportMaster',
+	initialState,
+	reducers: {
+		updateIsShowTableCompoenents: (state) => {
+			state.isShowTableCompoenents = true;
+		},
+		formDisabled: (state, action) => {
+			state.disabled = !state.disabled;
+		},
+		updateAircraftRegistration: (state, action) => {
+			state.additionalAircraftRegistration = action.payload;
+		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(addAircraftRegistration.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(addAircraftRegistration.fulfilled, (state, action) => {
+			state.loading = false;
+			state.error = '';
+            state.addAircraft = action.payload;
+            
+		});
+		builder.addCase(addAircraftRegistration.rejected, (state, action) => {
+			state.loading = false;
+            state.addAircraft = [];
+			state.error = action.error.message;
+		});
+	},
+});
+
+export const { addAircraft, formDisabled, updateIsShowTableCompoenents } = AirportMasterSlice.actions;
+
+export default AirportMasterSlice.reducer;

@@ -2,22 +2,45 @@ import React, { useState } from 'react';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import Delete from '../../../../../assets/Delete.svg';
+import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import FormComponent from '../../components/aircraft/formComponent/formComponent';
 import Edit from '../../../../../assets/Edit.svg';
 import TableComponent from '../../../../../components/table/table';
 import ButtonComponent from '../../../../../components/button/button';
+import { useDispatch } from 'react-redux';
 
 import './common_table.scss';
+import { deleteAircraftRegistration, updateAircraftRegistration } from '../../redux/actionCreator';
 
-const Common_table = () => {
+const Common_table = ({ Heading }) => {
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const dispatch = useDispatch();
+	const openModal = () => {
+		setIsModalOpen(true);
+		dispatch(updateAircraftRegistration(''));
+	};
+
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
 	const dummyData = [
 		{
 			key: '1',
 			edit: (
 				<div className="custom-button">
-					<ButtonComponent type={'iconWithBorder'} icon={Delete} id="delete_button"></ButtonComponent>
-					<ButtonComponent type={'iconWithBorder'} icon={Edit} id="edit_button"></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Delete}
+						id="delete_button"
+						onClick={dispatch(deleteAircraftRegistration(''))}
+					></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Edit}
+						id="edit_button"
+						onClick={openModal}
+					></ButtonComponent>
 				</div>
 			),
 			registration: 'Boeing 737 700',
@@ -27,7 +50,7 @@ const Common_table = () => {
 			homeairport: 'Airport 1',
 			nationality: 'Indian',
 			typeofuse: 'Usecase 1',
-			viewdetails: <ButtonComponent title="View Details" type="text" />,
+			viewdetails: <ButtonComponent title="View Details" type="text" onClick={openModal} />,
 			age: 25,
 			address: 'Los Angeles',
 		},
@@ -35,7 +58,12 @@ const Common_table = () => {
 			key: '2',
 			edit: (
 				<div className="custom-button">
-					<ButtonComponent type={'iconWithBorder'} icon={Delete} id="delete_button"></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Delete}
+						id="delete_button"
+						onClick={dispatch(deleteAircraftRegistration(key))}
+					></ButtonComponent>
 					<ButtonComponent type={'iconWithBorder'} icon={Edit} id="edit_button"></ButtonComponent>
 				</div>
 			),
@@ -69,23 +97,54 @@ const Common_table = () => {
 	const handleButtonChange = (label) => {
 		console.log('hdbhbdhbd', label);
 	};
+	const handleDropdownChange = (value) => {
+		// Add this line
+		if (value === 'Create') {
+			openModal();
+		}
+
+		if (value === 'ImportGlobalReference') {
+		}
+	};
 	const items = [
 		{
 			key: '1',
 			label: 'Create',
+			value: 'Create',
 			children: '',
 		},
 		{
 			key: '2',
 			label: 'Import Global Reference',
+			value: 'ImportGlobalReference',
 			children: '',
 		},
 	];
 	return (
 		<div className="airport_master_details">
 			<div className="custom_dropdown_style">
-				<DropdownButton buttonText={'Create'} className="custom_dropdown" dropdownItems={items} />
+				<DropdownButton
+					buttonText={'Create'}
+					className="custom_dropdown"
+					dropdownItems={items}
+					onChange={handleDropdownChange}
+				/>
 			</div>
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="120rem"
+				closeModal={closeModal}
+				title={
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+						{Heading}
+					</CustomTypography>
+				}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent closeModal={closeModal} />
+				</div>
+			</ModalComponent>
 			<div className="custom_table">
 				<div className="details_table">
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">

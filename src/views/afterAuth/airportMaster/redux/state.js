@@ -1,5 +1,7 @@
 export let state = {
-	DetailsAirport_Master:[],
+	addAircraft:[],
+	additionalAircraftRegistration: [],
+	isShowTableCompoenents:false,
 	loading: true,
 	error: '',
 };

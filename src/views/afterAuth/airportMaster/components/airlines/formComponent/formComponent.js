@@ -10,8 +10,10 @@ const FormComponent = ({ closeModal }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
-		console.log('Form values:', values);
-		//  localStorage.setItem('formValues', JSON.stringify(values));
+	
+			form.resetFields();
+			dispatch(addAircraftRegistration(values));
+    
 	};
 	return (
 		<>
