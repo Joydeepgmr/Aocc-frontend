@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Cards from '../../../components/card/cards';
+import Cards from '../../../components/card/card';
 import InputField from '../../../components/inputField/inputField';
 import { Divider, Form } from 'antd';
 import CustomSelect from '../../../components/selectfield/select';
@@ -29,7 +29,7 @@ export const Components = () => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
-	const [form] = Form.useForm();
+	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
 
 	const dropdownItems = [
 		{
@@ -70,7 +70,6 @@ export const Components = () => {
 			value: 'options',
 		},
 	];
-	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -89,7 +88,7 @@ export const Components = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log('Form values:', values);
+		console.log('Form values:', values); // Output form values to console
 	};
 
 	const dummyData = [

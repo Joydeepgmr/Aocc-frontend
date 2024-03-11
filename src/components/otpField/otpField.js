@@ -1,26 +1,18 @@
-import React from 'react';
-import { Button, Form } from 'antd'
-import CustomTypography from '../typographyComponent/typographyComponent';
+import React, { useState } from 'react';
+import { Form } from 'antd';
 import { InputOTP } from 'antd-input-otp';
 import PropTypes from 'prop-types';
 import './otpField.scss';
 
-const OtpField = ({ 
-    otpLength = 3, 
-    onFinish, 
-    label,
-    required,
-    disabled,
-    className="",
-}) => {
-    const otpLabel = () => {
-        return(
-            <>
-            {label}
-            {required && <span style={{ color: 'red' }}> *</span>}
-            </>
-        );
-    };
+const OtpField = ({ otpLength = 3, name, label, required, disabled, className = '' }) => {
+	const otpLabel = () => {
+		return (
+			<>
+				{label}
+				{required && <span style={{ color: 'red' }}> *</span>}
+			</>
+		);
+	};
 
     return (
         <>

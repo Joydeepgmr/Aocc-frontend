@@ -7,6 +7,7 @@ import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
+import AirportMaster from "./views/afterAuth/airportMaster/airport"
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 
 import './app.scss';
@@ -45,6 +46,7 @@ export function App() {
 						<Route element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="orders" element={<Orders />} />
+
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Route>

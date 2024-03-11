@@ -2,14 +2,9 @@ import React from 'react';
 import { Card } from 'antd';
 import './card.scss';
 
-
-const Cards = ({
-	children,
-	...rest
-}) => {
-	
+const Cards = ({ children, style, ...rest }) => {
 	return (
-		<Card className="middlecard" {...rest}>
+		<Card className={`middlecard ${style}`} {...rest}>
 			{children}
 		</Card>
 	);
