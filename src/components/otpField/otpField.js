@@ -18,7 +18,7 @@ const OtpField = ({ otpLength = 3, name, label, required, disabled, className = 
         <>
             <Form.Item 
             label={otpLabel()}
-            name="otp"
+            name={name}
             className={`${className} otp_form_item`}
             >
                 <InputOTP inputType="numeric" length={otpLength} disabled={disabled ? disabled : false} className="otp_field" />
