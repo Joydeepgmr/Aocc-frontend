@@ -28,7 +28,7 @@ const CDM = () => {
 			<div className="container">
 				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
 				<ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Collaborative Decision Making Schedule" className="custom_modal">
-					<div className="modal_content"><FormComponent /></div>
+					<div className="modal_content"><FormComponent handleButtonClose={()=>setIsModalOpen(false)} handleSaveButton={()=>setIsModalOpen(false)} /></div>
 				</ModalComponent>
 
 				<Button
