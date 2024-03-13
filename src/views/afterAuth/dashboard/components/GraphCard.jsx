@@ -18,7 +18,7 @@ import Performance from '../../../../assets/performance.svg'
 import Airplane_1 from '../../../../assets/Airline_1.svg'
 import RightArrow from '../../../../assets/RightArrow.svg'
 
-function GraphCard() {
+function GraphCard({cardTitle}) {
     const data = {
         labels: ['International', 'Domestic'],
         datasets: [
@@ -46,7 +46,7 @@ function GraphCard() {
     <div className='progress-card-body'>
             <div className='progress-body'>
             <div className='card-title'>
-                <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="On-time performance" />
+                <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children={cardTitle} />
                 <img src={Performance} alt="performance" />
             </div>
             <div className='progress-status-body'>
