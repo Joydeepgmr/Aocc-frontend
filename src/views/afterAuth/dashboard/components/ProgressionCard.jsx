@@ -6,30 +6,28 @@ import "./style.scss"
 import Performance from '../../../../assets/performance.svg'
 import Airplane_1 from '../../../../assets/Airline_1.svg'
 import RightArrow from '../../../../assets/RightArrow.svg'
-const ProgressionCard = () => {
+const ProgressionCard = ({cardTitle, airlineData}) => {
   return (
     <>
     <Card className='progress-card'>
     <div className='progress-card-body'>
             <div className='progress-body'>
             <div className='card-title'>
-                <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="On-time performance" />
+                <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children={cardTitle} />
                 <img src={Performance} alt="performance" />
             </div>
-            <div className='progress-status-body'>
-                <div className='progress-status-item'>
-                    {/* <img src={Airplane_1} alt="" /> */}
-                    <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children="Airline 1"  />
-                    <Progress percent={50} />
+            {airlineData.map((airline)=> {
+                return(
+                    <div className='progress-status-body'>
+                    <div className='progress-status-item'>
+                        {/* <img src={Airplane_1} alt="" /> */}
+                        <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children={airline?.name}  />
+                        <Progress percent={airline?.percent} />
+                    </div>
                 </div>
-            </div>
-            <div className='progress-status-body'>
-                <div className='progress-status-item'>
-                    {/* <img src={Airplane_1} alt="" /> */}
-                    <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children="Airline 2"  />
-                    <Progress percent={70} />
-                </div>
-            </div>
+                )
+            })}
+           
             </div>
             <div className='view-details'>
             <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="View Details" />
