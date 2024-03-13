@@ -40,7 +40,7 @@ export const navMenu = [
 export const roleBasedNav = (pathname) => {
 	let navItems = [];
 
-	if (role === 'ADMIN' || pathname ==='/global-masters') {
+	if (role === 'admin' || pathname === '/global-masters') {
 		navItems = [
 			{
 				key: '0',
@@ -53,7 +53,7 @@ export const roleBasedNav = (pathname) => {
 				children: '/airport-masters',
 			},
 		];
-	} else if (role === 'PLANNER' || pathname ==='/dashboard') {
+	} else if (role === 'planner' || pathname === '/dashboard') {
 		navItems = [
 			{
 				key: '0',
