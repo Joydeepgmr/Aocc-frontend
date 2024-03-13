@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import './arrival.scss';
 import TableComponent from '../../../../../../../components/table/table';
-import { columns, dummyData } from '../../seasonal';
+import { columns, dummyData } from './dummyData/dummy-data';
 
 
 const Arrival = () => {
