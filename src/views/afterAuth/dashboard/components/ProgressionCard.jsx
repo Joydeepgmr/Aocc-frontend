@@ -1,5 +1,5 @@
 import React from 'react'
-import Cards from '../../../../components/card/cards'
+// import Cards from '../../../../components/card/cards'
 import { Progress, Card } from 'antd';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent'
 import "./style.scss"

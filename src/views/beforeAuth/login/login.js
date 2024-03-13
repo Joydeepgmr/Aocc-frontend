@@ -7,6 +7,7 @@ import CheckboxField from '../../../components/checkBoxField/checkBoxField';
 import { Form, Image } from 'antd';
 import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
+import { Pathname } from '../../../pathname';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
@@ -18,17 +19,54 @@ export const Login = () => {
 	};
 
 	const onFinishHandler = (values) => {
+		console.log("what are the values in login",values?.email);
 		// Assuming your API response contains a token
 		const t_id = 'your_generated_token'; // Replace this with your actual token
+		let role;
+		let route;
+        const email = values?.email?.toLowerCase(); // Convert email to lowercase for case insensitivity
+
+        switch (email) {
+        	case 'admin@test.com':
+            	role = 'ADMIN';
+            	break;
+        	case 'planner@test.com':
+            	role = 'PLANNER';
+            	break;
+        	case 'vendor@test.com':
+            	role = 'VENDOR';
+            	break;
+        	case 'access@test.com':
+            	role = 'ACCESSMANAGER';
+            	break;
+        	default:
+            	role = ''; // Default token if email doesn't match any specific case
+            	break;
+    	}
 
 		// Store the token in local storage
 		localStorage.setItem('t_id', t_id);
-
-		console.log('Received values:', values);
+		localStorage.setItem('role', role);
 		let accessToken = localStorage.getItem('t_id');
 		// Redirect to the dashboard path
 		if (accessToken) {
-			navigate('/dashboard');
+			switch (role) {
+				case 'ADMIN':
+					navigate(Pathname.GLOBALMASTERS);
+					break;
+				case 'PLANNER':
+					navigate(Pathname.DASHBOARD);
+					break;
+				case 'VENDOR':
+					navigate(Pathname.DASHBOARD);
+					break;
+				case 'ACCESSMANAGER':
+					navigate(Pathname.DASHBOARD);
+					break;
+				default:
+					navigate(Pathname.DASHBOARD);
+					break;
+			}
 		}
 	};
 
@@ -67,7 +105,7 @@ export const Login = () => {
 										className="submit_button"
 										type="filledText"
 									/>
-									<p className="contact-admin">Need help?Contact admin</p>
+									<p className="contact-admin">Need help? <a className='admin-link'>Contact admin</a></p>
 								</Form>
 							</div>
 						</div>

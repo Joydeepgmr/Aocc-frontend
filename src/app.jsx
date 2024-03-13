@@ -20,7 +20,9 @@ const Components = React.lazy(() => import('./views/beforeAuth/components'));
 
 export function App() {
 	const token = localStorage.getItem('t_id');
-	const role = 'ITAdmin';
+	console.log("What is token here:", token);
+	const userRole = localStorage.getItem('role');
+	console.log("what is the role in app.jsx", userRole);
 
 	return (
 		<Suspense fallback={<Loader />}>
@@ -30,7 +32,7 @@ export function App() {
 						path="/"
 						element={
 							token ? (
-								role === 'ITAdmin' ? (
+								userRole === 'ADMIN' ? (
 									<Navigate to={Pathname.GLOBALMASTERS} />
 								) : (
 									<Navigate to={Pathname.DASHBOARD} />
