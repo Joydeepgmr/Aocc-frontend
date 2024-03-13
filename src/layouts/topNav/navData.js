@@ -2,7 +2,6 @@ import React from 'react';
 import { Navigate } from 'react-router';
 import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
-import { useLocation } from 'react-router-dom';
 const role = localStorage.getItem('role');
 console.log('what is the role', role);
 
