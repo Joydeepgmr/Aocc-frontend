@@ -61,7 +61,7 @@ export const Login = () => {
 					navigate(Pathname.DASHBOARD);
 					break;
 				case 'ACCESSMANAGER':
-					navigate(Pathname.ACCESS_MANAGER_DASHBOARD);
+					navigate(Pathname.DASHBOARD);
 					break;
 				default:
 					// Handle default case or invalid role
