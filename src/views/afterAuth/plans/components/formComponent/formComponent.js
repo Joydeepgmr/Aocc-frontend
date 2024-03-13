@@ -3,10 +3,9 @@ import { Form } from 'antd';
 import InputField from '../../../../../components/inputField/inputField';
 import Button from '../../../../../components/button/button';
 import './formComponent.scss';
-import ButtonComponent from '../../../../../components/button/button';
 import Date from '../../../../../components/datapicker/datepicker';
 
-const FormComponent = () => {
+const FormComponent = ({handleButtonClose, handleSaveButton}) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
@@ -165,7 +164,26 @@ const FormComponent = () => {
 						/>
 					</div>
 				</div>
-				<ButtonComponent />
+				<div className='form_bottomButton'>
+
+				<Button
+					id="btn"
+					title="Discard"
+					className="custom_svgButton"
+					type="filledText"
+					// isSubmit="submit"
+					onClick={handleButtonClose}
+				/>
+				<Button
+					id="btn"
+					title="Save"
+					// className="custom_svgButton"
+					type="filledText"
+					isSubmit="submit"
+					onClick={handleSaveButton}
+				/>
+				</div>
+				
 			</Form>
 		</div>
 	);
