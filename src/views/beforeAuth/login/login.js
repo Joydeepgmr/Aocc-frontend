@@ -64,7 +64,7 @@ export const Login = () => {
 					navigate(Pathname.DASHBOARD);
 					break;
 				default:
-					// Handle default case or invalid role
+					navigate(Pathname.DASHBOARD);
 					break;
 			}
 		}
