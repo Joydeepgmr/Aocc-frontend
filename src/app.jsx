@@ -20,7 +20,7 @@ const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
 const Components = React.lazy(() => import('./views/beforeAuth/components'));
 
 export function App() {
-	const token = localStorage.getItem('t_id');
+	const token = localStorage.getItem('_tid');
 	console.log("What is token here:", token);
 	const userRole = localStorage.getItem('role');
 	console.log("what is the role in app.jsx", userRole);

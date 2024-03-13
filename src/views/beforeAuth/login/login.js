@@ -8,6 +8,7 @@ import { Form, Image } from 'antd';
 import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
+import { checkAuth } from './dummy-user';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
@@ -19,54 +20,35 @@ export const Login = () => {
 	};
 
 	const onFinishHandler = (values) => {
-		console.log("what are the values in login",values?.email);
-		// Assuming your API response contains a token
-		const t_id = 'your_generated_token'; // Replace this with your actual token
-		let role;
-		let route;
-        const email = values?.email?.toLowerCase(); // Convert email to lowercase for case insensitivity
+		console.log("what are the values in login", values);
+		if (values.email && values.password) {
+			let auth = checkAuth({ email: values.email, password: values.password })
+			if (auth.token && auth.user) {
+				console.log("auth ::", auth);
+				localStorage.setItem('_tid', auth?.token)
+				localStorage.setItem('role', auth.user.role)
 
-        switch (email) {
-        	case 'admin@test.com':
-            	role = 'ADMIN';
-            	break;
-        	case 'planner@test.com':
-            	role = 'PLANNER';
-            	break;
-        	case 'vendor@test.com':
-            	role = 'VENDOR';
-            	break;
-        	case 'access@test.com':
-            	role = 'ACCESSMANAGER';
-            	break;
-        	default:
-            	role = ''; // Default token if email doesn't match any specific case
-            	break;
-    	}
-
-		// Store the token in local storage
-		localStorage.setItem('t_id', t_id);
-		localStorage.setItem('role', role);
-		let accessToken = localStorage.getItem('t_id');
-		// Redirect to the dashboard path
-		if (accessToken) {
-			switch (role) {
-				case 'ADMIN':
-					navigate(Pathname.GLOBALMASTERS);
-					break;
-				case 'PLANNER':
-					navigate(Pathname.DASHBOARD);
-					break;
-				case 'VENDOR':
-					navigate(Pathname.DASHBOARD);
-					break;
-				case 'ACCESSMANAGER':
-					navigate(Pathname.DASHBOARD);
-					break;
-				default:
-					navigate(Pathname.DASHBOARD);
-					break;
+				let role = auth.user.role.toLowerCase();
+				switch (role) {
+					case 'admin':
+						navigate(Pathname.GLOBALMASTERS);
+						break;
+					case 'planner':
+						navigate(Pathname.DASHBOARD);
+						break;
+					case 'vendor':
+						navigate(Pathname.DASHBOARD);
+						break;
+					case 'accessmanager':
+						navigate(Pathname.DASHBOARD);
+						break;
+					default:
+						navigate(Pathname.DASHBOARD);
+						break;
+				}
 			}
+		} else {
+			alert("Please fill out all fields");
 		}
 	};
 

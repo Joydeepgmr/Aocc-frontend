@@ -9,14 +9,14 @@ import ellipse from '../../assets/logo/ellipse.svg';
 import line from '../../assets/logo/line.svg';
 
 import './topNav.scss';
-import { navMenu, roleBasedNav} from './navData';
+import { navMenu, roleBasedNav } from './navData';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const TopNav = () => {
 	const [activeTab, setActiveTab] = useState(navMenu[0].key);
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const navigate = useNavigate();
-	const {pathname} = useLocation();
+	const { pathname } = useLocation();
 	console.log(pathname);
 	const navItems = roleBasedNav(pathname);
 	console.log(navItems);
@@ -30,10 +30,11 @@ const TopNav = () => {
 	};
 
 	const logoutHandler = () => {
-		localStorage.setItem('t_id', '');
-		localStorage.setItem('role', '');
+		localStorage.clear();
+		// localStorage.setItem('_tid', '');
+		// localStorage.setItem('role', '');
 		navigate('/login');
-		console.log('logged out', localStorage.getItem('t_id'));
+		console.log('logged out', localStorage.getItem('_tid'));
 	};
 
 	const manageAccessHandler = () => {

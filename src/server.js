@@ -12,7 +12,7 @@ export var Server = {
 		if (customOptions) requestOptions = { ...requestOptions, ...customOptions };
 
 		if (isAuth) {
-			let token = localStorage.getItem('t_id');
+			let token = localStorage.getItem('_tid');
 			console.log(token);
 			requestOptions.headers['Authorization'] = `Bearer ${token}`;
 			requestOptions.headers['x-auth-token'] = `Bearer ${token}`;
@@ -48,7 +48,7 @@ export var Server = {
 		};
 		if (customOptions) requestOptions = { ...requestOptions, ...customOptions };
 		if (isAuth) {
-			let token = localStorage.getItem('t_id');
+			let token = localStorage.getItem('_tid');
 			requestOptions.headers['Authorization'] = `Bearer ${atob(token)}`;
 			requestOptions.headers['x-auth-token'] = `Bearer ${atob(token)}`;
 		}
@@ -79,7 +79,7 @@ export var Server = {
 		};
 		if (customOptions) requestOptions = { ...requestOptions, ...customOptions };
 		if (isAuth) {
-			let token = localStorage.getItem('t_id');
+			let token = localStorage.getItem('_tid');
 			requestOptions.headers['Authorization'] = `Bearer ${atob(token)}`;
 			requestOptions.headers['x-auth-token'] = `Bearer ${atob(token)}`;
 		}
