@@ -37,7 +37,7 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
@@ -94,7 +94,7 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
@@ -154,7 +154,7 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
@@ -174,7 +174,7 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
@@ -193,7 +193,7 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
@@ -266,4 +266,4 @@ const FlightSchedule = () => {
   )
 }
 
-export default FlightSchedule
+export default FlightSchedule;
