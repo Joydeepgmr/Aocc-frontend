@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link, Route } from 'react-router-dom';
-import Airport from '../../views/afterAuth/airportMaster/airport';
+import { Navigate } from 'react-router';
 import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
-
+import PlannerAirportMaster from "../../views/afterAuth/plannerairportMaster/airport"
+const role = localStorage.getItem('role');
+console.log('what is the role', role);
 
 export const navMenu = [
 	{
@@ -12,20 +13,64 @@ export const navMenu = [
 		children: <Dashboard />,
 	},
 	{
-		key: '1',
-		label: 'Tasks',
-		children: 'import component Tasks',
-	},
-	{
 		key: '2',
 		label: 'Plans',
-		
 		children: <Plans />,
 	},
 	{
 		key: '3',
-		label: 'AirportMasters',
-		value: "/plan-airport-masters",
-		children: <Airport />,
+		label: 'Airport Masters',
+		children: <PlannerAirportMaster/>,
 	},
 ];
+
+// export const navItems = [
+// 	{
+// 		key: '0',
+// 		label: 'Global Masters',
+// 		children: '/global-masters',
+// 	},
+// 	{
+// 		key: '1',
+// 		label: 'Airport Masters',
+// 		children: '/airport-masters',
+// 	},
+// ];
+
+export const roleBasedNav = (pathname) => {
+	let navItems = [];
+
+	if (role === 'admin' || pathname === '/global-masters') {
+		navItems = [
+			{
+				key: '0',
+				label: 'Global Masters',
+				children: '/global-masters',
+			},
+			{
+				key: '1',
+				label: 'Airport Masters',
+				children: '/airport-masters',
+			},
+		];
+	} else if (role === 'planner' || pathname === '/dashboard' || role === '/plan-airport-masters') {
+		navItems = [
+			{
+				key: '0',
+				label: 'Dashboard',
+				children: '/dashboard',
+			},
+			{
+				key: '1',
+				label: 'Plans',
+				children: '/plans',
+			},
+			{
+				key: '2',
+				label: 'Airport Masters',
+				children: '/plan-airport-masters',
+			},
+		];
+	}
+	return navItems;
+};

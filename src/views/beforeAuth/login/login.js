@@ -7,6 +7,8 @@ import CheckboxField from '../../../components/checkBoxField/checkBoxField';
 import { Form, Image } from 'antd';
 import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
+import { Pathname } from '../../../pathname';
+import { checkAuth } from './dummy-user';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
@@ -18,17 +20,35 @@ export const Login = () => {
 	};
 
 	const onFinishHandler = (values) => {
-		// Assuming your API response contains a token
-		const t_id = 'your_generated_token'; // Replace this with your actual token
+		console.log("what are the values in login", values);
+		if (values.email && values.password) {
+			let auth = checkAuth({ email: values.email, password: values.password })
+			if (auth.token && auth.user) {
+				console.log("auth ::", auth);
+				localStorage.setItem('_tid', auth?.token)
+				localStorage.setItem('role', auth.user.role)
 
-		// Store the token in local storage
-		localStorage.setItem('t_id', t_id);
-
-		console.log('Received values:', values);
-		let accessToken = localStorage.getItem('t_id');
-		// Redirect to the dashboard path
-		if (accessToken) {
-			navigate('/dashboard');
+				let role = auth.user.role.toLowerCase();
+				switch (role) {
+					case 'admin':
+						navigate(Pathname.GLOBALMASTERS);
+						break;
+					case 'planner':
+						navigate(Pathname.DASHBOARD);
+						break;
+					case 'vendor':
+						navigate(Pathname.DASHBOARD);
+						break;
+					case 'accessmanager':
+						navigate(Pathname.DASHBOARD);
+						break;
+					default:
+						navigate(Pathname.DASHBOARD);
+						break;
+				}
+			}
+		} else {
+			alert("Please fill out all fields");
 		}
 	};
 
@@ -67,7 +87,7 @@ export const Login = () => {
 										className="submit_button"
 										type="filledText"
 									/>
-									<p className="contact-admin">Need help?Contact admin</p>
+									<p className="contact-admin">Need help? <a className='admin-link'>Contact admin</a></p>
 								</Form>
 							</div>
 						</div>
