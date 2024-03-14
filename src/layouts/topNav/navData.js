@@ -19,11 +19,13 @@ export const navMenu = [
 	{
 		key: '2',
 		label: 'Plans',
+		
 		children: <Plans />,
 	},
 	{
 		key: '3',
 		label: 'AirportMasters',
+		value: "/plan-airport-masters",
 		children: <Airport />,
 	},
 ];
