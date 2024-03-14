@@ -3,6 +3,7 @@ import CustomTypography from '../../../components/typographyComponent/typography
 import CustomTabs from '../../../components/customTabs/customTabs';
 import Seasonal from './components/seasonal/seasonal';
 import CDM from './components/CDM/CDM';
+import {addArrival} from './redux/planReducer';
 import './plans.scss';
 
 
@@ -10,7 +11,7 @@ export const planTabItems = [
     {
         key: '1',
         label: 'Seasonal',
-        children: <Seasonal />,
+        children: <Seasonal action={addArrival}/>,
     },
     {
         key: '2',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form } from 'antd';
 import InputField from '../../../../../components/inputField/inputField';
 import Button from '../../../../../components/button/button';
+import Date from '../../../../../components/datapicker/datepicker';
 import './formComponent.scss';
 
 
@@ -33,12 +34,12 @@ const FormComponent = () => {
                             required
                             warning="Required field"
                         />
-                        <InputField
+                        <Date
                             label="Date"
+                            placeholder="Filled Text"
                             name="date"
-                            placeholder="Pick a date"
-                            required
-                            warning="Required field"
+                            className="custom_date"
+                            format="MM-DD-YYYY"
                         />
 
                         <InputField

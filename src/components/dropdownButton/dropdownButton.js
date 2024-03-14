@@ -2,7 +2,6 @@
 import React from 'react';
 import downOutLined from '../../assets/DownOutLined.svg';
 import { Dropdown, Menu, Space } from 'antd';
-import { Dropdown, Menu, Space } from 'antd';
 import './dropdownButton.scss';
  
 const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...rest }) => {

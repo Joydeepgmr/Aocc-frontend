@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ButtonComponent from '../../../../../components/button/button';
 import FormComponent from '../formComponent/formComponent';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -10,10 +11,35 @@ import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
+import editIcon from '../../../../../assets/logo/edit.svg';
+import deleteIcon from '../../../../../assets/logo/delete.svg';
+import { useSelector } from 'react-redux';
 import './seasonal.scss';
 
 
 export const columns = [
+    { title: 'Actions',
+        key: 'actions',
+        render: (
+            text,
+            record
+        ) => (
+            <div className="action_buttons">
+                <ButtonComponent
+                    onClick={() => handleEdit(record)}
+                    type="iconWithBorder"
+                    icon={editIcon}
+                    className="custom_icon_buttons"
+                />
+                <ButtonComponent
+                    onClick={() => handleDelete(record)}
+                    type="iconWithBorder"
+                    icon={deleteIcon}
+                    className="custom_icon_buttons"
+                />
+            </div>
+        ),
+    },
     { title: 'Flight No.', dataIndex: 'flightNo', key: 'flightNo' },
     { title: 'Date', dataIndex: 'date', key: 'date' },
     { title: 'Call Sign', dataIndex: 'callSign', key: 'callSign' },
@@ -32,13 +58,13 @@ export const columns = [
 ];
 
 export const dummyData = [
-    { key: '1', flightNo: 'AI 812', date: 20240227, callSign: 'ABC 123', natureCode: '123', org: 'Lucknow', via: 'ST | HYD | DEL', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213', action: {} },
-    { key: '2', flightNo: '6E 6172', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Surat', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
-    { key: '3', flightNo: 'UK 642', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chicago', via: '-', atd: '15:00', sta: '15:00', eta: '15:30', tmo: '15:30', ata: '15:30', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
-    { key: '4', flightNo: 'AI 916', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chicago', via: 'IST', atd: '15:00', sta: '15:00', eta: '16:00', tmo: '16:00', ata: '16:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
-    { key: '5', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Lucknow', via: 'HYD', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
-    { key: '6', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Hyderabad', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
-    { key: '7', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chandigarh', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '1', flightNo: 'AI 812', date: 20240227, callSign: 'ABC 123', natureCode: '123', org: 'Lucknow', via: 'ST | HYD | DEL', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213', action: {} },
+    // { key: '2', flightNo: '6E 6172', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Surat', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '3', flightNo: 'UK 642', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chicago', via: '-', atd: '15:00', sta: '15:00', eta: '15:30', tmo: '15:30', ata: '15:30', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '4', flightNo: 'AI 916', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chicago', via: 'IST', atd: '15:00', sta: '15:00', eta: '16:00', tmo: '16:00', ata: '16:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '5', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Lucknow', via: 'HYD', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '6', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Hyderabad', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
+    // { key: '7', flightNo: '6E 1234', date: 20240227, callSign: 'ID 1234', natureCode: '123', org: 'Chandigarh', via: '-', atd: '15:00', sta: '15:00', eta: '15:00', tmo: '15:00', ata: '15:00', standCode: 'Stand 1', ACType: 'A12', REGNo: 'SS213' },
 ];
 
 export const dropdownItems = [
@@ -107,13 +133,38 @@ const Seasonal = () => {
         }
     };
 
+
+    // const { additionalArrivalData } = useSelector((store) => store.plans);
+
+	// console.log('additionalArrivalData', additionalArrivalData);
+	// const rows = additionalArrivalData?.map((data) => {
+	// 	return {
+	// 		flightNo: data.flightNo ?? 'NA',
+	// 		date: data.date ?? 'NA',
+	// 		atcCode: data.atcCode ?? 'NA',
+	// 		callSign: data.callSign ?? 'NA',
+	// 		natureCode: data.natureCode ?? 'NA',
+	// 		org: data.org ?? 'NA',
+	// 		via: data.via ?? 'NA',
+	// 		atd: data.atd ?? 'NA',
+	// 		sta: data.sta ?? 'NA',
+	// 		eta: data.eta ?? 'NA',
+	// 		tmo: data.tmo ?? 'NA',
+	// 		atc: data.atc ?? 'NA',
+	// 		standCode: data.standCode ?? 'NA',
+	// 		ACType: data.ACType ?? 'NA',
+	// 		REGNo: data.REGNo ?? 'NA',
+	// 		action: data.action ?? 'NA',
+	// 	};
+	// });
+
     return (
         <>
             {!showTable ? (
                 <div className="main_buttonContainer">
                     <div className="seasonal_container">
                         <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                        <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Seasonal Planning" className="custom_modal">
+                        <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Add New Inbound Flight" className="custom_modal">
                             <div className="modal_content"><FormComponent /></div>
                         </ModalComponent>
 

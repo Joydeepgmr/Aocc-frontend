@@ -38,7 +38,7 @@ const AirportSetupTable = () => {
 			key: 'actions',
 			render: (
 				text,
-				record // Use the render function to customize the content of the cell
+				record
 			) => (
 				<div className="action_buttons">
 					<ButtonComponent
@@ -65,11 +65,6 @@ const AirportSetupTable = () => {
 			title: 'Airport Code',
 			dataIndex: 'iataCode',
 			key: 'atcCode',
-		},
-		{
-			title: 'Name',
-			dataIndex: 'airportName',
-			key: 'airportName',
 		},
 		{
 			title: 'Airport Type',
