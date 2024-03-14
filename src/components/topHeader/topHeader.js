@@ -4,7 +4,7 @@ import InputField from '../inputField/inputField';
 import filterIcon from '../../assets/logo/filter-icon.svg';
 import './topHeader.scss';
 
-const TopHeader = ({ heading, subHeading, className }) => {
+const TopHeader = ({ heading, subHeading, className, searchBox }) => {
 	return (
 		<>
 			<div className={`top_header_container ${className}`}>

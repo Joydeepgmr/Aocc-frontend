@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
+import { formDisabled } from '../../redux/reducer';
 
 const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { additionalAirportData } = useSelector((store) => store.globalMasters);
+	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const openCsvModal = () => {
@@ -46,7 +47,6 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 	};
 
 	const onFinishHanlder = (values) => {
-		console.log('values', values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
@@ -61,6 +61,9 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 		console.log('Dropdown value:', value); // Add this line
 		if (value === 'addAirport') {
 			openAddModal();
+			if (disabled) {
+				dispatch(formDisabled());
+			}
 		}
 
 		if (value === 'uploadCSV') {

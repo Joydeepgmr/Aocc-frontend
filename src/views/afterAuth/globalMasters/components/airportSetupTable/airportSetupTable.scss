@@ -24,12 +24,28 @@
 .action_buttons{
     @include flex(center, center, row);
     gap: 1.6rem;
-    // .iconBorderButton {
-	// 		&.custom_icon_buttons {
-	// 			background-color: $button_color;
-	// 			color: $white;
-	// 			height: 4.4rem;
-	// 		}
-	// 	}
 }
+
+	.custom_modal{
+			max-height: 85%;
+			overflow: auto;
+			border-radius: 1rem;
+		}
+
+	 	.custom_buttons {
+    	@include flex(center, end, row);
+		gap: 2rem;
+		margin-top: 2.4rem;
+		margin-bottom: 1.4rem;
+		.custom_button_cancel {
+			background-color: $gray_100;
+			color: $black;
+			padding: 1.2rem 2.4rem;
+			height: 4.4rem;
+		}
+		.custom_button_save {
+			padding: 1.2rem 2.4rem;
+			height: 4.4rem;
+		}
+	}
        

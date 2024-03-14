@@ -9,19 +9,20 @@ import ellipse from '../../assets/logo/ellipse.svg';
 import line from '../../assets/logo/line.svg';
 
 import './topNav.scss';
-import { navMenu, navMenuITadmin } from './navData';
-import { useNavigate } from 'react-router-dom';
+import { navMenu, roleBasedNav } from './navData';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const TopNav = () => {
 	const [activeTab, setActiveTab] = useState(navMenu[0].key);
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const navigate = useNavigate();
-
-	const handleTabClick = (label) => {
-		setActiveTab(label);
-		console.log("what is key here", label);
-		navigate(`/${label.toLowerCase()}`)
-		navigate(navMenuITadmin[key].children);
+	const { pathname } = useLocation();
+	console.log(pathname);
+	const navItems = roleBasedNav(pathname);
+	console.log(navItems);
+	const handleTabClick = (key) => {
+		setActiveTab(key); // Set the clicked tab as active
+		navigate(navItems[key].children);
 	};
 
 	const toggleSettingCard = () => {
@@ -29,9 +30,11 @@ const TopNav = () => {
 	};
 
 	const logoutHandler = () => {
-		localStorage.setItem('t_id', '');
+		localStorage.clear();
+		// localStorage.setItem('_tid', '');
+		// localStorage.setItem('role', '');
 		navigate('/login');
-		console.log('logged out', localStorage.getItem('t_id'));
+		console.log('logged out', localStorage.getItem('_tid'));
 	};
 
 	const manageAccessHandler = () => {
@@ -47,8 +50,8 @@ const TopNav = () => {
 						<img src={gmrLogo} alt="GMR Logo" />
 					</div>
 					<div className="tabs_container">
-						{navMenuITadmin.map((menu) => (
-							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.label)}>
+						{navItems.map((menu) => (
+							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.key)}>
 								<div className={`tab ${activeTab === menu.key ? 'active' : ''}`}>{menu.label}</div>
 								{activeTab === menu.key && <div className="active-line" />}
 							</div>

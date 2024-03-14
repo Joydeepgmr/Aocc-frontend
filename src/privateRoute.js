@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { Pathname } from './pathname';
 
 
-let accessToken = localStorage.getItem('t_id');
+let accessToken = localStorage.getItem('_tid');
 
 
 export const PrivateRoute = () => {

@@ -47,6 +47,9 @@
                 .contact-admin{
                     text-align: center;
                     margin-top: 1rem;
+                    .admin-link:hover {
+                        color: $button_hoverColor;
+                    }
                 }
         }
     }

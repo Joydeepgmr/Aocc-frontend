@@ -2,75 +2,60 @@
 @import '../../styles/sass/variables';
  
 .button {
-    text-decoration: none;
-    border: none;
-    font-size: 1.6rem;
-    @include transition(0.2s, ease-in);
-    box-shadow: none;
- 
-    &.button.filledTextButton {
-        color: $white;
-        background-color: $button_color;
-        font-weight: $font_weight;
-        font-family: $button_font;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 1.2rem;
-        padding: 1.2rem 2.4rem 1.2rem 2.4rem;
-        line-height: 2.008rem;
-    }
- 
-    &.button.filledTextButton:hover {
-        border: 0.1rem solid #c6cace;
-    }
- 
-    &.button.textButton {
-        color: $button_color;
-        background-color: white;
-        font-family: $button_font;
-        width: 14.578rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: $font_weight;
-        box-shadow: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
- 
-    &.button.textButton:hover {
-        color: blue;
-    }
- 
-    &.button.iconBorderButton {
-        background-color: $gray_200;
-        height: 3.6rem;
-        width: 3.6rem;
-        padding: 0.8rem;
-        border-radius: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
- 
-    &.button.iconBorderButton:hover {
-        border: 0.1rem solid $gray_700;
-    }
- 
-    &.button.iconButton {
-        background-color: transparent;
-        width: 3.6rem;
-        height: 3.6rem;
-        padding: 0.8rem;
-        border-radius: 10rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
- 
-    &.button.iconButton:hover {
-        border: 0.1rem solid $gray_700;
-    }
+	text-decoration: none;
+	border: none;
+	font-size: 1.6rem;
+
+	&.button.filledTextButton {
+		color: $white;
+		background-color: $button_color;
+		font-weight: $font_weight;
+		font-family: $button_font;
+		@include flex(center, center, row);
+		border-radius: 1.2rem;
+		padding: 1.2rem 2.4rem 1.2rem 2.4rem;
+		line-height: 2.008rem;
+	}
+
+	&.button.filledTextButton:hover {
+		border: 0.1rem solid #c6cace;
+	}
+
+	&.button.textButton {
+		color: $button_color;
+		background-color: $white;
+		font-family: $button_font;
+		width: 14.578rem;
+		@include flex(center, center, row);
+		font-weight: $font_weight;
+		box-shadow: none;
+	}
+
+	&.button.textButton:hover {
+		color: $button_hoverColor;
+	}
+
+	&.button.iconBorderButton {
+		background-color: $gray_700;
+		padding: 0.8rem 0.4rem;
+		border-radius: 50%;
+		@include flex(center, center, row);
+	}
+
+	&.button.iconBorderButton:hover {
+		border: 0.1rem solid $gray_700;
+	}
+
+	&.button.iconButton {
+		background-color: transparent;
+		width: 3.6rem;
+		height: 3.6rem;
+		padding: 0.8rem;
+		border-radius: 10rem;
+		@include flex(center, center, row);
+	}
+
+	&.button.iconButton:hover {
+		border: 0.1rem solid $gray_700;
+	}
 }
