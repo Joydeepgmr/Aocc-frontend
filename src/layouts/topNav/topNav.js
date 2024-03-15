@@ -19,9 +19,9 @@ const TopNav = () => {
 	const { pathname } = useLocation();
 	console.log(pathname);
 	const navItems = roleBasedNav(pathname);
-	console.log(navItems);
+	
 	const handleTabClick = (key) => {
-		setActiveTab(key); // Set the clicked tab as active
+		setActiveTab(key); 
 		navigate(navItems[key].children);
 	};
 
