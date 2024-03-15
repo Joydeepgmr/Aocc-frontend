@@ -1,0 +1,62 @@
+@import '../../../src/styles/sass/variables';
+
+.vis-foreground .vis-group {
+	border-bottom: none;
+}
+
+.vis-current-time {
+	background-color: $dark_300;
+}
+
+.timeline {
+	&--FirstAirline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: $blue_100;
+		}
+	}
+	&--SecondAirline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: $yellow_100;
+		}
+	}
+	&--ThirdAirline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: $green_100;
+		}
+	}
+	&--LabelContainer {
+		display: flex;
+		gap: 0.8rem;
+	}
+	&--Label {
+		width: 2rem;
+		height: 2rem;
+	}
+	&--BottomContainer {
+		display: flex;
+		gap: 3.2rem;
+		margin: 2rem;
+	}
+}
+.vis-item,
+.vis-item.vis-range {
+	background: none;
+	border: none;
+	outline: none;
+	border-radius: 1rem;
+}
+.vis-timeline,
+.vis-panel.vis-top,
+.vis-labelset .vis-label,
+.vis-panel.vis-center,
+.vis-panel.vis-left,
+.vis-panel.vis-right {
+	border: none;
+}
+
