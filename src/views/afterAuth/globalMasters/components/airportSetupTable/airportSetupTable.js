@@ -50,9 +50,6 @@ const AirportSetupTable = ({ formComponent }) => {
 		setRowData(data);
 		setIsModalOpen(true);
 		setEditData(true);
-		if (!disabled) {
-			dispatch(formDisabled());
-		}
 	};
 
 	const handleEditButton = () => {
