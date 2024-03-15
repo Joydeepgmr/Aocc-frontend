@@ -1,17 +1,10 @@
-@import '../../../../../styles/sass/mixins';
-@import '../../../../../styles/sass/variables';
+@import '../../../../../../../styles/sass/variables';
+@import '../../../../../../../styles/sass/mixins';
 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-}
-
-.mainHead {
-    width: 100%;
-    border: 1px dashed $gray_400; 
-    border-radius: 1.2rem;
-    padding: 1.4rem;
 }
 
 .container {
@@ -30,4 +23,8 @@
     max-height: 50rem;
     overflow: auto;
     border-radius: 1rem;
+}
+
+.table-container{
+    margin-top: 2rem;
 }
