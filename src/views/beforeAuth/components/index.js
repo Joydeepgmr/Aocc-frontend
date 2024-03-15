@@ -22,6 +22,7 @@ import MultiSelectComponent from '../../../components/multiSelectComponent/multi
 import TopHeader from '../../../components/topHeader/topHeader';
 import OtpField from '../../../components/otpField/otpField';
 import TimelineDesign from '../../../components/timeline/timeline';
+import { useDummyApi } from '../../../services';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -224,6 +225,8 @@ export const Components = () => {
 			content: 'belt 6',
 		},
 	];
+
+	const {} = useDummyApi();
 
 	return (
 		<React.Fragment>
