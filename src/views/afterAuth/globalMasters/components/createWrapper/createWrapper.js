@@ -108,7 +108,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 				width={width ?? 'auto'}
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder}>
+				<Form form={form} layout="vertical" onFinish={onFinishHanlder}>
 					{formComponent && formComponent}
 					<Divider />
 					<div className="custom_buttons">
