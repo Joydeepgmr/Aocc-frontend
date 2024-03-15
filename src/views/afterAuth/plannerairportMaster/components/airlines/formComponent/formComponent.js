@@ -2,19 +2,21 @@ import React from 'react';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../components/inputField/inputField';
+import CustomSelect from '../../../../../../components/selectfield/select';
 import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
+import OtpField from '../../../../../../components/otpField/otpField';
+import TableComponent from '../../../../../../components/table/table';
+import { columns, dummyData } from './data';
 import './formComponent.scss';
-
 const FormComponent = ({ closeModal }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
-	
-			form.resetFields();
-			dispatch(addAircraftRegistration(values));
-    
+		form.resetFields();
+		dispatch(addAircraftRegistration(values));
 	};
+	const SelectData = [];
 	return (
 		<>
 			<div className="main_form">
@@ -27,6 +29,8 @@ const FormComponent = ({ closeModal }) => {
 								placeholder="Enter the airport name"
 								warning="Required field"
 							/>
+							<OtpField label="Airport Code" otpLength={2} id="custom_otp" name="airportCode" />
+							<OtpField label="ATC Code" name="atcCode" />
 						</div>
 
 						<div className="form_content">
@@ -66,27 +70,24 @@ const FormComponent = ({ closeModal }) => {
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
+						</div>
 
+						<div className="form_content">
 							<InputField
 								label="Country"
 								name="country"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
-						</div>
-
-						<div className="form_content">
-							<InputField label="ATA" name="ata" placeholder="Filled Text" warning="Required field" />
 							<InputField
-								label="Nationality"
-								name="nationality"
+								label="Continent"
+								name="continent"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
-
 							<InputField
-								label="Type of Use"
-								name="TypeofUse"
+								label="Home Airport"
+								name="HomeAirport"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
@@ -95,35 +96,41 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_section">
 						<div className="form_content">
 							<InputField
-								label="Cockpit Crew"
-								name="CockpitCrew"
+								label="Remark"
+								name="remark"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
 							<InputField
-								label="Cockpit Crew"
-								name="CockpitCrew"
+								label="Leasing"
+								name="leasing"
 								placeholder="Filled Text"
 								warning="Required field"
+							/>
+							<OtpField
+								label="Domestic/International"
+								otpLength={1}
+								id="custom_otp"
+								name="domestic/International"
 							/>
 						</div>
 
 						<div className="form_content">
 							<InputField
-								label="No. of Seats"
-								name="NoofSeats"
+								label="Terminal"
+								name="terminal"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
 							<InputField
-								label="No. of Kitchens"
-								name="NoofKitchens"
+								label="Report"
+								name="report"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
 							<InputField
-								label="No. of Toilets"
-								name="NoofToilets"
+								label="Work Order"
+								name="workOrder"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
@@ -136,94 +143,110 @@ const FormComponent = ({ closeModal }) => {
 								name="height"
 								placeholder="Filled Text"
 								warning="Required field"
-								suffixText="meters"
 							/>
 							<InputField
-								label="Length"
-								name="length"
+								label="Administrator"
+								name="administrator"
 								placeholder="Filled Text"
 								warning="Required field"
-								suffixText="meters"
-							/>
-							<InputField
-								label="Wingspan"
-								name="wingspan"
-								placeholder="Filled Text"
-								warning="Required field"
-								suffixText="meters"
 							/>
 						</div>
+						<Divider />
+						<div className="form_content">
+							<CustomSelect
+								SelectData={SelectData}
+								label="Mode of Payment"
+								name="ModeofPayment"
+								placeholder={'Enter the airport name'}
+							/>
+						</div>
+					</div>
+					<Divider />
+					<div className="wrapper_head">
+						<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
+							Head Office
+						</CustomTypography>
+						<div className="form_content">
+							<InputField
+								label="Address 1"
+								name="address1"
+								placeholder="Filled Text"
+								warning="Required field"
+							/>
+							<InputField
+								label="Address2"
+								name="Address2"
+								placeholder="Filled Text"
+								warning="Required field"
+							/>
+						</div>
+					</div>
+					<div className="form_content">
+						<InputField
+							label="Address3"
+							name="address3"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
+						<InputField
+							label="Address4"
+							name="Address4"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
+					</div>
+					<div className="form_content">
+						<InputField label="Phone" name="fax" placeholder="Filled Text" warning="Required field" />
+						<InputField
+							label="Internet"
+							name="internet"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
+					</div>
+					<div className="form_content">
+						<InputField label="Founded" name="founded" placeholder="Filled Text" warning="Required field" />
+						<InputField
+							label="SITA Code"
+							name="SITACode"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
+						<InputField
+							label="Employees"
+							name="employees"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
+					</div>
 
-						<div className="form_content">
-							<InputField
-								label="MTOW"
-								name="mtow"
-								placeholder="Filled Text"
-								warning="Required field"
-								suffixText="t"
-							/>
-							<InputField
-								label="Annex"
-								name="Annex"
-								placeholder="Filled Text"
-								warning="Required field"
-								suffixText="t"
-							/>
-						</div>
-						<div className="form_content">
-							<InputField
-								label="Main Deck"
-								name="MainDeck"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-							<InputField
-								label="APU INOP"
-								name="Apuinop"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-						</div>
-					</div>
 					<Divider />
-					<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
-						Owner
-					</CustomTypography>
-					<div className="form_content">
-						<InputField
-							label="Owner Name"
-							name="OwnerName"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-						<InputField label="Country" name="country" placeholder="Filled Text" warning="Required field" />
-						<InputField
-							label="Debit Number"
-							name="DebitNumber"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-					<div className="form_content">
-						<InputField label="Address" name="address" placeholder="Filled Text" warning="Required field" />
-						<InputField label="Remarks" name="remarks" placeholder="Filled Text" warning="Required field" />
+					<div className="Box_airline_nested_modal">
+						<div className="custom_airline_form_table">
+							<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
+								Agents
+							</CustomTypography>
+							<div className="custom_button_airline">
+								<Button title="Delete" type="filledText" id="btn" className="custom_svgButton" />
+								<Button title="Add" type="filledText" id="btn" isSubmit="submit" />
+							</div>
+						</div>
+						<TableComponent columns={columns} data={dummyData} />
 					</div>
 					<Divider />
 					<div className="form_content">
-						<Date label="Valid To" name="date" placeholder="Enter the airport name" required />
-						
-						<Date label="Valid To" name="datepic" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
 					</div>
 					<div className="form_section">
 						<div className="form_bottomButton">
-							<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 							<Button
 								title="Cancel"
 								type="filledText"
 								id="btn"
-								onClick={closeModal}
 								className="custom_svgButton"
 							/>
+							<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 						</div>
 					</div>
 				</Form>

@@ -8,6 +8,7 @@ import { addAircraftRegistration } from '../../../redux/actionCreator';
 import { useForm } from 'antd/lib/form/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIsShowTableComponents } from '../../../redux/reducer';
+import { SelectData } from '../../../../userAccess/userAccessData';
 
 const FormComponent = ({ closeModal }) => {
 	const dispatch = useDispatch();
@@ -16,9 +17,6 @@ const FormComponent = ({ closeModal }) => {
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
-		
-
-		closeModal();
 	};
 
 	return (
@@ -221,14 +219,13 @@ const FormComponent = ({ closeModal }) => {
 				</div>
 				<div className="form_section">
 					<div className="form_bottomButton">
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 						<Button
 							title="Cancel"
 							type="filledText"
 							id="btn"
-							onClick={closeModal}
 							className="custom_svgButton"
 						/>
+						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
 			</Form>

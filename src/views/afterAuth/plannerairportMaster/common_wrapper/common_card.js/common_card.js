@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ModalComponent from '../../../../../components/modalComponent/modalComponent';
-import FormComponent from '../../components/aircraft/formComponent/formComponent';
 import './common_card.scss';
-const Common_Card = ({ title1, title2, title3, Heading, btnCondition }) => {
+const Common_Card = ({ title1, title2, title3, Heading, btnCondition,formComponent }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
@@ -36,7 +35,7 @@ const Common_Card = ({ title1, title2, title3, Heading, btnCondition }) => {
 					className="custom_modal"
 				>
 					<div className="modal_content">
-						<FormComponent closeModal={closeModal} />
+						{formComponent}
 					</div>
 				</ModalComponent>
 				<Button
