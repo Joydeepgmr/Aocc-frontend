@@ -10,6 +10,9 @@ import MultiSelectComponent from '../../../components/multiSelectComponent/multi
 import FlightSchedule from './components/FlightSchedule';
 import ProgressionCard from './components/ProgressionCard';
 import GraphCard from './components/GraphCard';
+import Milestone from './components/Milestone';
+import TelexMessage from './components/TelexMessage';
+import MapView from './components/MapView';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -25,17 +28,17 @@ export const Dashboard = () => {
 		{
 			key: '2',
 			label: 'Milestone',
-			children: <><h1>Hello 2</h1></>,
+			children: <Milestone />,
 		},
 		{
 			key: '3',
 			label: 'Map View',
-			children: <><h1>Hello 3</h1></>,
+			children: <MapView/>,
 		},
 		{
 			key: '4',
 			label: 'Telex Messaging Gateway',
-			children: <><h1>Hello 4</h1></>,
+			children: <TelexMessage/>,
 		},
 	]
 
