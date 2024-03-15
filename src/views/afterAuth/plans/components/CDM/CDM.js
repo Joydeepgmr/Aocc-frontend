@@ -6,7 +6,7 @@ import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvMo
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CDMSchedule from './components/CDMSchedule/CDMSchedule';
 import './CDM.scss';
-
+import ResourceAllocation from './components/resourceAllocation/resourceAllocation';
 
 const CDM = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,16 +14,16 @@ const CDM = () => {
 	const [loading, setLoading] = useState(false);
 	const items = [
 		{
-			key: "1",
-			label: "CDM Schedule",
-			children: <CDMSchedule/>,
-		}, 
+			key: '1',
+			label: 'CDM Schedule',
+			children: <CDMSchedule />,
+		},
 		{
-			key: "2",
-			label: "Resource Allocation",
-			children: <></>,
-		}
-	]
+			key: '2',
+			label: 'Resource Allocation',
+			children: <ResourceAllocation />,
+		},
+	];
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
 	};
