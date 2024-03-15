@@ -1,0 +1,18 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    gap:2rem;
+}
+.custom_airline_form_table{
+    display: flex;
+    justify-content: space-between;
+}
+.custom_button_airline{
+    display: flex;
+    gap:1rem;
+}
+.Box_airline_nested_modal{
+    display: flex;
+    flex-direction: column;
+    gap:2rem;
+}

@@ -31,7 +31,7 @@ const Date = ({
 			className={`${className} date_form_item`}
 			// rules={[
 			// 	{
-			// 		message: 'This field is required.',
+			// 		message: 'This field is required',
 			// 	},
 			// ]}
 		>

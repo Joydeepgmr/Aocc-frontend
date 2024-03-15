@@ -7,23 +7,23 @@ import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
-import AirportMaster from "./views/afterAuth/airportMaster/airport"
+
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 
-import './app.scss';
-import GlobalMasters from './views/afterAuth/globalMasters/globalMasters';
 import AirportMasters from './views/afterAuth/airportMasters/airportMasters';
+import GlobalMasters from './views/afterAuth/globalMasters/globalMasters';
+import PlannerAirportMaster from './views/afterAuth/plannerairportMaster/airport';
 import Plans from './views/afterAuth/plans/plans';
-
+import './app.scss';
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
 const Components = React.lazy(() => import('./views/beforeAuth/components'));
 
 export function App() {
 	const token = localStorage.getItem('_tid');
-	console.log("What is token here:", token);
+	console.log('What is token here:', token);
 	const userRole = localStorage.getItem('role');
-	console.log("what is the role in app.jsx", userRole);
+	console.log('what is the role in app.jsx', userRole);
 
 	return (
 		<Suspense fallback={<Loader />}>
@@ -62,6 +62,11 @@ export function App() {
 					<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
 						<Route element={<Layout />}>
 							<Route index element={<UserAccess />} />
+						</Route>
+					</Route>
+					<Route path={Pathname.PLANAIRPORTMASTER} element={<PrivateOutlet />}>
+						<Route element={<Layout />}>
+							<Route index element={<PlannerAirportMaster />} />
 						</Route>
 					</Route>
 					<Route path={Pathname.GLOBALMASTERS} element={<PrivateOutlet />}>
