@@ -62,6 +62,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
+							required: true,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -85,6 +86,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
+							required: true,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -108,6 +110,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
+							required: true,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -130,6 +133,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
+							required: true,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
