@@ -1,6 +1,6 @@
 @import '../../styles/sass/mixins';
 @import '../../styles/sass/variables';
- 
+
 .button {
 	text-decoration: none;
 	border: none;
@@ -36,9 +36,11 @@
 	}
 
 	&.button.iconBorderButton {
-		background-color: $gray_700;
-		padding: 0.8rem 0.4rem;
-		border-radius: 50%;
+		background-color: $gray_200;
+		height: 3.6rem;
+		width: 3.6rem;
+		padding: 0.8rem;
+		border-radius: 1.2rem;
 		@include flex(center, center, row);
 	}
 
