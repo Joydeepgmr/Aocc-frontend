@@ -62,7 +62,7 @@ const AirportSetupForm = () => {
 					name="airportType"
 					disabled={disabled}
 				/>
-				<OtpField otpLength={3} label="Country Code" required name="countryCode" disabled={disabled} />
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={disabled} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -125,6 +125,7 @@ const AirportSetupForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					required
 					disabled={disabled}
 				/>
 				<Date
