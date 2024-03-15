@@ -7,14 +7,16 @@ import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
 import OtpField from '../../../../../../components/otpField/otpField';
 import TableComponent from '../../../../../../components/table/table';
+import { updateIsShowTableComponents } from '../../../redux/reducer';
 import { columns, dummyData } from './data';
 import './formComponent.scss';
+
 const FormComponent = ({ closeModal }) => {
 	const [form] = Form.useForm();
-
 	const onFinish = (values) => {
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
+		dispatch(updateIsShowTableComponents());
 	};
 	const SelectData = [];
 	return (
@@ -240,12 +242,7 @@ const FormComponent = ({ closeModal }) => {
 					</div>
 					<div className="form_section">
 						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-							/>
+							<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
 							<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 						</div>
 					</div>
