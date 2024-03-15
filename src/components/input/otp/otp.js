@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'antd';
 import { InputOTP } from 'antd-input-otp';
 import PropTypes from 'prop-types';
-import './otpField.scss';
+import './otp.scss';
 
 const OtpField = ({ otpLength = 3, name, label, required, disabled, className = '' }) => {
     const otpLabel = () => {

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../formComponent/formComponent';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import Filter from '../../../../../assets/Filter.svg';
-import InputField from '../../../../../components/inputField/inputField';
+import InputField from '../../../../../components/input/field/field';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
-import './seasonal.scss';
 import { dummyData } from './components/arrival/dummyData/dummy-data';
+
+import './seasonal.scss';
 
 export const dropdownItems = [
     {

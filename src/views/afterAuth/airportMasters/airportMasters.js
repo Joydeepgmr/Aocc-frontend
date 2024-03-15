@@ -1,10 +1,10 @@
 // import React, {useState} from 'react'
 // import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 // import ButtonComponent from '../../../components/button/button';
-// import ModalComponent from '../../../components/modalComponent/modalComponent';
-// import InputField from '../../../components/inputField/inputField';
+// import ModalComponent from '../../../components/modal/modal';
+// import InputField from '../../../components/input/field/field';
 // import { Divider, Form } from 'antd';
-// import CustomSelect from '../../../components/selectfield/select';
+// import CustomSelect from '../../../components/select/select';
 // import Date from '../../../components/datapicker/datepicker';
 // import TopHeader from '../../../components/topHeader/topHeader';
 // import TableComponent from '../../../components/table/table';
@@ -160,7 +160,7 @@
 
 // export default AirportMasters;
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './airportMasters.scss';
 import TopHeader from '../../../components/topHeader/topHeader'
 import CustomTabs from '../../../components/customTabs/customTabs';
@@ -173,16 +173,16 @@ const AirportMasters = () => {
 	return (
 		<div className='airport_masters_container'>
 			<div className='airport_master_header'>
-			<TopHeader heading="Airport Masters" subHeading="Overview of airport licenses for the Airport Operating System" />
+				<TopHeader heading="Airport Masters" subHeading="Overview of airport licenses for the Airport Operating System" />
 			</div>
 			<div>
-			<CreateWrapper
-			formComponent={<LicenseSetupForm />}
-			title="New Airport License"
-			width="87.2rem"
-			tableComponent={<LicenseSetupTable formComponent={<LicenseSetupForm />} />}
-			action={addAirportLicense}
-			/>
+				<CreateWrapper
+					formComponent={<LicenseSetupForm />}
+					title="New Airport License"
+					width="87.2rem"
+					tableComponent={<LicenseSetupTable formComponent={<LicenseSetupForm />} />}
+					action={addAirportLicense}
+				/>
 			</div>
 		</div>
 	)

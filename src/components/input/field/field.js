@@ -1,7 +1,8 @@
 import { Form, Input, InputNumber } from 'antd';
 import React, { useState } from 'react';
-import './inputField.scss';
 import { SearchOutlined } from '@ant-design/icons';
+
+import './field.scss';
 
 const InputField = ({
 	label,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../formComponent/formComponent';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import CustomTabs from '../../../../../components/customTabs/customTabs';

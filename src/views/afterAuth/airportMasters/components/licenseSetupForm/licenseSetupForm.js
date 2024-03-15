@@ -1,17 +1,17 @@
 import React from 'react'
-import InputField from '../../../../../components/inputField/inputField'
-import { Divider, Form } from 'antd';
+import InputField from '../../../../../components/input/field/field';
 import Date from '../../../../../components/datapicker/datepicker'
-import './licenseSetupForm.scss';
-import CustomSelect from '../../../../../components/selectfield/select';
-import OtpField from '../../../../../components/otpField/otpField';
+import CustomSelect from '../../../../../components/select/select';
+import OtpField from '../../../../../components/input/otp/otp';
 import { SelectData } from '../../../userAccess/userAccessData';
 import { useSelector } from 'react-redux';
 
+import './licenseSetupForm.scss';
+
 const LicenseSetupForm = () => {
-	const { disabled } = useSelector((store)=> store.airportMasters);
-    return (
-        <div className="airport_setup_form_container">
+	const { disabled } = useSelector((store) => store.airportMasters);
+	return (
+		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Airport Name"
@@ -20,7 +20,7 @@ const LicenseSetupForm = () => {
 					className="custom_input"
 					required
 				/>
-				<OtpField otpLength={3} label="3-Letter Code" required name="threeCode" disabled={disabled}/>
+				<OtpField otpLength={3} label="3-Letter Code" required name="threeCode" disabled={disabled} />
 				<OtpField otpLength={4} label="4-Letter Code" required name="fourCode" disabled={disabled} />
 
 			</div>
@@ -64,7 +64,7 @@ const LicenseSetupForm = () => {
 			</div>
 			{/* <Divider /> */}
 		</div>
-    )
+	)
 }
 
 export default LicenseSetupForm;

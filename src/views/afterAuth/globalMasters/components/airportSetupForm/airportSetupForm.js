@@ -1,11 +1,11 @@
 import React from 'react';
-import InputField from '../../../../../components/inputField/inputField';
+import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import './airportSetupForm.scss';
-import CustomSelect from '../../../../../components/selectfield/select';
+import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
-import OtpField from '../../../../../components/otpField/otpField';
+import OtpField from '../../../../../components/input/otp/otp';
 import { useSelector } from 'react-redux';
 
 const AirportSetupForm = () => {
