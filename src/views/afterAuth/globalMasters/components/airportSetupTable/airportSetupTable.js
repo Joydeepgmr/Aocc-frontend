@@ -6,7 +6,7 @@ import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import { formDisabled, updateAirportData } from '../../redux/reducer';

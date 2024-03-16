@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import { Select } from 'antd';
-import './multiSelectComponent.scss';
+import './multiSelect.scss';
 
 const { Option } = Select;
 

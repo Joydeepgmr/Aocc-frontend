@@ -1,7 +1,8 @@
 import { Form, Input, InputNumber } from 'antd';
 import React, { useState } from 'react';
-import './inputField.scss';
 import { SearchOutlined } from '@ant-design/icons';
+
+import './field.scss';
 
 const InputField = ({
 	label,
@@ -18,6 +19,11 @@ const InputField = ({
 	rest,
 	codeLength,
 }) => {
+	const numberPattern = /^[0-9]*$/;
+	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	const inputs = [];
+	const [codeValue, setCodeValue] = useState('');
+
 	const renderLabel = () => {
 		return (
 			<>
@@ -26,11 +32,6 @@ const InputField = ({
 			</>
 		);
 	};
-
-	const numberPattern = /^[0-9]*$/;
-	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-	const inputs = [];
-	const [codeValue, setCodeValue] = useState('');
 
 	const handleCodeChange = (index, value) => {
 		const updatedCodeValue = codeValue.substring(0, index) + value + codeValue.substring(index + 1);
@@ -62,7 +63,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
-							required: true,
+							required: required,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -86,7 +87,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
-							required: true,
+							required: required,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -110,7 +111,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
-							required: true,
+							required: required,
 							message: warning ? warning : 'This field is required.',
 						},
 						{
@@ -133,7 +134,7 @@ const InputField = ({
 					className={`${className} input_form_item`}
 					rules={[
 						{
-							required: true,
+							required: required,
 							message: warning ? warning : 'This field is required.',
 						},
 						{

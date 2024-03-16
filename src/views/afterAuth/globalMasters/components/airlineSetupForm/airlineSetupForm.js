@@ -1,7 +1,7 @@
 import React from 'react';
-import InputField from '../../../../../components/inputField/inputField';
+import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
-import CustomSelect from '../../../../../components/selectfield/select';
+import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import Date from '../../../../../components/datapicker/datepicker';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './createWrapper.scss';
 import ButtonComponent from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';

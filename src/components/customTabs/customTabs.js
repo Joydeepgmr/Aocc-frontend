@@ -8,6 +8,7 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 			<Tabs
 				defaultActiveKey={defaultActiveKey}
 				onChange={onChange}
+				tabBarExtraContent={extraContent}
 				type="card"
 				className={`custom_tabs_card ${className}`}
 				{...rest}
@@ -26,8 +27,8 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 			defaultActiveKey={defaultActiveKey}
 			onChange={onChange}
 			tabBarExtraContent={extraContent}
-			{...rest}
 			className={`custom_tabs_plain ${className}`}
+			{...rest}
 		>
 			{items.map((item) => (
 				<Tabs.TabPane tab={item.label} key={item.key}>
