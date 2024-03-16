@@ -1,9 +1,9 @@
 import React from 'react';
-import InputField from '../../../../../components/inputField/inputField';
+import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import './aircraftTypeForm.scss';
-import CheckBoxField from '../../../../../components/checkBoxField/checkBoxField';
+import CheckBoxField from '../../../../../components/checkbox/checkbox';
 
 const AircraftTypeForm = () => {
 	return (

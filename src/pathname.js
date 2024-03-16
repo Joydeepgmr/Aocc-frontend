@@ -8,7 +8,7 @@ export let Pathname = {
 	DASHBOARD_ORDERS: '/dashboard/orders',
 	DASHBOARD_TRANSACTIONS: '/dashboard/transactions',
 	COMPONENTS: '/components',
-	AIRPORTMASTER: '/airportmasters',
+	PLANAIRPORTMASTER: '/plan-airport-masters',
 	PLAN: '/plans',
 };
 

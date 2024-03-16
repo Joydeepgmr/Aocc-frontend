@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import TableComponent from '../../../../components/table/table';
-import InputField from '../../../../components/inputField/inputField';
+import InputField from '../../../../components/input/field/field';
 import Button from '../../../../components/button/button';
 import Filter from '../../../../assets/Filter.svg'
 import './style.scss';
 
 const FlightSchedule = () => {
-	const [loading, setLoading] = useState(false);
-	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
+    const [loading, setLoading] = useState(false);
+    const handleTableChange = (pagination, filters, sorter) => {
+        console.log('Table changed:', pagination, filters, sorter);
+    };
 
-	const columns = [
+    const columns = [
         { title: 'Flight', dataIndex: 'flight', key: 'flight' },
         { title: 'Status', dataIndex: 'status', key: 'status' },
         { title: 'ORG', dataIndex: 'org', key: 'org' },
@@ -32,17 +32,17 @@ const FlightSchedule = () => {
         { title: 'Call Sign', dataIndex: 'cs', key: 'cs' },
         { title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
     ];
-	const dummyData = [
+    const dummyData = [
         {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -52,7 +52,7 @@ const FlightSchedule = () => {
             remarks: 'AS321',
             cs: 'DAC-910',
         },
-		{
+        {
             flight: '6E 6172',
             status: 'Landed',
             org: 'Surat',
@@ -61,7 +61,7 @@ const FlightSchedule = () => {
             eta: '13:30',
             tmo: '13:45',
             ata: '14:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '14:15',
             onBlock: '11:30',
             pos: 'Stand 2',
@@ -71,7 +71,7 @@ const FlightSchedule = () => {
             remarks: 'AS321',
             cs: 'DAC-780',
         },
-		{
+        {
             flight: 'UK 642',
             status: 'Airborne',
             org: 'Chicago',
@@ -80,7 +80,7 @@ const FlightSchedule = () => {
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -94,12 +94,12 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -118,7 +118,7 @@ const FlightSchedule = () => {
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 5',
@@ -140,7 +140,7 @@ const FlightSchedule = () => {
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -154,12 +154,12 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -169,17 +169,17 @@ const FlightSchedule = () => {
             remarks: 'AS321',
             cs: 'DAC-910',
         },
-		
+
         {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -193,12 +193,12 @@ const FlightSchedule = () => {
             flight: 'AI 812',
             status: 'Airborne',
             org: 'Delhi',
-            via: 'ST|HYD|DEL',
+            via: 'ST | HYD | DEL',
             sta: '10:00',
             eta: '10:30',
             tmo: '10:45',
             ata: '11:00',
-            rmy: 'Stand 1',
+            rny: 'Stand 1',
             eob: '11:15',
             onBlock: '11:30',
             pos: 'Stand 1',
@@ -210,60 +210,60 @@ const FlightSchedule = () => {
         },
     ];
 
-	const items = [
-		{
-			key: '1',
-			label: 'Arrival',
-			children: <><TableComponent
-			columns={columns}
-			data={dummyData}
-			loading={loading}
-			onChange={handleTableChange}
-		/></>,
-		},
-		{
-			key: '2',
-			label: 'Departure',
-			children: <><TableComponent
-			columns={columns}
-			data={dummyData2}
-			loading={loading}
-			onChange={handleTableChange}
-		/></>,
-		},
-	];
-	const handleChange = () => {
-		console.log('Tab switch');
-	};
+    const items = [
+        {
+            key: '1',
+            label: 'Arrival',
+            children: <><TableComponent
+                columns={columns}
+                data={dummyData}
+                loading={loading}
+                onChange={handleTableChange}
+            /></>,
+        },
+        {
+            key: '2',
+            label: 'Departure',
+            children: <><TableComponent
+                columns={columns}
+                data={dummyData2}
+                loading={loading}
+                onChange={handleTableChange}
+            /></>,
+        },
+    ];
+    const handleChange = () => {
+        console.log('Tab switch');
+    };
 
-  return (
-    <div className='body-container'>
-       <div className='top-bar'>
-       <CustomTypography type="title" fontSize={24} fontWeight="600" color="black" children={"Flight Schedule"}/>
-        <div className='filter-section'>
-        <Button
-			onClick={() => {
-			alert('Icon Button');
-			}}
-			icon={Filter}
-			alt="bell icon"
-			className={"filter-btn"}
-			/>
-        <InputField
-			label="Airport Name"
-			name="search"
-			placeholder="Search"
-			warning="Required field"
-			type="search"
-		/>
+    return (
+        <div className='body-container'>
+            <div className='top-bar'>
+                <CustomTypography type="title" fontSize={24} fontWeight="600" color="black" children={"Flight Schedule"} />
+                <div className='filter-section'>
+                    <Button
+                        onClick={() => {
+                            alert('Icon Button');
+                        }}
+                        icon={Filter}
+                        alt="bell icon"
+                        className={"filter-btn"}
+                    />
+                    <InputField
+                        label="Airport Name"
+                        name="search"
+                        placeholder="Search"
+                        warning="Required field"
+                        type="search"
+                    />
 
+                </div>
+            </div>
+            <div className='flights-table'>
+                <CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+            </div>
         </div>
-        </div> 
-		<div className='flights-table'>
-		<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-		</div>
-    </div>
-  )
+    )
 }
 
-export default FlightSchedule
+export default FlightSchedule;

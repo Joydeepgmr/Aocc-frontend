@@ -1,63 +1,61 @@
-import React from 'react'
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import {Card} from 'antd';
-import { Doughnut } from 'react-chartjs-2';
-
-ChartJS.register(
-    ArcElement, 
-    Tooltip,
-    Legend
-);
+import React from 'react';
+import Chart from 'react-apexcharts';
+import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import { Card } from 'antd';
 import "./style.scss";
-import Performance from '../../../../assets/performance.svg'
-import Airplane_1 from '../../../../assets/Airline_1.svg'
-import RightArrow from '../../../../assets/RightArrow.svg'
+import Performance from '../../../../assets/performance.svg';
+import RightArrow from '../../../../assets/RightArrow.svg';
 
-function GraphCard({cardTitle}) {
-    const data = {
-        labels: ['International', 'Domestic'],
-        datasets: [
-          {
-            label: "Flights",
-            data: [100, 50],
-            backgroundColor: ["#FF682D", "#196CFD"],
-            hoverBackgroundColor: ["#FF682D", "#196CFD"],
-          },
-        ],
-      };
-
-      const options = {
-        cutout: 40,
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          display: true,
-          position: 'center',
+const DonutChart = ({ cardTitle }) => {
+  const options = {
+    chart: {
+      type: 'donut',
+      width: 200,
+    },
+    legend: {
+      position: 'bottom',
+    },
+    labels: ['Domestic', 'International'], 
+    dataLabels: {
+      enabled: false, 
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '80%', 
+          // background: 'transparent',
         },
-      };
-  return (
-    <>
-    <Card className='progress-card'>
-    <div className='progress-card-body'>
-            <div className='progress-body'>
-            <div className='card-title'>
-                <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children={cardTitle} />
-                <img src={Performance} alt="performance" />
-            </div>
-            <div className='progress-status-body'>
-            <Doughnut data={data} options={options}>
-            </Doughnut>
-            </div>
-            </div>
-            <div className='view-details'>
-            <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="View Details" />
-            <img src={RightArrow} alt="arrow" />
-            </div>
-        </div>
-    </Card>
-    </>
-  )
-}
+      },
+    },
+    colors: ['#ff682d', '#196cfd'],
+  };
 
-export default GraphCard;
+  const series = [45, 100];
+
+  return (
+    <Card className='progress-card'>
+      <div className='progress-card-body'>
+        <div className='progress-body'>
+          <div className='card-title'>
+            <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children={cardTitle} />
+            <img src={Performance} alt="performance" />
+          </div>
+          <div className='progress-status-body'>
+            <Chart
+              options={options}
+              series={series}
+              type="donut"
+              width={300}
+            />
+          </div>
+        </div>
+        <div className='view-details'>
+          <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="View Details" />
+          <img src={RightArrow} alt="arrow" />
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default DonutChart;

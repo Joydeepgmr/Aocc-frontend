@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Cards from '../../../components/card/card';
-import InputField from '../../../components/inputField/inputField';
+import InputField from '../../../components/input/field/field';
 import { Divider, Form } from 'antd';
-import CustomSelect from '../../../components/selectfield/select';
+import CustomSelect from '../../../components/select/select';
 import Date from '../../../components/datapicker/datepicker';
 import './index.scss';
-import ModalComponent from '../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../components/modal/modal';
 import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
 import { items } from './indexData';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import CheckBoxField from '../../../components/checkBoxField/checkBoxField';
+import CheckBoxField from '../../../components/checkbox/checkbox';
 import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
@@ -18,9 +18,11 @@ import Bell from '../../../assets/Bell.svg';
 import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
-import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import MultiSelectComponent from '../../../components/multiSelect/multiSelect';
 import TopHeader from '../../../components/topHeader/topHeader';
-import OtpField from '../../../components/otpField/otpField';
+import OtpField from '../../../components/input/otp/otp';
+import TimelineDesign from '../../../components/timeline/timeline';
+import { useDummyApi } from '../../../services';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,8 +115,124 @@ export const Components = () => {
 		console.log('Selected values:', selectedValues);
 	};
 
+	const timelineItems = [
+		{
+			id: 1,
+			start: '2024-04-20',
+			end: '2024-04-21',
+			content: 'Airline 2',
+			group: '3',
+			className: 'timeline--SecondAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 2,
+			start: '2024-04-21',
+			end: '2024-04-22',
+			content: 'Airline 1',
+			group: '2',
+			className: 'timeline--SecondAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 3,
+			start: '2024-03-20',
+			end: '2024-03-21',
+			content: 'Airline 3',
+			group: '4',
+			className: 'timeline--ThirdAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 4,
+			start: '2024-04-20',
+			end: '2024-04-21',
+			content: 'Airline 1',
+			group: '6',
+			className: 'timeline--FirstAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 5,
+			start: '2024-04-20',
+			end: '2024-04-21',
+			content: 'Airline 2',
+			group: '5',
+			className: 'timeline--SecondAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 6,
+			start: '2024-03-10',
+			end: '2024-03-11',
+			content: 'Airline 2',
+			group: '3',
+			className: 'timeline--ThirdAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 7,
+			start: '2024-03-11',
+			end: '2024-03-12',
+			content: 'Airline 1',
+			group: '2',
+			className: 'timeline--FirstAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 8,
+			start: '2024-03-20',
+			end: '2024-03-21',
+			content: 'Airline 3',
+			group: '4',
+			className: 'timeline--ThirdAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
+		},
+		{
+			id: 9,
+			start: '2024-04-20',
+			end: '2024-04-21',
+			content: 'Airline 1',
+			group: '6',
+			className: 'timeline--FirstAirline',
+			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A124<br/><br/>Status: Landed</div>',
+		},
+	];
+
+	const timelineGroups = [
+		{
+			id: 1,
+			content: 'belt 1',
+		},
+		{
+			id: 2,
+			content: 'belt 2',
+		},
+		{
+			id: 3,
+			content: 'belt 3',
+		},
+		{
+			id: 4,
+			content: 'belt 4',
+		},
+		{
+			id: 5,
+			content: 'belt 5',
+		},
+		{
+			id: 6,
+			content: 'belt 6',
+		},
+	];
+
+	const { } = useDummyApi();
+
 	return (
 		<React.Fragment>
+			<div>
+				<TimelineDesign items={timelineItems} groups={timelineGroups} editable={false} />
+			</div>
 			<Form layout="vertical">
 				<div className="margin">
 					<Form form={form} layout="vertical" onFinish={onFinish}>

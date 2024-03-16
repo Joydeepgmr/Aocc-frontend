@@ -29,11 +29,12 @@ const Date = ({
 			label={renderLabel()}
 			name={name}
 			className={`${className} date_form_item`}
-			// rules={[
-			// 	{
-			// 		message: 'This field is required.',
-			// 	},
-			// ]}
+			rules={[
+				{
+					required: required,
+					message: 'This field is required',
+				},
+			]}
 		>
 			<DatePicker
 				placeholder={placeholder}
