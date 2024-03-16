@@ -1,14 +1,16 @@
 import React from 'react';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { Form, Divider } from 'antd';
-import InputField from '../../../../../../components/inputField/inputField';
-import CustomSelect from '../../../../../../components/selectfield/select';
+import InputField from '../../../../../../components/input/field/field';
+import CustomSelect from '../../../../../../components/select/select';
 import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
-import OtpField from '../../../../../../components/otpField/otpField';
+import OtpField from '../../../../../../components/input/otp/otp';
 import TableComponent from '../../../../../../components/table/table';
 import { columns, dummyData } from './data';
+
 import './formComponent.scss';
+
 const FormComponent = ({ closeModal }) => {
 	const [form] = Form.useForm();
 

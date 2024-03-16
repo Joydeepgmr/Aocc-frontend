@@ -1,10 +1,10 @@
 import React from 'react';
 import CustomTypography from '../typographyComponent/typographyComponent';
-import InputField from '../inputField/inputField';
+import InputField from '../input/field/field';
 import filterIcon from '../../assets/logo/filter-icon.svg';
 import './topHeader.scss';
 
-const TopHeader = ({ heading, subHeading, className, searchBox ,condition}) => {
+const TopHeader = ({ heading, subHeading, className, searchBox, condition }) => {
 	return (
 		<>
 			<div className={`top_header_container ${className}`}>
@@ -22,7 +22,7 @@ const TopHeader = ({ heading, subHeading, className, searchBox ,condition}) => {
 						{subHeading}
 					</CustomTypography>
 				</div>
-				{ condition ?
+				{condition ?
 					<div className="filter_search_container">
 						<div className="filter-icon">
 							<img src={filterIcon} />
@@ -30,7 +30,7 @@ const TopHeader = ({ heading, subHeading, className, searchBox ,condition}) => {
 						<div>
 							<InputField type="search" name="search" placeholder="Search" className="custom_input1" />
 						</div>
-					</div>:""
+					</div> : ""
 				}
 			</div>
 		</>

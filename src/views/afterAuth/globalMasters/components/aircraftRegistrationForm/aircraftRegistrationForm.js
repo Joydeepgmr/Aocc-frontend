@@ -1,5 +1,5 @@
 import React from 'react';
-import InputField from '../../../../../components/inputField/inputField';
+import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import './aircraftRegistrationForm.scss';

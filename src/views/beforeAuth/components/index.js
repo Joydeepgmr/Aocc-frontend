@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Cards from '../../../components/card/card';
-import InputField from '../../../components/inputField/inputField';
+import InputField from '../../../components/input/field/field';
 import { Divider, Form } from 'antd';
-import CustomSelect from '../../../components/selectfield/select';
+import CustomSelect from '../../../components/select/select';
 import Date from '../../../components/datapicker/datepicker';
 import './index.scss';
-import ModalComponent from '../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../components/modal/modal';
 import UploadCsvModal from '../../../components/uploadCsvModal/uploadCsvModal';
 import { items } from './indexData';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import CheckBoxField from '../../../components/checkBoxField/checkBoxField';
+import CheckBoxField from '../../../components/checkbox/checkbox';
 import Button from '../../../components/button/button';
 import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import Chip from '../../../components/chip/chip';
@@ -18,10 +18,11 @@ import Bell from '../../../assets/Bell.svg';
 import RightArrow from '../../../assets/RightArrow.svg';
 import TableComponent from '../../../components/table/table';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
-import MultiSelectComponent from '../../../components/multiSelectComponent/multiSelectComponent';
+import MultiSelectComponent from '../../../components/multiSelect/multiSelect';
 import TopHeader from '../../../components/topHeader/topHeader';
-import OtpField from '../../../components/otpField/otpField';
+import OtpField from '../../../components/input/otp/otp';
 import TimelineDesign from '../../../components/timeline/timeline';
+import { useDummyApi } from '../../../services';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -224,6 +225,8 @@ export const Components = () => {
 			content: 'belt 6',
 		},
 	];
+
+	const { } = useDummyApi();
 
 	return (
 		<React.Fragment>

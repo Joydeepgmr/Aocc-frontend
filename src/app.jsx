@@ -7,6 +7,7 @@ import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import UserAccess from './views/afterAuth/userAccess/userAccess';
 
@@ -25,65 +26,75 @@ export function App() {
 	const userRole = localStorage.getItem('role');
 	console.log('what is the role in app.jsx', userRole);
 
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				refetchOnWindowFocus: false,
+				retry: false,
+			},
+		},
+	});
 	return (
-		<Suspense fallback={<Loader />}>
-			<BrowserRouter>
-				<Routes>
-					<Route
-						path="/"
-						element={
-							token ? (
-								userRole === 'admin' ? (
-									<Navigate to={Pathname.GLOBALMASTERS} />
+		<QueryClientProvider client={queryClient}>
+			<Suspense fallback={<Loader />}>
+				<BrowserRouter>
+					<Routes>
+						<Route
+							path="/"
+							element={
+								token ? (
+									userRole === 'admin' ? (
+										<Navigate to={Pathname.GLOBALMASTERS} />
+									) : (
+										<Navigate to={Pathname.DASHBOARD} />
+									)
 								) : (
-									<Navigate to={Pathname.DASHBOARD} />
+									<Navigate to={Pathname.LOGIN} />
 								)
-							) : (
-								<Navigate to={Pathname.LOGIN} />
-							)
-						}
-					/>
-					<Route path={Pathname.LOGIN} element={<Login />} />
+							}
+						/>
+						<Route path={Pathname.LOGIN} element={<Login />} />
 
-					<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<Dashboard />} />
-							<Route path="orders" element={<Orders />} />
+						<Route path={Pathname.DASHBOARD} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<Dashboard />} />
+								<Route path="orders" element={<Orders />} />
 
-							<Route path="*" element={<NotFound />} />
+								<Route path="*" element={<NotFound />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<Plans />} />
-							<Route path="*" element={<NotFound />} />
+						<Route path={Pathname.PLAN} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<Plans />} />
+								<Route path="*" element={<NotFound />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<UserAccess />} />
+						<Route path={Pathname.USERACCESS} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<UserAccess />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.PLANAIRPORTMASTER} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<PlannerAirportMaster />} />
+						<Route path={Pathname.PLANAIRPORTMASTER} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<PlannerAirportMaster />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.GLOBALMASTERS} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<GlobalMasters />} />
+						<Route path={Pathname.GLOBALMASTERS} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<GlobalMasters />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.AIRPORTMASTERS} element={<PrivateOutlet />}>
-						<Route element={<Layout />}>
-							<Route index element={<AirportMasters />} />
+						<Route path={Pathname.AIRPORTMASTERS} element={<PrivateOutlet />}>
+							<Route element={<Layout />}>
+								<Route index element={<AirportMasters />} />
+							</Route>
 						</Route>
-					</Route>
-					<Route path={Pathname.COMPONENTS} element={<Components />} />
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</BrowserRouter>
-		</Suspense>
+						<Route path={Pathname.COMPONENTS} element={<Components />} />
+						<Route path="*" element={<NotFound />} />
+					</Routes>
+				</BrowserRouter>
+			</Suspense>
+		</QueryClientProvider>
 	);
 }
 

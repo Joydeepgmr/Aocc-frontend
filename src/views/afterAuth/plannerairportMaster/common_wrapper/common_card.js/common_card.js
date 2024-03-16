@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import './common_card.scss';
 const Common_Card = ({ title1, title2, title3, Heading, btnCondition,formComponent }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
