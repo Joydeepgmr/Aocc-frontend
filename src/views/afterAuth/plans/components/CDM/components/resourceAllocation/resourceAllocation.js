@@ -222,7 +222,7 @@ const ResourceAllocation = () => {
 	];
 
 	const handleChange = (key) => {
-		setIsEditable(false)
+		setIsEditable(false);
 		setActiveTab(key);
 	};
 
