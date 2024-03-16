@@ -460,7 +460,7 @@ export const Components = () => {
 					subHeading="Overview of access management for airport access management"
 				/>
 				<div className="container">
-					<OtpField otpLength={3} label={'ATC Code'} required />
+					<OtpField otpLength={1} label={'ATC Code'} required />
 				</div>
 			</Form>
 		</React.Fragment>
