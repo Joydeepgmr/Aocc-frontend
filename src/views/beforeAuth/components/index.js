@@ -226,7 +226,7 @@ export const Components = () => {
 		},
 	];
 
-	const { } = useDummyApi();
+	const {} = useDummyApi();
 
 	return (
 		<React.Fragment>

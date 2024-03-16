@@ -140,15 +140,6 @@ const ArrivalTab = () => {
             <TopHeader
                 heading="Collaborative Decision Making Schedule"
             />
-            {/* <div className="container">
-                <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                <Button title="Upload CSV" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <Button title="Download CSV Template" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Collaborative Decision Making Schedule" className="custom_modal">
-                    <div className="modal_content"><FormComponent handleButtonClose={closeModal} handleSaveButton={closeModal} /></div>
-                </ModalComponent>
-                <UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
-            </div> */}
             <div className='table-container'>
                 <TableComponent columns={columns} data={data} onChange={handleTableChange} />
             </div>
