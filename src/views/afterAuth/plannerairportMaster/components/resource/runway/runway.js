@@ -1,6 +1,7 @@
 import React from 'react';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-const CheckIn = () => {
+import FormComponent from './formComponents/formComponents';
+const Runway = () => {
 	return (
 		<>
 			<Common_Card
@@ -8,10 +9,11 @@ const CheckIn = () => {
 				title2={'Import Global Reference'}
 				title3={'Download CSV Template'}
 				btnCondition={true}
-				Heading={'Setup aircraft registration'}
+				Heading={'Add Runway'}
+				formComponent={<FormComponent/>}
 			/>
 		</>
 	);
 };
 
-export default CheckIn;
+export default Runway;

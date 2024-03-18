@@ -3,7 +3,7 @@ import Button from '../../../../../components/button/button';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ModalComponent from '../../../../../components/modal/modal';
 import './common_card.scss';
-const Common_Card = ({ title1, title2, title3, Heading, btnCondition,formComponent }) => {
+const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formComponent, formClassName }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
@@ -34,9 +34,7 @@ const Common_Card = ({ title1, title2, title3, Heading, btnCondition,formCompone
 					}
 					className="custom_modal"
 				>
-					<div className="modal_content">
-						{formComponent}
-					</div>
+					<div className={`modal_content${formClassName}`}>{formComponent}</div>
 				</ModalComponent>
 				<Button
 					id="btn"

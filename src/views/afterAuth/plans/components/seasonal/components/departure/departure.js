@@ -1,11 +1,8 @@
-import React,{useState} from 'react';
+import React from 'react';
 import './departure.scss';
 import TableComponent from '../../../../../../../components/table/table';
-import { columns, dummyData } from './dummyData/dummy-data';
 
-
-const Departure = () => {
-    const [loading, setLoading] = useState(false);
+const Departure = ({data, columns}) => {
     
     const handleTableChange = (pagination, filters, sorter) => {
 		console.log('Table changed:', pagination, filters, sorter);
@@ -14,7 +11,7 @@ const Departure = () => {
     return (
         <div className="main">
             <div>
-				<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
+				<TableComponent columns={columns} data={data} onChange={handleTableChange} />
 			</div>
         </div>
     );

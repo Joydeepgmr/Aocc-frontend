@@ -2,6 +2,13 @@ import React from 'react';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CheckIn from './checkIn/checkIn';
+import Gates from './Gates/Gates';
+import ParkingStand from './parkingstand/parkingstand';
+import Runway from './runway/runway';
+import DelayCode from './delaycode/delaycode';
+import Taxiway from './taxiway/taxiway';
+import BaggageBelt from './baggagebelt/baggagebelt';
+import NatureCode from './naturecode/naturecode';
 
 const Resources = () => {
 	const handleChange = () => {
@@ -16,32 +23,37 @@ const Resources = () => {
 		{
 			key: '2',
 			label: 'Gates',
-			children: <CheckIn />,
+			children: <Gates />,
 		},
 		{
 			key: '3',
 			label: 'Parking Stand',
-			children: <CheckIn />,
+			children: <ParkingStand />,
 		},
 		{
 			key: '4',
 			label: 'Runway',
-			children: <CheckIn />,
+			children: <Runway />,
+		},
+		{
+			key: '5',
+			label: 'Taxiway',
+			children: <Taxiway />,
 		},
 		{
 			key: '6',
 			label: 'Baggage Belt',
-			children: <CheckIn />,
+			children: <BaggageBelt/>,
 		},
 		{
 			key: '7',
 			label: 'Delay Code',
-			children: <CheckIn />,
+			children: <DelayCode/>,
 		},
 		{
 			key: '8',
 			label: 'Nature Code',
-			children: <CheckIn />,
+			children: <NatureCode />,
 		},
 		{
 			key: '9',

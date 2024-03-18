@@ -50,9 +50,6 @@ const AirportSetupTable = ({ formComponent }) => {
 		setRowData(data);
 		setIsModalOpen(true);
 		setEditData(true);
-		if (!disabled) {
-			dispatch(formDisabled());
-		}
 	};
 
 	const handleEditButton = () => {
@@ -113,7 +110,7 @@ const AirportSetupTable = ({ formComponent }) => {
 			key: 'actions',
 			render: (
 				text,
-				record // Use the render function to customize the content of the cell
+				record
 			) => (
 				<div className="action_buttons">
 					<ButtonComponent

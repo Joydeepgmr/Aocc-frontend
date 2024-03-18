@@ -1,60 +1,64 @@
 @import '../../../../../styles/sass/variables';
 @import '../../../../../styles/sass/mixins';
 
-.create_wrapper_container{
-    width: 100%;
-    border: 1px dashed $gray_400;
-    height: 46.6rem;
-    border-radius: 1.2rem;
-    padding: 2.4rem;
-    @include flex(center, center, row);
-    gap: 2.4rem;
+.create_wrapper_container {
+	width: 100%;
+	border: 1px dashed $gray_400;
+	height: 46.6rem;
+	border-radius: 1.2rem;
+	padding: 2.4rem;
+	@include flex(center, center, row);
+	gap: 2.4rem;
 
-    .filledTextButton {
-			&.custom_button_create {
-				background-color: $button_color;
-				color: $white;
-				height: 4.4rem;
-			}
+	.filledTextButton {
+		&.custom_button_create {
+			background-color: $button_color;
+			color: $white;
+			height: 4.4rem;
 		}
+	}
 
-         .filledTextButton {
-			&.custom_button {
-				background-color: $gray_100;
-				color: $black;
-				height: 4.4rem;
-			}
-		}
-
-	
-}
-
-	.custom_modal{
-			max-height: 85%;
-			overflow: auto;
-			border-radius: 1rem;
-		}
-
-	 	.custom_buttons {
-    	@include flex(center, end, row);
-		gap: 2rem;
-		margin-top: 2.4rem;
-		margin-bottom: 1.4rem;
-		.custom_button_cancel {
+	.filledTextButton {
+		&.custom_button {
 			background-color: $gray_100;
 			color: $black;
-			padding: 1.2rem 2.4rem;
 			height: 4.4rem;
 		}
-		.custom_button_save {
-			padding: 1.2rem 2.4rem;
-			height: 4.4rem;
-		}
-	}	
+	}
 
 
-.table_container{
-	.create_button{
+}
+
+.custom_modal {
+	max-height: 85%;
+	overflow: auto;
+	border-radius: 1rem;
+}
+
+.custom_buttons {
+	@include flex(center, end, row);
+	gap: 2rem;
+	margin-top: 2.4rem;
+	margin-bottom: 1.4rem;
+}
+
+.button{
+	&.button.custom_button_cancel {
+		background-color: $gray_200;
+		color: $black;
+		padding: 1.2rem 2.4rem;
+		height: 4.4rem;
+	}
+
+	&.button.custom_button_save {
+		padding: 1.2rem 2.4rem;
+		height: 4.4rem;
+	}
+}
+
+
+.table_container {
+	.create_button {
 		@include flex(center, end, row);
 		gap: 2.4rem;
 		margin-bottom: 2.4rem;
