@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 
-import ModalComponent from '../../../../../components/modalComponent/modalComponent';
+import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../../components/aircraft/formComponent/formComponent';
 import TableComponent from '../../../../../components/table/table';
 import ButtonComponent from '../../../../../components/button/button';

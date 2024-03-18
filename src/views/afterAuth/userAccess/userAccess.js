@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import './userAccess.scss';
 import ButtonComponent from '../../../components/button/button';
 import downArrow from '../../../assets/logo/down-arrow.svg';
-import ModalComponent from '../../../components/modalComponent/modalComponent';
-import InputField from '../../../components/inputField/inputField';
+import ModalComponent from '../../../components/modal/modal';
+import InputField from '../../../components/input/field/field';
 import { Divider, Form } from 'antd';
-import CustomSelect from '../../../components/selectfield/select';
+import CustomSelect from '../../../components/select/select';
 import { SelectData, columns, dummyData } from './userAccessData';
 import Date from '../../../components/datapicker/datepicker';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import TableComponent from '../../../components/table/table';
+
+import './userAccess.scss';
 
 const UserAccess = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);

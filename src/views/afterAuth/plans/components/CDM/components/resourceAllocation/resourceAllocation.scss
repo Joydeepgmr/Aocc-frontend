@@ -1,0 +1,13 @@
+@import '../../../../../../../styles/sass/variables';
+@import '../../../../../../../styles/sass/mixins';
+
+.resourceAllocation {
+	&--Container {
+		padding: 2rem;
+		border-radius: 2rem;
+		border: 1px solid $gray_300;
+	}
+	&--Button {
+		margin-bottom: 1rem;
+	}
+}

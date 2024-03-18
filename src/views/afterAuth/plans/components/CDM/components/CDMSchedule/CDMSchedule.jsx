@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../../../../../../components/button/button';
-import ModalComponent from '../../../../../../../components/modalComponent/modalComponent'; // Corrected import path
+import ModalComponent from '../../../../../../../components/modal/modal'; // Corrected import path
 import FormComponent from '../../../formComponent/formComponent';
 import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
@@ -18,7 +18,7 @@ function CDMSchedule() {
         {
             key: "2",
             label: "Departure",
-            children: <DepartureTab/>,
+            children: <DepartureTab />,
         }
     ]
 
@@ -50,17 +50,17 @@ const ArrivalTab = () => {
     };
 
     const columns = [
-		{ title: 'FlightNo.', dataIndex: 'flightno', key: 'flightno' },
-		{ title: 'Date', dataIndex: 'date', key: 'date' },
-		{ title: 'Call Sign', dataIndex: 'callsign', key: 'callsign' },
-		{ title: 'Nature Code', dataIndex: 'naturecode', key: 'naturecode' },
-		{ title: 'ORG', dataIndex: 'org', key: 'org' },
-		{ title: 'STA', dataIndex: 'sta', key: 'sta' },
-		{ title: 'POS', dataIndex: 'pos', key: 'pos' },
-		{ title: 'REG No.', dataIndex: 'regno', key: 'regno' },
-		{ title: 'Flight Spilt (No.)', dataIndex: 'splitno', key: 'spiltno' },
-		{ title: 'Flight Recurrence', dataIndex: 'flightrecurrence', key: 'flightrecurrence' },
-	];
+        { title: 'FlightNo.', dataIndex: 'flightno', key: 'flightno' },
+        { title: 'Date', dataIndex: 'date', key: 'date' },
+        { title: 'Call Sign', dataIndex: 'callsign', key: 'callsign' },
+        { title: 'Nature Code', dataIndex: 'naturecode', key: 'naturecode' },
+        { title: 'ORG', dataIndex: 'org', key: 'org' },
+        { title: 'STA', dataIndex: 'sta', key: 'sta' },
+        { title: 'POS', dataIndex: 'pos', key: 'pos' },
+        { title: 'REG No.', dataIndex: 'regno', key: 'regno' },
+        { title: 'Flight Spilt (No.)', dataIndex: 'splitno', key: 'spiltno' },
+        { title: 'Flight Recurrence', dataIndex: 'flightrecurrence', key: 'flightrecurrence' },
+    ];
 
     const data = [
         {
@@ -69,7 +69,7 @@ const ArrivalTab = () => {
             date: "20/03/2024",
             callsign: "ABC 123",
             naturecode: "123",
-            org:"Lucknow",
+            org: "Lucknow",
             sta: "15:00",
             pos: "21,39.9",
             regno: "SS213",
@@ -82,7 +82,7 @@ const ArrivalTab = () => {
             date: "15/03/2024",
             callsign: "ID 1234",
             naturecode: "123",
-            org:"Surat",
+            org: "Surat",
             sta: "15:30",
             pos: "21,39.9",
             regno: "SS213",
@@ -95,7 +95,7 @@ const ArrivalTab = () => {
             date: "26/03/2024",
             callsign: "ID 1234",
             naturecode: "123",
-            org:"Chicago",
+            org: "Chicago",
             sta: "14:00",
             pos: "21,39.9",
             regno: "SS213",
@@ -108,7 +108,7 @@ const ArrivalTab = () => {
             date: "30/03/2024",
             callsign: "ID 1234",
             naturecode: "123",
-            org:"Chicago",
+            org: "Chicago",
             sta: "14:30",
             pos: "21,39.9",
             regno: "SS213",
@@ -121,7 +121,7 @@ const ArrivalTab = () => {
             date: "10/04/2024",
             callsign: "ID 1234",
             naturecode: "123",
-            org:"Hyderbad",
+            org: "Hyderbad",
             sta: "16:00",
             pos: "21,39.9",
             regno: "SS213",
@@ -132,25 +132,16 @@ const ArrivalTab = () => {
     ]
 
     const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
+        console.log('Table changed:', pagination, filters, sorter);
+    };
 
     return (
         <div className='Arrival-container'>
             <TopHeader
                 heading="Collaborative Decision Making Schedule"
             />
-            {/* <div className="container">
-                <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                <Button title="Upload CSV" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <Button title="Download CSV Template" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Collaborative Decision Making Schedule" className="custom_modal">
-                    <div className="modal_content"><FormComponent handleButtonClose={closeModal} handleSaveButton={closeModal} /></div>
-                </ModalComponent>
-                <UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
-            </div> */}
             <div className='table-container'>
-            <TableComponent columns={columns} data={data} onChange={handleTableChange} />
+                <TableComponent columns={columns} data={data} onChange={handleTableChange} />
             </div>
         </div>
     )

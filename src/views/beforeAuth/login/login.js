@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import './login.scss';
 import loginPageImage from '../../../assets/login_page_image.png';
 import gmrLogo from '../../../assets/logo/gmr-logo.png';
-import InputField from '../../../components/inputField/inputField';
-import CheckboxField from '../../../components/checkBoxField/checkBoxField';
+import InputField from '../../../components/input/field/field';
+import CheckboxField from '../../../components/checkbox/checkbox';
 import { Form, Image } from 'antd';
 import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
 import { checkAuth } from './dummy-user';
+
+import './login.scss';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance

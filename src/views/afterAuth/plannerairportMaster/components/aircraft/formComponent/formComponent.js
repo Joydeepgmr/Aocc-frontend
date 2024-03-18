@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import InputField from '../../../../../../components/inputField/inputField';
+import InputField from '../../../../../../components/input/field/field';
 import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
 import { addAircraftRegistration } from '../../../redux/actionCreator';

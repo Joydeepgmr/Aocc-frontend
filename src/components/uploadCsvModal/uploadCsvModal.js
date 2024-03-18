@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ModalComponent from '../modalComponent/modalComponent';
+import ModalComponent from '../modal/modal';
 import './uploadCsvModal.scss';
 import { Button, Upload } from 'antd';
 

@@ -1,7 +1,7 @@
 import { Checkbox, Form } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import './checkBoxField.scss';
+import './checkbox.scss';
 
 const CheckBoxField = ({
 	options,
