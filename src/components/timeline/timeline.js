@@ -4,12 +4,14 @@ import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
 
 const TimelineDesign = (props) => {
-	const { items, groups, editable = true } = props;
+	const { items, groups, editable = true, height = '400px' } = props;
 
 	const options = {
 		orientation: 'top',
 		width: '100%',
 		align: 'center',
+		height: height,
+		autoResize: true,
 		stack: true,
 		showMajorLabels: false,
 		showCurrentTime: true,
@@ -21,7 +23,6 @@ const TimelineDesign = (props) => {
 		showTooltips: true,
 		itemsAlwaysDraggable: {
 			item: true,
-			// range: true,
 		},
 		maxMinorChars: 10,
 		format: {
