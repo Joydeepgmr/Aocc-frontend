@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Divider } from 'antd';
-import InputField from '../../../../../../../components/inputField/inputField';
+import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import { useDispatch, useSelector } from 'react-redux';
