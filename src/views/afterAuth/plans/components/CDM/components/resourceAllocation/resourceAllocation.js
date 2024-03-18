@@ -4,10 +4,16 @@ import './resourceAllocation.scss';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import Button from '../../../../../../../components/button/button';
+import CustomSelect from '../../../../../../../components/select/select';
 
 const ResourceAllocation = () => {
 	const [activeTab, setActiveTab] = useState(1);
 	const [isEditable, setIsEditable] = useState(false);
+	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
+
+	const handleTimeValueChange = (value) => {
+		setSelectedTimeValue(value);
+	};
 	const timelineItems = [
 		{
 			id: 1,
@@ -219,12 +225,30 @@ const ResourceAllocation = () => {
 			label: 'Belts',
 			children: <TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />,
 		},
+		{
+			key: '5',
+			label: 'Taxi Way',
+			children: <TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />,
+		},
 	];
 
 	const handleChange = (key) => {
 		setIsEditable(false);
 		setActiveTab(key);
 	};
+
+	const SelectTime = [
+		{
+			id: '1',
+			label: '12hr',
+			value: '12hrs',
+		},
+		{
+			id: '2',
+			label: '24hr',
+			value: '24hrs',
+		},
+	];
 
 	return (
 		<div className="resourceAllocation--Container">
@@ -237,16 +261,26 @@ const ResourceAllocation = () => {
 				items={items}
 				onChange={handleChange}
 				extraContent={
-					<Button
-						id="btn"
-						title="Edit"
-						className={
-							isEditable ? 'resourceAllocation--Button' : 'custom_svgButton resourceAllocation--Button'
-						}
-						type="filledText"
-						isSubmit="submit"
-						onClick={() => setIsEditable(true)}
-					/>
+					<div className="resourceAllocation--SideTabContent">
+						<Button
+							id="btn"
+							title="Edit"
+							className={
+								isEditable
+									? 'resourceAllocation--Button'
+									: 'custom_svgButton resourceAllocation--Button'
+							}
+							type="filledText"
+							isSubmit="submit"
+							onClick={() => setIsEditable(true)}
+						/>
+						<CustomSelect
+							SelectData={SelectTime}
+							placeholder={'Select Format'}
+							onChange={handleTimeValueChange}
+							value={selectedTimeValue}
+						/>
+					</div>
 				}
 			/>
 		</div>

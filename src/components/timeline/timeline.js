@@ -42,14 +42,14 @@ const TimelineDesign = (props) => {
 
 	return (
 		<>
-			<Timeline options={options} groups={groups} items={items} itemsAlwaysDraggable />;
+			<Timeline options={options} groups={groups} items={items} itemsAlwaysDraggable />
 			<div className="timeline--BottomContainer">
 				{labels?.map((item) => (
 					<div className="timeline--LabelContainer">
 						<div className="timeline--Label" style={{ background: item.color }}></div>{' '}
 						<CustomTypography fontSize="1.4rem" color="#909296" fontWeight={400}>
 							{item?.name}
-						</CustomTypography>{' '}
+						</CustomTypography>
 					</div>
 				))}
 			</div>
