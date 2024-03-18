@@ -1,27 +1,36 @@
 @import '../../../../../styles/sass/mixins';
 @import '../../../../../styles/sass/variables';
 
-.form_section{
-    padding-top: 2.4rem;
-}
+.main_form {
+    position: relative; 
+    height: 120rem;
+    width: 100%;
 
-.form_content{
-    @include flex(stretch, flex-start, row);
-    gap: 1.6rem;
-}
+    .form_section {
+        padding-top: 0rem;
+        .form_content {
+            @include flex(stretch, flex-start, row);
+            gap: 1.6rem;
+            margin-bottom: 1rem;
 
-#btn {
-    padding: 2.2rem;
-}
-
-.button{
-    &.button.custom_svgButton {
-        color: $black;
-        background-color: $gray_200;
+            .date {
+                margin: 0rem;
+            }
+        }
     }
-}
 
-.form_bottomButton{
-    @include flex(stretch, end, row);
-    gap: 1.6rem;
+    .form_bottomButton {
+        @include flex(stretch, end, row);
+        gap: 1.6rem;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        
+        .button {
+            .custom_svgButton {
+                color: $black;
+                background-color: $gray_200;
+            }
+        }
+    }
 }

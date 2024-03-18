@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React from 'react';
 import './customTabs.scss';
-
+ 
 const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, extraContent }) => {
 	if (type === 'card') {
 		return (

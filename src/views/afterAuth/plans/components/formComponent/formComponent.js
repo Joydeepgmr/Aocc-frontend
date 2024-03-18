@@ -1,124 +1,140 @@
-import React, { useState } from 'react';
-import { Form } from 'antd';
+import React, { useEffect } from 'react';
+import { Divider, Form } from 'antd';
+import dayjs from 'dayjs';
 import InputField from '../../../../../components/input/field/field';
 import Button from '../../../../../components/button/button';
 import './formComponent.scss';
 import Date from '../../../../../components/datapicker/datepicker';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 
-const FormComponent = ({ handleButtonClose, handleSaveButton }) => {
+const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues }) => {
+	const dayjsDate = dayjs(initialValues?.date);
+	initialValues? initialValues["date"] = dayjsDate: [];
+	const dateFormat = 'YYYY-MM-DD';
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
+		const selectedDate = values.date;
+		const formattedDate = dayjs(selectedDate).format(dateFormat);
+		values['date'] = formattedDate;
+		handleSaveButton({ ...values, key: initialValues?.key });
 	};
+
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
 
 	return (
 		<div className="main_form">
-			<Form form={form} layout="vertical" onFinish={onFinish}>
+			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinish}>
 				<div className="form_section">
 					<div className="form_content">
 						<InputField
 							label="Flight Number"
 							name="flightNumber"
 							placeholder="Enter the airport name"
-							required
-							warning="Required field"
 						/>
-						<Date label="Select Date" required={true} placeholder="Date Picker" />
-
+						<Date
+							label="Date"
+							name="date"
+							required={true}
+							placeholder="Date"
+							className="date"
+							format={dateFormat}
+						/>
 						<InputField
-							label="Flight Id"
-							name="flightId"
+							label="Call Sign"
+							name="callSign"
 							placeholder="Filled Text"
-							required
-							warning="Required field"
 						/>
 					</div>
-
 					<div className="form_content">
 						<InputField
 							label="Nature Code"
 							name="natureCode"
-							placeholder="AI1234"
-							required
-							warning="Required field"
+							placeholder="D/I/F/D"
 						/>
 						<InputField
-							label="Origin"
+							label="Origin Airport"
 							name="origin"
 							placeholder="Filled Text"
-							required
-							warning="Required field"
-							type="number"
 						/>
-
-						<InputField
-							label="Via"
-							name="via"
-							placeholder="Filled Text"
-							required
-							warning="Required field"
-						/>
+						{type == 1 ? (
+							<InputField
+								label="STA"
+								name="sta"
+								placeholder="Filled Text"
+							/>
+						) : (
+							<InputField
+								label="STD"
+								name="std"
+								placeholder="Filled Text"
+							/>
+						)}
 					</div>
-
 					<div className="form_content">
-						<InputField label="ATD" name="atd" placeholder="B2345" required warning="Required field" />
-						<InputField
-							label="STA"
-							name="sta"
-							placeholder="Filled Text"
-							required
-							warning="Required field"
-						/>
-
-						<InputField
-							label="TMO"
-							name="tmo"
-							placeholder="Filled Text"
-							required
-							warning="Required field"
-						/>
-					</div>
-
-					<div className="form_content">
-						<InputField label="ATA" name="ata" placeholder="Password" required warning="Required field" />
 						<InputField
 							label="POS"
 							name="pos"
-							placeholder="Write Input Number"
-							required
-							warning="Required field"
+							placeholder="Filled Text"
 						/>
-
 						<InputField
-							label="A/C Type"
-							name="acType"
-							placeholder="Time Difference Summer"
-							required
-							warning="Required field"
+							label="Registration"
+							name="registration"
+							placeholder="Filled Text"
+						/>
+						<InputField
+							label="Towing to Hanger"
+							name="toh"
+							placeholder="Filled Text"
+						/>
+					</div>
+					<div className="form_content">
+						<InputField
+							label="Duration"
+							name="duration"
+							placeholder="Filled text"
 						/>
 					</div>
 				</div>
+				<Divider />
 
 				<div className="form_section">
+					<CustomTypography type="text" fontSize={14} fontWeight="400" color="#5C5F66" className="label">
+						Flight Split
+					</CustomTypography>
 					<div className="form_content">
-						<Date label="Absolute Period" required={true} placeholder="From" />
-						<Date label="Absolute Period" required={true} placeholder="To" />
-
-						<InputField
-							label="Days"
-							name="days"
-							placeholder="Enter the total no. of days"
-							required
-							warning="Required field"
-						/>
+						<InputField label="Flight Number" name="flightNumber" placeholder="Enter the airport name" />
+						<InputField label="Call Sign" name="callSign" placeholder="Filled Text" />
+						<InputField label="Nature Code" name="natureCode" placeholder="Filled Text" />
 					</div>
 
 					<div className="form_content">
-						<Date label="Absolute Period" required={true} placeholder="From" />
-						<Date label="" placeholder="To" />
+						<InputField label="Registration" name="registration" placeholder="Filled Text" />
+						<InputField label="Destination" name="destination" placeholder="Filled Text" />
 					</div>
 				</div>
+
+				<Divider />
+
+				<div className="form_section">
+					<CustomTypography type="text" fontSize={14} fontWeight="400" color="#5C5F66" className="label">
+						Flight Recurrence
+					</CustomTypography>
+					<div className="form_content">
+						<Date label="Absolute Period" placeholder="From" className="date" />
+						<Date label="" placeholder="To" className="date" />
+						<InputField label="Days" name="days" placeholder="Enter the total No. of days" />
+					</div>
+
+					<div className="form_content">
+						<Date label="Relative Period" placeholder="From" className="date" />
+						<Date label="" placeholder="To" className="date" />
+					</div>
+				</div>
+
+				<Divider />
 
 				<div className="form_section">
 					<div className="form_content">
@@ -126,46 +142,11 @@ const FormComponent = ({ handleButtonClose, handleSaveButton }) => {
 							label="Aircraft Position"
 							name="aircraftPosition"
 							placeholder="Enter the airport name"
-							required
-							warning="Required field"
 						/>
-						<InputField
-							label="Belt"
-							name="belt"
-							placeholder="Enter the airport name"
-							required
-							warning="Required field"
-						/>
-
-						<InputField
-							label="Gate"
-							name="gate"
-							placeholder="Enter the airport name"
-							required
-							warning="Required field"
-						/>
-					</div>
-
-					<div className="form_content">
-						<InputField
-							label="Lounge"
-							name="lounge"
-							placeholder="Enter the airport name"
-							required
-							warning="Required field"
-						/>
-						<InputField
-							label="Check In Counter"
-							name="checkInCounter"
-							placeholder="Enter the airport name"
-							required
-							warning="Required field"
-							type="number"
-						/>
+						<InputField label="Check In Counter" name="checkIn" placeholder="Enter the airport name" />
 					</div>
 				</div>
-				<div className='form_bottomButton'>
-
+				<div className="form_bottomButton">
 					<Button
 						id="btn"
 						title="Discard"
@@ -180,10 +161,8 @@ const FormComponent = ({ handleButtonClose, handleSaveButton }) => {
 						// className="custom_svgButton"
 						type="filledText"
 						isSubmit="submit"
-						onClick={handleSaveButton}
 					/>
 				</div>
-
 			</Form>
 		</div>
 	);
