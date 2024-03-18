@@ -3,7 +3,6 @@ import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import InputField from '../../../../../components/input/field/field';
 import Button from '../../../../../components/button/button';
-import './formComponent.scss';
 import Date from '../../../../../components/datapicker/datepicker';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 
