@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TopHeader from '../../../../../../../components/topHeader/topHeader';
 import './resourceAllocation.scss';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import Button from '../../../../../../../components/button/button';
 import CustomSelect from '../../../../../../../components/select/select';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 const ResourceAllocation = () => {
+	const divRef = useRef(null);
 	const [activeTab, setActiveTab] = useState(1);
 	const [isEditable, setIsEditable] = useState(false);
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
-
+	const [fullScreen, setFullScreen] = useState(false);
 	const handleTimeValueChange = (value) => {
 		setSelectedTimeValue(value);
+	};
+
+	const toggleFullscreen = () => {
+		setFullScreen(!fullScreen);
+		if (document.fullscreenElement === null) {
+			if (divRef.current?.requestFullscreen) {
+				divRef.current.requestFullscreen();
+			} else if (divRef.current?.mozRequestFullScreen) {
+				divRef.current.mozRequestFullScreen();
+			} else if (divRef.current?.webkitRequestFullscreen) {
+				divRef.current.webkitRequestFullscreen();
+			} else if (divRef.current?.msRequestFullscreen) {
+				divRef.current.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document?.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document?.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document?.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+		}
 	};
 	const timelineItems = [
 		{
@@ -204,31 +231,142 @@ const ResourceAllocation = () => {
 		},
 	];
 
+	// const handleFullScreenChange = () => setFullScreen(!setFullScreen);
+
+	// useEffect(() => {
+	// 	document.addEventListener('fullscreenchange', handleFullScreenChange);
+	// 	document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+	// 	document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+	// 	document.addEventListener('msfullscreenchange', handleFullScreenChange);
+
+	// 	return () => {
+	// 		document.removeEventListener('fullscreenchange', handleFullScreenChange);
+	// 		document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
+	// 		document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
+	// 		document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+	// 	};
+	// }, []);
+
 	const items = [
 		{
 			key: '1',
 			label: 'Check-in-counters',
-			children: <TimelineDesign items={timelineItems} groups={timelineCounterGroups} editable={isEditable} />,
+			children: (
+				<div ref={divRef}>
+					{fullScreen ? (
+						<div className={'resourceAllocation--FullScreen'}>
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+							<TimelineDesign
+								height="80vh"
+								items={timelineItems}
+								groups={timelineCounterGroups}
+								editable={isEditable}
+							/>
+						</div>
+					) : (
+						<TimelineDesign items={timelineItems} groups={timelineCounterGroups} editable={isEditable} />
+					)}
+				</div>
+			),
 		},
 		{
 			key: '2',
 			label: 'Gates',
-			children: <TimelineDesign items={timelineItems} groups={timelineGateGroups} editable={isEditable} />,
+			children: (
+				<div ref={divRef}>
+					{fullScreen ? (
+						<div className={'resourceAllocation--FullScreen'}>
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+							<TimelineDesign
+								height="80vh"
+								items={timelineItems}
+								groups={timelineGateGroups}
+								editable={isEditable}
+							/>
+						</div>
+					) : (
+						<TimelineDesign items={timelineItems} groups={timelineGateGroups} editable={isEditable} />
+					)}
+				</div>
+			),
 		},
 		{
 			key: '3',
 			label: 'Stands',
-			children: <TimelineDesign items={timelineItems} groups={timelineStandsGroups} editable={isEditable} />,
+			children: (
+				<div ref={divRef}>
+					{fullScreen ? (
+						<div className={'resourceAllocation--FullScreen'}>
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+							<TimelineDesign
+								height="80vh"
+								items={timelineItems}
+								groups={timelineStandsGroups}
+								editable={isEditable}
+							/>
+						</div>
+					) : (
+						<TimelineDesign items={timelineItems} groups={timelineStandsGroups} editable={isEditable} />
+					)}
+				</div>
+			),
 		},
 		{
 			key: '4',
 			label: 'Belts',
-			children: <TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />,
+			children: (
+				<div ref={divRef}>
+					{fullScreen ? (
+						<div className={'resourceAllocation--FullScreen'}>
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+							<TimelineDesign
+								height="80vh"
+								items={timelineItems}
+								groups={timelineBeltGroups}
+								editable={isEditable}
+							/>
+						</div>
+					) : (
+						<TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />
+					)}
+				</div>
+			),
 		},
 		{
 			key: '5',
 			label: 'Taxi Way',
-			children: <TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />,
+			children: (
+				<div ref={divRef}>
+					{fullScreen ? (
+						<div className={'resourceAllocation--FullScreen'}>
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+							<TimelineDesign
+								height="80vh"
+								items={timelineItems}
+								groups={timelineGateGroups}
+								editable={isEditable}
+							/>
+						</div>
+					) : (
+						<TimelineDesign items={timelineItems} groups={timelineGateGroups} editable={isEditable} />
+					)}
+				</div>
+			),
 		},
 	];
 
@@ -255,7 +393,10 @@ const ResourceAllocation = () => {
 			<TopHeader
 				heading="Resource Management"
 				subHeading="Access information regarding resource allocation for flights"
-			/>
+			>
+				<FullscreenOutlined onClick={toggleFullscreen} className="resourceAllocation--FullScreenIcon" />
+			</TopHeader>
+
 			<CustomTabs
 				defaultActiveKey={activeTab}
 				items={items}
@@ -283,6 +424,11 @@ const ResourceAllocation = () => {
 					</div>
 				}
 			/>
+			{/* {fullScreen && (
+				<div  style={{ background: 'white', height: '100vh', width: '100vw' }}>
+					{items.find((item) => item.key === activeTab)?.children}
+				</div>
+			)} */}
 		</div>
 	);
 };
