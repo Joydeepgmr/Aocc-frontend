@@ -6,10 +6,13 @@ import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import Button from '../../../../../../../components/button/button';
 import CustomSelect from '../../../../../../../components/select/select';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { useGetAllTimelineData, useGetTimelineGroupData } from '../../../../../../../services';
+import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
 
 const ResourceAllocation = () => {
 	const divRef = useRef(null);
-	const [activeTab, setActiveTab] = useState(1);
+	const [activeTab, setActiveTab] = useState('1');
+	const [tabValue, setTabValue] = useState('CHECKIN_COUNTER');
 	const [isEditable, setIsEditable] = useState(false);
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
 	const [fullScreen, setFullScreen] = useState(false);
@@ -41,211 +44,21 @@ const ResourceAllocation = () => {
 			}
 		}
 	};
-	const timelineItems = [
-		{
-			id: 1,
-			start: '2024-04-20',
-			end: '2024-04-21',
-			content: 'Airline 2',
-			group: '3',
-			className: 'timeline--SecondAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 2,
-			start: '2024-04-21',
-			end: '2024-04-22',
-			content: 'Airline 1',
-			group: '2',
-			className: 'timeline--SecondAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 3,
-			start: '2024-03-20',
-			end: '2024-03-21',
-			content: 'Airline 3',
-			group: '4',
-			className: 'timeline--ThirdAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 4,
-			start: '2024-04-20',
-			end: '2024-04-21',
-			content: 'Airline 1',
-			group: '6',
-			className: 'timeline--FirstAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 5,
-			start: '2024-04-20',
-			end: '2024-04-21',
-			content: 'Airline 2',
-			group: '5',
-			className: 'timeline--SecondAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 6,
-			start: '2024-03-10',
-			end: '2024-03-11',
-			content: 'Airline 2',
-			group: '3',
-			className: 'timeline--ThirdAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 7,
-			start: '2024-03-11',
-			end: '2024-03-12',
-			content: 'Airline 1',
-			group: '2',
-			className: 'timeline--FirstAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 8,
-			start: '2024-03-20',
-			end: '2024-03-21',
-			content: 'Airline 3',
-			group: '4',
-			className: 'timeline--ThirdAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: Landed</div>',
-		},
-		{
-			id: 9,
-			start: '2024-04-20',
-			end: '2024-04-21',
-			content: 'Airline 1',
-			group: '6',
-			className: 'timeline--FirstAirline',
-			title: '<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A124<br/><br/>Status: Landed</div>',
-		},
-	];
 
-	const timelineBeltGroups = [
-		{
-			id: 1,
-			content: 'belt 1',
-		},
-		{
-			id: 2,
-			content: 'belt 2',
-		},
-		{
-			id: 3,
-			content: 'belt 3',
-		},
-		{
-			id: 4,
-			content: 'belt 4',
-		},
-		{
-			id: 5,
-			content: 'belt 5',
-		},
-		{
-			id: 6,
-			content: 'belt 6',
-		},
-	];
-	const timelineGateGroups = [
-		{
-			id: 1,
-			content: 'gate 1',
-		},
-		{
-			id: 2,
-			content: 'gate 2',
-		},
-		{
-			id: 3,
-			content: 'gate 3',
-		},
-		{
-			id: 4,
-			content: 'gate 4',
-		},
-		{
-			id: 5,
-			content: 'gate 5',
-		},
-		{
-			id: 6,
-			content: 'gate 6',
-		},
-	];
+	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue);
+	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue);
 
-	const timelineCounterGroups = [
-		{
-			id: 1,
-			content: 'counter 1',
-		},
-		{
-			id: 2,
-			content: 'counter 2',
-		},
-		{
-			id: 3,
-			content: 'counter 3',
-		},
-		{
-			id: 4,
-			content: 'counter 4',
-		},
-		{
-			id: 5,
-			content: 'counter 5',
-		},
-		{
-			id: 6,
-			content: 'counter 6',
-		},
-	];
-	const timelineStandsGroups = [
-		{
-			id: 1,
-			content: 'stands 1',
-		},
-		{
-			id: 2,
-			content: 'stands 2',
-		},
-		{
-			id: 3,
-			content: 'stands 3',
-		},
-		{
-			id: 4,
-			content: 'stands 4',
-		},
-		{
-			id: 5,
-			content: 'stands 5',
-		},
-		{
-			id: 6,
-			content: 'stands 6',
-		},
-	];
+	const timelineItems = fetchedTimelineData
+		?.filter((item) => item?.status === 'occupied')
+		?.map((item) => ({
+			id: item?.id,
+			start: CombineUtcDateAndIstTime(item?.date, item?.startTime),
+			end: CombineUtcDateAndIstTime(item?.date, item?.endTime),
+			group: item?.resourceId?.id,
+			title: `<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: ${item?.resourceId?.status}</div>`,
+		}));
 
-	// const handleFullScreenChange = () => setFullScreen(!setFullScreen);
-
-	// useEffect(() => {
-	// 	document.addEventListener('fullscreenchange', handleFullScreenChange);
-	// 	document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-	// 	document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-	// 	document.addEventListener('msfullscreenchange', handleFullScreenChange);
-
-	// 	return () => {
-	// 		document.removeEventListener('fullscreenchange', handleFullScreenChange);
-	// 		document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
-	// 		document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-	// 		document.removeEventListener('msfullscreenchange', handleFullScreenChange);
-	// 	};
-	// }, []);
+	const timelineGroups = fetchedGroupData?.map((item) => ({ id: item?.id, content: item?.name }));
 
 	const items = [
 		{
@@ -262,12 +75,12 @@ const ResourceAllocation = () => {
 							<TimelineDesign
 								height="80vh"
 								items={timelineItems}
-								groups={timelineCounterGroups}
+								groups={timelineGroups}
 								editable={isEditable}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineCounterGroups} editable={isEditable} />
+						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
 					)}
 				</div>
 			),
@@ -286,12 +99,12 @@ const ResourceAllocation = () => {
 							<TimelineDesign
 								height="80vh"
 								items={timelineItems}
-								groups={timelineGateGroups}
+								groups={timelineGroups}
 								editable={isEditable}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGateGroups} editable={isEditable} />
+						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
 					)}
 				</div>
 			),
@@ -310,12 +123,12 @@ const ResourceAllocation = () => {
 							<TimelineDesign
 								height="80vh"
 								items={timelineItems}
-								groups={timelineStandsGroups}
+								groups={timelineGroups}
 								editable={isEditable}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineStandsGroups} editable={isEditable} />
+						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
 					)}
 				</div>
 			),
@@ -334,12 +147,12 @@ const ResourceAllocation = () => {
 							<TimelineDesign
 								height="80vh"
 								items={timelineItems}
-								groups={timelineBeltGroups}
+								groups={timelineGroups}
 								editable={isEditable}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineBeltGroups} editable={isEditable} />
+						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
 					)}
 				</div>
 			),
@@ -358,12 +171,12 @@ const ResourceAllocation = () => {
 							<TimelineDesign
 								height="80vh"
 								items={timelineItems}
-								groups={timelineGateGroups}
+								groups={timelineGroups}
 								editable={isEditable}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGateGroups} editable={isEditable} />
+						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
 					)}
 				</div>
 			),
@@ -373,6 +186,17 @@ const ResourceAllocation = () => {
 	const handleChange = (key) => {
 		setIsEditable(false);
 		setActiveTab(key);
+		setTabValue(
+			key === '1'
+				? 'CHECKIN_COUNTER'
+				: key === '2'
+					? 'AIRPORT_GATE'
+					: key === '3'
+						? 'PARKING_STAND'
+						: key === '4'
+							? 'BAGGAGE_BELT'
+							: 'TAXIWAY'
+		);
 	};
 
 	const SelectTime = [
