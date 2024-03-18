@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import timezonePlugin from 'dayjs/plugin/timezone';
-import ConvertUtcToIst from '../ConvertUtcToIst/ConvertUtcToIst';
+import ConvertUtcToIst from './ConvertUtcToIst';
 
 const CombineUtcDateAndIstTime = (utcDateString, istTimeString) => {
 	const istDate = ConvertUtcToIst(utcDateString, 'YYYY-MM-DD');
