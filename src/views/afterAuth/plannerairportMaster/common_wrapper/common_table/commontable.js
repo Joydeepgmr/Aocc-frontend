@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import './common_table.scss';
 import { deleteAircraftRegistration, updateAircraftRegistration } from '../../redux/actionCreator';
 
-const Common_table = ({ Heading }) => {
+const Commontable = ({ Heading }) => {
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dispatch = useDispatch();
@@ -91,4 +91,4 @@ const Common_table = ({ Heading }) => {
 	);
 };
 
-export default Common_table;
+export default Commontable;

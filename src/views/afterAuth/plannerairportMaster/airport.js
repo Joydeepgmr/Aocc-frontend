@@ -3,8 +3,10 @@ import TopHeader from '../../../components/topHeader/topHeader';
 import Aircrafts from './components/aircraft/aircraft';
 import Airlines from './components/airlines/airlines';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import './airport.scss';
+import MasterCorelation from './masterCorelation/master';
 import Resources from './components/resource/resource';
+import './airport.scss';
+
 
 const PlannerAirportMaster = () => {
 	const [index, setIndex] = useState(0);
@@ -27,7 +29,7 @@ const PlannerAirportMaster = () => {
 		{
 			key: '4',
 			label: 'Master Correlation',
-			children: '',
+			children: <MasterCorelation/>,
 		},
 	];
 	const [loading, setLoading] = useState(false);

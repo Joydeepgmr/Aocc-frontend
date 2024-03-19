@@ -1,25 +1,11 @@
-@import "../../../../../../styles/sass/mixins";
-@import "../../../../../../styles/sass/variables";
-.wrapper{
-    display: flex;
-    flex-direction: column;
-    gap:2rem;
-}
-.custom_airline_form_table{
-    display: flex;
-    justify-content: space-between;
-}
-.custom_button_airline{
-    display: flex;
-    gap:1rem;
-}
-.Box_airline_nested_modal{
-    display: flex;
-    flex-direction: column;
-    gap:2rem;
-}
+@import '../../../../../styles/sass/mixins';
+@import '../../../../../styles/sass/variables';
 
 .main_form {
+    position: relative;
+    height: 120rem;
+    width: 100%;
+
     .form_section {
         padding-top: 0rem;
 
@@ -37,6 +23,7 @@
     .form_bottomButton {
         @include flex(stretch, end, row);
         gap: 1.6rem;
+        position: absolute;
         bottom: 0;
         width: 100%;
 

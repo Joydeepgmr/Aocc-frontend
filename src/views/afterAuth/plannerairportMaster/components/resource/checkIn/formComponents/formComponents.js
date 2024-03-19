@@ -69,11 +69,12 @@ const FormComponent = ({ closeModal }) => {
 
 						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
 					</div>
-				</div>
-				<Divider />
-				<div className="form_content">
-					<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-					<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+
+					<Divider />
+					<div className="form_content">
+						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+					</div>
 				</div>
 				<div className="form_section">
 					<div className="form_bottomButton">
