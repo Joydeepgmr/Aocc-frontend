@@ -4,12 +4,14 @@ import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
 
 const TimelineDesign = (props) => {
-	const { items, groups, editable = true } = props;
+	const { items, groups, editable = true, height = '400px' } = props;
 
 	const options = {
 		orientation: 'top',
 		width: '100%',
 		align: 'center',
+		height: height,
+		autoResize: true,
 		stack: true,
 		showMajorLabels: false,
 		showCurrentTime: true,
@@ -21,7 +23,6 @@ const TimelineDesign = (props) => {
 		showTooltips: true,
 		itemsAlwaysDraggable: {
 			item: true,
-			// range: true,
 		},
 		maxMinorChars: 10,
 		format: {
@@ -42,14 +43,14 @@ const TimelineDesign = (props) => {
 
 	return (
 		<>
-			<Timeline options={options} groups={groups} items={items} itemsAlwaysDraggable />;
+			<Timeline options={options} groups={groups} items={items} itemsAlwaysDraggable />
 			<div className="timeline--BottomContainer">
 				{labels?.map((item) => (
 					<div className="timeline--LabelContainer">
 						<div className="timeline--Label" style={{ background: item.color }}></div>{' '}
 						<CustomTypography fontSize="1.4rem" color="#909296" fontWeight={400}>
 							{item?.name}
-						</CustomTypography>{' '}
+						</CustomTypography>
 					</div>
 				))}
 			</div>

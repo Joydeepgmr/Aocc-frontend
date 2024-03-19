@@ -16,7 +16,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 			<Form.Item
 				name={name}
 				disabled={disabled ? disabled : false}
-				label={renderLabel()}
+				label={label && renderLabel()}
 				className={`select ${className}`}
 				rules={[
 					{
@@ -24,7 +24,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 					},
 				]}
 			>
-				<Select className="select_wrapper" placeholder={placeholder}>
+				<Select className="select_wrapper" placeholder={placeholder} {...rest}>
 					{SelectData.map((option, index) => (
 						<Select.Option key={index} value={option.value}>
 							{option.name}

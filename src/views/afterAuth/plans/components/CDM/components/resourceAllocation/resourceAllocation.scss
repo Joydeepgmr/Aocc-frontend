@@ -10,4 +10,30 @@
 	&--Button {
 		margin-bottom: 1rem;
 	}
+	&--SideTabContent {
+		.ant-form-item {
+			margin-bottom: 1rem;
+		}
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&--FullScreenIcon {
+		cursor: pointer;
+		font-size: 2rem;
+	}
+	&--FullScreen {
+		background-color: white;
+		width: 100vw;
+		height: 100vh;
+		padding: 6rem;
+		position: relative;
+	}
+	&--FullScreenExitIcon {
+		cursor: pointer;
+		font-size: 2rem;
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
+	}
 }
