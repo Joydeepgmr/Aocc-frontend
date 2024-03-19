@@ -63,7 +63,7 @@ const ResourceAllocation = () => {
 	const items = [
 		{
 			key: '1',
-			label: 'Check-in-counters',
+			label: 'Check-in Counters',
 			children: (
 				<div ref={divRef}>
 					{fullScreen ? (
@@ -159,7 +159,7 @@ const ResourceAllocation = () => {
 		},
 		{
 			key: '5',
-			label: 'Taxi Way',
+			label: 'Taxiways',
 			children: (
 				<div ref={divRef}>
 					{fullScreen ? (

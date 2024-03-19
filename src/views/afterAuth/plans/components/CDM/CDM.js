@@ -15,7 +15,7 @@ const CDM = () => {
 	const items = [
 		{
 			key: '1',
-			label: 'CDM Schedule',
+			label: 'Flight Schedule',
 			children: <CDMSchedule />,
 		},
 		{
