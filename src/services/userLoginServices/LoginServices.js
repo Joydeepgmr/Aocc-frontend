@@ -1,5 +1,5 @@
 import {useMutation} from 'react-query';
-import { USER_LOGIN } from '@/api/endpoints';
+import { USER_LOGIN } from '../../api/endpoints';
 
 import { Post } from '../HttpServices/HttpServices';
 import { localStorageKey } from '../../keys';
