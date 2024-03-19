@@ -13,7 +13,6 @@ import AirlineSetupForm from './components/airlineSetupForm/airlineSetupForm';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
-	// const { postData: postGlobalAirport } = usePostGlobalAirport();
 
 	const items = [
 		{

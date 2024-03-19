@@ -35,7 +35,6 @@ const AirportSetupTable = ({ formComponent, data }) => {
 	};
 
 	const onFinishHanlder = (values) => {
-		console.log("abssjb",values)
 		usePostGlobalAirport(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
