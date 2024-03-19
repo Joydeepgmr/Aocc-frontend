@@ -7,4 +7,5 @@ export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resourc
 export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
 
 /*------------- IT admin Global Master --------------*/
-export const GLOBAL_AIRPORT = '/global-airport/';
+export const GET_GLOBAL_AIRPORT = '/global-airport/';
+export const POST_GLOBAL_AIRPORT = '/global-airport/';

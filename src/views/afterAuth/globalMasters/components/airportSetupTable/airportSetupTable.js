@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './airportSetupTable.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -10,11 +11,11 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import { formDisabled, updateAirportData } from '../../redux/reducer';
-import { useGetGlobalAirport } from '../../../../../services';
 
-const AirportSetupTable = ({ formComponent }) => {
-	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
 
+const AirportSetupTable = ({ formComponent, data }) => {
+	
+	
 	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -34,6 +35,8 @@ const AirportSetupTable = ({ formComponent }) => {
 	};
 
 	const onFinishHanlder = (values) => {
+		console.log("abssjb",values)
+		usePostGlobalAirport(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
@@ -56,9 +59,10 @@ const AirportSetupTable = ({ formComponent }) => {
 	};
 
 	const handleEditButton = () => {
-		if (disabled) {
-			dispatch(formDisabled());
-		}
+		// if (disabled) {
+		// 	dispatch(formDisabled());
+		// }
+		closeAddModal();
 	};
 
 	useEffect(() => {
@@ -134,13 +138,13 @@ const AirportSetupTable = ({ formComponent }) => {
 		},
 		{
 			title: 'Name',
-			dataIndex: 'airportName',
-			key: 'airportName',
+			dataIndex: 'name',
+			key: 'name',
 		},
 		{
 			title: 'Airport Code',
 			dataIndex: 'iataCode',
-			key: 'atcCode',
+			key: 'iataCode',
 		},
 		{
 			title: 'Airport Type',
@@ -186,7 +190,7 @@ const AirportSetupTable = ({ formComponent }) => {
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 						Airports
 					</CustomTypography>
-					<TableComponent data={rows} columns={columns} />
+					<TableComponent data={data} columns={columns} />
 				</div>
 			</div>
 			<ModalComponent

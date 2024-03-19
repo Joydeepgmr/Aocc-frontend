@@ -3,6 +3,6 @@ import {
 	useGetTimelineGroupData,
 } from './ResourceAllocationServices/ResourceAllocationServices';
 import { useDummyApi } from './dummyApi/dummyApi';
-import { useGetGlobalAirport } from './globalMaster/globalMaster';
+import { useGetGlobalAirport,usePostGlobalAirport } from './globalMasters/globalMaster'
 
-export { useDummyApi, useGetAllTimelineData, useGetTimelineGroupData, useGetGlobalAirport };
+export { useDummyApi, useGetAllTimelineData, useGetTimelineGroupData, useGetGlobalAirport,usePostGlobalAirport };
