@@ -10,8 +10,11 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import { formDisabled, updateAirportData } from '../../redux/reducer';
+import { useGetGlobalAirport } from '../../../../../services';
 
 const AirportSetupTable = ({ formComponent }) => {
+	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
+
 	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -57,6 +60,7 @@ const AirportSetupTable = ({ formComponent }) => {
 			dispatch(formDisabled());
 		}
 	};
+
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
