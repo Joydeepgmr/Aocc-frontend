@@ -49,7 +49,6 @@ const AircraftTypeForm = () => {
 					name="icaoCodeModified"
 					placeholder="Enter the ICAO code modified"
 					className="custom_input"
-					required
 				/>
 			</div>
 			<div className="airport_type_form_inputfields">
@@ -147,6 +146,7 @@ const AircraftTypeForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					required
 				/>
 				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
 			</div>

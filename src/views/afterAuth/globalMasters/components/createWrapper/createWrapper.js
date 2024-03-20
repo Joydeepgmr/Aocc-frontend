@@ -52,6 +52,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	const onFinishHanlder = (values) => {
 	
 	postGlobalAirport(values);
+		console.log(values)
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
