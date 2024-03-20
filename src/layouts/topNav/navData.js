@@ -3,6 +3,8 @@ import { Navigate } from 'react-router';
 import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
 import PlannerAirportMaster from "../../views/afterAuth/plannerairportMaster/airport"
+import * as userType from "../../utils/roles";
+
 const role = localStorage.getItem('role');
 console.log('what is the role', role);
 
@@ -20,7 +22,7 @@ export const navMenu = [
 	{
 		key: '3',
 		label: 'Airport Masters',
-		children: <PlannerAirportMaster/>,
+		children: <PlannerAirportMaster />,
 	},
 ];
 
@@ -40,7 +42,7 @@ export const navMenu = [
 export const roleBasedNav = (pathname) => {
 	let navItems = [];
 
-	if (role === 'it admin' || pathname === '/global-masters') {
+	if (role === userType.IT_ADMIN || pathname === '/global-masters') {
 		navItems = [
 			{
 				key: '0',
@@ -53,7 +55,7 @@ export const roleBasedNav = (pathname) => {
 				children: '/airport-masters',
 			},
 		];
-	} else if (role === 'planner' || pathname === '/dashboard' || role === '/plan-airport-masters') {
+	} else if (role === userType.PLANNER || pathname === '/dashboard' || role === '/plan-airport-masters') {
 		navItems = [
 			{
 				key: '0',
