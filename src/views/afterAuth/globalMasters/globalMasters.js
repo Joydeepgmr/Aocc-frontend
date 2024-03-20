@@ -9,7 +9,6 @@ import AirportSetupTable from './components/airportSetupTable/airportSetupTable'
 import { addAirport } from './redux/reducer';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineSetupForm from './components/airlineSetupForm/airlineSetupForm';
-// import { usePostGlobalAirport } from '../../../services';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
@@ -42,8 +41,6 @@ const GlobalMasters = () => {
 		},
 	];
 
-
-	console.log(fetchedGlobalAirport);
 	return (
 		<div className="global_masters_container">
 			<div className="global_master_header">

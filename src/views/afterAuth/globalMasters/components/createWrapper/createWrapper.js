@@ -55,7 +55,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
-		values.atcCode = values?.atcCode?.join('');
+		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
 	

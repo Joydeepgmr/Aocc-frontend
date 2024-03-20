@@ -39,7 +39,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
-		values.atcCode = values?.atcCode?.join('');
+		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
 		dispatch(action(values));
@@ -69,7 +69,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			const initialValuesObj = {
 				airportName: rowData.airportName ?? 'NA',
 				iataCode: rowData.iataCode ?? '',
-				atcCode: rowData.atcCode ?? '',
+				icaoCode: rowData.icaoCode ?? '',
 				abbreviatedName1: rowData.abbreviatedName1 ?? 'NA',
 				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
 				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
@@ -93,7 +93,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		return {
 			airportName: data.airportName ?? 'NA',
 			iataCode: data.iataCode ?? '',
-			atcCode: data.atcCode ?? '',
+			icaoCode: data.icaoCode ?? '',
 			abbreviatedName1: data.abbreviatedName1 ?? 'NA',
 			abbreviatedName2: data.abbreviatedName2 ?? 'NA',
 			abbreviatedName3: data.abbreviatedName3 ?? 'NA',
