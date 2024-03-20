@@ -43,7 +43,7 @@ export function App() {
 							path="/"
 							element={
 								token ? (
-									userRole === 'IT Admin' ? (
+									userRole === 'it admin' ? (
 										<Navigate to={Pathname.GLOBALMASTERS} />
 									) : (
 										<Navigate to={Pathname.DASHBOARD} />
