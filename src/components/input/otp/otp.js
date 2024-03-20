@@ -8,7 +8,7 @@ const OtpField = ({ otpLength = 3, name, label, required, disabled, className = 
     const otpLabel = () => {
         return (
             <>
-                {label} {required && <span style={{ color: 'red' }}> *</span>}
+                {label}
             </>
         );
     };

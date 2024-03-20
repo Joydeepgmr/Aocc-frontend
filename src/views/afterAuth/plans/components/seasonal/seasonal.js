@@ -11,10 +11,11 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
+import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
 import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture, useUploadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 import './seasonal.scss';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+
 
 const Seasonal = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,7 +58,6 @@ const Seasonal = () => {
 	};
 
 	const handleDropdownItemClick = (value) => {
-		console.log(value);
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
