@@ -33,6 +33,8 @@ const TimelineDesign = (props) => {
 		},
 		zoomMax: 1000 * 60 * 60 * 24,
 		onMove: (item) => console.log(item),
+		min: new Date().setDate(new Date().getDate() - 1),
+		max: new Date().setDate(new Date().getDate() + 1),
 	};
 
 	return (
