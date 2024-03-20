@@ -4,7 +4,6 @@ import { Pathname } from './pathname';
 
 
 const isAuthenticated = () => {
-	// For example, check if a user token exists
 	return localStorage.getItem('_tid') ? true : false;
 };
 
