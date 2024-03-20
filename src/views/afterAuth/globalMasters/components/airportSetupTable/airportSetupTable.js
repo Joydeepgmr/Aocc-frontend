@@ -23,6 +23,8 @@ const AirportSetupTable = ({ formComponent, data }) => {
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 	const dispatch = useDispatch();
+
+	
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
@@ -51,11 +53,11 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		dispatch(updateAirportData(updatedData));
 	};
 
-	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
-	};
+	// const handleEdit = (data) => {
+	// 	setRowData(data);
+	// 	setIsModalOpen(true);
+	// 	setEditData(true);
+	// };
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -120,12 +122,12 @@ const AirportSetupTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					<ButtonComponent
+					{/* <ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/>
+					/> */}
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"
