@@ -28,9 +28,10 @@ export const Login = () => {
                 onSuccess: (data) => { 
 						console.log("What is Data after login", data);
 						localStorage.setItem('_tid', data?.data?.accessToken)
-						localStorage.setItem('role', data?.data?.roleName);
+						localStorage.setItem('role', data?.data?.roleName.toLowerCase());
 		
 						let role = data?.data?.roleName.toLowerCase();
+						console.log("what is role",role);
 						switch (role) {
 							case 'it admin':
 								navigate(Pathname.GLOBALMASTERS);
