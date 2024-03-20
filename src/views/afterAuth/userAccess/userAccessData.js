@@ -1,18 +1,18 @@
 export const SelectData = [
 	{
 		id: '1',
-		label: 'option1',
-		value: 'option1',
+		label: 'International',
+		value: 'INTERNATIONAL',
 	},
 	{
 		id: '2',
-		label: 'option2',
-		value: 'option2',
+		label: 'National',
+		value: 'NATIONAL',
 	},
 	{
 		id: '3',
-		label: 'option3',
-		value: 'option3',
+		label: 'Both',
+		value: 'BOTH',
 	},
 ];
 

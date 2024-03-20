@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './airportSetupTable.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -11,7 +12,10 @@ import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import { formDisabled, updateAirportData } from '../../redux/reducer';
 
-const AirportSetupTable = ({ formComponent }) => {
+
+const AirportSetupTable = ({ formComponent, data }) => {
+	
+	console.log(data);
 	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -31,10 +35,11 @@ const AirportSetupTable = ({ formComponent }) => {
 	};
 
 	const onFinishHanlder = (values) => {
+		usePostGlobalAirport(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
-		values.atcCode = values?.atcCode?.join('');
+		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
 		dispatch(action(values));
@@ -53,16 +58,18 @@ const AirportSetupTable = ({ formComponent }) => {
 	};
 
 	const handleEditButton = () => {
-		if (disabled) {
-			dispatch(formDisabled());
-		}
+		// if (disabled) {
+		// 	dispatch(formDisabled());
+		// }
+		closeAddModal();
 	};
+
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
 				airportName: rowData.airportName ?? 'NA',
 				iataCode: rowData.iataCode ?? '',
-				atcCode: rowData.atcCode ?? '',
+				icaoCode: rowData.icaoCode ?? '',
 				abbreviatedName1: rowData.abbreviatedName1 ?? 'NA',
 				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
 				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
@@ -86,7 +93,7 @@ const AirportSetupTable = ({ formComponent }) => {
 		return {
 			airportName: data.airportName ?? 'NA',
 			iataCode: data.iataCode ?? '',
-			atcCode: data.atcCode ?? '',
+			icaoCode: data.icaoCode ?? '',
 			abbreviatedName1: data.abbreviatedName1 ?? 'NA',
 			abbreviatedName2: data.abbreviatedName2 ?? 'NA',
 			abbreviatedName3: data.abbreviatedName3 ?? 'NA',
@@ -130,33 +137,39 @@ const AirportSetupTable = ({ formComponent }) => {
 		},
 		{
 			title: 'Name',
-			dataIndex: 'airportName',
-			key: 'airportName',
+			dataIndex: 'name',
+			key: 'name',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Airport Code',
 			dataIndex: 'iataCode',
-			key: 'atcCode',
+			key: 'iataCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Airport Type',
 			dataIndex: 'airportType',
 			key: 'airportType',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Country Code',
 			dataIndex: 'countryCode',
 			key: 'countryCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Standard Flight Time',
 			dataIndex: 'standardFlightTime',
 			key: 'standardFlightTime',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Time Change',
 			dataIndex: 'timeChange',
 			key: 'timeChange',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'View Details',
@@ -182,7 +195,7 @@ const AirportSetupTable = ({ formComponent }) => {
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 						Airports
 					</CustomTypography>
-					<TableComponent data={rows} columns={columns} />
+					<TableComponent data={data} columns={columns} />
 				</div>
 			</div>
 			<ModalComponent

@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
-// import ModalComponent from '../../../../../components/modalComponent/modalComponent';
-import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../formComponent/formComponent';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
@@ -12,30 +10,22 @@ import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
-import { ArrivalData, DepartureData } from './components/dummyData/dummy-data';
 import editIcon from '../../../../../assets/logo/edit.svg';
+import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture, useUploadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 import './seasonal.scss';
+
 
 const Seasonal = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [rows, setRows] = useState([]);
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
+	const [flightType, setFlightType] = useState('arrival');
 
-	const handleEdit = (record) => {
-		setRowData(record);
-		openEditModal();
-	};
-
-	const handleEditSave = (value) => {
-		const prevRows = [...rows];
-		const updatedRows = prevRows.map((row) => (row.key === value.key ? value : row));
-		setRows(updatedRows);
-		closeEditModal();
-	};
+	const { data: fetchedSeasonalPlans, isLoading: isSeasonalPlansLoading } = useGetSeasonalPlans(flightType);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -63,39 +53,65 @@ const Seasonal = () => {
 
 	const handleChange = (key) => {
 		setIndex(key);
-		key === '1' && setRows(ArrivalData);
-		key === '2' && setRows(DepartureData);
+		key === '1' && setFlightType('arrival');
+		key === '2' && setFlightType('departure');
 	};
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
-		} else if (value === 'uploadCsv') {
+		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
 	};
 
+	//CREATE
+	const { mutate: postSeasonalPlans } = usePostSeasonalPlans();
 	const handleSaveButton = (value) => {
 		const data = {
-			key: rows.length,
-			flightNumber: value.flightNumber,
-			date: value.date,
+			FLIGHTNO: value.FLIGHTNO,
+			START: ConvertIstToUtc(value.start ?? value.date).split('T')[0],
+			END: ConvertIstToUtc(value.end ?? value.date).split('T')[0],
 			callSign: value.callSign,
 			natureCode: value.natureCode,
 			origin: value.origin,
-			sta: value.sta,
-			std: value.std,
+			STA: value.STA,
+			STD: value.STD,
 			pos: value.pos,
 			registration: value.registration,
-			action: {},
+			FREQUENCY: value.weeklySelect ?? [value.date.day()],
 		};
-		setRows([data, ...rows]);
+		data && postSeasonalPlans(data);
 		closeModal();
 	};
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+	};
+
+	//EDIT 
+	const handleEdit = (record) => {
+		setRowData(record);
+		openEditModal();
+	};
+
+	const {mutate: editSeasonalPlanArrival} = useEditSeasonalPlanArrival(rowData?.id)
+	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id)
+
+	const handleEditSave = (value) => {
+		const data = {
+			FLIGHTNO: value.FLIGHTNO,
+			callSign: value.callSign,
+			natureCode: value.natureCode,
+			origin: value.origin,
+			STA: value.STA,
+			STD: value.STD,
+			pos: value.pos,
+			registration: value.registration,
+		};
+		index === '1' ? editSeasonalPlanArrival(data) : editSeasonalPlanDeparture(data);
+		closeEditModal()
 	};
 
 	const dropdownItems = [
@@ -115,6 +131,7 @@ const Seasonal = () => {
 			key: '2',
 		},
 	];
+
 	const operations = (
 		<div>
 			<DropdownButton
@@ -126,15 +143,45 @@ const Seasonal = () => {
 		</div>
 	);
 
+	const {
+		mutate: onUploadCSV,
+	} = useUploadCSV();
+
+	//UPLOAD
+	const handleUpload = (file) => {
+		const data = file[0].originFileObj;
+		const formData = new FormData();
+        file && formData.append('file', data);
+		onUploadCSV(formData);
+		closeCsvModal();
+	}
+
 	const columns = [
-		{ title: 'Flight No.', dataIndex: 'flightNumber', key: 'flightNumber' },
-		{ title: 'Date', dataIndex: 'date', key: 'date' },
-		{ title: 'Call Sign', dataIndex: 'callSign', key: 'callSign' },
-		{ title: 'Nature Code', dataIndex: 'natureCode', key: 'natureCode' },
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin' },
-		index === '1' ? { title: 'STA', dataIndex: 'sta', key: 'sta' } : { title: 'STD', dataIndex: 'std', key: 'std' },
-		{ title: 'POS', dataIndex: 'pos', key: 'pos' },
-		{ title: 'REG No.', dataIndex: 'registration', key: 'registration' },
+		{
+			title: 'Flight No.',
+			dataIndex: 'FLIGHTNO',
+			key: 'FLIGHTNO',
+			render: (FLIGHTNO) => (FLIGHTNO ?? '-'),
+		},
+		{ title: 'Date', dataIndex: 'PDATE', key: 'PDATE', render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-') },
+		{
+			title: 'Call Sign',
+			dataIndex: 'callSign',
+			key: 'callSign',
+			render: (callSign) => (callSign ?? '-'),
+		},
+		{
+			title: 'Nature Code',
+			dataIndex: 'natureCode',
+			key: 'natureCode',
+			render: (natureCode) => (natureCode ?? '-'),
+		},
+		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin ?? '-') },
+		index === '1'
+			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA).split('T')[1].slice(0,5) : '-') }
+			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD).split('T')[1].slice(0,5) : '-'), },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos ?? '-'), },
+		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => ( registration ?? '-'), },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -156,7 +203,14 @@ const Seasonal = () => {
 			<>
 				<div className="main_buttonContainer">
 					<div className="seasonal_container">
-						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
+						<Button
+							title="Create"
+							id="btn"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openModal}
+							disabled={isSeasonalPlansLoading}
+						/>
 						<Button
 							id="btn"
 							title="Upload CSV"
@@ -183,18 +237,22 @@ const Seasonal = () => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: Boolean(rows?.length) ? <Arrival data={rows} columns={columns} /> : noDataHandler(),
+			children: Boolean(fetchedSeasonalPlans?.length) ? (
+				<Arrival data={fetchedSeasonalPlans} columns={columns} />
+			) : (
+				noDataHandler()
+			),
 		},
 		{
 			key: '2',
 			label: 'Departure',
-			children: Boolean(rows?.length) ? <Departure data={rows} columns={columns} /> : noDataHandler(),
+			children: Boolean(fetchedSeasonalPlans?.length) ? (
+				<Departure data={fetchedSeasonalPlans} columns={columns} />
+			) : (
+				noDataHandler()
+			),
 		},
 	];
-
-	useEffect(() => {
-		setRows(ArrivalData);
-	}, []);
 
 	return (
 		<>
@@ -214,6 +272,7 @@ const Seasonal = () => {
 							className={'custom_filter'}
 							icon={Filter}
 							alt="arrow icon"
+							disabled={isSeasonalPlansLoading}
 						/>
 						<InputField
 							label="search"
@@ -222,6 +281,7 @@ const Seasonal = () => {
 							className="custom_inputField"
 							warning="Required field"
 							type="search"
+							disabled={isSeasonalPlansLoading}
 						/>
 					</div>
 				</div>
@@ -255,7 +315,7 @@ const Seasonal = () => {
 					/>
 				</div>
 			</ModalComponent>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} />
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
 			<ModalComponent
 				isModalOpen={isEditModalOpen}
 				width="120rem"
@@ -269,6 +329,7 @@ const Seasonal = () => {
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
+						isEdit = {true}
 					/>
 				</div>
 			</ModalComponent>

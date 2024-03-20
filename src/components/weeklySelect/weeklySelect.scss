@@ -1,0 +1,31 @@
+@import '../../styles/sass/variables';
+
+.WeeklySelect {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	vertical-align: middle;
+	gap: 0.8rem;
+	width: 100%;
+	cursor: pointer;
+
+	&--Chip {
+		display: flex;
+		padding: 1.6rem;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.6rem;
+		font-weight: 400;
+		text-align: center;
+		font-weight: 600;
+		border-radius: 1.2rem;
+	}
+	&--Active {
+		color: $dark_900;
+		border: 1px solid $dark_300;
+	}
+    &--Inactive {
+		color: $dark_300;
+		border: 1px solid $gray_300;
+	}
+}

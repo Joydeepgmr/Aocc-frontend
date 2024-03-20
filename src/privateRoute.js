@@ -3,12 +3,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { Pathname } from './pathname';
 
 
-let accessToken = localStorage.getItem('_tid');
-
+let isAuthenticated = () => localStorage.getItem('_tid') ? true : false;
 
 export const PrivateRoute = () => {
-	const auth = accessToken;
-	return auth ? <Outlet /> : <Navigate to={Pathname.LOGIN} />;
+	return isAuthenticated() ? <Outlet /> : <Navigate to={Pathname.LOGIN} replace />;
 };
 
 export default PrivateRoute;

@@ -1,24 +1,24 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
+import * as userType from "./utils/roles";
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
 import Login from './views/beforeAuth/login/login';
 import NotFound from './views/404';
 import Layout from './layouts/layout/layout';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
 import UserAccess from './views/afterAuth/userAccess/userAccess';
-
 import AirportMasters from './views/afterAuth/airportMasters/airportMasters';
 import GlobalMasters from './views/afterAuth/globalMasters/globalMasters';
 import PlannerAirportMaster from './views/afterAuth/plannerairportMaster/airport';
 import Plans from './views/afterAuth/plans/plans';
-import './app.scss';
 const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard'));
 const Orders = React.lazy(() => import('./views/afterAuth/orders/orders'));
 const Components = React.lazy(() => import('./views/beforeAuth/components'));
+
+import './app.scss';
 
 export function App() {
 	const token = localStorage.getItem('_tid');
@@ -43,7 +43,7 @@ export function App() {
 							path="/"
 							element={
 								token ? (
-									userRole === 'IT Admin' ? (
+									userRole === userType.IT_ADMIN ? (
 										<Navigate to={Pathname.GLOBALMASTERS} />
 									) : (
 										<Navigate to={Pathname.DASHBOARD} />
