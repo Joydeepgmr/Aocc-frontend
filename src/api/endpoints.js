@@ -10,3 +10,9 @@ export const USER_LOGIN = 'user/login';
 
 /*------------- IT admin airports --------------*/
 export const GLOBAL_AIRPORTS = "" 
+
+/*------------------ Seasonal Plans --------------------- */
+export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
+export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
+export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
+export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
