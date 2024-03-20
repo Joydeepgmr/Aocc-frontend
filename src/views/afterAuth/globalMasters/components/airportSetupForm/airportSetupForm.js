@@ -15,14 +15,14 @@ const AirportSetupForm = () => {
 			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Airport Name"
-					name="airportName"
+					name="name"
 					placeholder="Enter the airport name"
 					className="custom_input"
 					required
 					disabled={disabled}
 				/>
 				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={disabled} />
-				<OtpField otpLength={4} label="ATC Code" required name="atcCode" disabled={disabled} />
+				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={disabled} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -81,7 +81,8 @@ const AirportSetupForm = () => {
 					disabled={disabled}
 				/>
 			</div>
-			<div className="airport_setup_form_inputfields">
+
+			{/* <div className="airport_setup_form_inputfields">
 				<InputField
 					label="Time Difference Before"
 					name="timeDifferenceBefore"
@@ -116,7 +117,8 @@ const AirportSetupForm = () => {
 					suffixText="hours"
 					disabled={disabled}
 				/>
-			</div>
+			</div> */}
+			
 			<Divider />
 			<div className="airport_setup_form_inputfields">
 				<Date

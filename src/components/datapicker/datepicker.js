@@ -19,7 +19,7 @@ const Date = ({
 		return (
 			<>
 				{label}
-				{required && <span style={{ color: 'red' }}> *</span>}
+				{/* {required && <span style={{ color: 'red' }}> *</span>} */}
 			</>
 		);
 	};

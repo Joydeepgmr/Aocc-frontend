@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './createWrapper.scss';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
@@ -8,8 +7,12 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
 import { formDisabled } from '../../redux/reducer';
+import {usePostGlobalAirport} from '../../../../../services/globalMasters/globalMaster';
+import './createWrapper.scss';
 
-const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) => {
+const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data }) => {
+	const { mutate: postGlobalAirport, isLoading, isSuccess, isError, postData, message } = usePostGlobalAirport();
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -47,13 +50,15 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 	};
 
 	const onFinishHanlder = (values) => {
+	
+	postGlobalAirport(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
-		values.atcCode = values?.atcCode?.join('');
+		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
-		dispatch(action(values));
+	
 		closeAddModal();
 	};
 
@@ -73,7 +78,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 
 	return (
 		<>
-			{additionalAirportData.length > 0 ? (
+			{data && data?.length > 0 ? (
 				<div className="table_container">
 					<div className="create_button">
 						<DropdownButton
@@ -122,7 +127,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action }) 
 							title="Save"
 							type="filledText"
 							className="custom_button_save"
-							isSubmit={true}
+							isSubmit="submit"
 						/>
 					</div>
 				</Form>
