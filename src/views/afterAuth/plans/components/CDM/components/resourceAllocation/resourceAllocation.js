@@ -12,7 +12,7 @@ import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
 const ResourceAllocation = () => {
 	const divRef = useRef(null);
 	const [activeTab, setActiveTab] = useState('1');
-	const [tabValue, setTabValue] = useState('CHECKIN_COUNTER');
+	const [tabValue, setTabValue] = useState('counter');
 	const [isEditable, setIsEditable] = useState(false);
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
 	const [fullScreen, setFullScreen] = useState(false);
@@ -45,20 +45,35 @@ const ResourceAllocation = () => {
 		}
 	};
 
-	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue);
-	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue);
+	const color = ['#02A0FC', '#FFD43B', '#2B8A3E', '#a83c32', '#a86132', '#a8a832', '#6fa832', '#32a89a'];
+	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue, selectedTimeValue?.slice(0, 2));
+	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue, selectedTimeValue?.slice(0, 2));
 
-	const timelineItems = fetchedTimelineData
-		?.filter((item) => item?.status === 'occupied')
-		?.map((item) => ({
-			id: item?.id,
-			start: CombineUtcDateAndIstTime(item?.date, item?.startTime),
-			end: CombineUtcDateAndIstTime(item?.date, item?.endTime),
-			group: item?.resourceId?.id,
-			title: `<div>Flight Number: Flight 1 <br/><br/>Aircraft Type: A123<br/><br/>Status: ${item?.resourceId?.status}</div>`,
-		}));
+	const timelineLabel =
+		fetchedGroupData &&
+		fetchedGroupData?.airlines?.map((item, i) => ({ id: i, label: item?.airline, color: color[i] }));
+	const timelineItems =
+		fetchedGroupData &&
+		fetchedTimelineData &&
+		fetchedTimelineData
+			?.filter((item) => item?.status === 'occupied')
+			?.map((item) => {
+				const airlineIndex = timelineLabel.findIndex((labelItem) => labelItem.label === item?.flight?.AIRLINE);
+				const className = airlineIndex !== -1 ? `timeline--${airlineIndex + 1}Airline` : '';
 
-	const timelineGroups = fetchedGroupData?.map((item) => ({ id: item?.id, content: item?.name }));
+				return {
+					id: item?.id,
+					start: CombineUtcDateAndIstTime(item?.startTime.split('T')[0], item?.startTime.split('T')[1]),
+					end: CombineUtcDateAndIstTime(item?.endTime.split('T')[0], item?.endTime.split('T')[1]),
+					group: item?.resourceId?.id,
+					content: 'Airline 3',
+					className,
+					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.resourceId?.status}</div>`,
+				};
+			});
+
+	const timelineGroups =
+		fetchedGroupData && fetchedGroupData?.resourceData?.map((item) => ({ id: item?.id, content: item?.name }));
 
 	const items = [
 		{
@@ -77,10 +92,16 @@ const ResourceAllocation = () => {
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
+								label={timelineLabel}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
+						<TimelineDesign
+							items={timelineItems}
+							groups={timelineGroups}
+							label={timelineLabel}
+							editable={isEditable}
+						/>
 					)}
 				</div>
 			),
@@ -101,10 +122,16 @@ const ResourceAllocation = () => {
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
+								label={timelineLabel}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
+						<TimelineDesign
+							items={timelineItems}
+							label={timelineLabel}
+							groups={timelineGroups}
+							editable={isEditable}
+						/>
 					)}
 				</div>
 			),
@@ -125,10 +152,16 @@ const ResourceAllocation = () => {
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
+								label={timelineLabel}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
+						<TimelineDesign
+							items={timelineItems}
+							label={timelineLabel}
+							groups={timelineGroups}
+							editable={isEditable}
+						/>
 					)}
 				</div>
 			),
@@ -149,10 +182,16 @@ const ResourceAllocation = () => {
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
+								label={timelineLabel}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
+						<TimelineDesign
+							items={timelineItems}
+							label={timelineLabel}
+							groups={timelineGroups}
+							editable={isEditable}
+						/>
 					)}
 				</div>
 			),
@@ -173,10 +212,16 @@ const ResourceAllocation = () => {
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
+								label={timelineLabel}
 							/>
 						</div>
 					) : (
-						<TimelineDesign items={timelineItems} groups={timelineGroups} editable={isEditable} />
+						<TimelineDesign
+							items={timelineItems}
+							label={timelineLabel}
+							groups={timelineGroups}
+							editable={isEditable}
+						/>
 					)}
 				</div>
 			),
@@ -187,15 +232,7 @@ const ResourceAllocation = () => {
 		setIsEditable(false);
 		setActiveTab(key);
 		setTabValue(
-			key === '1'
-				? 'CHECKIN_COUNTER'
-				: key === '2'
-					? 'AIRPORT_GATE'
-					: key === '3'
-						? 'PARKING_STAND'
-						: key === '4'
-							? 'BAGGAGE_BELT'
-							: 'TAXIWAY'
+			key === '1' ? 'counter' : key === '2' ? 'gate' : key === '3' ? 'stand' : key === '4' ? 'belt' : 'taxi'
 		);
 	};
 
