@@ -8,6 +8,7 @@ import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
 import { checkAuth } from './dummy-user';
+import { useLoginUser } from '../../../services/userLoginServices/LoginServices';
 
 import './login.scss';
 
@@ -16,38 +17,44 @@ export const Login = () => {
 	const imageUrl = [{ name: 'GMR Hyderbad International Aiport, Hyderabad, India', url: loginPageImage, key: 1 }];
 	const [nextImage, setNextTime] = useState(0);
 	const navigate = useNavigate();
+	const { mutate: loginUser } = useLoginUser();
 	const handleChangeLoginPageImage = () => {
 		setNextTime(nextImage % imageUrl);
 	};
 
 	const onFinishHandler = (values) => {
-		console.log("what are the values in login", values);
 		if (values.email && values.password) {
-			let auth = checkAuth({ email: values.email, password: values.password })
-			if (auth.token && auth.user) {
-				console.log("auth ::", auth);
-				localStorage.setItem('_tid', auth?.token)
-				localStorage.setItem('role', auth.user.role)
-
-				let role = auth.user.role.toLowerCase();
-				switch (role) {
-					case 'admin':
-						navigate(Pathname.GLOBALMASTERS);
-						break;
-					case 'planner':
-						navigate(Pathname.DASHBOARD);
-						break;
-					case 'vendor':
-						navigate(Pathname.DASHBOARD);
-						break;
-					case 'accessmanager':
-						navigate(Pathname.DASHBOARD);
-						break;
-					default:
-						navigate(Pathname.DASHBOARD);
-						break;
-				}
-			}
+			loginUser(values, {
+                onSuccess: (data) => { 
+						console.log("What is Data after login", data);
+						localStorage.setItem('_tid', data?.data?.accessToken)
+						localStorage.setItem('role', data?.data?.roleName);
+		
+						let role = data?.data?.roleName.toLowerCase();
+						switch (role) {
+							case 'it admin':
+								navigate(Pathname.GLOBALMASTERS);
+								break;
+							case 'planner':
+								navigate(Pathname.DASHBOARD);
+								break;
+							case 'vendor':
+								navigate(Pathname.DASHBOARD);
+								break;
+							case 'accessmanager':
+								navigate(Pathname.DASHBOARD);
+								break;
+							default:
+								navigate(Pathname.DASHBOARD);
+								break;
+						}
+					
+                },
+                onError: (error) => {
+                    console.error('Login error:', error);
+                    alert("Login failed. Please check your credentials.");
+                }
+            });
 		} else {
 			alert("Please fill out all fields");
 		}

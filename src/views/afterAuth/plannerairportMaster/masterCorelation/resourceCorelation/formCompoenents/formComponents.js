@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Divider } from 'antd';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
-import InputField from '../../../../../../../components/input/field/field';
-import Button from '../../../../../../../components/button/button';
-import Date from '../../../../../../../components/datapicker/datepicker';
+import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
+import InputField from '../../../../../../components/input/field/field';
+import Button from '../../../../../../components/button/button';
+import Date from '../../../../../../components/datapicker/datepicker';
 import { useDispatch, useSelector } from 'react-redux';
 
-const FormComponent = ({ closeModal }) => {
+const FormComponent = () => {
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
@@ -21,30 +21,50 @@ const FormComponent = ({ closeModal }) => {
 				<div className="form_section">
 					<div className="form_content">
 						<InputField
-							label="Taxiway Name"
-							name="TaxiwayName"
+							label="Group Name"
+							name="GroupName"
 							placeholder="Enter the airport name"
 							warning="Required field"
+							required
 						/>
 						<InputField
-							label="Airport"
-							name="counterGroup"
+							label="Conditional"
+							name="Conditional"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 					</div>
-					<Divider />
 					<div className="form_content">
 						<InputField
-							label="Reason, if unavailable"
-							name="reasonifunavailable"
-							placeholder="Filled Text"
+							label="Resource Type A"
+							name="ResourceTypeA"
+							placeholder="Enter the airport name"
+							warning="Required field"
 							required
+						/>
+
+						<InputField
+							label="Resource Name(s)"
+							name="Resource Name(s)"
+							placeholder="Filled Text"
 							warning="Required field"
 						/>
-						<Date label="Unavailable from" name="Unavailablefrom" placeholder="Enter the airport name" />
+					</div>
+					<div className="form_content">
+						<InputField
+							label="Resource Type B"
+							name="ResourceTypeB"
+							placeholder="Enter the airport name"
+							warning="Required field"
+							required
+						/>
 
-						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
+						<InputField
+							label="Resource Name(s)"
+							name="ResourceName(s)"
+							placeholder="Filled Text"
+							warning="Required field"
+						/>
 					</div>
 				</div>
 				<Divider />

@@ -9,6 +9,7 @@ import DelayCode from './delaycode/delaycode';
 import Taxiway from './taxiway/taxiway';
 import BaggageBelt from './baggagebelt/baggagebelt';
 import NatureCode from './naturecode/naturecode';
+import Terminal from './terminals/terminals';
 
 const Resources = () => {
 	const handleChange = () => {
@@ -33,6 +34,7 @@ const Resources = () => {
 		{
 			key: '4',
 			label: 'Runway',
+
 			children: <Runway />,
 		},
 		{
@@ -58,7 +60,7 @@ const Resources = () => {
 		{
 			key: '9',
 			label: 'Terminals',
-			children: <CheckIn />,
+			children: <Terminal/>,
 		},
 	];
 	return (

@@ -19,9 +19,6 @@ const FormComponent = ({ closeModal }) => {
 
 	return (
 		<div className="main_form">
-			<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
-				Airport
-			</CustomTypography>
 			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="form_section">
 					<div className="form_content">
@@ -90,9 +87,11 @@ const FormComponent = ({ closeModal }) => {
 					</div>
 				</div>
 				<Divider />
-				<div className="form_content">
-					<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-					<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+				<div className="form_section">
+					<div className="form_content">
+						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+					</div>
 				</div>
 				<Divider />
 				<div className="form_section">

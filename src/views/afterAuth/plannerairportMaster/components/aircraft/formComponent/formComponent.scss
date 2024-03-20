@@ -1,15 +1,32 @@
-// @import '../../../styles/sass//variables';
-// @import '../../../styles/sass/mixins';
+@import  "../../../../../../styles/sass/mixins";
+@import   "../../../../../../styles/sass/variables";
 
-// .form_section {
-//     padding-top: 2.4rem;
-// }
+  .main_form {
+        .form_section {
+            padding-top: 0rem;
 
-// .form_content {
-//     @include flex(stretch, flex-start, row);
-//     gap: 1.6rem;
-// }
+            .form_content {
+                @include flex(stretch, flex-start, row);
+                gap: 1.6rem;
+                margin-bottom: 1rem;
 
-// #btn {
-//     padding: 2.2rem;
-// }
+                .date {
+                    margin: 0rem;
+                }
+            }
+        }
+
+        .form_bottomButton {
+            @include flex(stretch, end, row);
+            gap: 1.6rem;
+            bottom: 0;
+            width: 100%;
+
+            .button {
+                .custom_svgButton {
+                    color: $black;
+                    background-color: $gray_200;
+                }
+            }
+        }
+    }
