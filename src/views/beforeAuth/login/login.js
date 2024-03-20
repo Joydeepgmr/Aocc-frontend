@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import loginPageImage from '../../../assets/login_page_image.png';
 import gmrLogo from '../../../assets/logo/gmr-logo.png';
 import InputField from '../../../components/input/field/field';
@@ -22,41 +22,51 @@ export const Login = () => {
 		setNextTime(nextImage % imageUrl);
 	};
 
+	const roleRedirectFlow = (role) => {
+		switch (role) {
+			case userType.IT_ADMIN:
+				navigate(Pathname.GLOBALMASTERS);
+				break;
+			case userType.PLANNER:
+				navigate(Pathname.DASHBOARD);
+				break;
+			case userType.VENDOR:
+				navigate(Pathname.DASHBOARD);
+				break;
+			case userType.ACCESS_MANAGER:
+				navigate(Pathname.DASHBOARD);
+				break;
+			default:
+				navigate(Pathname.DASHBOARD);
+				break;
+		}
+	}
+
+	useEffect(() => {
+		if (localStorage.getItem("_tid") && localStorage.getItem("role")) {
+			roleRedirectFlow(localStorage.getItem("role"))
+		}
+	}, [])
+
 	const onFinishHandler = (values) => {
 		if (values.email && values.password) {
 			loginUser(values, {
-				onSuccess: (data) => {
+				onSuccess: async (data) => {
 					console.log("What is Data after login", data);
-					localStorage.setItem('_tid', data?.data?.accessToken)
-					localStorage.setItem('role', data?.data?.roleName.toLowerCase());
+					const role = data.data.roleName.toLowerCase();
 
-					let role = data?.data?.roleName.toLowerCase();
+					await localStorage.setItem('_tid', data?.data?.accessToken)
+					await localStorage.setItem('role', role);
 
-					switch (role) {
-						case userType.IT_ADMIN:
-							navigate(Pathname.GLOBALMASTERS);
-							break;
-						case userType.PLANNER:
-							navigate(Pathname.DASHBOARD);
-							break;
-						case userType.VENDOR:
-							navigate(Pathname.DASHBOARD);
-							break;
-						case userType.ACCESS_MANAGER:
-							navigate(Pathname.DASHBOARD);
-							break;
-						default:
-							navigate(Pathname.DASHBOARD);
-							break;
-					}
-
+					roleRedirectFlow(role);
 				},
 				onError: (error) => {
 					console.error('Login error:', error);
 					alert("Login failed. Please check your credentials.");
 				}
 			});
-		} else {
+		}
+		else {
 			alert("Please fill out all fields");
 		}
 	};
