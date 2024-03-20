@@ -16,6 +16,8 @@ export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
 export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
+export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
+
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/';
 export const POST_GLOBAL_AIRPORT = '/global-airport/';

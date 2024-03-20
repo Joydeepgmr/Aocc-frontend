@@ -11,10 +11,11 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
-import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
-import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture, useUploadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 import './seasonal.scss';
+
 
 const Seasonal = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +60,7 @@ const Seasonal = () => {
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
-		} else if (value === 'uploadCsv') {
+		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
 	};
@@ -77,10 +78,9 @@ const Seasonal = () => {
 			STA: value.STA,
 			STD: value.STD,
 			pos: value.pos,
-			//registration: value.registration,
+			registration: value.registration,
 			FREQUENCY: value.weeklySelect ?? [value.date.day()],
 		};
-
 		data && postSeasonalPlans(data);
 		closeModal();
 	};
@@ -108,7 +108,7 @@ const Seasonal = () => {
 			STA: value.STA,
 			STD: value.STD,
 			pos: value.pos,
-			//registration: value.registration,
+			registration: value.registration,
 		};
 		index === '1' ? editSeasonalPlanArrival(data) : editSeasonalPlanDeparture(data);
 		closeEditModal()
@@ -143,32 +143,45 @@ const Seasonal = () => {
 		</div>
 	);
 
+	const {
+		mutate: onUploadCSV,
+	} = useUploadCSV();
+
+	//UPLOAD
+	const handleUpload = (file) => {
+		const data = file[0].originFileObj;
+		const formData = new FormData();
+        file && formData.append('file', data);
+		onUploadCSV(formData);
+		closeCsvModal();
+	}
+
 	const columns = [
 		{
 			title: 'Flight No.',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
-			render: (FLIGHTNO) => (FLIGHTNO !== null ? FLIGHTNO : '-'),
+			render: (FLIGHTNO) => (FLIGHTNO ?? '-'),
 		},
-		{ title: 'Date', dataIndex: 'PDATE', key: 'PDATE', render: (PDATE) => (PDATE !== null ? PDATE : '-') },
+		{ title: 'Date', dataIndex: 'PDATE', key: 'PDATE', render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-') },
 		{
 			title: 'Call Sign',
 			dataIndex: 'callSign',
 			key: 'callSign',
-			render: (callSign) => (callSign !== null ? callSign : '-'),
+			render: (callSign) => (callSign ?? '-'),
 		},
 		{
 			title: 'Nature Code',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
-			render: (natureCode) => (natureCode !== null ? natureCode : '-'),
+			render: (natureCode) => (natureCode ?? '-'),
 		},
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin !== null ? origin : '-') },
+		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin ?? '-') },
 		index === '1'
-			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? STA : '-') }
-			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? STD : '-'), },
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos !== null ? pos : '-'), },
-		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => (registration !== null ? registration : '-'), },
+			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA).split('T')[1].slice(0,5) : '-') }
+			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD).split('T')[1].slice(0,5) : '-'), },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos ?? '-'), },
+		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => ( registration ?? '-'), },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -302,7 +315,7 @@ const Seasonal = () => {
 					/>
 				</div>
 			</ModalComponent>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} />
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
 			<ModalComponent
 				isModalOpen={isEditModalOpen}
 				width="120rem"
@@ -316,6 +329,7 @@ const Seasonal = () => {
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
+						isEdit = {true}
 					/>
 				</div>
 			</ModalComponent>
