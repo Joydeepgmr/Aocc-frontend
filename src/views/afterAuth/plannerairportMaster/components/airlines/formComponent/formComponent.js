@@ -165,10 +165,11 @@ const FormComponent = ({ closeModal }) => {
 						</div>
 					</div>
 					<Divider />
-					<div className="wrapper_head">
-						<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
-							Head Office
-						</CustomTypography>
+
+					<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
+						Head Office
+					</CustomTypography>
+					<div className="form_section">
 						<div className="form_content">
 							<InputField
 								label="Address 1"
@@ -176,70 +177,16 @@ const FormComponent = ({ closeModal }) => {
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
-							<InputField
-								label="Address2"
-								name="Address2"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
+							<InputField label="Phone" name="Phone" placeholder="Filled Text" warning="Required field" />
+							<InputField label="Telex" name="Telex" placeholder="Filled Text" warning="Required field" />
 						</div>
 					</div>
-					<div className="form_content">
-						<InputField
-							label="Address3"
-							name="address3"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-						<InputField
-							label="Address4"
-							name="Address4"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-					<div className="form_content">
-						<InputField label="Phone" name="fax" placeholder="Filled Text" warning="Required field" />
-						<InputField
-							label="Internet"
-							name="internet"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-					<div className="form_content">
-						<InputField label="Founded" name="founded" placeholder="Filled Text" warning="Required field" />
-						<InputField
-							label="SITA Code"
-							name="SITACode"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-						<InputField
-							label="Employees"
-							name="employees"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-
 					<Divider />
-					<div className="Box_airline_nested_modal">
-						<div className="custom_airline_form_table">
-							<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
-								Agents
-							</CustomTypography>
-							<div className="custom_button_airline">
-								<Button title="Delete" type="filledText" id="btn" className="custom_svgButton" />
-								<Button title="Add" type="filledText" id="btn" isSubmit="submit" />
-							</div>
+					<div className="form_section">
+						<div className="form_content">
+							<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
+							<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
 						</div>
-						<TableComponent columns={columns} data={dummyData} />
-					</div>
-					<Divider />
-					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
 					</div>
 					<div className="form_section">
 						<div className="form_bottomButton">
