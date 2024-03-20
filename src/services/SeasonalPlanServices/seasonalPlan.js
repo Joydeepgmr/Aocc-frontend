@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { GET_SEASONAL_PLANS, POST_SEASONAL_PLANS, EDIT_SEASONAL_PLANS_ARRIVAL, EDIT_SEASONAL_PLANS_DEPARTURE } from '../../api';
+import { GET_SEASONAL_PLANS, POST_SEASONAL_PLANS, EDIT_SEASONAL_PLANS_ARRIVAL, EDIT_SEASONAL_PLANS_DEPARTURE, UPLOAD_CSV_BULK } from '../../api';
 import { Get, Post,Patch } from '../HttpServices/HttpServices';
 
 export const useGetSeasonalPlans = (flightType,props) => {
@@ -74,6 +74,20 @@ export const useEditSeasonalPlanDeparture = (id,props) => {
 	const statusMessage = isSuccess
 		? data?.data?.message
 		: error?.response?.data?.data?.error ?? error?.response?.data?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};
+
+export const useUploadCSV = (props) => {
+	const response = useMutation({
+		mutationKey: ['upload-csv'],
+		mutationFn: (data) => Post(`${UPLOAD_CSV_BULK}`, data),
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.data?.message;
 
 	return { ...response, data: data?.data, message: statusMessage };
 };

@@ -9,7 +9,7 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 
 import './formComponent.scss';
 
-const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues }) => {
+const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues, isEdit }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const [form] = Form.useForm();
@@ -40,9 +40,9 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							<InputField label="Nature Code" name="natureCode" placeholder="D/I/F/D" />
 							<InputField label="Origin Airport" name="origin" placeholder="Filled Text" />
 							{type == 1 ? (
-								<InputField label="STA" name="STA" placeholder="Filled Text" type="time" />
+								<InputField label="STA" name="STA" placeholder="Filled Text" type="time" required/>
 							) : (
-								<InputField label="STD" name="STD" placeholder="Filled Text" />
+								<InputField label="STD" name="STD" placeholder="Filled Text" required/>
 							)}
 						</div>
 						<div className="form_content">
@@ -92,7 +92,8 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							<Divider />
 						</div>
 					)}
-					<div className="form_section">
+
+					{!isEdit && <div className="form_section">
 						<CustomTypography type="text" fontSize={14} fontWeight="400" color="#5C5F66" className="label">
 							Flight Recurrence
 						</CustomTypography>
@@ -113,9 +114,8 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 								value={initialValues?.weeklySelect}
 							/>
 						</div>
-					</div>
-
-					<Divider />
+						<Divider />
+					</div>}
 					<div className="form_bottomButton">
 						<Button
 							id="btn"
