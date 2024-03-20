@@ -15,7 +15,7 @@ import { formDisabled, updateAirportData } from '../../redux/reducer';
 
 const AirportSetupTable = ({ formComponent, data }) => {
 	
-	
+	console.log(data);
 	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -139,31 +139,37 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Airport Code',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Airport Type',
 			dataIndex: 'airportType',
 			key: 'airportType',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Country Code',
 			dataIndex: 'countryCode',
 			key: 'countryCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Standard Flight Time',
 			dataIndex: 'standardFlightTime',
 			key: 'standardFlightTime',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Time Change',
 			dataIndex: 'timeChange',
 			key: 'timeChange',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'View Details',
