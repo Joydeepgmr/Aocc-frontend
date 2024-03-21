@@ -30,6 +30,7 @@ const LicenseSetupTable = ({ formComponent }) => {
 	};
 
 	const onFinishHanlder = (values) => {
+		console.log("What are values here", values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.threeCode?.join('');
