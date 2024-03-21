@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 const FormComponent = ({ closeModal }) => {
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
-	const onFinishHandler = (values) => {
+    const onFinishHandler = (values) => {
+      
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -22,13 +23,14 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Counter Name"
-							name="counterName"
+							name="counter_name"
 							placeholder="Enter the airport name"
-							warning="Required field"
+                            warning="Required field"
+                            required
 						/>
 						<InputField
 							label="Counter Group"
-							name="counterGroup"
+							name="counter_group"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -60,20 +62,19 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reasonifunavailable"
+							name="reason_if_unavailable"
 							placeholder="Filled Text"
-							required
 							warning="Required field"
 						/>
-						<Date label="Unavailable from" name="Unavailablefrom" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
 
-						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
+						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
 					</div>
 
 					<Divider />
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name"  />
 					</div>
 				</div>
 				<div className="form_section">

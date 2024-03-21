@@ -8,10 +8,26 @@ import CustomSelect from '../../../../../../../components/select/select';
 import { useDispatch, useSelector } from 'react-redux';
 
 const FormComponent = ({ closeModal }) => {
-	const SelectData = [];
 	const dispatch = useDispatch();
-	const [form] = Form.useForm();
-	const onFinishHandler = (values) => {
+    const [form] = Form.useForm();
+    const SelectData = [
+		{
+			id: '1',
+			label: 'Options1',
+			value: 'options1',
+		},
+		{
+			id: '2',
+			label: 'Options2',
+			value: 'Options2',
+		},
+		{
+			id: '3',
+			label: 'Options3',
+			value: 'Options3',
+		},
+	];
+    const onFinishHandler = (values) => {
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -24,14 +40,15 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Belt Name"
-							name="BeltName"
+							name="belt_name"
 							placeholder="Enter the airport name"
-							warning="Required field"
+                            warning="Required field"
+                            required
 						/>
 
 						<InputField
 							label="Belt Type"
-							name="BeltType"
+							name="belt_type"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -54,7 +71,7 @@ const FormComponent = ({ closeModal }) => {
 
 						<InputField
 							label="Phone Number"
-							name="PhoneNumber"
+							name="phone_number"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -68,7 +85,7 @@ const FormComponent = ({ closeModal }) => {
 						/>
 						<InputField
 							label="Default Allocation Duration"
-							name="DefaultAllocationDuration"
+							name="default_allocation_duration"
 							placeholder="Filled Text"
 							suffixText={'minutes'}
 						/>
@@ -76,21 +93,20 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reasonifunavailable"
+							name="reason_if_unavailable"
 							placeholder="Filled Text"
-							required
 							warning="Required field"
 						/>
-						<Date label="Unavailable from" name="Unavailablefrom" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
 
-						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
+						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name"  />
 					</div>
 				</div>
 				<Divider />

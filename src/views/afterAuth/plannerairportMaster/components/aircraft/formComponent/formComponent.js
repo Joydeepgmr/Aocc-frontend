@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../components/input/field/field';
+import CustomSelect from '../../../../../../components/select/select';
 import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
 import { addAircraftRegistration } from '../../../redux/actionCreator';
@@ -11,9 +12,27 @@ import { updateIsShowTableComponents } from '../../../redux/reducer';
 import { SelectData } from '../../../../userAccess/userAccessData';
 import './formComponent.scss';
 const FormComponent = ({ closeModal }) => {
+	const SelectData = [
+		{
+			id: '1',
+			label: 'Options',
+			value: 'options',
+		},
+		{
+			id: '2',
+			label: 'Options1',
+			value: 'options1',
+		},
+		{
+			id: '3',
+			label: 'Options2',
+			value: 'options2',
+		},
+	];
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
+		console.log('abhishek', values);
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -33,7 +52,6 @@ const FormComponent = ({ closeModal }) => {
 							placeholder="Enter the airport name"
 							warning="Required field"
 						/>
-						<Date label="Select Date" name="SelectDate" placeholder="Date Picker" required />
 
 						<InputField
 							label="Internal"
@@ -41,21 +59,27 @@ const FormComponent = ({ closeModal }) => {
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
+						<InputField label="IATA Code" name="iata_code" placeholder="AI1234" warning="Required field" />
 					</div>
 
 					<div className="form_content">
-						<InputField label="IATA Code" name="IataCode" placeholder="AI1234" warning="Required field" />
 						<InputField
 							label="ICAO Code"
-							name="IcaoCode"
+							name="icao_code"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
 						/>
-
+						<CustomSelect
+							required={true}
+							SelectData={SelectData}
+							label="Aircraft Type"
+							name="aircraft_type"
+							placeholder={'Select Field'}
+						/>
 						<InputField
-							label="ICAO Code Modified"
-							name="IcaoCodeModified"
+							label="Type of Use"
+							name="type_of_use"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -63,34 +87,16 @@ const FormComponent = ({ closeModal }) => {
 
 					<div className="form_content">
 						<InputField
-							label="ATD"
-							name="atd"
+							label="Home Airport"
+							name="home_airport"
 							placeholder="Filled Text"
 							required
 							warning="Required field"
 						/>
-						<InputField label="SELCAL" name="selcal" placeholder="Filled Text" warning="Required field" />
 
-						<InputField
-							label="Home Airport"
-							name="HomeAirport"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-
-					<div className="form_content">
-						<InputField label="ATA" name="ata" placeholder="Filled Text" warning="Required field" />
 						<InputField
 							label="Nationality"
 							name="nationality"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-
-						<InputField
-							label="Type of Use"
-							name="TypeofUse"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -100,34 +106,21 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Cockpit Crew"
-							name="CockpitCrew"
+							name="cockpit_crew"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 						<InputField
 							label="Cabin Crew"
-							name="CabinCrew"
+							name="cabin_crew"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 					</div>
-
 					<div className="form_content">
 						<InputField
 							label="No. of Seats"
-							name="NoofSeats"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-						<InputField
-							label="No. of Kitchens"
-							name="NoofKitchens"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-						<InputField
-							label="No. of Toilets"
-							name="NoofToilets"
+							name="no_of_seats"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -164,26 +157,27 @@ const FormComponent = ({ closeModal }) => {
 							name="mtow"
 							placeholder="Filled Text"
 							warning="Required field"
-							suffixText="t"
+							suffixText="metric tonne"
 						/>
 						<InputField
-							label="Annex"
-							name="Annex"
+							label="MOW"
+							name="mow"
 							placeholder="Filled Text"
 							warning="Required field"
-							suffixText="t"
+							suffixText="metric tonne"
 						/>
 					</div>
 					<div className="form_content">
+						<InputField label="Annex" name="annex" placeholder="Filled Text" warning="Required field" />
 						<InputField
 							label="Main Deck"
-							name="MainDeck"
+							name="main_deck"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 						<InputField
 							label="APU INOP"
-							name="Apuinop"
+							name="apu_inop"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -197,17 +191,11 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Owner Name"
-							name="OwnerName"
+							name="owner_name"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 						<InputField label="Country" name="country" placeholder="Filled Text" warning="Required field" />
-						<InputField
-							label="Debit Number"
-							name="DebitNumber"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
 					</div>
 					<div className="form_content">
 						<InputField label="Address" name="address" placeholder="Filled Text" warning="Required field" />
@@ -217,8 +205,8 @@ const FormComponent = ({ closeModal }) => {
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" required />
 					</div>
 				</div>
 				<div className="form_section">

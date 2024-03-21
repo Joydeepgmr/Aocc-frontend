@@ -21,3 +21,7 @@ export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/';
 export const POST_GLOBAL_AIRPORT = '/global-airport/';
+
+/*--------------------------planner airport master ---------------------*/
+
+export const POST_BAGGED_BELT = '';
