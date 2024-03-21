@@ -22,19 +22,19 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Nature Code"
-							name="NatureCode"
+							name="nature_code"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
 						/>
-						<InputField label="Name" name="Name" placeholder="Filled Text" warning="Required field" />
+						<InputField label="Name" name="name" placeholder="Filled Text" warning="Required field" />
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" required />
 					</div>
 				</div>
 				<div className="form_section">

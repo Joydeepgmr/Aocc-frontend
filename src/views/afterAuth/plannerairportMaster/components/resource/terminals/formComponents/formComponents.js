@@ -11,8 +11,7 @@ const FormComponent = () => {
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		form.resetFields();
-		dispatch(addAircraftRegistration(values));
-		dispatch(updateIsShowTableComponents());
+
 	};
 
 	return (
@@ -22,14 +21,14 @@ const FormComponent = () => {
 					<div className="form_content">
 						<InputField
 							label="Terminal Name"
-							name="TerminalName"
+							name="terminal_name"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
 						/>
 						<InputField
 							label="Connected to Taxiway"
-							name="ConnectedtoTaxiway"
+							name="connected_to_taxiway"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -37,7 +36,7 @@ const FormComponent = () => {
 					<div className="form_content">
 						<InputField
 							label="Connected to Stands"
-							name="ConnectedtoStands"
+							name="connected_to_stands"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
@@ -45,7 +44,7 @@ const FormComponent = () => {
 
 						<InputField
 							label="Connected to Runway"
-							name="ConnectedtoRunway"
+							name="connected_to_runway"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -54,8 +53,8 @@ const FormComponent = () => {
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<div className="form_section">

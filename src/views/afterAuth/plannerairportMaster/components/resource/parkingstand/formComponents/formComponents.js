@@ -5,7 +5,7 @@ import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 
 import Date from '../../../../../../../components/datapicker/datepicker';
-import CheckBoxField from "../../../../../../../components/checkbox/checkbox"
+import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './formComponents.scss';
@@ -14,6 +14,7 @@ const FormComponent = () => {
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
+		console.log('ihfdhduhdu', values);
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -26,9 +27,10 @@ const FormComponent = () => {
 					<div className="form_content">
 						<InputField
 							label="Stand Name"
-							name="StandName"
+							name="stand_name"
 							placeholder="Enter the airport name"
 							warning="Required field"
+							required
 						/>
 						<InputField label="Airport" name="airport" placeholder="Filled Text" warning="Required field" />
 					</div>
@@ -36,20 +38,20 @@ const FormComponent = () => {
 					<div className="form_content">
 						<InputField
 							label="Connected to Gate"
-							name="terminal"
+							name="connected_to_gate"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
 						<InputField
 							label="Connected to Taxiway"
-							name="row"
+							name="connected_to_taxiway"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
 						/>
 						<InputField
 							label="Default Allocation Duration"
-							name="phones"
+							name="default_allocation_duration"
 							placeholder="Filled Text"
 							warning="Required field"
 							suffixText="min"
@@ -62,34 +64,33 @@ const FormComponent = () => {
 						</CustomTypography>
 
 						<div className="custom_content">
-							<CheckBoxField name="GPU" label="GPU" id="custom_checkbox" title="Single Checkbox" />
-							<CheckBoxField name="APU" className="" label="APU" title="Single Checkbox" />
-							<CheckBoxField name="FuelPits" label="Fuel Pits" title="Single Checkbox" />
-							<CheckBoxField name="Pushback" label="Pushback" title="Single Checkbox" />
-							<CheckBoxField name="AirBridge" label="Air Bridge" title="Single Checkbox" />
-							<CheckBoxField name="AirCondition" label="Air Condition" title="Single Checkbox" />
-							<CheckBoxField name="DockingSystem" label="Docking System" title="Single Checkbox" />
+							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" />
+							<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" />
+							<CheckBoxField name="fuel_pits" label="Fuel Pits" title="Single Checkbox" />
+							<CheckBoxField name="push_back" label="Pushback" title="Single Checkbox" />
+							<CheckBoxField name="air_bridge" label="Air Bridge" title="Single Checkbox" />
+							<CheckBoxField name="air_condition" label="Air Condition" title="Single Checkbox" />
+							<CheckBoxField name="docking_system" label="Docking System" title="Single Checkbox" />
 						</div>
 					</div>
 					<Divider />
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reasonifunavailable"
+							name="reason_if_unavailable"
 							placeholder="Filled Text"
-							required
 							warning="Required field"
 						/>
-						<Date label="Unavailable from" name="Unavailablefrom" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
 
-						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
+						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<Divider />
