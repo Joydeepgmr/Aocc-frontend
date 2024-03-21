@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { POST_LICENSE } from '../../api/endpoints';
 import { Get, Post } from '../HttpServices/HttpServices';
 
-export const usePostLicenseAirport = () => {
+export const usePostLicenseAirport = (props) => {
 	const queryClient = useQueryClient();
 
 	const response = useMutation({
@@ -22,3 +22,4 @@ export const usePostLicenseAirport = () => {
 
 	return { ...response, data, message: statusMessage };
 };
+

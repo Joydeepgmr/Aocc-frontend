@@ -55,12 +55,8 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
     }
 
     const handleDropdownChange= (value) => {
-        if(value === 'addAirport') {
+        if(value === 'Add') {
             openAddModal();
-        }
-
-        if(value === "uploadCSV") {
-            openCsvModal();
         }
     }
 
@@ -96,7 +92,7 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 				width={width ?? 'auto'}
 				className="custom_modal"
 			>
-				<Form form={form} layout="vertical" onFinish={onFinishHanlder}>
+				<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 					{formComponent && formComponent}
 					<Divider />
 					<div className="custom_buttons">
