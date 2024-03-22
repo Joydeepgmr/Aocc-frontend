@@ -1,185 +1,380 @@
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
 import Button from '../../../../../../../components/button/button';
-import ModalComponent from '../../../../../../../components/modal/modal'; // Corrected import path
+import ModalComponent from '../../../../../../../components/modal/modal';
 import FormComponent from '../../../formComponent/formComponent';
 import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
+import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
+import Filter from '../../../../../../../assets/Filter.svg';
+import InputField from '../../../../../../../components/input/field/field';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
-import TopHeader from '../../../../../../../components/topHeader/topHeader';
-import "./CDMSchedule.scss";
-import TableComponent from '../../../../../../../components/table/table';
+import DropdownButton from '../../../../../../../components/dropdownButton/dropdownButton';
+import Arrival from '../arrival/arrival';
+import Departure from '../departure/departure';
+import editIcon from '../../../../../../../assets/logo/edit.svg';
+import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../../../utils';
+import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture, useUploadCSV } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
-function CDMSchedule() {
-    const items = [
-        {
-            key: "1",
-            label: "Arrival",
-            children: <ArrivalTab />,
-        },
-        {
-            key: "2",
-            label: "Departure",
-            children: <DepartureTab />,
-        }
-    ]
+import './CDMSchedule.scss';
 
-    const handleChange = () => {
-        console.log('Tab switch');
-    };
-    return (
-        <div className='container-div'>
-            <CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-        </div>
-    )
-}
 
-const ArrivalTab = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+const DailySchedule = ({tab}) => {
+	console.log(tab, "tabb");
+	const queryClient = useQueryClient();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [index, setIndex] = useState('1');
+	const [flightType, setFlightType] = useState('arrival');
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+	const { data: fetchedSeasonalPlans, isLoading: isSeasonalPlansLoading } = useGetSeasonalPlans(flightType,tab);
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setIsCsvModalOpen(false);
-    };
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
 
-    const openCsvModal = () => {
-        setIsCsvModalOpen(true);
-    };
+	const openCsvModal = () => {
+		setIsCsvModalOpen(true);
+	};
 
-    const columns = [
-        { title: 'FlightNo.', dataIndex: 'flightno', key: 'flightno' },
-        { title: 'Date', dataIndex: 'date', key: 'date' },
-        { title: 'Call Sign', dataIndex: 'callsign', key: 'callsign' },
-        { title: 'Nature Code', dataIndex: 'naturecode', key: 'naturecode' },
-        { title: 'ORG', dataIndex: 'org', key: 'org' },
-        { title: 'STA', dataIndex: 'sta', key: 'sta' },
-        { title: 'POS', dataIndex: 'pos', key: 'pos' },
-        { title: 'REG No.', dataIndex: 'regno', key: 'regno' },
-        { title: 'Flight Spilt (No.)', dataIndex: 'splitno', key: 'spiltno' },
-        { title: 'Flight Recurrence', dataIndex: 'flightrecurrence', key: 'flightrecurrence' },
-    ];
+	const closeCsvModal = () => {
+		setIsCsvModalOpen(false);
+	};
 
-    const data = [
-        {
-            key: "1",
-            flightno: "AI 812",
-            date: "20/03/2024",
-            callsign: "ABC 123",
-            naturecode: "123",
-            org: "Lucknow",
-            sta: "15:00",
-            pos: "21,39.9",
-            regno: "SS213",
-            splitno: "AB123",
-            flightrecurrence: "MTW",
-        },
-        {
-            key: "2",
-            flightno: "6E 6172",
-            date: "15/03/2024",
-            callsign: "ID 1234",
-            naturecode: "123",
-            org: "Surat",
-            sta: "15:30",
-            pos: "21,39.9",
-            regno: "SS213",
-            splitno: "6E 123",
-            flightrecurrence: "Once",
-        },
-        {
-            key: "3",
-            flightno: "UK 642",
-            date: "26/03/2024",
-            callsign: "ID 1234",
-            naturecode: "123",
-            org: "Chicago",
-            sta: "14:00",
-            pos: "21,39.9",
-            regno: "SS213",
-            splitno: "AI 1234",
-            flightrecurrence: "WFS",
-        },
-        {
-            key: "4",
-            flightno: "AI 916",
-            date: "30/03/2024",
-            callsign: "ID 1234",
-            naturecode: "123",
-            org: "Chicago",
-            sta: "14:30",
-            pos: "21,39.9",
-            regno: "SS213",
-            splitno: "6E213",
-            flightrecurrence: "Once",
-        },
-        {
-            key: "5",
-            flightno: "6E 1234",
-            date: "10/04/2024",
-            callsign: "ID 1234",
-            naturecode: "123",
-            org: "Hyderbad",
-            sta: "16:00",
-            pos: "21,39.9",
-            regno: "SS213",
-            splitno: "6E213",
-            flightrecurrence: "WFS",
-        }
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
 
-    ]
+	const openEditModal = () => {
+		setIsEditModalOpen(true);
+	};
 
-    const handleTableChange = (pagination, filters, sorter) => {
-        console.log('Table changed:', pagination, filters, sorter);
-    };
+	const closeEditModal = () => {
+		setIsEditModalOpen(false);
+	};
 
-    return (
-        <div className='Arrival-container'>
-            <TopHeader
-                heading="Collaborative Decision Making Schedule"
-            />
-            <div className='table-container'>
-                <TableComponent columns={columns} data={data} onChange={handleTableChange} />
-            </div>
-        </div>
-    )
-}
+	const handleChange = (key) => {
+		setIndex(key);
+		key === '1' && setFlightType('arrival');
+		key === '2' && setFlightType('departure');
+	};
 
-const DepartureTab = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const handleDropdownItemClick = (value) => {
+		if (value === 'create') {
+			openModal();
+		} else if (value === 'uploadCSV') {
+			openCsvModal();
+		}
+	};
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+	//CREATE
+	const { mutate: postSeasonalPlans } = usePostSeasonalPlans();
+	const handleSaveButton = (value) => {
+		const data = {
+			FLIGHTNO: value.FLIGHTNO,
+			START: ConvertIstToUtc(value.start ?? value.date).split('T')[0],
+			END: ConvertIstToUtc(value.end ?? value.date).split('T')[0],
+			callSign: value.callSign,
+			natureCode: value.natureCode,
+			origin: value.origin,
+			STA: value.STA,
+			STD: value.STD,
+			pos: value.pos,
+			registration: value.registration,
+			FREQUENCY: value.weeklySelect ?? [value.date.day()],
+		};
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setIsCsvModalOpen(false);
-    };
+		data && postSeasonalPlans(data);
+		closeModal();
+	};
 
-    const openCsvModal = () => {
-        setIsCsvModalOpen(true);
-    };
+	const handleCloseButton = () => {
+		setIsModalOpen(false);
+		setIsEditModalOpen(false);
+	};
 
-    return (
-        <div className='Arrival-container'>
-            <TopHeader
-                heading="Collaborative Decision Making Schedule"
-            />
-            <div className="container">
-                <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-                <Button title="Upload CSV" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <Button title="Download CSV Template" id="btn" className="custom_svgButton" type="filledText" isSubmit="submit" onClick={openCsvModal} />
-                <ModalComponent isModalOpen={isModalOpen} width="120rem" closeModal={closeModal} title="Collaborative Decision Making Schedule" className="custom_modal">
-                    <div className="modal_content"><FormComponent handleButtonClose={closeModal} handleSaveButton={closeModal} /></div>
-                </ModalComponent>
-                <UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeModal} />
-            </div>
-        </div>
-    )
-}
+	//EDIT 
+	const handleEdit = (record) => {
+		setRowData(record);
+		openEditModal();
+	};
 
-export default CDMSchedule;
+	const editSeasonalPlansHandler = {
+		onSuccess: (data) =>handleSeasonalEditSuccess(data),
+		onError: (error) => handleSeasonalEditError(error),
+	};
+	
+	const {mutate: editSeasonalPlanArrival} = useEditSeasonalPlanArrival(rowData?.id,editSeasonalPlansHandler)
+	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler)
+	const handleEditSave = (value) => {
+		const data = {
+			FLIGHTNO: value.FLIGHTNO,
+			callSign: value.callSign,
+			natureCode: value.natureCode,
+			origin: value.origin,
+			STA: value.STA,
+			STD: value.STD,
+			pos: value.pos,
+			registration: value.registration,
+		};
+		index === '1' && editSeasonalPlanArrival(data);
+		index=== '2' && editSeasonalPlanDeparture(data);
+	};
+	
+	const handleSeasonalEditSuccess = () => {
+		queryClient.invalidateQueries('get-seasonal-plans');
+		closeEditModal();
+	}
+
+	const handleSeasonalEditError = (error) => {
+		setIsError(true);
+		setErrorMessage(error?.response?.data?.message);
+	}
+	// console.log(arrivalEditSuccess,"SUCCESSS???");
+	// console.log(statusMessage,"status");
+
+	const dropdownItems = [
+		{
+			label: 'Create',
+			value: 'create',
+			key: '0',
+		},
+		{
+			label: 'Upload CSV',
+			value: 'uploadCSV',
+			key: '1',
+		},
+		{
+			label: 'Download CSV Template',
+			value: 'downloadCSVTemplate',
+			key: '2',
+		},
+	];
+
+	const operations = (
+		<div>
+			<DropdownButton
+				dropdownItems={dropdownItems}
+				buttonText="Actions"
+				className="custom_dropdownButton"
+				onChange={handleDropdownItemClick}
+			/>
+		</div>
+	);
+
+	
+
+	const uploadCsvHandler = {
+		onSuccess: (data) =>handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
+	};
+
+	const {mutate: onUploadCSV} = useUploadCSV(uploadCsvHandler);
+
+	//UPLOAD
+	const handleUpload = (file) => {
+		const data = file[0].originFileObj;
+		console.log(data,"filessssssss");
+		// const formData = new FormData();
+        // file && formData.append('file', data);
+		//type = application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+		//onUploadCSV(formData);
+	}
+
+	const handleUploadCsvSuccess = () => {
+		queryClient.invalidateQueries('get-seasonal-plans');
+		closeCsvModal();
+	}
+
+	const handleUploadCsvError = (error) => {
+		setErrorMessage("Incorrect File Type")
+	}
+
+	const columns = [
+		{
+			title: 'Flight No.',
+			dataIndex: 'FLIGHTNO',
+			key: 'FLIGHTNO',
+			render: (FLIGHTNO) => (FLIGHTNO ?? '-'),
+		},
+		{ title: 'Date', dataIndex: 'PDATE', key: 'PDATE', render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-') },
+		{
+			title: 'Call Sign',
+			dataIndex: 'callSign',
+			key: 'callSign',
+			render: (callSign) => (callSign ?? '-'),
+		},
+		{
+			title: 'Nature Code',
+			dataIndex: 'natureCode',
+			key: 'natureCode',
+			render: (natureCode) => (natureCode ?? '-'),
+		},
+		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin ?? '-') },
+		index === '1'
+			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA).split('T')[1].slice(0,5) : '-') }
+			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD).split('T')[1].slice(0,5) : '-'), },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos ?? '-'), },
+		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => ( registration ?? '-'), },
+        { title: 'Flight Split (No.)', dataIndex: 'flightSplit', key: 'flightSplit', render: (flightSplit) => ( flightSplit ?? '-'), },
+		{
+			title: 'Actions',
+			key: 'actions',
+			render: (text, record) => (
+				<div className="action_buttons">
+					<Button
+						onClick={() => handleEdit(record)}
+						type="iconWithBorder"
+						icon={editIcon}
+						className="custom_icon_buttons"
+					/>
+				</div>
+			),
+		},
+	];
+
+	const noDataHandler = () => {
+		return (
+			<>
+				<div className="main_buttonContainer">
+					<div className="seasonal_container">
+						<Button
+							title="Create"
+							id="btn"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openModal}
+							disabled={isSeasonalPlansLoading}
+						/>
+						<Button
+							id="btn"
+							title="Upload CSV"
+							className="custom_svgButton"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openCsvModal}
+						/>
+						<Button
+							id="btn"
+							title="Download CSV Template"
+							className="custom_svgButton"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openCsvModal}
+						/>
+					</div>
+				</div>
+			</>
+		);
+	};
+
+	const tabItems = [
+		{
+			key: '1',
+			label: 'Arrival',
+			children: Boolean(fetchedSeasonalPlans?.length) ? (
+				<Arrival data={fetchedSeasonalPlans} columns={columns} />
+			) : (
+				noDataHandler()
+			),
+		},
+		{
+			key: '2',
+			label: 'Departure',
+			children: Boolean(fetchedSeasonalPlans?.length) ? (
+				<Departure data={fetchedSeasonalPlans} columns={columns} />
+			) : (
+				noDataHandler()
+			),
+		},
+	];
+
+	return (
+		<>
+			<div className="main_TableContainer">
+				<div className="top_container">
+					<div>
+						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							Flight Schedule Planning
+						</CustomTypography>
+					</div>
+					<div className="icon_container">
+						<Button
+							onClick={() => {
+								alert('Filter Icon');
+							}}
+							type="iconWithBorder"
+							className={'custom_filter'}
+							icon={Filter}
+							alt="arrow icon"
+							disabled={isSeasonalPlansLoading}
+						/>
+						<InputField
+							label="search"
+							name="search"
+							placeholder="Search"
+							className="custom_inputField"
+							warning="Required field"
+							type="search"
+							disabled={isSeasonalPlansLoading}
+						/>
+					</div>
+				</div>
+				<div className="table_container">
+					<div>
+						<CustomTabs
+							defaultActiveKey="1"
+							items={tabItems}
+							onChange={handleChange}
+							type="simple"
+							extraContent={operations}
+						/>
+					</div>
+				</div>
+			</div>
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="120rem"
+				closeModal={closeModal}
+				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						type={index}
+						key={Math.random() * 100}
+					/>
+				</div>
+			</ModalComponent>
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="120rem"
+				closeModal={closeEditModal}
+				title={`Edit ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						type={index}
+						initialValues={rowData}
+						isEdit = {true}
+						isError = {isError}
+						errorMessage = {errorMessage}
+					/>
+				</div>
+			</ModalComponent>
+		</>
+	);
+};
+
+export default DailySchedule;
