@@ -8,6 +8,7 @@ import modalComponent from '../../../../../components/modal/modal';
 import { useGetLicenseData } from '../../../../../services/airportMasters/airportMasters';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 // import { updateLicenseData, formDisabled } from '../../redux/reducer';
 
 const LicenseSetupTable = ({ formComponent, data }) => {
@@ -151,13 +152,13 @@ const LicenseSetupTable = ({ formComponent, data }) => {
 			title: 'Valid From',
 			dataIndex: 'validFrom',
 			key: 'validFrom',
-			render: (text) => text || '-',
+			render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
 		},
 		{
 			title: 'Valid To',
 			dataIndex: 'validTo',
 			key: 'validTo',
-			render: (text) => text || '-',
+			render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
 		},
 	];
 
