@@ -4,7 +4,7 @@ import Button from '../../../../../../../components/button/button';
 import ModalComponent from '../../../../../../../components/modal/modal';
 import FormComponent from '../../../formComponent/formComponent';
 import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
+import TopHeader from '../../../../../../../components/topHeader/topHeader';
 import Filter from '../../../../../../../assets/Filter.svg';
 import InputField from '../../../../../../../components/input/field/field';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
@@ -19,7 +19,6 @@ import './CDMSchedule.scss';
 
 
 const DailySchedule = ({tab}) => {
-	console.log(tab, "tabb");
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -133,8 +132,6 @@ const DailySchedule = ({tab}) => {
 		setIsError(true);
 		setErrorMessage(error?.response?.data?.message);
 	}
-	// console.log(arrivalEditSuccess,"SUCCESSS???");
-	// console.log(statusMessage,"status");
 
 	const dropdownItems = [
 		{
@@ -295,9 +292,9 @@ const DailySchedule = ({tab}) => {
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>
-						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-							Collaborative Decision Making Schedule
-						</CustomTypography>
+					<TopHeader
+                heading="Daily Flight Schedule"
+            	/>
 					</div>
 					<div className="icon_container">
 						<Button

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Upload } from 'antd';
 import Button from '../button/button';
 import ModalComponent from '../modal/modal';
+import CustomTypography from '../typographyComponent/typographyComponent';
 import './uploadCsvModal.scss';
 
 const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 	const [files, setFiles] = useState([]);
 	const [isError, setIsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-	const [isRemovePerformed, setIsRemovePerformed] = useState(false);
 	const acceptedFormats = ['.csv', '.xlsx'];
 
 	// Function to handle file selection
@@ -30,9 +30,12 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 
 	//Validate file types
 	const ValidateFiles = (file, acceptedFormats) => {
-		const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase();
-		const isValidFile = acceptedFormats.includes(`.${fileExtension}`) ? true : false;
-		return !isValidFile;
+		if(file){
+			const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase();
+			const isValidFile = acceptedFormats.includes(`.${fileExtension}`) ? true : false;
+			return !isValidFile;
+		}
+		return false;	
 	};
 
 	return (
@@ -65,7 +68,6 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 								!isError && setFiles([file]);
 								return false;
 							}}
-							onRemove={() => setIsRemovePerformed(true)}
 						>
 
 							{!Boolean(files?.length) && (
@@ -73,7 +75,9 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 							)}
 
 						</Upload>
-						{isError && (<div>{errorMessage} : message</div>)}
+						{isError && <CustomTypography type="text" fontSize={14} fontWeight="400" color="#db0000">
+							{errorMessage}
+						</CustomTypography>}
 						{Boolean(files?.length) && (
 							<Button title="Upload" id="btn" type="filledText" onClick={() => handleUpload(files)} />
 						)}
