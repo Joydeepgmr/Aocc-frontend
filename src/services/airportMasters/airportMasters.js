@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { POST_LICENSE } from '../../api/endpoints';
+import { POST_LICENSE, GET_LICENSE, GET_AIRPORT_NAME } from '../../api/endpoints';
 import { Get, Post } from '../HttpServices/HttpServices';
 
 export const usePostLicenseAirport = (props) => {
@@ -22,4 +22,34 @@ export const usePostLicenseAirport = (props) => {
 
 	return { ...response, data, message: statusMessage };
 };
+
+export const useGetLicenseData = (props) => {
+	const response = useQuery({
+		queryKey: ['license'],
+		queryFn: async () => await Get(`${GET_LICENSE}`),
+		...props,
+	})
+
+	const { data, error, isSuccess} = response;
+
+	console.log(response?.data);
+	
+	const statusMessage = isSuccess ? data?.message : error?.message;  
+
+	return {
+		...response, 
+		data: data,
+		message: statusMessage,
+	}
+}
+
+export const useGetAirportName = (props) => {
+	const response = useQuery({
+		queryKey: ["airport-data"],
+		queryFn: async () => await Get(`${GET_AIRPORT_NAME}`),
+		...props,
+	})
+
+	const { data, error, isSuccess} =  response;
+}
 

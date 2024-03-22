@@ -4,8 +4,6 @@ import Date from '../../../../../components/datapicker/datepicker'
 import CustomSelect from '../../../../../components/select/select';
 import OtpField from '../../../../../components/input/otp/otp';
 import { SelectData } from '../../../userAccess/userAccessData';
-import { useSelector } from 'react-redux';
-
 import './licenseSetupForm.scss';
 
 const LicenseSetupForm = () => {
