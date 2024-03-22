@@ -7,7 +7,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 		return (
 			<>
 				{label}
-				{required && <span style={{ color: 'red' }}> *</span>}
+				{/* {required && <span style={{ color: 'red' }}> *</span>} */}
 			</>
 		);
 	};
@@ -20,6 +20,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 				className={`select ${className}`}
 				rules={[
 					{
+						required: required,
 						message: 'This field is required.',
 					},
 				]}

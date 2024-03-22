@@ -6,6 +6,9 @@ import Button from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
 import { useDispatch, useSelector } from 'react-redux';
 const FormComponent = () => {
+	const [resourceTypeA, setResourceTypeA] = useState('');
+	const [resourceNames, setResourceNames] = useState('');
+	const [generatedContent, setGeneratedContent] = useState('');
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
@@ -70,8 +73,8 @@ const FormComponent = () => {
 						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
 						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
 					</div>
-                </div>
-                
+				</div>
+
 				<div className="form_section">
 					<div className="form_bottomButton">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />

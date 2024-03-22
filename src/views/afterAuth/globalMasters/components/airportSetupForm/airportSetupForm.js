@@ -61,8 +61,9 @@ const AirportSetupForm = () => {
 					label="Airport Type"
 					name="airportType"
 					disabled={disabled}
+					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={disabled} />
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={disabled} required />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -79,6 +80,7 @@ const AirportSetupForm = () => {
 					className="custom_input"
 					suffixText="minutes"
 					disabled={disabled}
+					required
 				/>
 			</div>
 
@@ -118,7 +120,7 @@ const AirportSetupForm = () => {
 					disabled={disabled}
 				/>
 			</div> */}
-			
+
 			<Divider />
 			<div className="airport_setup_form_inputfields">
 				<Date
