@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
+import React, { useState } from 'react';
+import {usePostGlobalAircraftRegistration} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -9,24 +8,20 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import './airportSetupTable.scss';
-// import { formDisabled, updateAirportData } from '../../redux/reducer';
+import './aircraftRegistrationSetupTable.scss';
 
 
-const AirportSetupTable = ({ formComponent, data }) => {
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
-	// const dispatch = useDispatch();
 
 	
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-		// dispatch(formDisabled());
 	};
 
 	const closeAddModal = () => {
@@ -35,27 +30,28 @@ const AirportSetupTable = ({ formComponent, data }) => {
 	};
 
 	const onFinishHanlder = (values) => {
-		usePostGlobalAirport(values);
+		usePostGlobalAircraftRegistration(values);
+		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
+		values.icaoCodeModified = values?.icaoCodeModified?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
-		// dispatch(action(values));
 		closeAddModal();
 	};
 
-	const handleDelete = (record) => {
-		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-		// dispatch(updateAirportData(updatedData));
-	};
-
-	// const handleEdit = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	setEditData(true);
+	// const handleDelete = (record) => {
+	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+	// 	dispatch(updateAirportData(updatedData));
 	// };
+
+	const handleEdit = (data) => {
+		setRowData(data);
+		setIsModalOpen(true);
+		setEditData(true);
+	};
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -63,49 +59,55 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		// }
 		closeAddModal();
 	};
+	// 	if (rowData) {
+	// 		const initialValuesObj = {
+	// 			identifier: rowData.identifier ?? 'NA',
+	// 			iataCode: rowData.iataCode ?? '',
+	// 			model: rowData.model ?? 'NA',
+	// 			airline: rowData.airline ?? 'NA',
+	// 			icaoCode: rowData.icaoCode ?? '',
+	// 			icaoCodeModified: rowData.icaoCodeModified ?? 'NA',
+	// 			acFamily: rowData.acFamily ?? 'NA',
+	// 			acBodyType: rowData.acBodyType ?? 'NA',
+	// 			minimumGroundTime: rowData.minimumGroundTime ?? 'NA',
+	// 			wingspan: rowData.wingspan ?? '',
+	// 			length: rowData.length ?? 'NA',
+	// 			height: rowData.height ?? 'NA',
+	// 			engineType: rowData.engineType ?? 'NA',
+	// 			numberOfEngines: rowData.numberOfEngines ?? 'NA',
+	// 			totalSeats: rowData.totalSeats ?? 'NA',
+	// 			firstClass: rowData.firstClass ?? 'NA',
+	// 			businessClass: rowData.businessClass ?? 'NA',
+	// 			economyClass: rowData.economyClass ?? 'NA',
+	// 			validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
+	// 			validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+	// 		};
+	// 		setInitialValues(initialValuesObj);
+	// 		initial.setFieldsValue(initialValuesObj);
+	// 	}
+	// }, [rowData]);
 
-	useEffect(() => {
-		if (rowData) {
-			const initialValuesObj = {
-				name: rowData.name ?? '',
-				iataCode: rowData.iataCode ?? '',
-				icaoCode: rowData.icaoCode ?? '',
-				abbreviatedName1: rowData.abbreviatedName1 ?? 'NA',
-				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
-				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
-				abbreviatedName4: rowData.abbreviatedName4 ?? 'NA',
-				countryCode: rowData.countryCode ?? 'NA',
-				standardFlightTime: rowData.standardFlightTime ?? 'NA',
-				timeChange: rowData.timeChange ?? 'NA',
-				timeDifferenceAfter: rowData.timeDifferenceAfter ?? 'NA',
-				timeDifferenceBefore: rowData.timeDifferenceBefore ?? 'NA',
-				timeDifferenceSummer: rowData.timeDifferenceSummer ?? 'NA',
-				timeDifferenceWinter: rowData.timeDifferenceWinter ?? 'NA',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTill: rowData.validTill ? dayjs(rowData.validTill) : null,
-			};
-			setInitialValues(initialValuesObj);
-			initial.setFieldsValue(initialValuesObj);
-		}
-	}, [rowData]);
-
-	// const rows = additionalAirportData?.map((data, index) => {
+	// const rows = additionalAircraftTypeData?.map((data, index) => {
 	// 	return {
-	// 		airportName: data.airportName ?? 'NA',
+	// 		identifier: data.identifier ?? 'NA',
 	// 		iataCode: data.iataCode ?? '',
-	// 		icaoCode: data.icaoCode ?? '',
-	// 		abbreviatedName1: data.abbreviatedName1 ?? 'NA',
-	// 		abbreviatedName2: data.abbreviatedName2 ?? 'NA',
-	// 		abbreviatedName3: data.abbreviatedName3 ?? 'NA',
-	// 		abbreviatedName4: data.abbreviatedName4 ?? 'NA',
-	// 		countryCode: data.countryCode ?? '',
+	// 		model: data.model ?? '',
+	// 		airline: data.airline ?? 'NA',
+	// 		icaoCode: data.icaoCode ?? 'NA',
+	// 		icaoCodeModified: data.icaoCodeModified ?? 'NA',
+	// 		acFamily: data.acFamily ?? 'NA',
+	// 		acBodyType: data.acBodyType ?? '',
 	// 		airportType: data.airportType ?? '',
-	// 		standardFlightTime: data.standardFlightTime ?? 'NA',
-	// 		timeChange: data.timeChange ?? 'NA',
-	// 		timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
-	// 		timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
-	// 		timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
-	// 		timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
+	// 		minimumGroundTime: data.minimumGroundTime ?? 'NA',
+	// 		wingspan: data.wingspan ?? 'NA',
+	// 		length: data.length ?? 'NA',
+	// 		height: data.height ?? 'NA',
+	// 		engineType: data.engineType ?? 'NA',
+	// 		numberOfEngines: data.numberOfEngines ?? 'NA',
+	// 		totalSeats: data.totalSeats ?? 'NA',
+	// 		firstClass: data.firstClass ?? 'NA',
+	// 		businessClass: data.businessClass ?? 'NA',
+	// 		economyClass: data.economyClass ?? 'NA',
 	// 		validFrom: data.validFrom ?? '',
 	// 		validTo: data.validTo ?? '',
 	// 	};
@@ -136,39 +138,33 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			),
 		},
 		{
-			title: 'Name',
-			dataIndex: 'name',
-			key: 'name',
+			title: 'Description',
+			dataIndex: 'description',
+			key: 'description',
 			render: (text) => text || '-',
 		},
 		{
-			title: 'Airport Code',
+			title: 'Internal',
+			dataIndex: 'Internal',
+			key: 'Internal',
+			render: (text) => text || '-',
+		},
+		{
+			title: 'IATA Code',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
 			render: (text) => text || '-',
 		},
 		{
-			title: 'Airport Type',
-			dataIndex: 'airportType',
-			key: 'airportType',
+			title: 'Nationality',
+			dataIndex: 'nationality',
+			key: 'nationality',
 			render: (text) => text || '-',
 		},
 		{
-			title: 'Country Code',
-			dataIndex: 'countryCode',
-			key: 'countryCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Standard Flight Time',
-			dataIndex: 'standardFlightTime',
-			key: 'standardFlightTime',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Time Change',
-			dataIndex: 'timeChange',
-			key: 'timeChange',
+			title: 'Home Airport',
+			dataIndex: 'homeAirport',
+			key: 'homeAirport',
 			render: (text) => text || '-',
 		},
 		{
@@ -188,12 +184,13 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			),
 		},
 	];
+
 	return (
 		<div>
 			<div className="create_wrapper_table">
 				<div className="table_container">
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Airports
+						Aircrafts Type
 					</CustomTypography>
 					<TableComponent data={data} columns={columns} />
 				</div>
@@ -201,11 +198,11 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
-				title="Setup your airport"
+				title="Setup your aircraft type"
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
+				<Form layout="vertical" onFinish={onFinishHanlder}>
 					{formComponent && formComponent}
 					<Divider />
 					{!editData && (
@@ -253,4 +250,4 @@ const AirportSetupTable = ({ formComponent, data }) => {
 	);
 };
 
-export default AirportSetupTable;
+export default AircraftRegistrationSetupTable;

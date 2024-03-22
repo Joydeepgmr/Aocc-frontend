@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import './airlineSetupTable.scss';
 import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
@@ -9,24 +9,24 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import './airportSetupTable.scss';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
+// import { useDispatch, useSelector } from 'react-redux';
 
 
-const AirportSetupTable = ({ formComponent, data }) => {
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+const AirlineSetupTable = ({ formComponent, data }) => {
+	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
 	
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-		// dispatch(formDisabled());
+		dispatch(formDisabled());
 	};
 
 	const closeAddModal = () => {
@@ -42,13 +42,13 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
-		// dispatch(action(values));
+		dispatch(action(values));
 		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
-		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-		// dispatch(updateAirportData(updatedData));
+		const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		dispatch(updateAirportData(updatedData));
 	};
 
 	// const handleEdit = (data) => {
@@ -67,14 +67,14 @@ const AirportSetupTable = ({ formComponent, data }) => {
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
-				name: rowData.name ?? '',
+				airportName: rowData.airportName ?? 'NA',
 				iataCode: rowData.iataCode ?? '',
 				icaoCode: rowData.icaoCode ?? '',
 				abbreviatedName1: rowData.abbreviatedName1 ?? 'NA',
 				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
 				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
 				abbreviatedName4: rowData.abbreviatedName4 ?? 'NA',
-				countryCode: rowData.countryCode ?? 'NA',
+				countryCode: rowData.countryCode ?? '',
 				standardFlightTime: rowData.standardFlightTime ?? 'NA',
 				timeChange: rowData.timeChange ?? 'NA',
 				timeDifferenceAfter: rowData.timeDifferenceAfter ?? 'NA',
@@ -82,34 +82,34 @@ const AirportSetupTable = ({ formComponent, data }) => {
 				timeDifferenceSummer: rowData.timeDifferenceSummer ?? 'NA',
 				timeDifferenceWinter: rowData.timeDifferenceWinter ?? 'NA',
 				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTill: rowData.validTill ? dayjs(rowData.validTill) : null,
+				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
 			};
 			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [rowData]);
 
-	// const rows = additionalAirportData?.map((data, index) => {
-	// 	return {
-	// 		airportName: data.airportName ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		icaoCode: data.icaoCode ?? '',
-	// 		abbreviatedName1: data.abbreviatedName1 ?? 'NA',
-	// 		abbreviatedName2: data.abbreviatedName2 ?? 'NA',
-	// 		abbreviatedName3: data.abbreviatedName3 ?? 'NA',
-	// 		abbreviatedName4: data.abbreviatedName4 ?? 'NA',
-	// 		countryCode: data.countryCode ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		standardFlightTime: data.standardFlightTime ?? 'NA',
-	// 		timeChange: data.timeChange ?? 'NA',
-	// 		timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
-	// 		timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
-	// 		timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
-	// 		timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
+	const rows = additionalAirportData?.map((data, index) => {
+		return {
+			airportName: data.airportName ?? 'NA',
+			iataCode: data.iataCode ?? '',
+			icaoCode: data.icaoCode ?? '',
+			abbreviatedName1: data.abbreviatedName1 ?? 'NA',
+			abbreviatedName2: data.abbreviatedName2 ?? 'NA',
+			abbreviatedName3: data.abbreviatedName3 ?? 'NA',
+			abbreviatedName4: data.abbreviatedName4 ?? 'NA',
+			countryCode: data.countryCode ?? '',
+			airportType: data.airportType ?? '',
+			standardFlightTime: data.standardFlightTime ?? 'NA',
+			timeChange: data.timeChange ?? 'NA',
+			timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
+			timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
+			timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
+			timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
+			validFrom: data.validFrom ?? '',
+			validTo: data.validTo ?? '',
+		};
+	});
 
 	const columns = [
 		{
@@ -208,7 +208,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
 					{formComponent && formComponent}
 					<Divider />
-					{!editData && (
+					{!disabled && !editData && (
 						<>
 							<div className="custom_buttons">
 								<>
@@ -238,7 +238,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 									onClick={closeAddModal}
 								/>
 								<ButtonComponent
-									title="Save"
+									title="Edit"
 									type="filledText"
 									className="custom_button_save"
 									onClick={handleEditButton}
