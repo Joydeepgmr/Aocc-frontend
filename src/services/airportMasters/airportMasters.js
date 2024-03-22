@@ -51,5 +51,13 @@ export const useGetAirportName = (props) => {
 	})
 
 	const { data, error, isSuccess} =  response;
+
+	const statusMessage = isSuccess ? data?.message : error?.message;
+
+	return {
+		...response,
+		data: data,
+		message: statusMessage,
+	}
 }
 

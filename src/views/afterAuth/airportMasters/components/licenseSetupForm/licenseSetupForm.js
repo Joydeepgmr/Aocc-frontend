@@ -1,13 +1,17 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react';
 import InputField from '../../../../../components/input/field/field';
-import Date from '../../../../../components/datapicker/datepicker'
+import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
 import OtpField from '../../../../../components/input/otp/otp';
 import { SelectData } from '../../../userAccess/userAccessData';
+import { useGetAirportName } from '../../../../../services/airportMasters/airportMasters';
 import './licenseSetupForm.scss';
 
 const LicenseSetupForm = () => {
-	const { disabled } = useSelector((store) => store.airportMasters);
+	const {data: airportData} = useGetAirportName();
+
+	console.log("data in airportData", airportData);
+
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
@@ -18,9 +22,8 @@ const LicenseSetupForm = () => {
 					className="custom_input"
 					required
 				/>
-				<OtpField otpLength={3} label="3-Letter Code" required name="threeCode" disabled={disabled} />
-				<OtpField otpLength={4} label="4-Letter Code" required name="fourCode" disabled={disabled} />
-
+				<OtpField otpLength={3} label="IATA Code" required name="iataCode" required={true} />
+				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" required={true}/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -34,15 +37,11 @@ const LicenseSetupForm = () => {
 					name="email"
 					placeholder="Enter the Email Address"
 					className="custom_input"
+					required
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<InputField
-					label="City"
-					name="city"
-					placeholder="Enter the city name"
-					className="custom_input"
-				/>
+				<InputField label="City" name="city" placeholder="Enter the city name" className="custom_input" />
 				<InputField
 					label="Country"
 					name="country"
@@ -57,12 +56,13 @@ const LicenseSetupForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					required
 				/>
 				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
 			</div>
 			{/* <Divider /> */}
 		</div>
-	)
-}
+	);
+};
 
 export default LicenseSetupForm;

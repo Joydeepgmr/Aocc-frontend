@@ -46,11 +46,13 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 	};
 
     const onFinishHandler = (values) => {
-
+		console.log("These are the Airport masters values", values);
+		values.validFrom = values?.validFrom?.toISOString();
+		values.validTo = values?.validTo?.toISOString();
+		values.iataCode = values?.iataCode?.join('');
+		values.icaoCode = values?.icaoCode?.join('');
         postLicenseAirport(values);
-
         form.resetFieldS();
-
         closeAddModal();
     }
 
