@@ -20,8 +20,8 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 
     const dropdownItems = [
 		{
-			label: 'Add Airport',
-			value: 'addAirport',
+			label: 'Add Airport License',
+			value: 'addLicense',
 			key: '0',
 		},
 		{
@@ -57,7 +57,7 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
     }
 
     const handleDropdownChange= (value) => {
-        if(value === 'Add') {
+        if(value === 'addLicense') {
             openAddModal();
         }
     }

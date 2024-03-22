@@ -10,7 +10,7 @@ import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 // import { updateLicenseData, formDisabled } from '../../redux/reducer';
 
-const LicenseSetupTable = ({ formComponent }) => {
+const LicenseSetupTable = ({ formComponent, data }) => {
 	// const { additionalAirportLicenseData, disabled } = useSelector((store) => store.airportMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -79,19 +79,19 @@ const LicenseSetupTable = ({ formComponent }) => {
 		}
 	}, [rowData]);
 
-	const rows = additionalAirportLicenseData?.map((data, index) => {
-		return {
-			airportName: rowData.airportName ?? 'NA',
-			iataCode: rowData.threeCode ?? '',
-			icaoCode: rowData.fourCode ?? '',
-			abbreviatedName: rowData.abbreviatedName ?? 'NA',
-			email: rowData.email ?? 'NA',
-			city: rowData.city ?? '',
-			country: rowData.country ?? '',
-			validFrom: data.validFrom ?? '',
-			validTo: data.validTo ?? '',
-		};
-	});
+	// const rows = additionalAirportLicenseData?.map((data, index) => {
+	// 	return {
+	// 		airportName: rowData.airportName ?? 'NA',
+	// 		iataCode: rowData.threeCode ?? '',
+	// 		icaoCode: rowData.fourCode ?? '',
+	// 		abbreviatedName: rowData.abbreviatedName ?? 'NA',
+	// 		email: rowData.email ?? 'NA',
+	// 		city: rowData.city ?? '',
+	// 		country: rowData.country ?? '',
+	// 		validFrom: data.validFrom ?? '',
+	// 		validTo: data.validTo ?? '',
+	// 	};
+	// });
 
 	const columns = [
 		// {
@@ -118,39 +118,46 @@ const LicenseSetupTable = ({ formComponent }) => {
 		// 	),
 		// },
 		{
-			title: 'Name',
+			title: 'Airport Name',
 			dataIndex: 'airportName',
 			key: 'airportName',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'IATA Code',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'ICAO Code',
 			dataIndex: 'icaoCode',
 			key: 'icaoCode',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Country',
 			dataIndex: 'country',
 			key: 'country',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'City',
 			dataIndex: 'city',
 			key: 'city',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Valid From',
 			dataIndex: 'validFrom',
 			key: 'validFrom',
+			render: (text) => text || '-',
 		},
 		{
 			title: 'Valid To',
 			dataIndex: 'validTo',
 			key: 'validTo',
+			render: (text) => text || '-',
 		},
 	];
 
@@ -158,7 +165,7 @@ const LicenseSetupTable = ({ formComponent }) => {
 		<div>
 			<div className="create_wrapper_table">
 				<div className="table_container">
-					<TableComponent data={rows} columns={columns} />
+					<TableComponent data={data} columns={columns} />
 				</div>
 			</div>
 			{/* <ModalComponent

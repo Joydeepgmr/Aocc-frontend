@@ -4,11 +4,14 @@ import TopHeader from '../../../components/topHeader/topHeader'
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from '../globalMasters/components/createWrapper/createWrapper';
 import Wrapper from './components/Wrapper/Wrapper';
-import { addAirportLicense } from './redux/reducer';
+// import { addAirportLicense } from './redux/reducer';
+import { useGetLicenseData } from '../../../services/airportMasters/airportMasters';
 import LicenseSetupForm from './components/licenseSetupForm/licenseSetupForm';
 import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable';
 
 const AirportMasters = () => {
+	const {data: fetchedLicenseData} = useGetLicenseData();
+
 	return (
 		<div className='airport_masters_container'>
 			<div className='airport_master_header'>
@@ -26,8 +29,9 @@ const AirportMasters = () => {
 				formComponent={<LicenseSetupForm/>}
 				title="New Airport License"
 				width="87.2rem"
-				tableComponent={<LicenseSetupTable formComponent={<LicenseSetupTable/>} />}
-				action={addAirportLicense}
+				tableComponent={<LicenseSetupTable data={fetchedLicenseData} formComponent={<LicenseSetupTable/>} />}
+				data={fetchedLicenseData}
+				// action={addAirportLicense}
 				/>
 			</div>
 		</div>
