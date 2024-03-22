@@ -11,7 +11,9 @@ import {
 	useGetGlobalAircraftType, 
 	usePostGlobalAircraftType, 
 	useGetGlobalAircraftRegistration, 
-	usePostGlobalAircraftRegistration 
+	usePostGlobalAircraftRegistration,
+	useGetGlobalAirline,
+	usePostGlobalAirline, 
 } from './globalMasters/globalMaster';
 
 export { 
@@ -24,4 +26,6 @@ export {
 	usePostGlobalAircraftType,
 	useGetGlobalAircraftRegistration, 
 	usePostGlobalAircraftRegistration,
+	useGetGlobalAirline,
+	usePostGlobalAirline,
 };

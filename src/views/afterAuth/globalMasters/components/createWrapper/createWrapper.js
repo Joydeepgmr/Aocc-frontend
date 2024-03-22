@@ -7,16 +7,21 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
 // import { formDisabled } from '../../redux/reducer';
-import { usePostGlobalAirport, usePostGlobalAircraftType, usePostGlobalAircraftRegistration } from '../../../../../services/globalMasters/globalMaster';
+import { 
+	usePostGlobalAirport, 
+	usePostGlobalAircraftType, 
+	usePostGlobalAircraftRegistration,
+	usePostGlobalAirline
+ } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
 const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const { mutate: postGlobalAirline, isLoading: airlineLoading, isSuccess: airlineSuccess, isError: airlineError, postData: airlinePostData, message: airlineMessage } = usePostGlobalAirline();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const openCsvModal = () => {
@@ -101,8 +106,6 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 		setIsModalOpen(true);
 	};
 
-	// const dispatch = useDispatch();
-
 	const closeAddModal = () => {
 		setIsCsvModalOpen(false);
 		setIsModalOpen(false);
@@ -127,7 +130,8 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "airline") {
-
+			postGlobalAirline(values);
+			closeAddModal();
 		}
 		form.resetFields();
 		

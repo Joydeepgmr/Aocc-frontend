@@ -6,6 +6,8 @@ import {
 	POST_GLOBAL_AIRCRAFT_TYPE, 
 	GET_GLOBAL_AIRCRAFT_REGISTRATION,
 	POST_GLOBAL_AIRCRAFT_REGISTRATION,
+	GET_GLOBAL_AIRLINE,
+	POST_GLOBAL_AIRLINE
 } from "../../api/endpoints";
 
 import { Get, Post } from '../HttpServices/HttpServices';
@@ -122,6 +124,48 @@ export const usePostGlobalAircraftRegistration = (props) => {
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
 		onSuccess: () => {
 			queryClient.invalidateQueries('global-aircraft-register');
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+
+
+export const useGetGlobalAirline = (props) => {
+	const response = useQuery({
+		queryKey: ['global-airline'],
+		queryFn: async () => await Get(`${GET_GLOBAL_AIRLINE}`),
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	console.log(response);
+
+	const statusMessage = isSuccess ? data?.message : error?.message;
+
+	return {
+		...response,
+		data: data,
+		message: statusMessage,
+	};
+};
+
+export const usePostGlobalAirline = (props) => {
+	const queryClient= useQueryClient()
+	
+	const response = useMutation({
+		mutationKey: ['post-global-airline'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRLINE}`, props),
+		onSuccess: () => {
+			queryClient.invalidateQueries('global-airline');
 		},
 		...props,
 	});
