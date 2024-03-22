@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {usePostGlobalAircraftRegistration} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
@@ -36,8 +36,6 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
-		values.icaoCodeModified = values?.icaoCodeModified?.join('');
-		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
 		closeAddModal();
 	};
@@ -59,33 +57,40 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 		// }
 		closeAddModal();
 	};
-	// 	if (rowData) {
-	// 		const initialValuesObj = {
-	// 			identifier: rowData.identifier ?? 'NA',
-	// 			iataCode: rowData.iataCode ?? '',
-	// 			model: rowData.model ?? 'NA',
-	// 			airline: rowData.airline ?? 'NA',
-	// 			icaoCode: rowData.icaoCode ?? '',
-	// 			icaoCodeModified: rowData.icaoCodeModified ?? 'NA',
-	// 			acFamily: rowData.acFamily ?? 'NA',
-	// 			acBodyType: rowData.acBodyType ?? 'NA',
-	// 			minimumGroundTime: rowData.minimumGroundTime ?? 'NA',
-	// 			wingspan: rowData.wingspan ?? '',
-	// 			length: rowData.length ?? 'NA',
-	// 			height: rowData.height ?? 'NA',
-	// 			engineType: rowData.engineType ?? 'NA',
-	// 			numberOfEngines: rowData.numberOfEngines ?? 'NA',
-	// 			totalSeats: rowData.totalSeats ?? 'NA',
-	// 			firstClass: rowData.firstClass ?? 'NA',
-	// 			businessClass: rowData.businessClass ?? 'NA',
-	// 			economyClass: rowData.economyClass ?? 'NA',
-	// 			validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-	// 			validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
-	// 		};
-	// 		setInitialValues(initialValuesObj);
-	// 		initial.setFieldsValue(initialValuesObj);
-	// 	}
-	// }, [rowData]);
+
+	useEffect(() => {
+		if (rowData) {
+			const initialValuesObj = {
+				registration: rowData.registration ?? '',
+				internal: rowData.internal ?? 'NA',
+				iataCode: rowData.iataCode ?? '',
+				iacoCode: rowData.iacoCode ?? 'NA',
+				aircraftType: rowData.aircraftType ?? '',
+				typeOfUse: rowData.typeOfUse ?? 'NA',
+				homeAirport: rowData.homeAirport ?? 'NA',
+				nationality: rowData.nationality ?? 'NA',
+				cockpitCrew: rowData.cockpitCrew ?? 'NA',
+				cabinCrew: rowData.cabinCrew ?? 'NA',
+				numberOfSeats: rowData.numberOfSeats ?? 'NA',
+				height: rowData.height ?? 'NA',
+				length: rowData.length ?? 'NA',
+				wingspan: rowData.wingspan ?? 'NA',
+				mtow: rowData.mtow ?? 'NA',
+				mow: rowData.mow ?? 'NA',
+				annex: rowData.annex ?? '',
+				mainDeck: rowData.mainDeck ?? 'NA',
+				apuInop: rowData.apuInop ?? 'NA',
+				ownerName: rowData.ownerName ?? 'NA',
+				country: rowData.country ?? 'NA',
+				address: rowData.address ?? 'NA',
+				remarks: rowData.remarks ?? 'NA',
+				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
+				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+			};
+			setInitialValues(initialValuesObj);
+			initial.setFieldsValue(initialValuesObj);
+		}
+	}, [rowData]);
 
 	// const rows = additionalAircraftTypeData?.map((data, index) => {
 	// 	return {
@@ -190,7 +195,7 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 			<div className="create_wrapper_table">
 				<div className="table_container">
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Aircrafts Type
+						Aircraft Registrations
 					</CustomTypography>
 					<TableComponent data={data} columns={columns} />
 				</div>

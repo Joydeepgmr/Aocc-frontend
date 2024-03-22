@@ -3,12 +3,15 @@ import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
 import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
 import AircraftTypeSetupTable from '../aircraftTypeSetupTable/aircraftTypeSetupTable';
-import { useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
+import AircraftRegistrationSetupTable from '../aircraftRegistrationSetupTable/aircraftRegistrationSetupTable';
 
 
 const AircraftTabs = () => {
 	const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
+	const { data: fetchedGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
+	
 	 const items = [
 		{
 			key: '1',
@@ -33,8 +36,8 @@ const AircraftTabs = () => {
 					formComponent={<AircraftRegistrationForm />}
 					title="Setup aircraft registration"
 					width="120rem"
-					// tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeSetupForm />} />}
-					// data={fetchedGlobalAircraftType}
+					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
+					data={fetchedGlobalAircraftType}
 					type='aircraft-registration'
 				/>
 			),
