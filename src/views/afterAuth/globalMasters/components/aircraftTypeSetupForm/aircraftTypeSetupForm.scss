@@ -4,10 +4,10 @@
 
 
 
-.airport_type_form_container{
+.aircraft_type_form_container{
     padding: 0rem 0rem 2.4rem 0rem;
     box-sizing: content-box;
-    .airport_type_form_inputfields{
+    .aircraft_type_form_inputfields{
         @include flex(center, start, row);
         gap: 2.4rem;
         width: 100%;
@@ -20,4 +20,8 @@
     }
 
    
+}
+
+.customTypo{
+    margin-bottom: 1.6rem;
 }

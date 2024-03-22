@@ -2,47 +2,106 @@ import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
-import { formDisabled } from '../../redux/reducer';
-import {usePostGlobalAirport} from '../../../../../services/globalMasters/globalMaster';
+// import { formDisabled } from '../../redux/reducer';
+import { usePostGlobalAirport, usePostGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
-const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data }) => {
-	const { mutate: postGlobalAirport, isLoading, isSuccess, isError, postData, message } = usePostGlobalAirport();
+const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
+	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
+	const { mutate: postGlobalAircraftType, isLoading: aircraftLoading, isSuccess: aircraftSuccess, isError: aircraftError, postData: aircraftPostData, message: aircraftMessage } = usePostGlobalAircraftType();
+
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
-	const dropdownItems = [
-		{
-			label: 'Add Airport',
-			value: 'addAirport',
-			key: '0',
-		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'Download CSV Template',
-			key: '2',
-		},
-	];
+	let dropdownItems = [];
+	if (type.toLowerCase() === "airport") {
+		dropdownItems = [
+			{
+				label: 'Add Airport',
+				value: 'addAirport',
+				key: '0',
+			},
+			{
+				label: 'Upload CSV',
+				value: 'uploadCSV',
+				key: '1',
+			},
+			{
+				label: 'Download CSV Template',
+				value: 'downloadCsvTemplate',
+				key: '2',
+			},
+		];
+	} else if (type.toLowerCase() === "aircraft-type") {
+		dropdownItems = [
+			{
+				label: 'Add Aircraft Type',
+				value: 'addAircraftType',
+				key: '0',
+			},
+			{
+				label: 'Upload CSV',
+				value: 'uploadCSV',
+				key: '1',
+			},
+			{
+				label: 'Download CSV Template',
+				value: 'downloadCsvTemplate',
+				key: '2',
+			},
+		];
+	} else if (type.toLowerCase() === "aircraft-registration") {
+		dropdownItems = [
+			{
+				label: 'Add Aircraft Registration',
+				value: 'addAircraftRegistration',
+				key: '0',
+			},
+			{
+				label: 'Upload CSV',
+				value: 'uploadCSV',
+				key: '1',
+			},
+			{
+				label: 'Download CSV Template',
+				value: 'downloadCsvTemplate',
+				key: '2',
+			},
+		];
+	} else if (type.toLowerCase() === "airline") {
+		dropdownItems = [
+			{
+				label: 'Add Airline',
+				value: 'addAirline',
+				key: '0',
+			},
+			{
+				label: 'Upload CSV',
+				value: 'uploadCSV',
+				key: '1',
+			},
+			{
+				label: 'Download CSV Template',
+				value: 'downloadCsvTemplate',
+				key: '2',
+			},
+		];
+	}
 
 	const openAddModal = () => {
 		setIsModalOpen(true);
 	};
 
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 
 	const closeAddModal = () => {
 		setIsCsvModalOpen(false);
@@ -50,25 +109,39 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	};
 
 	const onFinishHanlder = (values) => {
-	
-	postGlobalAirport(values);
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
-		values.countryCode = values?.countryCode?.join('');
+
+		if (type.toLowerCase() === "airport") {
+			values.validFrom = values?.validFrom?.toISOString();
+			values.validTo = values?.validTo?.toISOString();
+			values.iataCode = values?.iataCode?.join('');
+			values.icaoCode = values?.icaoCode?.join('');
+			values.countryCode = values?.countryCode?.join('');
+			postGlobalAirport(values);
+			closeAddModal();
+		}
+		if (type.toLowerCase() === "aircraft-type") {
+			postGlobalAircraftType(values);
+			closeAddModal();
+		}
+		if (type.toLowerCase() === "aircraft-registration") {
+
+		}
+		if (type.toLowerCase() === "airline") {
+
+		}
+
+
 		form.resetFields();
-	
-		closeAddModal();
+		
 	};
 
 	const handleDropdownChange = (value) => {
 		console.log('Dropdown value:', value); // Add this line
-		if (value === 'addAirport') {
+		if (value === 'addAirport' || value === 'addAircraftType' || value === 'addAircraftRegistration' || value === 'addAirline') {
 			openAddModal();
-			if (disabled) {
-				dispatch(formDisabled());
-			}
+			// if (disabled) {
+			// 	dispatch(formDisabled());
+			// }
 		}
 
 		if (value === 'uploadCSV') {

@@ -11,7 +11,7 @@ const AircraftRegistrationForm = () => {
 				<InputField
 					label="Registration"
 					name="registration"
-					placeholder="Enter the registration name"
+					placeholder="Enter the airport name"
 					className="custom_input"
 					required
 				/>
@@ -26,6 +26,7 @@ const AircraftRegistrationForm = () => {
 					name="iataCode"
 					placeholder="Enter the IATA code"
 					className="custom_input"
+					required
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -34,15 +35,19 @@ const AircraftRegistrationForm = () => {
 					name="iacoCode"
 					placeholder="Enter the ICAO code"
 					className="custom_input"
-					required
 				/>
 				<InputField
-					label="ICAO Code Modified"
-					name="icaoCodeModified"
-					placeholder="Enter the icao code modified"
+					label="Aircraft Type"
+					name="aircraftType"
+					placeholder="Filled Text"
 					className="custom_input"
 				/>
-				<InputField label="SELCAL" name="selcal" placeholder="Enter the selcal" className="custom_input" />
+				<InputField
+					label="Type of Use"
+					name="typeOfUse"
+					placeholder="Enter the type of use"
+					className="custom_input"
+				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
 				<InputField
@@ -55,12 +60,6 @@ const AircraftRegistrationForm = () => {
 					label="Nationality"
 					name="nationality"
 					placeholder="Enter the nationality"
-					className="custom_input"
-				/>
-				<InputField
-					label="Type of Use"
-					name="typeOfUse"
-					placeholder="Enter the type of use"
 					className="custom_input"
 				/>
 			</div>
@@ -83,38 +82,6 @@ const AircraftRegistrationForm = () => {
 					label="No. of Seats"
 					name="numberOfSeats"
 					placeholder="Enter the number of seats"
-					className="custom_input"
-				/>
-				<InputField
-					label="No. of Kitchens"
-					name="numberOfKitchens"
-					placeholder="Enter the number of Kitchens"
-					className="custom_input"
-				/>
-				<InputField
-					label="No. of Toilets"
-					name="numberOfToilets"
-					placeholder="Enter the number of toilets"
-					className="custom_input"
-				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
-				<InputField
-					label="No. of Seats"
-					name="numberOfSeats"
-					placeholder="Enter the number of seats"
-					className="custom_input"
-				/>
-				<InputField
-					label="No. of Kitchens"
-					name="numberOfKitchens"
-					placeholder="Enter the number of Kitchens"
-					className="custom_input"
-				/>
-				<InputField
-					label="No. of Toilets"
-					name="numberOfToilets"
-					placeholder="Enter the number of toilets"
 					className="custom_input"
 				/>
 			</div>
@@ -187,12 +154,6 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the country name"
 					className="custom_input"
 				/>
-				<InputField
-					label="Debit Number"
-					name="debitNumber"
-					placeholder="Enter the debit number"
-					className="custom_input"
-				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
 				<InputField label="Address" name="address" placeholder="Enter the address" className="custom_input" />
@@ -206,6 +167,7 @@ const AircraftRegistrationForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					required
 				/>
 				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
 			</div>

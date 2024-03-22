@@ -6,10 +6,8 @@ import './airportSetupForm.scss';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
-import { useSelector } from 'react-redux';
 
 const AirportSetupForm = () => {
-	const { disabled } = useSelector((store) => store.globalMasters);
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
@@ -19,10 +17,9 @@ const AirportSetupForm = () => {
 					placeholder="Enter the airport name"
 					className="custom_input"
 					required
-					disabled={disabled}
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={disabled} />
-				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={disabled} />
+				<OtpField otpLength={3} label="IATA Code" required name="iataCode"/>
+				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -30,21 +27,18 @@ const AirportSetupForm = () => {
 					name="abbreviatedName1"
 					placeholder="Enter the abbreviated name 1"
 					className="custom_input"
-					disabled={disabled}
 				/>
 				<InputField
 					label="Abbreviated Name 2"
 					name="abbreviatedName2"
 					placeholder="Enter the abbreviated name 2"
 					className="custom_input"
-					disabled={disabled}
 				/>
 				<InputField
 					label="Abbreviated Name 3"
 					name="abbreviatedName3"
 					placeholder="Enter the abbreviated name 3"
 					className="custom_input"
-					disabled={disabled}
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
@@ -53,17 +47,14 @@ const AirportSetupForm = () => {
 					name="abbreviatedName4"
 					placeholder="Enter the abbreviated name 4"
 					className="custom_input"
-					disabled={disabled}
 				/>
 				<CustomSelect
 					SelectData={SelectData}
 					placeholder="Select the access type"
 					label="Airport Type"
 					name="airportType"
-					disabled={disabled}
-					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={disabled} required />
+				<OtpField otpLength={3} label="Country Code" name="countryCode" />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -71,7 +62,6 @@ const AirportSetupForm = () => {
 					name="timeChange"
 					placeholder="Enter the time change"
 					className="custom_input"
-					disabled={disabled}
 				/>
 				<InputField
 					label="Standard Flight Time"
@@ -79,48 +69,8 @@ const AirportSetupForm = () => {
 					placeholder="Enter the standard flight time"
 					className="custom_input"
 					suffixText="minutes"
-					disabled={disabled}
-					required
 				/>
 			</div>
-
-			{/* <div className="airport_setup_form_inputfields">
-				<InputField
-					label="Time Difference Before"
-					name="timeDifferenceBefore"
-					placeholder="Enter the time difference before"
-					className="custom_input"
-					suffixText="hours"
-					disabled={disabled}
-				/>
-				<InputField
-					label="Time Difference After"
-					name="timeDifferenceAfter"
-					placeholder="Enter the time difference after"
-					className="custom_input"
-					suffixText="hours"
-					disabled={disabled}
-				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
-				<InputField
-					label="Time Difference Summer"
-					name="timeDifferenceSummer"
-					placeholder="Enter the time difference summer"
-					className="custom_input"
-					suffixText="hours"
-					disabled={disabled}
-				/>
-				<InputField
-					label="Time Difference Winter"
-					name="timeDifferenceWinter"
-					placeholder="Enter the time difference winter"
-					className="custom_input"
-					suffixText="hours"
-					disabled={disabled}
-				/>
-			</div> */}
-
 			<Divider />
 			<div className="airport_setup_form_inputfields">
 				<Date
@@ -130,14 +80,12 @@ const AirportSetupForm = () => {
 					className="custom_date"
 					format="MM-DD-YYYY"
 					required
-					disabled={disabled}
 				/>
 				<Date
 					label="Valid To"
 					placeholder="Select valid to date"
-					name="validTo"
+					name="validTill"
 					format="MM-DD-YYYY"
-					disabled={disabled}
 				/>
 			</div>
 		</div>
