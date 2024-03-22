@@ -4,7 +4,6 @@ import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
 import AirportSetupForm from './components/airportSetupForm/airportSetupForm';
 import AirportSetupTable from './components/airportSetupTable/airportSetupTable';
-// import { addAirport } from './redux/reducer';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineSetupForm from './components/airlineSetupForm/airlineSetupForm';
 import AirlineSetupTable from './components/airlineSetupTable/airlineSetupTable';
@@ -50,6 +49,7 @@ const GlobalMasters = () => {
 			),
 		},
 	];
+
 
 	return (
 		<div className="global_masters_container">

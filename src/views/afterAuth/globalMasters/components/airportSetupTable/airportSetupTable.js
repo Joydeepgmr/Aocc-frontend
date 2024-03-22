@@ -10,23 +10,18 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import './airportSetupTable.scss';
-// import { formDisabled, updateAirportData } from '../../redux/reducer';
 
 
 const AirportSetupTable = ({ formComponent, data }) => {
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
-	// const dispatch = useDispatch();
 
-	
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-		// dispatch(formDisabled());
 	};
 
 	const closeAddModal = () => {
@@ -42,7 +37,6 @@ const AirportSetupTable = ({ formComponent, data }) => {
 		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
-		// dispatch(action(values));
 		closeAddModal();
 	};
 
@@ -88,28 +82,6 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [rowData]);
-
-	// const rows = additionalAirportData?.map((data, index) => {
-	// 	return {
-	// 		airportName: data.airportName ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		icaoCode: data.icaoCode ?? '',
-	// 		abbreviatedName1: data.abbreviatedName1 ?? 'NA',
-	// 		abbreviatedName2: data.abbreviatedName2 ?? 'NA',
-	// 		abbreviatedName3: data.abbreviatedName3 ?? 'NA',
-	// 		abbreviatedName4: data.abbreviatedName4 ?? 'NA',
-	// 		countryCode: data.countryCode ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		standardFlightTime: data.standardFlightTime ?? 'NA',
-	// 		timeChange: data.timeChange ?? 'NA',
-	// 		timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
-	// 		timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
-	// 		timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
-	// 		timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
 
 	const columns = [
 		{
