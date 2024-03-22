@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 const FormComponent = ({ closeModal }) => {
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
-	const onFinishHandler = (values) => {
+    const onFinishHandler = (values) => {
+       
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -22,19 +23,15 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Gate Name"
-							name="counterName"
+							name="gate_name"
 							placeholder="Enter the airport name"
 							warning="Required field"
+							required
 						/>
-						<InputField
-							label="Airport"
-							name="counterGroup"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
+						<InputField label="Airport" name="airport" placeholder="Filled Text" warning="Required field" />
 						<InputField
 							label="Bus Gate"
-							name="counterGroup"
+							name="bus_gate"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -43,30 +40,29 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Terminal"
-							name="Terminal"
+							name="terminal"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
 						/>
 						<InputField
 							label="Gate ID"
-							name="GateID"
+							name="gate_id"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
 						/>
 						<InputField
 							label="Gate Type"
-							name="GateID"
+							name="gate_type"
 							placeholder="Filled Text"
 							warning="Required field"
-							type="number"
 						/>
 					</div>
 					<div className="form_content">
 						<InputField
 							label="Default Allocation Duration"
-							name="Default Allocation Duration"
+							name="default_allocation_duration"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
@@ -77,21 +73,20 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reasonifunavailable"
+							name="reason_if_unavailable"
 							placeholder="Filled Text"
-							required
 							warning="Required field"
 						/>
-						<Date label="Unavailable from" name="Unavailablefrom" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
 
-						<Date label="Unavailable to" name="Unavailableto" placeholder="Enter the airport name" />
+						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_to" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<div className="form_section">

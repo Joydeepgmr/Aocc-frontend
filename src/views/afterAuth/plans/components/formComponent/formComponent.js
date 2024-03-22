@@ -10,10 +10,9 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import './formComponent.scss';
 
 const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues, isEdit, isError, errorMessage }) => {
-	console.log(errorMessage,"message", isError,"errorrr");
 	const [tohChecked, setTohChecked] = useState(false);
-	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const [form] = Form.useForm();
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 	const onFinish = (values) => {
 		handleSaveButton(values);

@@ -12,14 +12,33 @@ import { columns, dummyData } from './data';
 
 import './formComponent.scss';
 
+const SelectData = [
+	{
+		id: '1',
+		label: 'Options1',
+		value: 'options1',
+	},
+	{
+		id: '2',
+		label: 'Options2',
+		value: 'Options2',
+	},
+	{
+		id: '3',
+		label: 'Options3',
+		value: 'Options3',
+	},
+];
 const FormComponent = ({ closeModal }) => {
+	
 	const [form] = Form.useForm();
 	const onFinish = (values) => {
+		console.log('jdjsjnjsjdjs',values);
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
 	};
-	const SelectData = [];
+	
 	return (
 		<>
 			<div className="main_form">
@@ -28,51 +47,18 @@ const FormComponent = ({ closeModal }) => {
 						<div className="form_content">
 							<InputField
 								label="Airline Name"
-								name="AirlineName"
+								name="airline_name"
 								placeholder="Enter the airport name"
 								warning="Required field"
 							/>
-							<OtpField label="Airport Code" otpLength={2} id="custom_otp" name="airportCode" />
-							<OtpField label="ATC Code" name="atcCode" />
-						</div>
-
-						<div className="form_content">
-							<InputField
-								label="Correction Key"
-								name="CorrectionKey"
-								placeholder="AI1234"
-								warning="Required field"
-							/>
-							<InputField
-								label="IATA Code"
-								name="IataCode"
-								placeholder="Filled Text"
-								warning="Required field"
-								type="number"
-							/>
-
-							<InputField
-								label="IATA Number"
-								name="IataNumber"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-						</div>
-
-						<div className="form_content">
-							<InputField
-								label="ICAO Code"
-								name="IcaoCode"
-								placeholder="Filled Text"
+							<OtpField
+								label="Two Letter Code"
+								otpLength={2}
+								id="custom_otp"
+								name="two_letter_code"
 								required
-								warning="Required field"
 							/>
-							<InputField
-								label="ICAO Call Sign"
-								name="IcaoCallSign"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
+							<OtpField label="Three Letter Code" name="three_letter_code" required />
 						</div>
 
 						<div className="form_content">
@@ -83,14 +69,14 @@ const FormComponent = ({ closeModal }) => {
 								warning="Required field"
 							/>
 							<InputField
-								label="Continent"
-								name="continent"
+								label="Home Airport"
+								name="home_airport"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
 							<InputField
-								label="Home Airport"
-								name="HomeAirport"
+								label="Terminal"
+								name="terminal"
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
@@ -104,66 +90,24 @@ const FormComponent = ({ closeModal }) => {
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
-							<InputField
-								label="Leasing"
-								name="leasing"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
 							<OtpField
 								label="Domestic/International"
 								otpLength={1}
 								id="custom_otp"
-								name="domestic/International"
+								name="is_domestic"
 							/>
 						</div>
+					</div>
+					<div className="form_content">
+						<CustomSelect
+							required={true}
+							SelectData={SelectData}
+							label="Mode of Payment"
+							name="mode_of_payment"
+							placeholder={'Mode of Payment'}
+						/>
+					</div>
 
-						<div className="form_content">
-							<InputField
-								label="Terminal"
-								name="terminal"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-							<InputField
-								label="Report"
-								name="report"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-							<InputField
-								label="Work Order"
-								name="workOrder"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-						</div>
-					</div>
-					<div className="form_section">
-						<div className="form_content">
-							<InputField
-								label="Height"
-								name="height"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-							<InputField
-								label="Administrator"
-								name="administrator"
-								placeholder="Filled Text"
-								warning="Required field"
-							/>
-						</div>
-						<Divider />
-						<div className="form_content">
-							<CustomSelect
-								SelectData={SelectData}
-								label="Mode of Payment"
-								name="ModeofPayment"
-								placeholder={'Enter the airport name'}
-							/>
-						</div>
-					</div>
 					<Divider />
 
 					<CustomTypography type="text" fontSize={16} fontWeight="400" color="#5C5F66">
@@ -177,15 +121,15 @@ const FormComponent = ({ closeModal }) => {
 								placeholder="Filled Text"
 								warning="Required field"
 							/>
-							<InputField label="Phone" name="Phone" placeholder="Filled Text" warning="Required field" />
-							<InputField label="Telex" name="Telex" placeholder="Filled Text" warning="Required field" />
+							<InputField label="Phone" name="phone" placeholder="Filled Text" warning="Required field" />
+							<InputField label="Telex" name="telex" placeholder="Filled Text" warning="Required field" />
 						</div>
 					</div>
 					<Divider />
 					<div className="form_section">
 						<div className="form_content">
-							<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-							<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+							<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+							<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" required />
 						</div>
 					</div>
 					<div className="form_section">

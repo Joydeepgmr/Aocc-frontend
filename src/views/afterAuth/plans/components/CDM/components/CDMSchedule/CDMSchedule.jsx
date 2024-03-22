@@ -177,11 +177,9 @@ const DailySchedule = ({tab}) => {
 	//UPLOAD
 	const handleUpload = (file) => {
 		const data = file[0].originFileObj;
-		console.log(data,"filessssssss");
-		// const formData = new FormData();
-        // file && formData.append('file', data);
-		//type = application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-		//onUploadCSV(formData);
+		const formData = new FormData();
+        file && formData.append('file', data);
+		onUploadCSV(formData);
 	}
 
 	const handleUploadCsvSuccess = () => {
@@ -298,7 +296,7 @@ const DailySchedule = ({tab}) => {
 				<div className="top_container">
 					<div>
 						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-							Flight Schedule Planning
+							Collaborative Decision Making Schedule
 						</CustomTypography>
 					</div>
 					<div className="icon_container">

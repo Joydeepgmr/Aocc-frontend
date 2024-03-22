@@ -9,25 +9,60 @@
 }
 
 .timeline {
-	&--FirstAirline {
+	&--1Airline {
 		.vis-item-overflow {
 			font-size: 0rem;
 			border-radius: 1rem;
 			background: $blue_100;
 		}
 	}
-	&--SecondAirline {
+	&--2Airline {
 		.vis-item-overflow {
 			font-size: 0rem;
 			border-radius: 1rem;
 			background: $yellow_100;
 		}
 	}
-	&--ThirdAirline {
+	&--3Airline {
 		.vis-item-overflow {
 			font-size: 0rem;
 			border-radius: 1rem;
 			background: $green_100;
+		}
+	}
+	&--4Airline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: #a83c32;
+		}
+	}
+	&--5Airline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: #a86132;
+		}
+	}
+	&--6Airline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: #a8a832;
+		}
+	}
+	&--7Airline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: #6fa832;
+		}
+	}
+	&--8Airline {
+		.vis-item-overflow {
+			font-size: 0rem;
+			border-radius: 1rem;
+			background: #32a89a;
 		}
 	}
 	&--LabelContainer {
@@ -59,4 +94,3 @@
 .vis-panel.vis-right {
 	border: none;
 }
-
