@@ -188,6 +188,7 @@ const AirportSetupTable = ({ formComponent, data }) => {
 			),
 		},
 	];
+	
 	return (
 		<div>
 			<div className="create_wrapper_table">
