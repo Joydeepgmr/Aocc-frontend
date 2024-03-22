@@ -1,5 +1,4 @@
 import React from 'react';
-import Common_Card from '../../common_wrapper/common_card.js/common_card';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CheckIn from './checkIn/checkIn';
 import Gates from './Gates/Gates';
@@ -34,7 +33,6 @@ const Resources = () => {
 		{
 			key: '4',
 			label: 'Runway',
-
 			children: <Runway />,
 		},
 		{

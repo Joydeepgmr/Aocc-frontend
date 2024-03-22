@@ -11,7 +11,8 @@ const FormComponent = ({ closeModal }) => {
 	const SelectData = [];
 	const dispatch = useDispatch();
 	const [form] = Form.useForm();
-	const onFinishHandler = (values) => {
+    const onFinishHandler = (values) => {
+        console.log("ueueeuueueuue", values);
 		form.resetFields();
 		dispatch(addAircraftRegistration(values));
 		dispatch(updateIsShowTableComponents());
@@ -25,7 +26,7 @@ const FormComponent = ({ closeModal }) => {
 					<div className="form_content">
 						<InputField
 							label="Delay Code"
-							name="DelayCode"
+							name="delay_code"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
@@ -34,7 +35,7 @@ const FormComponent = ({ closeModal }) => {
 						<InputField label="Group" name="group" placeholder="Filled Text" warning="Required field" />
 						<InputField
 							label="Delay Identifier"
-							name="DelayIdentifier"
+							name="delay_identifier"
 							placeholder="Filled Text"
 							warning="Required field"
 						/>
@@ -53,8 +54,8 @@ const FormComponent = ({ closeModal }) => {
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
+						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
 					</div>
 				</div>
 				<Divider />

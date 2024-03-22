@@ -13,7 +13,8 @@ const CustomRules = () => {
 				<Common_Card
 					title1="Create"
 					title2={'Upload CSV'}
-					title3={'Download CSV Template'}
+                        title3={'Download CSV Template'}
+                       
 					btnCondition={true}
 					Heading={'Create custom aircraft rules'}
 					formComponent={<FormComponent />}

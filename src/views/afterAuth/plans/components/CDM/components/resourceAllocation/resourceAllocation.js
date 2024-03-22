@@ -80,7 +80,7 @@ const ResourceAllocation = () => {
 			key: '1',
 			label: 'Check-in Counters',
 			children: (
-				<div ref={divRef}>
+				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
 							<FullscreenExitOutlined
@@ -88,7 +88,7 @@ const ResourceAllocation = () => {
 								onClick={toggleFullscreen}
 							/>
 							<TimelineDesign
-								height="80vh"
+								height="50vh"
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
@@ -110,7 +110,7 @@ const ResourceAllocation = () => {
 			key: '2',
 			label: 'Gates',
 			children: (
-				<div ref={divRef}>
+				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
 							<FullscreenExitOutlined
@@ -118,7 +118,7 @@ const ResourceAllocation = () => {
 								onClick={toggleFullscreen}
 							/>
 							<TimelineDesign
-								height="80vh"
+								height="50vh"
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
@@ -140,7 +140,7 @@ const ResourceAllocation = () => {
 			key: '3',
 			label: 'Stands',
 			children: (
-				<div ref={divRef}>
+				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
 							<FullscreenExitOutlined
@@ -148,7 +148,7 @@ const ResourceAllocation = () => {
 								onClick={toggleFullscreen}
 							/>
 							<TimelineDesign
-								height="80vh"
+								height="50vh"
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
@@ -170,7 +170,7 @@ const ResourceAllocation = () => {
 			key: '4',
 			label: 'Belts',
 			children: (
-				<div ref={divRef}>
+				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
 							<FullscreenExitOutlined
@@ -178,7 +178,7 @@ const ResourceAllocation = () => {
 								onClick={toggleFullscreen}
 							/>
 							<TimelineDesign
-								height="80vh"
+								height="50vh"
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
@@ -200,7 +200,7 @@ const ResourceAllocation = () => {
 			key: '5',
 			label: 'Taxiways',
 			children: (
-				<div ref={divRef}>
+				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
 							<FullscreenExitOutlined
@@ -208,7 +208,7 @@ const ResourceAllocation = () => {
 								onClick={toggleFullscreen}
 							/>
 							<TimelineDesign
-								height="80vh"
+								height="50vh"
 								items={timelineItems}
 								groups={timelineGroups}
 								editable={isEditable}
@@ -250,7 +250,7 @@ const ResourceAllocation = () => {
 	];
 
 	return (
-		<div className="resourceAllocation--Container">
+		<div className={`resourceAllocation--Container ${fullScreen && 'resourceAllocation--FullScreen'}`} ref={divRef}>
 			<TopHeader
 				heading="Resource Management"
 				subHeading="Access information regarding resource allocation for flights"

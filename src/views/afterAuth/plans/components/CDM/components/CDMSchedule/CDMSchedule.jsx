@@ -138,7 +138,7 @@ const ArrivalTab = () => {
     return (
         <div className='Arrival-container'>
             <TopHeader
-                heading="Collaborative Decision Making Schedule"
+                heading="Daily Flight Schedule"
             />
             <div className='table-container'>
                 <TableComponent columns={columns} data={data} onChange={handleTableChange} />
@@ -167,7 +167,7 @@ const DepartureTab = () => {
     return (
         <div className='Arrival-container'>
             <TopHeader
-                heading="Collaborative Decision Making Schedule"
+                heading="Daily Flight Schedule"
             />
             <div className="container">
                 <Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
