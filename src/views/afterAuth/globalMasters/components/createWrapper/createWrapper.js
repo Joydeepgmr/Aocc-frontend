@@ -7,13 +7,13 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
 // import { formDisabled } from '../../redux/reducer';
-import { usePostGlobalAirport, usePostGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { usePostGlobalAirport, usePostGlobalAircraftType, usePostGlobalAircraftRegistration } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
 const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
-	const { mutate: postGlobalAircraftType, isLoading: aircraftLoading, isSuccess: aircraftSuccess, isError: aircraftError, postData: aircraftPostData, message: aircraftMessage } = usePostGlobalAircraftType();
-
+	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
@@ -109,7 +109,6 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	};
 
 	const onFinishHanlder = (values) => {
-
 		if (type.toLowerCase() === "airport") {
 			values.validFrom = values?.validFrom?.toISOString();
 			values.validTo = values?.validTo?.toISOString();
@@ -124,13 +123,12 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "aircraft-registration") {
-
+			postGlobalAircraftRegistration(values);
+			closeAddModal();
 		}
 		if (type.toLowerCase() === "airline") {
 
 		}
-
-
 		form.resetFields();
 		
 	};

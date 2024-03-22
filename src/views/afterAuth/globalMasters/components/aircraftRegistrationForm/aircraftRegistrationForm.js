@@ -138,7 +138,11 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the main deck"
 					className="custom_input"
 				/>
-				<InputField label="APU INOP" name="apuInop" placeholder="Enter the apuInop" className="custom_input" />
+				<InputField 
+					label="APU INOP" 
+					name="apuInop" 
+					placeholder="Enter the apuInop" 
+					className="custom_input" />
 			</div>
 			<Divider />
 			<div className="airport_registration_form_inputfields">

@@ -54,7 +54,7 @@ const GlobalMasters = () => {
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="2" items={items} type="card" />
+				<CustomTabs defaultActiveKey="1" items={items} type="card" />
 			</div>
 		</div>
 	);
