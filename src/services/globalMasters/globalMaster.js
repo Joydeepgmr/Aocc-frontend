@@ -1,5 +1,13 @@
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { GET_GLOBAL_AIRPORT, POST_GLOBAL_AIRPORT } from "../../api/endpoints"
+import { 
+	GET_GLOBAL_AIRPORT, 
+	POST_GLOBAL_AIRPORT, 
+	GET_GLOBAL_AIRCRAFT_TYPE, 
+	POST_GLOBAL_AIRCRAFT_TYPE, 
+	GET_GLOBAL_AIRCRAFT_REGISTRATION,
+	POST_GLOBAL_AIRCRAFT_REGISTRATION,
+} from "../../api/endpoints";
+
 import { Get, Post } from '../HttpServices/HttpServices';
 
 export const useGetGlobalAirport = (props) => {
@@ -45,16 +53,84 @@ export const usePostGlobalAirport = (props) => {
 };
 
 
+export const useGetGlobalAircraftType = (props) => {
+	const response = useQuery({
+		queryKey: ['global-aircraft-type'],
+		queryFn: async () => await Get(`${GET_GLOBAL_AIRCRAFT_TYPE}`),
+		...props,
+	});
 
-// export const useDeleteUser = (id) => {
-//     const response = useMutation({
-//         mutationKey: ['delete-user', id],
-//         mutationFn: () => Delete(`${DELETE_USER}/${id}`),
-//     });
-//     const { data, error, isSuccess } = response;
+	const { data, error, isSuccess } = response;
 
-//     const statusMessage = isSuccess
-//         ? data?.data?.message
-//         : error?.response?.data?.message;
+	const statusMessage = isSuccess ? data?.message : error?.message;
 
-//     return { ...response, data: data?.payload?.data, message: statusMessage };
+	return {
+		...response,
+		data: data,
+		message: statusMessage,
+	};
+};
+
+
+export const usePostGlobalAircraftType = (props) => {
+	const queryClient= useQueryClient()
+	
+	const response = useMutation({
+		mutationKey: ['post-global-aircraft-type'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
+		onSuccess: () => {
+			queryClient.invalidateQueries('global-aircraft-type');
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+
+
+
+export const useGetGlobalAircraftRegistration = (props) => {
+	const response = useQuery({
+		queryKey: ['global-aircraft-register'],
+		queryFn: async () => await Get(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`),
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.message;
+
+	return {
+		...response,
+		data: data,
+		message: statusMessage,
+	};
+};
+
+
+export const usePostGlobalAircraftRegistration = (props) => {
+	const queryClient= useQueryClient()
+	
+	const response = useMutation({
+		mutationKey: ['post-global-aircraft-register'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
+		onSuccess: () => {
+			queryClient.invalidateQueries('global-aircraft-register');
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};

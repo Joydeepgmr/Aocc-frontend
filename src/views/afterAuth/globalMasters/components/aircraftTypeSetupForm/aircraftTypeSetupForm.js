@@ -2,23 +2,24 @@ import React from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
-import './aircraftTypeForm.scss';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
-
-const AircraftTypeForm = () => {
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import './aircraftTypeSetupForm.scss';
+ 
+const AircraftTypeSetupForm = () => {
 	return (
-		<div className="airport_type_form_container">
-			<div className="airport_type_form_inputfields">
+		<div className="aircraft_type_form_container">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Identifier"
-					name="itentifier"
+					name="identifier"
 					placeholder="Enter the identifier name"
 					className="custom_input"
 					required
 				/>
 				<InputField
 					label="IATA Code"
-					name="IataCode"
+					name="iataCode"
 					placeholder="Enter the IATA Code"
 					className="custom_input"
 					required
@@ -31,7 +32,7 @@ const AircraftTypeForm = () => {
 					required
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Airline"
 					name="airline"
@@ -49,10 +50,9 @@ const AircraftTypeForm = () => {
 					name="icaoCodeModified"
 					placeholder="Enter the ICAO code modified"
 					className="custom_input"
-					required
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="A/C Family"
 					name="acFamily"
@@ -67,7 +67,7 @@ const AircraftTypeForm = () => {
 				/>
 				<CheckBoxField name="dockersystem" label="Don't use docking system" title="Single Checkbox" />
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Minimum Ground Time"
 					name="minimumGroundTime"
@@ -76,7 +76,7 @@ const AircraftTypeForm = () => {
 					suffixText="minutes"
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Wingspan"
 					name="wingspan"
@@ -99,7 +99,7 @@ const AircraftTypeForm = () => {
 					suffixText="meters"
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Engine Type"
 					name="engineType"
@@ -114,7 +114,8 @@ const AircraftTypeForm = () => {
 				/>
 			</div>
 			<Divider />
-			<div className="airport_type_form_inputfields">
+			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Total Seats"
 					name="totalSeats"
@@ -140,18 +141,23 @@ const AircraftTypeForm = () => {
 					className="custom_input"
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder="Select valid from date"
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date 
+					label="Valid To" 
+					placeholder="Select valid to date" 
+					name="validTo" 
+					format="MM-DD-YYYY" />
 			</div>
 		</div>
 	);
 };
 
-export default AircraftTypeForm;
+export default AircraftTypeSetupForm;

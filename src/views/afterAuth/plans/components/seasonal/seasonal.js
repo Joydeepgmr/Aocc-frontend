@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
 import Button from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../formComponent/formComponent';
@@ -16,16 +17,19 @@ import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, 
 
 import './seasonal.scss';
 
-
-const Seasonal = () => {
+const Seasonal = ({tab}) => {
+	console.log(tab, "tabbb");
+	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const { data: fetchedSeasonalPlans, isLoading: isSeasonalPlansLoading } = useGetSeasonalPlans(flightType);
+	const { data: fetchedSeasonalPlans, isLoading: isSeasonalPlansLoading } = useGetSeasonalPlans(flightType,tab);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -81,6 +85,7 @@ const Seasonal = () => {
 			registration: value.registration,
 			FREQUENCY: value.weeklySelect ?? [value.date.day()],
 		};
+
 		data && postSeasonalPlans(data);
 		closeModal();
 	};
@@ -96,9 +101,13 @@ const Seasonal = () => {
 		openEditModal();
 	};
 
-	const {mutate: editSeasonalPlanArrival} = useEditSeasonalPlanArrival(rowData?.id)
-	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id)
-
+	const editSeasonalPlansHandler = {
+		onSuccess: (data) =>handleSeasonalEditSuccess(data),
+		onError: (error) => handleSeasonalEditError(error),
+	};
+	
+	const {mutate: editSeasonalPlanArrival} = useEditSeasonalPlanArrival(rowData?.id,editSeasonalPlansHandler)
+	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler)
 	const handleEditSave = (value) => {
 		const data = {
 			FLIGHTNO: value.FLIGHTNO,
@@ -110,9 +119,19 @@ const Seasonal = () => {
 			pos: value.pos,
 			registration: value.registration,
 		};
-		index === '1' ? editSeasonalPlanArrival(data) : editSeasonalPlanDeparture(data);
-		closeEditModal()
+		index === '1' && editSeasonalPlanArrival(data);
+		index=== '2' && editSeasonalPlanDeparture(data);
 	};
+	
+	const handleSeasonalEditSuccess = () => {
+		queryClient.invalidateQueries('get-seasonal-plans');
+		closeEditModal();
+	}
+
+	const handleSeasonalEditError = (error) => {
+		setIsError(true);
+		setErrorMessage(error?.response?.data?.message);
+	}
 
 	const dropdownItems = [
 		{
@@ -143,9 +162,14 @@ const Seasonal = () => {
 		</div>
 	);
 
-	const {
-		mutate: onUploadCSV,
-	} = useUploadCSV();
+	
+
+	const uploadCsvHandler = {
+		onSuccess: (data) =>handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
+	};
+
+	const {mutate: onUploadCSV} = useUploadCSV(uploadCsvHandler);
 
 	//UPLOAD
 	const handleUpload = (file) => {
@@ -153,7 +177,15 @@ const Seasonal = () => {
 		const formData = new FormData();
         file && formData.append('file', data);
 		onUploadCSV(formData);
+	}
+
+	const handleUploadCsvSuccess = () => {
+		queryClient.invalidateQueries('get-seasonal-plans');
 		closeCsvModal();
+	}
+
+	const handleUploadCsvError = (error) => {
+		setErrorMessage("Incorrect File Type")
 	}
 
 	const columns = [
@@ -330,6 +362,8 @@ const Seasonal = () => {
 						type={index}
 						initialValues={rowData}
 						isEdit = {true}
+						isError = {isError}
+						errorMessage = {errorMessage}
 					/>
 				</div>
 			</ModalComponent>

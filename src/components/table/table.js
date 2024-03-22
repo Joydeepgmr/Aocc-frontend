@@ -7,15 +7,15 @@ const TableComponent = ({
     columns,
     data = [],
     loading = false,
-    onChange = () => {}, 
-    tableTitle = '', 
-    emptyText = 'No data available' 
+    onChange = () => { },
+    tableTitle = '',
+    emptyText = 'No data available'
 }) => {
 
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
         const sortOrder = sorter?.order;
-        
+
         onChange({
             sortField,
             sortOrder,
