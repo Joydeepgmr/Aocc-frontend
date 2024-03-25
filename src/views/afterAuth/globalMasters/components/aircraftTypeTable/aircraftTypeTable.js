@@ -12,6 +12,7 @@ import './aircraftTypeTable.scss';
 
 
 const AircraftTable = ({ formComponent, data }) => {
+	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
@@ -30,7 +31,7 @@ const AircraftTable = ({ formComponent, data }) => {
 		values.icaoCode = values?.icaoCode?.join('');
 		values.icaoCodeModified = values?.icaoCodeModified?.join('');
 		values.countryCode = values?.countryCode?.join('');
-		usePostGlobalAircraftType(values);
+		postGlobalAircraftType(values);
 		form.resetFields();
 		closeAddModal();
 	};
@@ -87,31 +88,6 @@ const AircraftTable = ({ formComponent, data }) => {
 		}
 	}, [rowData]);
 
-	// const rows = additionalAircraftTypeData?.map((data, index) => {
-	// 	return {
-	// 		identifier: data.identifier ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		model: data.model ?? '',
-	// 		airline: data.airline ?? 'NA',
-	// 		icaoCode: data.icaoCode ?? 'NA',
-	// 		icaoCodeModified: data.icaoCodeModified ?? 'NA',
-	// 		acFamily: data.acFamily ?? 'NA',
-	// 		acBodyType: data.acBodyType ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		minimumGroundTime: data.minimumGroundTime ?? 'NA',
-	// 		wingspan: data.wingspan ?? 'NA',
-	// 		length: data.length ?? 'NA',
-	// 		height: data.height ?? 'NA',
-	// 		engineType: data.engineType ?? 'NA',
-	// 		numberOfEngines: data.numberOfEngines ?? 'NA',
-	// 		totalSeats: data.totalSeats ?? 'NA',
-	// 		firstClass: data.firstClass ?? 'NA',
-	// 		businessClass: data.businessClass ?? 'NA',
-	// 		economyClass: data.economyClass ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
 
 	const columns = [
 		{

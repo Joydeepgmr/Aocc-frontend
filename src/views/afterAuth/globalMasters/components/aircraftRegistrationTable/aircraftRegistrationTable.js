@@ -12,6 +12,7 @@ import './aircraftRegistrationTable.scss';
 
 
 const AircraftRegistrationTable = ({ formComponent, data }) => {
+	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
@@ -34,7 +35,7 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
-		usePostGlobalAircraftRegistration(values);
+		postGlobalAircraftRegistration(values);
 		form.resetFields();
 		closeAddModal();
 	};
@@ -90,32 +91,6 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [rowData]);
-
-	// const rows = additionalAircraftTypeData?.map((data, index) => {
-	// 	return {
-	// 		identifier: data.identifier ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		model: data.model ?? '',
-	// 		airline: data.airline ?? 'NA',
-	// 		icaoCode: data.icaoCode ?? 'NA',
-	// 		icaoCodeModified: data.icaoCodeModified ?? 'NA',
-	// 		acFamily: data.acFamily ?? 'NA',
-	// 		acBodyType: data.acBodyType ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		minimumGroundTime: data.minimumGroundTime ?? 'NA',
-	// 		wingspan: data.wingspan ?? 'NA',
-	// 		length: data.length ?? 'NA',
-	// 		height: data.height ?? 'NA',
-	// 		engineType: data.engineType ?? 'NA',
-	// 		numberOfEngines: data.numberOfEngines ?? 'NA',
-	// 		totalSeats: data.totalSeats ?? 'NA',
-	// 		firstClass: data.firstClass ?? 'NA',
-	// 		businessClass: data.businessClass ?? 'NA',
-	// 		economyClass: data.economyClass ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
 
 	const columns = [
 		{

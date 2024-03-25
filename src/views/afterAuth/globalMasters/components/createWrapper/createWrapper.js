@@ -7,7 +7,7 @@ import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvMo
 import { useForm } from 'rc-field-form';
 import { 
 	usePostGlobalAirport, 
-	usePostGlobalAircraftType, 
+	usePostGlobalAircraftType,
 	usePostGlobalAircraftRegistration,
 	usePostGlobalAirline
  } from '../../../../../services/globalMasters/globalMaster';
@@ -120,19 +120,10 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "aircraft-type") {
-			values.validFrom = values?.validFrom?.toISOString();
-			values.validTo = values?.validTo?.toISOString();
-			values.iataCode = values?.iataCode?.join('');
-			values.icaoCode = values?.icaoCode?.join('');
-			values.icaoCodeModified = values?.icaoCodeModified?.join('');
 			postGlobalAircraftType(values);
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "aircraft-registration") {
-			values.validFrom = values?.validFrom?.toISOString();
-			values.validTo = values?.validTo?.toISOString();
-			values.iataCode = values?.iataCode?.join('');
-			values.icaoCode = values?.icaoCode?.join('');
 			postGlobalAircraftRegistration(values);
 			closeAddModal();
 		}
