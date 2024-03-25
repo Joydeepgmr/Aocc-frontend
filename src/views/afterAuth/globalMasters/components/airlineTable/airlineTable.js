@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {usePostGlobalAircraftRegistration} from "../../../../../services/globalMasters/globalMaster"
+import React, { useEffect, useState } from 'react';
+import './airlineTable.scss';
+import {usePostGlobalAirline} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -8,17 +9,17 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import './aircraftRegistrationSetupTable.scss';
+// import { formDisabled, updateAirportData } from '../../redux/reducer';
+// import { useDispatch, useSelector } from 'react-redux';
 
 
-const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
+const AirlineTable = ({ formComponent, data }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
-	
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
@@ -30,13 +31,13 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	};
 
 	const onFinishHanlder = (values) => {
-		usePostGlobalAircraftRegistration(values);
-		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
+		values.twoLetterCode = values?.twoLetterCode?.join('');
+		values.threeLetterCode = values?.threeLetterCode?.join('');
 		form.resetFields();
+		usePostGlobalAirline(values);
+		// dispatch(action(values));
 		closeAddModal();
 	};
 
@@ -45,11 +46,11 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	// 	dispatch(updateAirportData(updatedData));
 	// };
 
-	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
-	};
+	// const handleEdit = (data) => {
+	// 	setRowData(data);
+	// 	setIsModalOpen(true);
+	// 	setEditData(true);
+	// };
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -61,29 +62,17 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
-				registration: rowData.registration ?? '',
-				internal: rowData.internal ?? 'NA',
-				iataCode: rowData.iataCode ?? '',
-				iacoCode: rowData.iacoCode ?? 'NA',
-				aircraftType: rowData.aircraftType ?? '',
-				typeOfUse: rowData.typeOfUse ?? 'NA',
-				homeAirport: rowData.homeAirport ?? 'NA',
-				nationality: rowData.nationality ?? 'NA',
-				cockpitCrew: rowData.cockpitCrew ?? 'NA',
-				cabinCrew: rowData.cabinCrew ?? 'NA',
-				numberOfSeats: rowData.numberOfSeats ?? 'NA',
-				height: rowData.height ?? 'NA',
-				length: rowData.length ?? 'NA',
-				wingspan: rowData.wingspan ?? 'NA',
-				mtow: rowData.mtow ?? 'NA',
-				mow: rowData.mow ?? 'NA',
-				annex: rowData.annex ?? '',
-				mainDeck: rowData.mainDeck ?? 'NA',
-				apuInop: rowData.apuInop ?? 'NA',
-				ownerName: rowData.ownerName ?? 'NA',
+				name: rowData.name ?? '',
+				twoLetterCode: rowData.twoLetterCode ?? '',
+				threeLetterCode: rowData.threeLetterCode ?? '',
 				country: rowData.country ?? 'NA',
-				address: rowData.address ?? 'NA',
-				remarks: rowData.remarks ?? 'NA',
+				homeAirport: rowData.homeAirport ?? 'NA',
+				terminal: rowData.terminal ?? 'NA',
+				remark: rowData.remark ?? 'NA',
+				modeOfPayment: rowData.modeOfPayment ?? 'NA',
+				address1: rowData.address1 ?? 'NA',
+				phone: rowData.phone ?? 'NA',
+				telex: rowData.telex ?? 'NA',
 				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
 				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
 			};
@@ -92,27 +81,23 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 		}
 	}, [rowData]);
 
-	// const rows = additionalAircraftTypeData?.map((data, index) => {
+	// const rows = additionalAirportData?.map((data, index) => {
 	// 	return {
-	// 		identifier: data.identifier ?? 'NA',
+	// 		airportName: data.airportName ?? 'NA',
 	// 		iataCode: data.iataCode ?? '',
-	// 		model: data.model ?? '',
-	// 		airline: data.airline ?? 'NA',
-	// 		icaoCode: data.icaoCode ?? 'NA',
-	// 		icaoCodeModified: data.icaoCodeModified ?? 'NA',
-	// 		acFamily: data.acFamily ?? 'NA',
-	// 		acBodyType: data.acBodyType ?? '',
+	// 		icaoCode: data.icaoCode ?? '',
+	// 		abbreviatedName1: data.abbreviatedName1 ?? 'NA',
+	// 		abbreviatedName2: data.abbreviatedName2 ?? 'NA',
+	// 		abbreviatedName3: data.abbreviatedName3 ?? 'NA',
+	// 		abbreviatedName4: data.abbreviatedName4 ?? 'NA',
+	// 		countryCode: data.countryCode ?? '',
 	// 		airportType: data.airportType ?? '',
-	// 		minimumGroundTime: data.minimumGroundTime ?? 'NA',
-	// 		wingspan: data.wingspan ?? 'NA',
-	// 		length: data.length ?? 'NA',
-	// 		height: data.height ?? 'NA',
-	// 		engineType: data.engineType ?? 'NA',
-	// 		numberOfEngines: data.numberOfEngines ?? 'NA',
-	// 		totalSeats: data.totalSeats ?? 'NA',
-	// 		firstClass: data.firstClass ?? 'NA',
-	// 		businessClass: data.businessClass ?? 'NA',
-	// 		economyClass: data.economyClass ?? 'NA',
+	// 		standardFlightTime: data.standardFlightTime ?? 'NA',
+	// 		timeChange: data.timeChange ?? 'NA',
+	// 		timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
+	// 		timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
+	// 		timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
+	// 		timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
 	// 		validFrom: data.validFrom ?? '',
 	// 		validTo: data.validTo ?? '',
 	// 	};
@@ -143,15 +128,9 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 			),
 		},
 		{
-			title: 'Description',
-			dataIndex: 'description',
-			key: 'description',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Internal',
-			dataIndex: 'Internal',
-			key: 'Internal',
+			title: 'Airline Name',
+			dataIndex: 'name',
+			key: 'name',
 			render: (text) => text || '-',
 		},
 		{
@@ -161,15 +140,27 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 			render: (text) => text || '-',
 		},
 		{
-			title: 'Nationality',
-			dataIndex: 'nationality',
-			key: 'nationality',
+			title: 'ICAO Type',
+			dataIndex: 'airportType',
+			key: 'airportType',
+			render: (text) => text || '-',
+		},
+		{
+			title: 'Country',
+			dataIndex: 'country',
+			key: 'country',
 			render: (text) => text || '-',
 		},
 		{
 			title: 'Home Airport',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
+			render: (text) => text || '-',
+		},
+		{
+			title: 'Terminal',
+			dataIndex: 'terminal',
+			key: 'timeChange',
 			render: (text) => text || '-',
 		},
 		{
@@ -189,13 +180,12 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 			),
 		},
 	];
-
 	return (
 		<div>
 			<div className="create_wrapper_table">
 				<div className="table_container">
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Aircraft Registrations
+						Airports
 					</CustomTypography>
 					<TableComponent data={data} columns={columns} />
 				</div>
@@ -203,11 +193,11 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
-				title="Setup your aircraft type"
+				title="Setup your airport"
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder}>
+				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
 					{formComponent && formComponent}
 					<Divider />
 					{!editData && (
@@ -240,7 +230,7 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 									onClick={closeAddModal}
 								/>
 								<ButtonComponent
-									title="Save"
+									title="Edit"
 									type="filledText"
 									className="custom_button_save"
 									onClick={handleEditButton}
@@ -255,4 +245,4 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	);
 };
 
-export default AircraftRegistrationSetupTable;
+export default AirlineTable;

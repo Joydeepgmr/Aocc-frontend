@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
-import AirportSetupForm from './components/airportSetupForm/airportSetupForm';
-import AirportSetupTable from './components/airportSetupTable/airportSetupTable';
+import AirportForm from './components/AirportForm/AirportForm';
+import AirportTable from './components/AirportTable/AirportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
-import AirlineSetupForm from './components/airlineSetupForm/airlineSetupForm';
-import AirlineSetupTable from './components/airlineSetupTable/airlineSetupTable';
+import AirlineForm from './components/AirlineForm/AirlineForm';
+import AirlineTable from './components/AirlineTable/AirlineTable';
 import { useGetGlobalAirport, useGetGlobalAirline } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
 
@@ -20,10 +20,10 @@ const GlobalMasters = () => {
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					formComponent={<AirportSetupForm />}
+					formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
-					tableComponent={<AirportSetupTable data={fetchedGlobalAirport} formComponent={<AirportSetupForm />} />}
+					tableComponent={<AirportTable data={fetchedGlobalAirport} formComponent={<AirportForm />} />}
 					data={fetchedGlobalAirport}
 					type="airport"
 				/>
@@ -39,10 +39,10 @@ const GlobalMasters = () => {
 			label: 'Airlines',
 			children: (
 				<CreateWrapper
-					formComponent={<AirlineSetupForm />}
+					formComponent={<AirlineForm />}
 					title="Setup your airline"
 					width="120rem"
-					tableComponent={<AirlineSetupTable data={fetchedGlobalAirline} formComponent={<AirlineSetupForm />} />}
+					tableComponent={<AirlineTable data={fetchedGlobalAirline} formComponent={<AirlineForm />} />}
 					data={fetchedGlobalAirline}
 					type='airline'
 				/>

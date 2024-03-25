@@ -1,11 +1,11 @@
 import React from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
-import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
-import AircraftTypeSetupTable from '../aircraftTypeSetupTable/aircraftTypeSetupTable';
+import AircraftTypeForm from '../AircraftTypeForm/AircraftTypeForm';
+import AircraftTypeTable from '../AircraftTypeTable/AircraftTypeTable';
 import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
-import AircraftRegistrationSetupTable from '../aircraftRegistrationSetupTable/aircraftRegistrationSetupTable';
+import AircraftRegistrationTable from '../AircraftRegistrationTable/AircraftRegistrationTable';
 
 
 const AircraftTabs = () => {
@@ -18,10 +18,10 @@ const AircraftTabs = () => {
 			label: 'Aircaft Type',
 			children: (
 				<CreateWrapper 
-					formComponent={<AircraftTypeSetupForm />} 
+					formComponent={<AircraftTypeForm />} 
 					title="Setup aircraft type" 
 					width="120rem" 
-					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeSetupForm />} />}
+					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeForm />} />}
 					// action={addAirport}
 					data={fetchedGlobalAircraftType}
 					type='aircraft-type'
@@ -36,7 +36,7 @@ const AircraftTabs = () => {
 					formComponent={<AircraftRegistrationForm />}
 					title="Setup aircraft registration"
 					width="120rem"
-					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
+					tableComponent={<AircraftRegistrationTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
 					data={fetchedGlobalAircraftType}
 					type='aircraft-registration'
 				/>

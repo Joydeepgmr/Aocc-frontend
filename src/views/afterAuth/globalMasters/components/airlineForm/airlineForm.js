@@ -7,9 +7,9 @@ import Date from '../../../../../components/datapicker/datepicker';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
-import './airlineSetupForm.scss';
+import './airlineForm.scss';
 
-const AirlineSetupForm = () => {
+const AirlineForm = () => {
 	return (
 		<div className="airline_setup_form_container">
 			<div className="airline_setup_form_inputfields">
@@ -78,4 +78,4 @@ const AirlineSetupForm = () => {
 	);
 };
 
-export default AirlineSetupForm;
+export default AirlineForm;

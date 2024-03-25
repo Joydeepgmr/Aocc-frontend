@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
-// import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
-// import { formDisabled } from '../../redux/reducer';
 import { 
 	usePostGlobalAirport, 
 	usePostGlobalAircraftType, 
@@ -151,7 +149,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	};
 
 	const handleDropdownChange = (value) => {
-		console.log('Dropdown value:', value); // Add this line
+		console.log('Dropdown value:', value);
 		if (value === 'addAirport' || value === 'addAircraftType' || value === 'addAircraftRegistration' || value === 'addAirline') {
 			openAddModal();
 			// if (disabled) {
