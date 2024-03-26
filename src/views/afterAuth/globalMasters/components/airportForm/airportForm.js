@@ -2,12 +2,12 @@ import React from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
-import './airportSetupForm.scss';
+import './airportForm.scss';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportSetupForm = () => {
+const AirportForm = () => {
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
@@ -92,4 +92,4 @@ const AirportSetupForm = () => {
 	);
 };
 
-export default AirportSetupForm;
+export default AirportForm;

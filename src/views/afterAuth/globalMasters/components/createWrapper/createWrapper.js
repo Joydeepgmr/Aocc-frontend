@@ -2,26 +2,53 @@ import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
-// import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useForm } from 'rc-field-form';
-// import { formDisabled } from '../../redux/reducer';
-import { usePostGlobalAirport, usePostGlobalAircraftType, usePostGlobalAircraftRegistration } from '../../../../../services/globalMasters/globalMaster';
+import { 
+	usePostGlobalAirport, 
+	usePostGlobalAircraftType,
+	useUploadCSVAircraftType,
+	usePostGlobalAircraftRegistration,
+	usePostGlobalAirline,
+ } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
 const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-
+	const { mutate: postGlobalAirline, isLoading: airlineLoading, isSuccess: airlineSuccess, isError: airlineError, postData: airlinePostData, message: airlineMessage } = usePostGlobalAirline();
+	const { mutate: onUploadCSV} = useUploadCSVAircraftType(uploadCSVHandler);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
+
+	const uploadCSVHandler = {
+		onSuccess: (data) =>handleUploadCSVSuccess(data),
+		onError: (error) => handleUploadCSVError(error),
+	};
+
+	//UPLOAD
+	const handleCSVUpload = (file) => {
+		const data = file[0].originFileObj;
+		const formData = new FormData();
+        file && formData.append('file', data);
+		onUploadCSV(formData);
+	}
+
+	// const handleUploadCSVSuccess = () => {
+	// 	queryClient.invalidateQueries('get-seasonal-plans');
+	// 	closeAddModal();
+	// }
+
+	// const handleUploadCSVError = (error) => {
+	// 	setErrorMessage("Incorrect File Type")
+	// }
+	
 	let dropdownItems = [];
 	if (type.toLowerCase() === "airport") {
 		dropdownItems = [
@@ -101,8 +128,6 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 		setIsModalOpen(true);
 	};
 
-	// const dispatch = useDispatch();
-
 	const closeAddModal = () => {
 		setIsCsvModalOpen(false);
 		setIsModalOpen(false);
@@ -127,14 +152,19 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "airline") {
-
+			values.validFrom = values?.validFrom?.toISOString();
+			values.validTo = values?.validTo?.toISOString();
+			values.twoLetterCode = values?.twoLetterCode?.join('');
+			values.threeLetterCode = values?.threeLetterCode?.join('');
+			postGlobalAirline(values);
+			closeAddModal();
 		}
 		form.resetFields();
 		
 	};
 
 	const handleDropdownChange = (value) => {
-		console.log('Dropdown value:', value); // Add this line
+		console.log('Dropdown value:', value);
 		if (value === 'addAirport' || value === 'addAircraftType' || value === 'addAircraftRegistration' || value === 'addAirline') {
 			openAddModal();
 			// if (disabled) {
@@ -203,7 +233,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 					</div>
 				</Form>
 			</ModalComponent>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeAddModal} />
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeAddModal} handleUpload={handleCSVUpload} />
 		</>
 	);
 };
