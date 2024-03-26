@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {usePostGlobalAircraftType} from "../../../../../services/globalMasters/globalMaster"
+import {usePostGlobalAircraftType, useDeleteGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -13,6 +13,7 @@ import './aircraftTypeTable.scss';
 
 const AircraftTable = ({ formComponent, data }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
@@ -35,6 +36,11 @@ const AircraftTable = ({ formComponent, data }) => {
 		form.resetFields();
 		closeAddModal();
 	};
+
+	const handleDelete = (record) => {
+        // Call the delete function and pass the record ID
+        deleteGlobalAirport(record.id);
+    };
 
 	// const handleDelete = (record) => {
 	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
@@ -98,12 +104,12 @@ const AircraftTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					{/* <ButtonComponent
+					<ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/> */}
+					/>
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"

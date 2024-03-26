@@ -2,7 +2,7 @@ import React from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
 import AircraftTypeForm from '../AircraftTypeForm/AircraftTypeForm';
-import AircraftTypeTable from '../AircraftTypeTable/AircraftTypeTable';
+import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import AircraftRegistrationTable from '../AircraftRegistrationTable/AircraftRegistrationTable';

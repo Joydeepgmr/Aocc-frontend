@@ -46,11 +46,11 @@ const AirlineTable = ({ formComponent, data }) => {
 	// 	dispatch(updateAirportData(updatedData));
 	// };
 
-	// const handleEdit = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	setEditData(true);
-	// };
+	const handleEdit = (data) => {
+		setRowData(data);
+		setIsModalOpen(true);
+		setEditData(true);
+	};
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -81,27 +81,6 @@ const AirlineTable = ({ formComponent, data }) => {
 		}
 	}, [rowData]);
 
-	// const rows = additionalAirportData?.map((data, index) => {
-	// 	return {
-	// 		airportName: data.airportName ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		icaoCode: data.icaoCode ?? '',
-	// 		abbreviatedName1: data.abbreviatedName1 ?? 'NA',
-	// 		abbreviatedName2: data.abbreviatedName2 ?? 'NA',
-	// 		abbreviatedName3: data.abbreviatedName3 ?? 'NA',
-	// 		abbreviatedName4: data.abbreviatedName4 ?? 'NA',
-	// 		countryCode: data.countryCode ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		standardFlightTime: data.standardFlightTime ?? 'NA',
-	// 		timeChange: data.timeChange ?? 'NA',
-	// 		timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
-	// 		timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
-	// 		timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
-	// 		timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
 
 	const columns = [
 		{
@@ -112,12 +91,12 @@ const AirlineTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					{/* <ButtonComponent
+					<ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/> */}
+					/>
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"

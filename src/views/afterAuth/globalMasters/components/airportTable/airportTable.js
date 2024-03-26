@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
+import {usePostGlobalAirport, useEditGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -18,6 +17,8 @@ const AirportTable = ({ formComponent, data }) => {
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
+	const {mutate: editGlobalAirport} = useEditGlobalAirport(rowData?.id)
+
 
 	const handleDetails = (data) => {
 		setRowData(data);
@@ -45,11 +46,11 @@ const AirportTable = ({ formComponent, data }) => {
 		// dispatch(updateAirportData(updatedData));
 	};
 
-	// const handleEdit = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	setEditData(true);
-	// };
+	const handleEdit = (data) => {
+		setRowData(data);
+		setIsModalOpen(true);
+		setEditData(true);
+	};
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -92,12 +93,12 @@ const AirportTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					{/* <ButtonComponent
+					<ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/> */}
+					/>
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"

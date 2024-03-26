@@ -22,6 +22,8 @@ export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/';
 export const POST_GLOBAL_AIRPORT = '/global-airport/';
+export const EDIT_GLOBAL_AIRPORT = '/global-airport/';
+export const DELETE_GLOBAL_AIRPORT = '/airport/removeAirport';
 
 /*--------------------------planner airport master ---------------------*/
 
@@ -32,7 +34,7 @@ export const POST_BULK_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/upload/';
 
 export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const POST_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
-// export const POST_BULK_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/upload/';
+export const POST_BULK_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/upload/';
 
 export const GET_GLOBAL_AIRLINE = '/global-airline/';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';

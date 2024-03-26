@@ -2,7 +2,7 @@ import React from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import CustomSelect from '../../../../../components/select/select';
-import { SelectData } from '../../../userAccess/userAccessData';
+import {SelectPaymentData} from '../../../userAccess/userAccessData';
 import Date from '../../../../../components/datapicker/datepicker';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -49,7 +49,7 @@ const AirlineForm = () => {
 			<Divider />
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect
-					SelectData={SelectData}
+					SelectData={SelectPaymentData}
 					placeholder="Select the access type"
 					label="Mode of payment"
 					name="modeOfPayment"
