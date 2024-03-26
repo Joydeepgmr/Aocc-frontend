@@ -179,14 +179,14 @@ const Seasonal = ({tab}) => {
 		onUploadCSV(formData);
 	}
 
-	const handleUploadCsvSuccess = () => {
-		queryClient.invalidateQueries('get-seasonal-plans');
-		closeCsvModal();
-	}
+	// const handleUploadCsvSuccess = () => {
+	// 	queryClient.invalidateQueries('get-seasonal-plans');
+	// 	closeCsvModal();
+	// }
 
-	const handleUploadCsvError = (error) => {
-		setErrorMessage("Incorrect File Type")
-	}
+	// const handleUploadCsvError = (error) => {
+	// 	setErrorMessage("Incorrect File Type")
+	// }
 
 	const columns = [
 		{

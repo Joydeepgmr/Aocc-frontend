@@ -1,27 +1,27 @@
 import React from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
-import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
-import AircraftTypeSetupTable from '../aircraftTypeSetupTable/aircraftTypeSetupTable';
+import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
+import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
-import AircraftRegistrationSetupTable from '../aircraftRegistrationSetupTable/aircraftRegistrationSetupTable';
+import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 
 
 const AircraftTabs = () => {
 	const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
 	const { data: fetchedGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
-	
-	 const items = [
+
+	const items = [
 		{
 			key: '1',
 			label: 'Aircaft Type',
 			children: (
-				<CreateWrapper 
-					formComponent={<AircraftTypeSetupForm />} 
-					title="Setup aircraft type" 
-					width="120rem" 
-					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeSetupForm />} />}
+				<CreateWrapper
+					formComponent={<AircraftTypeForm />}
+					title="Setup aircraft type"
+					width="120rem"
+					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeForm />} />}
 					// action={addAirport}
 					data={fetchedGlobalAircraftType}
 					type='aircraft-type'
@@ -36,7 +36,7 @@ const AircraftTabs = () => {
 					formComponent={<AircraftRegistrationForm />}
 					title="Setup aircraft registration"
 					width="120rem"
-					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
+					tableComponent={<AircraftRegistrationTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
 					data={fetchedGlobalAircraftType}
 					type='aircraft-registration'
 				/>

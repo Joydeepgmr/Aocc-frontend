@@ -7,11 +7,16 @@ import { useDummyApi } from './dummyApi/dummyApi';
 
 import { 
 	useGetGlobalAirport, 
-	usePostGlobalAirport, 
+	usePostGlobalAirport,
+	useEditGlobalAirport, 
+	useDeleteGlobalAirport,
 	useGetGlobalAircraftType, 
 	usePostGlobalAircraftType, 
+	useUploadCSVAircraftType,
 	useGetGlobalAircraftRegistration, 
-	usePostGlobalAircraftRegistration 
+	usePostGlobalAircraftRegistration,
+	useGetGlobalAirline,
+	usePostGlobalAirline, 
 } from './globalMasters/globalMaster';
 
 export { 
@@ -19,9 +24,14 @@ export {
 	useGetAllTimelineData, 
 	useGetTimelineGroupData, 
 	useGetGlobalAirport,
-	usePostGlobalAirport, 
+	usePostGlobalAirport,
+	useEditGlobalAirport,
+	useDeleteGlobalAirport, 
 	useGetGlobalAircraftType, 
 	usePostGlobalAircraftType,
+	useUploadCSVAircraftType,
 	useGetGlobalAircraftRegistration, 
 	usePostGlobalAircraftRegistration,
+	useGetGlobalAirline,
+	usePostGlobalAirline,
 };
