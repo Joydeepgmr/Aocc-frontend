@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {usePostGlobalAircraftRegistration} from "../../../../../services/globalMasters/globalMaster"
+import React, { useState, useEffect, useMemo } from 'react';
+import { useDeleteGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -16,6 +16,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const { mutate: patchGlobalAircraftRegistration } = usePatchGlobalAircraftRegistration();
+	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
 
 	
@@ -30,20 +32,26 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	const onFinishHandler = (values) => {
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
+
+		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
+		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.iataCode = values?.iataCode;
+		values.icaoCode = values?.icaoCode;
 		if (aircraftRegistrationModal.type === 'new') {
 			postGlobalAircraftRegistration(values);
+		} else {
+			values.id = aircraftRegistrationModal.data.id
+			patchGlobalAircraftRegistration(values);
 		}
+		console.log("values are ", values)
 		closeAddModal();
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateAirportData(updatedData));
-	// };
+	const handleDelete = (record) => {
+		deleteGlobalAircraftRegistration(record.id)
+		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		// dispatch(updateAirportData(updatedData));
+	};
 
 	const handleEdit = (data) => {
 		setRowData(data);
@@ -61,31 +69,31 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
-				registration: rowData.registration ?? '',
-				internal: rowData.internal ?? 'NA',
-				iataCode: rowData.iataCode ?? '',
-				iacoCode: rowData.iacoCode ?? 'NA',
-				aircraftType: rowData.aircraftType ?? '',
-				typeOfUse: rowData.typeOfUse ?? 'NA',
-				homeAirport: rowData.homeAirport ?? 'NA',
-				nationality: rowData.nationality ?? 'NA',
-				cockpitCrew: rowData.cockpitCrew ?? 'NA',
-				cabinCrew: rowData.cabinCrew ?? 'NA',
-				numberOfSeats: rowData.numberOfSeats ?? 'NA',
-				height: rowData.height ?? 'NA',
-				length: rowData.length ?? 'NA',
-				wingspan: rowData.wingspan ?? 'NA',
-				mtow: rowData.mtow ?? 'NA',
-				mow: rowData.mow ?? 'NA',
-				annex: rowData.annex ?? '',
-				mainDeck: rowData.mainDeck ?? 'NA',
-				apuInop: rowData.apuInop ?? 'NA',
-				ownerName: rowData.ownerName ?? 'NA',
-				country: rowData.country ?? 'NA',
-				address: rowData.address ?? 'NA',
-				remarks: rowData.remarks ?? 'NA',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+				registration: data.registration ?? '',
+				internal: data.internal ?? '',
+				iataCode: data.iataCode ?? '',
+				iacoCode: data.iacoCode ?? '',
+				aircraftType: data.aircraftType ?? '',
+				typeOfUse: data.typeOfUse ?? '',
+				homeAirport: data.homeAirport ?? '',
+				nationality: data.nationality ?? '',
+				cockpitCrew: data.cockpitCrew ?? '',
+				cabinCrew: data.cabinCrew ?? '',
+				numberOfSeats: data.numberOfSeats ?? '',
+				height: data.height ?? '',
+				length: data.length ?? '',
+				wingspan: data.wingspan ?? '',
+				mtow: data.mtow,
+				mow: data.mow ?? '',
+				annex: data.annex ?? '',
+				mainDeck: data.mainDeck ?? '',
+				apuInop: data.apuInop ?? '',
+				ownerName: data.ownerName ?? '',
+				country: data.country ?? '',
+				address: data.address ?? '',
+				remarks: data.remarks ?? '',
+				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+				validTo: data.validTo ? dayjs(data.validTo) : '',
 			};
 			console.log(rowData);
 			setInitialValues(initialValuesObj);

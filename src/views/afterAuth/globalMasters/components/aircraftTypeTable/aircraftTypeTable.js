@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { usePostGlobalAircraftType, useDeleteGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -15,10 +15,8 @@ import './aircraftTypeTable.scss';
 const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
+	const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
+	const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
 	const [initial] = Form.useForm();
 
 	const closeAddModal = () => {
@@ -28,14 +26,16 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 
 	const onFinishHandler = (values) => {
 		// console.log(values);
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
+		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
+		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
 		values.iataCode = values?.iataCode;
 		values.icaoCode = values?.icaoCode;
 		values.icaoCodeModified = values?.icaoCodeModified;
 		values.countryCode = values?.countryCode;
 		if (aircraftTypeModal.type === 'edit') {
 			console.log('dispatch the update air craft type api');
+			values.id = aircraftTypeModal.data.id
+			patchGlobalAircraftType(values);
 		} else {
 			postGlobalAircraftType(values);
 			console.log('dispatch the create new air craft type api');
@@ -45,7 +45,8 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 
 	const handleDelete = (record) => {
 		// Call the delete function and pass the record ID
-		deleteGlobalAirport(record.id);
+		// deleteGlobalAirport(record.id);
+		deleteGlobalAircraftType(record.id);
 	};
 
 	// const handleDelete = (record) => {
