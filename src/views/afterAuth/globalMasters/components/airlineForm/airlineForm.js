@@ -8,7 +8,7 @@ import OtpField from '../../../../../components/input/otp/otp';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import './airlineForm.scss';
-
+. 
 const AirlineForm = () => {
 	return (
 		<div className="airline_setup_form_container">

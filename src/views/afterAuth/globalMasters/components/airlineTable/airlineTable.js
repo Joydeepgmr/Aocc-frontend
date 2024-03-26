@@ -9,7 +9,7 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import AirlineForm from '../AirlineForm/AirlineForm';
+import AirlineForm from '../airlineForm/airlineForm';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
 // import { useDispatch, useSelector } from 'react-redux';
 
