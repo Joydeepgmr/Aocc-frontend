@@ -8,8 +8,10 @@ export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
 /*------------- login --------------*/
 export const USER_LOGIN = 'user/login';
 
-/*------------- IT admin airports --------------*/
-export const GLOBAL_AIRPORTS = "" 
+/*------------- IT admin airport Master --------------*/
+export const POST_LICENSE = "airport-license" 
+export const GET_LICENSE = "airport-license/"
+export const GET_AIRPORT_NAME = "airport/"
 
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
