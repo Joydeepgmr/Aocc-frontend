@@ -27,7 +27,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 				<Select className="select_wrapper" placeholder={placeholder} {...rest} disabled={disabled ? disabled : false}>
 					{SelectData.map((option, index) => (
 						<Select.Option key={index} value={option.value}>
-							{option.name}
+							{option?.label}
 						</Select.Option>
 					))}
 				</Select>

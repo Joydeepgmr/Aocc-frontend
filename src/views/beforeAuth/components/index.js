@@ -58,17 +58,17 @@ export const Components = () => {
 	const SelectData = [
 		{
 			id: '1',
-			label: 'options',
+			label: 'option 1',
 			value: 'options',
 		},
 		{
 			id: '2',
-			label: 'options',
+			label: 'option 2',
 			value: 'options',
 		},
 		{
 			id: '3',
-			label: 'options',
+			label: 'option 3',
 			value: 'options',
 		},
 	];

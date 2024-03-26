@@ -5,8 +5,8 @@ import CreateWrapper from './components/createWrapper/createWrapper';
 import AirportForm from './components/airportForm/airportForm';
 import AirportTable from './components/airportTable/airportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
-import AirlineForm from './components/AirlineForm/AirlineForm';
-import AirlineTable from './components/AirlineTable/AirlineTable';
+import AirlineForm from './components/airlineForm/airlineForm';
+import AirlineTable from './components/airlineTable/airlineTable';
 import { useGetGlobalAirport, useGetGlobalAirline } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
 
