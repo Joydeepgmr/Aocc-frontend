@@ -2,12 +2,12 @@ import React from 'react';
 import downOutLined from '../../assets/DownOutLined.svg';
 import { Dropdown, Menu, Space } from 'antd';
 import './dropdownButton.scss';
- 
-const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...rest }) => {
+
+const DropdownButton = ({ dropdownItems, buttonText, className, onChange, onOpenChange, ...rest }) => {
     const handleItemClick = (e, item) => {
         onChange(item.value);
     };
- 
+
     const menu = (
         <Menu>
             {dropdownItems.map((item) => (
@@ -17,9 +17,9 @@ const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...res
             ))}
         </Menu>
     );
- 
+
     return (
-        <Dropdown overlay={menu} trigger={['click']}>
+        <Dropdown onOpenChange={onOpenChange} overlay={menu} trigger={['click']}>
             <a className={`create ${className}`} {...rest}>
                 <Space>
                     {buttonText}
@@ -29,5 +29,5 @@ const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...res
         </Dropdown>
     );
 };
- 
+
 export default DropdownButton;
