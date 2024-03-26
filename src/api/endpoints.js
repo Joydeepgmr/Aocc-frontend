@@ -11,7 +11,7 @@ export const USER_LOGIN = 'user/login';
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = "airport-license" 
 export const GET_LICENSE = "airport-license/"
-export const GET_AIRPORT_NAME = "airport/"
+export const GET_AIRPORT_NAME = "global-airport/"
 
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
