@@ -14,6 +14,7 @@ const CheckBoxField = ({
 	label,
 	className = '',
 	onChange,
+	disabled,
 	rest,
 }) => {
 	return (
@@ -33,7 +34,7 @@ const CheckBoxField = ({
 					<Checkbox.Group className={`checkbox_group ${className}`}>
 						{options?.map((data, index) => {
 							return (
-								<Checkbox key={index} value={selectedValue ? data?.[selectedValue] : data} onChange={onChange}>
+								<Checkbox key={index} value={selectedValue ? data?.[selectedValue] : data} onChange={onChange} disabled={disabled}>
 									<span>{selectedName ? data?.[selectedName] : data}</span>
 								</Checkbox>
 							);
@@ -42,7 +43,7 @@ const CheckBoxField = ({
 				</Form.Item>
 			) : (
 				<Form.Item name={name} valuePropName="checked" {...rest} onChange={onChange}>
-					<Checkbox>{label}</Checkbox>
+						<Checkbox disabled={disabled}>{label}</Checkbox>
 				</Form.Item>
 			)}
 		</>

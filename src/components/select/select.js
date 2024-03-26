@@ -34,6 +34,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
             >
                 <Select
                     className="select_wrapper"
+                    disabled={disabled}
                     placeholder={placeholder}
                     onChange={handleSelectChange}
                     {...rest}

@@ -40,6 +40,7 @@ const Date = ({
 				placeholder={placeholder}
 				className="date_style"
 				format={format}
+				disabled={disabled}
 				disabledDate={(current) => {
 					if (acceptAllDate) {
 						return false;
