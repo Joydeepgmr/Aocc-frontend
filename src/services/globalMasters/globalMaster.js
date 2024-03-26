@@ -162,7 +162,7 @@ export const usePatchGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient()
 	const response = useMutation({
 		mutationKey: ['patch-global-aircraft-type'],
-		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}`, props),
+		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}${props.id}`, props),
 		onSuccess: (data) => {
 			console.log("data on succes is ", data);
 			queryClient.invalidateQueries('global-aircraft-type');

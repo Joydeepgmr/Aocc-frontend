@@ -36,6 +36,7 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 		values.countryCode = values?.countryCode;
 		if (aircraftTypeModal.type === 'edit') {
 			console.log('dispatch the update air craft type api');
+			values.id = aircraftTypeModal.data.id
 			patchGlobalAircraftType(values);
 		} else {
 			postGlobalAircraftType(values);
