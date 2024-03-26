@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
+// import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
+// import { formDisabled } from '../../redux/reducer';
+import { usePostGlobalAircraftRegistration, usePostGlobalAircraftType, usePostGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import { useForm } from 'rc-field-form';
 import { 
 	usePostGlobalAirport, 
@@ -15,7 +18,7 @@ import {
  } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
-const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
+const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	const { mutate: editGlobalAirport, isLoading: airportEditLoading, isSuccess: airportEditSuccess, isError: airportEditError, postData: airportEditPostData, message: airportEditMessage } = useEditGlobalAirport();
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
@@ -23,7 +26,33 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	const { mutate: postGlobalAirline, isLoading: airlineLoading, isSuccess: airlineSuccess, isError: airlineError, postData: airlinePostData, message: airlineMessage } = usePostGlobalAirline();
 	const { mutate: onUploadCSV} = useUploadCSVAircraftType(uploadCSVHandler);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const onOpenChange = () => {
+		if (createProps.new) {
+			setCreateProps({ ...createProps, new: false });
+		}
+
+	}
+	let dropdownItems = [{
+		label,
+		value: 'createNew',
+		key: '0',
+	},
+	{
+		label: 'Upload CSV',
+		value: 'uploadCSV',
+		key: '1',
+	},
+	{
+		label: 'Download CSV Template',
+		value: 'downloadCsv',
+		key: '2',
+	},];
+
+	const openCsvModal = () => {
+		setIsCsvModalOpen(true);
+	};
 	const [form] = Form.useForm();
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
@@ -127,11 +156,18 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	}
 
 	const openAddModal = () => {
-		setIsModalOpen(true);
+		setCreateProps((props) => { return { ...props, new: true } });
 	};
+	const closeCsvModal = () => {
 
 	const closeAddModal = () => {
 		setIsCsvModalOpen(false);
+	};
+	const handleCsvUpload = (files) => {
+		createProps.onUpload(files);
+		closeCsvModal();
+	}
+
 		setIsModalOpen(false);
 	};
 
@@ -167,13 +203,15 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 	};
 
 	const handleDropdownChange = (value) => {
+		if (value === 'createNew') {
 		console.log('Dropdown value:', value);
 		if (value === 'addAirport' || value === 'addAircraftType' || value === 'addAircraftRegistration' || value === 'addAirline') {
 			openAddModal();
 		}
-
-		if (value === 'uploadCSV') {
+		else if (value === 'uploadCSV') {
 			openCsvModal();
+		} else {
+			createProps.onDownload();
 		}
 	};
 
@@ -186,6 +224,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 							dropdownItems={dropdownItems}
 							buttonText="Create"
 							onChange={handleDropdownChange}
+							onOpenChange={onOpenChange}
 						/>
 					</div>
 					<div>{tableComponent && tableComponent}</div>
@@ -207,6 +246,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
 				</div>
 			)}
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
