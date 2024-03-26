@@ -12,7 +12,7 @@ import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegist
 import './aircraftRegistrationTable.scss';
 
 
-const AircraftRegistrationTable = ({ formComponent, data }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
@@ -90,6 +90,12 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftRegistrationModal.isOpen]);
+	useEffect(() => {
+		if (createProps.new) {
+			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
 
 	const columns = useMemo(() => [
 		{
@@ -162,12 +168,6 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 			),
 		},
 	], [data]);
-	useEffect(() => {
-		if (createProps.new) {
-			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
-			setCreateProps({ ...createProps, new: false });
-		}
-	}, [createProps.new])
 	return (
 		<div>
 			<div className="create_wrapper_table">
