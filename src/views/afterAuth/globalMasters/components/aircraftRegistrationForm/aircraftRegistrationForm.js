@@ -4,7 +4,7 @@ import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import './aircraftRegistrationForm.scss';
 
-const AircraftRegistrationForm = () => {
+const AircraftRegistrationForm = ({ isReadOnly }) => {
 	return (
 		<div className="airport_registration_form_container">
 			<div className="airport_registration_form_inputfields">
@@ -14,12 +14,14 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the airport name"
 					className="custom_input"
 					required
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Internal"
 					name="internal"
 					placeholder="Enter the internal"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="IATA Code"
@@ -27,6 +29,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the IATA code"
 					className="custom_input"
 					required
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -35,18 +38,21 @@ const AircraftRegistrationForm = () => {
 					name="iacoCode"
 					placeholder="Enter the ICAO code"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Aircraft Type"
 					name="aircraftType"
 					placeholder="Filled Text"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Type of Use"
 					name="typeOfUse"
 					placeholder="Enter the type of use"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -55,12 +61,14 @@ const AircraftRegistrationForm = () => {
 					name="homeAirport"
 					placeholder="Enter the home airport"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Nationality"
 					name="nationality"
 					placeholder="Enter the nationality"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -69,12 +77,14 @@ const AircraftRegistrationForm = () => {
 					name="cockpitCrew"
 					placeholder="Enter the cockpit crew"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Cabin crew"
 					name="cabinCrew"
 					placeholder="Enter the cabin crew"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -83,6 +93,7 @@ const AircraftRegistrationForm = () => {
 					name="numberOfSeats"
 					placeholder="Enter the number of seats"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -92,6 +103,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the Height"
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Length"
@@ -99,6 +111,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the length"
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Wingspan"
@@ -106,6 +119,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the wingspan"
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -115,6 +129,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the MTOW"
 					className="custom_input"
 					suffixText="t"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="MOW"
@@ -122,6 +137,7 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the MOW"
 					className="custom_input"
 					suffixText="t"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
@@ -131,18 +147,21 @@ const AircraftRegistrationForm = () => {
 					placeholder="Enter the annex"
 					className="custom_input"
 					required
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Main Deck"
 					name="mainDeck"
 					placeholder="Enter the main deck"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
-				<InputField 
-					label="APU INOP" 
-					name="apuInop" 
-					placeholder="Enter the apuInop" 
-					className="custom_input" />
+				<InputField
+					label="APU INOP"
+					name="apuInop"
+					placeholder="Enter the apuInop"
+					className="custom_input"
+					disabled={isReadOnly} />
 			</div>
 			<Divider />
 			<div className="airport_registration_form_inputfields">
@@ -151,17 +170,21 @@ const AircraftRegistrationForm = () => {
 					name="ownerName"
 					placeholder="Enter the owner name"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Country"
 					name="country"
 					placeholder="Enter the country name"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
-				<InputField label="Address" name="address" placeholder="Enter the address" className="custom_input" />
-				<InputField label="Remarks" name="remarks" placeholder="Enter remarks" className="custom_input" />
+				<InputField label="Address" name="address" placeholder="Enter the address" className="custom_input"
+					disabled={isReadOnly} />
+				<InputField label="Remarks" name="remarks" placeholder="Enter remarks" className="custom_input"
+					disabled={isReadOnly} />
 			</div>
 			<Divider />
 			<div className="airport_registration_form_inputfields">
@@ -172,8 +195,15 @@ const AircraftRegistrationForm = () => {
 					className="custom_date"
 					format="MM-DD-YYYY"
 					required
+					disabled={isReadOnly}
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date
+					label="Valid To"
+					placeholder="Select valid to date"
+					name="validTo"
+					format="MM-DD-YYYY"
+					disabled={isReadOnly}
+				/>
 			</div>
 		</div>
 	);

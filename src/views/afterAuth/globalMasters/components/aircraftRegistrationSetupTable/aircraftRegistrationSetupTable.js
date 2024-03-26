@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {usePostGlobalAircraftRegistration} from "../../../../../services/globalMasters/globalMaster"
+import React, { useState, useEffect, useMemo } from 'react';
+import { usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -9,28 +9,25 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import './aircraftRegistrationSetupTable.scss';
+import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 
 
-const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
+const AircraftRegistrationSetupTable = ({ data, createProps, setCreateProps }) => {
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
+	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [initial] = Form.useForm();
 
-	
+
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
 	};
 
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		setAircraftRegistrationModal(defaultModalParams)
 	};
 
-	const onFinishHanlder = (values) => {
-		usePostGlobalAircraftRegistration(values);
+	const onFinishHandler = (values) => {
+		// usePostGlobalAircraftRegistration(values);
 		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
@@ -46,9 +43,7 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	// };
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
 	};
 
 	const handleEditButton = () => {
@@ -59,66 +54,40 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = aircraftRegistrationModal
+		if (data) {
 			const initialValuesObj = {
-				registration: rowData.registration ?? '',
-				internal: rowData.internal ?? 'NA',
-				iataCode: rowData.iataCode ?? '',
-				iacoCode: rowData.iacoCode ?? 'NA',
-				aircraftType: rowData.aircraftType ?? '',
-				typeOfUse: rowData.typeOfUse ?? 'NA',
-				homeAirport: rowData.homeAirport ?? 'NA',
-				nationality: rowData.nationality ?? 'NA',
-				cockpitCrew: rowData.cockpitCrew ?? 'NA',
-				cabinCrew: rowData.cabinCrew ?? 'NA',
-				numberOfSeats: rowData.numberOfSeats ?? 'NA',
-				height: rowData.height ?? 'NA',
-				length: rowData.length ?? 'NA',
-				wingspan: rowData.wingspan ?? 'NA',
-				mtow: rowData.mtow ?? 'NA',
-				mow: rowData.mow ?? 'NA',
-				annex: rowData.annex ?? '',
-				mainDeck: rowData.mainDeck ?? 'NA',
-				apuInop: rowData.apuInop ?? 'NA',
-				ownerName: rowData.ownerName ?? 'NA',
-				country: rowData.country ?? 'NA',
-				address: rowData.address ?? 'NA',
-				remarks: rowData.remarks ?? 'NA',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+				registration: data.registration ?? '',
+				internal: data.internal ?? 'NA',
+				iataCode: data.iataCode ?? '',
+				iacoCode: data.iacoCode ?? 'NA',
+				aircraftType: data.aircraftType ?? '',
+				typeOfUse: data.typeOfUse ?? 'NA',
+				homeAirport: data.homeAirport ?? 'NA',
+				nationality: data.nationality ?? 'NA',
+				cockpitCrew: data.cockpitCrew ?? 'NA',
+				cabinCrew: data.cabinCrew ?? 'NA',
+				numberOfSeats: data.numberOfSeats ?? 'NA',
+				height: data.height ?? 'NA',
+				length: data.length ?? 'NA',
+				wingspan: data.wingspan ?? 'NA',
+				mtow: data.mtow ?? 'NA',
+				mow: data.mow ?? 'NA',
+				annex: data.annex ?? '',
+				mainDeck: data.mainDeck ?? 'NA',
+				apuInop: data.apuInop ?? 'NA',
+				ownerName: data.ownerName ?? 'NA',
+				country: data.country ?? 'NA',
+				address: data.address ?? 'NA',
+				remarks: data.remarks ?? 'NA',
+				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+				validTo: data.validTo ? dayjs(data.validTo) : '',
 			};
-			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [aircraftRegistrationModal.isOpen]);
 
-	// const rows = additionalAircraftTypeData?.map((data, index) => {
-	// 	return {
-	// 		identifier: data.identifier ?? 'NA',
-	// 		iataCode: data.iataCode ?? '',
-	// 		model: data.model ?? '',
-	// 		airline: data.airline ?? 'NA',
-	// 		icaoCode: data.icaoCode ?? 'NA',
-	// 		icaoCodeModified: data.icaoCodeModified ?? 'NA',
-	// 		acFamily: data.acFamily ?? 'NA',
-	// 		acBodyType: data.acBodyType ?? '',
-	// 		airportType: data.airportType ?? '',
-	// 		minimumGroundTime: data.minimumGroundTime ?? 'NA',
-	// 		wingspan: data.wingspan ?? 'NA',
-	// 		length: data.length ?? 'NA',
-	// 		height: data.height ?? 'NA',
-	// 		engineType: data.engineType ?? 'NA',
-	// 		numberOfEngines: data.numberOfEngines ?? 'NA',
-	// 		totalSeats: data.totalSeats ?? 'NA',
-	// 		firstClass: data.firstClass ?? 'NA',
-	// 		businessClass: data.businessClass ?? 'NA',
-	// 		economyClass: data.economyClass ?? 'NA',
-	// 		validFrom: data.validFrom ?? '',
-	// 		validTo: data.validTo ?? '',
-	// 	};
-	// });
-
-	const columns = [
+	const columns = useMemo(() => [
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -127,12 +96,12 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					{/* <ButtonComponent
+					<ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/> */}
+					/>
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"
@@ -188,8 +157,13 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 				></ButtonComponent>
 			),
 		},
-	];
-
+	], [data]);
+	useEffect(() => {
+		if (createProps.new) {
+			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
 	return (
 		<div>
 			<div className="create_wrapper_table">
@@ -201,37 +175,17 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your aircraft type"
+				title={aircraftRegistrationModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
+				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
+					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} />
+					{aircraftRegistrationModal.type !== 'view' &&
 						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
+							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"
@@ -240,15 +194,13 @@ const AircraftRegistrationSetupTable = ({ formComponent, data }) => {
 									onClick={closeAddModal}
 								/>
 								<ButtonComponent
-									title="Save"
+									title={aircraftRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
 									className="custom_button_save"
-									onClick={handleEditButton}
 									isSubmit={true}
 								/>
 							</div>
-						</>
-					)}
+						</>}
 				</Form>
 			</ModalComponent>
 		</div>

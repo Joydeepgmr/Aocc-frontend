@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
 import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
@@ -11,20 +11,22 @@ import AircraftRegistrationSetupTable from '../aircraftRegistrationSetupTable/ai
 const AircraftTabs = () => {
 	const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
 	const { data: fetchedGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
-	
-	 const items = [
+	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => { }, onDownload: () => { } })
+	const [activeTab, setActiveTab] = useState('1');
+	const handleTabChange = (key) => {
+		setActiveTab(key);
+	}
+	const items = [
 		{
 			key: '1',
-			label: 'Aircaft Type',
+			label: 'Aircraft Type',
 			children: (
-				<CreateWrapper 
-					formComponent={<AircraftTypeSetupForm />} 
-					title="Setup aircraft type" 
-					width="120rem" 
-					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeSetupForm />} />}
-					// action={addAirport}
+				<CreateWrapper
+					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					createProps={createProps}
+					setCreateProps={setCreateProps}
 					data={fetchedGlobalAircraftType}
-					type='aircraft-type'
+					label='Add aircraft type'
 				/>
 			),
 		},
@@ -33,19 +35,18 @@ const AircraftTabs = () => {
 			label: 'Aircraft Registration',
 			children: (
 				<CreateWrapper
-					formComponent={<AircraftRegistrationForm />}
-					title="Setup aircraft registration"
-					width="120rem"
-					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} formComponent={<AircraftRegistrationForm />} />}
+					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAircraftType}
-					type='aircraft-registration'
+					createProps={createProps}
+					setCreateProps={setCreateProps}
+					label='Add aircraft registration'
 				/>
 			),
 		},
 	];
 	return (
 		<div>
-			<CustomTabs defaultActiveKey="1" items={items} />
+			<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
 		</div>
 	);
 };
