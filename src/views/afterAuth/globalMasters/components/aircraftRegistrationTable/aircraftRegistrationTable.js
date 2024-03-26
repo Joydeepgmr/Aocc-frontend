@@ -8,15 +8,14 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
 
-const AircraftRegistrationTable = ({ formComponent, data }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
+	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
 	
@@ -26,17 +25,18 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 	};
 
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		initial.resetFields();
+		setAircraftRegistrationModal(defaultModalParams)
 	};
 
-	const onFinishHanlder = (values) => {
+	const onFinishHandler = (values) => {
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
-		postGlobalAircraftRegistration(values);
-		form.resetFields();
+		if (aircraftRegistrationModal.type === 'new') {
+			postGlobalAircraftRegistration(values);
+		}
 		closeAddModal();
 	};
 
@@ -91,9 +91,15 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [aircraftRegistrationModal.isOpen]);
+	useEffect(() => {
+		if (createProps.new) {
+			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
 
-	const columns = [
+	const columns = useMemo(() => [
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -163,8 +169,7 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 				></ButtonComponent>
 			),
 		},
-	];
-
+	], [data]);
 	return (
 		<div>
 			<div className="create_wrapper_table">

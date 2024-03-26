@@ -22,7 +22,7 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					data={fetchedGlobalAircraftType}
@@ -35,7 +35,7 @@ const AircraftTabs = () => {
 			label: 'Aircraft Registration',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftRegistrationTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAircraftType}
 					createProps={createProps}
 					setCreateProps={setCreateProps}

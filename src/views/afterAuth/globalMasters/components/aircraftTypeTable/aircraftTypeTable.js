@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {usePostGlobalAircraftType, useDeleteGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
+import React, { useEffect, useMemo, useState } from 'react';
+import { usePostGlobalAircraftType, useDeleteGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -8,10 +8,11 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
 
-const AircraftTable = ({ formComponent, data }) => {
+const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,22 +26,27 @@ const AircraftTable = ({ formComponent, data }) => {
 		setEditData(false);
 	};
 
-	const onFinishHanlder = (values) => {
+	const onFinishHandler = (values) => {
+		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
-		values.icaoCodeModified = values?.icaoCodeModified?.join('');
-		values.countryCode = values?.countryCode?.join('');
-		postGlobalAircraftType(values);
-		form.resetFields();
+		values.iataCode = values?.iataCode;
+		values.icaoCode = values?.icaoCode;
+		values.icaoCodeModified = values?.icaoCodeModified;
+		values.countryCode = values?.countryCode;
+		if (aircraftTypeModal.type === 'edit') {
+			console.log('dispatch the update air craft type api');
+		} else {
+			postGlobalAircraftType(values);
+			console.log('dispatch the create new air craft type api');
+		}
 		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
-        // Call the delete function and pass the record ID
-        deleteGlobalAirport(record.id);
-    };
+		// Call the delete function and pass the record ID
+		deleteGlobalAirport(record.id);
+	};
 
 	// const handleDelete = (record) => {
 	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
@@ -94,90 +100,97 @@ const AircraftTable = ({ formComponent, data }) => {
 		}
 	}, [rowData]);
 
-
-	const columns = [
-		{
-			title: 'Actions',
-			key: 'actions',
-			render: (
-				text,
-				record
-			) => (
-				<div className="action_buttons">
+	useEffect(() => {
+		if (createProps.new) {
+			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
+	const columns = useMemo(() => {
+		return [
+			{
+				title: 'Actions',
+				key: 'actions',
+				render: (
+					text,
+					record
+				) => (
+					<div className="action_buttons">
+						<ButtonComponent
+							onClick={() => handleEdit(record)}
+							type="iconWithBorder"
+							icon={editIcon}
+							className="custom_icon_buttons"
+						/>
+						<ButtonComponent
+							onClick={() => handleDelete(record)}
+							type="iconWithBorder"
+							icon={deleteIcon}
+							className="custom_icon_buttons"
+						/>
+					</div>
+				),
+			},
+			{
+				title: 'Identifier',
+				dataIndex: 'identifier',
+				key: 'identifier',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'IATA Code',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Model',
+				dataIndex: 'model',
+				key: 'model',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Airline',
+				dataIndex: 'airline',
+				key: 'airline',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'ICAO Code',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'A/C Family',
+				dataIndex: 'acFamily',
+				key: 'acFamily',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'A/C Body Type',
+				dataIndex: 'acBodyType',
+				key: 'acBodyType',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'View Details',
+				key: 'viewDetails',
+				render: (
+					text,
+					record // Use the render function to customize the content of the cell
+				) => (
 					<ButtonComponent
-						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
-						icon={editIcon}
-						className="custom_icon_buttons"
+						title="View Details"
+						type="text"
+						onClick={() => {
+							handleDetails(record);
+						}}
 					/>
-					<ButtonComponent
-						onClick={() => handleDelete(record)}
-						type="iconWithBorder"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
-		{
-			title: 'Identifier',
-			dataIndex: 'identifier',
-			key: 'identifier',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'IATA Code',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Model',
-			dataIndex: 'model',
-			key: 'model',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Airline',
-			dataIndex: 'airline',
-			key: 'airline',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'ICAO Code',
-			dataIndex: 'icaoCode',
-			key: 'icaoCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'A/C Family',
-			dataIndex: 'acFamily',
-			key: 'acFamily',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'A/C Body Type',
-			dataIndex: 'acBodyType',
-			key: 'acBodyType',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'View Details',
-			key: 'viewDetails',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View Details"
-					type="text"
-					onClick={() => {
-						handleDetails(record);
-					}}
-				></ButtonComponent>
-			),
-		},
-	];
+				),
+			},
+		];
+	}, [data])
 
 	return (
 		<div>
@@ -196,49 +209,26 @@ const AircraftTable = ({ formComponent, data }) => {
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
-						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
-										onClick={closeAddModal}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
-							<div className="custom_buttons">
-								<ButtonComponent
-									title="Cancel"
-									type="filledText"
-									className="custom_button_cancel"
-									onClick={closeAddModal}
-								/>
-								<ButtonComponent
-									title="Save"
-									type="filledText"
-									className="custom_button_save"
-									onClick={handleEditButton}
-									isSubmit={true}
-								/>
-							</div>
-						</>
-					)}
+				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
+					{/* {formComponent && formComponent} */}
+					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} />
+					{aircraftTypeModal.type !== 'view' && <>
+						<Divider />
+						<div className="custom_buttons">
+							<ButtonComponent
+								title="Cancel"
+								type="filledText"
+								className="custom_button_cancel"
+								onClick={closeAddModal}
+							/>
+							<ButtonComponent
+								title={aircraftTypeModal.type === 'edit' ? 'Update' : 'Save'}
+								type="filledText"
+								className="custom_button_save"
+								isSubmit={true}
+							/>
+						</div>
+					</>}
 				</Form>
 			</ModalComponent>
 		</div>

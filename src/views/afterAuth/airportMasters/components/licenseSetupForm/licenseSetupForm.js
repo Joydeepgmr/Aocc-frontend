@@ -9,19 +9,19 @@ import './licenseSetupForm.scss';
 
 const LicenseSetupForm = () => {
 	const [airportName, setAirportName] = useState([]);
-	const [iataCode, setIataCode] = useState('');
-	const [icaoCode, setIcaoCode] = useState('');
+	const [iataCode, setIataCode] = useState([]);
+	const [icaoCode, setIcaoCode] = useState([]);
 	const { data: airportData } = useGetAirportName();
 
-	console.log('data in airportData', airportData);
+	console.log('data from api', airportData);
 
 	useEffect(() => {
 		if (airportData) {
 			setAirportName(
 				airportData.map((airport, index) => {
 					return {
-						id: (index + 1).toString(), // Generating an id based on index
-						label: airport.name, // Taking name as label
+						id: (index + 1).toString(),
+						label: airport.name,
 						value: airport.id,
 						iataValue: airport?.iataCode,
 						icaoValue: airport?.icaoCode,
@@ -29,29 +29,55 @@ const LicenseSetupForm = () => {
 				})
 			);
 		} else {
-			setAirportName([]); // Set an empty array if airportData is undefined or null
+			setAirportName([]);
 		}
 	}, [airportData]);
+
+	const handleAirportChange = (selectedAirport) => {
+		const selectedAirportData = airportData.find((airport) => airport.id === selectedAirport);
+		console.log('what is selected Airport Data', selectedAirportData);
+		const iataValue = selectedAirportData.iataCode.split('');
+		const icaoValue = selectedAirportData.icaoCode.split('');
+		console.log('arrays...', iataValue, icaoValue);
+		if (selectedAirportData) {
+			setIataCode(iataValue);
+			setIcaoCode(icaoValue);
+			alert(`Iata Code: ${selectedAirportData.iataCode}`)
+			alert(`Icao Code: ${selectedAirportData.icaoCode}`)
+		} else {
+			setIataCode([]);
+			setIcaoCode([]);
+		}
+	};
 
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
-				{/* <InputField
-					label="Airport Name"
-					name="airportName"
-					placeholder="Enter the airport name"
-					className="custom_input"
-					required
-				/> */}
 				<CustomSelect
+					name="airportId"
 					required
 					label="Airport Name"
 					placeholder="Enter the airport name"
 					SelectData={airportName}
 					className="custom_input"
+					onChange={handleAirportChange}
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode" required={true} />
-				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" required={true} />
+				<OtpField
+					otpLength={3}
+					label="IATA Code"
+					required
+					name="iataCode"
+					value={iataCode}
+					onChange={setIataCode}
+				/>
+				<OtpField
+					otpLength={4}
+					label="ICAO Code"
+					required
+					name="icaoCode"
+					value={icaoCode}
+					onChange={setIcaoCode}
+				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -86,9 +112,8 @@ const LicenseSetupForm = () => {
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" />
 			</div>
-			{/* <Divider /> */}
 		</div>
 	);
 };

@@ -5,8 +5,8 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import './aircraftTypeForm.scss';
- 
-const AircraftTypeForm = () => {
+
+const AircraftTypeForm = ({ isReadOnly }) => {
 	return (
 		<div className="aircraft_type_form_container">
 			<div className="aircraft_type_form_inputfields">
