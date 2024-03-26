@@ -2,7 +2,7 @@ import React from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import CustomSelect from '../../../../../components/select/select';
-import {SelectPaymentData} from '../../../userAccess/userAccessData';
+import { CountryData, HomeAirportData, SelectPaymentData, TerminalData } from '../../../userAccess/userAccessData';
 import Date from '../../../../../components/datapicker/datepicker';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -24,18 +24,22 @@ const AirlineForm = () => {
 				<OtpField otpLength={3} label="Three Letter Code" name="threeLetterCode" required />
 			</div>
 			<div className="airline_setup_form_inputfields">
-				<InputField
+				<CustomSelect
+					SelectData={CountryData}
 					label="Country"
 					name="country"
 					placeholder="Country"
-					className="custom_input" />
-				<InputField
+					className="custom_input"
+				/>
+				<CustomSelect
+					SelectData={HomeAirportData}
 					label="Home Airport"
 					name="homeAirport"
 					placeholder="Enter the home airport"
 					className="custom_input"
 				/>
-				<InputField
+				<CustomSelect
+					SelectData={TerminalData}
 					label="Terminal"
 					name="terminal"
 					placeholder="Filled Text"
@@ -55,12 +59,16 @@ const AirlineForm = () => {
 					name="modeOfPayment"
 				/>
 			</div>
-			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Head Office</CustomTypography></div>
-			
+			<div className="customTypo">
+				<CustomTypography type="title" fontSize={14} fontWeight="600" color="#5C5F66">
+					Head Office
+				</CustomTypography>
+			</div>
+
 			<div className="airline_setup_form_inputfields">
 				<InputField label="Address 1" name="address1" placeholder="Address 1" className="custom_input" />
 				<InputField label="Phone" name="phone" placeholder="Enter your Phone No." className="custom_input" />
-				<InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" />
+				{/* <InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" /> */}
 			</div>
 			<Divider />
 			<div className="airline_setup_form_inputfields">

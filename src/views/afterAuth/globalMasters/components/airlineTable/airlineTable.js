@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './airlineTable.scss';
-import {usePostGlobalAirline} from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -9,14 +9,15 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import AirlineForm from '../AirlineForm/AirlineForm';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
 // import { useDispatch, useSelector } from 'react-redux';
-
 
 const AirlineTable = ({ formComponent, data }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
+	const [formDisabled, setFormDisabled] = useState(true); // State variable to track form field disabled state
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
@@ -41,10 +42,10 @@ const AirlineTable = ({ formComponent, data }) => {
 		closeAddModal();
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateAirportData(updatedData));
-	// };
+	const handleDelete = (record) => {
+		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		// dispatch(updateAirportData(updatedData));
+	};
 
 	const handleEdit = (data) => {
 		setRowData(data);
@@ -65,14 +66,14 @@ const AirlineTable = ({ formComponent, data }) => {
 				name: rowData.name ?? '',
 				twoLetterCode: rowData.twoLetterCode ?? '',
 				threeLetterCode: rowData.threeLetterCode ?? '',
-				country: rowData.country ?? 'NA',
-				homeAirport: rowData.homeAirport ?? 'NA',
-				terminal: rowData.terminal ?? 'NA',
-				remark: rowData.remark ?? 'NA',
-				modeOfPayment: rowData.modeOfPayment ?? 'NA',
-				address1: rowData.address1 ?? 'NA',
-				phone: rowData.phone ?? 'NA',
-				telex: rowData.telex ?? 'NA',
+				country: rowData.country ?? '',
+				homeAirport: rowData.homeAirport ?? '',
+				terminal: rowData.terminal ?? '',
+				remark: rowData.remark ?? '',
+				modeOfPayment: rowData.modeOfPayment ?? '',
+				address1: rowData.address1 ?? '',
+				phone: rowData.phone ?? '',
+				telex: rowData.telex ?? '',
 				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
 				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
 			};
@@ -81,15 +82,11 @@ const AirlineTable = ({ formComponent, data }) => {
 		}
 	}, [rowData]);
 
-
 	const columns = [
 		{
 			title: 'Actions',
 			key: 'actions',
-			render: (
-				text,
-				record
-			) => (
+			render: (text, record) => (
 				<div className="action_buttons">
 					<ButtonComponent
 						onClick={() => handleEdit(record)}
@@ -164,7 +161,7 @@ const AirlineTable = ({ formComponent, data }) => {
 			<div className="create_wrapper_table">
 				<div className="table_container">
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Airports
+						Airlines
 					</CustomTypography>
 					<TableComponent data={data} columns={columns} />
 				</div>
@@ -172,7 +169,7 @@ const AirlineTable = ({ formComponent, data }) => {
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
-				title="Setup your airport"
+				title="Edit airline"
 				width="120rem"
 				className="custom_modal"
 			>
@@ -188,12 +185,6 @@ const AirlineTable = ({ formComponent, data }) => {
 										type="filledText"
 										className="custom_button_cancel"
 										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
 									/>
 								</>
 							</div>
