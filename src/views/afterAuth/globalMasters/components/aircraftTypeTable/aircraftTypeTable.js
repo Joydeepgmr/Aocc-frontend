@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { usePostGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAircraftType, useDeleteGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -8,11 +8,17 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import './aircraftTypeSetupTable.scss';
-import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
+import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
+import './aircraftTypeTable.scss';
 
 
-const AircraftSetupTable = ({ data, createProps, setCreateProps }) => {
+const AircraftTable = ({ data, createProps, setCreateProps }) => {
+	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [initialValues, setInitialValues] = useState({});
+	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
@@ -38,6 +44,11 @@ const AircraftSetupTable = ({ data, createProps, setCreateProps }) => {
 			console.log('dispatch the create new air craft type api');
 		}
 		closeAddModal();
+	};
+
+	const handleDelete = (record) => {
+		// Call the delete function and pass the record ID
+		deleteGlobalAirport(record.id);
 	};
 
 	// const handleDelete = (record) => {
@@ -175,7 +186,7 @@ const AircraftSetupTable = ({ data, createProps, setCreateProps }) => {
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		];
@@ -200,7 +211,7 @@ const AircraftSetupTable = ({ data, createProps, setCreateProps }) => {
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
 					{/* {formComponent && formComponent} */}
-					<AircraftTypeSetupForm isReadOnly={aircraftTypeModal.type === 'view'} />
+					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} />
 					{aircraftTypeModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">
@@ -224,4 +235,4 @@ const AircraftSetupTable = ({ data, createProps, setCreateProps }) => {
 	);
 };
 
-export default AircraftSetupTable;
+export default AircraftTable;

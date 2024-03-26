@@ -8,9 +8,9 @@ import { usePostGlobalAircraftRegistration, usePostGlobalAircraftType, usePostGl
 import './createWrapper.scss';
 
 const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
-	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
-	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
-	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	// const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
+	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	// const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const onOpenChange = () => {
@@ -51,6 +51,7 @@ const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProp
 
 
 	const handleDropdownChange = (value) => {
+		``
 		if (value === 'createNew') {
 			openAddModal();
 			// if (disabled) {

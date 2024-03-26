@@ -4,9 +4,9 @@ import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import './aircraftTypeSetupForm.scss';
+import './aircraftTypeForm.scss';
 
-const AircraftTypeSetupForm = ({ isReadOnly }) => {
+const AircraftTypeForm = ({ isReadOnly }) => {
 	return (
 		<div className="aircraft_type_form_container">
 			<div className="aircraft_type_form_inputfields">
@@ -180,4 +180,4 @@ const AircraftTypeSetupForm = ({ isReadOnly }) => {
 	);
 };
 
-export default AircraftTypeSetupForm;
+export default AircraftTypeForm;

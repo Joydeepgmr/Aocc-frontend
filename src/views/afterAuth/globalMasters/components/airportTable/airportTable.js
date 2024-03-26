@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './airlineSetupTable.scss';
-import {usePostGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
+import {usePostGlobalAirport, useEditGlobalAirport} from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -9,24 +8,21 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-// import { formDisabled, updateAirportData } from '../../redux/reducer';
-// import { useDispatch, useSelector } from 'react-redux';
+import './airportTable.scss';
 
 
-const AirlineSetupTable = ({ formComponent, data }) => {
-	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+const AirportTable = ({ formComponent, data }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
-	const dispatch = useDispatch();
+	const {mutate: editGlobalAirport} = useEditGlobalAirport(rowData?.id)
 
-	
+
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-		dispatch(formDisabled());
 	};
 
 	const closeAddModal = () => {
@@ -42,20 +38,19 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
-		dispatch(action(values));
 		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
-		const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-		dispatch(updateAirportData(updatedData));
+		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		// dispatch(updateAirportData(updatedData));
 	};
 
-	// const handleEdit = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	setEditData(true);
-	// };
+	const handleEdit = (data) => {
+		setRowData(data);
+		setIsModalOpen(true);
+		setEditData(true);
+	};
 
 	const handleEditButton = () => {
 		// if (disabled) {
@@ -67,14 +62,14 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 	useEffect(() => {
 		if (rowData) {
 			const initialValuesObj = {
-				airportName: rowData.airportName ?? 'NA',
+				name: rowData.name ?? '',
 				iataCode: rowData.iataCode ?? '',
 				icaoCode: rowData.icaoCode ?? '',
 				abbreviatedName1: rowData.abbreviatedName1 ?? 'NA',
 				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
 				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
 				abbreviatedName4: rowData.abbreviatedName4 ?? 'NA',
-				countryCode: rowData.countryCode ?? '',
+				countryCode: rowData.countryCode ?? 'NA',
 				standardFlightTime: rowData.standardFlightTime ?? 'NA',
 				timeChange: rowData.timeChange ?? 'NA',
 				timeDifferenceAfter: rowData.timeDifferenceAfter ?? 'NA',
@@ -82,34 +77,12 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 				timeDifferenceSummer: rowData.timeDifferenceSummer ?? 'NA',
 				timeDifferenceWinter: rowData.timeDifferenceWinter ?? 'NA',
 				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+				validTill: rowData.validTill ? dayjs(rowData.validTill) : null,
 			};
 			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [rowData]);
-
-	const rows = additionalAirportData?.map((data, index) => {
-		return {
-			airportName: data.airportName ?? 'NA',
-			iataCode: data.iataCode ?? '',
-			icaoCode: data.icaoCode ?? '',
-			abbreviatedName1: data.abbreviatedName1 ?? 'NA',
-			abbreviatedName2: data.abbreviatedName2 ?? 'NA',
-			abbreviatedName3: data.abbreviatedName3 ?? 'NA',
-			abbreviatedName4: data.abbreviatedName4 ?? 'NA',
-			countryCode: data.countryCode ?? '',
-			airportType: data.airportType ?? '',
-			standardFlightTime: data.standardFlightTime ?? 'NA',
-			timeChange: data.timeChange ?? 'NA',
-			timeDifferenceAfter: data.timeDifferenceAfter ?? 'NA',
-			timeDifferenceBefore: data.timeDifferenceBefore ?? 'NA',
-			timeDifferenceSummer: data.timeDifferenceSummer ?? 'NA',
-			timeDifferenceWinter: data.timeDifferenceWinter ?? 'NA',
-			validFrom: data.validFrom ?? '',
-			validTo: data.validTo ?? '',
-		};
-	});
 
 	const columns = [
 		{
@@ -120,12 +93,12 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 				record
 			) => (
 				<div className="action_buttons">
-					{/* <ButtonComponent
+					<ButtonComponent
 						onClick={() => handleEdit(record)}
 						type="iconWithBorder"
 						icon={editIcon}
 						className="custom_icon_buttons"
-					/> */}
+					/>
 					<ButtonComponent
 						onClick={() => handleDelete(record)}
 						type="iconWithBorder"
@@ -188,6 +161,7 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 			),
 		},
 	];
+	
 	return (
 		<div>
 			<div className="create_wrapper_table">
@@ -208,7 +182,7 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
 					{formComponent && formComponent}
 					<Divider />
-					{!disabled && !editData && (
+					{!editData && (
 						<>
 							<div className="custom_buttons">
 								<>
@@ -238,7 +212,7 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 									onClick={closeAddModal}
 								/>
 								<ButtonComponent
-									title="Edit"
+									title="Save"
 									type="filledText"
 									className="custom_button_save"
 									onClick={handleEditButton}
@@ -253,4 +227,4 @@ const AirlineSetupTable = ({ formComponent, data }) => {
 	);
 };
 
-export default AirportSetupTable;
+export default AirportTable;

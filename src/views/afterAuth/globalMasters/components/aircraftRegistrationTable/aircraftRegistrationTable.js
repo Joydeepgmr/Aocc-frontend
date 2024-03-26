@@ -8,13 +8,18 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import './aircraftRegistrationSetupTable.scss';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
+import './aircraftRegistrationTable.scss';
 
 
-const AircraftRegistrationSetupTable = ({ data, createProps, setCreateProps }) => {
+const AircraftRegistrationTable = ({ formComponent, data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
+	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [initialValues, setInitialValues] = useState({});
+	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
 
@@ -27,12 +32,11 @@ const AircraftRegistrationSetupTable = ({ data, createProps, setCreateProps }) =
 	};
 
 	const onFinishHandler = (values) => {
-		// usePostGlobalAircraftRegistration(values);
-		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
+		postGlobalAircraftRegistration(values);
 		form.resetFields();
 		closeAddModal();
 	};
@@ -207,4 +211,4 @@ const AircraftRegistrationSetupTable = ({ data, createProps, setCreateProps }) =
 	);
 };
 
-export default AircraftRegistrationSetupTable;
+export default AircraftRegistrationTable;

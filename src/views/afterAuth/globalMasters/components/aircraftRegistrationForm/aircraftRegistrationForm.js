@@ -2,6 +2,8 @@ import React from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
+import CustomSelect from '../../../../../components/select/select';
+import { SelectAircraftTye } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
 
 const AircraftRegistrationForm = ({ isReadOnly }) => {
@@ -40,12 +42,13 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<InputField
-					label="Aircraft Type"
-					name="aircraftType"
+				<CustomSelect
+					SelectData={SelectAircraftTye}
 					placeholder="Filled Text"
 					className="custom_input"
 					disabled={isReadOnly}
+					label="Airport Type"
+					name="airportType"
 				/>
 				<InputField
 					label="Type of Use"

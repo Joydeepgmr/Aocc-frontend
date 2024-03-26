@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import CreateWrapper from '../createWrapper/createWrapper';
-import AircraftTypeSetupForm from '../aircraftTypeSetupForm/aircraftTypeSetupForm';
-import AircraftTypeSetupTable from '../aircraftTypeSetupTable/aircraftTypeSetupTable';
+import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
+import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
-import AircraftRegistrationSetupTable from '../aircraftRegistrationSetupTable/aircraftRegistrationSetupTable';
+import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 
 
 const AircraftTabs = () => {
@@ -22,7 +22,7 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeSetupTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					data={fetchedGlobalAircraftType}
@@ -35,7 +35,7 @@ const AircraftTabs = () => {
 			label: 'Aircraft Registration',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftRegistrationSetupTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftRegistrationTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAircraftType}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
