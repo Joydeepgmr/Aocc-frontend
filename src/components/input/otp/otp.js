@@ -4,7 +4,7 @@ import { InputOTP } from 'antd-input-otp';
 import PropTypes from 'prop-types';
 import './otp.scss';
 
-const OtpField = ({ otpLength = 3, name, label, required, disabled, className = '' }) => {
+const OtpField = ({ otpLength = 3, name, label, required, disabled, value, onChange, className = '' }) => {
     const otpLabel = () => {
         return (
             <>
@@ -19,6 +19,7 @@ const OtpField = ({ otpLength = 3, name, label, required, disabled, className = 
                 label={otpLabel()}
                 name={name}
                 className={`${className} otp_form_item`}
+                initialValue={value}
                 rules={[
                     {
                         required: required,
@@ -26,15 +27,11 @@ const OtpField = ({ otpLength = 3, name, label, required, disabled, className = 
                     }
                 ]}
             >
-                <InputOTP inputType="numeric" length={otpLength} disabled={disabled ? disabled : false} className="otp_field" />
+                <InputOTP length={otpLength} disabled={disabled ? disabled : false} className="otp_field" value={value} />
             </Form.Item>
         </>
     );
 };
 
-OtpField.propTypes = {
-    otpLength: PropTypes.number.isRequired,
-    onFinish: PropTypes.func.isRequired,
-};
 
 export default OtpField;
