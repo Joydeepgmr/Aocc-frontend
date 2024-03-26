@@ -87,6 +87,7 @@ const AircraftRegistrationTable = ({ formComponent, data }) => {
 				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
 				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
 			};
+			console.log(rowData);
 			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}

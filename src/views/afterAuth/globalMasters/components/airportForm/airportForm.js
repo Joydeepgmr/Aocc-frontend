@@ -7,7 +7,7 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportForm = () => {
+const AirportForm = ({isReadOnly}) => {
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
@@ -16,10 +16,11 @@ const AirportForm = () => {
 					name="name"
 					placeholder="Enter the airport name"
 					className="custom_input"
+					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode"/>
-				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" />
+				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={isReadOnly}/>
+				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={isReadOnly} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -27,18 +28,21 @@ const AirportForm = () => {
 					name="abbreviatedName1"
 					placeholder="Enter the abbreviated name 1"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Abbreviated Name 2"
 					name="abbreviatedName2"
 					placeholder="Enter the abbreviated name 2"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Abbreviated Name 3"
 					name="abbreviatedName3"
 					placeholder="Enter the abbreviated name 3"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
@@ -47,14 +51,16 @@ const AirportForm = () => {
 					name="abbreviatedName4"
 					placeholder="Enter the abbreviated name 4"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<CustomSelect
 					SelectData={SelectData}
 					placeholder="Select the access type"
 					label="Airport Type"
 					name="airportType"
+					disabled={isReadOnly}
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" />
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly}/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -62,6 +68,7 @@ const AirportForm = () => {
 					name="timeChange"
 					placeholder="Enter the time change"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Standard Flight Time"
@@ -69,6 +76,7 @@ const AirportForm = () => {
 					placeholder="Enter the standard flight time"
 					className="custom_input"
 					suffixText="minutes"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<Divider />
@@ -79,6 +87,7 @@ const AirportForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabled={isReadOnly}
 					required
 				/>
 				<Date
@@ -86,6 +95,7 @@ const AirportForm = () => {
 					placeholder="Select valid to date"
 					name="validTill"
 					format="MM-DD-YYYY"
+					disabled={isReadOnly}
 				/>
 			</div>
 		</div>

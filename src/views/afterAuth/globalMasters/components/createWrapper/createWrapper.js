@@ -8,6 +8,7 @@ import { useForm } from 'rc-field-form';
 import { 
 	usePostGlobalAirport, 
 	usePostGlobalAircraftType,
+	useEditGlobalAirport,
 	useUploadCSVAircraftType,
 	usePostGlobalAircraftRegistration,
 	usePostGlobalAirline,
@@ -16,6 +17,7 @@ import './createWrapper.scss';
 
 const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data, type }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
+	const { mutate: editGlobalAirport, isLoading: airportEditLoading, isSuccess: airportEditSuccess, isError: airportEditError, postData: airportEditPostData, message: airportEditMessage } = useEditGlobalAirport();
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	const { mutate: postGlobalAirline, isLoading: airlineLoading, isSuccess: airlineSuccess, isError: airlineError, postData: airlinePostData, message: airlineMessage } = usePostGlobalAirline();
@@ -141,6 +143,7 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 			values.icaoCode = values?.icaoCode?.join('');
 			values.countryCode = values?.countryCode?.join('');
 			postGlobalAirport(values);
+			editGlobalAirport(values);
 			closeAddModal();
 		}
 		if (type.toLowerCase() === "aircraft-type") {
@@ -167,9 +170,6 @@ const CreateWrapper = ({ formComponent, title, width, tableComponent, action, da
 		console.log('Dropdown value:', value);
 		if (value === 'addAirport' || value === 'addAircraftType' || value === 'addAircraftRegistration' || value === 'addAirline') {
 			openAddModal();
-			// if (disabled) {
-			// 	dispatch(formDisabled());
-			// }
 		}
 
 		if (value === 'uploadCSV') {

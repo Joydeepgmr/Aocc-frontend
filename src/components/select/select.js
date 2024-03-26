@@ -7,7 +7,6 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 		return (
 			<>
 				{label}
-				{/* {required && <span style={{ color: 'red' }}> *</span>} */}
 			</>
 		);
 	};
@@ -15,7 +14,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 		<>
 			<Form.Item
 				name={name}
-				disabled={disabled ? disabled : false}
+				
 				label={label && renderLabel()}
 				className={`select ${className}`}
 				rules={[
@@ -25,7 +24,7 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
 					},
 				]}
 			>
-				<Select className="select_wrapper" placeholder={placeholder} {...rest}>
+				<Select className="select_wrapper" placeholder={placeholder} {...rest} disabled={disabled ? disabled : false}>
 					{SelectData.map((option, index) => (
 						<Select.Option key={index} value={option.value}>
 							{option.name}

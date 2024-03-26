@@ -22,7 +22,6 @@ const AircraftTabs = () => {
 					title="Setup aircraft type" 
 					width="120rem" 
 					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} formComponent={<AircraftTypeForm />} />}
-					// action={addAirport}
 					data={fetchedGlobalAircraftType}
 					type='aircraft-type'
 				/>
