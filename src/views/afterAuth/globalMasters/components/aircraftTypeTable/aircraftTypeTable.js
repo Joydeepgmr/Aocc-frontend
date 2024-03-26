@@ -15,10 +15,6 @@ import './aircraftTypeTable.scss';
 const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
@@ -29,8 +25,6 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	};
 
 	const onFinishHandler = (values) => {
-
-		// usePostGlobalAircraftType(values);
 		// console.log(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
@@ -41,6 +35,7 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 		if (aircraftTypeModal.type === 'edit') {
 			console.log('dispatch the update air craft type api');
 		} else {
+			postGlobalAircraftType(values);
 			console.log('dispatch the create new air craft type api');
 		}
 		closeAddModal();
