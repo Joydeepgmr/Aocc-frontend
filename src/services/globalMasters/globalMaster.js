@@ -94,45 +94,19 @@ export const useDeleteGlobalAirport = (id) => {
 
 
 export const useGetGlobalAircraftType = (props) => {
-	const response = useQuery({
-		queryKey: ['global-aircraft-type'],
-		queryFn: async () => await Get(`${GET_GLOBAL_AIRCRAFT_TYPE}`),
-		...props,
-	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
-};
-
-
-export const usePostGlobalAircraftType = (props) => {
-	const queryClient = useQueryClient()
-
 	const response = useMutation({
-		mutationKey: ['post-global-aircraft-type'],
-		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
-		onSuccess: () => {
-			queryClient.invalidateQueries('global-aircraft-type');
-		},
+		mutationKey: ['global-aircraft-type'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
 		...props,
 	});
 
 	const { data, error, isSuccess } = response;
-
 	const statusMessage = isSuccess
 		? data?.message
 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
 	return { ...response, data, message: statusMessage };
 };
-
 export const useDeleteGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
 
@@ -143,7 +117,7 @@ export const useDeleteGlobalAircraftType = (props) => {
 				const response = await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`);
 				return response.data; // Assuming the API returns a success message or updated data
 			},
-			onSuccess: () => {
+			onSuccess: async () => {
 				queryClient.invalidateQueries('global-aircraft-type');
 			},
 			...props,
@@ -157,6 +131,28 @@ export const useDeleteGlobalAircraftType = (props) => {
 
 	return { ...response, data, message: statusMessage };
 };
+
+export const usePostGlobalAircraftType = (props) => {
+	const queryClient = useQueryClient()
+
+	const response = useMutation({
+		mutationKey: ['post-global-aircraft-type'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['global-aircraft-type']);
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+
 
 export const usePatchGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient()
@@ -183,7 +179,11 @@ export const usePatchGlobalAircraftType = (props) => {
 export const useUploadCSVAircraftType = (props) => {
 	const response = useMutation({
 		mutationKey: ['global-aircraft-type/upload'],
-		mutationFn: (data) => Post(`${POST_BULK_GLOBAL_AIRCRAFT_TYPE}`, data),
+		mutationFn: (data) => Post(`${POST_BULK_GLOBAL_AIRCRAFT_TYPE}`, data, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		}),
 		...props,
 	});
 
@@ -196,21 +196,18 @@ export const useUploadCSVAircraftType = (props) => {
 
 
 export const useGetGlobalAircraftRegistration = (props) => {
-	const response = useQuery({
-		queryKey: ['global-aircraft-register'],
-		queryFn: async () => await Get(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`),
+	const response = useMutation({
+		mutationKey: ['global-aircraft-register'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
 		...props,
 	});
 
 	const { data, error, isSuccess } = response;
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return { ...response, data, message: statusMessage };
 };
 
 

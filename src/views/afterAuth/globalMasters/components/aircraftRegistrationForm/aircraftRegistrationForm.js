@@ -198,6 +198,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
 					required
 					disabled={isReadOnly}
 				/>

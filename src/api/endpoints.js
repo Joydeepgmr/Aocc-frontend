@@ -30,13 +30,13 @@ export const DELETE_GLOBAL_AIRPORT = '/airport/removeAirport';
 /*--------------------------planner airport master ---------------------*/
 
 export const POST_BAGGED_BELT = '';
-export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
+export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type//paginated/';
 export const POST_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const PATCH_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const DELETE_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const POST_BULK_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/upload/';
 
-export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
+export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register//paginated/';
 export const POST_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const PATCH_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const DELETE_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';

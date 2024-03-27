@@ -166,6 +166,7 @@ const AircraftTypeForm = ({ isReadOnly }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
 					required
 					disabled={isReadOnly}
 				/>
@@ -173,6 +174,7 @@ const AircraftTypeForm = ({ isReadOnly }) => {
 					label="Valid To"
 					placeholder="Select valid to date"
 					name="validTo"
+					disabledFor='past'
 					format="MM-DD-YYYY"
 					disabled={isReadOnly} />
 			</div>
