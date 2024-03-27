@@ -6,8 +6,9 @@ import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvMo
 // import { formDisabled } from '../../redux/reducer';
 import { usePostGlobalAircraftRegistration, usePostGlobalAircraftType, usePostGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
+const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore: true }, fetchData, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
 	// const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	// const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
@@ -67,7 +68,18 @@ const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProp
 
 	return (
 		<>
-			{data && data?.length > 0 ? (
+			<div className="table_container">
+				<div className="create_button">
+					<DropdownButton
+						dropdownItems={dropdownItems}
+						buttonText="Create"
+						onChange={handleDropdownChange}
+						onOpenChange={onOpenChange}
+					/>
+				</div>
+				<div>{tableComponent && tableComponent}</div>
+			</div>
+			{/* {data && data?.length > 0 ? (
 				<div className="table_container">
 					<div className="create_button">
 						<DropdownButton
@@ -77,8 +89,17 @@ const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProp
 							onOpenChange={onOpenChange}
 						/>
 					</div>
-					<div>{tableComponent && tableComponent}</div>
-				</div>
+					<div>
+						<InfiniteScroll
+							dataLength={data.length} // This is important to determine when to fetch more data
+							next={fetchData} // Function to call when reaching the end of the list
+							hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+						>
+							{tableComponent && tableComponent}
+						</InfiniteScroll>
+					</div>
+					{/* <div>{tableComponent && tableComponent}</div> */}
+				{/* </div>
 			) : (
 				<div className="create_wrapper_container">
 					<ButtonComponent
@@ -95,7 +116,7 @@ const CreateWrapper = ({ width, tableComponent, data, createProps, setCreateProp
 					/>
 					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
 				</div>
-			)}
+			)} */} 
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 		</>
 	);

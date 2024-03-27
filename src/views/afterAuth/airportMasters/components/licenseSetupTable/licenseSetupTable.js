@@ -94,73 +94,118 @@ const LicenseSetupTable = ({ formComponent, data }) => {
 	// 	};
 	// });
 
+	// const columns = [
+	// 	// {
+	// 	// 	title: 'Actions',
+	// 	// 	key: 'actions',
+	// 	// 	render: (
+	// 	// 		text,
+	// 	// 		record // Use the render function to customize the content of the cell
+	// 	// 	) => (
+	// 	// 		<div className="action_buttons">
+	// 	// 			<ButtonComponent
+	// 	// 				onClick={() => handleEdit(record)}
+	// 	// 				type="iconWithBorder"
+	// 	// 				icon={editIcon}
+	// 	// 				className="custom_icon_buttons"
+	// 	// 			/>
+	// 	// 			<ButtonComponent
+	// 	// 				onClick={() => handleDelete(record)}
+	// 	// 				type="iconWithBorder"
+	// 	// 				icon={deleteIcon}
+	// 	// 				className="custom_icon_buttons"
+	// 	// 			/>
+	// 	// 		</div>
+	// 	// 	),
+	// 	// },
+	// 	{
+	// 		title: 'Airport Name',
+	// 		dataIndex: 'airportName',
+	// 		key: 'airportName',
+	// 		render: (text) => text || '-',
+	// 	},
+	// 	{
+	// 		title: 'IATA Code',
+	// 		dataIndex: 'iataCode',
+	// 		key: 'iataCode',
+	// 		render: (text) => text || '-',
+	// 	},
+	// 	{
+	// 		title: 'ICAO Code',
+	// 		dataIndex: 'icaoCode',
+	// 		key: 'icaoCode',
+	// 		render: (text) => text || '-',
+	// 	},
+	// 	{
+	// 		title: 'Country',
+	// 		dataIndex: 'country',
+	// 		key: 'country',
+	// 		render: (text) => text || '-',
+	// 	},
+	// 	{
+	// 		title: 'City',
+	// 		dataIndex: 'city',
+	// 		key: 'city',
+	// 		render: (text) => text || '-',
+	// 	},
+	// 	{
+	// 		title: 'Valid From',
+	// 		dataIndex: 'validFrom',
+	// 		key: 'validFrom',
+	// 		render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
+	// 	},
+	// 	{
+	// 		title: 'Valid To',
+	// 		dataIndex: 'validTill',
+	// 		key: 'validTo',
+	// 		render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
+	// 	},
+	// ];
+
 	const columns = [
-		// {
-		// 	title: 'Actions',
-		// 	key: 'actions',
-		// 	render: (
-		// 		text,
-		// 		record // Use the render function to customize the content of the cell
-		// 	) => (
-		// 		<div className="action_buttons">
-		// 			<ButtonComponent
-		// 				onClick={() => handleEdit(record)}
-		// 				type="iconWithBorder"
-		// 				icon={editIcon}
-		// 				className="custom_icon_buttons"
-		// 			/>
-		// 			<ButtonComponent
-		// 				onClick={() => handleDelete(record)}
-		// 				type="iconWithBorder"
-		// 				icon={deleteIcon}
-		// 				className="custom_icon_buttons"
-		// 			/>
-		// 		</div>
-		// 	),
-		// },
 		{
-			title: 'Airport Name',
-			dataIndex: 'airportName',
-			key: 'airportName',
-			render: (text) => text || '-',
+		  title: 'Airport Name',
+		  dataIndex: ['globalAirport', 'name'],
+		  key: 'airportName',
+		  render: (text) => text || '-',
 		},
 		{
-			title: 'IATA Code',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			render: (text) => text || '-',
+		  title: 'IATA Code',
+		  dataIndex: ['globalAirport', 'iataCode'],
+		  key: 'iataCode',
+		  render: (text) => text || '-',
 		},
 		{
-			title: 'ICAO Code',
-			dataIndex: 'icaoCode',
-			key: 'icaoCode',
-			render: (text) => text || '-',
+		  title: 'ICAO Code',
+		  dataIndex: ['globalAirport', 'icaoCode'],
+		  key: 'icaoCode',
+		  render: (text) => text || '-',
 		},
 		{
-			title: 'Country',
-			dataIndex: 'country',
-			key: 'country',
-			render: (text) => text || '-',
+		  title: 'Country',
+		  dataIndex: 'country',
+		  key: 'country',
+		  render: (text) => text || '-',
 		},
 		{
-			title: 'City',
-			dataIndex: 'city',
-			key: 'city',
-			render: (text) => text || '-',
+		  title: 'City',
+		  dataIndex: 'city',
+		  key: 'city',
+		  render: (text) => text || '-',
 		},
 		{
-			title: 'Valid From',
-			dataIndex: 'validFrom',
-			key: 'validFrom',
-			render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
+		  title: 'Valid From',
+		  dataIndex: 'validFrom',
+		  key: 'validFrom',
+		  render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
 		},
 		{
-			title: 'Valid To',
-			dataIndex: 'validTo',
-			key: 'validTo',
-			render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
+		  title: 'Valid To',
+		  dataIndex: 'validTill',
+		  key: 'validTo',
+		  render: (text) => ConvertUtcToIst(text, "DD/MM/YYYY") || '-',
 		},
-	];
+	  ];
 
 	return (
 		<div>

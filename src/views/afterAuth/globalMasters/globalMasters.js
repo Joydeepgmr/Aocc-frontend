@@ -30,12 +30,21 @@ const GlobalMasters = () => {
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					formComponent={<AirportForm />}
+					// formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
-					tableComponent={<AirportTable data={fetchedGlobalAirport} formComponent={<AirportForm />} />}
+					tableComponent={
+						<AirportTable
+							data={fetchedGlobalAirport}
+							createProps={activeTab == 1 && createProps}
+							setCreateProps={setCreateProps}
+						/>
+					}
 					data={fetchedGlobalAirport}
-					type="airport"
+					createProps={createProps}
+					setCreateProps={setCreateProps}
+					// type="airport"
+					label="New Airport"
 				/>
 			),
 		},

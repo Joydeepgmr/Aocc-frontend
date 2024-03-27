@@ -140,6 +140,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 					placeholder="Enter the MOW"
 					className="custom_input"
 					suffixText="t"
+					required
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -197,6 +198,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
 					required
 					disabled={isReadOnly}
 				/>
