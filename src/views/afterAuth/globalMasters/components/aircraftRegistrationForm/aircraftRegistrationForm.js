@@ -3,17 +3,11 @@ import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
-import { SelectAircraftTye } from '../../../userAccess/userAccessData';
+import { SelectAircraftTye, SelectTypeOfUse } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
 
 const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 	const isNotEditable = type === 'edit';
-
-	const typeOfUseArr = [
-		'Commercial',
-		'Government',
-		'Cargo', 'Personal',
-	]
 	return (
 		<div className="airport_registration_form_container">
 			<div className="airport_registration_form_inputfields">
@@ -51,19 +45,21 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 				/>
 				<CustomSelect
 					SelectData={SelectAircraftTye}
-					placeholder={!isReadOnly && "Filled Text"}
+					placeholder={!isReadOnly && "Aircraft Typey"}
 					className="custom_input"
 					disabled={isReadOnly || isNotEditable}
 					label="Aircraft Type"
 					required
 					name="aircraft_id"
 				/>
-				<InputField
-					label="Type of Use"
-					name="typeOfUse"
-					placeholder={!isReadOnly && "Enter the type of use"}
+				<CustomSelect
+					SelectData={SelectTypeOfUse}
+					placeholder={!isReadOnly && "Type of Use"}
 					className="custom_input"
 					disabled={isReadOnly}
+					label="Type of Use"
+					name="typeOfUse"
+					required
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">

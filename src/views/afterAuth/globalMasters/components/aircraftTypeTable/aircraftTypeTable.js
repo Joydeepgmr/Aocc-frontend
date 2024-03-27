@@ -11,41 +11,6 @@ import dayjs from 'dayjs';
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
-const IntersectionObserverComponent = ({ fetchApi, pagination }) => {
-	const targetRef = useRef(null);
-	const observerRef = useRef(null);
-
-	useEffect(() => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (pagination.isMore) {
-						fetchApi();
-					}
-				});
-			},
-			{
-				root: null,
-				rootMargin: "0px",
-				threshold: 0.5,
-			}
-		);
-
-		observerRef.current = observer;
-
-		const currentTarget = targetRef.current;
-		if (currentTarget) {
-			observer.observe(currentTarget);
-		}
-
-		return () => {
-			if (observerRef.current) {
-				observerRef.current.disconnect();
-			}
-		};
-	}, []); // Empty dependency array to run only once after component mount
-	return <div ref={targetRef}></div>;
-};
 const AircraftTable = ({ createProps, setCreateProps, data }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: isCreateNewSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
@@ -73,7 +38,7 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 			wingspan: data?.wingspan && parseInt(data?.wingspan),
 			length: data?.length && parseInt(data?.length),
 			height: data?.height && parseInt(data?.height),
-			engineType: data?.engineType ?? '',
+			engineType: data?.engineType,
 			numberOfEngines: data?.numberOfEngines && parseInt(data?.numberOfEngines),
 			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
 			firstClass: data?.firstClass && parseInt(data?.firstClass),
@@ -232,7 +197,7 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 
 	return (
 		<div>
-			{data?.length &&
+			{data?.length ?
 				<div className="create_wrapper_table">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
@@ -240,7 +205,7 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 						</CustomTypography>
 						<TableComponent data={data} columns={columns} />
 					</div>
-				</div>
+				</div> : <></>
 			}
 			<ModalComponent
 				isModalOpen={aircraftTypeModal.isOpen}

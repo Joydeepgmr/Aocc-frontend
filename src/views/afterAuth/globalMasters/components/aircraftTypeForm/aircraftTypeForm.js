@@ -5,6 +5,8 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import './aircraftTypeForm.scss';
+import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
+import CustomSelect from '../../../../../components/select/select';
 
 const AircraftTypeForm = ({ isReadOnly, type }) => {
 	const isNotEditable = type === 'edit'
@@ -67,7 +69,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<InputField
+				<CustomSelect
+					SelectData={SelectAcBodyType}
 					label="A/C Body Type"
 					name="acBodyType"
 					placeholder={!isReadOnly && "Enter the Aircraft Body Type"}
@@ -118,7 +121,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 			</div>
 			<div className="aircraft_type_form_inputfields">
-				<InputField
+				<CustomSelect
+					SelectData={SelectEngineType}
 					label="Engine Type"
 					name="engineType"
 					placeholder={!isReadOnly && "Enter the engine type"}

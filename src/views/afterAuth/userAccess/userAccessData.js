@@ -85,6 +85,25 @@ export const SelectAircraftTye = [
 	},
 ];
 
+export const SelectTypeOfUse = [
+	{ id: 1, label: 'Commercial', value: 'Commercial' },
+	{ id: 2, label: 'Government', value: 'Government' },
+	{ id: 3, label: 'Cargo', value: 'Cargo' },
+	{ id: 4, label: 'Personal', value: 'Personal' },
+]
+export const SelectAcBodyType = [
+	{ id: 1, label: 'Wide-Body', value: 'Wide-Body' },
+	{ id: 2, label: 'Commuter', value: 'Commuter' },
+	{ id: 3, label: 'Narrow-Body', value: 'Narrow-Body' },
+	{ id: 4, label: 'Airbus', value: 'Airbus' },
+	{ id: 4, label: 'Airplane', value: 'Airplane' },
+	{ id: 4, label: 'Jets', value: 'Jets' },
+	{ id: 4, label: 'Piston', value: 'Piston' }
+]
+export const SelectEngineType = [
+	{ id: 1, label: 'Jet', value: 'Jet' },
+	{ id: 2, label: 'Turbopop', value: 'Turbopop' }
+]
 export const TerminalData = [
 	{
 		id: '1',

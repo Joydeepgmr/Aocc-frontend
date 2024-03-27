@@ -7,13 +7,18 @@ import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData } = useGetGlobalAircraftType();
-	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData } = useGetGlobalAircraftRegistration();
+	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGetGlobalAircraftType();
+	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGetGlobalAircraftRegistration();
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
 	const handleTabChange = (key) => {
 		setActiveTab(key);
+		if (key == 1 && !updatedAircraftTypeData?.length) {
+			fetchedGlobalAircraftType();
+		} else if (key == 2 && !updatedAircraftRegistrationData?.length) {
+			fetchedGlobalAircraftRegistration();
+		}
 	}
 	function onUpload([file]) {
 		const formData = new FormData();
@@ -69,8 +74,7 @@ const AircraftTabs = () => {
 		},
 	];
 	useEffect(() => {
-		fetchedGlobalAircraftType();
-		fetchedGlobalAircraftRegistration();
+		handleTabChange('1');
 	}, []);
 	return (
 		<div>
