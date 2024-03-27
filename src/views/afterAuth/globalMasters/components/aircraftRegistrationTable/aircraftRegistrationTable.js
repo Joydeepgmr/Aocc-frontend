@@ -14,18 +14,7 @@ import './aircraftRegistrationTable.scss';
 const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
-	const {
-		mutate: postGlobalAircraftRegistration,
-		isLoading: aircraftRegistrationLoading,
-		isSuccess: aircraftRegistrationSuccess,
-		isError: aircraftRegistrationError,
-		postData: aircraftRegistrationPostData,
-		message: aircraftRegistrationMessage,
-	} = usePostGlobalAircraftRegistration();
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
+	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
 
 	const handleDetails = (data) => {
@@ -33,7 +22,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	const closeAddModal = () => {
-		setAircraftRegistrationModal(defaultModalParams);
+		initial.resetFields();
+		setAircraftRegistrationModal(defaultModalParams)
 	};
 
 	const onFinishHandler = (values) => {
@@ -41,8 +31,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
-		postGlobalAircraftRegistration(values);
-		form.resetFields();
+		if (aircraftRegistrationModal.type === 'new') {
+			postGlobalAircraftRegistration(values);
+		}
 		closeAddModal();
 	};
 
