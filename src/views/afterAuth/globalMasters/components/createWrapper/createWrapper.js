@@ -6,8 +6,9 @@ import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvMo
 // import { formDisabled } from '../../redux/reducer';
 import { usePostGlobalAircraftRegistration, usePostGlobalAircraftType, usePostGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
+const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore: true }, fetchData, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
 	// const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	// const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
@@ -77,7 +78,16 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 							onOpenChange={onOpenChange}
 						/>
 					</div>
-					<div>{tableComponent && tableComponent}</div>
+					<div>
+						<InfiniteScroll
+							dataLength={data.length} // This is important to determine when to fetch more data
+							next={fetchData} // Function to call when reaching the end of the list
+							hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+						>
+							{tableComponent && tableComponent}
+						</InfiniteScroll>
+					</div>
+					{/* <div>{tableComponent && tableComponent}</div> */}
 				</div>
 			) : (
 				<div className="create_wrapper_container">

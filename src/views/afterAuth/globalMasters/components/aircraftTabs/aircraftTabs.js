@@ -7,8 +7,8 @@ import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType } = useGetGlobalAircraftType();
-	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
+	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData } = useGetGlobalAircraftType();
+	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData } = useGetGlobalAircraftRegistration();
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
@@ -41,10 +41,10 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeTable data={aircraftTypeData?.data} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable data={updatedAircraftTypeData} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					data={aircraftTypeData?.data}
+					data={updatedAircraftTypeData}
 					pagination={aircraftTypeData?.pagination}
 					fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
@@ -56,8 +56,8 @@ const AircraftTabs = () => {
 			label: 'Aircraft Registration',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftRegistrationTable data={aircraftRegistrationData?.data} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
-					data={aircraftRegistrationData?.data}
+					tableComponent={<AircraftRegistrationTable data={updatedAircraftRegistrationData} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
+					data={updatedAircraftRegistrationData}
 					pagination={aircraftRegistrationData?.pagination}
 					fetchData={fetchedGlobalAircraftRegistration}
 					createProps={createProps}
