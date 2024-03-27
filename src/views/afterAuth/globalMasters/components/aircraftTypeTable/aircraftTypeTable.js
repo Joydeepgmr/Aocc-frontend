@@ -46,11 +46,12 @@ const IntersectionObserverComponent = ({ fetchApi, pagination }) => {
 	}, []); // Empty dependency array to run only once after component mount
 	return <div ref={targetRef}></div>;
 };
-const AircraftTable = ({ createProps, setCreateProps,data }) => {
-	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+const AircraftTable = ({ createProps, setCreateProps, data }) => {
+	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: isCreateNewSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
-	const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
+	const { mutate: patchGlobalAircraftType, isSuccess: isEditSuccess } = usePatchGlobalAircraftType();
 	const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
+	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData } = useGetGlobalAircraftType();
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
@@ -58,14 +59,38 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams)
 	};
+	const getFormValues = (data) => {
+		return {
+			identifier: data?.identifier,
+			iataCode: data?.iataCode,
+			model: data?.model,
+			airline: data?.airline,
+			icaoCode: data?.icaoCode,
+			icaoCodeModified: data?.icaoCodeModified,
+			acFamily: data?.acFamily,
+			acBodyType: data?.acBodyType,
+			minimumGroundTime: data?.minimumGroundTime,
+			wingspan: data?.wingspan && parseInt(data?.wingspan),
+			length: data?.length && parseInt(data?.length),
+			height: data?.height && parseInt(data?.height),
+			engineType: data?.engineType ?? '',
+			numberOfEngines: data?.numberOfEngines && parseInt(data?.numberOfEngines),
+			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
+			firstClass: data?.firstClass && parseInt(data?.firstClass),
+			businessClass: data?.businessClass && parseInt(data?.businessClass),
+			economyClass: data?.economyClass,
+			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
+			validTo: data?.validTo ? dayjs(data?.validTo) : null,
+		}
+	}
 	const onFinishHandler = (values) => {
-		// console.log(values);
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
-		values.iataCode = values?.iataCode;
-		values.icaoCode = values?.icaoCode;
-		values.icaoCodeModified = values?.icaoCodeModified;
-		values.countryCode = values?.countryCode;
+		// values.iataCode = values?.iataCode;
+		// values.icaoCode = values?.icaoCode;
+		// values.icaoCodeModified = values?.icaoCodeModified;
+		// values.countryCode = values?.countryCode;
 		if (aircraftTypeModal.type === 'edit') {
 			console.log('dispatch the update air craft type api');
 			values.id = aircraftTypeModal.data.id
@@ -74,7 +99,6 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 			postGlobalAircraftType(values);
 			console.log('dispatch the create new air craft type api');
 		}
-		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
@@ -106,38 +130,20 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	useEffect(() => {
 		const { data } = aircraftTypeModal
 		if (data) {
-			const initialValuesObj = {
-				identifier: data.identifier ?? '',
-				iataCode: data.iataCode ?? '',
-				model: data.model ?? '',
-				airline: data.airline ?? '',
-				icaoCode: data.icaoCode ?? '',
-				icaoCodeModified: data.icaoCodeModified ?? '',
-				acFamily: data.acFamily ?? '',
-				acBodyType: data.acBodyType ?? '',
-				minimumGroundTime: data.minimumGroundTime ?? '',
-				wingspan: data.wingspan ?? '',
-				length: data.length ?? '',
-				height: data.height ?? '',
-				engineType: data.engineType ?? '',
-				numberOfEngines: data.numberOfEngines ?? '',
-				totalSeats: data.totalSeats ?? '',
-				firstClass: data.firstClass ?? '',
-				businessClass: data.businessClass ?? '',
-				economyClass: data.economyClass ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTo: data.validTo ? dayjs(data.validTo) : null,
-			};
+			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftTypeModal.isOpen]);
 
 	useEffect(() => {
-		if (createProps.new) {
+		if (isEditSuccess || isCreateNewSuccess) {
+			closeAddModal();
+		}
+		else if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new, isEditSuccess, isCreateNewSuccess])
 	const columns = useMemo(() => {
 		return [
 			{
@@ -226,14 +232,16 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 
 	return (
 		<div>
-			<div className="create_wrapper_table">
-				<div className="table_container">
-					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Aircrafts Type
-					</CustomTypography>
-					<TableComponent data={data} columns={columns} />
+			{data?.length &&
+				<div className="create_wrapper_table">
+					<div className="table_container">
+						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
+							Aircraft Type
+						</CustomTypography>
+						<TableComponent data={data} columns={columns} />
+					</div>
 				</div>
-			</div>
+			}
 			<ModalComponent
 				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
@@ -242,8 +250,7 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					{/* {formComponent && formComponent} */}
-					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} />
+					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} type={aircraftTypeModal.type} />
 					{aircraftTypeModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

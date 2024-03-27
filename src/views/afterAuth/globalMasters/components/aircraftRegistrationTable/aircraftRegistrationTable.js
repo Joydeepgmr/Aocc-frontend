@@ -15,8 +15,8 @@ import './aircraftRegistrationTable.scss';
 const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
-	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-	const { mutate: patchGlobalAircraftRegistration } = usePatchGlobalAircraftRegistration();
+	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: isCreateNewSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const { mutate: patchGlobalAircraftRegistration, isSuccess: isEditSuccess } = usePatchGlobalAircraftRegistration();
 	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
 	const handleDetails = (data) => {
@@ -28,8 +28,38 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 		setAircraftRegistrationModal(defaultModalParams)
 	};
 
-	const onFinishHandler = (values) => {
+	const getFormValues = (data) => {
+		return {
+			registration: data?.registration,
+			internal: data?.internal,
+			iataCode: data?.iataCode,
+			iacoCode: data?.iacoCode,
+			aircraftType: data?.aircraftType,
+			typeOfUse: data?.typeOfUse,
+			homeAirport: data?.homeAirport,
+			nationality: data?.nationality,
+			cockpitCrew: data?.cockpitCrew,
+			cabinCrew: data?.cabinCrew,
+			numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
+			height: data?.height && parseInt(data?.height),
+			length: data?.length && parseInt(data?.length),
+			wingspan: data?.wingspan && parseInt(data?.wingspan),
+			mtow: data?.mtow,
+			mow: data?.mow,
+			annex: data?.annex,
+			mainDeck: data?.mainDeck,
+			apuInop: data?.apuInop,
+			ownerName: data?.ownerName,
+			country: data?.country,
+			address: data?.address,
+			remarks: data?.remarks,
+			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
+			validTo: data?.validTo ? dayjs(data?.validTo) : '',
+		};
+	}
 
+	const onFinishHandler = (values) => {
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
 		values.iataCode = values?.iataCode;
@@ -40,8 +70,6 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 			values.id = aircraftRegistrationModal.data.id
 			patchGlobalAircraftRegistration(values);
 		}
-		console.log("values are ", values)
-		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
@@ -64,42 +92,19 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal
 		if (data) {
-			const initialValuesObj = {
-				registration: data.registration ?? '',
-				internal: data.internal ?? '',
-				iataCode: data.iataCode ?? '',
-				iacoCode: data.iacoCode ?? '',
-				aircraftType: data.aircraftType ?? '',
-				typeOfUse: data.typeOfUse ?? '',
-				homeAirport: data.homeAirport ?? '',
-				nationality: data.nationality ?? '',
-				cockpitCrew: data.cockpitCrew ?? '',
-				cabinCrew: data.cabinCrew ?? '',
-				numberOfSeats: data.numberOfSeats ?? '',
-				height: data.height ?? '',
-				length: data.length ?? '',
-				wingspan: data.wingspan ?? '',
-				mtow: data.mtow,
-				mow: data.mow ?? '',
-				annex: data.annex ?? '',
-				mainDeck: data.mainDeck ?? '',
-				apuInop: data.apuInop ?? '',
-				ownerName: data.ownerName ?? '',
-				country: data.country ?? '',
-				address: data.address ?? '',
-				remarks: data.remarks ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTo: data.validTo ? dayjs(data.validTo) : '',
-			};
+			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftRegistrationModal.isOpen]);
 	useEffect(() => {
-		if (createProps.new) {
+		if (isCreateNewSuccess || isEditSuccess) {
+			closeAddModal();
+		}
+		else if (createProps.new) {
 			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new, isCreateNewSuccess, isEditSuccess])
 
 	const columns = useMemo(() => [
 		{
@@ -190,7 +195,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 				className="custom_modal"
 			>
 				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
-					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} />
+					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} type={aircraftRegistrationModal.type} />
 					{aircraftRegistrationModal.type !== 'view' &&
 						<>
 							<Divider />

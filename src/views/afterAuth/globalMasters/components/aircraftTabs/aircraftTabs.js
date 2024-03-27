@@ -27,6 +27,7 @@ const AircraftTabs = () => {
 	function onDownload(file) {
 
 	}
+	console.log("pagination is ", aircraftTypeData)
 	const fetchedGlobalAircraftType = () => {
 		const payload = { pagination: aircraftTypeData?.pagination }
 		getGlobalAircraftType(payload);
