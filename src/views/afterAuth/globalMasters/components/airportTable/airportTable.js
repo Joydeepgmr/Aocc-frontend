@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { usePostGlobalAirport, usePatchGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAirport, usePatchGlobalAirport, useDeleteGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -15,6 +15,7 @@ import './airportTable.scss';
 const AirportTable = ({ data, createProps, setCreateProps }) => {
 	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
 	const { mutate: patchGlobalAirport } = usePatchGlobalAirport();
+	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,9 +54,9 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 	};
 
 	const handleDelete = (record) => {
-		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-		// dispatch(updateAirportData(updatedData));
+		deleteGlobalAirport(record.id);
 	};
+
 
 	const handleEdit = (data) => {
 		setAirportModal({ isOpen: true, type: 'edit', data, title: 'Update your airport' });

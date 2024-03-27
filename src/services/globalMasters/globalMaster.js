@@ -17,9 +17,10 @@ import {
 	DELETE_GLOBAL_AIRCRAFT_REGISTRATION,
 	DELETE_GLOBAL_AIRCRAFT_TYPE,
 	PATCH_GLOBAL_AIRCRAFT_TYPE,
+	POST_BULK_GLOBAL_AIRPORT,
 } from '../../api/endpoints';
 
-import { Get, Post, Patch, Delete } from '../HttpServices/HttpServices';
+import { Post, Patch, Delete } from '../HttpServices/HttpServices';
 
 
 export const useGetGlobalAirport = (props) => {
@@ -58,7 +59,6 @@ export const usePostGlobalAirport = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-
 export const usePatchGlobalAirport = (props) => {
 	const queryClient = useQueryClient()
 	const response = useMutation({
@@ -80,16 +80,46 @@ export const usePatchGlobalAirport = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-export const useDeleteGlobalAirport = (id) => {
+export const useDeleteGlobalAirport = (props) => {
+	const queryClient = useQueryClient();
+
 	const response = useMutation({
-		mutationKey: ['delete-user', id],
-		mutationFn: () => Delete(`${DELETE_GLOBAL_AIRPORT}/${id}`),
+		mutationKey: ['delete-global-airport'],
+		mutationFn: async (id) => {
+			const response = await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
+			return response.data; // Assuming the API returns a success message or updated data
+		},
+		onSuccess: async () => {
+			queryClient.invalidateQueries('global-airport');
+		},
+		...props,
 	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess ? data?.data?.message : error?.response?.data?.message;
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-	return { ...response, data: data?.payload?.data, message: statusMessage };
+	return { ...response, data, message: statusMessage };
+};
+
+export const useUploadCSVAirport = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-airport/upload'],
+		mutationFn: (data) =>
+			Post(`${POST_BULK_GLOBAL_AIRPORT}`, data, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			}),
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
 };
 
 export const useGetGlobalAircraftType = (props) => {
@@ -112,6 +142,7 @@ export const useGetGlobalAircraftType = (props) => {
 
 	return { ...response, data, message: statusMessage, updatedData };
 };
+
 export const useDeleteGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
 
