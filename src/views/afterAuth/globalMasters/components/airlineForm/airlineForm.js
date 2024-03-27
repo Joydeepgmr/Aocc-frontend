@@ -8,8 +8,8 @@ import OtpField from '../../../../../components/input/otp/otp';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import './airlineForm.scss';
-. 
-const AirlineForm = () => {
+
+const AirlineForm = ({ isReadOnly }) => {
 	return (
 		<div className="airline_setup_form_container">
 			<div className="airline_setup_form_inputfields">
@@ -18,10 +18,17 @@ const AirlineForm = () => {
 					name="name"
 					placeholder="Enter the airline name"
 					className="custom_input"
+					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={2} label="Two Letter Code" name="twoLetterCode" required />
-				<OtpField otpLength={3} label="Three Letter Code" name="threeLetterCode" required />
+				<OtpField otpLength={2} label="Two Letter Code" name="twoLetterCode" disabled={isReadOnly} required />
+				<OtpField
+					otpLength={3}
+					label="Three Letter Code"
+					name="threeLetterCode"
+					disabled={isReadOnly}
+					required
+				/>
 			</div>
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect
@@ -30,6 +37,7 @@ const AirlineForm = () => {
 					name="country"
 					placeholder="Country"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<CustomSelect
 					SelectData={HomeAirportData}
@@ -37,6 +45,7 @@ const AirlineForm = () => {
 					name="homeAirport"
 					placeholder="Enter the home airport"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<CustomSelect
 					SelectData={TerminalData}
@@ -44,11 +53,23 @@ const AirlineForm = () => {
 					name="terminal"
 					placeholder="Filled Text"
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airline_setup_form_inputfields">
-				<InputField label="Remark" name="remark" placeholder="Remark" className="custom_input" />
-				<CheckBoxField name="domestic/International" label="Domestic/International" title="Single Checkbox" />
+				<InputField
+					label="Remark"
+					name="remark"
+					placeholder="Remark"
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
+				<CheckBoxField
+					name="domestic/International"
+					label="Domestic/International"
+					title="Single Checkbox"
+					disabled={isReadOnly}
+				/>
 			</div>
 			<Divider />
 			<div className="airline_setup_form_inputfields">
@@ -57,6 +78,7 @@ const AirlineForm = () => {
 					placeholder="Select the access type"
 					label="Mode of payment"
 					name="modeOfPayment"
+					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="customTypo">
@@ -66,8 +88,20 @@ const AirlineForm = () => {
 			</div>
 
 			<div className="airline_setup_form_inputfields">
-				<InputField label="Address 1" name="address1" placeholder="Address 1" className="custom_input" />
-				<InputField label="Phone" name="phone" placeholder="Enter your Phone No." className="custom_input" />
+				<InputField
+					label="Address 1"
+					name="address1"
+					placeholder="Address 1"
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
+				<InputField
+					label="Phone"
+					name="phone"
+					placeholder="Enter your Phone No."
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
 				{/* <InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" /> */}
 			</div>
 			<Divider />
@@ -78,9 +112,16 @@ const AirlineForm = () => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabled={isReadOnly}
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date
+					label="Valid To"
+					placeholder="Select valid to date"
+					name="validTo"
+					format="MM-DD-YYYY"
+					disabled={isReadOnly}
+				/>
 			</div>
 		</div>
 	);

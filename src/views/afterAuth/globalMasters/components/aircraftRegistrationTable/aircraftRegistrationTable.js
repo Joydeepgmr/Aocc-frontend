@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAircraftRegistration } from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -11,24 +11,29 @@ import dayjs from 'dayjs';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-
 const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
-	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
-	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const {
+		mutate: postGlobalAircraftRegistration,
+		isLoading: aircraftRegistrationLoading,
+		isSuccess: aircraftRegistrationSuccess,
+		isError: aircraftRegistrationError,
+		postData: aircraftRegistrationPostData,
+		message: aircraftRegistrationMessage,
+	} = usePostGlobalAircraftRegistration();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
-
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
 	};
 
 	const closeAddModal = () => {
-		setAircraftRegistrationModal(defaultModalParams)
+		setAircraftRegistrationModal(defaultModalParams);
 	};
 
 	const onFinishHandler = (values) => {
@@ -58,7 +63,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	useEffect(() => {
-		const { data } = aircraftRegistrationModal
+		const { data } = aircraftRegistrationModal;
 		if (data) {
 			const initialValuesObj = {
 				registration: data.registration ?? '',
@@ -95,79 +100,79 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new]);
 
-	const columns = useMemo(() => [
-		{
-			title: 'Actions',
-			key: 'actions',
-			render: (
-				text,
-				record
-			) => (
-				<div className="action_buttons">
+	const columns = useMemo(
+		() => [
+			{
+				title: 'Actions',
+				key: 'actions',
+				render: (text, record) => (
+					<div className="action_buttons">
+						<ButtonComponent
+							onClick={() => handleEdit(record)}
+							type="iconWithBorder"
+							icon={editIcon}
+							className="custom_icon_buttons"
+						/>
+						<ButtonComponent
+							onClick={() => handleDelete(record)}
+							type="iconWithBorder"
+							icon={deleteIcon}
+							className="custom_icon_buttons"
+						/>
+					</div>
+				),
+			},
+			{
+				title: 'Description',
+				dataIndex: 'description',
+				key: 'description',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Internal',
+				dataIndex: 'Internal',
+				key: 'Internal',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'IATA Code',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Nationality',
+				dataIndex: 'nationality',
+				key: 'nationality',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Home Airport',
+				dataIndex: 'homeAirport',
+				key: 'homeAirport',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'View Details',
+				key: 'viewDetails',
+				render: (
+					text,
+					record // Use the render function to customize the content of the cell
+				) => (
 					<ButtonComponent
-						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<ButtonComponent
-						onClick={() => handleDelete(record)}
-						type="iconWithBorder"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
-		{
-			title: 'Description',
-			dataIndex: 'description',
-			key: 'description',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Internal',
-			dataIndex: 'Internal',
-			key: 'Internal',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'IATA Code',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Nationality',
-			dataIndex: 'nationality',
-			key: 'nationality',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Home Airport',
-			dataIndex: 'homeAirport',
-			key: 'homeAirport',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'View Details',
-			key: 'viewDetails',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View Details"
-					type="text"
-					onClick={() => {
-						handleDetails(record);
-					}}
-				></ButtonComponent>
-			),
-		},
-	], [data]);
+						title="View Details"
+						type="text"
+						onClick={() => {
+							handleDetails(record);
+						}}
+					></ButtonComponent>
+				),
+			},
+		],
+		[data]
+	);
 	return (
 		<div>
 			<div className="create_wrapper_table">
@@ -185,9 +190,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
+				<Form layout="vertical" form={initial} onFinish={onFinishHandler}>
 					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} />
-					{aircraftRegistrationModal.type !== 'view' &&
+					{aircraftRegistrationModal.type !== 'view' && (
 						<>
 							<Divider />
 							<div className="custom_buttons">
@@ -204,7 +209,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 									isSubmit={true}
 								/>
 							</div>
-						</>}
+						</>
+					)}
 				</Form>
 			</ModalComponent>
 		</div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
@@ -6,13 +6,20 @@ import AirportForm from './components/airportForm/airportForm';
 import AirportTable from './components/airportTable/airportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineForm from './components/airlineForm/airlineForm';
-import AirlineTable from './components/airlineTable/airlineTable';
+// import AirlineTable from './components/airlineTable/airlineTable';
 import { useGetGlobalAirport, useGetGlobalAirline } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
+import AirlineTable from './components/AirlineTable/AirlineTable';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
 	const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+
+	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => {}, onDownload: () => {} });
+	const [activeTab, setActiveTab] = useState('1');
+	const handleTabChange = (key) => {
+		setActiveTab(key);
+	};
 
 	const items = [
 		{
@@ -41,15 +48,23 @@ const GlobalMasters = () => {
 				<CreateWrapper
 					formComponent={<AirlineForm />}
 					title="Setup your airline"
+					createProps={createProps}
+					setCreateProps={setCreateProps}
 					width="120rem"
-					tableComponent={<AirlineTable data={fetchedGlobalAirline} formComponent={<AirlineForm />} />}
+					tableComponent={
+						<AirlineTable
+							createProps={activeTab == 3 && createProps}
+							setCreateProps={setCreateProps}
+							data={fetchedGlobalAirline}
+							formComponent={<AirlineForm />}
+						/>
+					}
 					data={fetchedGlobalAirline}
-					type='airline'
+					label=" Add Airline"
 				/>
 			),
 		},
 	];
-
 
 	return (
 		<div className="global_masters_container">
@@ -57,7 +72,7 @@ const GlobalMasters = () => {
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="1" items={items} type="card" />
+				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange} />
 			</div>
 		</div>
 	);

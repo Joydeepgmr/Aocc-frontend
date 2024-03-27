@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './airlineTable.scss';
-import { usePostGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
+import { useGetGlobalAirline, usePostGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -13,7 +13,9 @@ import AirlineForm from '../airlineForm/airlineForm';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
 // import { useDispatch, useSelector } from 'react-redux';
 
-const AirlineTable = ({ formComponent, data }) => {
+const AirlineTable = ({ createProps, setCreateProps, data }) => {
+	const getGlobalAirlineResponse = useGetGlobalAirline();
+	const [airlinedata, setAirlinedata] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
@@ -21,24 +23,44 @@ const AirlineTable = ({ formComponent, data }) => {
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
+	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
+	const {
+		mutate: postGlobalAirLineRegistration,
+		isLoading: airlineRegistrationLoading,
+		isSuccess: airlineRegistrationSuccess,
+		isError: airlineRegistrationError,
+		postData: airlineRegistrationPostData,
+		message: airlineRegistrationMessage,
+	} = usePostGlobalAirline();
+
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
 	};
 
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		setAirlineRegistrationModal(defaultModalParams);
+		initial.resetFields();
 	};
 
 	const onFinishHanlder = (values) => {
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.twoLetterCode = values?.twoLetterCode?.join('');
-		values.threeLetterCode = values?.threeLetterCode?.join('');
-		form.resetFields();
-		usePostGlobalAirline(values);
-		// dispatch(action(values));
+		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
+		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+
+		values.twoLetterCode = values?.twoLetterCode;
+		values.threeLetterCode = values?.threeLetterCode;
+		console.log(values, 'valll');
+
+		if (airlineRegistrationModal.type === 'new') {
+			postGlobalAirLineRegistration(values);
+		} else {
+			console.log('update');
+		}
+
+		// After posting data, fetch the updated data again
+		if (getGlobalAirlineResponse.isSuccess) {
+			setAirlinedata(getGlobalAirlineResponse.data); // Assuming setData is a state setter for the table data
+		}
 		closeAddModal();
 	};
 
@@ -48,9 +70,7 @@ const AirlineTable = ({ formComponent, data }) => {
 	};
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAirlineRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update airline registration' });
 	};
 
 	const handleEditButton = () => {
@@ -61,101 +81,112 @@ const AirlineTable = ({ formComponent, data }) => {
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = airlineRegistrationModal;
+		if (data) {
 			const initialValuesObj = {
-				name: rowData.name ?? '',
-				twoLetterCode: rowData.twoLetterCode ?? '',
-				threeLetterCode: rowData.threeLetterCode ?? '',
-				country: rowData.country ?? '',
-				homeAirport: rowData.homeAirport ?? '',
-				terminal: rowData.terminal ?? '',
-				remark: rowData.remark ?? '',
-				modeOfPayment: rowData.modeOfPayment ?? '',
-				address1: rowData.address1 ?? '',
-				phone: rowData.phone ?? '',
-				telex: rowData.telex ?? '',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+				name: data.name ?? '',
+				twoLetterCode: data.twoLetterCode ?? '',
+				threeLetterCode: data.threeLetterCode ?? '',
+				country: data.country ?? '',
+				homeAirport: data.homeAirport ?? '',
+				terminal: data.terminal ?? '',
+				remark: data.remark ?? '',
+				modeOfPayment: data.modeOfPayment ?? '',
+				address1: data.address1 ?? '',
+				phone: data.phone ?? '',
+				telex: data.telex ?? '',
+				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+				validTo: data.validTo ? dayjs(data.validTo) : '',
 			};
-			setInitialValues(initialValuesObj);
+			// setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [airlineRegistrationModal.isOpen, airlineRegistrationModal.data]);
 
-	const columns = [
-		{
-			title: 'Actions',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
+	useEffect(() => {
+		if (createProps.new) {
+			setAirlineRegistrationModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new]);
+
+	const columns = useMemo(
+		() => [
+			{
+				title: 'Actions',
+				key: 'actions',
+				render: (text, record) => (
+					<div className="action_buttons">
+						<ButtonComponent
+							onClick={() => handleEdit(record)}
+							type="iconWithBorder"
+							icon={editIcon}
+							className="custom_icon_buttons"
+						/>
+						<ButtonComponent
+							onClick={() => handleDelete(record)}
+							type="iconWithBorder"
+							icon={deleteIcon}
+							className="custom_icon_buttons"
+						/>
+					</div>
+				),
+			},
+			{
+				title: 'Airline Name',
+				dataIndex: 'name',
+				key: 'name',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'IATA Code',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'ICAO Type',
+				dataIndex: 'airportType',
+				key: 'airportType',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Country',
+				dataIndex: 'country',
+				key: 'country',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Home Airport',
+				dataIndex: 'homeAirport',
+				key: 'homeAirport',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Terminal',
+				dataIndex: 'terminal',
+				key: 'timeChange',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'View Details',
+				key: 'viewDetails',
+				render: (
+					text,
+					record // Use the render function to customize the content of the cell
+				) => (
 					<ButtonComponent
-						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<ButtonComponent
-						onClick={() => handleDelete(record)}
-						type="iconWithBorder"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
-		{
-			title: 'Airline Name',
-			dataIndex: 'name',
-			key: 'name',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'IATA Code',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'ICAO Type',
-			dataIndex: 'airportType',
-			key: 'airportType',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Country',
-			dataIndex: 'country',
-			key: 'country',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Home Airport',
-			dataIndex: 'homeAirport',
-			key: 'homeAirport',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Terminal',
-			dataIndex: 'terminal',
-			key: 'timeChange',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'View Details',
-			key: 'viewDetails',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View Details"
-					type="text"
-					onClick={() => {
-						handleDetails(record);
-					}}
-				></ButtonComponent>
-			),
-		},
-	];
+						title="View Details"
+						type="text"
+						onClick={() => {
+							handleDetails(record);
+						}}
+					></ButtonComponent>
+				),
+			},
+		],
+		[data]
+	);
 	return (
 		<div>
 			<div className="create_wrapper_table">
@@ -167,31 +198,17 @@ const AirlineTable = ({ formComponent, data }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
-				title="Edit airline"
+				title={airlineRegistrationModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
+					<AirlineForm isReadOnly={airlineRegistrationModal.type === 'view'} />
+					{airlineRegistrationModal.type !== 'view' && (
 						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
+							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"
@@ -199,11 +216,11 @@ const AirlineTable = ({ formComponent, data }) => {
 									className="custom_button_cancel"
 									onClick={closeAddModal}
 								/>
+
 								<ButtonComponent
-									title="Edit"
+									title={airlineRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
-									className="custom_button_save"
-									onClick={handleEditButton}
+									className="custom_button_cancel"
 									isSubmit={true}
 								/>
 							</div>

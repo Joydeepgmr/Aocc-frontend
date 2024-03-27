@@ -1,17 +1,19 @@
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { 
-	GET_GLOBAL_AIRPORT, 
-	POST_GLOBAL_AIRPORT, 
+import {
+	GET_GLOBAL_AIRPORT,
+	POST_GLOBAL_AIRPORT,
 	EDIT_GLOBAL_AIRPORT,
 	DELETE_GLOBAL_AIRPORT,
-	GET_GLOBAL_AIRCRAFT_TYPE, 
+	GET_GLOBAL_AIRCRAFT_TYPE,
 	POST_GLOBAL_AIRCRAFT_TYPE,
-	POST_BULK_GLOBAL_AIRCRAFT_TYPE, 
+	POST_BULK_GLOBAL_AIRCRAFT_TYPE,
 	GET_GLOBAL_AIRCRAFT_REGISTRATION,
 	POST_GLOBAL_AIRCRAFT_REGISTRATION,
 	GET_GLOBAL_AIRLINE,
 	POST_GLOBAL_AIRLINE,
-} from "../../api/endpoints";
+	PATCH_GLOBAL_AIRLINE,
+	DELETE_GLOBAL_AIRLINE,
+} from '../../api/endpoints';
 
 import { Get, Post, Patch, Delete } from '../HttpServices/HttpServices';
 
@@ -35,10 +37,9 @@ export const useGetGlobalAirport = (props) => {
 	};
 };
 
-
 export const usePostGlobalAirport = (props) => {
-	const queryClient= useQueryClient()
-	
+	const queryClient = useQueryClient();
+
 	const response = useMutation({
 		mutationKey: ['post-global-airport'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
@@ -57,8 +58,7 @@ export const usePostGlobalAirport = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-
-export const useEditGlobalAirport = (id,props) => {
+export const useEditGlobalAirport = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-global-airport'],
 		mutationFn: (data) => Patch(`${EDIT_GLOBAL_AIRPORT}/${id}`, data),
@@ -66,28 +66,22 @@ export const useEditGlobalAirport = (id,props) => {
 	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.message;
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
 
-	return { ...response, data: data?.data , message : statusMessage};
+	return { ...response, data: data?.data, message: statusMessage };
 };
-
 
 export const useDeleteGlobalAirport = (id) => {
-    const response = useMutation({
-        mutationKey: ['delete-user', id],
-        mutationFn: () => Delete(`${DELETE_GLOBAL_AIRPORT}/${id}`),
-    });
-    const { data, error, isSuccess } = response;
+	const response = useMutation({
+		mutationKey: ['delete-user', id],
+		mutationFn: () => Delete(`${DELETE_GLOBAL_AIRPORT}/${id}`),
+	});
+	const { data, error, isSuccess } = response;
 
-    const statusMessage = isSuccess
-        ? data?.data?.message
-        : error?.response?.data?.message;
+	const statusMessage = isSuccess ? data?.data?.message : error?.response?.data?.message;
 
-    return { ...response, data: data?.payload?.data, message: statusMessage };
+	return { ...response, data: data?.payload?.data, message: statusMessage };
 };
-
 
 export const useGetGlobalAircraftType = (props) => {
 	const response = useQuery({
@@ -107,10 +101,9 @@ export const useGetGlobalAircraftType = (props) => {
 	};
 };
 
-
 export const usePostGlobalAircraftType = (props) => {
-	const queryClient= useQueryClient()
-	
+	const queryClient = useQueryClient();
+
 	const response = useMutation({
 		mutationKey: ['post-global-aircraft-type'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
@@ -129,7 +122,6 @@ export const usePostGlobalAircraftType = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-
 export const useUploadCSVAircraftType = (props) => {
 	const response = useMutation({
 		mutationKey: ['global-aircraft-type/upload'],
@@ -143,7 +135,6 @@ export const useUploadCSVAircraftType = (props) => {
 
 	return { ...response, data: data?.data, message: statusMessage };
 };
-
 
 export const useGetGlobalAircraftRegistration = (props) => {
 	const response = useQuery({
@@ -163,10 +154,9 @@ export const useGetGlobalAircraftRegistration = (props) => {
 	};
 };
 
-
 export const usePostGlobalAircraftRegistration = (props) => {
-	const queryClient= useQueryClient()
-	
+	const queryClient = useQueryClient();
+
 	const response = useMutation({
 		mutationKey: ['post-global-aircraft-register'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
@@ -185,11 +175,10 @@ export const usePostGlobalAircraftRegistration = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-
 export const useGetGlobalAirline = (props) => {
 	const response = useQuery({
 		queryKey: ['global-airline'],
-		queryFn: async () => await Get(`${GET_GLOBAL_AIRLINE}`),
+		queryFn: async () => await Post(`${GET_GLOBAL_AIRLINE}`),
 		...props,
 	});
 
@@ -207,11 +196,55 @@ export const useGetGlobalAirline = (props) => {
 };
 
 export const usePostGlobalAirline = (props) => {
-	const queryClient= useQueryClient()
-	
+	const queryClient = useQueryClient();
+
 	const response = useMutation({
 		mutationKey: ['post-global-airline'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRLINE}`, props),
+		onSuccess: () => {
+			queryClient.invalidateQueries('global-airline');
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+
+export const usePatchGlobalAirline = (props) => {
+	const queryClient = useQueryClient();
+
+	const response = useMutation({
+		mutationKey: ['patch-global-airline'],
+		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}`, props),
+
+		onSuccess: () => {
+			queryClient.invalidateQueries('global-airline');
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+
+export const useDeleteGlobalAirline = (props) => {
+	const queryClient = useQueryClient();
+
+	const response = useMutation({
+		mutationKey: ['delete-global-airline'],
+		mutationFn: async (props) => await Delete(`${DELETE_GLOBAL_AIRLINE}`, props),
+
 		onSuccess: () => {
 			queryClient.invalidateQueries('global-airline');
 		},
