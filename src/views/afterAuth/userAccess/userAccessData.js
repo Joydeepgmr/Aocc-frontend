@@ -1,4 +1,4 @@
-import { useGetGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
 export const SelectData = [
 	{
@@ -169,7 +169,7 @@ export const columns = [
 	{ title: 'Created On', dataIndex: 'createdOn', key: '6' },
 ];
 
-// const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
+// const { data: fetchedGlobalAircraftType } = useGlobalAircraftType();
 // export const SelectAircraftType = fetchedGlobalAircraftType ? fetchedGlobalAircraftType.map((item, index) => ({
 // 	id: index.toString(),
 // 	label: item.label,

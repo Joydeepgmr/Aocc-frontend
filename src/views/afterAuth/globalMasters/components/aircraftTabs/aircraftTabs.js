@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
-import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { useGetGlobalAircraftRegistration, useGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGetGlobalAircraftType();
+	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData = [], isEditSuccess } = useGlobalAircraftType();
 	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGetGlobalAircraftRegistration();
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
@@ -32,7 +32,6 @@ const AircraftTabs = () => {
 	function onDownload(file) {
 
 	}
-	console.log("pagination is ", aircraftTypeData)
 	const fetchedGlobalAircraftType = () => {
 		const payload = { pagination: aircraftTypeData?.pagination }
 		getGlobalAircraftType(payload);
@@ -47,7 +46,7 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeTable data={updatedAircraftTypeData} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					data={updatedAircraftTypeData}

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType, useGetGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
+import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType, useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -11,12 +11,12 @@ import dayjs from 'dayjs';
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
-const AircraftTable = ({ createProps, setCreateProps, data }) => {
-	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: isCreateNewSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
-	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
-	const { mutate: patchGlobalAircraftType, isSuccess: isEditSuccess } = usePatchGlobalAircraftType();
-	const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData } = useGetGlobalAircraftType();
+const AircraftTable = ({ createProps, setCreateProps }) => {
+	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	// const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
+	// const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
+	// const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
+	const { patchAircraftType, isEditSuccess, deleteAircraftType, isDeleteSuccess, isDeleteError, postAircraftType, isCreateNewSuccess, isCreateNewError, updatedData: data } = useGlobalAircraftType();
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
@@ -62,17 +62,16 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 			delete values.iataCode
 			delete values.validFrom
 			delete values.model
-			patchGlobalAircraftType({ values, id });
+			patchAircraftType({ values, id });
 		} else {
-			postGlobalAircraftType(values);
-			console.log('dispatch the create new air craft type api');
+			postAircraftType(values);
 		}
 	};
 
 	const handleDelete = (record) => {
 		// Call the delete function and pass the record ID
 		// deleteGlobalAirport(record.id);
-		deleteGlobalAircraftType(record.id);
+		deleteAircraftType(record.id);
 	};
 
 	// const handleDelete = (record) => {
