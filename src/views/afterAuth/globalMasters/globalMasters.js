@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
@@ -12,20 +12,34 @@ import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
-	const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+	// const { mutate: fetchedGlobalAirport, isLoading, isError, isSuccess } = useGetGlobalAirport();
+	// const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+
+	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => { }, onDownload: () => { } })
+	const [activeTab, setActiveTab] = useState('1');
+	const handleTabChange = (key) => {
+		setActiveTab(key);
+	}
+
+	console.log(createProps);
+	console.log(activeTab == 1);
 
 	const items = [
+	
 		{
 			key: '1',
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					formComponent={<AirportForm />}
+					// formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
-					tableComponent={<AirportTable data={fetchedGlobalAirport} formComponent={<AirportForm />} />}
+					tableComponent={<AirportTable data={fetchedGlobalAirport} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAirport}
-					type="airport"
+					createProps={createProps}
+					setCreateProps={setCreateProps}
+					// type="airport"
+					label='New Airport'
 				/>
 			),
 		},
@@ -42,22 +56,24 @@ const GlobalMasters = () => {
 					formComponent={<AirlineForm />}
 					title="Setup your airline"
 					width="120rem"
-					tableComponent={<AirlineTable data={fetchedGlobalAirline} formComponent={<AirlineForm />} />}
-					data={fetchedGlobalAirline}
+					// tableComponent={<AirlineTable data={fetchedGlobalAirline} createProps={activeTab == 3 && createProps} setCreateProps={setCreateProps} />}
+					// data={fetchedGlobalAirline}
 					type='airline'
 				/>
 			),
 		},
 	];
 
-
+	// useEffect(()=> {
+	// 	fetchedGlobalAirport();
+	// }, [])
 	return (
 		<div className="global_masters_container">
 			<div className="global_master_header">
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="1" items={items} type="card" />
+				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange}/>
 			</div>
 		</div>
 	);
