@@ -11,7 +11,7 @@ export const USER_LOGIN = 'user/login';
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = "airport-license"
 export const GET_LICENSE = "airport-license/"
-export const GET_AIRPORT_NAME = "global-airport/"
+export const GET_AIRPORT_NAME = "global-airport/paginated"
 
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
@@ -19,7 +19,6 @@ export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
 export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
-
 
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/paginated';
@@ -42,5 +41,7 @@ export const PATCH_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const DELETE_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const POST_BULK_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/upload/';
 
-export const GET_GLOBAL_AIRLINE = '/global-airline/';
+export const GET_GLOBAL_AIRLINE = '/global-airline/paginated';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';
+export const PATCH_GLOBAL_AIRLINE = '/global-airline/';
+export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
