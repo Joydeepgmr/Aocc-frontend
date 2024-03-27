@@ -59,8 +59,9 @@ const AirportForm = ({isReadOnly}) => {
 					label="Airport Type"
 					name="airportType"
 					disabled={isReadOnly}
+					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly}/>
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly} required/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField

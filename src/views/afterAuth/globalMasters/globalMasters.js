@@ -11,18 +11,33 @@ import { useGetGlobalAirport, useGetGlobalAirline } from '../../../services/glob
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
+	const { data: airportData, mutate: getGlobalAirport } = useGetGlobalAirport();
+	// const { data: fetchedGlobalAirport } = useGetGlobalAirport();
 	// const { mutate: fetchedGlobalAirport, isLoading, isError, isSuccess } = useGetGlobalAirport();
 	// const { data: fetchedGlobalAirline } = useGetGlobalAirline();
 
-	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => { }, onDownload: () => { } })
+	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
 	const handleTabChange = (key) => {
 		setActiveTab(key);
 	}
+	function onUpload([file]) {
+		const formData = new FormData();
+		formData.append('file', file);
+		if (activeTab == 1) {
+			uploadAircraftTypeCsv(formData)
+		} else if (activeTab == 2) {
 
-	console.log(createProps);
-	console.log(activeTab == 1);
+		}
+	}
+	function onDownload(file) {
+
+	}
+
+	const fetchedGlobalAirport = () => {
+		const payload = { pagination: airportData?.pagination }
+		getGlobalAirport(payload);
+	}
 
 	const items = [
 	
@@ -31,14 +46,14 @@ const GlobalMasters = () => {
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					// formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
-					tableComponent={<AirportTable data={fetchedGlobalAirport} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
-					data={fetchedGlobalAirport}
+					tableComponent={<AirportTable data={airportData?.data} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					data={airportData?.data}
+					pagination={airportData?.pagination}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					// type="airport"
+					fetchData={fetchedGlobalAirport}
 					label='New Airport'
 				/>
 			),
@@ -64,9 +79,10 @@ const GlobalMasters = () => {
 		},
 	];
 
-	// useEffect(()=> {
-	// 	fetchedGlobalAirport();
-	// }, [])
+	useEffect(() => {
+		fetchedGlobalAirport();
+	}, []);
+
 	return (
 		<div className="global_masters_container">
 			<div className="global_master_header">
