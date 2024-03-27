@@ -15,6 +15,11 @@ axiosInstance.interceptors.request.use(
 			config.headers['Authorization'] = `Bearer ${token}`;
 		}
 
+		// Remove keys with null values from the request payload
+		if (config.method.toUpperCase() !== 'GET' && config.data && typeof config.data === 'object') {
+			config.data = removeNullValues(config.data);
+		}
+
 		return config;
 	},
 	(error) => {
@@ -38,5 +43,16 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject(error);
 	}
 );
+
+// Utility function to remove keys with null values from an object
+const removeNullValues = (obj) => {
+	const newObj = {};
+	for (const key in obj) {
+		if (obj[key] !== null) {
+			newObj[key] = obj[key];
+		}
+	}
+	return newObj;
+};
 
 export default axiosInstance;

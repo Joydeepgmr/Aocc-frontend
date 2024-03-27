@@ -39,9 +39,10 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 			</div>
 			<div className="aircraft_type_form_inputfields">
-				<InputField
+				<CustomSelect
+					SelectData={SelectAcBodyType}
 					label="Airline"
-					name="airline"
+					name="globalAirline"
 					placeholder={!isReadOnly && "Enter the airline name"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -64,7 +65,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="A/C Family"
-					name="acFamily"
+					name="family"
 					placeholder={!isReadOnly && "Enter the aircraft family"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -72,13 +73,13 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<CustomSelect
 					SelectData={SelectAcBodyType}
 					label="A/C Body Type"
-					name="acBodyType"
+					name="bodyType"
 					placeholder={!isReadOnly && "Enter the Aircraft Body Type"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<CheckBoxField
-					name="dockersystem"
+					name="isUsingDockingSystem"
 					disabled={isReadOnly}
 					label="Don't use docking system"
 					title="Single Checkbox"
@@ -87,8 +88,9 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Minimum Ground Time"
-					name="minimumGroundTime"
+					name="minGroundTime"
 					placeholder={!isReadOnly && "Enter the minimum ground time"}
+					type='number'
 					className="custom_input"
 					suffixText="minutes"
 					disabled={isReadOnly}
@@ -99,6 +101,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Wingspan"
 					name="wingspan"
 					placeholder={!isReadOnly && "Enter the wingspan"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -107,6 +110,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Length"
 					name="length"
 					placeholder={!isReadOnly && "Enter the length"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -115,6 +119,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Height"
 					name="height"
 					placeholder={!isReadOnly && "Enter the Height"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -131,7 +136,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 				<InputField
 					label="Number of Engines"
-					name="numberOfEngines"
+					name="engineCount"
+					type='number'
 					placeholder={!isReadOnly && "Enter the number of engines"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -143,6 +149,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Total Seats"
 					name="totalSeats"
+					type='number'
 					placeholder={!isReadOnly && "Enter the total seats"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -150,6 +157,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="First Class"
 					name="firstClass"
+					type='number'
 					placeholder={!isReadOnly && "Enter the first class seats"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -157,6 +165,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Business Class"
 					name="businessClass"
+					type='number'
 					placeholder={!isReadOnly && "Enter the business class seats"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -164,6 +173,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Economy Class"
 					name="economyClass"
+					type='number'
 					placeholder={!isReadOnly && "Enter the economy class seats"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -183,7 +193,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<Date
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
-					name="validTo"
+					name="validTill"
 					disabledFor='past'
 					format="MM-DD-YYYY"
 					disabled={isReadOnly} />

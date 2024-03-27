@@ -29,37 +29,40 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 			identifier: data?.identifier,
 			iataCode: data?.iataCode,
 			model: data?.model,
-			airline: data?.airline,
+			globalAirline: data?.globalAirline,
 			icaoCode: data?.icaoCode,
 			icaoCodeModified: data?.icaoCodeModified,
-			acFamily: data?.acFamily,
-			acBodyType: data?.acBodyType,
-			minimumGroundTime: data?.minimumGroundTime,
+			family: data?.family,
+			bodyType: data?.bodyType,
+			isUsingDockingSystem: data?.isUsingDockingSystem,
+			minGroundTime: data?.minGroundTime,
 			wingspan: data?.wingspan && parseInt(data?.wingspan),
 			length: data?.length && parseInt(data?.length),
 			height: data?.height && parseInt(data?.height),
 			engineType: data?.engineType,
-			numberOfEngines: data?.numberOfEngines && parseInt(data?.numberOfEngines),
+			engineCount: data?.engineCount && parseInt(data?.engineCount),
 			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
 			firstClass: data?.firstClass && parseInt(data?.firstClass),
 			businessClass: data?.businessClass && parseInt(data?.businessClass),
 			economyClass: data?.economyClass,
-			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
-			validTo: data?.validTo ? dayjs(data?.validTo) : null,
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
 		}
 	}
 	const onFinishHandler = (values) => {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
-		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		// values.iataCode = values?.iataCode;
 		// values.icaoCode = values?.icaoCode;
 		// values.icaoCodeModified = values?.icaoCodeModified;
 		// values.countryCode = values?.countryCode;
 		if (aircraftTypeModal.type === 'edit') {
-			console.log('dispatch the update air craft type api');
-			values.id = aircraftTypeModal.data.id
-			patchGlobalAircraftType(values);
+			const id = aircraftTypeModal.data.id;
+			delete values.iataCode
+			delete values.validFrom
+			delete values.model
+			patchGlobalAircraftType({ values, id });
 		} else {
 			postGlobalAircraftType(values);
 			console.log('dispatch the create new air craft type api');
@@ -104,11 +107,13 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 		if (isEditSuccess || isCreateNewSuccess) {
 			closeAddModal();
 		}
-		else if (createProps.new) {
+	}, [isEditSuccess, isCreateNewSuccess]);
+	useEffect(() => {
+		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new, isEditSuccess, isCreateNewSuccess])
+	}, [createProps.new])
 	const columns = useMemo(() => {
 		return [
 			{
@@ -166,14 +171,14 @@ const AircraftTable = ({ createProps, setCreateProps, data }) => {
 			},
 			{
 				title: 'A/C Family',
-				dataIndex: 'acFamily',
-				key: 'acFamily',
+				dataIndex: 'family',
+				key: 'family',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'A/C Body Type',
-				dataIndex: 'acBodyType',
-				key: 'acBodyType',
+				dataIndex: 'bodyType',
+				key: 'bodyType',
 				render: (text) => text || '-',
 			},
 			{

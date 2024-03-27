@@ -92,17 +92,17 @@ export const SelectTypeOfUse = [
 	{ id: 4, label: 'Personal', value: 'Personal' },
 ]
 export const SelectAcBodyType = [
-	{ id: 1, label: 'Wide-Body', value: 'Wide-Body' },
-	{ id: 2, label: 'Commuter', value: 'Commuter' },
-	{ id: 3, label: 'Narrow-Body', value: 'Narrow-Body' },
-	{ id: 4, label: 'Airbus', value: 'Airbus' },
-	{ id: 4, label: 'Airplane', value: 'Airplane' },
-	{ id: 4, label: 'Jets', value: 'Jets' },
-	{ id: 4, label: 'Piston', value: 'Piston' }
+	{ id: 1, label: 'Wide-Body', value: 'wide body' },
+	{ id: 2, label: 'Commuter', value: 'commuter' },
+	{ id: 3, label: 'Narrow-Body', value: 'narrow body' },
+	{ id: 4, label: 'Airbus', value: 'airbus' },
+	{ id: 4, label: 'Airplane', value: 'airplane' },
+	{ id: 4, label: 'Jets', value: 'jets' },
+	{ id: 4, label: 'Piston', value: 'piston' }
 ]
 export const SelectEngineType = [
-	{ id: 1, label: 'Jet', value: 'Jet' },
-	{ id: 2, label: 'Turbopop', value: 'Turbopop' }
+	{ id: 1, label: 'Jet', value: 'jet' },
+	{ id: 2, label: 'Turbopop', value: 'turbopop' }
 ]
 export const TerminalData = [
 	{
