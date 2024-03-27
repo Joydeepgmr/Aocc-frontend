@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType, useGetGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -11,8 +11,42 @@ import dayjs from 'dayjs';
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
+const IntersectionObserverComponent = ({ fetchApi, pagination }) => {
+	const targetRef = useRef(null);
+	const observerRef = useRef(null);
 
-const AircraftTable = ({ data, createProps, setCreateProps }) => {
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (pagination.isMore) {
+						fetchApi();
+					}
+				});
+			},
+			{
+				root: null,
+				rootMargin: "0px",
+				threshold: 0.5,
+			}
+		);
+
+		observerRef.current = observer;
+
+		const currentTarget = targetRef.current;
+		if (currentTarget) {
+			observer.observe(currentTarget);
+		}
+
+		return () => {
+			if (observerRef.current) {
+				observerRef.current.disconnect();
+			}
+		};
+	}, []); // Empty dependency array to run only once after component mount
+	return <div ref={targetRef}></div>;
+};
+const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
 	const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
@@ -20,12 +54,10 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
-
 	const closeAddModal = () => {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams)
 	};
-
 	const onFinishHandler = (values) => {
 		// console.log(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
@@ -78,21 +110,21 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 				identifier: data.identifier ?? '',
 				iataCode: data.iataCode ?? '',
 				model: data.model ?? '',
-				airline: data.airline ?? 'NA',
-				icaoCode: data.icaoCode ?? 'NA',
-				icaoCodeModified: data.icaoCodeModified ?? 'NA',
-				acFamily: data.acFamily ?? 'NA',
-				acBodyType: data.acBodyType ?? 'NA',
-				minimumGroundTime: data.minimumGroundTime ?? 'NA',
-				wingspan: data.wingspan ?? 'NA',
-				length: data.length ?? 'NA',
-				height: data.height ?? 'NA',
-				engineType: data.engineType ?? 'NA',
-				numberOfEngines: data.numberOfEngines ?? 'NA',
-				totalSeats: data.totalSeats ?? 'NA',
-				firstClass: data.firstClass ?? 'NA',
-				businessClass: data.businessClass ?? 'NA',
-				economyClass: data.economyClass ?? 'NA',
+				airline: data.airline ?? '',
+				icaoCode: data.icaoCode ?? '',
+				icaoCodeModified: data.icaoCodeModified ?? '',
+				acFamily: data.acFamily ?? '',
+				acBodyType: data.acBodyType ?? '',
+				minimumGroundTime: data.minimumGroundTime ?? '',
+				wingspan: data.wingspan ?? '',
+				length: data.length ?? '',
+				height: data.height ?? '',
+				engineType: data.engineType ?? '',
+				numberOfEngines: data.numberOfEngines ?? '',
+				totalSeats: data.totalSeats ?? '',
+				firstClass: data.firstClass ?? '',
+				businessClass: data.businessClass ?? '',
+				economyClass: data.economyClass ?? '',
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
 				validTo: data.validTo ? dayjs(data.validTo) : null,
 			};

@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
-import CreateWrapper from '../createWrapper/createWrapper';
-import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
-import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
-import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType } from '../../../../../services/globalMasters/globalMaster';
-import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
+import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
+import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
+import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
-	const { data: fetchedGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
-	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => { }, onDownload: () => { } })
+	const { data: aircraftTypeData, mutate: getGlobalAircraftType } = useGetGlobalAircraftType();
+	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration } = useGetGlobalAircraftRegistration();
+	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
+	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
 	const handleTabChange = (key) => {
 		setActiveTab(key);
+	}
+	function onUpload([file]) {
+		const formData = new FormData();
+		formData.append('file', file);
+		if (activeTab == 1) {
+			uploadAircraftTypeCsv(formData)
+		} else if (activeTab == 2) {
+
+		}
+	}
+	function onDownload(file) {
+
+	}
+	const fetchedGlobalAircraftType = () => {
+		const payload = { pagination: aircraftTypeData?.pagination }
+		getGlobalAircraftType(payload);
+	}
+	const fetchedGlobalAircraftRegistration = () => {
+		const payload = { pagination: aircraftRegistrationData?.pagination }
+		getGlobalAircraftRegistration(payload);
 	}
 	const items = [
 		{
@@ -22,10 +41,12 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeTable data={fetchedGlobalAircraftType} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable data={aircraftTypeData?.data} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					data={fetchedGlobalAircraftType}
+					data={aircraftTypeData?.data}
+					pagination={aircraftTypeData?.pagination}
+					fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
 				/>
 			),
@@ -35,8 +56,10 @@ const AircraftTabs = () => {
 			label: 'Aircraft Registration',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftRegistrationTable data={fetchedGlobalAircraftRegistration} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
-					data={fetchedGlobalAircraftType}
+					tableComponent={<AircraftRegistrationTable data={aircraftRegistrationData?.data} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
+					data={aircraftRegistrationData?.data}
+					pagination={aircraftRegistrationData?.pagination}
+					fetchData={fetchedGlobalAircraftRegistration}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					label='Add aircraft registration'
@@ -44,6 +67,10 @@ const AircraftTabs = () => {
 			),
 		},
 	];
+	useEffect(() => {
+		fetchedGlobalAircraftType();
+		fetchedGlobalAircraftRegistration();
+	}, []);
 	return (
 		<div>
 			<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />

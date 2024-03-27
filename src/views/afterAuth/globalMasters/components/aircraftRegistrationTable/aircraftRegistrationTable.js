@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useDeleteGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
+import { useDeleteGlobalAircraftRegistration, useGetGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -12,15 +12,13 @@ import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegist
 import './aircraftRegistrationTable.scss';
 
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	const { mutate: patchGlobalAircraftRegistration } = usePatchGlobalAircraftRegistration();
 	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
-
-
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
 	};
