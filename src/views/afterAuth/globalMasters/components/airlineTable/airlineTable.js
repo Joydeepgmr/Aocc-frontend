@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './airlineTable.scss';
-import {usePostGlobalAirline} from "../../../../../services/globalMasters/globalMaster"
+import {
+	useGetGlobalAirline,
+	usePostGlobalAirline,
+	useDeleteGlobalAirline,
+} from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -9,47 +13,71 @@ import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import AirlineForm from '../airlineForm/airlineForm';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
 // import { useDispatch, useSelector } from 'react-redux';
 
+const AirlineTable = ({ createProps, setCreateProps, data }) => {
+	// const getGlobalAirlineResponse = useGetGlobalAirline();
 
-const AirlineTable = ({ formComponent, data }) => {
+	const [airlinedata, setAirlinedata] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [initialValues, setInitialValues] = useState({});
+	const [formDisabled, setFormDisabled] = useState(true); // State variable to track form field disabled state
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
 
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
+	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
+	const {
+		mutate: postGlobalAirLineRegistration,
+		isLoading: airlineRegistrationLoading,
+		isSuccess: airlineRegistrationSuccess,
+		isError: airlineRegistrationError,
+		postData: airlineRegistrationPostData,
+		message: airlineRegistrationMessage,
+	} = usePostGlobalAirline();
+
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
 	};
 
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		setAirlineRegistrationModal(defaultModalParams);
+		initial.resetFields();
 	};
 
 	const onFinishHanlder = (values) => {
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.twoLetterCode = values?.twoLetterCode?.join('');
-		values.threeLetterCode = values?.threeLetterCode?.join('');
-		form.resetFields();
-		usePostGlobalAirline(values);
-		// dispatch(action(values));
+		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
+		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+
+		values.twoLetterCode = values?.twoLetterCode;
+		values.threeLetterCode = values?.threeLetterCode;
+		console.log(values, 'valll');
+
+		if (airlineRegistrationModal.type === 'new') {
+			postGlobalAirLineRegistration(values);
+		} else {
+			useGetGlobalAirline(values);
+		}
+
 		closeAddModal();
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateAirportData(updatedData));
-	// };
+	const handleDelete = (record) => {
+		useDeleteGlobalAirline({
+			params: {
+				id: id,
+			},
+		});
+
+		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		// dispatch(updateAirportData(updatedData));
+	};
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAirlineRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update airline registration' });
 	};
 
 	const handleEditButton = () => {
@@ -60,147 +88,135 @@ const AirlineTable = ({ formComponent, data }) => {
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = airlineRegistrationModal;
+		console.log(data, 'data');
+		if (data) {
 			const initialValuesObj = {
-				name: rowData.name ?? '',
-				twoLetterCode: rowData.twoLetterCode ?? '',
-				threeLetterCode: rowData.threeLetterCode ?? '',
-				country: rowData.country ?? 'NA',
-				homeAirport: rowData.homeAirport ?? 'NA',
-				terminal: rowData.terminal ?? 'NA',
-				remark: rowData.remark ?? 'NA',
-				modeOfPayment: rowData.modeOfPayment ?? 'NA',
-				address1: rowData.address1 ?? 'NA',
-				phone: rowData.phone ?? 'NA',
-				telex: rowData.telex ?? 'NA',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : '',
+				name: data.name ?? '',
+				twoLetterCode: data.twoLetterCode ?? '',
+				threeLetterCode: data.threeLetterCode ?? '',
+				country: data.country ?? '',
+				// homeAirport: data.homeAirport ?? '',
+				terminal: data.terminal ?? '',
+				remark: data.remark ?? '',
+				modeOfPayment: data.paymentMode ?? '',
+				address1: data.address ?? '',
+				phone: data.phoneNumber ?? '',
+				// telex: data.telex ?? '',
+				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+				validTo: data.validTill ? dayjs(data.validTill) : '',
 			};
-			setInitialValues(initialValuesObj);
+			// setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [airlineRegistrationModal.isOpen]);
 
+	useEffect(() => {
+		if (createProps.new) {
+			setAirlineRegistrationModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new]);
 
-	const columns = [
-		{
-			title: 'Actions',
-			key: 'actions',
-			render: (
-				text,
-				record
-			) => (
-				<div className="action_buttons">
+	const columns = useMemo(
+		() => [
+			{
+				title: 'Actions',
+				key: 'actions',
+				render: (text, record) => (
+					<div className="action_buttons">
+						<ButtonComponent
+							onClick={() => handleEdit(record)}
+							type="iconWithBorder"
+							icon={editIcon}
+							className="custom_icon_buttons"
+						/>
+						<ButtonComponent
+							onClick={() => handleDelete(record)}
+							type="iconWithBorder"
+							icon={deleteIcon}
+							className="custom_icon_buttons"
+						/>
+					</div>
+				),
+			},
+			{
+				title: 'Airline Name',
+				dataIndex: 'name',
+				key: 'name',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'IATA Code',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'ICAO Type',
+				dataIndex: 'airportType',
+				key: 'airportType',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Country',
+				dataIndex: 'country',
+				key: 'country',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Home Airport',
+				dataIndex: 'homeAirport',
+				key: 'homeAirport',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'Terminal',
+				dataIndex: 'terminal',
+				key: 'timeChange',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'View Details',
+				key: 'viewDetails',
+				render: (
+					text,
+					record // Use the render function to customize the content of the cell
+				) => (
 					<ButtonComponent
-						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<ButtonComponent
-						onClick={() => handleDelete(record)}
-						type="iconWithBorder"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
-		{
-			title: 'Airline Name',
-			dataIndex: 'name',
-			key: 'name',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'IATA Code',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'ICAO Type',
-			dataIndex: 'airportType',
-			key: 'airportType',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Country',
-			dataIndex: 'country',
-			key: 'country',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Home Airport',
-			dataIndex: 'homeAirport',
-			key: 'homeAirport',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'Terminal',
-			dataIndex: 'terminal',
-			key: 'timeChange',
-			render: (text) => text || '-',
-		},
-		{
-			title: 'View Details',
-			key: 'viewDetails',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View Details"
-					type="text"
-					onClick={() => {
-						handleDetails(record);
-					}}
-				></ButtonComponent>
-			),
-		},
-	];
+						title="View Details"
+						type="text"
+						onClick={() => {
+							handleDetails(record);
+						}}
+					></ButtonComponent>
+				),
+			},
+		],
+		[data]
+	);
 	return (
 		<div>
 			<div className="create_wrapper_table">
 				<div className="table_container">
 					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Airports
+						Airlines
 					</CustomTypography>
 					<TableComponent data={data} columns={columns} />
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your airport"
+				title={airlineRegistrationModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
+					<AirlineForm isReadOnly={airlineRegistrationModal.type === 'view'} />
+					{airlineRegistrationModal.type !== 'view' && (
 						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
+							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"
@@ -208,11 +224,11 @@ const AirlineTable = ({ formComponent, data }) => {
 									className="custom_button_cancel"
 									onClick={closeAddModal}
 								/>
+
 								<ButtonComponent
-									title="Edit"
+									title={airlineRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
-									className="custom_button_save"
-									onClick={handleEditButton}
+									className="custom_button_cancel"
 									isSubmit={true}
 								/>
 							</div>

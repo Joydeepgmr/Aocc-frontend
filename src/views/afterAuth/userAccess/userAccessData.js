@@ -1,4 +1,3 @@
-
 import { useGetGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
 export const SelectData = [
@@ -19,7 +18,6 @@ export const SelectData = [
 	},
 ];
 
-
 export const SelectPaymentData = [
 	{
 		id: '1',
@@ -30,9 +28,44 @@ export const SelectPaymentData = [
 		id: '2',
 		label: 'Cash',
 		value: 'CASH',
-	}
+	},
 ];
 
+export const CountryData = [
+	{
+		id: '1',
+		label: 'India',
+		value: 'India',
+	},
+	{
+		id: '2',
+		label: 'Australia',
+		value: 'Australia',
+	},
+	{
+		id: '3',
+		label: 'Argentina',
+		value: 'Argentina',
+	},
+];
+
+export const HomeAirportData = [
+	{
+		id: '1',
+		label: 'HomeAirport1',
+		value: 'HomeAirport1',
+	},
+	{
+		id: '2',
+		label: 'HomeAirport2',
+		value: 'HomeAirport2',
+	},
+	{
+		id: '3',
+		label: 'HomeAirport3',
+		value: 'HomeAirport3',
+	},
+];
 
 export const SelectAircraftTye = [
 	{
@@ -52,7 +85,23 @@ export const SelectAircraftTye = [
 	},
 ];
 
-
+export const TerminalData = [
+	{
+		id: '1',
+		label: 'terminal123',
+		value: 'terminal123',
+	},
+	{
+		id: '2',
+		label: 'terminal234',
+		value: 'terminal1234',
+	},
+	{
+		id: '3',
+		label: 'terminal63',
+		value: 'terminal67',
+	},
+];
 export const dummyData = [
 	{
 		key: '1',
