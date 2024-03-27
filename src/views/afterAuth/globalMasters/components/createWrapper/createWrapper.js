@@ -15,14 +15,11 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
-const CreateWrapper = ({ width, tableComponent, data, type, formComponent, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
-	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
-	const { mutate: editGlobalAirport, isLoading: airportEditLoading, isSuccess: airportEditSuccess, isError: airportEditError, postData: airportEditPostData, message: airportEditMessage } = useEditGlobalAirport();
-	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
-	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-	const { mutate: postGlobalAirline, isLoading: airlineLoading, isSuccess: airlineSuccess, isError: airlineError, postData: airlinePostData, message: airlineMessage } = usePostGlobalAirline();
-	const { mutate: onUploadCSV } = useUploadCSVAircraftType(uploadCSVHandler);
-	const [isModalOpen, setIsModalOpen] = useState(false);
+const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
+	// const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
+	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
+	// const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const onOpenChange = () => {
 		if (createProps.new) {
