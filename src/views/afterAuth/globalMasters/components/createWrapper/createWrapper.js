@@ -134,10 +134,12 @@ const CreateWrapper = ({ width, tableComponent, data, type, formComponent, creat
 	}
 
 	const openAddModal = () => {
+		setIsModalOpen(true)
 		setCreateProps((props) => { return { ...props, new: true } });
 	};
 
 	const closeAddModal = () => {
+		setIsModalOpen(false)
 		setIsCsvModalOpen(false);
 	};
 	const handleCsvUpload = (files) => {
