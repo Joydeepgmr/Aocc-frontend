@@ -6,14 +6,14 @@ import AirportForm from './components/airportForm/airportForm';
 import AirportTable from './components/airportTable/airportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineForm from './components/airlineForm/airlineForm';
-// import AirlineTable from './components/airlineTable/airlineTable';
+import AirlineTable from './components/airlineTable/airlineTable';
 import { useGetGlobalAirport, useGetGlobalAirline } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
-import AirlineTable from './components/AirlineTable/AirlineTable';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
 	const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => {}, onDownload: () => {} });
 	const [activeTab, setActiveTab] = useState('1');

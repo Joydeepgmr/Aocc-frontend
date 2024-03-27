@@ -14,7 +14,9 @@ import AirlineForm from '../airlineForm/airlineForm';
 // import { useDispatch, useSelector } from 'react-redux';
 
 const AirlineTable = ({ createProps, setCreateProps, data }) => {
-	const getGlobalAirlineResponse = useGetGlobalAirline();
+	// const getGlobalAirlineResponse = useGetGlobalAirline();
+
+	console.log(createProps, 'createprops');
 	const [airlinedata, setAirlinedata] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -57,10 +59,6 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 			console.log('update');
 		}
 
-		// After posting data, fetch the updated data again
-		if (getGlobalAirlineResponse.isSuccess) {
-			setAirlinedata(getGlobalAirlineResponse.data); // Assuming setData is a state setter for the table data
-		}
 		closeAddModal();
 	};
 
@@ -82,6 +80,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 
 	useEffect(() => {
 		const { data } = airlineRegistrationModal;
+		console.log(data,"data");
 		if (data) {
 			const initialValuesObj = {
 				name: data.name ?? '',
@@ -101,7 +100,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 			// setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [airlineRegistrationModal.isOpen, airlineRegistrationModal.data]);
+	}, [airlineRegistrationModal.isOpen]);
 
 	useEffect(() => {
 		if (createProps.new) {
