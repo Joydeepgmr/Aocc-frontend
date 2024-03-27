@@ -55,8 +55,8 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		initial.resetFields();
+		setAircraftTypeModal(defaultModalParams)
 	};
 	const onFinishHandler = (values) => {
 		// console.log(values);
@@ -89,9 +89,7 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	// };
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
 	};
 
 	const handleEditButton = () => {
@@ -102,12 +100,12 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	};
 
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = aircraftTypeModal
+		if (data) {
 			const initialValuesObj = {
 				identifier: data.identifier ?? '',
 				iataCode: data.iataCode ?? '',
@@ -130,10 +128,9 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
 				validTo: data.validTo ? dayjs(data.validTo) : null,
 			};
-			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [aircraftTypeModal.isOpen]);
 
 	useEffect(() => {
 		if (createProps.new) {
@@ -141,7 +138,6 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
-	
 	const columns = useMemo(() => {
 		return [
 			{
@@ -239,9 +235,9 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your aircraft type"
+				title={aircraftTypeModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
