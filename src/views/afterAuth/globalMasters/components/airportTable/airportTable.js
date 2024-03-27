@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import './airportTable.scss';
 
 
-const AirportTable = ({ data }) => {
+const AirportTable = ({ data, createProps, setCreateProps }) => {
     let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
     const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,6 +102,13 @@ const AirportTable = ({ data }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [airportModal.data]);
+
+	useEffect(() => {
+		if (createProps.new) {
+			setAirportModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
 
 	const columns = [
 		{

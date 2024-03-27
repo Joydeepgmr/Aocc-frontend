@@ -107,6 +107,7 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
+	
 	const columns = useMemo(() => {
 		return [
 			{
