@@ -112,18 +112,24 @@ export const useDeleteGlobalAirport = (id) => {
 
 
 export const useGetGlobalAircraftType = (props) => {
+	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['global-aircraft-type'],
 		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
+		onSuccess: (newData) => {
+			const previousData = queryClient.getQueryData('global-aircraft-type') || [];
+			const updatedData = [...previousData, ...newData.data];
+			queryClient.setQueryData('global-aircraft-type', updatedData);
+		},
 		...props,
 	});
-
+	const updatedData = queryClient.getQueryData('global-aircraft-type');
 	const { data, error, isSuccess } = response;
 	const statusMessage = isSuccess
 		? data?.message
 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-	return { ...response, data, message: statusMessage };
+	return { ...response, data, message: statusMessage, updatedData };
 };
 export const useDeleteGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
@@ -178,7 +184,6 @@ export const usePatchGlobalAircraftType = (props) => {
 		mutationKey: ['patch-global-aircraft-type'],
 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}${props.id}`, props),
 		onSuccess: (data) => {
-			console.log("data on succes is ", data);
 			queryClient.invalidateQueries('global-aircraft-type');
 		},
 		...props,
@@ -214,18 +219,27 @@ export const useUploadCSVAircraftType = (props) => {
 
 
 export const useGetGlobalAircraftRegistration = (props) => {
+	const getAirType = useGetGlobalAircraftType();
+	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['global-aircraft-register'],
 		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
+		onSuccess: (newData) => {
+			queryClient.invalidateQueries('global-aircraft-type');
+			const previousData = queryClient.getQueryData('global-aircraft-register') || [];
+			const updatedData = [...previousData, ...newData.data];
+			queryClient.setQueryData('global-aircraft-register', updatedData);
+			// getAirType.mutate();
+		},
 		...props,
 	});
-
+	const updatedData = queryClient.getQueryData('global-aircraft-register');
 	const { data, error, isSuccess } = response;
 	const statusMessage = isSuccess
 		? data?.message
 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-	return { ...response, data, message: statusMessage };
+	return { ...response, data, message: statusMessage, updatedData };
 };
 
 
