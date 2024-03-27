@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useDeleteGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
+import { useDeleteGlobalAircraftRegistration, useGetGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -12,18 +12,15 @@ import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegist
 import './aircraftRegistrationTable.scss';
 
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
 	const { mutate: patchGlobalAircraftRegistration } = usePatchGlobalAircraftRegistration();
 	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
-
-	
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
 	};
 
 	const closeAddModal = () => {
@@ -54,9 +51,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
 	};
 
 	const handleEditButton = () => {
@@ -67,7 +62,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = aircraftRegistrationModal
+		if (data) {
 			const initialValuesObj = {
 				registration: data.registration ?? '',
 				internal: data.internal ?? '',
@@ -95,8 +91,6 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
 				validTo: data.validTo ? dayjs(data.validTo) : '',
 			};
-			console.log(rowData);
-			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftRegistrationModal.isOpen]);
@@ -189,37 +183,17 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your aircraft type"
+				title={aircraftRegistrationModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
+				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
+					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} />
+					{aircraftRegistrationModal.type !== 'view' &&
 						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
+							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"
@@ -228,15 +202,13 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 									onClick={closeAddModal}
 								/>
 								<ButtonComponent
-									title="Save"
+									title={aircraftRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
 									className="custom_button_save"
-									onClick={handleEditButton}
 									isSubmit={true}
 								/>
 							</div>
-						</>
-					)}
+						</>}
 				</Form>
 			</ModalComponent>
 		</div>

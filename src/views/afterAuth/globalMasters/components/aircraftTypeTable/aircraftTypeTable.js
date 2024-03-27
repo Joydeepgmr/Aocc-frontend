@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType, useGetGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -11,19 +11,53 @@ import dayjs from 'dayjs';
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
+const IntersectionObserverComponent = ({ fetchApi, pagination }) => {
+	const targetRef = useRef(null);
+	const observerRef = useRef(null);
 
-const AircraftTable = ({ data, createProps, setCreateProps }) => {
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (pagination.isMore) {
+						fetchApi();
+					}
+				});
+			},
+			{
+				root: null,
+				rootMargin: "0px",
+				threshold: 0.5,
+			}
+		);
+
+		observerRef.current = observer;
+
+		const currentTarget = targetRef.current;
+		if (currentTarget) {
+			observer.observe(currentTarget);
+		}
+
+		return () => {
+			if (observerRef.current) {
+				observerRef.current.disconnect();
+			}
+		};
+	}, []); // Empty dependency array to run only once after component mount
+	return <div ref={targetRef}></div>;
+};
+const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
 	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
 	const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
 	const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
 	const [initial] = Form.useForm();
-
+	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
+	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+		initial.resetFields();
+		setAircraftTypeModal(defaultModalParams)
 	};
-
 	const onFinishHandler = (values) => {
 		// console.log(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
@@ -55,9 +89,7 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	// };
 
 	const handleEdit = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
-		setEditData(true);
+		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
 	};
 
 	const handleEditButton = () => {
@@ -68,38 +100,37 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	};
 
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
+		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = aircraftTypeModal
+		if (data) {
 			const initialValuesObj = {
-				identifier: rowData.identifier ?? '',
-				iataCode: rowData.iataCode ?? '',
-				model: rowData.model ?? '',
-				airline: rowData.airline ?? 'NA',
-				icaoCode: rowData.icaoCode ?? 'NA',
-				icaoCodeModified: rowData.icaoCodeModified ?? 'NA',
-				acFamily: rowData.acFamily ?? 'NA',
-				acBodyType: rowData.acBodyType ?? 'NA',
-				minimumGroundTime: rowData.minimumGroundTime ?? 'NA',
-				wingspan: rowData.wingspan ?? 'NA',
-				length: rowData.length ?? 'NA',
-				height: rowData.height ?? 'NA',
-				engineType: rowData.engineType ?? 'NA',
-				numberOfEngines: rowData.numberOfEngines ?? 'NA',
-				totalSeats: rowData.totalSeats ?? 'NA',
-				firstClass: rowData.firstClass ?? 'NA',
-				businessClass: rowData.businessClass ?? 'NA',
-				economyClass: rowData.economyClass ?? 'NA',
-				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
-				validTo: rowData.validTo ? dayjs(rowData.validTo) : null,
+				identifier: data.identifier ?? '',
+				iataCode: data.iataCode ?? '',
+				model: data.model ?? '',
+				airline: data.airline ?? '',
+				icaoCode: data.icaoCode ?? '',
+				icaoCodeModified: data.icaoCodeModified ?? '',
+				acFamily: data.acFamily ?? '',
+				acBodyType: data.acBodyType ?? '',
+				minimumGroundTime: data.minimumGroundTime ?? '',
+				wingspan: data.wingspan ?? '',
+				length: data.length ?? '',
+				height: data.height ?? '',
+				engineType: data.engineType ?? '',
+				numberOfEngines: data.numberOfEngines ?? '',
+				totalSeats: data.totalSeats ?? '',
+				firstClass: data.firstClass ?? '',
+				businessClass: data.businessClass ?? '',
+				economyClass: data.economyClass ?? '',
+				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+				validTo: data.validTo ? dayjs(data.validTo) : null,
 			};
-			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [aircraftTypeModal.isOpen]);
 
 	useEffect(() => {
 		if (createProps.new) {
@@ -107,7 +138,6 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
-	
 	const columns = useMemo(() => {
 		return [
 			{
@@ -205,9 +235,9 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your aircraft type"
+				title={aircraftTypeModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
