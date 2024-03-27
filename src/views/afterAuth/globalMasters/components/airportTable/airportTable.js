@@ -206,7 +206,7 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AirportForm isReadOnly={airportModal.type === 'view'} />
+					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

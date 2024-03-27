@@ -3,7 +3,7 @@ import ButtonComponent from '../../../../../components/button/button';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import './createWrapper.scss';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);

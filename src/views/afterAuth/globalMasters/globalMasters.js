@@ -76,11 +76,11 @@ const GlobalMasters = () => {
 						<AirlineTable
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
-							data={fetchedGlobalAirline?.data}
+							// data={fetchedGlobalAirline?.data}
 							formComponent={<AirlineForm />}
 						/>
 					}
-					data={fetchedGlobalAirline?.data}
+					// data={fetchedGlobalAirline?.data}
 					label=" Add Airline"
 				/>
 			),
