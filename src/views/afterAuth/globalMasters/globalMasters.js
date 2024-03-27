@@ -21,21 +21,25 @@ const GlobalMasters = () => {
 		setActiveTab(key);
 	}
 
+	console.log(createProps);
+	console.log(activeTab == 1);
+
 	const items = [
+	
 		{
 			key: '1',
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					formComponent={<AirportForm />}
+					// formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
 					tableComponent={<AirportTable data={fetchedGlobalAirport} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAirport}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					type="airport"
-					label='Airport'
+					// type="airport"
+					label='New Airport'
 				/>
 			),
 		},

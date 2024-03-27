@@ -67,7 +67,18 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 
 	return (
 		<>
-			{data && data?.length > 0 ? (
+			<div className="table_container">
+				<div className="create_button">
+					<DropdownButton
+						dropdownItems={dropdownItems}
+						buttonText="Create"
+						onChange={handleDropdownChange}
+						onOpenChange={onOpenChange}
+					/>
+				</div>
+				<div>{tableComponent && tableComponent}</div>
+			</div>
+			{/* {data && data?.length > 0 ? (
 				<div className="table_container">
 					<div className="create_button">
 						<DropdownButton
@@ -95,7 +106,7 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 					/>
 					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
 				</div>
-			)}
+			)} */}
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 		</>
 	);

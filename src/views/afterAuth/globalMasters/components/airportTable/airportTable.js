@@ -103,7 +103,10 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 		}
 	}, [airportModal.data]);
 
+	console.log(createProps, 'underAirport Table useEffect');
+
 	useEffect(() => {
+		
 		if (createProps.new) {
 			setAirportModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
