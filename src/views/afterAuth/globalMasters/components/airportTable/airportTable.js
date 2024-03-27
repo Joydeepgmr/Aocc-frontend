@@ -7,28 +7,34 @@ import editIcon from '../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
+import AirportForm from '../airportForm/airportForm';
 import dayjs from 'dayjs';
 import './airportTable.scss';
 
 
-const AirportTable = ({ formComponent, data }) => {
+const AirportTable = ({ data, createProps, setCreateProps }) => {
+    let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
+    const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
+	const [rowData, setRowData] = useState({});
 	const [initialValues, setInitialValues] = useState({});
 	const [editData, setEditData] = useState(false);
 	const [initial] = Form.useForm();
-	const {mutate: editGlobalAirport} = useEditGlobalAirport(rowData?.id)
+	const {mutate: editGlobalAirport} = useEditGlobalAirport();
+
+	const closeAddModal = () => {
+		setIsModalOpen(false);
+		setEditData(false);
+        setAirportModal(defaultModalParams)
+    };
 
 
 	const handleDetails = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-	};
+        setAirportModal({ isOpen: true, type: 'view', data, title: 'Your Airport' });
+    };
 
-	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
-	};
 
 	const onFinishHanlder = (values) => {
 		usePostGlobalAirport(values);
@@ -38,29 +44,41 @@ const AirportTable = ({ formComponent, data }) => {
 		values.icaoCode = values?.icaoCode?.join('');
 		values.countryCode = values?.countryCode?.join('');
 		form.resetFields();
+
+		editGlobalAirport(rowData.id, values)
+        .then((response) => {
+            // Handle success response
+            console.log('Airport updated successfully:', response);
+            closeAddModal();
+        })
+        .catch((error) => {
+            // Handle error response
+            console.error('Error updating airport:', error);
+        });
 		closeAddModal();
 	};
+
 
 	const handleDelete = (record) => {
 		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
 		// dispatch(updateAirportData(updatedData));
 	};
 
+
 	const handleEdit = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
+        setAirportModal({ isOpen: true, type: 'edit', data, title: 'Update your airport' });
 		setEditData(true);
-	};
+    };
 
 	const handleEditButton = () => {
-		// if (disabled) {
-		// 	dispatch(formDisabled());
-		// }
 		closeAddModal();
 	};
 
 	useEffect(() => {
-		if (rowData) {
+		const { data } = airportModal
+		if (data) {
 			const initialValuesObj = {
 				name: rowData.name ?? '',
 				iataCode: rowData.iataCode ?? '',
@@ -69,6 +87,7 @@ const AirportTable = ({ formComponent, data }) => {
 				abbreviatedName2: rowData.abbreviatedName2 ?? 'NA',
 				abbreviatedName3: rowData.abbreviatedName3 ?? 'NA',
 				abbreviatedName4: rowData.abbreviatedName4 ?? 'NA',
+				airportType: rowData.airportType ?? 'NA',
 				countryCode: rowData.countryCode ?? 'NA',
 				standardFlightTime: rowData.standardFlightTime ?? 'NA',
 				timeChange: rowData.timeChange ?? 'NA',
@@ -82,7 +101,14 @@ const AirportTable = ({ formComponent, data }) => {
 			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [rowData]);
+	}, [airportModal.data]);
+
+	useEffect(() => {
+		if (createProps.new) {
+			setAirportModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
 
 	const columns = [
 		{
@@ -173,55 +199,56 @@ const AirportTable = ({ formComponent, data }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={airportModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your airport"
+				title={airportModal.title}
 				width="120rem"
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
-					{formComponent && formComponent}
-					<Divider />
-					{!editData && (
-						<>
-							<div className="custom_buttons">
-								<>
-									<ButtonComponent
-										title="Cancel"
-										type="filledText"
-										className="custom_button_cancel"
-										onClick={closeAddModal}
-									/>
-									<ButtonComponent
-										title="Save"
-										type="filledText"
-										className="custom_button_save"
-										isSubmit={true}
-									/>
-								</>
-							</div>
-						</>
-					)}
-					{editData && (
-						<>
-							<div className="custom_buttons">
-								<ButtonComponent
-									title="Cancel"
-									type="filledText"
-									className="custom_button_cancel"
-									onClick={closeAddModal}
-								/>
-								<ButtonComponent
-									title="Save"
-									type="filledText"
-									className="custom_button_save"
-									onClick={handleEditButton}
-									isSubmit={true}
-								/>
-							</div>
-						</>
-					)}
-				</Form>
+                    <AirportForm isReadOnly={airportModal.type === 'view'} />
+                    {airportModal.type !== 'view' && <Divider />}
+                    {airportModal.type === 'new' && (
+                        <>
+                            <div className="custom_buttons">
+                                <>
+                                    <ButtonComponent
+                                        title="Cancel"
+                                        type="filledText"
+                                        className="custom_button_cancel"
+                                        onClick={closeAddModal}
+                                    />
+                                    <ButtonComponent
+                                        title="Save"
+                                        type="filledText"
+                                        className="custom_button_save"
+                                        isSubmit={true}
+                                        onClick={closeAddModal}
+                                    />
+                                </>
+                            </div>
+                        </>
+                    )}
+                    {airportModal.type === 'edit' && (
+                        <>
+                            <div className="custom_buttons">
+                                <ButtonComponent
+                                    title="Cancel"
+                                    type="filledText"
+                                    className="custom_button_cancel"
+                                    onClick={closeAddModal}
+                                />
+                                <ButtonComponent
+                                    title="Save"
+                                    type="filledText"
+                                    className="custom_button_save"
+                                    onClick={handleEditButton}
+                                    isSubmit={true}
+                                />
+                            </div>
+                        </>
+                    )}
+                </Form>
 			</ModalComponent>
 		</div>
 	);

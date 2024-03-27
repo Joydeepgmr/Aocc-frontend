@@ -18,12 +18,10 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
 	const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
 	const [initial] = Form.useForm();
-	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
-	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 
 	const closeAddModal = () => {
-		initial.resetFields();
-		setAircraftTypeModal(defaultModalParams)
+		setIsModalOpen(false);
+		setEditData(false);
 	};
 
 	const onFinishHandler = (values) => {
@@ -57,7 +55,9 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	// };
 
 	const handleEdit = (data) => {
-		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
+		setRowData(data);
+		setIsModalOpen(true);
+		setEditData(true);
 	};
 
 	const handleEditButton = () => {
@@ -68,37 +68,38 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 	};
 
 	const handleDetails = (data) => {
-		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
+		setRowData(data);
+		setIsModalOpen(true);
 	};
 
 	useEffect(() => {
-		const { data } = aircraftTypeModal
-		if (data) {
+		if (rowData) {
 			const initialValuesObj = {
-				identifier: data.identifier ?? '',
-				iataCode: data.iataCode ?? '',
-				model: data.model ?? '',
-				airline: data.airline ?? 'NA',
-				icaoCode: data.icaoCode ?? 'NA',
-				icaoCodeModified: data.icaoCodeModified ?? 'NA',
-				acFamily: data.acFamily ?? 'NA',
-				acBodyType: data.acBodyType ?? 'NA',
-				minimumGroundTime: data.minimumGroundTime ?? 'NA',
-				wingspan: data.wingspan ?? 'NA',
-				length: data.length ?? 'NA',
-				height: data.height ?? 'NA',
-				engineType: data.engineType ?? 'NA',
-				numberOfEngines: data.numberOfEngines ?? 'NA',
-				totalSeats: data.totalSeats ?? 'NA',
-				firstClass: data.firstClass ?? 'NA',
-				businessClass: data.businessClass ?? 'NA',
-				economyClass: data.economyClass ?? 'NA',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTo: data.validTo ? dayjs(data.validTo) : null,
+				identifier: rowData.identifier ?? '',
+				iataCode: rowData.iataCode ?? '',
+				model: rowData.model ?? '',
+				airline: rowData.airline ?? 'NA',
+				icaoCode: rowData.icaoCode ?? 'NA',
+				icaoCodeModified: rowData.icaoCodeModified ?? 'NA',
+				acFamily: rowData.acFamily ?? 'NA',
+				acBodyType: rowData.acBodyType ?? 'NA',
+				minimumGroundTime: rowData.minimumGroundTime ?? 'NA',
+				wingspan: rowData.wingspan ?? 'NA',
+				length: rowData.length ?? 'NA',
+				height: rowData.height ?? 'NA',
+				engineType: rowData.engineType ?? 'NA',
+				numberOfEngines: rowData.numberOfEngines ?? 'NA',
+				totalSeats: rowData.totalSeats ?? 'NA',
+				firstClass: rowData.firstClass ?? 'NA',
+				businessClass: rowData.businessClass ?? 'NA',
+				economyClass: rowData.economyClass ?? 'NA',
+				validFrom: rowData.validFrom ? dayjs(rowData.validFrom) : '',
+				validTo: rowData.validTo ? dayjs(rowData.validTo) : null,
 			};
+			setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
 		}
-	}, [aircraftTypeModal.isOpen]);
+	}, [rowData]);
 
 	useEffect(() => {
 		if (createProps.new) {
@@ -106,6 +107,7 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
+	
 	const columns = useMemo(() => {
 		return [
 			{
@@ -203,9 +205,9 @@ const AircraftTable = ({ data, createProps, setCreateProps }) => {
 				</div>
 			</div>
 			<ModalComponent
-				isModalOpen={aircraftTypeModal.isOpen}
+				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
-				title={aircraftTypeModal.title}
+				title="Setup your aircraft type"
 				width="120rem"
 				className="custom_modal"
 			>

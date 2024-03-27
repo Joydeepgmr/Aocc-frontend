@@ -19,24 +19,42 @@ import {
 
 import { Get, Post, Patch, Delete } from '../HttpServices/HttpServices';
 
+// export const useGetGlobalAirport = (props) => {
+// 	const response = useQuery({
+// 		queryKey: ['global-airport'],
+// 		queryFn: async () => await Get(`${GET_GLOBAL_AIRPORT}`),
+// 		...props,
+// 	});
+
+// 	const { data, error, isSuccess } = response;
+
+// 	console.log(response);
+
+// 	const statusMessage = isSuccess ? data?.message : error?.message;
+
+// 	return {
+// 		...response,
+// 		data: data,
+// 		message: statusMessage,
+// 	};
+// };
+
 export const useGetGlobalAirport = (props) => {
-	const response = useQuery({
-		queryKey: ['global-airport'],
-		queryFn: async () => await Get(`${GET_GLOBAL_AIRPORT}`),
+	const queryClient = useQueryClient()
+
+	const response = useMutation({
+		mutationKey: ['global-airport'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
 		...props,
 	});
 
 	const { data, error, isSuccess } = response;
 
-	console.log(response);
+	const statusMessage = isSuccess
+		? data?.message
+		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return { ...response, data, message: statusMessage };
 };
 
 

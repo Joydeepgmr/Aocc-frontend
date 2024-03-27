@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useState} from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
@@ -14,6 +14,12 @@ const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
 	const { data: fetchedGlobalAirline } = useGetGlobalAirline();
 
+	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => { }, onDownload: () => { } })
+	const [activeTab, setActiveTab] = useState('1');
+	const handleTabChange = (key) => {
+		setActiveTab(key);
+	}
+
 	const items = [
 		{
 			key: '1',
@@ -23,9 +29,12 @@ const GlobalMasters = () => {
 					formComponent={<AirportForm />}
 					title="Setup your Airport"
 					width="120rem"
-					tableComponent={<AirportTable data={fetchedGlobalAirport} formComponent={<AirportForm />} />}
+					tableComponent={<AirportTable data={fetchedGlobalAirport} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAirport}
+					createProps={createProps}
+					setCreateProps={setCreateProps}
 					type="airport"
+					label='Airport'
 				/>
 			),
 		},
@@ -42,7 +51,7 @@ const GlobalMasters = () => {
 					formComponent={<AirlineForm />}
 					title="Setup your airline"
 					width="120rem"
-					tableComponent={<AirlineTable data={fetchedGlobalAirline} formComponent={<AirlineForm />} />}
+					tableComponent={<AirlineTable data={fetchedGlobalAirline} createProps={activeTab == 3 && createProps} setCreateProps={setCreateProps} />}
 					data={fetchedGlobalAirline}
 					type='airline'
 				/>
@@ -57,7 +66,7 @@ const GlobalMasters = () => {
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="1" items={items} type="card" />
+				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange}/>
 			</div>
 		</div>
 	);
