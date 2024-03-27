@@ -16,7 +16,6 @@ import AirlineForm from '../airlineForm/airlineForm';
 const AirlineTable = ({ createProps, setCreateProps, data }) => {
 	// const getGlobalAirlineResponse = useGetGlobalAirline();
 
-	console.log(createProps, 'createprops');
 	const [airlinedata, setAirlinedata] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -80,7 +79,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 
 	useEffect(() => {
 		const { data } = airlineRegistrationModal;
-		console.log(data,"data");
+		console.log(data, 'data');
 		if (data) {
 			const initialValuesObj = {
 				name: data.name ?? '',

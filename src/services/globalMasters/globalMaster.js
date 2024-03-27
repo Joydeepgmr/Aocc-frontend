@@ -176,9 +176,9 @@ export const usePostGlobalAircraftRegistration = (props) => {
 };
 
 export const useGetGlobalAirline = (props) => {
-	const response = useQuery({
-		queryKey: ['global-airline'],
-		queryFn: async () => await Post(`${GET_GLOBAL_AIRLINE}`),
+	const response = useMutation({
+		mutationKey: ['global-airline'],
+		mutationFn: async () => await Post(`${GET_GLOBAL_AIRLINE}`),
 		...props,
 	});
 

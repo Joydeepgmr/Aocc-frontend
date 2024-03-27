@@ -12,7 +12,7 @@ import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
-	const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+	const { data: fetchedGlobalAirline, mutate: getGlobalAirline } = useGetGlobalAirline();
 	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => {}, onDownload: () => {} });
@@ -21,6 +21,9 @@ const GlobalMasters = () => {
 		setActiveTab(key);
 	};
 
+	useEffect(() => {
+		getGlobalAirline();
+	}, []);
 	const items = [
 		{
 			key: '1',
@@ -55,11 +58,11 @@ const GlobalMasters = () => {
 						<AirlineTable
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
-							data={fetchedGlobalAirline}
+							data={fetchedGlobalAirline?.data}
 							formComponent={<AirlineForm />}
 						/>
 					}
-					data={fetchedGlobalAirline}
+					data={fetchedGlobalAirline?.data}
 					label=" Add Airline"
 				/>
 			),
