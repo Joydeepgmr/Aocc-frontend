@@ -10,7 +10,6 @@ import './Wrapper.scss';
 
 const Wrapper = ({formComponent, title, width, tableComponent, action, data}) => {
     const {mutate: postLicenseAirport, isLoading, isSuccess, isError, postData, message} = usePostLicenseAirport();
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
     const [form] = Form.useForm();
