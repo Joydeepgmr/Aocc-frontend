@@ -183,17 +183,18 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 	);
 	return (
 		<div>
-			<div className="create_wrapper_table">
-				{data?.length
-					? <div className="table_container">
+			{data?.length
+				?
+				<div className="create_wrapper_table">
+					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Registrations
 						</CustomTypography>
 						<TableComponent data={data} columns={columns} />
 					</div>
-					: <></>
-				}
-			</div>
+
+				</div> : <></>
+			}
 			<ModalComponent
 				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}

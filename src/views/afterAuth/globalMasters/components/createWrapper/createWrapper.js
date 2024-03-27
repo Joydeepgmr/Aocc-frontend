@@ -68,61 +68,43 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 
 	return (
 		<>
-			<div className="table_container">
-				<div className="create_button">
-					<DropdownButton
-						dropdownItems={dropdownItems}
-						buttonText="Create"
-						onChange={handleDropdownChange}
-						onOpenChange={onOpenChange}
-					/>
-				</div>
-				<InfiniteScroll
-					dataLength={data.length} // This is important to determine when to fetch more data
-					next={fetchData} // Function to call when reaching the end of the list
-					hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-				>
-					{tableComponent && tableComponent}
-				</InfiniteScroll>
-			</div>
-			{/* {data && data?.length > 0 ? (
+			{data && data?.length ?
 				<div className="table_container">
-					<div className="create_button">
-						<DropdownButton
-							dropdownItems={dropdownItems}
-							buttonText="Create"
-							onChange={handleDropdownChange}
-							onOpenChange={onOpenChange}
-						/>
-					</div>
-					<div>
-						<InfiniteScroll
-							dataLength={data.length} // This is important to determine when to fetch more data
-							next={fetchData} // Function to call when reaching the end of the list
-							hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-						>
-							{tableComponent && tableComponent}
-						</InfiniteScroll>
-					</div>
-					{/* <div>{tableComponent && tableComponent}</div> */}
-			{/* </div>
-			) : (
-				<div className="create_wrapper_container">
-					<ButtonComponent
-						title="Create"
-						type="filledText"
-						className="custom_button_create"
-						onClick={openAddModal}
-					/>
-					<ButtonComponent
-						title="Upload CSV"
-						type="filledText"
-						className="custom_button"
-						onClick={openCsvModal}
-					/>
-					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
+					<InfiniteScroll
+						dataLength={data.length} // This is important to determine when to fetch more data
+						next={fetchData} // Function to call when reaching the end of the list
+						hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+					>
+						<div className="create_button">
+							<DropdownButton
+								dropdownItems={dropdownItems}
+								buttonText="Create"
+								onChange={handleDropdownChange}
+								onOpenChange={onOpenChange}
+							/>
+						</div>
+						{tableComponent && tableComponent}
+					</InfiniteScroll>
 				</div>
-			)} */}
+				: <>
+					{tableComponent && tableComponent}
+					<div className="create_wrapper_container">
+						<ButtonComponent
+							title="Create"
+							type="filledText"
+							className="custom_button_create"
+							onClick={openAddModal}
+						/>
+						<ButtonComponent
+							title="Upload CSV"
+							type="filledText"
+							className="custom_button"
+							onClick={openCsvModal}
+						/>
+						<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
+					</div>
+				</>
+			}
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 		</>
 	);
