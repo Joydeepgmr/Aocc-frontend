@@ -50,7 +50,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					SelectData={HomeAirportData}
 					label="Home Airport"
 					name="homeAirport"
-					placeholder={!isReadOnly && 'Enter the home airport'}
+					placeholder={!isReadOnly && 'Select home airport'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -84,7 +84,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					SelectData={SelectPaymentData}
 					placeholder={!isReadOnly && 'Select the access type'}
 					label="Mode of payment"
-					name="modeOfPayment"
+					name="paymentMode"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -97,14 +97,14 @@ const AirlineForm = ({ isReadOnly, type }) => {
 			<div className="airline_setup_form_inputfields">
 				<InputField
 					label="Address 1"
-					name="address1"
-					placeholder={!isReadOnly && 'Address 1'}
+					name="address"
+					placeholder={!isReadOnly && 'Address'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Phone"
-					name="phone"
+					name="phoneNumber"
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -125,7 +125,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<Date
 					label="Valid To"
 					placeholder={!isReadOnly && 'Select valid to date'}
-					name="validTo"
+					name="validTill"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>

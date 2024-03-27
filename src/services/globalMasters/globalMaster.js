@@ -338,13 +338,34 @@ export const usePostGlobalAirline = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
+// export const usePatchGlobalAirline = (props) => {
+// 	const queryClient = useQueryClient();
+// 	const response = useMutation({
+// 		mutationKey: ['patch-global-airline'],
+// 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}${props.id}`, props),
+
+// 		onSuccess: (data) => {
+// 			queryClient.invalidateQueries('global-airline');
+// 		},
+// 		...props,
+// 	});
+
+// 	const { data, error, isSuccess } = response;
+
+// 	const statusMessage = isSuccess
+// 		? data?.message
+// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+
+// 	return { ...response, data, message: statusMessage };
+// };
+
 export const usePatchGlobalAirline = (props) => {
 	const queryClient = useQueryClient();
+
 	const response = useMutation({
 		mutationKey: ['patch-global-airline'],
-		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}${props.id}`, props),
-
-		onSuccess: (data) => {
+		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}`, props), // Assuming PATCH_GLOBAL_AIRLINE is the endpoint for patching
+		onSuccess: () => {
 			queryClient.invalidateQueries('global-airline');
 		},
 		...props,

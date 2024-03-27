@@ -56,7 +56,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 
 	const onFinishHanlder = (values) => {
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
-		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 
 		// values.twoLetterCode = values?.twoLetterCode;
 		// values.threeLetterCode = values?.threeLetterCode;
@@ -67,8 +67,8 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 			values.twoLetterCode = values.twoLetterCode.join('');
 			values.threeLetterCode = values.threeLetterCode.join('');
 		} else {
-			values.twoLetterCode = [values.twoLetterCode];
-			values.threeLetterCode = [values.threeLetterCode];
+			values.twoLetterCode = values.twoLetterCode;
+			values.threeLetterCode = values.threeLetterCode;
 		}
 
 		console.log(values, 'valll');
@@ -123,12 +123,12 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 				// homeAirport: data.homeAirport ?? '',
 				terminal: data.terminal ?? '',
 				remark: data.remark ?? '',
-				modeOfPayment: data.paymentMode ?? '',
-				address1: data.address ?? '',
-				phone: data.phoneNumber ?? '',
+				paymentMode: data.paymentMode ?? '',
+				address: data.address ?? '',
+				phoneNumber: data.phoneNumber ?? '',
 				// telex: data.telex ?? '',
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTo: data.validTill ? dayjs(data.validTill) : '',
+				validTill: data.validTill ? dayjs(data.validTill) : '',
 			};
 			// setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);

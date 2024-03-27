@@ -53,7 +53,7 @@ export const HomeAirportData = [
 	{
 		id: '1',
 		label: 'HomeAirport1',
-		value: 'HomeAirport1',
+		value: '183b51ce-8e51-4535-a13f-545cd8dc8b3f',
 	},
 	{
 		id: '2',
