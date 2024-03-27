@@ -26,6 +26,7 @@ const GlobalMasters = () => {
 					tableComponent={<AirportTable data={fetchedGlobalAirport} />}
 					data={fetchedGlobalAirport}
 					type="airport"
+					label='Airport'
 				/>
 			),
 		},
