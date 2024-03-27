@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CreateWrapper from './components/createWrapper/createWrapper';
@@ -40,7 +40,6 @@ const GlobalMasters = () => {
 	}
 
 	const items = [
-	
 		{
 			key: '1',
 			label: 'Airports',
@@ -70,10 +69,19 @@ const GlobalMasters = () => {
 				<CreateWrapper
 					formComponent={<AirlineForm />}
 					title="Setup your airline"
+					createProps={createProps}
+					setCreateProps={setCreateProps}
 					width="120rem"
-					// tableComponent={<AirlineTable data={fetchedGlobalAirline} createProps={activeTab == 3 && createProps} setCreateProps={setCreateProps} />}
-					// data={fetchedGlobalAirline}
-					type='airline'
+					tableComponent={
+						<AirlineTable
+							createProps={activeTab == 3 && createProps}
+							setCreateProps={setCreateProps}
+							data={fetchedGlobalAirline?.data}
+							formComponent={<AirlineForm />}
+						/>
+					}
+					data={fetchedGlobalAirline?.data}
+					label=" Add Airline"
 				/>
 			),
 		},
@@ -89,7 +97,7 @@ const GlobalMasters = () => {
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange}/>
+				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange} />
 			</div>
 		</div>
 	);
