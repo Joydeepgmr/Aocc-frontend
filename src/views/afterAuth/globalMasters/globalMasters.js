@@ -12,11 +12,10 @@ import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { data: airportData, mutate: getGlobalAirport } = useGetGlobalAirport();
-	// const { data: fetchedGlobalAirport } = useGetGlobalAirport();
-	// const { mutate: fetchedGlobalAirport, isLoading, isError, isSuccess } = useGetGlobalAirport();
-	// const { data: fetchedGlobalAirline } = useGetGlobalAirline();
+	const { data: fetchedGlobalAirline, mutate: getGlobalAirline } = useGetGlobalAirline();
+	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
 
-	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
+	const [createProps, setCreateProps] = useState({ new: false, onUpload: () => {}, onDownload: () => {} });
 	const [activeTab, setActiveTab] = useState('1');
 	const handleTabChange = (key) => {
 		setActiveTab(key);
@@ -38,6 +37,10 @@ const GlobalMasters = () => {
 		const payload = { pagination: airportData?.pagination }
 		getGlobalAirport(payload);
 	}
+
+	useEffect(() => {
+        getGlobalAirline();
+    }, []);
 
 	const items = [
 		{
@@ -63,33 +66,34 @@ const GlobalMasters = () => {
 			children: <AircraftTabs />,
 		},
 		{
-			key: '3',
-			label: 'Airlines',
-			children: (
-				<CreateWrapper
-					formComponent={<AirlineForm />}
-					title="Setup your airline"
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					width="120rem"
-					tableComponent={
-						<AirlineTable
-							createProps={activeTab == 3 && createProps}
-							setCreateProps={setCreateProps}
-							// data={fetchedGlobalAirline?.data}
-							formComponent={<AirlineForm />}
-						/>
-					}
-					// data={fetchedGlobalAirline?.data}
-					label=" Add Airline"
-				/>
-			),
-		},
+            key: '3',
+            label: 'Airlines',
+            children: (
+                <CreateWrapper
+                    formComponent={<AirlineForm />}
+                    title="Setup your airline"
+                    createProps={createProps}
+                    setCreateProps={setCreateProps}
+                    width="120rem"
+                    tableComponent={
+                        <AirlineTable
+                            createProps={activeTab == 3 && createProps}
+                            setCreateProps={setCreateProps}
+                            data={fetchedGlobalAirline?.data}
+                            formComponent={<AirlineForm />}
+                        />
+                    }
+                    data={fetchedGlobalAirline?.data}
+                    label=" Add Airline"
+                />
+            ),
+        },
 	];
 
 	useEffect(() => {
 		fetchedGlobalAirport();
 	}, []);
+
 
 	return (
 		<div className="global_masters_container">
