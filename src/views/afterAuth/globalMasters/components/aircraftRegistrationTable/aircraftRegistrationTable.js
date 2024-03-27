@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
+import { useDeleteGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, usePostGlobalAircraftRegistration } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -16,6 +16,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
+	const { mutate: patchGlobalAircraftRegistration } = usePatchGlobalAircraftRegistration();
+	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
 
 
@@ -29,20 +31,26 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 	};
 
 	const onFinishHandler = (values) => {
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
+
+		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
+		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.iataCode = values?.iataCode;
+		values.icaoCode = values?.icaoCode;
 		if (aircraftRegistrationModal.type === 'new') {
 			postGlobalAircraftRegistration(values);
+		} else {
+			values.id = aircraftRegistrationModal.data.id
+			patchGlobalAircraftRegistration(values);
 		}
+		console.log("values are ", values)
 		closeAddModal();
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateAirportData(updatedData));
-	// };
+	const handleDelete = (record) => {
+		deleteGlobalAircraftRegistration(record.id)
+		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
+		// dispatch(updateAirportData(updatedData));
+	};
 
 	const handleEdit = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
@@ -60,28 +68,28 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data }) => {
 		if (data) {
 			const initialValuesObj = {
 				registration: data.registration ?? '',
-				internal: data.internal ?? 'NA',
+				internal: data.internal ?? '',
 				iataCode: data.iataCode ?? '',
-				iacoCode: data.iacoCode ?? 'NA',
+				iacoCode: data.iacoCode ?? '',
 				aircraftType: data.aircraftType ?? '',
-				typeOfUse: data.typeOfUse ?? 'NA',
-				homeAirport: data.homeAirport ?? 'NA',
-				nationality: data.nationality ?? 'NA',
-				cockpitCrew: data.cockpitCrew ?? 'NA',
-				cabinCrew: data.cabinCrew ?? 'NA',
-				numberOfSeats: data.numberOfSeats ?? 'NA',
-				height: data.height ?? 'NA',
-				length: data.length ?? 'NA',
-				wingspan: data.wingspan ?? 'NA',
-				mtow: data.mtow ?? 'NA',
-				mow: data.mow ?? 'NA',
+				typeOfUse: data.typeOfUse ?? '',
+				homeAirport: data.homeAirport ?? '',
+				nationality: data.nationality ?? '',
+				cockpitCrew: data.cockpitCrew ?? '',
+				cabinCrew: data.cabinCrew ?? '',
+				numberOfSeats: data.numberOfSeats ?? '',
+				height: data.height ?? '',
+				length: data.length ?? '',
+				wingspan: data.wingspan ?? '',
+				mtow: data.mtow,
+				mow: data.mow ?? '',
 				annex: data.annex ?? '',
-				mainDeck: data.mainDeck ?? 'NA',
-				apuInop: data.apuInop ?? 'NA',
-				ownerName: data.ownerName ?? 'NA',
-				country: data.country ?? 'NA',
-				address: data.address ?? 'NA',
-				remarks: data.remarks ?? 'NA',
+				mainDeck: data.mainDeck ?? '',
+				apuInop: data.apuInop ?? '',
+				ownerName: data.ownerName ?? '',
+				country: data.country ?? '',
+				address: data.address ?? '',
+				remarks: data.remarks ?? '',
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
 				validTo: data.validTo ? dayjs(data.validTo) : '',
 			};
