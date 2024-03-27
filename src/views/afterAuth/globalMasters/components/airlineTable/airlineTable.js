@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import './airlineTable.scss';
-import { useGetGlobalAirline, usePostGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
+import {
+	useGetGlobalAirline,
+	usePostGlobalAirline,
+	useDeleteGlobalAirline,
+} from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -55,13 +59,19 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 		if (airlineRegistrationModal.type === 'new') {
 			postGlobalAirLineRegistration(values);
 		} else {
-			console.log('update');
+			useGetGlobalAirline(values);
 		}
 
 		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
+		useDeleteGlobalAirline({
+			params: {
+				id: id,
+			},
+		});
+
 		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
 		// dispatch(updateAirportData(updatedData));
 	};
@@ -86,15 +96,15 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 				twoLetterCode: data.twoLetterCode ?? '',
 				threeLetterCode: data.threeLetterCode ?? '',
 				country: data.country ?? '',
-				homeAirport: data.homeAirport ?? '',
+				// homeAirport: data.homeAirport ?? '',
 				terminal: data.terminal ?? '',
 				remark: data.remark ?? '',
-				modeOfPayment: data.modeOfPayment ?? '',
-				address1: data.address1 ?? '',
-				phone: data.phone ?? '',
-				telex: data.telex ?? '',
+				modeOfPayment: data.paymentMode ?? '',
+				address1: data.address ?? '',
+				phone: data.phoneNumber ?? '',
+				// telex: data.telex ?? '',
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTo: data.validTo ? dayjs(data.validTo) : '',
+				validTo: data.validTill ? dayjs(data.validTill) : '',
 			};
 			// setInitialValues(initialValuesObj);
 			initial.setFieldsValue(initialValuesObj);
