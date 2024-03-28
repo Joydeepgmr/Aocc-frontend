@@ -10,13 +10,16 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
+import toast from 'react-hot-toast';
 
 const AircraftTable = ({ createProps, setCreateProps }) => {
 	const {
 		postGlobalAirCraftType,
 		patchGlobalAircraftType,
 		deleteGlobalAircraftType,
-		updatedData: data = []
+		updatedData: data = [],
+		successMessage,
+		errorMessage
 	} = useGlobalAircraftType();
 	const { mutate: postAircraftType, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirCraftType;
 	const { mutate: patchAircraftType, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading, isIdle: isEditIdle } = patchGlobalAircraftType;
@@ -47,9 +50,9 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			engineType: data?.engineType,
 			engineCount: data?.engineCount && parseInt(data?.engineCount),
 			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
-			firstClass: data?.firstClass && parseInt(data?.firstClass),
-			businessClass: data?.businessClass && parseInt(data?.businessClass),
-			economyClass: data?.economyClass,
+			firstClassSeats: data?.firstClassSeats && parseInt(data?.firstClassSeats),
+			businessClassSeats: data?.businessClassSeats && parseInt(data?.businessClassSeats),
+			economyClassSeats: data?.economyClassSeats,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}
@@ -107,12 +110,20 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftTypeModal.isOpen]);
-
+	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
-		if (isEditSuccess || isCreateNewSuccess) {
+		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.success(successMessage)
+		}
+		if (aircraftTypeModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isEditSuccess, isCreateNewSuccess]);
+	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
+	useEffect(() => {
+		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.error(errorMessage)
+		}
+	}, [isEditError, isCreateNewError, isDeleteError])
 	useEffect(() => {
 		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });

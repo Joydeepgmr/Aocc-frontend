@@ -1,50 +1,44 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import './airlineTable.scss';
-import {
-	useGetGlobalAirline,
-	usePostGlobalAirline,
-	useDeleteGlobalAirline,
-	usePatchGlobalAirline,
-} from '../../../../../services/globalMasters/globalMaster';
-import ButtonComponent from '../../../../../components/button/button';
-import TableComponent from '../../../../../components/table/table';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import editIcon from '../../../../../assets/logo/edit.svg';
-import deleteIcon from '../../../../../assets/logo/delete.svg';
-import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react';
+import deleteIcon from '../../../../../assets/logo/delete.svg';
+import editIcon from '../../../../../assets/logo/edit.svg';
+import ButtonComponent from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modal/modal';
+import TableComponent from '../../../../../components/table/table';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import {
+	useGlobalAirline,
+} from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
-// import { formDisabled, updateAirportData } from '../../redux/reducer';
-// import { useDispatch, useSelector } from 'react-redux';
+import './airlineTable.scss';
+import toast from 'react-hot-toast';
 
-const AirlineTable = ({ createProps, setCreateProps, data }) => {
-	// const getGlobalAirlineResponse = useGetGlobalAirline();
-
-	const [airlinedata, setAirlinedata] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [formDisabled, setFormDisabled] = useState(true); // State variable to track form field disabled state
-	const [editData, setEditData] = useState(false);
-	const [deleteData, setDeleteData] = useState(data); // Define state variable and setter for data
-
-	const [initial] = Form.useForm();
-
+const AirlineTable = ({ createProps, setCreateProps }) => {
+	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [], successMessage, errorMessage } = useGlobalAirline();
+	const { mutate: postGlobalAirLineRegistration, isSuccess: isCreateNewSuccess, isError: isCreateNewError } = postGlobalAirline;
+	const { mutate: patchAirline, isSuccess: isEditSuccess, isError: isEditError } = patchGlobalAirline;
+	const { mutate: deleteAirline, isSuccess: isDeleteSuccess, isError: isDeleteError } = deleteGlobalAirline;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
-	const {
-		mutate: postGlobalAirLineRegistration,
-		isLoading: airlineRegistrationLoading,
-		isSuccess: airlineRegistrationSuccess,
-		isError: airlineRegistrationError,
-		postData: airlineRegistrationPostData,
-		message: airlineRegistrationMessage,
-	} = usePostGlobalAirline();
-
-	const { mutate: deleteGlobalAirline } = useDeleteGlobalAirline();
-	const { mutate: patchGlobalAirline } = usePatchGlobalAirline();
-
+	const [initial] = Form.useForm();
+	const getFormValues = (data) => {
+		return {
+			name: data.name,
+			twoLetterCode: data.twoLetterCode,
+			threeLetterCode: data.threeLetterCode,
+			country: data.country,
+			// homeAirport: data.homeAirport,
+			terminal: data.terminal,
+			remark: data.remark,
+			paymentMode: data.paymentMode,
+			address: data.address,
+			phoneNumber: data.phoneNumber,
+			// telex: data.telex,
+			validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+			validTill: data.validTill ? dayjs(data.validTill) : '',
+		};
+	}
 	const handleDetails = (data) => {
 		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
 	};
@@ -54,93 +48,57 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 		initial.resetFields();
 	};
 
-	const onFinishHanlder = (values) => {
+	const onFinishHandler = (values) => {
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
-
-		// values.twoLetterCode = values?.twoLetterCode;
-		// values.threeLetterCode = values?.threeLetterCode;
-		// values.twoLetterCode = values.twoLetterCode?.join('') || values.twoLetterCode;
-		// values.threeLetterCode = values.threeLetterCode?.join('') || values.threeLetterCode;
-
-		if (airlineRegistrationModal.type === 'new') {
-			values.twoLetterCode = values.twoLetterCode.join('');
-			values.threeLetterCode = values.threeLetterCode.join('');
-		} else {
+		if (airlineRegistrationModal.type === 'edit') {
 			values.twoLetterCode = values.twoLetterCode;
 			values.threeLetterCode = values.threeLetterCode;
-		}
-
-		console.log(values, 'valll');
-
-		// if (airlineRegistrationModal.type === 'new') {
-		// 	postGlobalAirLineRegistration(values);
-		// } else {
-		// 	// useGetGlobalAirline(values);
-		// }
-
-		if (airlineRegistrationModal.type === 'edit') {
-			console.log('Update');
 			values.id = airlineRegistrationModal.data.id;
-			console.log('values.id', values.id);
-			patchGlobalAirline(values);
+			patchAirline(values);
 		} else {
+			values.twoLetterCode = values.twoLetterCode.join('');
+			values.threeLetterCode = values.threeLetterCode.join('');
 			postGlobalAirLineRegistration(values);
-			console.log('create');
 		}
-
-		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
-		// console.log('recooord', record.id);
-		deleteGlobalAirline(record.id);
-
-		// const updatedData = data.filter((item) => item.id !== record.id);
-		// setDeleteData(updatedData);
+		deleteAirline(record.id);
 	};
 
 	const handleEdit = (data) => {
 		setAirlineRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update airline registration' });
 	};
 
-	const handleEditButton = () => {
-		// if (disabled) {
-		// 	dispatch(formDisabled());
-		// }
-		closeAddModal();
-	};
-
 	useEffect(() => {
 		const { data } = airlineRegistrationModal;
-		console.log(data, 'data');
 		if (data) {
-			const initialValuesObj = {
-				name: data.name ?? '',
-				twoLetterCode: data.twoLetterCode ?? '',
-				threeLetterCode: data.threeLetterCode ?? '',
-				country: data.country ?? '',
-				// homeAirport: data.homeAirport ?? '',
-				terminal: data.terminal ?? '',
-				remark: data.remark ?? '',
-				paymentMode: data.paymentMode ?? '',
-				address: data.address ?? '',
-				phoneNumber: data.phoneNumber ?? '',
-				// telex: data.telex ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTill: data.validTill ? dayjs(data.validTill) : '',
-			};
-			// setInitialValues(initialValuesObj);
+			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [airlineRegistrationModal.isOpen]);
 
+	useEffect(() => {
+		if (airlineRegistrationModal.isOpen) {
+			closeAddModal();
+		}
+		if (successMessage) {
+			toast.success(successMessage);
+		}
+	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
+	useEffect(() => {
+		if (errorMessage) {
+			toast.error(errorMessage);
+		}
+	}, [isCreateNewError, isEditError, isDeleteError])
 	useEffect(() => {
 		if (createProps.new) {
 			setAirlineRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new]);
+	console.log("messages are ", successMessage, errorMessage)
 
 	const columns = useMemo(
 		() => [
@@ -221,7 +179,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 	);
 	return (
 		<div>
-			{data?.length && (
+			{data && data?.length ? (
 				<div className="create_wrapper_table">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
@@ -230,7 +188,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 						<TableComponent data={data} columns={columns} />
 					</div>
 				</div>
-			)}
+			) : <></>}
 
 			<ModalComponent
 				isModalOpen={airlineRegistrationModal.isOpen}
@@ -239,7 +197,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 				width="120rem"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHanlder} form={initial}>
+				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
 					<AirlineForm
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}

@@ -7,14 +7,14 @@ import AirportTable from './components/airportTable/airportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineForm from './components/airlineForm/airlineForm';
 import AirlineTable from './components/airlineTable/airlineTable';
-import { useGlobalAirport, useGetGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
+import { useGlobalAirport, useGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	console.log(useGlobalAirport, 'useGlobalAirport-line');
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport('get');
 	const { data: airportData, mutate: getAirport } = getGlobalAirport;
-	const { data: fetchedGlobalAirline, mutate: getGlobalAirline } = useGetGlobalAirline();
+	const { getGlobalAirline } = useGlobalAirline();
+	const { data: fetchedGlobalAirline, mutate: getAirline } = getGlobalAirline;
 	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
 	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
 
@@ -88,8 +88,6 @@ const GlobalMasters = () => {
 						<AirlineTable
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
-							data={fetchedGlobalAirline?.data}
-							formComponent={<AirlineForm />}
 						/>
 					}
 					data={fetchedGlobalAirline?.data}
@@ -104,7 +102,7 @@ const GlobalMasters = () => {
 	}, []);
 
 	useEffect(() => {
-		getGlobalAirline();
+		getAirline();
 	}, []);
 
 

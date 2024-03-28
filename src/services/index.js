@@ -10,8 +10,7 @@ import {
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
-	useGetGlobalAirline,
-	usePostGlobalAirline,
+	useGlobalAirline,
 } from './globalMasters/globalMaster';
 
 export {
@@ -22,6 +21,5 @@ export {
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
-	useGetGlobalAirline,
-	usePostGlobalAirline,
+	useGlobalAirline,
 };
