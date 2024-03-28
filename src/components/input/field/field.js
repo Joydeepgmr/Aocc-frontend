@@ -72,10 +72,10 @@ const InputField = ({
 						},
 					]}
 				>
-					<Input
+					<InputNumber
 						placeholder={placeholder}
 						disabled={disabled ? disabled : false}
-						className={`input_field`}
+						className={`input_number_field`}
 						suffix={suffixText && <span>{suffixText}</span>}
 						{...rest}
 					/>

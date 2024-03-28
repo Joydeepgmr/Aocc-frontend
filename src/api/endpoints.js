@@ -9,9 +9,9 @@ export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
 export const USER_LOGIN = 'user/login';
 
 /*------------- IT admin airport Master --------------*/
-export const POST_LICENSE = "airport-license"
-export const GET_LICENSE = "airport-license/"
-export const GET_AIRPORT_NAME = "global-airport/paginated"
+export const POST_LICENSE = 'airport-license';
+export const GET_LICENSE = 'airport-license/';
+export const GET_AIRPORT_NAME = 'global-airport/paginated';
 
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
@@ -30,19 +30,19 @@ export const POST_BULK_GLOBAL_AIRPORT = '/global-airport/upload/';
 /*--------------------------planner airport master ---------------------*/
 
 export const POST_BAGGED_BELT = '';
-export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type//paginated/';
+export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/paginated/';
 export const POST_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const PATCH_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const DELETE_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const POST_BULK_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/upload/';
 
-export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register//paginated/';
+export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/paginated/';
 export const POST_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const PATCH_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const DELETE_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const POST_BULK_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/upload/';
 
-export const GET_GLOBAL_AIRLINE = '/global-airline/paginated';
+export const GET_GLOBAL_AIRLINE = '/global-airline/paginated/';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';
 export const PATCH_GLOBAL_AIRLINE = '/global-airline/';
 export const DELETE_GLOBAL_AIRLINE = '/global-airline/';

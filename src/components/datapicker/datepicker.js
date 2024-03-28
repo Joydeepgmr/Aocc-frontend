@@ -43,6 +43,7 @@ const Date = ({
 				},
 			]}
 		>
+
 			<DatePicker
 				placeholder={placeholder}
 				className="date_style"
@@ -53,14 +54,14 @@ const Date = ({
 						return disablePastDates(current);
 					} else if (disabledFor === 'future') {
 						return disableFutureDates(current);
-					}
-					else if (isDisabledDate) {
+					} else if (isDisabledDate) {
 						return disabledDate(current);
 					} else {
 						return false;
 					}
 				}}
 			/>
+
 		</Form.Item>
 	);
 };

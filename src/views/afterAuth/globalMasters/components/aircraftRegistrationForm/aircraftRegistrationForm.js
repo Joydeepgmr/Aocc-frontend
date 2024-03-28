@@ -3,17 +3,18 @@ import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
-import { SelectAircraftTye } from '../../../userAccess/userAccessData';
+import { SelectAircraftTye, SelectTypeOfUse } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
 
-const AircraftRegistrationForm = ({ isReadOnly }) => {
+const AircraftRegistrationForm = ({ isReadOnly, type }) => {
+	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_registration_form_container">
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Registration"
 					name="registration"
-					placeholder="Enter the airport name"
+					placeholder={!isReadOnly && "Enter the airport name"}
 					className="custom_input"
 					required
 					disabled={isReadOnly}
@@ -21,14 +22,14 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Internal"
 					name="internal"
-					placeholder="Enter the internal"
+					placeholder={!isReadOnly && "Enter the internal"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="IATA Code"
 					name="iataCode"
-					placeholder="Enter the IATA code"
+					placeholder={!isReadOnly && "Enter the IATA code"}
 					className="custom_input"
 					required
 					disabled={isReadOnly}
@@ -38,38 +39,41 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="ICAO Code"
 					name="iacoCode"
-					placeholder="Enter the ICAO code"
+					placeholder={!isReadOnly && "Enter the ICAO code"}
 					className="custom_input"
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 				/>
 				<CustomSelect
 					SelectData={SelectAircraftTye}
-					placeholder="Filled Text"
+					placeholder={!isReadOnly && "Aircraft Typey"}
+					className="custom_input"
+					disabled={isReadOnly || isNotEditable}
+					label="Aircraft Type"
+					required
+					name="aircraft_id"
+				/>
+				<CustomSelect
+					SelectData={SelectTypeOfUse}
+					placeholder={!isReadOnly && "Type of Use"}
 					className="custom_input"
 					disabled={isReadOnly}
-					label="Airport Type"
-					name="airportType"
-				/>
-				<InputField
 					label="Type of Use"
 					name="typeOfUse"
-					placeholder="Enter the type of use"
-					className="custom_input"
-					disabled={isReadOnly}
+					required
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Home Airport"
 					name="homeAirport"
-					placeholder="Enter the home airport"
+					placeholder={!isReadOnly && "Enter the home airport"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Nationality"
 					name="nationality"
-					placeholder="Enter the nationality"
+					placeholder={!isReadOnly && "Enter the nationality"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -78,14 +82,14 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Cockpit Crew"
 					name="cockpitCrew"
-					placeholder="Enter the cockpit crew"
+					placeholder={!isReadOnly && "Enter the cockpit crew"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Cabin crew"
 					name="cabinCrew"
-					placeholder="Enter the cabin crew"
+					placeholder={!isReadOnly && "Enter the cabin crew"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -94,7 +98,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="No. of Seats"
 					name="numberOfSeats"
-					placeholder="Enter the number of seats"
+					placeholder={!isReadOnly && "Enter the number of seats"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -103,7 +107,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Height"
 					name="height"
-					placeholder="Enter the Height"
+					placeholder={!isReadOnly && "Enter the Height"}
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -111,7 +115,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Length"
 					name="length"
-					placeholder="Enter the length"
+					placeholder={!isReadOnly && "Enter the length"}
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -119,7 +123,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Wingspan"
 					name="wingspan"
-					placeholder="Enter the wingspan"
+					placeholder={!isReadOnly && "Enter the wingspan"}
 					className="custom_input"
 					suffixText="meters"
 					disabled={isReadOnly}
@@ -129,7 +133,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="MTOW"
 					name="mtow"
-					placeholder="Enter the MTOW"
+					placeholder={!isReadOnly && "Enter the MTOW"}
 					className="custom_input"
 					suffixText="t"
 					disabled={isReadOnly}
@@ -137,7 +141,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="MOW"
 					name="mow"
-					placeholder="Enter the MOW"
+					placeholder={!isReadOnly && "Enter the MOW"}
 					className="custom_input"
 					suffixText="t"
 					required
@@ -148,7 +152,7 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Annex"
 					name="annex"
-					placeholder="Enter the annex"
+					placeholder={!isReadOnly && "Enter the annex"}
 					className="custom_input"
 					required
 					disabled={isReadOnly}
@@ -156,14 +160,14 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Main Deck"
 					name="mainDeck"
-					placeholder="Enter the main deck"
+					placeholder={!isReadOnly && "Enter the main deck"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="APU INOP"
 					name="apuInop"
-					placeholder="Enter the apuInop"
+					placeholder={!isReadOnly && "Enter the apuInop"}
 					className="custom_input"
 					disabled={isReadOnly} />
 			</div>
@@ -172,39 +176,39 @@ const AircraftRegistrationForm = ({ isReadOnly }) => {
 				<InputField
 					label="Owner Name"
 					name="ownerName"
-					placeholder="Enter the owner name"
+					placeholder={!isReadOnly && "Enter the owner name"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Country"
 					name="country"
-					placeholder="Enter the country name"
+					placeholder={!isReadOnly && "Enter the country name"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
-				<InputField label="Address" name="address" placeholder="Enter the address" className="custom_input"
+				<InputField label="Address" name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
 					disabled={isReadOnly} />
-				<InputField label="Remarks" name="remarks" placeholder="Enter remarks" className="custom_input"
+				<InputField label="Remarks" name="remarks" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
 					disabled={isReadOnly} />
 			</div>
 			<Divider />
 			<div className="airport_registration_form_inputfields">
 				<Date
 					label="Valid From"
-					placeholder="Select valid from date"
+					placeholder={!isReadOnly && "Select valid from date"}
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
 					disabledFor='future'
 					required
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 				/>
 				<Date
 					label="Valid To"
-					placeholder="Select valid to date"
+					placeholder={!isReadOnly && "Select valid to date"}
 					name="validTo"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
