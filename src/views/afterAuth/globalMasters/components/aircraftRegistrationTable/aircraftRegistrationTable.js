@@ -37,8 +37,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			iataCode: data?.iataCode,
 			iacoCode: data?.iacoCode,
 			aircraftType: data?.aircraftType,
-			typeOfUse: data?.typeOfUse,
-			homeAirport: data?.homeAirport,
+			usage: data?.usage,
+			globalAirportId: data?.globalAirportId,
 			nationality: data?.nationality,
 			cockpitCrew: data?.cockpitCrew,
 			cabinCrew: data?.cabinCrew,
@@ -50,20 +50,20 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			mow: data?.mow,
 			annex: data?.annex,
 			mainDeck: data?.mainDeck,
-			apuInop: data?.apuInop,
+			// apuInop: data?.apuInop,
 			ownerName: data?.ownerName,
 			country: data?.country,
 			address: data?.address,
 			remarks: data?.remarks,
 			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
-			validTo: data?.validTo ? dayjs(data?.validTo) : '',
+			validTill: data?.validTill ? dayjs(data?.validTill) : '',
 		};
 	}
 
 	const onFinishHandler = (values) => {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
-		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		values.iataCode = values?.iataCode;
 		values.icaoCode = values?.icaoCode;
 		if (aircraftRegistrationModal.type === 'new') {

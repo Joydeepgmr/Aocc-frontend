@@ -58,14 +58,14 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 					label="Type of Use"
-					name="typeOfUse"
+					name="usage"
 					required
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Home Airport"
-					name="homeAirport"
+					name="globalAirportId"
 					placeholder={!isReadOnly && "Enter the home airport"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -164,12 +164,12 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<InputField
+				{/* <InputField
 					label="APU INOP"
 					name="apuInop"
 					placeholder={!isReadOnly && "Enter the apuInop"}
 					className="custom_input"
-					disabled={isReadOnly} />
+					disabled={isReadOnly} /> */}
 			</div>
 			<Divider />
 			<div className="airport_registration_form_inputfields">
@@ -209,7 +209,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 				<Date
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
-					name="validTo"
+					name="validTill"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>

@@ -86,10 +86,11 @@ export const SelectAircraftTye = [
 ];
 
 export const SelectTypeOfUse = [
-	{ id: 1, label: 'Commercial', value: 'Commercial' },
-	{ id: 2, label: 'Government', value: 'Government' },
-	{ id: 3, label: 'Cargo', value: 'Cargo' },
-	{ id: 4, label: 'Personal', value: 'Personal' },
+	{ id: 1, label: 'Commercial', value: 'commercial' },
+	{ id: 2, label: 'Government', value: 'governmental' },
+	{ id: 3, label: 'Cargo', value: 'cargo' },
+	{ id: 4, label: 'Personal', value: 'personal' },
+	{ id: 5, label: 'Single', value: 'single' },
 ]
 export const SelectAcBodyType = [
 	{ id: 1, label: 'Wide-Body', value: 'wide body' },
