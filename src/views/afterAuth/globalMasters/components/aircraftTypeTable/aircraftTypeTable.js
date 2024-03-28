@@ -50,9 +50,9 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			engineType: data?.engineType,
 			engineCount: data?.engineCount && parseInt(data?.engineCount),
 			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
-			firstClass: data?.firstClass && parseInt(data?.firstClass),
-			businessClass: data?.businessClass && parseInt(data?.businessClass),
-			economyClass: data?.economyClass,
+			firstClassSeats: data?.firstClassSeats && parseInt(data?.firstClassSeats),
+			businessClassSeats: data?.businessClassSeats && parseInt(data?.businessClassSeats),
+			economyClassSeats: data?.economyClassSeats,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}

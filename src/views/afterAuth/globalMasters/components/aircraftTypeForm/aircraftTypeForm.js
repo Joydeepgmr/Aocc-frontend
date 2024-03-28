@@ -156,7 +156,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 				<InputField
 					label="First Class"
-					name="firstClass"
+					name="firstClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the first class seats"}
 					className="custom_input"
@@ -164,7 +164,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 				<InputField
 					label="Business Class"
-					name="businessClass"
+					name="businessClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the business class seats"}
 					className="custom_input"
@@ -172,7 +172,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				/>
 				<InputField
 					label="Economy Class"
-					name="economyClass"
+					name="economyClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the economy class seats"}
 					className="custom_input"
