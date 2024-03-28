@@ -23,85 +23,82 @@ import {
 import { Post, Patch, Delete } from '../HttpServices/HttpServices';
 
 
-export const useGetGlobalAirport = (props) => {
-	const response = useMutation({
+export const useGlobalAirport = (props) => {
+	const queryClient = useQueryClient();
+	// for get all airport
+	const getGlobalAirport = useMutation({
 		mutationKey: ['global-airport'],
 		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
+		onSuccess: (newData) => {
+			console.log("on get success")
+			const previousData = queryClient.getQueryData('global-airport') || [];
+			const updatedData = [...previousData, ...newData.data];
+			queryClient.setQueryData('global-airport', updatedData);
+		},
 		...props,
 	});
-
-	const { data, error, isSuccess } = response;
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const usePostGlobalAirport = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
+	
+	// if (props == 'get') {
+	// 	return { getGlobalAirport }
+	// }
+	//for create new airport
+	const postGlobalAirport = useMutation({
 		mutationKey: ['post-global-airport'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
 		onSuccess: () => {
-			queryClient.invalidateQueries('global-airport');
+			console.log("on post success")
 		},
 		...props,
 	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const usePatchGlobalAirport = (props) => {
-	const queryClient = useQueryClient()
-	const response = useMutation({
+	// for edit an airport
+	console.log(postGlobalAirport, 'postGLobalAirport');
+	const patchGlobalAirport = useMutation({
 		mutationKey: ['patch-global-airport'],
-		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRPORT}${props.id}`, props),
-		onSuccess: (data) => {
-			console.log("data on success is ", data);
-			queryClient.invalidateQueries('global-airport');
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRPORT}${payload.id}`, payload.values),
+		onSuccess: ({ data }) => {
+			console.log("on patch success")
+			let updatedData = queryClient.getQueryData('global-airport') || [];
+			updatedData = updatedData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			})
+			queryClient.setQueryData('global-airport', updatedData);
 		},
 		...props,
 	});
+	//for delete an airport
+	let deleteId = ''; // to handle delete flow
+	const deleteGlobalAirport = useMutation(
+		{
+			mutationKey: ['delete-global-airport'],
+			mutationFn: async (id) => {
+				deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
+			},
+			onSuccess: async ({ data }) => {
+				console.log("on delete success")
+				let updatedData = queryClient.getQueryData('global-airport') || [];
+				updatedData = updatedData.filter((elm) => {
+					return elm.id !== deleteId
+				})
+				queryClient.setQueryData('global-airport', updatedData);
+				deleteId = '';
+			},
+			...props,
+		}
+	);
+	const updatedData = queryClient.getQueryData('global-airport') || [];
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return {
+		getGlobalAirport,
+		postGlobalAirport,
+		patchGlobalAirport,
+		deleteGlobalAirport,
+		updatedData
+	};
 };
 
-export const useDeleteGlobalAirport = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
-		mutationKey: ['delete-global-airport'],
-		mutationFn: async (id) => {
-			const response = await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
-			return response.data; // Assuming the API returns a success message or updated data
-		},
-		onSuccess: async () => {
-			queryClient.invalidateQueries('global-airport');
-		},
-		...props,
-	});
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
 
 export const useUploadCSVAirport = (props) => {
 	const response = useMutation({

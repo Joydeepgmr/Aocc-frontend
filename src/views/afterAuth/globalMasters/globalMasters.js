@@ -7,11 +7,12 @@ import AirportTable from './components/airportTable/airportTable';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineForm from './components/airlineForm/airlineForm';
 import AirlineTable from './components/airlineTable/airlineTable';
-import { useGetGlobalAirport, useGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
+import { useGlobalAirport, useGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	const { data: airportData, mutate: getGlobalAirport } = useGetGlobalAirport();
+	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport('get');
+	const { data: airportData, mutate: getAirport } = getGlobalAirport;
 	const { getGlobalAirline } = useGlobalAirline();
 	const { data: fetchedGlobalAirline, mutate: getAirline } = getGlobalAirline;
 	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
@@ -19,8 +20,12 @@ const GlobalMasters = () => {
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
+
 	const handleTabChange = (key) => {
 		setActiveTab(key);
+		if (key == 1 && !updatedAirportData?.length) {
+			fetchedGlobalAirport();
+		}
 	}
 
 	function onUpload([file]) {
@@ -38,7 +43,7 @@ const GlobalMasters = () => {
 
 	const fetchedGlobalAirport = () => {
 		const payload = { pagination: airportData?.pagination }
-		getGlobalAirport(payload);
+		getAirport(payload);
 	}
 
 	const items = [

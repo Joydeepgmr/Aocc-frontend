@@ -6,9 +6,7 @@ import {
 import { useDummyApi } from './dummyApi/dummyApi';
 
 import {
-	useGetGlobalAirport,
-	usePostGlobalAirport,
-	usePatchGlobalAirport,
+	useGlobalAirport,
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
@@ -19,9 +17,7 @@ export {
 	useDummyApi,
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
-	useGetGlobalAirport,
-	usePostGlobalAirport,
-	usePatchGlobalAirport,
+	useGlobalAirport,
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
