@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
-import { useGetGlobalAircraftRegistration, useGetGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftRegistration, useGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData } = useGetGlobalAircraftType();
-	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData } = useGetGlobalAircraftRegistration();
+	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGlobalAircraftType('get');
+	const { getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGlobalAircraftRegistration();
+	const { data: aircraftTypeData, mutate: getAircraftType } = getGlobalAircraftType;
+	const { data: aircraftRegistrationData, mutate: getAircraftRegistration } = getGlobalAircraftRegistration;
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
 	const handleTabChange = (key) => {
 		setActiveTab(key);
+		if (key == 1 && !updatedAircraftTypeData?.length) {
+			fetchedGlobalAircraftType();
+		} else if (key == 2 && !updatedAircraftRegistrationData?.length) {
+			fetchedGlobalAircraftRegistration();
+		}
 	}
+	console.log("aircraftTypeData is ", aircraftTypeData)
 	function onUpload([file]) {
 		const formData = new FormData();
 		formData.append('file', file);
@@ -29,11 +37,11 @@ const AircraftTabs = () => {
 	}
 	const fetchedGlobalAircraftType = () => {
 		const payload = { pagination: aircraftTypeData?.pagination }
-		getGlobalAircraftType(payload);
+		getAircraftType(payload);
 	}
 	const fetchedGlobalAircraftRegistration = () => {
 		const payload = { pagination: aircraftRegistrationData?.pagination }
-		getGlobalAircraftRegistration(payload);
+		getAircraftRegistration(payload);
 	}
 	const items = [
 		{
@@ -41,10 +49,10 @@ const AircraftTabs = () => {
 			label: 'Aircraft Type',
 			children: (
 				<CreateWrapper
-					tableComponent={<AircraftTypeTable data={updatedAircraftTypeData} createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
+					tableComponent={<AircraftTypeTable createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					data={updatedAircraftTypeData}
+					data={aircraftTypeData?.data ?? []}
 					pagination={aircraftTypeData?.pagination}
 					fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
@@ -57,7 +65,7 @@ const AircraftTabs = () => {
 			children: (
 				<CreateWrapper
 					tableComponent={<AircraftRegistrationTable data={updatedAircraftRegistrationData} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
-					data={updatedAircraftRegistrationData}
+					data={aircraftRegistrationData?.data ?? []}
 					pagination={aircraftRegistrationData?.pagination}
 					fetchData={fetchedGlobalAircraftRegistration}
 					createProps={createProps}
@@ -68,8 +76,7 @@ const AircraftTabs = () => {
 		},
 	];
 	useEffect(() => {
-		fetchedGlobalAircraftType();
-		fetchedGlobalAircraftRegistration();
+		handleTabChange('1');
 	}, []);
 	return (
 		<div>

@@ -1,4 +1,4 @@
-import { useGetGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
 export const SelectData = [
 	{
@@ -85,6 +85,25 @@ export const SelectAircraftTye = [
 	},
 ];
 
+export const SelectTypeOfUse = [
+	{ id: 1, label: 'Commercial', value: 'Commercial' },
+	{ id: 2, label: 'Government', value: 'Government' },
+	{ id: 3, label: 'Cargo', value: 'Cargo' },
+	{ id: 4, label: 'Personal', value: 'Personal' },
+]
+export const SelectAcBodyType = [
+	{ id: 1, label: 'Wide-Body', value: 'wide body' },
+	{ id: 2, label: 'Commuter', value: 'commuter' },
+	{ id: 3, label: 'Narrow-Body', value: 'narrow body' },
+	{ id: 4, label: 'Airbus', value: 'airbus' },
+	{ id: 4, label: 'Airplane', value: 'airplane' },
+	{ id: 4, label: 'Jets', value: 'jets' },
+	{ id: 4, label: 'Piston', value: 'piston' }
+]
+export const SelectEngineType = [
+	{ id: 1, label: 'Jet', value: 'jet' },
+	{ id: 2, label: 'Turbopop', value: 'turbopop' }
+]
 export const TerminalData = [
 	{
 		id: '1',
@@ -150,7 +169,7 @@ export const columns = [
 	{ title: 'Created On', dataIndex: 'createdOn', key: '6' },
 ];
 
-// const { data: fetchedGlobalAircraftType } = useGetGlobalAircraftType();
+// const { data: fetchedGlobalAircraftType } = useGlobalAircraftType();
 // export const SelectAircraftType = fetchedGlobalAircraftType ? fetchedGlobalAircraftType.map((item, index) => ({
 // 	id: index.toString(),
 // 	label: item.label,
