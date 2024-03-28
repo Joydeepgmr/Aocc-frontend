@@ -22,6 +22,7 @@ const AircraftTabs = () => {
 			fetchedGlobalAircraftRegistration();
 		}
 	}
+	console.log("aircraftTypeData is ", aircraftTypeData)
 	function onUpload([file]) {
 		const formData = new FormData();
 		formData.append('file', file);
@@ -51,7 +52,7 @@ const AircraftTabs = () => {
 					tableComponent={<AircraftTypeTable createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					data={updatedAircraftTypeData}
+					data={aircraftTypeData?.data ?? []}
 					pagination={aircraftTypeData?.pagination}
 					fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
@@ -64,7 +65,7 @@ const AircraftTabs = () => {
 			children: (
 				<CreateWrapper
 					tableComponent={<AircraftRegistrationTable data={updatedAircraftRegistrationData} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
-					data={updatedAircraftRegistrationData}
+					data={aircraftRegistrationData?.data ?? []}
 					pagination={aircraftRegistrationData?.pagination}
 					fetchData={fetchedGlobalAircraftRegistration}
 					createProps={createProps}

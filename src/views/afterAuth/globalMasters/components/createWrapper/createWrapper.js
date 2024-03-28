@@ -11,8 +11,8 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 		if (createProps.new) {
 			setCreateProps({ ...createProps, new: false });
 		}
-
 	}
+	
 	let dropdownItems = [{
 		label,
 		value: 'createNew',

@@ -62,7 +62,7 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 						<Upload
 							onChange={handleFileSelect}
 							fileList={files}
-							accept=".csv"
+							accept=".csv, .xlsx"
 							showUploadList={true}
 							beforeUpload={(file) => {
 								!isError && setFiles([file]);
@@ -79,7 +79,7 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 							{errorMessage}
 						</CustomTypography>}
 						{Boolean(files?.length) && (
-							<Button title="Upload" id="btn" type="filledText" onClick={() => handleUpload(files)} />
+							<Button title="Upload" id="btn" type="filledText" onClick={() => {handleUpload(files); setFiles([])}} />
 						)}
 					</div>
 

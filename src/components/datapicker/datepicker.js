@@ -43,24 +43,24 @@ const Date = ({
 				},
 			]}
 		>
-			<DatePicker
-				placeholder={placeholder}
-				className="date_style"
-				format={format}
-				disabled={disabled}
-				disabledDate={(current) => {
-					if (disabledFor === 'past') {
-						return disablePastDates(current);
-					} else if (disabledFor === 'future') {
-						return disableFutureDates(current);
-					}
-					else if (isDisabledDate) {
-						return disabledDate(current);
-					} else {
-						return false;
-					}
-				}}
-			/>
+
+<DatePicker
+    placeholder={placeholder}
+    className="date_style"
+    format={format}
+    disabled={disabled}
+    disabledDate={(current) => {
+        if (acceptAllDate) {
+            return false;
+        } else if (isDisabledDate) {
+            return disabledDate(current);
+        } else {
+            let customDate = dayjs().format(format);
+            return current && current < dayjs(customDate, format).startOf('day');
+        }
+    }}
+/>
+
 		</Form.Item>
 	);
 };
