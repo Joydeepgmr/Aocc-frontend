@@ -11,7 +11,7 @@ const Date = ({
 	placeholder,
 	disabledDate,
 	isDisabledDate = false,
-	acceptAllDate,
+	disabledFor, // 'past' | 'future'
 	format,
 	className,
 }) => {
@@ -23,7 +23,14 @@ const Date = ({
 			</>
 		);
 	};
-
+	const disablePastDates = (current) => {
+		let customDate = dayjs().format(format);
+		return current && current < dayjs(customDate, format);
+	}
+	const disableFutureDates = (current) => {
+		let customDate = dayjs().format(format);
+		return current && current > dayjs(customDate, format);
+	}
 	return (
 		<Form.Item
 			label={renderLabel()}

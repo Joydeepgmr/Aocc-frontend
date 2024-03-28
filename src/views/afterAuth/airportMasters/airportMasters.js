@@ -10,7 +10,8 @@ import LicenseSetupForm from './components/licenseSetupForm/licenseSetupForm';
 import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable';
 
 const AirportMasters = () => {
-	const {data: fetchedLicenseData} = useGetLicenseData();
+	const {data: fetchedLicenseData, isLoading} = useGetLicenseData();
+	console.log("what is fetched data", fetchedLicenseData);
 
 	return (
 		<div className='airport_masters_container'>

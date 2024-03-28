@@ -3,22 +3,24 @@ import InputField from '../../../../../components/input/field/field';
 import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
 import OtpField from '../../../../../components/input/otp/otp';
+import NumericField from '../numericField/numericField';
 import { SelectData } from '../../../userAccess/userAccessData';
-import { useGetAirportName } from '../../../../../services/airportMasters/airportMasters';
+import { usePostAirportName } from '../../../../../services/airportMasters/airportMasters';
 import './licenseSetupForm.scss';
 
 const LicenseSetupForm = () => {
 	const [airportName, setAirportName] = useState([]);
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
-	const { data: airportData } = useGetAirportName();
+	// const { data: airportData } = useGetAirportName();
+	const { mutate: postLicenseAirportName, isLoading, isSucess, isError, data, response } = usePostAirportName();
 
-	console.log('data from api', airportData);
+	// console.log('data from api', airportData);
 
 	useEffect(() => {
-		if (airportData) {
+		if (data) {
 			setAirportName(
-				airportData.map((airport, index) => {
+				data?.data?.map((airport, index) => {
 					return {
 						id: (index + 1).toString(),
 						label: airport.name,
@@ -31,10 +33,10 @@ const LicenseSetupForm = () => {
 		} else {
 			setAirportName([]);
 		}
-	}, [airportData]);
+	}, [data]);
 
 	const handleAirportChange = (selectedAirport) => {
-		const selectedAirportData = airportData.find((airport) => airport.id === selectedAirport);
+		const selectedAirportData = data?.data?.find((airport) => airport.id === selectedAirport);
 		console.log('what is selected Airport Data', selectedAirportData);
 		const iataValue = selectedAirportData.iataCode.split('');
 		const icaoValue = selectedAirportData.icaoCode.split('');
@@ -42,13 +44,17 @@ const LicenseSetupForm = () => {
 		if (selectedAirportData) {
 			setIataCode(iataValue);
 			setIcaoCode(icaoValue);
-			alert(`Iata Code: ${selectedAirportData.iataCode}`)
-			alert(`Icao Code: ${selectedAirportData.icaoCode}`)
+			// alert(`Iata Code: ${selectedAirportData.iataCode}`);
+			// alert(`Icao Code: ${selectedAirportData.icaoCode}`);
 		} else {
 			setIataCode([]);
 			setIcaoCode([]);
 		}
 	};
+
+	useEffect(() => {
+		postLicenseAirportName();
+	}, []);
 
 	return (
 		<div className="airport_setup_form_container">
@@ -62,7 +68,7 @@ const LicenseSetupForm = () => {
 					className="custom_input"
 					onChange={handleAirportChange}
 				/>
-				<OtpField
+				{/* <OtpField
 					otpLength={3}
 					label="IATA Code"
 					required
@@ -77,6 +83,24 @@ const LicenseSetupForm = () => {
 					name="icaoCode"
 					value={icaoCode}
 					onChange={setIcaoCode}
+				/> */}
+				<NumericField
+					otpLength={3}
+					label="IATA Code"
+					required
+					name="iataCode"
+					value={iataCode}
+					onChange={setIataCode}
+					disabled
+				/>
+				<NumericField
+					otpLength={4}
+					label="ICAO Code"
+					required
+					name="icaoCode"
+					value={icaoCode}
+					onChange={setIcaoCode}
+					disabled
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
@@ -112,7 +136,7 @@ const LicenseSetupForm = () => {
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" />
+				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" required/>
 			</div>
 		</div>
 	);
