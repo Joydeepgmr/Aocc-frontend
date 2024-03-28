@@ -7,7 +7,7 @@ import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGlobalAircraftType('get');
+	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGlobalAircraftType();
 	const { getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGlobalAircraftRegistration();
 	const { data: aircraftTypeData, mutate: getAircraftType } = getGlobalAircraftType;
 	const { data: aircraftRegistrationData, mutate: getAircraftRegistration } = getGlobalAircraftRegistration;
@@ -52,7 +52,7 @@ const AircraftTabs = () => {
 					tableComponent={<AircraftTypeTable createProps={activeTab == 1 && createProps} setCreateProps={setCreateProps} />}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					data={aircraftTypeData?.data ?? []}
+					data={updatedAircraftTypeData}
 					pagination={aircraftTypeData?.pagination}
 					fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
@@ -65,7 +65,7 @@ const AircraftTabs = () => {
 			children: (
 				<CreateWrapper
 					tableComponent={<AircraftRegistrationTable data={updatedAircraftRegistrationData} createProps={activeTab == 2 && createProps} setCreateProps={setCreateProps} />}
-					data={aircraftRegistrationData?.data ?? []}
+					data={updatedAircraftRegistrationData}
 					pagination={aircraftRegistrationData?.pagination}
 					fetchData={fetchedGlobalAircraftRegistration}
 					createProps={createProps}
