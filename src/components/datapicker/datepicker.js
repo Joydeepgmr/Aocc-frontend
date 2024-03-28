@@ -51,9 +51,9 @@ const Date = ({
 				disabled={disabled}
 				disabledDate={(current) => {
 					if (disabledFor === 'past') {
-						return disablePastDates();
+						return disablePastDates(current);
 					} else if (disabledFor === 'future') {
-						return disableFutureDates();
+						return disableFutureDates(current);
 					} else if (isDisabledDate) {
 						return disabledDate(current);
 					} else {
