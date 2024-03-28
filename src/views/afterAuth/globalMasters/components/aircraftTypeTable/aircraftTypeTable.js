@@ -54,6 +54,7 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
+
 	const closeAddModal = () => {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams)
@@ -210,7 +211,7 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 				key: 'viewDetails',
 				render: (
 					text,
-					record // Use the render function to customize the content of the cell
+					record
 				) => (
 					<ButtonComponent
 						title="View Details"
@@ -242,7 +243,6 @@ const AircraftTable = ({ createProps, setCreateProps,data }) => {
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					{/* {formComponent && formComponent} */}
 					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} />
 					{aircraftTypeModal.type !== 'view' && <>
 						<Divider />

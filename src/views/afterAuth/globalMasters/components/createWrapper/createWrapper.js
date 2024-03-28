@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
-// import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
-// import { formDisabled } from '../../redux/reducer';
-import { usePostGlobalAircraftRegistration, usePostGlobalAircraftType, usePostGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
-const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore: true }, fetchData, createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
-	// const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
-	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isSuccess: aircraftTypeSuccess, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
-	// const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: aircraftRegistrationSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-	// const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label = 'Create Wrapper changed update your code' }) => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const onOpenChange = () => {
 		if (createProps.new) {
 			setCreateProps({ ...createProps, new: false });
 		}
-
 	}
+	
 	let dropdownItems = [{
 		label,
 		value: 'createNew',
