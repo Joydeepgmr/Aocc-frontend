@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
-import { useGetGlobalAircraftRegistration, useGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftRegistration, useGlobalAircraftType, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 
 
 const AircraftTabs = () => {
-	const { data: aircraftTypeData, mutate: getGlobalAircraftType, updatedData: updatedAircraftTypeData = [], isEditSuccess } = useGlobalAircraftType();
-	const { data: aircraftRegistrationData, mutate: getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGetGlobalAircraftRegistration();
+	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGlobalAircraftType('get');
+	const { getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGlobalAircraftRegistration();
+	const { data: aircraftTypeData, mutate: getAircraftType } = getGlobalAircraftType;
+	const { data: aircraftRegistrationData, mutate: getAircraftRegistration } = getGlobalAircraftRegistration;
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
@@ -34,11 +36,11 @@ const AircraftTabs = () => {
 	}
 	const fetchedGlobalAircraftType = () => {
 		const payload = { pagination: aircraftTypeData?.pagination }
-		getGlobalAircraftType(payload);
+		getAircraftType(payload);
 	}
 	const fetchedGlobalAircraftRegistration = () => {
 		const payload = { pagination: aircraftRegistrationData?.pagination }
-		getGlobalAircraftRegistration(payload);
+		getAircraftRegistration(payload);
 	}
 	const items = [
 		{

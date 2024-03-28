@@ -5,33 +5,27 @@ import {
 
 import { useDummyApi } from './dummyApi/dummyApi';
 
-import { 
-	useGetGlobalAirport, 
-	usePostGlobalAirport,
-	useEditGlobalAirport, 
-	useDeleteGlobalAirport,
-	useGlobalAircraftType, 
-	usePostGlobalAircraftType, 
-	useUploadCSVAircraftType,
-	useGetGlobalAircraftRegistration, 
-	usePostGlobalAircraftRegistration,
-	useGetGlobalAirline,
-	usePostGlobalAirline, 
-} from './globalMasters/globalMaster';
-
-export { 
-	useDummyApi, 
-	useGetAllTimelineData, 
-	useGetTimelineGroupData, 
+import {
 	useGetGlobalAirport,
 	usePostGlobalAirport,
 	useEditGlobalAirport,
-	useDeleteGlobalAirport, 
-	useGlobalAircraftType, 
-	usePostGlobalAircraftType,
+	useGlobalAircraftType,
 	useUploadCSVAircraftType,
-	useGetGlobalAircraftRegistration, 
-	usePostGlobalAircraftRegistration,
+	useGlobalAircraftRegistration,
+	useGetGlobalAirline,
+	usePostGlobalAirline,
+} from './globalMasters/globalMaster';
+
+export {
+	useDummyApi,
+	useGetAllTimelineData,
+	useGetTimelineGroupData,
+	useGetGlobalAirport,
+	usePostGlobalAirport,
+	useEditGlobalAirport,
+	useGlobalAircraftType,
+	useUploadCSVAircraftType,
+	useGlobalAircraftRegistration,
 	useGetGlobalAirline,
 	usePostGlobalAirline,
 };

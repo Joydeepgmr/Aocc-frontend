@@ -1,22 +1,26 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { usePostGlobalAircraftType, useDeleteGlobalAirport, useDeleteGlobalAircraftType, usePatchGlobalAircraftType, useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster"
-import ButtonComponent from '../../../../../components/button/button';
-import TableComponent from '../../../../../components/table/table';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import editIcon from '../../../../../assets/logo/edit.svg';
-import deleteIcon from '../../../../../assets/logo/delete.svg';
-import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react';
+import deleteIcon from '../../../../../assets/logo/delete.svg';
+import editIcon from '../../../../../assets/logo/edit.svg';
+import ButtonComponent from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modal/modal';
+import TableComponent from '../../../../../components/table/table';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
 const AircraftTable = ({ createProps, setCreateProps }) => {
-	// const { mutate: postGlobalAircraftType, isLoading: aircraftTypeLoading, isError: aircraftTypeError, postData: aircraftTypePostData, message: aircraftTypeMessage } = usePostGlobalAircraftType();
-	// const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
-	// const { mutate: patchGlobalAircraftType } = usePatchGlobalAircraftType();
-	// const { mutate: deleteGlobalAircraftType } = useDeleteGlobalAircraftType();
-	const { patchAircraftType, isEditSuccess, deleteAircraftType, isDeleteSuccess, isDeleteError, postAircraftType, isCreateNewSuccess, isCreateNewError, updatedData: data } = useGlobalAircraftType();
+	const {
+		postGlobalAirCraftType,
+		patchGlobalAircraftType,
+		deleteGlobalAircraftType,
+		updatedData: data = []
+	} = useGlobalAircraftType();
+	const { mutate: postAircraftType, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirCraftType;
+	const { mutate: patchAircraftType, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading, isIdle: isEditIdle } = patchGlobalAircraftType;
+	const { mutate: deleteAircraftType, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAircraftType;
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
@@ -49,6 +53,7 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}
 	}
+	console.log("isEdit Success", isEditSuccess);
 	const onFinishHandler = (values) => {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');

@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import {
-	useDeleteGlobalAircraftRegistration,
-	useGetGlobalAircraftRegistration,
-	usePatchGlobalAircraftRegistration,
-	usePostGlobalAircraftRegistration,
-} from '../../../../../services/globalMasters/globalMaster';
-import ButtonComponent from '../../../../../components/button/button';
-import TableComponent from '../../../../../components/table/table';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import editIcon from '../../../../../assets/logo/edit.svg';
-import deleteIcon from '../../../../../assets/logo/delete.svg';
-import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react';
+import deleteIcon from '../../../../../assets/logo/delete.svg';
+import editIcon from '../../../../../assets/logo/edit.svg';
+import ButtonComponent from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modal/modal';
+import TableComponent from '../../../../../components/table/table';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import {
+	useGlobalAircraftRegistration
+} from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
+	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [] } = useGlobalAircraftRegistration();
+	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError } = postGlobalAircraftRegistration;
+	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError } = patchGlobalAircraftRegistration;
+	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError } = deleteGlobalAircraftRegistration;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
-	const { mutate: postGlobalAircraftRegistration, isLoading: aircraftRegistrationLoading, isSuccess: isCreateNewSuccess, isError: aircraftRegistrationError, postData: aircraftRegistrationPostData, message: aircraftRegistrationMessage } = usePostGlobalAircraftRegistration();
-	const { mutate: patchGlobalAircraftRegistration, isSuccess: isEditSuccess } = usePatchGlobalAircraftRegistration();
-	const { mutate: deleteGlobalAircraftRegistration } = useDeleteGlobalAircraftRegistration();
 	const [initial] = Form.useForm();
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
@@ -69,17 +67,15 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data = [] }) =
 		values.iataCode = values?.iataCode;
 		values.icaoCode = values?.icaoCode;
 		if (aircraftRegistrationModal.type === 'new') {
-			postGlobalAircraftRegistration(values);
+			postAircraftRegistration(values);
 		} else {
 			values.id = aircraftRegistrationModal.data.id;
-			patchGlobalAircraftRegistration(values);
+			patchAircraftRegistration(values);
 		}
 	};
 
 	const handleDelete = (record) => {
-		deleteGlobalAircraftRegistration(record.id);
-		// const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-		// dispatch(updateAirportData(updatedData));
+		deleteAircraftRegistration(record.id);
 	};
 
 	const handleEdit = (data) => {
