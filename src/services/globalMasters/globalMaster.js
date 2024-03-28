@@ -152,9 +152,6 @@ export const useGlobalAircraftType = (props) => {
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 		...props,
 	});
-	if (props == 'get') {
-		return { getGlobalAircraftType }
-	}
 	//for create new aircraft type
 	const postGlobalAirCraftType = useMutation({
 		mutationKey: ['post-global-aircraft-type'],
