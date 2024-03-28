@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import './airlineTable.scss';
 import {
-	useGetGlobalAirline,
-	usePostGlobalAirline,
-	useDeleteGlobalAirline,
-	usePatchGlobalAirline,
+	useGlobalAirline,
 } from '../../../../../services/globalMasters/globalMaster';
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
@@ -18,9 +15,12 @@ import AirlineForm from '../airlineForm/airlineForm';
 // import { formDisabled, updateAirportData } from '../../redux/reducer';
 // import { useDispatch, useSelector } from 'react-redux';
 
-const AirlineTable = ({ createProps, setCreateProps, data }) => {
-	// const getGlobalAirlineResponse = useGetGlobalAirline();
-
+const AirlineTable = ({ createProps, setCreateProps }) => {
+	// const getGlobalAirlineResponse = useGlobalAirline();
+	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [] } = useGlobalAirline();
+	const { mutate: postGlobalAirLineRegistration } = postGlobalAirline;
+	const { mutate: patchAirline } = patchGlobalAirline;
+	const { mutate: deleteAirline } = deleteGlobalAirline;
 	const [airlinedata, setAirlinedata] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -33,17 +33,14 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
-	const {
-		mutate: postGlobalAirLineRegistration,
-		isLoading: airlineRegistrationLoading,
-		isSuccess: airlineRegistrationSuccess,
-		isError: airlineRegistrationError,
-		postData: airlineRegistrationPostData,
-		message: airlineRegistrationMessage,
-	} = usePostGlobalAirline();
-
-	const { mutate: deleteGlobalAirline } = useDeleteGlobalAirline();
-	const { mutate: patchGlobalAirline } = usePatchGlobalAirline();
+	// const {
+	// 	mutate: postGlobalAirLineRegistration,
+	// 	isLoading: airlineRegistrationLoading,
+	// 	isSuccess: airlineRegistrationSuccess,
+	// 	isError: airlineRegistrationError,
+	// 	postData: airlineRegistrationPostData,
+	// 	message: airlineRegistrationMessage,
+	// } = usePostGlobalAirline();
 
 	const handleDetails = (data) => {
 		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
@@ -76,14 +73,14 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 		// if (airlineRegistrationModal.type === 'new') {
 		// 	postGlobalAirLineRegistration(values);
 		// } else {
-		// 	// useGetGlobalAirline(values);
+		// 	// useGlobalAirline(values);
 		// }
 
 		if (airlineRegistrationModal.type === 'edit') {
 			console.log('Update');
 			values.id = airlineRegistrationModal.data.id;
 			console.log('values.id', values.id);
-			patchGlobalAirline(values);
+			patchAirline(values);
 		} else {
 			postGlobalAirLineRegistration(values);
 			console.log('create');
@@ -94,7 +91,7 @@ const AirlineTable = ({ createProps, setCreateProps, data }) => {
 
 	const handleDelete = (record) => {
 		// console.log('recooord', record.id);
-		deleteGlobalAirline(record.id);
+		deleteAirline(record.id);
 
 		// const updatedData = data.filter((item) => item.id !== record.id);
 		// setDeleteData(updatedData);
