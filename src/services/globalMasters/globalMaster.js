@@ -37,7 +37,7 @@ export const useGlobalAirport = (props) => {
 		},
 		...props,
 	});
-	
+
 	// if (props == 'get') {
 	// 	return { getGlobalAirport }
 	// }
@@ -141,13 +141,27 @@ export const useUploadCSVAircraftType = (props) => {
 export const useGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
 	// for get all aircraft type
+	let variables = '';
 	const getGlobalAircraftType = useMutation({
 		mutationKey: ['global-aircraft-type'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
+		mutationFn: async (props) => {
+			variables = props;
+			if (props?.bulk) {
+				return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}?bulk=true`)
+			} else {
+				return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props)
+			}
+		},
 		onSuccess: (newData) => {
-			const previousData = queryClient.getQueryData('global-aircraft-type') || [];
-			const updatedData = [...previousData, ...newData.data];
-			queryClient.setQueryData('global-aircraft-type', updatedData);
+			console.log("variables are ", variables)
+			if (variables?.bulk) {
+				const updatedData = newData.data;
+				queryClient.setQueryData('global-aircraft-type', updatedData);
+			} else {
+				const previousData = queryClient.getQueryData('global-aircraft-type') || [];
+				const updatedData = [...previousData, ...newData.data];
+				queryClient.setQueryData('global-aircraft-type', updatedData);
+			}
 		},
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 		...props,
@@ -204,6 +218,8 @@ export const useGlobalAircraftType = (props) => {
 			...props,
 		}
 	);
+	// const isLoading = getGlobalAircraftType.isLoading || postGlobalAirCraftType.isLoading || patchGlobalAircraftType.isLoading || deleteGlobalAircraftType.isLoading
+	// queryClient.getQueryData('global-aircraft-type') || [];
 	const updatedData = queryClient.getQueryData('global-aircraft-type') || [];
 	const successMessage = queryClient.getQueriesData('aircraft-type-success')?.[0]?.[1] ?? undefined;;
 	const errorMessage = queryClient.getQueriesData('aircraft-type-error')?.[0]?.[1] ?? undefined;;

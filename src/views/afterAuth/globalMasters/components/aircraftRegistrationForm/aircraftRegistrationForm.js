@@ -5,9 +5,18 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectAircraftTye, SelectTypeOfUse } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
+import { useGlobalAircraftType, useGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 
 const AircraftRegistrationForm = ({ isReadOnly, type }) => {
+	const { updatedData: globalAirportData = [] } = useGlobalAirport();
+	const { updatedData: globalAircraftTypeData = [] } = useGlobalAircraftType();
 	const isNotEditable = type === 'edit';
+	const SelectAircraftData = globalAircraftTypeData.map((data) => {
+		return { label: data.identifier, value: data.id }
+	})
+	const SelectAirportData = globalAirportData.map((data) => {
+		return { label: data.name, value: data.id }
+	})
 	return (
 		<div className="airport_registration_form_container">
 			<div className="airport_registration_form_inputfields">
@@ -44,7 +53,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					disabled={isReadOnly || isNotEditable}
 				/>
 				<CustomSelect
-					SelectData={SelectAircraftTye}
+					SelectData={SelectAircraftData}
 					placeholder={!isReadOnly && "Aircraft Typey"}
 					className="custom_input"
 					disabled={isReadOnly || isNotEditable}
@@ -59,16 +68,17 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					disabled={isReadOnly}
 					label="Type of Use"
 					name="usage"
-					required
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
-				<InputField
+				<CustomSelect
+					SelectData={SelectAirportData}
 					label="Home Airport"
 					name="globalAirportId"
 					placeholder={!isReadOnly && "Enter the home airport"}
 					className="custom_input"
 					disabled={isReadOnly}
+					required
 				/>
 				<InputField
 					label="Nationality"
@@ -94,7 +104,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					disabled={isReadOnly}
 				/>
 			</div>
-			<div className="airport_registration_form_inputfields">
+			{/* <div className="airport_registration_form_inputfields">
 				<InputField
 					label="No. of Seats"
 					name="numberOfSeats"
@@ -102,8 +112,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
+			</div> */}
+			{/* <div className="airport_registration_form_inputfields">
 				<InputField
 					label="Height"
 					name="height"
@@ -128,7 +138,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					suffixText="meters"
 					disabled={isReadOnly}
 				/>
-			</div>
+			</div> */}
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="MTOW"

@@ -1,6 +1,6 @@
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
@@ -8,7 +8,7 @@ import ModalComponent from '../../../../../components/modal/modal';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
-	useGlobalAircraftRegistration
+	useGlobalAircraftRegistration, useGlobalAircraftType
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
@@ -37,16 +37,16 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			internal: data?.internal,
 			iataCode: data?.iataCode,
 			iacoCode: data?.iacoCode,
-			aircraftType: data?.aircraftType,
+			aircraft_id: data?.aircraft_id ?? data?.globalAircraftType?.id,
 			usage: data?.usage,
 			globalAirportId: data?.globalAirportId,
 			nationality: data?.nationality,
 			cockpitCrew: data?.cockpitCrew,
 			cabinCrew: data?.cabinCrew,
-			numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
-			height: data?.height && parseInt(data?.height),
-			length: data?.length && parseInt(data?.length),
-			wingspan: data?.wingspan && parseInt(data?.wingspan),
+			// numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
+			// height: data?.height && parseInt(data?.height),
+			// length: data?.length && parseInt(data?.length),
+			// wingspan: data?.wingspan && parseInt(data?.wingspan),
 			mtow: data?.mtow,
 			mow: data?.mow,
 			annex: data?.annex,
@@ -56,8 +56,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			country: data?.country,
 			address: data?.address,
 			remarks: data?.remarks,
-			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
-			validTill: data?.validTill ? dayjs(data?.validTill) : '',
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
 		};
 	}
 
@@ -70,6 +70,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		if (aircraftRegistrationModal.type === 'new') {
 			postAircraftRegistration(values);
 		} else {
+			delete values.aircraft_id;
+			delete values.validFrom;
 			values.id = aircraftRegistrationModal.data.id;
 			patchAircraftRegistration(values);
 		}
@@ -90,7 +92,6 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		closeAddModal();
 	};
 	console.log('messages are ', successMessage, errorMessage)
-
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal;
 		if (data) {
@@ -240,4 +241,4 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 	);
 };
 
-export default AircraftRegistrationTable;
+export default memo(AircraftRegistrationTable);
