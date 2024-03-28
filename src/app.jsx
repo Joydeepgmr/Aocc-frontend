@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import * as userType from "./utils/roles";
+import * as userType from './utils/roles';
 import PrivateOutlet from './privateRoute';
 import Loader from './components/loader';
 import { Pathname } from './pathname';
@@ -18,6 +18,7 @@ const Dashboard = React.lazy(() => import('./views/afterAuth/dashboard/dashboard
 const Components = React.lazy(() => import('./views/beforeAuth/components'));
 
 import './app.scss';
+import { Toaster } from 'react-hot-toast';
 
 export function App() {
 	const token = localStorage.getItem('_tid');
@@ -36,6 +37,23 @@ export function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Suspense fallback={<Loader />}>
+				<Toaster
+					position="top-center"
+					gutter={8}
+					toastOptions={{
+						style: {
+							background: '#363636',
+							color: '#fff',
+							fontSize: '1.3rem',
+						},
+						success: {
+							duration: 3000,
+						},
+						error: {
+							duration: 5000,
+						},
+					}}
+				/>
 				<BrowserRouter>
 					<Routes>
 						<Route

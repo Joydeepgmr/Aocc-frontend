@@ -12,6 +12,7 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
+import toast from 'react-hot-toast';
 
 const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
@@ -103,13 +104,13 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			closeAddModal();
 		}
 		if (successMessage) {
-			alert(successMessage)
+			toast.success(successMessage);
 		}
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
 
 	useEffect(() => {
 		if (errorMessage) {
-			alert(errorMessage);
+			toast.error(errorMessage);
 		}
 	}, [isCreateNewError, isDeleteError, isEditError])
 

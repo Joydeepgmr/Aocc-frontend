@@ -12,6 +12,7 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
+import toast from 'react-hot-toast';
 
 const AirlineTable = ({ createProps, setCreateProps }) => {
 	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [], successMessage, errorMessage } = useGlobalAirline();
@@ -83,12 +84,12 @@ const AirlineTable = ({ createProps, setCreateProps }) => {
 			closeAddModal();
 		}
 		if (successMessage) {
-			alert(successMessage)
+			toast.success(successMessage);
 		}
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
 	useEffect(() => {
 		if (errorMessage) {
-			alert(errorMessage)
+			toast.error(errorMessage);
 		}
 	}, [isCreateNewError, isEditError, isDeleteError])
 	useEffect(() => {

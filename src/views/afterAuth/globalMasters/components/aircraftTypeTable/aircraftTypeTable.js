@@ -10,6 +10,7 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
+import toast from 'react-hot-toast';
 
 const AircraftTable = ({ createProps, setCreateProps }) => {
 	const {
@@ -112,7 +113,7 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
 		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
-			alert(successMessage)
+			toast.success(successMessage)
 		}
 		if (aircraftTypeModal.isOpen) {
 			closeAddModal();
@@ -120,7 +121,7 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
 	useEffect(() => {
 		if (isEditError || isCreateNewError || isDeleteError) {
-			alert(errorMessage)
+			toast.error(errorMessage)
 		}
 	}, [isEditError, isCreateNewError, isDeleteError])
 	useEffect(() => {
