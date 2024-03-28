@@ -79,6 +79,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					className="custom_input"
 					suffixText="minutes"
 					disabled={isReadOnly}
+					type='number'
 				/>
 			</div>
 			<Divider />

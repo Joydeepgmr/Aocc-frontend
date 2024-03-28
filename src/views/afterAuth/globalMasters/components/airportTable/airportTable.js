@@ -35,13 +35,31 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
 
 		if (airportModal.type === 'edit') {
-			values.iataCode = values?.iataCode;
-			values.icaoCode = values?.icaoCode;
-			values.countryCode = values?.countryCode;
-			console.log('add a data');
-			console.log('dispatch the update airport api');
-			values.id = airportModal.data.id
-			patchGlobalAirport(values);
+			console.log("what edit values:", values);
+			if (values) {
+				const isNotEmpty = value => value !== "" && value !== null && value !== undefined && value !== "noneditable";
+				const filteredAirportData = Object.fromEntries(
+					Object.entries(values)
+						.filter(([key, value]) => isNotEmpty(value))
+				);
+				delete filteredAirportData.validFrom;
+				// delete filteredAirportData.id;
+
+				console.log("filtered values", filteredAirportData);
+				filteredAirportData.iataCode = filteredAirportData?.iataCode;
+				filteredAirportData.icaoCode = filteredAirportData?.icaoCode;
+				filteredAirportData.countryCode = filteredAirportData?.countryCode;
+				filteredAirportData.standardFlightTime = filteredAirportData?.standardFlightTime;
+				console.log('add a data');
+				console.log('dispatch the update airport api');
+				filteredAirportData.id = airportModal.data.id
+				patchGlobalAirport(filteredAirportData);
+			}
+			// values.iataCode = values?.iataCode;
+			// values.icaoCode = values?.icaoCode;
+			// values.countryCode = values?.countryCode;
+			// values.standardFlightTime = values?.standardFlightTime;
+
 			console.log('added a data');
 		} else {
 			values.iataCode = values?.iataCode?.join('');
