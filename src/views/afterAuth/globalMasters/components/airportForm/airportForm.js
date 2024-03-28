@@ -91,6 +91,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					className="custom_date"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly || isNotEditable}
+					disabledFor='future'
 					required
 				/>
 				<Date

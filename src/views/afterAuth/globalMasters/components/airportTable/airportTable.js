@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { usePostGlobalAirport, usePatchGlobalAirport, useDeleteGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
+import { useGlobalAirport } from "../../../../../services/globalMasters/globalMaster"
 import ButtonComponent from '../../../../../components/button/button';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
@@ -12,67 +12,70 @@ import dayjs from 'dayjs';
 import './airportTable.scss';
 
 
-const AirportTable = ({ data, createProps, setCreateProps }) => {
-	const { mutate: postGlobalAirport, isLoading: airportLoading, isSuccess: airportSuccess, isError: airportError, postData: airportPostData, message: airportMessage } = usePostGlobalAirport();
-	const { mutate: patchGlobalAirport } = usePatchGlobalAirport();
-	const { mutate: deleteGlobalAirport } = useDeleteGlobalAirport();
+const AirportTable = ({ createProps, setCreateProps }) => {
+	const {
+		postGlobalAirport,
+		patchGlobalAirport,
+		deleteGlobalAirport,
+		updatedData: data = []
+	} = useGlobalAirport();
+	console.log(postGlobalAirport, 'postGlobal');
+
+	const [initial] = Form.useForm();
+	const { mutate: postAirport, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirport;
+	const { mutate: patchAirport, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading} = patchGlobalAirport;
+	const { mutate: deleteAirport, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAirport;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState({});
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
-	const [initial] = Form.useForm();
 
 	const closeAddModal = () => {
 		initial.resetFields();
 		setAirportModal(defaultModalParams)
 	};
 
+	const getFormValues = (data) => {
+		return {
+			name: data?.name,
+			iataCode: data?.iataCode,
+			icaoCode: data?.icaoCode,
+			abbreviatedName1: data?.abbreviatedName1,
+			abbreviatedName2: data?.abbreviatedName2,
+			abbreviatedName3: data?.abbreviatedName3,
+			abbreviatedName4: data?.abbreviatedName4,
+			airportType: data?.airportType,
+			countryCode: data?.countryCode,
+			standardFlightTime: data?.standardFlightTime,
+			timeChange: data?.timeChange,
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
+		}
+	}
+
 	const onFinishHandler = (values) => {
-		console.log(values, airportModal);
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
 
 		if (airportModal.type === 'edit') {
-			console.log("what edit values:", values);
-			if (values) {
-				const isNotEmpty = value => value !== "" && value !== null && value !== undefined && value !== "noneditable";
-				const filteredAirportData = Object.fromEntries(
-					Object.entries(values)
-						.filter(([key, value]) => isNotEmpty(value))
-				);
-				delete filteredAirportData.validFrom;
-				// delete filteredAirportData.id;
-
-				console.log("filtered values", filteredAirportData);
-				filteredAirportData.iataCode = filteredAirportData?.iataCode;
-				filteredAirportData.icaoCode = filteredAirportData?.icaoCode;
-				filteredAirportData.countryCode = filteredAirportData?.countryCode;
-				filteredAirportData.standardFlightTime = filteredAirportData?.standardFlightTime;
-				console.log('add a data');
-				console.log('dispatch the update airport api');
-				filteredAirportData.id = airportModal.data.id
-				patchGlobalAirport(filteredAirportData);
-			}
+			const id = airportModal.data.id;
 			// values.iataCode = values?.iataCode;
 			// values.icaoCode = values?.icaoCode;
-			// values.countryCode = values?.countryCode;
-			// values.standardFlightTime = values?.standardFlightTime;
-
-			console.log('added a data');
+			values.countryCode = values?.countryCode;
+			values.standardFlightTime = values?.standardFlightTime;
+			delete values.iataCode
+			delete values.validFrom
+			patchAirport({ values, id });
 		} else {
 			values.iataCode = values?.iataCode?.join('');
 			values.icaoCode = values?.icaoCode?.join('');
 			values.countryCode = values?.countryCode?.join('');
-			postGlobalAirport(values);
-			console.log('dispatch the create new airport api');
+			postAirport(values);
 		}
 		closeAddModal();
 	};
 
 	const handleDelete = (record) => {
-		deleteGlobalAirport(record.id);
+		deleteAirport(record.id);
 	};
 
 
@@ -80,14 +83,8 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 		setAirportModal({ isOpen: true, type: 'edit', data, title: 'Update your airport' });
 	};
 
-	const handleEditButton = () => {
-		closeAddModal();
-	};
-
 
 	const handleDetails = (data) => {
-		setRowData(data);
-		setIsModalOpen(true);
 		setAirportModal({ isOpen: true, type: 'view', data, title: 'Your Airport' });
 	};
 
@@ -107,10 +104,6 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 				countryCode: data.countryCode ?? '',
 				standardFlightTime: data.standardFlightTime ?? '',
 				timeChange: data.timeChange ?? '',
-				timeDifferenceAfter: data.timeDifferenceAfter ?? '',
-				timeDifferenceBefore: data.timeDifferenceBefore ?? '',
-				timeDifferenceSummer: data.timeDifferenceSummer ?? '',
-				timeDifferenceWinter: data.timeDifferenceWinter ?? '',
 				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
 				validTill: data.validTill ? dayjs(data.validTill) : null,
 			};
@@ -118,6 +111,20 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 		}
 	}, [airportModal.isOpen]);
 
+
+	useEffect(() => {
+		const { data } = airportModal
+		if (data) {
+			const initialValuesObj = getFormValues(data);
+			initial.setFieldsValue(initialValuesObj);
+		}
+	}, [airportModal.isOpen]);
+
+	useEffect(() => {
+		if (isEditSuccess || isCreateNewSuccess) {
+			closeAddModal();
+		}
+	}, [isEditSuccess, isCreateNewSuccess]);
 
 	useEffect(() => {
 		if (createProps.new) {
@@ -209,14 +216,18 @@ const AirportTable = ({ data, createProps, setCreateProps }) => {
 
 	return (
 		<div>
-			<div className="create_wrapper_table">
-				<div className="table_container">
-					<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-						Airports
-					</CustomTypography>
-					<TableComponent data={data} columns={columns} />
-				</div>
-			</div>
+			{data && data?.length ?
+				<div className="create_wrapper_table">
+					<div className="table_container">
+						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
+							Airports
+						</CustomTypography>
+						<TableComponent data={data} columns={columns} />
+					</div>
+				</div> :
+				<>
+				</>
+			}
 			<ModalComponent
 				isModalOpen={airportModal.isOpen}
 				closeModal={closeAddModal}
