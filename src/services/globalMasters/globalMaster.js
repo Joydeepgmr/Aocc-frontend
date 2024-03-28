@@ -93,6 +93,24 @@ export const useEditGlobalAirport = (id, props) => {
 	return { ...response, data: data?.data, message: statusMessage };
 };
 
+export const useUploadCSVAircraftType = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-aircraft-type/upload'],
+		mutationFn: (data) => Post(`${POST_BULK_GLOBAL_AIRCRAFT_TYPE}`, data, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		}),
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};
+
 
 export const useGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
@@ -165,10 +183,6 @@ export const useGlobalAircraftType = (props) => {
 	// const statusMessage = isSuccess
 	// 	? data?.message
 	// 	: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-	console.log("patchGlobalAircraftType isLoading:", patchGlobalAircraftType.isLoading);
-	console.log("patchGlobalAircraftType isSuccess:", patchGlobalAircraftType.isSuccess);
-	console.log("patchGlobalAircraftType isError:", patchGlobalAircraftType.isError);
-	console.log("patchGlobalAircraftType isIdle:", patchGlobalAircraftType.isIdle);
 	return {
 		getGlobalAircraftType,
 		postGlobalAirCraftType,
@@ -244,26 +258,6 @@ export const useGlobalAircraftType = (props) => {
 // 	return { ...response, data, message: statusMessage };
 // };
 
-
-export const useUploadCSVAircraftType = (props) => {
-	const response = useMutation({
-		mutationKey: ['global-aircraft-type/upload'],
-		mutationFn: (data) => Post(`${POST_BULK_GLOBAL_AIRCRAFT_TYPE}`, data, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-		}),
-		...props,
-	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
-
-	return { ...response, data: data?.data, message: statusMessage };
-};
-
-
 export const useGlobalAircraftRegistration = (props) => {
 	const queryClient = useQueryClient();
 	// for get all registration api
@@ -290,16 +284,16 @@ export const useGlobalAircraftRegistration = (props) => {
 	const patchGlobalAircraftRegistration = useMutation({
 		mutationKey: ['patch-global-aircraft-register'],
 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
-	// onSuccess: ({ data }) => {
-	// 	let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
-	// 	updatedData = updatedData.map((elm) => {
-	// 		if (elm.id === data.id) {
-	// 			return data;
-	// 		}
-	// 		return elm;
-	// 	})
-	// 	queryClient.setQueryData('global-aircraft-register', updatedData);
-	// },
+		// onSuccess: ({ data }) => {
+		// 	let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
+		// 	updatedData = updatedData.map((elm) => {
+		// 		if (elm.id === data.id) {
+		// 			return data;
+		// 		}
+		// 		return elm;
+		// 	})
+		// 	queryClient.setQueryData('global-aircraft-register', updatedData);
+		// },
 		...props,
 	});
 	//for delete an aircraft registration
@@ -318,9 +312,9 @@ export const useGlobalAircraftRegistration = (props) => {
 				})
 				queryClient.setQueryData('global-aircraft-register', updatedData);
 				deleteId = '';
-			// if (updatedData.length === 0) {
-			// 	response.mutate();
-			// }
+				// if (updatedData.length === 0) {
+				// 	response.mutate();
+				// }
 			},
 			...props,
 		}
