@@ -100,11 +100,13 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		if (isCreateNewSuccess || isEditSuccess) {
 			closeAddModal();
 		}
-		else if (createProps.new) {
+	}, [isCreateNewSuccess, isEditSuccess])
+	useEffect(() => {
+		if (createProps.new) {
 			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new, isCreateNewSuccess, isEditSuccess])
+	}, [createProps.new])
 
 	const columns = useMemo(
 		() => [
