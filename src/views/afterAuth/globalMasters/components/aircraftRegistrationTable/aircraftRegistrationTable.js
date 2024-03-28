@@ -14,7 +14,7 @@ import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegist
 import './aircraftRegistrationTable.scss';
 
 const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
-	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [] } = useGlobalAircraftRegistration();
+	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
 	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError } = postGlobalAircraftRegistration;
 	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError } = patchGlobalAircraftRegistration;
 	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError } = deleteGlobalAircraftRegistration;
@@ -88,6 +88,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		// }
 		closeAddModal();
 	};
+	console.log('messages are ', successMessage, errorMessage)
 
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal;
@@ -96,11 +97,22 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftRegistrationModal.isOpen]);
+
 	useEffect(() => {
-		if (isCreateNewSuccess || isEditSuccess) {
+		if (aircraftRegistrationModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isCreateNewSuccess, isEditSuccess])
+		if (successMessage) {
+			alert(successMessage)
+		}
+	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
+
+	useEffect(() => {
+		if (errorMessage) {
+			alert(errorMessage);
+		}
+	}, [isCreateNewError, isDeleteError, isEditError])
+
 	useEffect(() => {
 		if (createProps.new) {
 			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });

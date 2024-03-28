@@ -16,7 +16,9 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 		postGlobalAirCraftType,
 		patchGlobalAircraftType,
 		deleteGlobalAircraftType,
-		updatedData: data = []
+		updatedData: data = [],
+		successMessage,
+		errorMessage
 	} = useGlobalAircraftType();
 	const { mutate: postAircraftType, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirCraftType;
 	const { mutate: patchAircraftType, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading, isIdle: isEditIdle } = patchGlobalAircraftType;
@@ -107,12 +109,20 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftTypeModal.isOpen]);
-
+	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
-		if (isEditSuccess || isCreateNewSuccess) {
+		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			alert(successMessage)
+		}
+		if (aircraftTypeModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isEditSuccess, isCreateNewSuccess]);
+	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
+	useEffect(() => {
+		if (isEditError || isCreateNewError || isDeleteError) {
+			alert(errorMessage)
+		}
+	}, [isEditError, isCreateNewError, isDeleteError])
 	useEffect(() => {
 		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
