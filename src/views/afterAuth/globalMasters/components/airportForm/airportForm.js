@@ -62,7 +62,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable} required/>
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable}/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -79,6 +79,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					className="custom_input"
 					suffixText="minutes"
 					disabled={isReadOnly}
+					type='number'
 				/>
 			</div>
 			<Divider />
@@ -90,6 +91,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					className="custom_date"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly || isNotEditable}
+					disabledFor='future'
 					required
 				/>
 				<Date
