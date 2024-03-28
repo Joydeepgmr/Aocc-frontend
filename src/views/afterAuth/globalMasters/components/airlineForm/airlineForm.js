@@ -9,24 +9,31 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import './airlineForm.scss';
 
-const AirlineForm = ({ isReadOnly }) => {
+const AirlineForm = ({ isReadOnly, type }) => {
+	const isNotEditable = type === 'edit';
 	return (
 		<div className="airline_setup_form_container">
 			<div className="airline_setup_form_inputfields">
 				<InputField
 					label="Airline Name"
 					name="name"
-					placeholder="Enter the airline name"
+					placeholder={!isReadOnly && 'Enter the airline name'}
 					className="custom_input"
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={2} label="Two Letter Code" name="twoLetterCode" disabled={isReadOnly} required />
+				<OtpField
+					otpLength={2}
+					label="Two Letter Code"
+					name="twoLetterCode"
+					disabled={isReadOnly || isNotEditable}
+					required
+				/>
 				<OtpField
 					otpLength={3}
 					label="Three Letter Code"
 					name="threeLetterCode"
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 					required
 				/>
 			</div>
@@ -35,7 +42,7 @@ const AirlineForm = ({ isReadOnly }) => {
 					SelectData={CountryData}
 					label="Country"
 					name="country"
-					placeholder="Country"
+					placeholder={!isReadOnly && 'Country'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -43,7 +50,7 @@ const AirlineForm = ({ isReadOnly }) => {
 					SelectData={HomeAirportData}
 					label="Home Airport"
 					name="homeAirport"
-					placeholder="Enter the home airport"
+					placeholder={!isReadOnly && 'Select home airport'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -51,7 +58,7 @@ const AirlineForm = ({ isReadOnly }) => {
 					SelectData={TerminalData}
 					label="Terminal"
 					name="terminal"
-					placeholder="Filled Text"
+					placeholder={!isReadOnly && 'Filled Text'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -60,7 +67,7 @@ const AirlineForm = ({ isReadOnly }) => {
 				<InputField
 					label="Remark"
 					name="remark"
-					placeholder="Remark"
+					placeholder={!isReadOnly && 'Remark'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -75,9 +82,9 @@ const AirlineForm = ({ isReadOnly }) => {
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect
 					SelectData={SelectPaymentData}
-					placeholder="Select the access type"
+					placeholder={!isReadOnly && 'Select the access type'}
 					label="Mode of payment"
-					name="modeOfPayment"
+					name="paymentMode"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -90,15 +97,15 @@ const AirlineForm = ({ isReadOnly }) => {
 			<div className="airline_setup_form_inputfields">
 				<InputField
 					label="Address 1"
-					name="address1"
-					placeholder="Address 1"
+					name="address"
+					placeholder={!isReadOnly && 'Address'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Phone"
-					name="phone"
-					placeholder="Enter your Phone No."
+					name="phoneNumber"
+					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -108,17 +115,17 @@ const AirlineForm = ({ isReadOnly }) => {
 			<div className="airline_setup_form_inputfields">
 				<Date
 					label="Valid From"
-					placeholder="Select valid from date"
+					placeholder={!isReadOnly && 'Select valid from date'}
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 					required
 				/>
 				<Date
 					label="Valid To"
-					placeholder="Select valid to date"
-					name="validTo"
+					placeholder={!isReadOnly && 'Select valid to date'}
+					name="validTill"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>
