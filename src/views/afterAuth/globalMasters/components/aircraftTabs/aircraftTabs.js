@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
-import { useGlobalAircraftRegistration, useGlobalAircraftType, useGlobalAirline, useGlobalAirport, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftRegistration, useGlobalAircraftType, useGlobalAirline, useGlobalAirport, useGlobalCountries, useUploadCSVAircraftType } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
@@ -11,10 +11,12 @@ const AircraftTabs = () => {
 	const { getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGlobalAircraftRegistration();
 	const { getGlobalAirline, updatedData: updatedAirLineData = [] } = useGlobalAirline();
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
+	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
+	const { mutate: getCountriesData } = getGlobalCountries;
 	const { mutate: getAirportData } = getGlobalAirport;
 	const { mutate: getAirlineData } = getGlobalAirline;
-	const { data: aircraftTypeData, mutate: getAircraftType, isLoading: isGetAircraftLoading } = getGlobalAircraftType;
-	const { data: aircraftRegistrationData, mutate: getAircraftRegistration, isLoading: isGetAircraftRegistrationLoading } = getGlobalAircraftRegistration;
+	const { data: aircraftTypeData, mutate: getAircraftType, isLoading: isAircraftTypeLoading } = getGlobalAircraftType;
+	const { data: aircraftRegistrationData, mutate: getAircraftRegistration, isLoading: isAircraftRegistrationLoading } = getGlobalAircraftRegistration;
 	const { mutate: uploadAircraftTypeCsv } = useUploadCSVAircraftType();
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
@@ -37,8 +39,15 @@ const AircraftTabs = () => {
 			if (!updatedAirportData?.length) {
 				getAirportData();
 			}
+			if (!countryData?.length) {
+				console.log("countryData ", countryData)
+				getCountriesData();
+			}
 		}
 	}
+
+	console.log('getCountriesData', getCountriesData, 'air', getAirportData)
+
 	function onUpload([file]) {
 		const formData = new FormData();
 		formData.append('file', file);
@@ -48,6 +57,7 @@ const AircraftTabs = () => {
 
 		}
 	}
+	console.log('isAircraftTypeLoading ', isAircraftTypeLoading)
 	function onDownload(file) {
 
 	}
@@ -71,10 +81,10 @@ const AircraftTabs = () => {
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					data={updatedAircraftTypeData}
-					pagination={aircraftTypeData?.pagination}
-					fetchData={fetchedGlobalAircraftType}
+					// pagination={aircraftTypeData?.pagination}
+					// fetchData={fetchedGlobalAircraftType}
 					label='Add aircraft type'
-					isLoading={isGetAircraftLoading}
+					isLoading={isAircraftTypeLoading}
 				/>
 			),
 		},
@@ -90,6 +100,7 @@ const AircraftTabs = () => {
 					createProps={createProps}
 					setCreateProps={setCreateProps}
 					label='Add aircraft registration'
+					isLoading={isAircraftRegistrationLoading}
 				/>
 			),
 		},

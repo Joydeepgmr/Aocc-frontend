@@ -4,6 +4,7 @@ import DropdownButton from '../../../../../components/dropdownButton/dropdownBut
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './createWrapper.scss';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
 const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore: true }, fetchData, createProps, setCreateProps, label, isLoading }) => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -79,7 +80,7 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 						{tableComponent && tableComponent}
 						{/* </InfiniteScroll> */}
 					</div>
-					: isLoading ? <>
+					: !isLoading ? <>
 						{tableComponent && tableComponent}
 						<div className="create_wrapper_container">
 							<ButtonComponent
@@ -96,7 +97,7 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 							/>
 							<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
 						</div>
-					</> : <h3>loading ....</h3>
+					</> : <PageLoader loading={isLoading} />
 				}
 			</>
 			{/* {!isLoading &&

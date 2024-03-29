@@ -13,9 +13,8 @@ import './globalMasters.scss';
 const GlobalMasters = () => {
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport('get');
 	const { data: airportData, mutate: getAirport } = getGlobalAirport;
-	const { getGlobalAirline } = useGlobalAirline();
-	const { data: fetchedGlobalAirline, mutate: getAirline } = getGlobalAirline;
-	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
+	const { getGlobalAirline, updatedData: updateAirlineData = [] } = useGlobalAirline();
+	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
 	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
@@ -25,6 +24,8 @@ const GlobalMasters = () => {
 		setActiveTab(key);
 		if (key == 1 && !updatedAirportData?.length) {
 			fetchedGlobalAirport();
+		} else if (key == 2 && !updateAirlineData?.length) {
+			fetchGlobalAirline();
 		}
 	}
 
@@ -44,6 +45,11 @@ const GlobalMasters = () => {
 	const fetchedGlobalAirport = () => {
 		const payload = { pagination: airportData?.pagination }
 		getAirport(payload);
+	}
+
+	const fetchGlobalAirline = () => {
+		const payload = { pagination: airlineData?.pagination }
+		getAirline(payload);
 	}
 
 	const items = [
@@ -79,7 +85,6 @@ const GlobalMasters = () => {
 			label: 'Airlines',
 			children: (
 				<CreateWrapper
-					formComponent={<AirlineForm />}
 					title="Setup your airline"
 					createProps={createProps}
 					setCreateProps={setCreateProps}
@@ -88,10 +93,13 @@ const GlobalMasters = () => {
 						<AirlineTable
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
+							fetchData={fetchGlobalAirline}
+							pagination={airlineData?.pagination}
 						/>
 					}
-					data={fetchedGlobalAirline?.data}
+					data={updateAirlineData}
 					label=" Add Airline"
+					isLoading={isAirlineLoading}
 				/>
 			),
 		},

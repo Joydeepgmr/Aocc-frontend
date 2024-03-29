@@ -5,17 +5,21 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectAircraftTye, SelectTypeOfUse } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
-import { useGlobalAircraftType, useGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
+import { useGlobalAircraftType, useGlobalAirport, useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
 
 const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 	const { updatedData: globalAirportData = [] } = useGlobalAirport();
 	const { updatedData: globalAircraftTypeData = [] } = useGlobalAircraftType();
+	const { countryData = [] } = useGlobalCountries();
 	const isNotEditable = type === 'edit';
 	const SelectAircraftData = globalAircraftTypeData.map((data) => {
 		return { label: data.identifier, value: data.id }
 	})
 	const SelectAirportData = globalAirportData.map((data) => {
 		return { label: data.name, value: data.id }
+	})
+	const SelectCountryData = countryData.map((data) => {
+		return { label: data.name, value: data.name }
 	})
 	return (
 		<div className="airport_registration_form_container">
@@ -143,6 +147,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="MTOW"
 					name="mtow"
+					type='number'
 					placeholder={!isReadOnly && "Enter the MTOW"}
 					className="custom_input"
 					suffixText="t"
@@ -190,7 +195,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<InputField
+				<CustomSelect
+					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
 					placeholder={!isReadOnly && "Enter the country name"}

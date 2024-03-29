@@ -13,14 +13,16 @@ import {
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 import toast from 'react-hot-toast';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData, pagination }) => {
 	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
-	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError } = postGlobalAircraftRegistration;
-	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError } = patchGlobalAircraftRegistration;
-	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError } = deleteGlobalAircraftRegistration;
+	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAircraftRegistration;
+	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading } = patchGlobalAircraftRegistration;
+	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAircraftRegistration;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
 	const [initial] = Form.useForm();
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
@@ -37,9 +39,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			internal: data?.internal,
 			iataCode: data?.iataCode,
 			iacoCode: data?.iacoCode,
-			aircraft_id: data?.aircraft_id ?? data?.globalAircraftType?.id,
+			aircraft_id: typeof data?.aircraft_id === 'string' ? data?.aircraft_id : data?.globalAircraftType?.id ?? null,
 			usage: data?.usage,
-			globalAirportId: data?.globalAirportId,
+			globalAirportId: typeof data?.globalAirportId === 'string' ? data?.globalAirportId : data?.globalAirportId?.id,
 			nationality: data?.nationality,
 			cockpitCrew: data?.cockpitCrew,
 			cabinCrew: data?.cabinCrew,
@@ -105,12 +107,20 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			closeAddModal();
 		}
 		if (successMessage) {
+			toast.dismiss()
 			toast.success(successMessage);
 		}
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
-
+	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false)
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
 	useEffect(() => {
 		if (errorMessage) {
+			toast.dismiss()
 			toast.error(errorMessage);
 		}
 	}, [isCreateNewError, isDeleteError, isEditError])
@@ -195,6 +205,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 	);
 	return (
 		<div>
+			<PageLoader loading={isLoading} />
 			{data?.length
 				?
 				<div className="create_wrapper_table">
@@ -202,7 +213,16 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Registrations
 						</CustomTypography>
-						<TableComponent data={data} columns={columns} />
+						{fetchData
+							?
+							<InfiniteScroll
+								dataLength={data.length} // This is important to determine when to fetch more data
+								next={fetchData} // Function to call when reaching the end of the list
+								hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+							>
+								<TableComponent data={data} columns={columns} />
+							</InfiniteScroll>
+							: <TableComponent data={data} columns={columns} />}
 					</div>
 
 				</div> : <></>

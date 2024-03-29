@@ -46,3 +46,5 @@ export const GET_GLOBAL_AIRLINE = '/global-airline/paginated/';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';
 export const PATCH_GLOBAL_AIRLINE = '/global-airline/';
 export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
+
+export const GET_COUNTRY_DATA = '/country/'

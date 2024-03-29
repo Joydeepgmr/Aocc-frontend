@@ -12,6 +12,7 @@ import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
 const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
 	const {
@@ -20,8 +21,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		deleteGlobalAircraftType,
 		updatedData: data = [],
 		successMessage,
-		errorMessage,
-		isLoading
+		errorMessage
 	} = useGlobalAircraftType();
 	const { mutate: postAircraftType, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirCraftType;
 	const { mutate: patchAircraftType, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading, isIdle: isEditIdle } = patchGlobalAircraftType;
@@ -29,6 +29,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const closeAddModal = () => {
 		initial.resetFields();
@@ -96,7 +97,9 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 	}, [aircraftTypeModal.isOpen]);
 	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
+		console.log("under success effect", successMessage)
 		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.dismiss();
 			toast.success(successMessage)
 		}
 		if (aircraftTypeModal.isOpen) {
@@ -105,9 +108,17 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
 	useEffect(() => {
 		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.dismiss();
 			toast.error(errorMessage)
 		}
 	}, [isEditError, isCreateNewError, isDeleteError])
+	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false);
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
 	useEffect(() => {
 		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
@@ -202,6 +213,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 
 	return (
 		<div>
+			<PageLoader loading={isLoading} />
 			{data?.length ?
 				<div className="create_wrapper_table">
 					<div className="table_container">
@@ -213,7 +225,6 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 								dataLength={data.length} // This is important to determine when to fetch more data
 								next={fetchData} // Function to call when reaching the end of the list
 								hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-								loader={<h2>loading.....</h2>}
 							>
 								<TableComponent data={data} columns={columns} />
 							</InfiniteScroll>
