@@ -10,7 +10,7 @@ import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
-	const { data: airportData, mutate: getAirport } = getGlobalAirport;
+	const { data: airportData, mutate: getAirport, isLoading: isAirportLoading } = getGlobalAirport;
 	const { getGlobalAirline, updatedData: updatedAirlineData = [] } = useGlobalAirline();
 	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
 	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
@@ -46,6 +46,7 @@ const GlobalMasters = () => {
 
 		}
 	}
+	console.log(isAirportLoading)
 	function onDownload(file) {
 
 	}
@@ -67,17 +68,18 @@ const GlobalMasters = () => {
 				<CreateWrapper
 					width="120rem"
 					tableComponent={
-						<AirportTable
+						activeTab == 1 && <AirportTable
 							data={airportData?.data}
-							createProps={activeTab == 1 && createProps}
+							createProps={createProps}
 							setCreateProps={setCreateProps}
+							fetchData={fetchedGlobalAirport}
+							pagination={airportData?.pagination}
 						/>}
 					data={updatedAirportData}
-					pagination={airportData?.pagination}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					fetchData={fetchedGlobalAirport}
 					label='New Airport'
+					isLoading={isAirportLoading}
 				/>
 			),
 		},
