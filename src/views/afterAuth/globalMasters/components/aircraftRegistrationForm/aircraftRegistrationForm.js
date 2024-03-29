@@ -113,35 +113,39 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="No. of Seats"
 					name="numberOfSeats"
+					type='number'
 					placeholder={!isReadOnly && "Enter the number of seats"}
 					className="custom_input"
-					disabled={isReadOnly}
+					disabled={true}
 				/>
 			</div> */}
 			{/* <div className="airport_registration_form_inputfields">
 				<InputField
 					label="Height"
 					name="height"
+					type='number'
 					placeholder={!isReadOnly && "Enter the Height"}
 					className="custom_input"
 					suffixText="meters"
-					disabled={isReadOnly}
+					disabled={true}
 				/>
 				<InputField
 					label="Length"
 					name="length"
+					type='number'
 					placeholder={!isReadOnly && "Enter the length"}
 					className="custom_input"
 					suffixText="meters"
-					disabled={isReadOnly}
+					disabled={true}
 				/>
 				<InputField
 					label="Wingspan"
 					name="wingspan"
+					type='number'
 					placeholder={!isReadOnly && "Enter the wingspan"}
 					className="custom_input"
 					suffixText="meters"
-					disabled={isReadOnly}
+					disabled={true}
 				/>
 			</div> */}
 			<div className="airport_registration_form_inputfields">

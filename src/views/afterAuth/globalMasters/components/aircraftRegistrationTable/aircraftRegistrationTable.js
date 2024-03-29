@@ -24,6 +24,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [isLoading, setIsLoading] = useState(false);
 	const [initial] = Form.useForm();
+	const aircraftIdWatch = Form.useWatch('aircraft_id', initial);
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
 	};
@@ -34,6 +35,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	};
 
 	const getFormValues = (data) => {
+		console.log('data?.airportId ', data?.airportId)
+		console.log('data?.globalAirportId ', data?.globalAirportId)
 		return {
 			registration: data?.registration,
 			internal: data?.internal,
@@ -45,10 +48,10 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 			nationality: data?.nationality,
 			cockpitCrew: data?.cockpitCrew,
 			cabinCrew: data?.cabinCrew,
-			// numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
-			// height: data?.height && parseInt(data?.height),
-			// length: data?.length && parseInt(data?.length),
-			// wingspan: data?.wingspan && parseInt(data?.wingspan),
+			numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
+			height: data?.height && parseInt(data?.height),
+			length: data?.length && parseInt(data?.length),
+			wingspan: data?.wingspan && parseInt(data?.wingspan),
 			mtow: data?.mtow,
 			mow: data?.mow,
 			annex: data?.annex,
@@ -67,8 +70,10 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
-		values.iataCode = values?.iataCode;
-		values.icaoCode = values?.icaoCode;
+		delete values.length;
+		delete values.wingspan;
+		delete values.numberOfSeats;
+		delete values.hight;
 		if (aircraftRegistrationModal.type === 'new') {
 			postAircraftRegistration(values);
 		} else {
@@ -88,6 +93,14 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	const handleEdit = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
 	};
+
+	useEffect(() => {
+		if (aircraftIdWatch) {
+			console.log(length, height, wingSpan, totalSeats)
+			const { length, height, wingSpan, totalSeats } = aircraftRegistrationModal?.data?.globalAircraftType
+			initial.setFieldsValue({ length: 10, height, wingSpan, totalSeats })
+		}
+	}, [aircraftIdWatch])
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal;
 		if (data) {

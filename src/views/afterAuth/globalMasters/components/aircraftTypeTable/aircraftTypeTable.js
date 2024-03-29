@@ -51,7 +51,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 			height: data?.height && parseInt(data?.height),
 			engineType: data?.engineType,
 			engineCount: data?.engineCount && parseInt(data?.engineCount),
-			// totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
+			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
 			firstClassSeats: data?.firstClassSeats && parseInt(data?.firstClassSeats),
 			businessClassSeats: data?.businessClassSeats && parseInt(data?.businessClassSeats),
 			economyClassSeats: data?.economyClassSeats,
@@ -63,6 +63,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
+		delete values.totalSeats
 		if (aircraftTypeModal.type === 'edit') {
 			const id = aircraftTypeModal.data.id;
 			delete values.iataCode
