@@ -346,16 +346,18 @@ export const Components = () => {
 
 				<Divider />
 				<div>
-					<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
+					<Button title="Open Delete Modal" isSubmit="submit" onClick={openModal} type="filledText" />
 					<DeleteModal
-						// isModalOpen={isModalOpen}
-						width="20rem"
-						// closeModal={closeModal}
+						isModalOpen={isModalOpen}
+						width="40rem"
+						closeModal={closeModal}
 						title="Delete Modal Heading"
 					>
 						<div>
-							<p>This is the content of the delete modal.</p>
+							<p>This is the content of the Delete modal.</p>
 						</div>
+						<Button title="Cancel" isSubmit="submit" type="filledText" />
+						<Button title="Delete" isSubmit="submit" type="filledText" />
 					</DeleteModal>
 				</div>
 				<Divider />
