@@ -9,6 +9,7 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import AirportForm from '../airportForm/airportForm';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import './airportTable.scss';
 
 
@@ -17,7 +18,9 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 		postGlobalAirport,
 		patchGlobalAirport,
 		deleteGlobalAirport,
-		updatedData: data = []
+		updatedData: data = [],
+		successMessage,
+		errorMessage
 	} = useGlobalAirport();
 	console.log(postGlobalAirport, 'postGlobal');
 
@@ -121,10 +124,19 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	}, [airportModal.isOpen]);
 
 	useEffect(() => {
-		if (isEditSuccess || isCreateNewSuccess) {
+		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.success(successMessage)
+		}
+		if (airportModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isEditSuccess, isCreateNewSuccess]);
+	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
+
+	useEffect(() => {
+		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.error(errorMessage)
+		}
+	}, [isEditError, isCreateNewError, isDeleteError])
 
 	useEffect(() => {
 		if (createProps.new) {

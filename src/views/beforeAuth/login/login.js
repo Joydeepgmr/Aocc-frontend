@@ -14,7 +14,7 @@ import './login.scss';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
-	const imageUrl = [{ name: 'GMR Hyderbad International Aiport, Hyderabad, India', url: loginPageImage, key: 1 }];
+	const imageUrl = [{ name: 'GMR Hyderbad International Airport, Hyderabad, India', url: loginPageImage, key: 1 }];
 	const [nextImage, setNextTime] = useState(0);
 	const navigate = useNavigate();
 	const { mutate: loginUser } = useLoginUser();
