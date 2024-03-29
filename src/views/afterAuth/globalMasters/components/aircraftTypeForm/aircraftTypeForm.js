@@ -47,7 +47,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<CustomSelect
 					SelectData={SelectedAirlineData}
 					label="Airline"
-					name="globalAirline"
+					name="globalAirlineId"
 					placeholder={!isReadOnly && "Enter the airline name"}
 					className="custom_input"
 					disabled={isReadOnly}

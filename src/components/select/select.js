@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, Form } from 'antd';
 import './select.scss';
 
-const CustomSelect = ({ SelectData, placeholder, label, required, className, name, disabled, onChange, ...rest }) => {
+const CustomSelect = ({ SelectData = [], placeholder, label, required, className, name, disabled, onChange, multiple, ...rest }) => {
     const renderLabel = () => {
         return (
             <>
@@ -16,6 +16,10 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
         if (onChange) {
             onChange(value);
         }
+    };
+
+    const filterOption = (inputValue, option) => {
+        return option.children.toLowerCase().includes(inputValue.toLowerCase());
     };
 
     return (
@@ -33,10 +37,14 @@ const CustomSelect = ({ SelectData, placeholder, label, required, className, nam
                 ]}
             >
                 <Select
+                    mode={multiple && 'multiple'}
+                    showSearch
                     className="select_wrapper"
+                    allowClear
                     disabled={disabled}
                     placeholder={placeholder}
                     onChange={handleSelectChange}
+                    filterOption={filterOption}
                     {...rest}
                 >
                     {SelectData.map((option, index) => (

@@ -1,18 +1,17 @@
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
-import toast from 'react-hot-toast';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
 const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
 	const {
@@ -40,7 +39,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 			identifier: data?.identifier,
 			iataCode: data?.iataCode,
 			model: data?.model,
-			globalAirline: data?.globalAirline,
+			globalAirlineId: data?.globalAirlineId ?? data?.globalAirline?.id,
 			icaoCode: data?.icaoCode,
 			icaoCodeModified: data?.icaoCodeModified,
 			family: data?.family,
@@ -60,7 +59,6 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}
 	}
-	console.log("isEdit Success", isEditSuccess);
 	const onFinishHandler = (values) => {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
@@ -95,15 +93,14 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 			initial.setFieldsValue(initialValuesObj);
 		}
 	}, [aircraftTypeModal.isOpen]);
-	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
 		console.log("under success effect", successMessage)
 		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
 			toast.dismiss();
 			toast.success(successMessage)
-		}
-		if (aircraftTypeModal.isOpen) {
-			closeAddModal();
+			if (aircraftTypeModal.isOpen) {
+				closeAddModal();
+			}
 		}
 	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
 	useEffect(() => {
@@ -172,7 +169,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 				title: 'Airline',
 				dataIndex: 'globalAirline',
 				key: 'globalAirline',
-				render: (text) => text || '-',
+				render: (text) => text?.name || '-',
 			},
 			{
 				title: 'ICAO Code',
@@ -215,7 +212,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		<div>
 			<PageLoader loading={isLoading} />
 			{data?.length ?
-				<div className="create_wrapper_table">
+				<div className="create_wrapper_table aircraftType">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Type

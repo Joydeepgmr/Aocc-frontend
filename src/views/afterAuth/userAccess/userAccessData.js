@@ -22,12 +22,12 @@ export const SelectPaymentData = [
 	{
 		id: '1',
 		label: 'Credit',
-		value: 'CREDIT',
+		value: 'credit',
 	},
 	{
 		id: '2',
 		label: 'Cash',
-		value: 'CASH',
+		value: 'cash',
 	},
 ];
 
@@ -122,6 +122,10 @@ export const TerminalData = [
 		value: 'terminal67',
 	},
 ];
+export const AirlineTypeData = [
+	{ id: '1', label: 'Domestic', value: 'domestic' },
+	{ id: '1', label: 'International', value: 'international' }
+]
 export const dummyData = [
 	{
 		key: '1',

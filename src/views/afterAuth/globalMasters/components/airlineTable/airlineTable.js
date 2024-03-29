@@ -1,6 +1,7 @@
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
@@ -12,8 +13,6 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
-import toast from 'react-hot-toast';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) => {
 	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [], successMessage, errorMessage } = useGlobalAirline();
@@ -29,15 +28,15 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 			twoLetterCode: data.twoLetterCode,
 			threeLetterCode: data.threeLetterCode,
 			country: data.country,
-			// homeAirport: data.homeAirport,
+			globalAirport: data.globalAirport ?? data?.homeAirport?.id,
 			terminal: data.terminal,
+			airlineType: data.airlineType,
 			remark: data.remark,
 			paymentMode: data.paymentMode,
 			address: data.address,
 			phoneNumber: data.phoneNumber,
-			// telex: data.telex,
-			validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-			validTill: data.validTill ? dayjs(data.validTill) : '',
+			validFrom: data.validFrom && dayjs(data.validFrom),
+			validTill: data.validTill && dayjs(data.validTill),
 		};
 	}
 	const handleDetails = (data) => {
@@ -53,8 +52,9 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		if (airlineRegistrationModal.type === 'edit') {
-			values.twoLetterCode = values.twoLetterCode;
-			values.threeLetterCode = values.threeLetterCode;
+			delete values.twoLetterCode;
+			delete values.threeLetterCode;
+			delete values.validFrom
 			values.id = airlineRegistrationModal.data.id;
 			patchAirline(values);
 		} else {
@@ -81,15 +81,17 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 	}, [airlineRegistrationModal.isOpen]);
 
 	useEffect(() => {
-		if (airlineRegistrationModal.isOpen) {
-			closeAddModal();
-		}
-		if (successMessage) {
+		if (isCreateNewSuccess || isEditSuccess || isDeleteSuccess) {
+			if (airlineRegistrationModal.isOpen) {
+				closeAddModal();
+			}
+			toast.dismiss();
 			toast.success(successMessage);
 		}
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
 	useEffect(() => {
-		if (errorMessage) {
+		if (isCreateNewError || isEditError || isDeleteError) {
+			toast.dismiss()
 			toast.error(errorMessage);
 		}
 	}, [isCreateNewError, isEditError, isDeleteError])
@@ -99,7 +101,6 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new]);
-	console.log("messages are ", successMessage, errorMessage)
 
 	const columns = useMemo(
 		() => [
@@ -151,7 +152,7 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 				title: 'Home Airport',
 				dataIndex: 'homeAirport',
 				key: 'homeAirport',
-				render: (text) => text || '-',
+				render: (text) => text?.name || '-',
 			},
 			{
 				title: 'Terminal',
@@ -186,16 +187,7 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airlines
 						</CustomTypography>
-						{fetchData ?
-							<InfiniteScroll
-								dataLength={data.length} // This is important to determine when to fetch more data
-								next={fetchData} // Function to call when reaching the end of the list
-								hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-							>
-								<TableComponent data={data} columns={columns} />
-							</InfiniteScroll>
-							: <TableComponent data={data} columns={columns} />
-						}
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
 					</div>
 				</div>
 			) : <></>}

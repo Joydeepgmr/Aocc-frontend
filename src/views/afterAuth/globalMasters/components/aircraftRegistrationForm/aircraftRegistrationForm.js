@@ -13,13 +13,13 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 	const { countryData = [] } = useGlobalCountries();
 	const isNotEditable = type === 'edit';
 	const SelectAircraftData = globalAircraftTypeData.map((data) => {
-		return { label: data.identifier, value: data.id }
+		return { label: data.identifier, value: data.id, id: data.id }
 	})
 	const SelectAirportData = globalAirportData.map((data) => {
-		return { label: data.name, value: data.id }
+		return { label: data.name, value: data.id, id: data.id }
 	})
 	const SelectCountryData = countryData.map((data) => {
-		return { label: data.name, value: data.name }
+		return { label: data.name, value: data.name, id: data.name }
 	})
 	return (
 		<div className="airport_registration_form_container">
@@ -51,7 +51,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="ICAO Code"
-					name="iacoCode"
+					name="icaoCode"
 					placeholder={!isReadOnly && "Enter the ICAO code"}
 					className="custom_input"
 					disabled={isReadOnly || isNotEditable}
@@ -78,13 +78,14 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 				<CustomSelect
 					SelectData={SelectAirportData}
 					label="Home Airport"
-					name="globalAirportId"
+					name="airportId"
 					placeholder={!isReadOnly && "Enter the home airport"}
 					className="custom_input"
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 					required
 				/>
-				<InputField
+				<CustomSelect
+					SelectData={SelectCountryData}
 					label="Nationality"
 					name="nationality"
 					placeholder={!isReadOnly && "Enter the nationality"}
@@ -207,7 +208,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 			<div className="airport_registration_form_inputfields">
 				<InputField label="Address" name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
 					disabled={isReadOnly} />
-				<InputField label="Remarks" name="remarks" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
+				<InputField label="Remarks" name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
 					disabled={isReadOnly} />
 			</div>
 			<Divider />
