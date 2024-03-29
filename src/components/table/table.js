@@ -11,10 +11,10 @@ const TableComponent = ({
     onChange = () => { },
     tableTitle = '',
     emptyText = 'No data available',
-    fetchData,
-    pagination,
+    fetchData = null,
+    pagination = null,
 }) => {
-
+    console.log("fetchData", fetchData)
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
         const sortOrder = sorter?.order;
