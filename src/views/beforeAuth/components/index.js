@@ -23,6 +23,7 @@ import TopHeader from '../../../components/topHeader/topHeader';
 import OtpField from '../../../components/input/otp/otp';
 import TimelineDesign from '../../../components/timeline/timeline';
 import { useDummyApi } from '../../../services';
+import DeleteModal from '../../../components/deleteModal/deleteModal';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -226,7 +227,7 @@ export const Components = () => {
 		},
 	];
 
-	const {} = useDummyApi();
+	const { } = useDummyApi();
 
 	return (
 		<React.Fragment>
@@ -343,7 +344,21 @@ export const Components = () => {
 					</Form>
 				</div>
 
-				<hr />
+				<Divider />
+				<div>
+					<Button title="Open Modal" isSubmit="submit" onClick={openModal} type="filledText" />
+					<DeleteModal
+						// isModalOpen={isModalOpen}
+						width="20rem"
+						// closeModal={closeModal}
+						title="Delete Modal Heading"
+					>
+						<div>
+							<p>This is the content of the delete modal.</p>
+						</div>
+					</DeleteModal>
+				</div>
+				<Divider />
 
 				<div className="container">
 					<Button
