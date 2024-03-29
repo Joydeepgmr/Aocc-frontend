@@ -13,8 +13,9 @@ import {
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 import toast from 'react-hot-toast';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-const AirlineTable = ({ createProps, setCreateProps }) => {
+const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) => {
 	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [], successMessage, errorMessage } = useGlobalAirline();
 	const { mutate: postGlobalAirLineRegistration, isSuccess: isCreateNewSuccess, isError: isCreateNewError } = postGlobalAirline;
 	const { mutate: patchAirline, isSuccess: isEditSuccess, isError: isEditError } = patchGlobalAirline;
@@ -185,7 +186,16 @@ const AirlineTable = ({ createProps, setCreateProps }) => {
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airlines
 						</CustomTypography>
-						<TableComponent data={data} columns={columns} />
+						{fetchData ?
+							<InfiniteScroll
+								dataLength={data.length} // This is important to determine when to fetch more data
+								next={fetchData} // Function to call when reaching the end of the list
+								hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+							>
+								<TableComponent data={data} columns={columns} />
+							</InfiniteScroll>
+							: <TableComponent data={data} columns={columns} />
+						}
 					</div>
 				</div>
 			) : <></>}

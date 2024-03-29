@@ -11,8 +11,10 @@ import { useGlobalAircraftType } from "../../../../../services/globalMasters/glo
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 import toast from 'react-hot-toast';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
-const AircraftTable = ({ createProps, setCreateProps }) => {
+const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
 	const {
 		postGlobalAirCraftType,
 		patchGlobalAircraftType,
@@ -27,6 +29,7 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	const [initial] = Form.useForm();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const closeAddModal = () => {
 		initial.resetFields();
@@ -49,7 +52,7 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			height: data?.height && parseInt(data?.height),
 			engineType: data?.engineType,
 			engineCount: data?.engineCount && parseInt(data?.engineCount),
-			totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
+			// totalSeats: data?.totalSeats && parseInt(data?.totalSeats),
 			firstClassSeats: data?.firstClassSeats && parseInt(data?.firstClassSeats),
 			businessClassSeats: data?.businessClassSeats && parseInt(data?.businessClassSeats),
 			economyClassSeats: data?.economyClassSeats,
@@ -62,10 +65,6 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
-		// values.iataCode = values?.iataCode;
-		// values.icaoCode = values?.icaoCode;
-		// values.icaoCodeModified = values?.icaoCodeModified;
-		// values.countryCode = values?.countryCode;
 		if (aircraftTypeModal.type === 'edit') {
 			const id = aircraftTypeModal.data.id;
 			delete values.iataCode
@@ -78,25 +77,11 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	};
 
 	const handleDelete = (record) => {
-		// Call the delete function and pass the record ID
-		// deleteGlobalAirport(record.id);
 		deleteAircraftType(record.id);
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateAirportData(updatedData));
-	// };
-
 	const handleEdit = (data) => {
 		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
-	};
-
-	const handleEditButton = () => {
-		// if (disabled) {
-		// 	dispatch(formDisabled());
-		// }
-		closeAddModal();
 	};
 
 	const handleDetails = (data) => {
@@ -112,7 +97,9 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	}, [aircraftTypeModal.isOpen]);
 	console.log("messages", successMessage, errorMessage)
 	useEffect(() => {
+		console.log("under success effect", successMessage)
 		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.dismiss();
 			toast.success(successMessage)
 		}
 		if (aircraftTypeModal.isOpen) {
@@ -121,9 +108,17 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
 	useEffect(() => {
 		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.dismiss();
 			toast.error(errorMessage)
 		}
 	}, [isEditError, isCreateNewError, isDeleteError])
+	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false);
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
 	useEffect(() => {
 		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
@@ -175,8 +170,8 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 			},
 			{
 				title: 'Airline',
-				dataIndex: 'airline',
-				key: 'airline',
+				dataIndex: 'globalAirline',
+				key: 'globalAirline',
 				render: (text) => text || '-',
 			},
 			{
@@ -218,13 +213,14 @@ const AircraftTable = ({ createProps, setCreateProps }) => {
 
 	return (
 		<div>
+			<PageLoader loading={isLoading} />
 			{data?.length ?
 				<div className="create_wrapper_table">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Type
 						</CustomTypography>
-						<TableComponent data={data} columns={columns} />
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
 					</div>
 				</div> : <></>
 			}

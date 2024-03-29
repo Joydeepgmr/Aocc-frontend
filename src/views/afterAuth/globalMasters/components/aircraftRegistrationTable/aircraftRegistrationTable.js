@@ -1,6 +1,6 @@
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
@@ -8,19 +8,21 @@ import ModalComponent from '../../../../../components/modal/modal';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
-	useGlobalAircraftRegistration
+	useGlobalAircraftRegistration, useGlobalAircraftType
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 import toast from 'react-hot-toast';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData, pagination }) => {
 	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
-	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError } = postGlobalAircraftRegistration;
-	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError } = patchGlobalAircraftRegistration;
-	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError } = deleteGlobalAircraftRegistration;
+	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAircraftRegistration;
+	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading } = patchGlobalAircraftRegistration;
+	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAircraftRegistration;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
 	const [initial] = Form.useForm();
 	const handleDetails = (data) => {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
@@ -37,16 +39,16 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			internal: data?.internal,
 			iataCode: data?.iataCode,
 			iacoCode: data?.iacoCode,
-			aircraftType: data?.aircraftType,
+			aircraft_id: typeof data?.aircraft_id === 'string' ? data?.aircraft_id : data?.globalAircraftType?.id ?? null,
 			usage: data?.usage,
-			globalAirportId: data?.globalAirportId,
+			globalAirportId: typeof data?.globalAirportId === 'string' ? data?.globalAirportId : data?.globalAirportId?.id,
 			nationality: data?.nationality,
 			cockpitCrew: data?.cockpitCrew,
 			cabinCrew: data?.cabinCrew,
-			numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
-			height: data?.height && parseInt(data?.height),
-			length: data?.length && parseInt(data?.length),
-			wingspan: data?.wingspan && parseInt(data?.wingspan),
+			// numberOfSeats: data?.numberOfSeats && parseInt(data?.numberOfSeats),
+			// height: data?.height && parseInt(data?.height),
+			// length: data?.length && parseInt(data?.length),
+			// wingspan: data?.wingspan && parseInt(data?.wingspan),
 			mtow: data?.mtow,
 			mow: data?.mow,
 			annex: data?.annex,
@@ -56,8 +58,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			country: data?.country,
 			address: data?.address,
 			remarks: data?.remarks,
-			validFrom: data?.validFrom ? dayjs(data?.validFrom) : '',
-			validTill: data?.validTill ? dayjs(data?.validTill) : '',
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
 		};
 	}
 
@@ -70,6 +72,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		if (aircraftRegistrationModal.type === 'new') {
 			postAircraftRegistration(values);
 		} else {
+			delete values.aircraft_id;
+			delete values.validFrom;
 			values.id = aircraftRegistrationModal.data.id;
 			patchAircraftRegistration(values);
 		}
@@ -90,7 +94,6 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 		closeAddModal();
 	};
 	console.log('messages are ', successMessage, errorMessage)
-
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal;
 		if (data) {
@@ -104,12 +107,20 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 			closeAddModal();
 		}
 		if (successMessage) {
+			toast.dismiss()
 			toast.success(successMessage);
 		}
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess])
-
+	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false)
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
 	useEffect(() => {
 		if (errorMessage) {
+			toast.dismiss()
 			toast.error(errorMessage);
 		}
 	}, [isCreateNewError, isDeleteError, isEditError])
@@ -194,6 +205,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 	);
 	return (
 		<div>
+			<PageLoader loading={isLoading} />
 			{data?.length
 				?
 				<div className="create_wrapper_table">
@@ -201,7 +213,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Registrations
 						</CustomTypography>
-						<TableComponent data={data} columns={columns} />
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
 					</div>
 
 				</div> : <></>
@@ -240,4 +252,4 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps }) => {
 	);
 };
 
-export default AircraftRegistrationTable;
+export default memo(AircraftRegistrationTable);

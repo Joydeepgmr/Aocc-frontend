@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import CreateWrapper from './components/createWrapper/createWrapper';
-import AirportTable from './components/airportTable/airportTable';
-import AirlineForm from './components/airlineForm/airlineForm';
-import AirportForm from './components/airportForm/airportForm';
+import TopHeader from '../../../components/topHeader/topHeader';
+import { useGlobalAirline, useGlobalAirport, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineTable from './components/airlineTable/airlineTable';
-import { useGlobalAirport, useGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
+import AirportTable from './components/airportTable/airportTable';
+import CreateWrapper from './components/createWrapper/createWrapper';
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
 	const { data: airportData, mutate: getAirport } = getGlobalAirport;
-
 	const { getGlobalAirline, updatedData: updatedAirlineData = [] } = useGlobalAirline();
-	const { data: airlineData, mutate: getAirline } = getGlobalAirline;
-
-	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
+	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
 	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
@@ -29,10 +24,9 @@ const GlobalMasters = () => {
 		if (key == 1 && !updatedAirportData?.length) {
 			fetchedGlobalAirport();
 		} else if (key == 3 && !updatedAirlineData?.length) {
-			fetchedGlobalAirline();
+			fetchGlobalAirline();
 		}
 	}
-	console.log('airportData is ', airportData);
 	function onUpload([file]) {
 		const formData = new FormData();
 		formData.append('file', file);
@@ -55,6 +49,11 @@ const GlobalMasters = () => {
 		getAirline(payload);
 	}
 
+
+	const fetchGlobalAirline = () => {
+		const payload = { pagination: airlineData?.pagination }
+		getAirline(payload);
+	}
 
 	const items = [
 		{
@@ -95,14 +94,13 @@ const GlobalMasters = () => {
 							data={airlineData?.data}
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
+							fetchData={fetchGlobalAirline}
+							pagination={airlineData?.pagination}
 						/>
 					}
 					data={updatedAirlineData}
-					pagination={airlineData?.pagination}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					fetchData={fetchedGlobalAirline}
 					label=" Add Airline"
+					isLoading={isAirlineLoading}
 				/>
 			),
 		},

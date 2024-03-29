@@ -7,8 +7,13 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import './aircraftTypeForm.scss';
 import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
 import CustomSelect from '../../../../../components/select/select';
+import { useGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
 
 const AircraftTypeForm = ({ isReadOnly, type }) => {
+	const { updatedData: airlineData = [] } = useGlobalAirline();
+	const SelectedAirlineData = airlineData.map((data) => {
+		return { label: data.name, value: data.id }
+	})
 	const isNotEditable = type === 'edit'
 	return (
 		<div className="aircraft_type_form_container">
@@ -40,7 +45,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			</div>
 			<div className="aircraft_type_form_inputfields">
 				<CustomSelect
-					SelectData={SelectAcBodyType}
+					SelectData={SelectedAirlineData}
 					label="Airline"
 					name="globalAirline"
 					placeholder={!isReadOnly && "Enter the airline name"}
@@ -146,14 +151,14 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<Divider />
 			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
 			<div className="aircraft_type_form_inputfields">
-				<InputField
+				{/* <InputField
 					label="Total Seats"
 					name="totalSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the total seats"}
 					className="custom_input"
 					disabled={isReadOnly}
-				/>
+				/> */}
 				<InputField
 					label="First Class"
 					name="firstClassSeats"
