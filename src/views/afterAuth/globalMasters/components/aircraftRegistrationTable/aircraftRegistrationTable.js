@@ -95,7 +95,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	};
 
 	useEffect(() => {
-		if (aircraftIdWatch) {
+		if (aircraftIdWatch && aircraftRegistrationModal?.data?.globalAircraftType) {
 			console.log(length, height, wingSpan, totalSeats)
 			const { length, height, wingSpan, totalSeats } = aircraftRegistrationModal?.data?.globalAircraftType
 			initial.setFieldsValue({ length: 10, height, wingSpan, totalSeats })
