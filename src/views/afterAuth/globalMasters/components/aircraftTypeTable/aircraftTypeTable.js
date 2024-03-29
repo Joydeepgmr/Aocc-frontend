@@ -220,16 +220,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Type
 						</CustomTypography>
-						{fetchData ?
-							<InfiniteScroll
-								dataLength={data.length} // This is important to determine when to fetch more data
-								next={fetchData} // Function to call when reaching the end of the list
-								hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-							>
-								<TableComponent data={data} columns={columns} />
-							</InfiniteScroll>
-							: <TableComponent data={data} columns={columns} />
-						}
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
 					</div>
 				</div> : <></>
 			}
