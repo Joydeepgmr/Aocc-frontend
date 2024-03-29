@@ -14,7 +14,6 @@ const TableComponent = ({
     fetchData = null,
     pagination = null,
 }) => {
-    console.log("fetchData", fetchData)
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
         const sortOrder = sorter?.order;
