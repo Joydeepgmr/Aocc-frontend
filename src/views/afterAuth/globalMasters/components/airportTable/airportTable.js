@@ -9,6 +9,7 @@ import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
 import AirportForm from '../airportForm/airportForm';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import './airportTable.scss';
 
 
@@ -17,7 +18,9 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 		postGlobalAirport,
 		patchGlobalAirport,
 		deleteGlobalAirport,
-		updatedData: data = []
+		updatedData: data = [],
+		successMessage,
+		errorMessage
 	} = useGlobalAirport();
 	console.log(postGlobalAirport, 'postGlobal');
 
@@ -89,27 +92,27 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	};
 
 
-	useEffect(() => {
-		const { data } = airportModal
-		if (data) {
-			const initialValuesObj = {
-				name: data.name ?? '',
-				iataCode: data.iataCode ?? '',
-				icaoCode: data.icaoCode ?? '',
-				abbreviatedName1: data.abbreviatedName1 ?? '',
-				abbreviatedName2: data.abbreviatedName2 ?? '',
-				abbreviatedName3: data.abbreviatedName3 ?? '',
-				abbreviatedName4: data.abbreviatedName4 ?? '',
-				airportType: data.airportType ?? '',
-				countryCode: data.countryCode ?? '',
-				standardFlightTime: data.standardFlightTime ?? '',
-				timeChange: data.timeChange ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTill: data.validTill ? dayjs(data.validTill) : null,
-			};
-			initial.setFieldsValue(initialValuesObj);
-		}
-	}, [airportModal.isOpen]);
+	// useEffect(() => {
+	// 	const { data } = airportModal
+	// 	if (data) {
+	// 		const initialValuesObj = {
+	// 			name: data.name ?? '',
+	// 			iataCode: data.iataCode ?? '',
+	// 			icaoCode: data.icaoCode ?? '',
+	// 			abbreviatedName1: data.abbreviatedName1 ?? '',
+	// 			abbreviatedName2: data.abbreviatedName2 ?? '',
+	// 			abbreviatedName3: data.abbreviatedName3 ?? '',
+	// 			abbreviatedName4: data.abbreviatedName4 ?? '',
+	// 			airportType: data.airportType ?? '',
+	// 			countryCode: data.countryCode ?? '',
+	// 			standardFlightTime: data.standardFlightTime ?? '',
+	// 			timeChange: data.timeChange ?? '',
+	// 			validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+	// 			validTill: data.validTill ? dayjs(data.validTill) : null,
+	// 		};
+	// 		initial.setFieldsValue(initialValuesObj);
+	// 	}
+	// }, [airportModal.isOpen]);
 
 
 	useEffect(() => {
@@ -121,10 +124,20 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	}, [airportModal.isOpen]);
 
 	useEffect(() => {
-		if (isEditSuccess || isCreateNewSuccess) {
+		if (airportModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isEditSuccess, isCreateNewSuccess]);
+		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.success(successMessage)
+		}
+		
+	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess]);
+
+	useEffect(() => {
+		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.error(errorMessage)
+		}
+	}, [isEditError, isCreateNewError, isDeleteError])
 
 	useEffect(() => {
 		if (createProps.new) {
