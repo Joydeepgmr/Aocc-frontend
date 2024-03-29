@@ -91,8 +91,8 @@ export const useGlobalAirport = (props) => {
 		}
 	);
 	const updatedData = queryClient.getQueryData('global-airport') || [];
-	const successMessage = queryClient.getQueriesData('airport-success');
-    const errorMessage = queryClient.getQueriesData('airport-error');
+	const successMessage = queryClient.getQueryData('airport-success');
+    const errorMessage = queryClient.getQueryData('airport-error');
 
 	return {
 		getGlobalAirport,

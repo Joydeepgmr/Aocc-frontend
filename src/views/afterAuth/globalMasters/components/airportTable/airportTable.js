@@ -92,27 +92,27 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	};
 
 
-	useEffect(() => {
-		const { data } = airportModal
-		if (data) {
-			const initialValuesObj = {
-				name: data.name ?? '',
-				iataCode: data.iataCode ?? '',
-				icaoCode: data.icaoCode ?? '',
-				abbreviatedName1: data.abbreviatedName1 ?? '',
-				abbreviatedName2: data.abbreviatedName2 ?? '',
-				abbreviatedName3: data.abbreviatedName3 ?? '',
-				abbreviatedName4: data.abbreviatedName4 ?? '',
-				airportType: data.airportType ?? '',
-				countryCode: data.countryCode ?? '',
-				standardFlightTime: data.standardFlightTime ?? '',
-				timeChange: data.timeChange ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTill: data.validTill ? dayjs(data.validTill) : null,
-			};
-			initial.setFieldsValue(initialValuesObj);
-		}
-	}, [airportModal.isOpen]);
+	// useEffect(() => {
+	// 	const { data } = airportModal
+	// 	if (data) {
+	// 		const initialValuesObj = {
+	// 			name: data.name ?? '',
+	// 			iataCode: data.iataCode ?? '',
+	// 			icaoCode: data.icaoCode ?? '',
+	// 			abbreviatedName1: data.abbreviatedName1 ?? '',
+	// 			abbreviatedName2: data.abbreviatedName2 ?? '',
+	// 			abbreviatedName3: data.abbreviatedName3 ?? '',
+	// 			abbreviatedName4: data.abbreviatedName4 ?? '',
+	// 			airportType: data.airportType ?? '',
+	// 			countryCode: data.countryCode ?? '',
+	// 			standardFlightTime: data.standardFlightTime ?? '',
+	// 			timeChange: data.timeChange ?? '',
+	// 			validFrom: data.validFrom ? dayjs(data.validFrom) : '',
+	// 			validTill: data.validTill ? dayjs(data.validTill) : null,
+	// 		};
+	// 		initial.setFieldsValue(initialValuesObj);
+	// 	}
+	// }, [airportModal.isOpen]);
 
 
 	useEffect(() => {
