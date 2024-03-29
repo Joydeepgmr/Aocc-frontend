@@ -129,6 +129,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
 					disabled={isReadOnly || isNotEditable}
 					required
 				/>
