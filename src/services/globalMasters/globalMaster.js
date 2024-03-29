@@ -44,7 +44,7 @@ export const useGlobalAirport = (props) => {
 	const postGlobalAirport = useMutation({
 		mutationKey: ['post-global-airport'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
-		onSuccess: () => {
+		onSuccess: ({message}) => {
 			queryClient.setQueryData('airport-success', message);
 		},
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
