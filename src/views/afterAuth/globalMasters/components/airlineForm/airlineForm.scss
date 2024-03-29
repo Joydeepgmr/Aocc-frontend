@@ -2,26 +2,24 @@
 @import '../../../../../styles/sass/variables';
 @import '../../../../../styles/sass/utils';
 
-
-
-.airline_setup_form_container{
-    padding: 0rem 0rem 2.4rem 0rem;
-    box-sizing: content-box;
-    .airline_setup_form_inputfields{
-        @include flex(center, start, row);
-        gap: 2.4rem;
-        width: 100%;
-        .input_form_item{
-            &.custom_input{
-                width: 33%;
-            }
-        }
-        
-    }
-
-   
+.airline_setup_form_container {
+	padding: 0rem 0rem 2.4rem 0rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	box-sizing: content-box;
+	.airline_setup_form_inputfields {
+		@include flex(start, start, row);
+		gap: 2.4rem;
+		width: 100%;
+		.input_form_item {
+			&.custom_input {
+				width: 33%;
+			}
+		}
+	}
 }
 
-.customTypo{
-    margin-bottom: 1.6rem;
+.customTypo {
+	margin-bottom: 1.6rem;
 }

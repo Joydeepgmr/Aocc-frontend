@@ -39,8 +39,8 @@ export const useGlobalAirport = (props) => {
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
-	
-	
+
+
 	//for create new airport
 	const postGlobalAirport = useMutation({
 		mutationKey: ['post-global-airport'],
@@ -93,7 +93,7 @@ export const useGlobalAirport = (props) => {
 	);
 	const updatedData = queryClient.getQueryData('global-airport') || [];
 	const successMessage = queryClient.getQueryData('airport-success');
-    const errorMessage = queryClient.getQueryData('airport-error');
+	const errorMessage = queryClient.getQueryData('airport-error');
 
 	return {
 		getGlobalAirport,
@@ -102,7 +102,7 @@ export const useGlobalAirport = (props) => {
 		deleteGlobalAirport,
 		updatedData,
 		successMessage,
-        errorMessage
+		errorMessage
 	};
 };
 
@@ -207,31 +207,27 @@ export const useGlobalAircraftType = (props) => {
 		...props,
 	});
 	//for delete an aircraft type
-	let deleteId = ''; // to handle delete flow
 	const deleteGlobalAircraftType = useMutation(
 		{
 			mutationKey: ['delete-global-aircraft-type'],
 			mutationFn: async (id) => {
-				deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`);
+				return await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`);
 			},
 			onSuccess: async ({ data, message }) => {
 				queryClient.setQueryData('aircraft-type-success', message);
 				let updatedData = queryClient.getQueryData('global-aircraft-type') || [];
 				updatedData = updatedData.filter((elm) => {
-					return elm.id !== deleteId
+					return elm.id !== data.id
 				})
 				queryClient.setQueryData('global-aircraft-type', updatedData);
-				deleteId = '';
-				// if (updatedData.length === 0) {
-				// 	response.mutate();
-				// }
+				if (updatedData.length === 0) {
+					getGlobalAircraftType.mutate();
+				}
 			},
 			onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 			...props,
 		}
 	);
-	// const isLoading = getGlobalAircraftType.isLoading || postGlobalAirCraftType.isLoading || patchGlobalAircraftType.isLoading || deleteGlobalAircraftType.isLoading
-	// queryClient.getQueryData('global-aircraft-type') || [];
 	const updatedData = queryClient.getQueryData('global-aircraft-type') || [];
 	const successMessage = queryClient.getQueryData('aircraft-type-success');
 	const errorMessage = queryClient.getQueryData('aircraft-type-error');
@@ -264,6 +260,7 @@ export const useGlobalAircraftRegistration = (props) => {
 		mutationKey: ['post-global-aircraft-register'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
 		onSuccess: ({ data, message }) => {
+			queryClient.setQueryData('aircraft-register-success', message);
 			delete data.createdBy;
 			const previousData = queryClient.getQueryData('global-aircraft-register') || [];
 			const updatedData = [data, ...previousData];
@@ -278,38 +275,35 @@ export const useGlobalAircraftRegistration = (props) => {
 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
 		onSuccess: ({ data, message }) => {
 			queryClient.setQueryData('aircraft-register-success', message);
-			// let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
-			// updatedData = updatedData.map((elm) => {
-			// 	if (elm.id === data.id) {
-			// 		return data;
-			// 	}
-			// 	return elm;
-			// })
-			// queryClient.setQueryData('global-aircraft-register', updatedData);
+			let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
+			updatedData = updatedData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			})
+			queryClient.setQueryData('global-aircraft-register', updatedData);
 		},
 		onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 		...props,
 	});
 	//for delete an aircraft registration
-	let deleteId = ''; // to handle delete flow
 	const deleteGlobalAircraftRegistration = useMutation(
 		{
 			mutationKey: ['delete-global-aircraft-register'],
 			mutationFn: async (id) => {
-				deleteId = id;
 				return await Delete(`${DELETE_GLOBAL_AIRCRAFT_REGISTRATION}${id}`);
 			},
 			onSuccess: async ({ data, message }) => {
 				queryClient.setQueryData('aircraft-register-success', message);
 				let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
 				updatedData = updatedData.filter((elm) => {
-					return elm.id !== deleteId
+					return elm.id !== data.id
 				})
 				queryClient.setQueryData('global-aircraft-register', updatedData);
-				deleteId = '';
-				// if (updatedData.length === 0) {
-				// 	response.mutate();
-				// }
+				if (updatedData.length === 0) {
+					getGlobalAircraftRegistration.mutate();
+				}
 			},
 			onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 			...props,
@@ -347,9 +341,12 @@ export const useGlobalAirline = (props) => {
 	const postGlobalAirline = useMutation({
 		mutationKey: ['post-global-airline'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRLINE}`, props),
-		onSuccess: ({ message }) => {
+		onSuccess: ({ message, data }) => {
 			queryClient.setQueryData('airline-success', message);
-			// queryClient.invalidateQueries('global-airline');
+			delete data.createBy;
+			const previousData = queryClient.getQueryData('global-airline') || [];
+			const updatedData = [data, ...previousData];
+			queryClient.setQueryData('global-airline', updatedData);
 		},
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
@@ -372,25 +369,21 @@ export const useGlobalAirline = (props) => {
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
 	});
-
-	let deleteId = ''
 	const deleteGlobalAirline = useMutation({
 		mutationKey: ['delete-global-airline'],
 		mutationFn: async (id) => {
-			deleteId = id;
 			return await Delete(`${DELETE_GLOBAL_AIRLINE}${id}`);
 		},
 		onSuccess: async ({ data, message }) => {
 			queryClient.setQueryData('airline-success', message);
 			let updatedData = queryClient.getQueryData('global-airline') || [];
 			updatedData = updatedData.filter((elm) => {
-				return elm.id !== deleteId
+				return elm.id !== data.id
 			})
 			queryClient.setQueryData('global-airline', updatedData);
-			deleteId = '';
-			// if (updatedData.length === 0) {
-			// 	response.mutate();
-			// }
+			if (updatedData.length === 0) {
+				getGlobalAirline.mutate();
+			}
 		},
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
