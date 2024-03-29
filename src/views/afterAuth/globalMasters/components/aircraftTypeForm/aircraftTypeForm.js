@@ -69,6 +69,15 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			</div>
 			<div className="aircraft_type_form_inputfields">
 				<InputField
+					label="Minimum Ground Time"
+					name="minGroundTime"
+					placeholder={!isReadOnly && "Enter the minimum ground time"}
+					type='number'
+					className="custom_input"
+					suffixText="minutes"
+					disabled={isReadOnly}
+				/>
+				<InputField
 					label="A/C Family"
 					name="family"
 					placeholder={!isReadOnly && "Enter the aircraft family"}
@@ -81,23 +90,6 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="bodyType"
 					placeholder={!isReadOnly && "Enter the Aircraft Body Type"}
 					className="custom_input"
-					disabled={isReadOnly}
-				/>
-				<CheckBoxField
-					name="isUsingDockingSystem"
-					disabled={isReadOnly}
-					label="Don't use docking system"
-					title="Single Checkbox"
-				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
-				<InputField
-					label="Minimum Ground Time"
-					name="minGroundTime"
-					placeholder={!isReadOnly && "Enter the minimum ground time"}
-					type='number'
-					className="custom_input"
-					suffixText="minutes"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -147,6 +139,12 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
+				<CheckBoxField
+					name="isUsingDockingSystem"
+					disabled={isReadOnly}
+					label="Don't use docking system"
+					title="Single Checkbox"
+				/>
 			</div>
 			<Divider />
 			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
@@ -156,7 +154,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="totalSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the total seats"}
-					className="custom_input"
+					className="custom_input_seat"
 					disabled={isReadOnly}
 				/>
 				<InputField
@@ -164,7 +162,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="firstClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the first class seats"}
-					className="custom_input"
+					className="custom_input_seat"
 					disabled={isReadOnly}
 				/>
 				<InputField
@@ -172,7 +170,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="businessClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the business class seats"}
-					className="custom_input"
+					className="custom_input_seat"
 					disabled={isReadOnly}
 				/>
 				<InputField
@@ -180,7 +178,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="economyClassSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the economy class seats"}
-					className="custom_input"
+					className="custom_input_seat"
 					disabled={isReadOnly}
 				/>
 			</div>
