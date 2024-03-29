@@ -124,13 +124,14 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	}, [airportModal.isOpen]);
 
 	useEffect(() => {
-		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
-			toast.success(successMessage)
-		}
 		if (airportModal.isOpen) {
 			closeAddModal();
 		}
-	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
+		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.success(successMessage)
+		}
+		
+	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess]);
 
 	useEffect(() => {
 		if (isEditError || isCreateNewError || isDeleteError) {
