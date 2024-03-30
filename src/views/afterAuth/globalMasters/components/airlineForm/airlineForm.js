@@ -25,6 +25,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Airline Name"
 					name="name"
+					max={32}
 					placeholder={!isReadOnly && 'Enter the airline name'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -74,6 +75,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Remark"
 					name="remark"
+					max={32}
 					placeholder={!isReadOnly && 'Remark'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -108,6 +110,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Address 1"
 					name="address"
+					max={32}
 					placeholder={!isReadOnly && 'Address'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -115,6 +118,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Phone"
 					name="phoneNumber"
+					max={20}
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"
 					disabled={isReadOnly}

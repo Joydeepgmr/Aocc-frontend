@@ -1,10 +1,13 @@
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { memo, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 import ModalComponent from '../../../../../components/modal/modal';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
@@ -12,15 +15,13 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
-import toast from 'react-hot-toast';
-import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 
 const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = null, pagination = null }) => {
 	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
 	const { mutate: postAircraftRegistration, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAircraftRegistration;
 	const { mutate: patchAircraftRegistration, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading } = patchGlobalAircraftRegistration;
 	const { mutate: deleteAircraftRegistration, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAircraftRegistration;
+	const { updatedData: globalAircraftTypeData = [] } = useGlobalAircraftType();
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +79,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 		delete values.length;
 		delete values.wingspan;
 		delete values.numberOfSeats;
-		delete values.hight;
+		delete values.height;
 		if (aircraftRegistrationModal.type === 'new') {
 			postAircraftRegistration(values);
 		} else {
@@ -101,10 +102,15 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	};
 
 	useEffect(() => {
-		if (aircraftIdWatch && aircraftRegistrationModal?.data?.globalAircraftType) {
-			console.log(length, height, wingSpan, totalSeats)
-			const { length, height, wingSpan, totalSeats } = aircraftRegistrationModal?.data?.globalAircraftType
-			initial.setFieldsValue({ length: 10, height, wingSpan, totalSeats })
+		if (aircraftIdWatch) {
+			if (aircraftRegistrationModal?.data?.globalAircraftType) {
+				const { length, height, wingSpan, totalSeats } = aircraftRegistrationModal?.data?.globalAircraftType;
+				initial.setFieldsValue({ length: 10, height, wingSpan, totalSeats })
+			} else if (globalAircraftTypeData?.length) {
+				const selectedAircraft = globalAircraftTypeData.filter(({ id }) => id === aircraftIdWatch)?.[0];
+				const { length, height, wingSpan, totalSeats } = selectedAircraft;
+				initial.setFieldsValue({ length, height, wingSpan, totalSeats })
+			}
 		}
 	}, [aircraftIdWatch])
 	useEffect(() => {
@@ -168,9 +174,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 				),
 			},
 			{
-				title: 'Description',
-				dataIndex: 'remark',
-				key: 'remark',
+				title: 'Registration',
+				dataIndex: 'registration',
+				key: 'registration',
 				render: (text) => text || '-',
 			},
 			{

@@ -23,7 +23,6 @@ import TopHeader from '../../../components/topHeader/topHeader';
 import OtpField from '../../../components/input/otp/otp';
 import TimelineDesign from '../../../components/timeline/timeline';
 import { useDummyApi } from '../../../services';
-import DeleteModal from '../../../components/deleteModal/deleteModal';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -347,18 +346,6 @@ export const Components = () => {
 				<Divider />
 				<div>
 					<Button title="Open Delete Modal" isSubmit="submit" onClick={openModal} type="filledText" />
-					<DeleteModal
-						isModalOpen={isModalOpen}
-						width="40rem"
-						closeModal={closeModal}
-						title="Delete Modal Heading"
-					>
-						<div>
-							<p>This is the content of the Delete modal.</p>
-						</div>
-						<Button title="Cancel" isSubmit="submit" type="filledText" />
-						<Button title="Delete" isSubmit="submit" type="filledText" />
-					</DeleteModal>
 				</div>
 				<Divider />
 
