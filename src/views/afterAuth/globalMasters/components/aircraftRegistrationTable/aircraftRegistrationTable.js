@@ -174,9 +174,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 				),
 			},
 			{
-				title: 'Description',
-				dataIndex: 'remark',
-				key: 'remark',
+				title: 'Registration',
+				dataIndex: 'registration',
+				key: 'registration',
 				render: (text) => text || '-',
 			},
 			{
