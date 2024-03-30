@@ -5,6 +5,7 @@ import CustomSelect from '../../../../../components/select/select';
 import OtpField from '../../../../../components/input/otp/otp';
 import NumericField from '../numericField/numericField';
 import { SelectData } from '../../../userAccess/userAccessData';
+import { useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
 import { usePostAirportName } from '../../../../../services/airportMasters/airportMasters';
 import './licenseSetupForm.scss';
 
@@ -14,6 +15,20 @@ const LicenseSetupForm = () => {
 	const [icaoCode, setIcaoCode] = useState([]);
 	// const { data: airportData } = useGetAirportName();
 	const { mutate: postLicenseAirportName, isLoading, isSucess, isError, data, response } = usePostAirportName();
+
+	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
+	const { mutate: getCountriesData } = getGlobalCountries;
+
+	console.log('countryData:', countryData);
+	useEffect(() => {
+		if (!countryData?.length) {
+			getCountriesData();
+		}
+	}, []);
+
+	const SelectCountryData = countryData?.map((data) => {
+		return { label: data.name, value: data.name, id: data.name };
+	});
 
 	// console.log('data from api', airportData);
 
@@ -120,10 +135,12 @@ const LicenseSetupForm = () => {
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField label="City" name="city" placeholder="Enter the city name" className="custom_input" />
-				<InputField
+
+				<CustomSelect
+					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
-					placeholder="Enter the country name"
+					placeholder="Select country"
 					className="custom_input"
 				/>
 			</div>
@@ -136,7 +153,7 @@ const LicenseSetupForm = () => {
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" required/>
+				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" />
 			</div>
 		</div>
 	);
