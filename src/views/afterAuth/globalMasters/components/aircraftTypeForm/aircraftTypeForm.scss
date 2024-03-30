@@ -7,19 +7,30 @@
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-	box-sizing: content-box;
+
 	.aircraft_type_form_inputfields {
-		@include flex(start, start, row);
+		display: flex;
+		flex-wrap: wrap;
 		gap: 2.4rem;
-		width: 100%;
+
 		.input_form_item {
 			&.custom_input {
-				width: 33%;
+				width: calc(33% - 2.4rem);
+			}
+			&.custom_input_seat {
+				width: calc(25% - 2.4rem);
 			}
 		}
-	}
-}
+		.select {
+			width: calc(33% - 2.4rem);
+		}
 
-.customTypo {
-	margin-bottom: 1.6rem;
+		.custom_date {
+			width: calc(33% - 2.4rem);
+		}
+	}
+
+	.customTypo {
+		margin-bottom: 1.6rem;
+	}
 }

@@ -14,6 +14,7 @@ import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegist
 import './aircraftRegistrationTable.scss';
 import toast from 'react-hot-toast';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 
 const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = null, pagination = null }) => {
 	const { postGlobalAircraftRegistration, patchGlobalAircraftRegistration, deleteGlobalAircraftRegistration, updatedData: data = [], successMessage, errorMessage } = useGlobalAircraftRegistration();
@@ -23,6 +24,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [isLoading, setIsLoading] = useState(false);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
 	const [initial] = Form.useForm();
 	const aircraftIdWatch = Form.useWatch('aircraft_id', initial);
 	const handleDetails = (data) => {
@@ -33,6 +35,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 		initial.resetFields();
 		setAircraftRegistrationModal(defaultModalParams);
 	};
+	const closeDeleteModal = () => {
+		setDeleteModal({ isOpen: false, id: null });
+	}
 
 	const getFormValues = (data) => {
 		console.log('data?.airportId ', data?.airportId)
@@ -86,8 +91,9 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 		}
 	};
 
-	const handleDelete = (record) => {
-		deleteAircraftRegistration(record.id);
+	const handleDelete = () => {
+		deleteAircraftRegistration(deleteModal.id);
+		closeDeleteModal();
 	};
 
 	const handleEdit = (data) => {
@@ -153,7 +159,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 							className="custom_icon_buttons"
 						/>
 						<ButtonComponent
-							onClick={() => handleDelete(record)}
+							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
 							type="iconWithBorder"
 							icon={deleteIcon}
 							className="custom_icon_buttons"
@@ -213,18 +219,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 	return (
 		<div>
 			<PageLoader loading={isLoading} />
-			{data?.length
-				?
-				<div className="create_wrapper_table">
-					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Aircraft Registrations
-						</CustomTypography>
-						<TableComponent {...{ data, columns, fetchData, pagination }} />
-					</div>
-
-				</div> : <></>
-			}
+			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
 			<ModalComponent
 				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}
@@ -255,6 +250,18 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, fetchData = nu
 					}
 				</Form>
 			</ModalComponent>
+			{data?.length
+				?
+				<div className="create_wrapper_table">
+					<div className="table_container">
+						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
+							Aircraft Registrations
+						</CustomTypography>
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
+					</div>
+
+				</div> : <></>
+			}
 		</div>
 	);
 };

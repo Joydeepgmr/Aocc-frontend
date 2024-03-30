@@ -12,6 +12,7 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 
 const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
 	const {
@@ -29,11 +30,15 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 	const [isLoading, setIsLoading] = useState(false);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
 
 	const closeAddModal = () => {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams)
 	};
+	const closeDeleteModal = () => {
+		setDeleteModal({ isOpen: false, id: null });
+	}
 	const getFormValues = (data) => {
 		return {
 			identifier: data?.identifier,
@@ -75,8 +80,9 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		}
 	};
 
-	const handleDelete = (record) => {
-		deleteAircraftType(record.id);
+	const handleDelete = () => {
+		deleteAircraftType(deleteModal.id);
+		closeDeleteModal();
 	};
 
 	const handleEdit = (data) => {
@@ -140,7 +146,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 							className="custom_icon_buttons"
 						/>
 						<ButtonComponent
-							onClick={() => handleDelete(record)}
+							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
 							type="iconWithBorder"
 							icon={deleteIcon}
 							className="custom_icon_buttons"
@@ -212,16 +218,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 	return (
 		<div>
 			<PageLoader loading={isLoading} />
-			{data?.length ?
-				<div className="create_wrapper_table aircraftType">
-					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Aircraft Type
-						</CustomTypography>
-						<TableComponent {...{ data, columns, fetchData, pagination }} />
-					</div>
-				</div> : <></>
-			}
+			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
 			<ModalComponent
 				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
@@ -250,6 +247,16 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 					</>}
 				</Form>
 			</ModalComponent>
+			{data?.length ?
+				<div className="create_wrapper_table aircraftType">
+					<div className="table_container">
+						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
+							Aircraft Type
+						</CustomTypography>
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
+					</div>
+				</div> : <></>
+			}
 		</div>
 	);
 };

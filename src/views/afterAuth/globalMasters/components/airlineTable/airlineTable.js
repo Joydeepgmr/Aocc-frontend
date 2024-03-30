@@ -13,14 +13,18 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 
 const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) => {
 	const { postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData: data = [], successMessage, errorMessage } = useGlobalAirline();
-	const { mutate: postGlobalAirLineRegistration, isSuccess: isCreateNewSuccess, isError: isCreateNewError } = postGlobalAirline;
-	const { mutate: patchAirline, isSuccess: isEditSuccess, isError: isEditError } = patchGlobalAirline;
-	const { mutate: deleteAirline, isSuccess: isDeleteSuccess, isError: isDeleteError } = deleteGlobalAirline;
+	const { mutate: postGlobalAirLineRegistration, isSuccess: isCreateNewSuccess, isError: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirline;
+	const { mutate: patchAirline, isSuccess: isEditSuccess, isError: isEditError, isLoading: isEditLoading } = patchGlobalAirline;
+	const { mutate: deleteAirline, isSuccess: isDeleteSuccess, isError: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAirline;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
 	const [initial] = Form.useForm();
 	const getFormValues = (data) => {
 		return {
@@ -47,6 +51,9 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 		setAirlineRegistrationModal(defaultModalParams);
 		initial.resetFields();
 	};
+	const closeDeleteModal = () => {
+		setDeleteModal({ isOpen: false, id: null });
+	}
 
 	const onFinishHandler = (values) => {
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
@@ -64,8 +71,9 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 		}
 	};
 
-	const handleDelete = (record) => {
-		deleteAirline(record.id);
+	const handleDelete = () => {
+		deleteAirline(deleteModal.id);
+		closeDeleteModal();
 	};
 
 	const handleEdit = (data) => {
@@ -96,6 +104,13 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 		}
 	}, [isCreateNewError, isEditError, isDeleteError])
 	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false);
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
+	useEffect(() => {
 		if (createProps.new) {
 			setAirlineRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
@@ -116,7 +131,7 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 							className="custom_icon_buttons"
 						/>
 						<ButtonComponent
-							onClick={() => handleDelete(record)}
+							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
 							type="iconWithBorder"
 							icon={deleteIcon}
 							className="custom_icon_buttons"
@@ -181,17 +196,8 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 	);
 	return (
 		<div>
-			{data && data?.length ? (
-				<div className="create_wrapper_table">
-					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Airlines
-						</CustomTypography>
-						<TableComponent {...{ data, columns, fetchData, pagination }} />
-					</div>
-				</div>
-			) : <></>}
-
+			<PageLoader loading={isLoading} />
+			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
 			<ModalComponent
 				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
@@ -226,6 +232,17 @@ const AirlineTable = ({ createProps, setCreateProps, fetchData, pagination }) =>
 					)}
 				</Form>
 			</ModalComponent>
+			{data && data?.length ? (
+				<div className="create_wrapper_table">
+					<div className="table_container">
+						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
+							Airlines
+						</CustomTypography>
+						<TableComponent {...{ data, columns, fetchData, pagination }} />
+					</div>
+				</div>
+			) : <></>}
+
 		</div>
 	);
 };
