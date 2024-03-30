@@ -16,9 +16,9 @@ const ProgressionCard = ({cardTitle, airlineData}) => {
                 <CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children={cardTitle} />
                 <img src={Performance} alt="performance" />
             </div>
-            {airlineData.map((airline)=> {
+            {airlineData.map((airline,index)=> {
                 return(
-                    <div className='progress-status-body'>
+                    <div key={index} className='progress-status-body'>
                     <div className='progress-status-item'>
                         {/* <img src={Airplane_1} alt="" /> */}
                         <CustomTypography type="paragraph" fontSize={12} fontWeight="600" color="black" children={airline?.name}  />

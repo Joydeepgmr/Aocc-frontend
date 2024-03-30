@@ -1,27 +1,27 @@
-import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import {
-	GET_GLOBAL_AIRPORT,
-	POST_GLOBAL_AIRPORT,
-	PATCH_GLOBAL_AIRPORT,
-	DELETE_GLOBAL_AIRPORT,
-	GET_GLOBAL_AIRCRAFT_TYPE,
-	POST_GLOBAL_AIRCRAFT_TYPE,
-	POST_BULK_GLOBAL_AIRCRAFT_TYPE,
-	GET_GLOBAL_AIRCRAFT_REGISTRATION,
-	POST_GLOBAL_AIRCRAFT_REGISTRATION,
-	GET_GLOBAL_AIRLINE,
-	POST_GLOBAL_AIRLINE,
-	PATCH_GLOBAL_AIRLINE,
-	DELETE_GLOBAL_AIRLINE,
-	PATCH_GLOBAL_AIRCRAFT_REGISTRATION,
 	DELETE_GLOBAL_AIRCRAFT_REGISTRATION,
 	DELETE_GLOBAL_AIRCRAFT_TYPE,
-	PATCH_GLOBAL_AIRCRAFT_TYPE,
-	POST_BULK_GLOBAL_AIRPORT,
+	DELETE_GLOBAL_AIRLINE,
+	DELETE_GLOBAL_AIRPORT,
 	GET_COUNTRY_DATA,
+	GET_GLOBAL_AIRCRAFT_REGISTRATION,
+	GET_GLOBAL_AIRCRAFT_TYPE,
+	GET_GLOBAL_AIRLINE,
+	GET_GLOBAL_AIRPORT,
+	PATCH_GLOBAL_AIRCRAFT_REGISTRATION,
+	PATCH_GLOBAL_AIRCRAFT_TYPE,
+	PATCH_GLOBAL_AIRLINE,
+	PATCH_GLOBAL_AIRPORT,
+	POST_BULK_GLOBAL_AIRCRAFT_TYPE,
+	POST_BULK_GLOBAL_AIRPORT,
+	POST_GLOBAL_AIRCRAFT_REGISTRATION,
+	POST_GLOBAL_AIRCRAFT_TYPE,
+	POST_GLOBAL_AIRLINE,
+	POST_GLOBAL_AIRPORT,
 } from '../../api/endpoints';
 
-import { Post, Patch, Delete, Get } from '../HttpServices/HttpServices';
+import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
 
 
 export const useGlobalAirport = (props) => {
@@ -31,7 +31,6 @@ export const useGlobalAirport = (props) => {
 		mutationKey: ['global-airport'],
 		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
 		onSuccess: (newData) => {
-			console.log("on get success")
 			const previousData = queryClient.getQueryData('global-airport') || [];
 			const updatedData = [...previousData, ...newData.data];
 			queryClient.setQueryData('global-airport', updatedData);
@@ -39,20 +38,20 @@ export const useGlobalAirport = (props) => {
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
-
-
 	//for create new airport
 	const postGlobalAirport = useMutation({
 		mutationKey: ['post-global-airport'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
-		onSuccess: ({ message }) => {
+		onSuccess: ({ message, data }) => {
 			queryClient.setQueryData('airport-success', message);
+			const previousData = queryClient.getQueryData('global-airport') || [];
+			const updatedData = [data, ...previousData];
+			queryClient.setQueryData('global-airport', updatedData);
 		},
 		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
 	// for edit an airport
-	console.log(postGlobalAirport, 'postGLobalAirport');
 	const patchGlobalAirport = useMutation({
 		mutationKey: ['patch-global-airport'],
 		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRPORT}${payload.id}`, payload.values),
@@ -71,21 +70,22 @@ export const useGlobalAirport = (props) => {
 		...props,
 	});
 	//for delete an airport
-	let deleteId = ''; // to handle delete flow
+	let deleteId = ''
 	const deleteGlobalAirport = useMutation(
 		{
 			mutationKey: ['delete-global-airport'],
-			mutationFn: async (id) => {
-				deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
-			},
+			mutationFn: async (id) => { deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`) },
 			onSuccess: async ({ data, message }) => {
 				queryClient.setQueryData('airport-success', message);
 				let updatedData = queryClient.getQueryData('global-airport') || [];
 				updatedData = updatedData.filter((elm) => {
 					return elm.id !== deleteId
 				})
+				deleteId = ''
 				queryClient.setQueryData('global-airport', updatedData);
-				deleteId = '';
+				if (updatedData?.length === 0) {
+					getGlobalAirport.mutate();
+				}
 			},
 			onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 			...props,

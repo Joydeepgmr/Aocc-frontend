@@ -23,6 +23,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="identifier"
 					placeholder={!isReadOnly && "Enter the identifier name"}
 					className="custom_input"
+					max={32}
 					required
 					disabled={isReadOnly}
 				/>
@@ -31,12 +32,15 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					name="iataCode"
 					placeholder={!isReadOnly && "Enter the IATA Code"}
 					className="custom_input"
+					min={3}
+					max={3}
 					required
 					disabled={isReadOnly || isNotEditable}
 				/>
 				<InputField
 					label="Model"
 					name="model"
+					max={32}
 					placeholder={!isReadOnly && "Enter the model name"}
 					className="custom_input"
 					required
@@ -55,6 +59,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
+					min={3}
+					max={4}
 					placeholder={!isReadOnly && "Enter the ICAO Code"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -62,6 +68,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="ICAO Code Modified"
 					name="icaoCodeModified"
+					min={3}
+					max={4}
 					placeholder={!isReadOnly && "Enter the ICAO code modified"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -69,17 +77,9 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			</div>
 			<div className="aircraft_type_form_inputfields">
 				<InputField
-					label="Minimum Ground Time"
-					name="minGroundTime"
-					placeholder={!isReadOnly && "Enter the minimum ground time"}
-					type='number'
-					className="custom_input"
-					suffixText="minutes"
-					disabled={isReadOnly}
-				/>
-				<InputField
 					label="A/C Family"
 					name="family"
+					max={32}
 					placeholder={!isReadOnly && "Enter the aircraft family"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -92,11 +92,22 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
+				<InputField
+					label="Minimum Ground Time"
+					name="minGroundTime"
+					max={999}
+					placeholder={!isReadOnly && "Enter the minimum ground time"}
+					type='number'
+					className="custom_input"
+					suffixText="minutes"
+					disabled={isReadOnly}
+				/>
 			</div>
 			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Wingspan"
 					name="wingspan"
+					max={999}
 					placeholder={!isReadOnly && "Enter the wingspan"}
 					type='number'
 					className="custom_input"
@@ -106,6 +117,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Length"
 					name="length"
+					max={999}
 					placeholder={!isReadOnly && "Enter the length"}
 					type='number'
 					className="custom_input"
@@ -115,6 +127,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Height"
 					name="height"
+					max={999}
 					placeholder={!isReadOnly && "Enter the Height"}
 					type='number'
 					className="custom_input"
@@ -134,6 +147,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Number of Engines"
 					name="engineCount"
+					max={999}
 					type='number'
 					placeholder={!isReadOnly && "Enter the number of engines"}
 					className="custom_input"
@@ -149,36 +163,39 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<Divider />
 			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
 			<div className="aircraft_type_form_inputfields">
-				<InputField
+				{/* <InputField
 					label="Total Seats"
 					name="totalSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the total seats"}
-					className="custom_input_seat"
+					className="custom_input"
 					disabled={isReadOnly}
-				/>
+				/> */}
 				<InputField
 					label="First Class"
 					name="firstClassSeats"
+					max={999}
 					type='number'
 					placeholder={!isReadOnly && "Enter the first class seats"}
-					className="custom_input_seat"
+					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Business Class"
 					name="businessClassSeats"
+					max={999}
 					type='number'
 					placeholder={!isReadOnly && "Enter the business class seats"}
-					className="custom_input_seat"
+					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Economy Class"
 					name="economyClassSeats"
+					max={999}
 					type='number'
 					placeholder={!isReadOnly && "Enter the economy class seats"}
-					className="custom_input_seat"
+					className="custom_input"
 					disabled={isReadOnly}
 				/>
 			</div>
