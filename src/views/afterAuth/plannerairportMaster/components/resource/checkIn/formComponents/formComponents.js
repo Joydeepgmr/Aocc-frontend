@@ -7,17 +7,8 @@ import CustomTypography from '../../../../../../../components/typographyComponen
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponent.scss';
 
-const FormComponent = ({
-	handleSaveButton,
-	handleButtonClose,
-	initialValues,
-	isEdit,
-	isError,
-	errorMessage,
-	isReadOnly,
-}) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly } ) => {
 
-	console.log(initialValues,"initiall");
 	const SelectData = [
 		{
 			id: '1',
@@ -68,7 +59,7 @@ const FormComponent = ({
 							<InputField
 								label="Counter Name"
 								name="name"
-								//type="number"
+								type="number"
 								placeholder={!isReadOnly && 'Enter the airport name'}
 								warning="Required field"
 								required
@@ -101,7 +92,7 @@ const FormComponent = ({
 							<InputField
 								label="Phones"
 								name="phoneNumber"
-								//type="number"
+								type="number"
 								placeholder={!isReadOnly && 'Filled Text'}
 								warning="Required field"
 								disabled={isReadOnly}
@@ -154,11 +145,6 @@ const FormComponent = ({
 					</div>
 					<div className="form_section">
 						<div className="form_bottomButton">
-							{isError && (
-								<CustomTypography type="text" fontSize={14} fontWeight="400" color="#db0000">
-									{errorMessage}
-								</CustomTypography>
-							)}
 							<Button
 								title="Cancel"
 								type="filledText"

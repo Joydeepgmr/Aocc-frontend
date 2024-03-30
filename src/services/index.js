@@ -6,26 +6,22 @@ import {
 import { useDummyApi } from './dummyApi/dummyApi';
 
 import {
-	useGetGlobalAirport,
-	usePostGlobalAirport,
-	usePatchGlobalAirport,
+	useGlobalAirport,
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
-	useGetGlobalAirline,
-	usePostGlobalAirline,
+	useGlobalAirline,
+	useGlobalCountries,
 } from './globalMasters/globalMaster';
 
 export {
 	useDummyApi,
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
-	useGetGlobalAirport,
-	usePostGlobalAirport,
-	usePatchGlobalAirport,
+	useGlobalAirport,
 	useGlobalAircraftType,
 	useUploadCSVAircraftType,
 	useGlobalAircraftRegistration,
-	useGetGlobalAirline,
-	usePostGlobalAirline,
+	useGlobalAirline,
+	useGlobalCountries,
 };

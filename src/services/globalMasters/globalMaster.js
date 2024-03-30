@@ -18,90 +18,94 @@ import {
 	DELETE_GLOBAL_AIRCRAFT_TYPE,
 	PATCH_GLOBAL_AIRCRAFT_TYPE,
 	POST_BULK_GLOBAL_AIRPORT,
+	GET_COUNTRY_DATA,
 } from '../../api/endpoints';
 
-import { Post, Patch, Delete } from '../HttpServices/HttpServices';
+import { Post, Patch, Delete, Get } from '../HttpServices/HttpServices';
 
 
-export const useGetGlobalAirport = (props) => {
-	const response = useMutation({
+export const useGlobalAirport = (props) => {
+	const queryClient = useQueryClient();
+	// for get all airport
+	const getGlobalAirport = useMutation({
 		mutationKey: ['global-airport'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`),
+		onSuccess: (newData) => {
+			console.log("on get success")
+			const previousData = queryClient.getQueryData('global-airport') || [];
+			const updatedData = [...previousData, ...newData.data];
+			queryClient.setQueryData('global-airport', updatedData);
+		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
-
-	const { data, error, isSuccess } = response;
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const usePostGlobalAirport = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
+	
+	
+	//for create new airport
+	const postGlobalAirport = useMutation({
 		mutationKey: ['post-global-airport'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
-		onSuccess: () => {
-			queryClient.invalidateQueries('global-airport');
+		onSuccess: ({message}) => {
+			queryClient.setQueryData('airport-success', message);
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const usePatchGlobalAirport = (props) => {
-	const queryClient = useQueryClient()
-	const response = useMutation({
+	// for edit an airport
+	console.log(postGlobalAirport, 'postGLobalAirport');
+	const patchGlobalAirport = useMutation({
 		mutationKey: ['patch-global-airport'],
-		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRPORT}${props.id}`, props),
-		onSuccess: (data) => {
-			console.log("data on success is ", data);
-			queryClient.invalidateQueries('global-airport');
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRPORT}${payload.id}`, payload.values),
+		onSuccess: ({ data, message }) => {
+			queryClient.setQueryData('airport-success', message);
+			let updatedData = queryClient.getQueryData('global-airport') || [];
+			updatedData = updatedData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			})
+			queryClient.setQueryData('global-airport', updatedData);
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airport-error', message); },
 		...props,
 	});
+	//for delete an airport
+	let deleteId = ''; // to handle delete flow
+	const deleteGlobalAirport = useMutation(
+		{
+			mutationKey: ['delete-global-airport'],
+			mutationFn: async (id) => {
+				deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
+			},
+			onSuccess: async ({ data, message }) => {
+				queryClient.setQueryData('airport-success', message);
+				let updatedData = queryClient.getQueryData('global-airport') || [];
+				updatedData = updatedData.filter((elm) => {
+					return elm.id !== deleteId
+				})
+				queryClient.setQueryData('global-airport', updatedData);
+				deleteId = '';
+			},
+			onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
+			...props,
+		}
+	);
+	const updatedData = queryClient.getQueryData('global-airport') || [];
+	const successMessage = queryClient.getQueryData('airport-success');
+    const errorMessage = queryClient.getQueryData('airport-error');
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return {
+		getGlobalAirport,
+		postGlobalAirport,
+		patchGlobalAirport,
+		deleteGlobalAirport,
+		updatedData,
+		successMessage,
+        errorMessage
+	};
 };
 
-export const useDeleteGlobalAirport = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
-		mutationKey: ['delete-global-airport'],
-		mutationFn: async (id) => {
-			const response = await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`);
-			return response.data; // Assuming the API returns a success message or updated data
-		},
-		onSuccess: async () => {
-			queryClient.invalidateQueries('global-airport');
-		},
-		...props,
-	});
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
 
 export const useUploadCSVAirport = (props) => {
 	const response = useMutation({
@@ -144,35 +148,52 @@ export const useUploadCSVAircraftType = (props) => {
 export const useGlobalAircraftType = (props) => {
 	const queryClient = useQueryClient();
 	// for get all aircraft type
+	let variables = '';
 	const getGlobalAircraftType = useMutation({
 		mutationKey: ['global-aircraft-type'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
-		onSuccess: (newData) => {
-			console.log("on get success")
-			const previousData = queryClient.getQueryData('global-aircraft-type') || [];
-			const updatedData = [...previousData, ...newData.data];
-			queryClient.setQueryData('global-aircraft-type', updatedData);
+		mutationFn: async (props) => {
+			variables = props;
+			if (props?.bulk) {
+				return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}?bulk=true`)
+			} else {
+				return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props)
+			}
 		},
+		onSuccess: (newData) => {
+			console.log("variables are ", variables)
+			if (variables?.bulk) {
+				const updatedData = newData.data;
+				queryClient.setQueryData('global-aircraft-type', updatedData);
+			} else {
+				const previousData = queryClient.getQueryData('global-aircraft-type') || [];
+				const updatedData = [...previousData, ...newData.data];
+				queryClient.setQueryData('global-aircraft-type', updatedData);
+			}
+		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 		...props,
 	});
-	if (props == 'get') {
-		return { getGlobalAircraftType }
-	}
 	//for create new aircraft type
 	const postGlobalAirCraftType = useMutation({
 		mutationKey: ['post-global-aircraft-type'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
-		onSuccess: () => {
-			console.log("on post success")
+		onSuccess: ({ data, message }) => {
+			console.log("post data is ", data);
+			queryClient.setQueryData('aircraft-type-success', message);
+			delete data.createdBy;
+			const previousData = queryClient.getQueryData('global-aircraft-type') || [];
+			const updatedData = [data, ...previousData];
+			queryClient.setQueryData('global-aircraft-type', updatedData);
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 		...props,
 	});
 	// for edit an aircraft type
 	const patchGlobalAircraftType = useMutation({
 		mutationKey: ['patch-global-aircraft-type'],
 		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}${payload.id}`, payload.values),
-		onSuccess: ({ data }) => {
-			console.log("on patch success")
+		onSuccess: ({ data, message }) => {
+			queryClient.setQueryData('aircraft-type-success', message);
 			let updatedData = queryClient.getQueryData('global-aircraft-type') || [];
 			updatedData = updatedData.map((elm) => {
 				if (elm.id === data.id) {
@@ -182,6 +203,7 @@ export const useGlobalAircraftType = (props) => {
 			})
 			queryClient.setQueryData('global-aircraft-type', updatedData);
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 		...props,
 	});
 	//for delete an aircraft type
@@ -192,8 +214,8 @@ export const useGlobalAircraftType = (props) => {
 			mutationFn: async (id) => {
 				deleteId = id; return await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`);
 			},
-			onSuccess: async ({ data }) => {
-				console.log("on delete success")
+			onSuccess: async ({ data, message }) => {
+				queryClient.setQueryData('aircraft-type-success', message);
 				let updatedData = queryClient.getQueryData('global-aircraft-type') || [];
 				updatedData = updatedData.filter((elm) => {
 					return elm.id !== deleteId
@@ -204,89 +226,25 @@ export const useGlobalAircraftType = (props) => {
 				// 	response.mutate();
 				// }
 			},
+			onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('aircraft-type-error', message); },
 			...props,
 		}
 	);
+	// const isLoading = getGlobalAircraftType.isLoading || postGlobalAirCraftType.isLoading || patchGlobalAircraftType.isLoading || deleteGlobalAircraftType.isLoading
+	// queryClient.getQueryData('global-aircraft-type') || [];
 	const updatedData = queryClient.getQueryData('global-aircraft-type') || [];
-	// const { data, error, isSuccess } = response;
-	// const statusMessage = isSuccess
-	// 	? data?.message
-	// 	: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+	const successMessage = queryClient.getQueryData('aircraft-type-success');
+	const errorMessage = queryClient.getQueryData('aircraft-type-error');
 	return {
 		getGlobalAircraftType,
 		postGlobalAirCraftType,
 		patchGlobalAircraftType,
 		deleteGlobalAircraftType,
-		updatedData
+		updatedData,
+		successMessage,
+		errorMessage
 	};
 };
-// export const useDeleteGlobalAircraftType = (props) => {
-// 	const queryClient = useQueryClient();
-
-// 	const response = useMutation(
-// 		{
-// 			mutationKey: ['delete-global-aircraft-type'],
-// 			mutationFn: async (id) => {
-// 				const response = await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`);
-// 				return response.data; // Assuming the API returns a success message or updated data
-// 			},
-// 			onSuccess: async () => {
-// 				queryClient.invalidateQueries('global-aircraft-type');
-// 			},
-// 			...props,
-// 		}
-// 	);
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
-// export const usePostGlobalAircraftType = (props) => {
-// 	const queryClient = useQueryClient()
-
-// 	const response = useMutation({
-// 		mutationKey: ['post-global-aircraft-type'],
-// 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
-// 		onSuccess: () => {
-// 			queryClient.invalidateQueries(['global-aircraft-type']);
-// 		},
-// 		...props,
-// 	});
-
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
-
-// export const usePatchGlobalAircraftType = (props) => {
-// 	const queryClient = useQueryClient()
-// 	const response = useMutation({
-// 		mutationKey: ['patch-global-aircraft-type'],
-// 		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}${payload.id}`, payload.values),
-// 		onSuccess: (data) => {
-// 			queryClient.invalidateQueries('global-aircraft-type');
-// 		},
-// 		...props,
-// 	});
-
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
 export const useGlobalAircraftRegistration = (props) => {
 	const queryClient = useQueryClient();
 	// for get all registration api
@@ -298,31 +256,38 @@ export const useGlobalAircraftRegistration = (props) => {
 			const updatedData = [...previousData, ...newData.data];
 			queryClient.setQueryData('global-aircraft-register', updatedData);
 		},
+		onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 		...props,
 	});
 	//for create new aircraft registration
 	const postGlobalAircraftRegistration = useMutation({
 		mutationKey: ['post-global-aircraft-register'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
-		// onSuccess: () => {
-		// 	queryClient.invalidateQueries(['global-aircraft-register']);
-		// },
+		onSuccess: ({ data, message }) => {
+			delete data.createdBy;
+			const previousData = queryClient.getQueryData('global-aircraft-register') || [];
+			const updatedData = [data, ...previousData];
+			queryClient.setQueryData('global-aircraft-register', updatedData);
+		},
+		onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 		...props,
 	});
 	// for edit an aircraft registration
 	const patchGlobalAircraftRegistration = useMutation({
 		mutationKey: ['patch-global-aircraft-register'],
 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
-		// onSuccess: ({ data }) => {
-		// 	let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
-		// 	updatedData = updatedData.map((elm) => {
-		// 		if (elm.id === data.id) {
-		// 			return data;
-		// 		}
-		// 		return elm;
-		// 	})
-		// 	queryClient.setQueryData('global-aircraft-register', updatedData);
-		// },
+		onSuccess: ({ data, message }) => {
+			queryClient.setQueryData('aircraft-register-success', message);
+			// let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
+			// updatedData = updatedData.map((elm) => {
+			// 	if (elm.id === data.id) {
+			// 		return data;
+			// 	}
+			// 	return elm;
+			// })
+			// queryClient.setQueryData('global-aircraft-register', updatedData);
+		},
+		onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 		...props,
 	});
 	//for delete an aircraft registration
@@ -334,7 +299,8 @@ export const useGlobalAircraftRegistration = (props) => {
 				deleteId = id;
 				return await Delete(`${DELETE_GLOBAL_AIRCRAFT_REGISTRATION}${id}`);
 			},
-			onSuccess: async ({ data }) => {
+			onSuccess: async ({ data, message }) => {
+				queryClient.setQueryData('aircraft-register-success', message);
 				let updatedData = queryClient.getQueryData('global-aircraft-register') || [];
 				updatedData = updatedData.filter((elm) => {
 					return elm.id !== deleteId
@@ -345,14 +311,13 @@ export const useGlobalAircraftRegistration = (props) => {
 				// 	response.mutate();
 				// }
 			},
+			onError: ({ response: { data: { message } } }) => queryClient.setQueryData('aircraft-register-error', message),
 			...props,
 		}
 	);
 	const updatedData = queryClient.getQueryData('global-aircraft-register') || [];
-	// const { data, error, isSuccess } = response;
-	// const statusMessage = isSuccess
-	// 	? data?.message
-	// 	: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
+	const successMessage = queryClient.getQueryData('aircraft-register-success');
+	const errorMessage = queryClient.getQueryData('aircraft-register-error');
 
 	return {
 		getGlobalAircraftRegistration,
@@ -360,180 +325,92 @@ export const useGlobalAircraftRegistration = (props) => {
 		patchGlobalAircraftRegistration,
 		deleteGlobalAircraftRegistration,
 		updatedData,
+		successMessage,
+		errorMessage
 	};
 };
 
-
-// export const usePostGlobalAircraftRegistration = (props) => {
-// 	const queryClient = useQueryClient()
-
-// 	const response = useMutation({
-// 		mutationKey: ['post-global-aircraft-register'],
-// 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
-// 		onSuccess: () => {
-// 			queryClient.invalidateQueries('global-aircraft-register');
-// 		},
-// 		...props,
-// 	});
-
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
-// export const useDeleteGlobalAircraftRegistration = (props) => {
-// 	const queryClient = useQueryClient();
-
-// 	const response = useMutation(
-// 		{
-// 			mutationKey: ['delete-global-aircraft-register'],
-// 			mutationFn: async (id) => {
-// 				const response = await Delete(`${DELETE_GLOBAL_AIRCRAFT_REGISTRATION}${id}`);
-// 				return response.data; // Assuming the API returns a success message or updated data
-// 			},
-// 			onSuccess: () => {
-// 				queryClient.invalidateQueries('global-aircraft-register');
-// 			},
-// 			...props,
-// 		}
-// 	);
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
-// export const usePatchGlobalAircraftRegistration = (props) => {
-// 	const queryClient = useQueryClient()
-// 	const response = useMutation({
-// 		mutationKey: ['patch-global-aircraft-register'],
-// 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
-// 		onSuccess: (data) => {
-// 			console.log("data on succes is ", data);
-// 			queryClient.invalidateQueries('global-aircraft-register');
-// 		},
-// 		...props,
-// 	});
-
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-export const useGetGlobalAirline = (props) => {
-	const response = useMutation({
+export const useGlobalAirline = (props) => {
+	const queryClient = useQueryClient();
+	const getGlobalAirline = useMutation({
 		mutationKey: ['global-airline'],
 		mutationFn: async () => await Post(`${GET_GLOBAL_AIRLINE}`),
+		onSuccess: (newData) => {
+			const previousData = queryClient.getQueryData('global-airline') || [];
+			const updatedData = [...previousData, ...newData.data];
+			queryClient.setQueryData('global-airline', updatedData);
+		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	console.log(response);
-
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
-};
-
-export const usePostGlobalAirline = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
+	const postGlobalAirline = useMutation({
 		mutationKey: ['post-global-airline'],
 		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRLINE}`, props),
-		onSuccess: () => {
-			queryClient.invalidateQueries('global-airline');
+		onSuccess: ({ message }) => {
+			queryClient.setQueryData('airline-success', message);
+			// queryClient.invalidateQueries('global-airline');
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-// export const usePatchGlobalAirline = (props) => {
-// 	const queryClient = useQueryClient();
-// 	const response = useMutation({
-// 		mutationKey: ['patch-global-airline'],
-// 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}${props.id}`, props),
-
-// 		onSuccess: (data) => {
-// 			queryClient.invalidateQueries('global-airline');
-// 		},
-// 		...props,
-// 	});
-
-// 	const { data, error, isSuccess } = response;
-
-// 	const statusMessage = isSuccess
-// 		? data?.message
-// 		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-// 	return { ...response, data, message: statusMessage };
-// };
-
-export const usePatchGlobalAirline = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
+	const patchGlobalAirline = useMutation({
 		mutationKey: ['patch-global-airline'],
 		mutationFn: async (props) => await Patch(`${PATCH_GLOBAL_AIRLINE}`, props), // Assuming PATCH_GLOBAL_AIRLINE is the endpoint for patching
-		onSuccess: () => {
-			queryClient.invalidateQueries('global-airline');
+		onSuccess: ({ data, message }) => {
+			queryClient.setQueryData('airline-success', message);
+			let updatedData = queryClient.getQueryData('global-airline') || [];
+			updatedData = updatedData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			})
+			queryClient.setQueryData('global-airline', updatedData);
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const useDeleteGlobalAirline = (props) => {
-	const queryClient = useQueryClient();
-
-	const fetchGetAll = useGetGlobalAirline();
-	const response = useMutation({
+	let deleteId = ''
+	const deleteGlobalAirline = useMutation({
 		mutationKey: ['delete-global-airline'],
 		mutationFn: async (id) => {
-			const response = await Delete(`${DELETE_GLOBAL_AIRLINE}${id}`);
-			return response.data;
+			deleteId = id;
+			return await Delete(`${DELETE_GLOBAL_AIRLINE}${id}`);
 		},
-		onSuccess: async () => {
-			// queryClient.invalidateQueries('global-airline');
-			fetchGetAll.mutate();
+		onSuccess: async ({ data, message }) => {
+			queryClient.setQueryData('airline-success', message);
+			let updatedData = queryClient.getQueryData('global-airline') || [];
+			updatedData = updatedData.filter((elm) => {
+				return elm.id !== deleteId
+			})
+			queryClient.setQueryData('global-airline', updatedData);
+			deleteId = '';
+			// if (updatedData.length === 0) {
+			// 	response.mutate();
+			// }
 		},
+		onError: ({ response: { data: { message } } }) => { queryClient.setQueryData('airline-error', message); },
 		...props,
 	});
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	const updatedData = queryClient.getQueryData('global-airline') || [];
+	const successMessage = queryClient.getQueryData('airline-success');
+	const errorMessage = queryClient.getQueryData('airline-error');
+	return { getGlobalAirline, postGlobalAirline, patchGlobalAirline, deleteGlobalAirline, updatedData, successMessage, errorMessage }
 };
+
+export const useGlobalCountries = (props) => {
+	const queryClient = useQueryClient();
+	const getGlobalCountries = useMutation({
+		mutationKey: ['get-country-data'],
+		mutationFn: async () => await Get(`${GET_COUNTRY_DATA}`),
+		onSuccess: (data) => {
+			queryClient.setQueryData('country-data', data); // Set the data in the cache
+		},
+		...props
+	});
+	const countryData = queryClient.getQueryData('country-data') || [];
+	return { getGlobalCountries, countryData }
+}

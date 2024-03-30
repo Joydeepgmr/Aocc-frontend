@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
@@ -18,8 +19,6 @@ const CheckIn = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
-	const [isError, setIsError] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const { data: fetchCheckIn } = useGetCheckIn();
 
@@ -42,25 +41,24 @@ const CheckIn = () => {
 
 
 	//CREATE
-	const handleAddCheckinSuccess = () => {
+	const handleAddCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
 		closeModal();
+		toast.success(data?.message);
 	}
 
 	const handleAddCheckinError = (error) => {
-		console.log(error?.response?.data?.message,"errorr");
-		setIsError(true);
-		setErrorMessage(error?.response?.data?.message);
+		toast.error(error?.response?.data?.message);
 	}
 
 	const addCheckinHandler = {
-		onSuccess: () => handleAddCheckinSuccess(),
+		onSuccess: (data) => handleAddCheckinSuccess(data),
 		onError: (error) => handleAddCheckinError(error),
 	};
 
 	const { mutate: postCheckIn } = usePostCheckIn(addCheckinHandler);
+	
 	const handleSaveButton = (value) => {
-		console.log(value, 'valueee');
 		value["isAllocatedToLounge"] = false;
 		value && postCheckIn(value);
 	};
@@ -71,6 +69,23 @@ const CheckIn = () => {
 	};
 
 	//EDIT 
+	const editCheckinHandler = {
+		onSuccess: (data) => handleEditCheckinSuccess(data),
+		onError: (error) => handleEditCheckinError(error),
+	};
+
+	const {mutate: editCheckin} = useEditCheckin(editCheckinHandler)
+	
+	const handleEditCheckinSuccess = (data) => {
+		queryClient.invalidateQueries('get-check-in');
+		closeEditModal();
+		toast.success(data?.message);
+	}
+
+	const handleEditCheckinError = (error) => {
+		toast.error(error?.response?.data?.message)
+	}
+
 	const handleEdit = (record) => {
 		record = {...record,
 			validFrom : dayjs(record?.validFrom),
@@ -82,12 +97,9 @@ const CheckIn = () => {
 		openEditModal();
 	};
 
-
-	const {mutate: editCheckin} = useEditCheckin()
 	const handleEditSave = (value) => {
 		value["id"] =  rowData.id;
 		editCheckin(value);
-		setIsEditModalOpen(false);
 	};
 
 	//DELETE
@@ -95,7 +107,6 @@ const CheckIn = () => {
 	const handleDelete = (record) => {
 		deleteCheckin(record.id);	
 	}
-
 
 	//table actions handlers
 	const handleViewDetail = (record) => {
@@ -202,7 +213,7 @@ const CheckIn = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};
+	};	
 
 	return (
 		<>
@@ -213,7 +224,7 @@ const CheckIn = () => {
 					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Check-in Counters'}
-					formComponent={<FormComponent />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
 				/>
 			) : (
 				<>
@@ -246,10 +257,6 @@ const CheckIn = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
-								//type={index}
-								key={Math.random() * 100}
-								isError = {isError}
-								errorMessage = {errorMessage}	
 							/>
 						</div>
 					</ModalComponent>

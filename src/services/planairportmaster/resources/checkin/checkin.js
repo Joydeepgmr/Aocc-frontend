@@ -23,7 +23,7 @@ export const useGetCheckIn = (props) => {
 export const usePostCheckIn = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-check-in'],
-		mutationFn: async (data) => await Post(`${CHECKIN_COUNTER}`, data),
+		mutationFn: (data) => Post(`${CHECKIN_COUNTER}`, data),
 		...props,
 	});
 
@@ -37,25 +37,16 @@ export const usePostCheckIn = (props) => {
 };
 
 export const useEditCheckin = (props) => {
-	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['edit-checkin'],
 		mutationFn: (data) => Patch(`${CHECKIN_COUNTER}`, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('get-check-in');
-		},
 		...props,
 	});
-	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess
-		? data?.data?.message
-		: error?.message;
-
-	return { ...response, data: data?.data, message: statusMessage };
+	return response;
 };
 
-export const useDeleteCheckin = (id,props) => {
+export const useDeleteCheckin = (props) => {
 	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-checkin'],

@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import CreateWrapper from './components/createWrapper/createWrapper';
-import AirportForm from './components/airportForm/airportForm';
-import AirportTable from './components/airportTable/airportTable';
+import TopHeader from '../../../components/topHeader/topHeader';
+import { useGlobalAirline, useGlobalAirport, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
-import AirlineForm from './components/airlineForm/airlineForm';
 import AirlineTable from './components/airlineTable/airlineTable';
-import { useGetGlobalAirport, useGetGlobalAirline, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
+import AirportTable from './components/airportTable/airportTable';
+import CreateWrapper from './components/createWrapper/createWrapper';
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	const { data: airportData, mutate: getGlobalAirport } = useGetGlobalAirport();
-	const { data: fetchedGlobalAirline, mutate: getGlobalAirline } = useGetGlobalAirline();
-	console.log('fetchedGlobalAirline', fetchedGlobalAirline);
+	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
+	const { data: airportData, mutate: getAirport } = getGlobalAirport;
+	const { getGlobalAirline, updatedData: updatedAirlineData = [] } = useGlobalAirline();
+	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
 	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
+
+
 	const handleTabChange = (key) => {
 		setActiveTab(key);
+		if (key == 1 && !updatedAirportData?.length) {
+			fetchedGlobalAirport();
+		} else if (key == 3 && !updatedAirlineData?.length) {
+			fetchGlobalAirline();
+		}
 	}
-
 	function onUpload([file]) {
 		const formData = new FormData();
 		formData.append('file', file);
@@ -37,7 +42,17 @@ const GlobalMasters = () => {
 
 	const fetchedGlobalAirport = () => {
 		const payload = { pagination: airportData?.pagination }
-		getGlobalAirport(payload);
+		getAirport(payload);
+	}
+	const fetchedGlobalAirline = () => {
+		const payload = { pagination: airlineData?.pagination }
+		getAirline(payload);
+	}
+
+
+	const fetchGlobalAirline = () => {
+		const payload = { pagination: airlineData?.pagination }
+		getAirline(payload);
 	}
 
 	const items = [
@@ -46,7 +61,6 @@ const GlobalMasters = () => {
 			label: 'Airports',
 			children: (
 				<CreateWrapper
-					title="Setup your Airport"
 					width="120rem"
 					tableComponent={
 						<AirportTable
@@ -54,7 +68,7 @@ const GlobalMasters = () => {
 							createProps={activeTab == 1 && createProps}
 							setCreateProps={setCreateProps}
 						/>}
-					data={airportData?.data}
+					data={updatedAirportData}
 					pagination={airportData?.pagination}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
@@ -73,32 +87,29 @@ const GlobalMasters = () => {
 			label: 'Airlines',
 			children: (
 				<CreateWrapper
-					formComponent={<AirlineForm />}
 					title="Setup your airline"
-					createProps={createProps}
-					setCreateProps={setCreateProps}
 					width="120rem"
 					tableComponent={
 						<AirlineTable
+							data={airlineData?.data}
 							createProps={activeTab == 3 && createProps}
 							setCreateProps={setCreateProps}
-							data={fetchedGlobalAirline?.data}
-							formComponent={<AirlineForm />}
+							fetchData={fetchGlobalAirline}
+							pagination={airlineData?.pagination}
 						/>
 					}
-					data={fetchedGlobalAirline?.data}
+					data={updatedAirlineData}
 					label=" Add Airline"
+					isLoading={isAirlineLoading}
 				/>
 			),
 		},
 	];
 
-	useEffect(() => {
-		fetchedGlobalAirport();
-	}, []);
+
 
 	useEffect(() => {
-		getGlobalAirline();
+		handleTabChange('1');
 	}, []);
 
 
