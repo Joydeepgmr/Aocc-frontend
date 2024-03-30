@@ -27,8 +27,6 @@ export const PATCH_GLOBAL_AIRPORT = '/global-airport/';
 export const DELETE_GLOBAL_AIRPORT = '/global-airport/';
 export const POST_BULK_GLOBAL_AIRPORT = '/global-airport/upload/';
 
-/*--------------------------planner airport master ---------------------*/
-
 export const POST_BAGGED_BELT = '';
 export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/paginated/';
 export const POST_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
@@ -47,4 +45,9 @@ export const POST_GLOBAL_AIRLINE = '/global-airline/';
 export const PATCH_GLOBAL_AIRLINE = '/global-airline/';
 export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 
-export const GET_COUNTRY_DATA = '/country/'
+export const GET_COUNTRY_DATA = '/country/';
+
+/*--------------------------planner airport master ---------------------*/
+
+export const CHECKIN_COUNTER = '/checkin-counter';
+export const GATE = '/gate'
