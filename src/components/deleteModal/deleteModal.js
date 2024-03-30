@@ -1,23 +1,23 @@
 import { Modal } from 'antd';
 import React from 'react';
 
-const deleteModal = ({width, onSave, onClose, title, className, content }) => {
+const DeleteModal = ({ isModalOpen, content, width, closeModal, title, className }) => {
 	return (
 		<>
 			<Modal
-				// open={isModalOpen}
-				// closable={true}
-				className={`deleteModal ${className}`}
+				open={isModalOpen}
+				closable={true}
+				className={`delteodal ${className}`}
 				width={width ? width : '32rem'}
-				// centered
-				// footer={null}
-				// onCancel={closeModal}
+				centered
+				footer={null}
+				onCancel={closeModal}
 				title={title}
 			>
-				content
+				{content}
 			</Modal>
 		</>
 	);
 };
 
-export default React.memo(deleteModal);
+export default React.memo(DeleteModal);
