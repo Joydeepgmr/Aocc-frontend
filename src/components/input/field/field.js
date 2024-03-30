@@ -26,7 +26,6 @@ const InputField = ({
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	const inputs = [];
 	const [codeValue, setCodeValue] = useState('');
-	console.log("min and max value are ", min, max)
 	const validateRange = (_, value) => {
 		if (!value) {
 			return Promise.resolve();
