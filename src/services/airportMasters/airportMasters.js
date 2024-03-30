@@ -28,20 +28,18 @@ export const useGetLicenseData = (props) => {
 		queryKey: ['license'],
 		queryFn: async () => await Get(`${GET_LICENSE}`),
 		...props,
-	})
+	});
 
-	const { data, error, isSuccess} = response;
+	const { data, error, isSuccess } = response;
 
-	console.log(response?.data);
-	
-	const statusMessage = isSuccess ? data?.message : error?.message;  
+	const statusMessage = isSuccess ? data?.message : error?.message;
 
 	return {
-		...response, 
+		...response,
 		data: data,
 		message: statusMessage,
-	}
-}
+	};
+};
 
 // export const useGetAirportName = (props) => {
 // 	const response = useQuery({
@@ -65,19 +63,18 @@ export const usePostAirportName = (props) => {
 	const queryClient = useQueryClient();
 
 	const response = useMutation({
-		mutationKey: ["airport-data"],
+		mutationKey: ['airport-data'],
 		mutationFn: async () => await Post(`${GET_AIRPORT_NAME}?bulk=true`, props),
 		onSuccess: () => {
 			queryClient.invalidateQueries('airport-name');
-		}, 
+		},
 		...props,
 	});
-	
-	const {data, error, isSuccess} = response;
-	console.log("under api response", response);
+
+	const { data, error, isSuccess } = response;
+	console.log('under api response', response);
 
 	const statusMessage = isSuccess ? data?.message : error?.response?.data?.data?.error;
 
-	return {...response, data: data, message: statusMessage};
-
+	return { ...response, data: data, message: statusMessage };
 };
