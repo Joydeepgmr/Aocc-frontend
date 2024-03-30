@@ -1,15 +1,23 @@
-import React from 'react';
-import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
-import CustomSelect from '../../../../../components/select/select';
-import { CountryData, HomeAirportData, SelectPaymentData, TerminalData } from '../../../userAccess/userAccessData';
+import React from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
+import InputField from '../../../../../components/input/field/field';
 import OtpField from '../../../../../components/input/otp/otp';
+import CustomSelect from '../../../../../components/select/select';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import CheckBoxField from '../../../../../components/checkbox/checkbox';
+import { useGlobalAirport, useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
+import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAccessData';
 import './airlineForm.scss';
 
 const AirlineForm = ({ isReadOnly, type }) => {
+	const { updatedData: globalAirportData = [] } = useGlobalAirport();
+	const { countryData = [] } = useGlobalCountries();
+	const SelectAirportData = globalAirportData.map((data) => {
+		return { label: data.name, value: data.id, id: data.id }
+	})
+	const SelectCountryData = countryData.map((data) => {
+		return { label: data.name, value: data.name, id: data.name }
+	})
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airline_setup_form_container">
@@ -39,7 +47,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 			</div>
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect
-					SelectData={CountryData}
+					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
 					placeholder={!isReadOnly && 'Country'}
@@ -47,15 +55,14 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					disabled={isReadOnly}
 				/>
 				<CustomSelect
-					SelectData={HomeAirportData}
+					SelectData={SelectAirportData}
 					label="Home Airport"
-					name="homeAirport"
+					name="globalAirport"
 					placeholder={!isReadOnly && 'Select home airport'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<CustomSelect
-					SelectData={TerminalData}
+				<InputField
 					label="Terminal"
 					name="terminal"
 					placeholder={!isReadOnly && 'Filled Text'}
@@ -71,10 +78,13 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<CheckBoxField
-					name="domestic/International"
-					label="Domestic/International"
-					title="Single Checkbox"
+				<CustomSelect
+					SelectData={AirlineTypeData}
+					label="Airline Type"
+					name="airlineType"
+					multiple
+					placeholder={!isReadOnly && 'Filled Text'}
+					className="custom_input"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -119,6 +129,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
 					disabled={isReadOnly || isNotEditable}
 					required
 				/>

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
-import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import './createWrapper.scss';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
+import './createWrapper.scss';
 
-const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore: true }, fetchData, createProps, setCreateProps, label, isLoading }) => {
+const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label, isLoading }) => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const onOpenChange = () => {
 		if (createProps.new) {
@@ -45,12 +44,8 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 
 
 	const handleDropdownChange = (value) => {
-		``
 		if (value === 'createNew') {
 			openAddModal();
-			// if (disabled) {
-			// 	dispatch(formDisabled());
-			// }
 		}
 		else if (value === 'uploadCSV') {
 			openCsvModal();
@@ -72,13 +67,7 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 								onOpenChange={onOpenChange}
 							/>
 						</div>
-						{/* <InfiniteScroll
-							dataLength={data.length} // This is important to determine when to fetch more data
-							next={fetchData} // Function to call when reaching the end of the list
-							hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-						> */}
 						{tableComponent && tableComponent}
-						{/* </InfiniteScroll> */}
 					</div>
 					: !isLoading ? <>
 						{tableComponent && tableComponent}
@@ -100,45 +89,6 @@ const CreateWrapper = ({ width, tableComponent, data = [], pagination = { isMore
 					</> : <PageLoader loading={isLoading} />
 				}
 			</>
-			{/* {!isLoading &&
-			} */}
-			{/* {data && data?.length ?
-				<div className="table_container">
-					<InfiniteScroll
-						dataLength={data.length} // This is important to determine when to fetch more data
-						next={fetchData} // Function to call when reaching the end of the list
-						hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
-					>
-						<div className="create_button">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								onChange={handleDropdownChange}
-								onOpenChange={onOpenChange}
-							/>
-						</div>
-						{tableComponent && tableComponent}
-					</InfiniteScroll>
-				</div>
-				: <>
-					{tableComponent && tableComponent}
-					<div className="create_wrapper_container">
-						<ButtonComponent
-							title="Create"
-							type="filledText"
-							className="custom_button_create"
-							onClick={openAddModal}
-						/>
-						<ButtonComponent
-							title="Upload CSV"
-							type="filledText"
-							className="custom_button"
-							onClick={openCsvModal}
-						/>
-						<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
-					</div>
-				</>
-			} */}
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 		</>
 	);

@@ -7,13 +7,14 @@ import editIcon from '../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../components/modal/modal';
 import { Divider, Form } from 'antd';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import AirportForm from '../airportForm/airportForm';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import './airportTable.scss';
 
 
-const AirportTable = ({ createProps, setCreateProps }) => {
+const AirportTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
 	const {
 		postGlobalAirport,
 		patchGlobalAirport,
@@ -30,6 +31,7 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	const { mutate: deleteAirport, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAirport;
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const closeAddModal = () => {
 		initial.resetFields();
@@ -74,7 +76,7 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 			values.countryCode = values?.countryCode?.join('');
 			postAirport(values);
 		}
-		closeAddModal();
+		// closeAddModal();
 	};
 
 	const handleDelete = (record) => {
@@ -124,20 +126,30 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 	}, [airportModal.isOpen]);
 
 	useEffect(() => {
-		if (airportModal.isOpen) {
-			closeAddModal();
-		}
 		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
+			toast.dismiss();
 			toast.success(successMessage)
+			if (airportModal.isOpen) {
+				closeAddModal();
+			}
 		}
 		
 	}, [isCreateNewSuccess, isEditSuccess, isDeleteSuccess]);
 
 	useEffect(() => {
 		if (isEditError || isCreateNewError || isDeleteError) {
+			toast.dismiss();
 			toast.error(errorMessage)
 		}
 	}, [isEditError, isCreateNewError, isDeleteError])
+
+	useEffect(() => {
+		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false);
+		}
+	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
 
 	useEffect(() => {
 		if (createProps.new) {
@@ -145,6 +157,7 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
+	
 
 
 	const columns = useMemo(() => {
@@ -229,13 +242,14 @@ const AirportTable = ({ createProps, setCreateProps }) => {
 
 	return (
 		<div>
+			<PageLoader loading={isLoading} />
 			{data && data?.length ?
 				<div className="create_wrapper_table">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airports
 						</CustomTypography>
-						<TableComponent data={data} columns={columns} />
+						<TableComponent {...{ data, columns, fetchData, pagination }}/>
 					</div>
 				</div> :
 				<>

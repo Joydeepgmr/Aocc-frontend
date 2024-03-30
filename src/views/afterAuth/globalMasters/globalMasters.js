@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import TopHeader from '../../../components/topHeader/topHeader';
-import { useGlobalAirline, useGlobalAirport, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
+import { useGlobalAirline, useGlobalAirport, useGlobalCountries, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
 import AirlineTable from './components/airlineTable/airlineTable';
 import AirportTable from './components/airportTable/airportTable';
@@ -10,9 +10,11 @@ import './globalMasters.scss';
 
 const GlobalMasters = () => {
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
-	const { data: airportData, mutate: getAirport } = getGlobalAirport;
+	const { data: airportData, mutate: getAirport, isLoading: isAirportLoading } = getGlobalAirport;
 	const { getGlobalAirline, updatedData: updatedAirlineData = [] } = useGlobalAirline();
 	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
+	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
+	const { mutate: getCountriesData } = getGlobalCountries;
 	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
 
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
@@ -23,8 +25,16 @@ const GlobalMasters = () => {
 		setActiveTab(key);
 		if (key == 1 && !updatedAirportData?.length) {
 			fetchedGlobalAirport();
-		} else if (key == 3 && !updatedAirlineData?.length) {
-			fetchGlobalAirline();
+		} else if (key == 3) {
+			if (!updatedAirlineData?.length) {
+				fetchGlobalAirline();
+			}
+			if (!updatedAirportData?.length) {
+				fetchedGlobalAirport();
+			}
+			if (!countryData?.length) {
+				getCountriesData();
+			}
 		}
 	}
 	function onUpload([file]) {
@@ -36,6 +46,7 @@ const GlobalMasters = () => {
 
 		}
 	}
+	console.log(isAirportLoading)
 	function onDownload(file) {
 
 	}
@@ -44,12 +55,6 @@ const GlobalMasters = () => {
 		const payload = { pagination: airportData?.pagination }
 		getAirport(payload);
 	}
-	const fetchedGlobalAirline = () => {
-		const payload = { pagination: airlineData?.pagination }
-		getAirline(payload);
-	}
-
-
 	const fetchGlobalAirline = () => {
 		const payload = { pagination: airlineData?.pagination }
 		getAirline(payload);
@@ -63,17 +68,18 @@ const GlobalMasters = () => {
 				<CreateWrapper
 					width="120rem"
 					tableComponent={
-						<AirportTable
+						activeTab == 1 && <AirportTable
 							data={airportData?.data}
-							createProps={activeTab == 1 && createProps}
+							createProps={createProps}
 							setCreateProps={setCreateProps}
+							fetchData={fetchedGlobalAirport}
+							pagination={airportData?.pagination}
 						/>}
 					data={updatedAirportData}
-					pagination={airportData?.pagination}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					fetchData={fetchedGlobalAirport}
 					label='New Airport'
+					isLoading={isAirportLoading}
 				/>
 			),
 		},
@@ -90,14 +96,16 @@ const GlobalMasters = () => {
 					title="Setup your airline"
 					width="120rem"
 					tableComponent={
-						<AirlineTable
+						activeTab == 3 && <AirlineTable
 							data={airlineData?.data}
-							createProps={activeTab == 3 && createProps}
+							createProps={createProps}
 							setCreateProps={setCreateProps}
 							fetchData={fetchGlobalAirline}
 							pagination={airlineData?.pagination}
 						/>
 					}
+					createProps={createProps}
+					setCreateProps={setCreateProps}
 					data={updatedAirlineData}
 					label=" Add Airline"
 					isLoading={isAirlineLoading}

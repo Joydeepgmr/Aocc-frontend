@@ -47,7 +47,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<CustomSelect
 					SelectData={SelectedAirlineData}
 					label="Airline"
-					name="globalAirline"
+					name="globalAirlineId"
 					placeholder={!isReadOnly && "Enter the airline name"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -151,14 +151,14 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<Divider />
 			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
 			<div className="aircraft_type_form_inputfields">
-				{/* <InputField
+				<InputField
 					label="Total Seats"
 					name="totalSeats"
 					type='number'
 					placeholder={!isReadOnly && "Enter the total seats"}
 					className="custom_input"
 					disabled={isReadOnly}
-				/> */}
+				/>
 				<InputField
 					label="First Class"
 					name="firstClassSeats"
