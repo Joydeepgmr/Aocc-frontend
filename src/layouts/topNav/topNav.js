@@ -19,9 +19,9 @@ const TopNav = () => {
 	const { pathname } = useLocation();
 	console.log(pathname);
 	const navItems = roleBasedNav(pathname);
-	
+
 	const handleTabClick = (key) => {
-		setActiveTab(key); 
+		setActiveTab(key);
 		navigate(navItems[key].children);
 	};
 
@@ -80,16 +80,16 @@ const TopNav = () => {
 					</div>
 					<div className="setting_bell">
 						<img src={setting} onClick={toggleSettingCard} />
-						<div>
+						{/* <div>
 							<img src={bell} />
 							<img src={ellipse} className="ellipse" />
-						</div>
+						</div> */}
 					</div>
 					<div className="user_info">
 						<img src={user} />
 						<div className="user_details">
-							<p>Arjun Singh</p>
-							<p>emailaddress@gmail.com</p>
+							<p>{localStorage.getItem('name')}</p>
+							<p>{localStorage.getItem('email')}</p>
 						</div>
 					</div>
 				</div>

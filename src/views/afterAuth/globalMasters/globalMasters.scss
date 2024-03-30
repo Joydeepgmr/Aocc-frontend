@@ -1,9 +1,10 @@
 @import '../../../styles/sass/mixins';
 
-.global_masters_container{
-    padding: 4rem;
-    height: 63.2rem;
-    box-sizing: content-box;
-    @include flex(stretch, flex-start, column);
-    gap: 2.4rem;
+.global_masters_container {
+	padding: 4rem;
+	overflow-y: auto;
+	// height: 63.2rem;
+	box-sizing: content-box;
+	@include flex(stretch, flex-start, column);
+	gap: 2.4rem;
 }
