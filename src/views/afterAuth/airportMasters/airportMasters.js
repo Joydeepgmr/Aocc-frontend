@@ -30,16 +30,14 @@ const AirportMasters = () => {
 					action={addAirportLicense}
 				/> */}
 				<Wrapper
-					formComponent={<LicenseSetupForm />}
 					title="New Airport License"
 					width="87.2rem"
 					tableComponent={
 						<LicenseSetupTable
 							data={fetchedLicenseData}
-							formComponent={<LicenseSetupTable />}
-							isLoading={isLoading}
 						/>
 					}
+					isLoading={isLoading}
 					data={fetchedLicenseData}
 				/>
 			</div>
