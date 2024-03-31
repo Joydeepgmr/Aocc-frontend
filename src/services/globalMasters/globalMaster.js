@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	DELETE_GLOBAL_AIRCRAFT_REGISTRATION,
 	DELETE_GLOBAL_AIRCRAFT_TYPE,
@@ -23,6 +23,197 @@ import {
 
 import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
 
+export const useGetGlobalAirport = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-airport'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
+		...props,
+	});
+	return { ...response }
+}
+export const usePostGlobalAirport = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-global-airport'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRPORT}`, props),
+		...props,
+	})
+	return { ...response }
+}
+export const usePatchGlobalAirport = (props) => {
+	const response = useMutation({
+		mutationKey: ['patch-global-airport'],
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRPORT}${payload.id}`, payload.values),
+		...props,
+	});
+
+	return { ...response };
+}
+export const useDeleteGlobalAirport = (props) => {
+	const response = useMutation(
+		{
+			mutationKey: ['delete-global-airport'],
+			mutationFn: async (id) => await Delete(`${DELETE_GLOBAL_AIRPORT}${id}`),
+			...props,
+		}
+	);
+	return { ...response };
+}
+export const useGlobalAirportDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['post-global-airport'],
+		queryFn: async () => await Post(`${GET_GLOBAL_AIRPORT}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}
+
+export const useGetGlobalAirline = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-airline'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRLINE}`, props),
+		...props,
+	});
+	return { ...response }
+}
+export const usePostGlobalAirline = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-global-airline'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRLINE}`, props),
+		...props,
+	})
+	return { ...response }
+}
+export const usePatchGlobalAirline = (props) => {
+	const response = useMutation({
+		mutationKey: ['patch-global-airline'],
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRLINE}${payload.id}`, payload.values),
+		...props,
+	});
+
+	return { ...response };
+}
+export const useDeleteGlobalAirline = (props) => {
+	const response = useMutation(
+		{
+			mutationKey: ['delete-global-airline'],
+			mutationFn: async (id) => await Delete(`${DELETE_GLOBAL_AIRLINE}${id}`),
+			...props,
+		}
+	);
+	return { ...response };
+}
+export const useGlobalAirlineDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['global-airline-dropdown'],
+		queryFn: async () => await Post(`${GET_GLOBAL_AIRLINE}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? [];
+	return { ...response, data }
+}
+
+export const useGetGlobalAircraftType = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-aircraft-type'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
+		...props,
+	});
+	return { ...response }
+}
+export const usePostGlobalAircraftType = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-global-aircraft-type'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_TYPE}`, props),
+		...props,
+	})
+	return { ...response }
+}
+export const usePatchGlobalAircraftType = (props) => {
+	const response = useMutation({
+		mutationKey: ['patch-global-aircraft-type'],
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_TYPE}${payload.id}`, payload.values),
+		...props,
+	});
+
+	return { ...response };
+}
+export const useDeleteGlobalAircraftType = (props) => {
+	const response = useMutation(
+		{
+			mutationKey: ['delete-global-aircraft-type'],
+			mutationFn: async (id) => await Delete(`${DELETE_GLOBAL_AIRCRAFT_TYPE}${id}`),
+			...props,
+		}
+	);
+	return { ...response };
+}
+export const useGlobalAircraftTypeDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['global-aircraft-type-dropdown'],
+		queryFn: async () => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}?bulk=true`),
+		...props,
+	})
+	return { ...response }
+}
+export const useGetGlobalAircraftRegistration = (props) => {
+	const response = useMutation({
+		mutationKey: ['global-aircraft-registration'],
+		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
+		...props,
+	});
+	return { ...response }
+}
+export const usePostGlobalAircraftRegistration = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-global-aircraft-registration'],
+		mutationFn: async (props) => await Post(`${POST_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
+		...props,
+	})
+	return { ...response }
+}
+export const usePatchGlobalAircraftRegistration = (props) => {
+	const response = useMutation({
+		mutationKey: ['patch-global-aircraft-registration'],
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}${payload.id}`, payload.values),
+		...props,
+	});
+
+	return { ...response };
+}
+export const useDeleteGlobalAircraftRegistration = (props) => {
+	const response = useMutation(
+		{
+			mutationKey: ['delete-global-aircraft-registration'],
+			mutationFn: async (id) => await Delete(`${DELETE_GLOBAL_AIRCRAFT_REGISTRATION}${id}`),
+			...props,
+		}
+	);
+	return { ...response };
+}
+export const useCountriesDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-countries'],
+		queryFn: async () => await Get(`${GET_COUNTRY_DATA}`),
+		...props,
+	})
+	return { ...response }
+}
+
+export const useGetGlobalAircraftTypePaginated = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['global-aircraft-type-paginated'],
+		queryFn: async ({ pageParam = {} }) => { console.log("getNextPageParam fetch payload", pageParam); return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, { pagination: pageParam }) },
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) => {
+			console.log('getNextPageParam function', lastPage);
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
+		...props,
+	});
+	return { ...response }
+}
 
 export const useGlobalAirport = (props) => {
 	const queryClient = useQueryClient();

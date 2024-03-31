@@ -4,10 +4,11 @@ import { useGlobalAircraftRegistration, useGlobalAircraftType, useGlobalAirline,
 import AircraftRegistrationTable from '../aircraftRegistrationTable/aircraftRegistrationTable';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
+import AircraftTypeTab from '../aircraftTypeTab/aircraftTypeTab';
 
 
 const AircraftTabs = () => {
-	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [], patchGlobalAircraftType } = useGlobalAircraftType();
+	const { getGlobalAircraftType, updatedData: updatedAircraftTypeData = [] } = useGlobalAircraftType();
 	const { getGlobalAircraftRegistration, updatedData: updatedAircraftRegistrationData = [] } = useGlobalAircraftRegistration();
 	const { getGlobalAirline, updatedData: updatedAirLineData = [] } = useGlobalAirline();
 	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
@@ -23,12 +24,12 @@ const AircraftTabs = () => {
 	const handleTabChange = (key) => {
 		setActiveTab(key);
 		if (key == 1) {
-			if (!updatedAircraftTypeData?.length) {
-				fetchedGlobalAircraftType();
-			}
-			if (!updatedAirLineData?.length) {
-				getAirlineData();
-			}
+			// if (!updatedAircraftTypeData?.length) {
+			// 	fetchedGlobalAircraftType();
+			// }
+			// if (!updatedAirLineData?.length) {
+			// 	getAirlineData();
+			// }
 		} else if (key == 2) {
 			if (!updatedAircraftRegistrationData?.length) {
 				fetchedGlobalAircraftRegistration();
@@ -71,15 +72,7 @@ const AircraftTabs = () => {
 			key: '1',
 			label: 'Aircraft Type',
 			children: (
-				<CreateWrapper
-					tableComponent={activeTab == 1 && <AircraftTypeTable createProps={createProps} setCreateProps={setCreateProps} pagination={aircraftTypeData?.pagination}
-						fetchData={fetchedGlobalAircraftType} />}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					data={updatedAircraftTypeData}
-					label='Add aircraft type'
-					isLoading={isAircraftTypeLoading}
-				/>
+				<AircraftTypeTab />
 			),
 		},
 		{

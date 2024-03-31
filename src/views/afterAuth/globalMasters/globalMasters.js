@@ -1,86 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import TopHeader from '../../../components/topHeader/topHeader';
-import { useGlobalAirline, useGlobalAirport, useGlobalCountries, useUploadCSVAirport } from '../../../services/globalMasters/globalMaster';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
-import AirlineTable from './components/airlineTable/airlineTable';
-import AirportTable from './components/airportTable/airportTable';
-import CreateWrapper from './components/createWrapper/createWrapper';
+import AirlineTab from './components/airlineTab/airlineTab';
+import AirportTab from './components/airportTab/airportTab';
 import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	const { getGlobalAirport, updatedData: updatedAirportData = [] } = useGlobalAirport();
-	const { data: airportData, mutate: getAirport, isLoading: isAirportLoading } = getGlobalAirport;
-	const { getGlobalAirline, updatedData: updatedAirlineData = [] } = useGlobalAirline();
-	const { data: airlineData, mutate: getAirline, isLoading: isAirlineLoading } = getGlobalAirline;
-	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
-	const { mutate: getCountriesData } = getGlobalCountries;
-	const { mutate: uploadAirportCsv } = useUploadCSVAirport();
-
-	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const [activeTab, setActiveTab] = useState('1');
-
-
-	const handleTabChange = (key) => {
-		setActiveTab(key);
-		if (key == 1 && !updatedAirportData?.length) {
-			fetchedGlobalAirport();
-		} else if (key == 3) {
-			if (!updatedAirlineData?.length) {
-				fetchGlobalAirline();
-			}
-			if (!updatedAirportData?.length) {
-				fetchedGlobalAirport();
-			}
-			if (!countryData?.length) {
-				getCountriesData();
-			}
-		}
-	}
-	function onUpload([file]) {
-		const formData = new FormData();
-		formData.append('file', file);
-		if (activeTab == 1) {
-			uploadAirportCsv(formData)
-		} else if (activeTab == 2) {
-
-		}
-	}
-	console.log(isAirportLoading)
-	function onDownload(file) {
-
-	}
-
-	const fetchedGlobalAirport = () => {
-		const payload = { pagination: airportData?.pagination }
-		getAirport(payload);
-	}
-	const fetchGlobalAirline = () => {
-		const payload = { pagination: airlineData?.pagination }
-		getAirline(payload);
-	}
-
 	const items = [
 		{
 			key: '1',
 			label: 'Airports',
 			children: (
-				<CreateWrapper
-					width="120rem"
-					tableComponent={
-						activeTab == 1 && <AirportTable
-							data={airportData?.data}
-							createProps={createProps}
-							setCreateProps={setCreateProps}
-							fetchData={fetchedGlobalAirport}
-							pagination={airportData?.pagination}
-						/>}
-					data={updatedAirportData}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					label='New Airport'
-					isLoading={isAirportLoading}
-				/>
+				<AirportTab />
 			),
 		},
 		{
@@ -92,42 +25,17 @@ const GlobalMasters = () => {
 			key: '3',
 			label: 'Airlines',
 			children: (
-				<CreateWrapper
-					title="Setup your airline"
-					width="120rem"
-					tableComponent={
-						activeTab == 3 && <AirlineTable
-							data={airlineData?.data}
-							createProps={createProps}
-							setCreateProps={setCreateProps}
-							fetchData={fetchGlobalAirline}
-							pagination={airlineData?.pagination}
-						/>
-					}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					data={updatedAirlineData}
-					label=" Add Airline"
-					isLoading={isAirlineLoading}
-				/>
+				<AirlineTab />
 			),
 		},
 	];
-
-
-
-	useEffect(() => {
-		handleTabChange('1');
-	}, []);
-
-
 	return (
 		<div className="global_masters_container">
 			<div className="global_master_header">
 				<TopHeader heading="Global Reference Data" subHeading="overview of global reference data" />
 			</div>
 			<div>
-				<CustomTabs defaultActiveKey="1" items={items} type="card" onChange={handleTabChange} />
+				<CustomTabs defaultActiveKey="1" items={items} type="card" />
 			</div>
 		</div>
 	);

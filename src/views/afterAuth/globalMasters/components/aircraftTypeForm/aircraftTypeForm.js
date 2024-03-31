@@ -1,19 +1,19 @@
-import React from 'react';
-import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
-import Date from '../../../../../components/datapicker/datepicker';
+import React, { useMemo } from 'react';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import './aircraftTypeForm.scss';
-import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
+import Date from '../../../../../components/datapicker/datepicker';
+import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
-import { useGlobalAirline } from '../../../../../services/globalMasters/globalMaster';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
+import './aircraftTypeForm.scss';
 
-const AircraftTypeForm = ({ isReadOnly, type }) => {
-	const { updatedData: airlineData = [] } = useGlobalAirline();
-	const SelectedAirlineData = airlineData.map((data) => {
-		return { label: data.name, value: data.id }
-	})
+const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
+	const SelectedAirlineData = useMemo(() => {
+		return airlineDropdownData.map((data) => {
+			return { label: data.name, value: data.id }
+		})
+	}, [airlineDropdownData]);
 	const isNotEditable = type === 'edit'
 	return (
 		<div className="aircraft_type_form_container">
