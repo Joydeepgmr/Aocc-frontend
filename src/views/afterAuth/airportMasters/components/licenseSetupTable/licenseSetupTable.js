@@ -1,84 +1,76 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './licenseSetupTable.scss';
-// import { useDispatch, useSelector } from 'react-redux';
-import ButtonComponent from '../../../../../components/button/button';
-import TableComponent from '../../../../../components/table/table';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import ModalComponent from '../../../../../components/modal/modal';
-import { useGetLicenseData } from '../../../../../services/airportMasters/airportMasters';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
-import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
+import toast from 'react-hot-toast';
+import ButtonComponent from '../../../../../components/button/button';
+import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
-// import { updateLicenseData, formDisabled } from '../../redux/reducer';
+import TableComponent from '../../../../../components/table/table';
+import { usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
+import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
+import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 
-const LicenseSetupTable = ({ formComponent, data, isLoading }) => {
-	// const { additionalAirportLicenseData, disabled } = useSelector((store) => store.airportMasters);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [initialValues, setInitialValues] = useState({});
-	const [editData, setEditData] = useState(false);
+const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData }) => {
+	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
+	const [airportModal, setAirportModal] = useState(defaultModalParams);
+	const [airportData, setAirportData] = useState([]);
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const postApiProps = {
+		onSuccess: ({ message, data }) => {
+			toast.success(message);
+			setAirportData((oldData) => [data, ...oldData]);
+			closeAddModal();
+		},
+		onError
+	}
+	const { mutate: postAirportLicense, isLoading: isCreateNewLoading } = usePostLicenseAirport(postApiProps);
 	const [initial] = Form.useForm();
-	// const dispatch = useDispatch();
 
-	// const handleDetails = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	dispatch(formDisabled());
-	// };
-
-	const closeAddModal = () => {
-		setIsModalOpen(false);
-		setEditData(false);
+	function closeAddModal() {
+		initial.resetFields();
+		setAirportModal(defaultModalParams)
 	};
 
+	function getFormValues(data = {}) {
+		return {
+			airportId: data?.airportId,
+			iataCode: data?.threeCode,
+			icaoCode: data?.fourCode,
+			abbreviatedName: data?.abbreviatedName,
+			email: data?.email,
+			city: data?.city,
+			country: data?.country,
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
+		}
+	}
 	const onFinishHandler = (values) => {
-		console.log('What are values here', values);
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
 		values.iataCode = values?.threeCode?.join('');
 		values.icaoCode = values?.fourCode?.join('');
-		form.resetFields();
-		// dispatch(action(values));
-		closeAddModal();
+		postAirportLicense(values);
 	};
 
-	// const handleDelete = (record) => {
-	// 	const updatedData = additionalAirportLicenseData.filter((data) => data.airportName !== record.airportName);
-	// 	dispatch(updateLicenseData(updatedData));
-	// };
-
-	// const handleEdit = (data) => {
-	// 	setRowData(data);
-	// 	setIsModalOpen(true);
-	// 	setEditData(true);
-	// 	if (!disabled) {
-	// 		dispatch(formDisabled());
-	// 	}
-	// };
-
-	// const handleEditButton = () => {
-	// 	if (disabled) {
-	// 		dispatch(formDisabled());
-	// 	}
-	// };
-
 	useEffect(() => {
+		const { data } = airportModal
 		if (data) {
-			console.log(data, 'dataa');
-			const initialValuesObj = {
-				airportName: data.airportName ?? 'NA',
-				iataCode: data.threeCode ?? '',
-				icaoCode: data.fourCode ?? '',
-				abbreviatedName: data.abbreviatedName ?? 'NA',
-				email: data.email ?? 'NA',
-				city: data.city ?? '',
-				country: data.country ?? '',
-				validFrom: data.validFrom ? dayjs(data.validFrom) : '',
-				validTill: data.validTill ? dayjs(data.validTill) : '',
-			};
-			setInitialValues(initialValuesObj);
+			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
+		}
+	}, [airportModal.isOpen]);
+	useEffect(() => {
+		if (createProps.new) {
+			setAirportModal({ ...defaultModalParams, isOpen: true });
+			setCreateProps({ ...createProps, new: false });
+		}
+	}, [createProps.new])
+	useEffect(() => {
+		if (data?.pages) {
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setAirportData([...airportData, ...lastPage.data]);
 		}
 	}, [data]);
 
@@ -127,52 +119,46 @@ const LicenseSetupTable = ({ formComponent, data, isLoading }) => {
 				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
 			},
 		],
-		[data]
+		[airportData]
 	);
 
 	return (
-		<div>
-			{data && data?.length ? (
-				<div className="create_wrapper_table">
-					<div className="table_container">
-						<TableComponent data={data} columns={columns} />
-					</div>
-				</div>
-			) : (
-				<></>
-			)}
-			{/* <ModalComponent
-				isModalOpen={isModalOpen}
+		<>
+			<PageLoader loading={isCreateNewLoading} />
+			<ModalComponent
+				isModalOpen={airportModal.isOpen}
 				closeModal={closeAddModal}
-				title="Setup your airport"
-				width="120rem"
+				title={airportModal.title}
+				width={'120rem'}
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					{formComponent && formComponent}
+				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
+					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData }} />
 					<Divider />
-
-					<>
-						<div className="custom_buttons">
-							<>
-								<ButtonComponent
-									title="Cancel"
-									type="filledText"
-									className="custom_button_cancel"
-									onClick={closeAddModal}
-								/>
-								<ButtonComponent
-									title="Save"
-									type="filledText"
-									className="custom_button_save"
-									isSubmit={true}
-								/>
-							</>
-						</div>
-					</>
+					<div className="custom_buttons">
+						<ButtonComponent
+							title="Cancel"
+							type="filledText"
+							className="custom_button_cancel"
+							onClick={closeAddModal}
+						/>
+						<ButtonComponent
+							title="Save"
+							type="filledText"
+							className="custom_button_save"
+							isSubmit="submit"
+						/>
+					</div>
 				</Form>
-			</ModalComponent> */}
-		</div>
+			</ModalComponent>
+			<div>
+				<div className="create_wrapper_table">
+					<div className="table_container">
+						<TableComponent {...{ data: airportData, columns, fetchData, pagination }} />
+					</div>
+				</div>
+			</div>
+		</>
 	);
 };
 
