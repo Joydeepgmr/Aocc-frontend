@@ -1,5 +1,5 @@
 import { Divider } from 'antd';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import OtpField from '../../../../../components/input/otp/otp';
@@ -9,15 +9,17 @@ import { useGlobalAirport, useGlobalCountries } from '../../../../../services/gl
 import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAccessData';
 import './airlineForm.scss';
 
-const AirlineForm = ({ isReadOnly, type }) => {
-	const { updatedData: globalAirportData = [] } = useGlobalAirport();
-	const { countryData = [] } = useGlobalCountries();
-	const SelectAirportData = globalAirportData.map((data) => {
-		return { label: data.name, value: data.id, id: data.id }
-	})
-	const SelectCountryData = countryData.map((data) => {
-		return { label: data.name, value: data.name, id: data.name }
-	})
+const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownData }) => {
+	const SelectAirportData = useMemo(() => {
+		return airportDropdownData.map((data) => {
+			return { label: data.name, value: data.id, id: data.id }
+		})
+	}, [airportDropdownData]);
+	const SelectCountryData = useMemo(() => {
+		return countryDropdownData.map((data) => {
+			return { label: data.name, value: data.name, id: data.name }
+		})
+	}, [countryDropdownData])
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airline_setup_form_container">
@@ -25,6 +27,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Airline Name"
 					name="name"
+					max={32}
 					placeholder={!isReadOnly && 'Enter the airline name'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -74,6 +77,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Remark"
 					name="remark"
+					max={32}
 					placeholder={!isReadOnly && 'Remark'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -108,6 +112,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Address 1"
 					name="address"
+					max={32}
 					placeholder={!isReadOnly && 'Address'}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -115,6 +120,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Phone"
 					name="phoneNumber"
+					max={20}
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"
 					disabled={isReadOnly}

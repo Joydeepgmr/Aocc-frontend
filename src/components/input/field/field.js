@@ -1,6 +1,6 @@
+import { SearchOutlined } from '@ant-design/icons';
 import { Form, Input, InputNumber } from 'antd';
 import React, { useState } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
 
 import './field.scss';
 
@@ -18,17 +18,45 @@ const InputField = ({
 	status,
 	rest,
 	codeLength,
+	validator,
+	min,
+	max
 }) => {
 	const numberPattern = /^[0-9]*$/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	const inputs = [];
 	const [codeValue, setCodeValue] = useState('');
-
+	const validateRange = (_, value) => {
+		if (!value) {
+			return Promise.resolve();
+		}
+		let errorMessage;
+		if (min !== undefined && max !== undefined) {
+			if (min === max) {
+				errorMessage = `Required ${type === 'number' ? 'value' : 'length'} is ${min}${type !== 'number' ? ' characters' : ''}.`
+			} else {
+				errorMessage = `${type === 'number' ? 'Value' : 'Length'} must be between ${min} and ${max}${type !== 'number' ? ' characters' : ''}.`
+			}
+		} else if (min !== undefined) {
+			errorMessage = `Minimum ${type === 'number' ? 'Value' : 'Length'} required is ${min}${type !== 'number' ? ' characters' : ''}.`
+		} else if (max !== undefined) {
+			errorMessage = `Maximum ${type === 'number' ? 'Value' : 'Length'} required is ${max}${type !== 'number' ? ' characters' : ''}.`
+		}
+		if (type === 'number') {
+			if ((max !== undefined && value > max) || (min !== undefined && value < min)) {
+				return Promise.reject(errorMessage);
+			}
+		} else {
+			if ((max !== undefined && value.length > max) || (min !== undefined && value.length < min)) {
+				return Promise.reject(errorMessage);
+			}
+		}
+		return Promise.resolve();
+	};
 	const renderLabel = () => {
 		return (
 			<>
 				{label}
-				{/* {required && <span style={{ color: 'red' }}> *</span>} */}
 			</>
 		);
 	};
@@ -70,6 +98,7 @@ const InputField = ({
 							pattern: type === 'number' ? numberPattern : null,
 							message: type === 'number' ? 'Please enter only numbers' : 'Enter the valid format',
 						},
+						{ validator: validator ?? validateRange },
 					]}
 				>
 					<InputNumber
@@ -95,6 +124,7 @@ const InputField = ({
 							message:
 								'Password must be at least 8 characters and contain at least 1 uppercase, 1 lowercase, 1 digit, 1 special character',
 						},
+						{ validator: validator ?? validateRange },
 					]}
 				>
 					<Input.Password
@@ -118,6 +148,7 @@ const InputField = ({
 							pattern: numberPattern,
 							message: 'Please enter only numbers',
 						},
+						{ validator: validator ?? validateRange },
 					]}
 				>
 					<div className="code_input">
@@ -141,6 +172,7 @@ const InputField = ({
 							pattern: pattern,
 							message: 'Enter the valid format',
 						},
+						{ validator: validator ?? validateRange }
 					]}
 				>
 					<Input

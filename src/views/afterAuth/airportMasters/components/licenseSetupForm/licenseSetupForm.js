@@ -5,15 +5,29 @@ import CustomSelect from '../../../../../components/select/select';
 import OtpField from '../../../../../components/input/otp/otp';
 import NumericField from '../numericField/numericField';
 import { SelectData } from '../../../userAccess/userAccessData';
+import { useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
 import { usePostAirportName } from '../../../../../services/airportMasters/airportMasters';
 import './licenseSetupForm.scss';
+import { Form } from 'antd';
 
-const LicenseSetupForm = () => {
+const LicenseSetupForm = ({ form }) => {
 	const [airportName, setAirportName] = useState([]);
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
 	// const { data: airportData } = useGetAirportName();
-	const { mutate: postLicenseAirportName, isLoading, isSucess, isError, data, response } = usePostAirportName();
+	const { mutate: postLicenseAirportName, data } = usePostAirportName();
+
+	const { getGlobalCountries, countryData = [] } = useGlobalCountries();
+	const { mutate: getCountriesData } = getGlobalCountries;
+	useEffect(() => {
+		if (!countryData?.length) {
+			getCountriesData();
+		}
+	}, []);
+
+	const SelectCountryData = countryData?.map((data) => {
+		return { label: data.name, value: data.name, id: data.name };
+	});
 
 	// console.log('data from api', airportData);
 
@@ -44,6 +58,7 @@ const LicenseSetupForm = () => {
 		if (selectedAirportData) {
 			setIataCode(iataValue);
 			setIcaoCode(icaoValue);
+			// form.setFieldsValue('abbreviatedName', 'hello world')
 			// alert(`Iata Code: ${selectedAirportData.iataCode}`);
 			// alert(`Icao Code: ${selectedAirportData.icaoCode}`);
 		} else {
@@ -109,6 +124,7 @@ const LicenseSetupForm = () => {
 					name="abbreviatedName"
 					placeholder="Enter the abbreviated name "
 					className="custom_input"
+					disabled={true}
 				/>
 				<InputField
 					label="Email Address"
@@ -120,10 +136,12 @@ const LicenseSetupForm = () => {
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField label="City" name="city" placeholder="Enter the city name" className="custom_input" />
-				<InputField
+
+				<CustomSelect
+					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
-					placeholder="Enter the country name"
+					placeholder="Select country"
 					className="custom_input"
 				/>
 			</div>
@@ -136,7 +154,7 @@ const LicenseSetupForm = () => {
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTill" format="MM-DD-YYYY" required/>
+				<Date label="Valid To" placeholder="Select valid to date" name="validTill" required format="MM-DD-YYYY" />
 			</div>
 		</div>
 	);

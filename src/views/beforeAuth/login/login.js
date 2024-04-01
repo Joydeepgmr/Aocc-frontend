@@ -29,6 +29,8 @@ export const Login = () => {
 					console.log("What is Data after login", data);
 					localStorage.setItem('_tid', data?.data?.accessToken)
 					localStorage.setItem('role', data?.data?.roleName.toLowerCase());
+					localStorage.setItem('name', data?.data?.name)
+					localStorage.setItem('email', data?.data?.email)
 
 					let role = data?.data?.roleName.toLowerCase();
 

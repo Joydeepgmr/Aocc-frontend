@@ -27,7 +27,6 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 		value: 'downloadCsv',
 		key: '2',
 	},];
-
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};

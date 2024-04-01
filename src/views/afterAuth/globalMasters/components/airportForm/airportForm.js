@@ -7,7 +7,7 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportForm = ({isReadOnly, type}) => {
+const AirportForm = ({ isReadOnly, type }) => {
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_setup_form_container">
@@ -18,9 +18,10 @@ const AirportForm = ({isReadOnly, type}) => {
 					placeholder={!isReadOnly && "Enter the airport name"}
 					className="custom_input"
 					disabled={isReadOnly}
+					max={32}
 					required
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={isReadOnly || isNotEditable}/>
+				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={isReadOnly || isNotEditable} />
 				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={isReadOnly || isNotEditable} />
 			</div>
 			<div className="airport_setup_form_inputfields">
@@ -29,6 +30,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					name="abbreviatedName1"
 					placeholder={!isReadOnly && "Enter the abbreviated name 1"}
 					className="custom_input"
+					max={32}
 					disabled={isReadOnly}
 				/>
 				<InputField
@@ -36,6 +38,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					name="abbreviatedName2"
 					placeholder={!isReadOnly && "Enter the abbreviated name 2"}
 					className="custom_input"
+					max={32}
 					disabled={isReadOnly}
 				/>
 				<InputField
@@ -43,6 +46,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					name="abbreviatedName3"
 					placeholder={!isReadOnly && "Enter the abbreviated name 3"}
 					className="custom_input"
+					max={32}
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -52,6 +56,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					name="abbreviatedName4"
 					placeholder={!isReadOnly && "Enter the abbreviated name 4"}
 					className="custom_input"
+					max={32}
 					disabled={isReadOnly}
 				/>
 				<CustomSelect
@@ -62,7 +67,7 @@ const AirportForm = ({isReadOnly, type}) => {
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable}/>
+				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField

@@ -14,7 +14,6 @@ const TableComponent = ({
     fetchData = null,
     pagination = null,
 }) => {
-    console.log("fetchData", fetchData)
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
         const sortOrder = sorter?.order;
@@ -33,7 +32,7 @@ const TableComponent = ({
                 <InfiniteScroll
                     dataLength={data.length} // This is important to determine when to fetch more data
                     next={fetchData} // Function to call when reaching the end of the list
-                    hasMore={pagination?.isMore} // Boolean to indicate if there is more data to load
+                    hasMore={pagination?.isMore ?? pagination} // Boolean to indicate if there is more data to load
                 >
                     <Table
                         columns={columns}
