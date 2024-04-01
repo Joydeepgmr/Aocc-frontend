@@ -133,11 +133,8 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 	}, [createProps.new])
 	useEffect(() => {
 		if (data?.pages) {
-			let updatedData = [];
-			data.pages.forEach((data) => {
-				updatedData = [...updatedData, ...data.data]
-			})
-			setAircraftTypeData(updatedData);
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setAircraftTypeData([...aircraftTypeData, ...lastPage.data]);
 		}
 	}, [data]);
 	const columns = useMemo(() => {

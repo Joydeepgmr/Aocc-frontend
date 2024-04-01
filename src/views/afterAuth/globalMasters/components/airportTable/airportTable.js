@@ -134,11 +134,8 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	useEffect(() => {
 		if (data?.pages) {
-			let updatedData = [];
-			data.pages.forEach((data) => {
-				updatedData = [...updatedData, ...data.data]
-			})
-			setAirportData(updatedData);
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setAirportData([...airportData, ...lastPage.data]);
 		}
 	}, [data]);
 

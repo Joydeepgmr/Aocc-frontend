@@ -158,11 +158,8 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 	}, [createProps.new])
 	useEffect(() => {
 		if (data?.pages) {
-			let updatedData = [];
-			data.pages.forEach((data) => {
-				updatedData = [...updatedData, ...data.data]
-			})
-			setAircraftRegistrationData(updatedData);
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setAircraftRegistrationData([...aircraftRegistrationData, ...lastPage.data]);
 		}
 	}, [data]);
 
