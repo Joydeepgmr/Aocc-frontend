@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import { GATE } from "../../../../api";
 import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
@@ -33,13 +33,9 @@ export const useEditGate = (id,props) => {
 };
 
 export const useDeleteGate = (props) => {
-	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-gate'],
 		mutationFn: (id) => Delete(`${GATE}/${id}`),
-		onSuccess: () => {
-			queryClient.invalidateQueries('get-gate');
-		},
 		...props,
 	});
 

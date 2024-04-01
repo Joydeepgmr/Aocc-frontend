@@ -6,9 +6,11 @@ import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import ModalComponent from '../../../../../../components/modal/modal';
 import FormComponent from './formComponents/formComponents';
 import TableComponent from '../../../../../../components/table/table';
+import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditCheckin, useGetCheckIn, usePostCheckIn, useDeleteCheckin } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
@@ -20,7 +22,8 @@ const CheckIn = () => {
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
-	const { data: fetchCheckIn } = useGetCheckIn();
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const { data: fetchCheckIn, isLoading: isFetchLoading } = useGetCheckIn();
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -39,6 +42,16 @@ const CheckIn = () => {
 		setIsReadOnly(false);
 	};
 
+	const openDeleteModal = (record) => {
+		setRowData(record);
+		setIsDeleteConfirm(true);
+	}
+
+	const closeDeleteModal = () => {
+		setRowData(null);
+		setIsDeleteConfirm(false);
+
+	}
 
 	//CREATE
 	const handleAddCheckinSuccess = (data) => {
@@ -56,7 +69,7 @@ const CheckIn = () => {
 		onError: (error) => handleAddCheckinError(error),
 	};
 
-	const { mutate: postCheckIn } = usePostCheckIn(addCheckinHandler);
+	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 	
 	const handleSaveButton = (value) => {
 		value["isAllocatedToLounge"] = false;
@@ -74,7 +87,7 @@ const CheckIn = () => {
 		onError: (error) => handleEditCheckinError(error),
 	};
 
-	const {mutate: editCheckin} = useEditCheckin(rowData?.id,editCheckinHandler)
+	const {mutate: editCheckin, isLoading: isEditLoading} = useEditCheckin(rowData?.id,editCheckinHandler)
 	
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
@@ -92,9 +105,8 @@ const CheckIn = () => {
 			validTill: record?.validTo ? dayjs(record?.validTo) : "",
 			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
 			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
-			terminal: record.terminal.id,
+			terminalId: record.terminal.id,
 		}
-
 		setRowData(record);
 		openEditModal();
 	};
@@ -104,23 +116,25 @@ const CheckIn = () => {
 	};
 
 	//DELETE
-	const {mutate: deleteCheckin} = useDeleteCheckin();
-	const handleDelete = (record) => {
-		deleteCheckin(record.id);	
+	const deleteCheckinHandler = {
+		onSuccess: (data) => handleDeleteCheckinSuccess(data),
+		onError: (error) => handleDeleteCheckinError(error),
+	};
+
+	const handleDeleteCheckinSuccess = (data) => {
+		queryClient.invalidateQueries('get-check-in');
+		closeDeleteModal();
+		toast.success(data?.message);
 	}
 
-	//table actions handlers
-	const handleViewDetail = (record) => {
-		record = {...record,
-			validFrom : dayjs(record?.validFrom),
-			validTill: dayjs(record?.validTo),
-			unavailableFrom: dayjs(record?.unavailableFrom),
-			unavailableTo: dayjs(record?.unavailableTo)
-		}
-		setRowData(record)
-		setIsReadOnly(true);
-		openEditModal(true);
-	};
+	const handleDeleteCheckinError = (error) => {
+		toast.error(error?.response?.data?.message)
+	}
+
+	const {mutate: deleteCheckin} = useDeleteCheckin(deleteCheckinHandler);
+	const handleDelete = () => {
+		deleteCheckin(rowData.id);	
+	}
 
 	const columns = [
 		{
@@ -135,7 +149,7 @@ const CheckIn = () => {
 						className="custom_icon_buttons"
 					/>
 					<Button
-						onClick={() => handleDelete(record)}
+						onClick={() => openDeleteModal(record)}
 						type="iconWithBorder"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
@@ -184,7 +198,11 @@ const CheckIn = () => {
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => handleViewDetail(record)} title="View Details" type="text" />
+					<Button onClick={() => {
+						setIsReadOnly(true);
+						handleEdit(record)}} 
+						title="View Details" 
+						type="text" />
 				</>
 			),
 		},
@@ -218,6 +236,7 @@ const CheckIn = () => {
 
 	return (
 		<>
+			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			{!Boolean(fetchCheckIn?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -280,6 +299,12 @@ const CheckIn = () => {
 					/>
 				</div>
 			</ModalComponent>
+			<ConfirmationModal 
+			isOpen={isDeleteConfirm} 
+			onClose={closeDeleteModal} 
+			onSave={handleDelete} 
+			content={`You want to delete ${rowData?.name}?`}
+			/>
 				</>
 			)}
 		</>

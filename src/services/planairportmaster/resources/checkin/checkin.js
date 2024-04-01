@@ -37,9 +37,6 @@ export const useDeleteCheckin = (props) => {
 	const response = useMutation({
 		mutationKey: ['delete-checkin'],
 		mutationFn: (id) => Delete(`${CHECKIN_COUNTER}/${id}`),
-		onSuccess: () => {
-			queryClient.invalidateQueries('get-check-in');
-		},
 		...props,
 	});
 	return response;

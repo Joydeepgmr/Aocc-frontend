@@ -7,7 +7,7 @@ import CustomSelect from '../../../../../../../components/select/select';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import './formComponent.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isError, errorMessage, isReadOnly }) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	const SelectData = [
 		{
 			id: '1',
@@ -33,14 +33,15 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	const [form] = Form.useForm();
     const onFinishHandler = (values) => {
-		const changedValues = isEdit ? {} : values;
-		Object.keys(values).forEach((key) => {
-			if (!isEdit || values[key] !== initialValues[key]) {
+		const changedValues = isEdit ? {} : {...values, busGate : values.busGate ?? false};
+		
+		changedValues && Object.keys(values).forEach((key) => {
+			if (isEdit && values[key] !== initialValues[key]) {
 				changedValues[key] = values[key];
 			}
 		});
 
-		handleSaveButton(changedValues);
+		changedValues && handleSaveButton(changedValues);
 		form.resetFields();
 	};
 
@@ -120,7 +121,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				<div className="form_section">
 					<div className="form_bottomButton">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
 			</Form>

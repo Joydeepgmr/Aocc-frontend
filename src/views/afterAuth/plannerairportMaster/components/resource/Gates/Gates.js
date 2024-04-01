@@ -6,12 +6,19 @@ import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import ModalComponent from '../../../../../../components/modal/modal';
 import FormComponent from './formComponents/formComponents';
 import TableComponent from '../../../../../../components/table/table';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import { useGetGate, usePostGate, useEditGate, useDeleteGate } from '../../../../../../services/planairportmaster/resources/gates/gates';
+import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
+import {
+	useGetGate,
+	usePostGate,
+	useEditGate,
+	useDeleteGate,
+} from '../../../../../../services/planairportmaster/resources/gates/gates';
 import './Gates.scss';
 
 const Gates = () => {
@@ -20,7 +27,8 @@ const Gates = () => {
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
-	const {data: fetchGates} = useGetGate();
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const { data: fetchGates, isLoading: isFetchLoading } = useGetGate();
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -44,22 +52,21 @@ const Gates = () => {
 		queryClient.invalidateQueries('get-gate');
 		closeModal();
 		toast.success(data?.message);
-	}
+	};
 
 	const handleAddGateError = (error) => {
 		toast.error(error?.response?.data?.message);
-	}
+	};
 
 	const addGateHandler = {
 		onSuccess: (data) => handleAddGateSuccess(data),
 		onError: (error) => handleAddGateError(error),
 	};
 
-
-	const { mutate: postGate } = usePostGate(addGateHandler);
+	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
 	const handleSaveButton = (value) => {
 		postGate(value);
-	}
+	};
 
 	const handleCloseButton = () => {
 		closeEditModal();
@@ -76,47 +83,60 @@ const Gates = () => {
 		queryClient.invalidateQueries('get-gate');
 		closeEditModal();
 		toast.success(data?.message);
-	}
+	};
 
 	const handleEditGateError = (error) => {
-		toast.error(error?.response?.data?.message)
-	}
+		toast.error(error?.response?.data?.message);
+	};
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom) : "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
+			validTill: record?.validTo ? dayjs(record?.validTo) : '',
+			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
+			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
 			terminal: record.terminal.id,
-		}
+		};
 		setRowData(record);
 		openEditModal();
 	};
 
-	const {mutate: editGate} = useEditGate(rowData?.id,editGateHandler)
+	const { mutate: editGate, isLoading: isEditLoading } = useEditGate(rowData?.id, editGateHandler);
 	const handleEditSave = (value) => {
 		editGate(value);
 	};
 
 	//DELETE
-	const {mutate: deleteGate} = useDeleteGate();
-	const handleDelete = (record) => {
-		deleteGate(record.id);	
-	}
-
-	//View Details
-	const handleViewDetail = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
-		}
+	const openDeleteModal = (record) => {
 		setRowData(record);
-		setIsReadOnly(true);
-		openEditModal(true);
-	}
+		setIsDeleteConfirm(true);
+	};
+
+	const closeDeleteModal = () => {
+		setRowData(null);
+		setIsDeleteConfirm(false);
+	};
+
+	const deleteGateHandler = {
+		onSuccess: (data) => handleDeleteGateSuccess(data),
+		onError: (error) => handleDeleteGateError(error),
+	};
+
+	const handleDeleteGateSuccess = (data) => {
+		queryClient.invalidateQueries('get-gate');
+		closeDeleteModal();
+		toast.success(data?.message);
+	};
+
+	const handleDeleteGateError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const { mutate: deleteGate, isLoading: isDeleteLoading } = useDeleteGate(deleteGateHandler);
+	const handleDelete = () => {
+		deleteGate(rowData.id);
+	};
 
 	const columns = [
 		{
@@ -131,7 +151,7 @@ const Gates = () => {
 						className="custom_icon_buttons"
 					/>
 					<Button
-						onClick={() => handleDelete(record)}
+						onClick={() => openDeleteModal(record)}
 						type="iconWithBorder"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
@@ -155,7 +175,7 @@ const Gates = () => {
 			title: 'Bus Gate',
 			dataIndex: 'busGate',
 			key: 'busGate',
-			render: (busGate) => busGate? "Yes" : "No",
+			render: (busGate) => (busGate ? 'Yes' : 'No'),
 		},
 		{
 			title: 'Terminal',
@@ -192,7 +212,14 @@ const Gates = () => {
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => handleViewDetail(record)} title="View Details" type="text" />
+					<Button
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record);
+						}}
+						title="View Details"
+						type="text"
+					/>
 				</>
 			),
 		},
@@ -226,6 +253,7 @@ const Gates = () => {
 
 	return (
 		<>
+			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			{!Boolean(fetchGates?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -233,12 +261,18 @@ const Gates = () => {
 					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Gate'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100}/>}
+					formComponent={
+						<FormComponent
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							key={Math.random() * 100}
+						/>
+					}
 				/>
 			) : (
 				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
+					<div className="gate">
+						<div className="gate--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
 								buttonText="Actions"
@@ -246,7 +280,7 @@ const Gates = () => {
 								onChange={handleDropdownItemClick}
 							/>
 						</div>
-						<div className="check-in--tableContainer">
+						<div className="gate--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Gates
 							</CustomTypography>
@@ -259,35 +293,41 @@ const Gates = () => {
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add Checkin Counters'}
+						title={'Add Gate'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}	
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
-					
-				<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="120rem"
-				closeModal={closeEditModal}
-				title={`Edit Check-in Counters`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
+
+					<ModalComponent
+						isModalOpen={isEditModalOpen}
+						width="120rem"
+						closeModal={closeEditModal}
+						title={`Edit Gate`}
+						className="custom_modal"
+					>
+						<div className="modal_content">
+							<FormComponent
+								handleSaveButton={handleEditSave}
+								handleButtonClose={handleCloseButton}
+								isEdit={true}
+								initialValues={rowData}
+								isReadOnly={isReadOnly}
+							/>
+						</div>
+					</ModalComponent>
+					<ConfirmationModal
+						isOpen={isDeleteConfirm}
+						onClose={closeDeleteModal}
+						onSave={handleDelete}
+						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</div>
-			</ModalComponent>
 				</>
 			)}
 		</>
