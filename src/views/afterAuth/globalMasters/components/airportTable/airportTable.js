@@ -133,8 +133,14 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	}, [createProps.new])
 
 	useEffect(() => {
-		setAirportData(data);
-	}, [data])
+		if (data?.pages) {
+			let updatedData = [];
+			data.pages.forEach((data) => {
+				updatedData = [...updatedData, ...data.data]
+			})
+			setAirportData(updatedData);
+		}
+	}, [data]);
 
 	const columns = useMemo(() => {
 		return [

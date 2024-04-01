@@ -127,7 +127,13 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 		}
 	}, [createProps.new]);
 	useEffect(() => {
-		setAirlineData(data);
+		if (data?.pages) {
+			let updatedData = [];
+			data.pages.forEach((data) => {
+				updatedData = [...updatedData, ...data.data]
+			})
+			setAirlineData(updatedData);
+		}
 	}, [data]);
 
 	const columns = useMemo(

@@ -32,7 +32,6 @@ import {
 	usePatchGlobalAircraftRegistration,
 	useDeleteGlobalAircraftRegistration,
 	useCountriesDropdown,
-	useGetGlobalAircraftTypePaginated
 } from './globalMasters/globalMaster';
 
 export {
@@ -65,5 +64,4 @@ export {
 	usePatchGlobalAircraftRegistration,
 	useDeleteGlobalAircraftRegistration,
 	useCountriesDropdown,
-	useGetGlobalAircraftTypePaginated
 };

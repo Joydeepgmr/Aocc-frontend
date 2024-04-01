@@ -1,26 +1,28 @@
-import React from 'react';
-import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
+import React, { useMemo } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
+import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
-import { SelectAircraftTye, SelectTypeOfUse } from '../../../userAccess/userAccessData';
+import { SelectTypeOfUse } from '../../../userAccess/userAccessData';
 import './aircraftRegistrationForm.scss';
-import { useGlobalAircraftType, useGlobalAirport, useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
 
-const AircraftRegistrationForm = ({ isReadOnly, type }) => {
-	const { updatedData: globalAirportData = [] } = useGlobalAirport();
-	const { updatedData: globalAircraftTypeData = [] } = useGlobalAircraftType();
-	const { countryData = [] } = useGlobalCountries();
+const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircraftTypeDropdownData, countryDropdownData }) => {
 	const isNotEditable = type === 'edit';
-	const SelectAircraftData = globalAircraftTypeData.map((data) => {
-		return { label: data.identifier, value: data.id, id: data.id }
-	})
-	const SelectAirportData = globalAirportData.map((data) => {
-		return { label: data.name, value: data.id, id: data.id }
-	})
-	const SelectCountryData = countryData.map((data) => {
-		return { label: data.name, value: data.name, id: data.name }
-	})
+	const SelectAircraftData = useMemo(() => {
+		return aircraftTypeDropdownData.map((data) => {
+			return { label: data.identifier, value: data.id, id: data.id }
+		})
+	}, [aircraftTypeDropdownData])
+	const SelectAirportData = useMemo(() => {
+		return airportDropdownData.map((data) => {
+			return { label: data.name, value: data.id, id: data.id }
+		})
+	}, [airportDropdownData])
+	const SelectCountryData = useMemo(() => {
+		return countryDropdownData.map((data) => {
+			return { label: data.name, value: data.name, id: data.name }
+		})
+	}, [countryDropdownData])
 	return (
 		<div className="airport_registration_form_container">
 			<div className="airport_registration_form_inputfields">
@@ -124,7 +126,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type }) => {
 			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="No. of Seats"
-					name="numberOfSeats"
+					name="totalSeats"
 					type='number'
 					// placeholder={!isReadOnly && "Enter the number of seats"}
 					className="custom_input"

@@ -6,32 +6,25 @@ import CreateWrapper from '../createWrapper/createWrapper';
 
 const AirportTab = () => {
     const onError = ({ response: { data: { message } } }) => toast.error(message);
-    const { data = [], isLoading, mutate: getAirportData, ...rest } = useGetGlobalAirport({ onError });
+    const { data, isLoading, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
     const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
-    function fetchAirportData() {
-        const payload = { pagination: data?.pagination }
-        getAirportData(payload);
-    }
     function onUpload() {
 
     }
     function onDownload() {
 
     }
-    useEffect(() => {
-        getAirportData();
-    }, [])
     return (
         <CreateWrapper
             width="120rem"
             tableComponent={<AirportTable
-                data={data?.data}
+                data={data}
                 createProps={createProps}
                 setCreateProps={setCreateProps}
-                fetchData={fetchAirportData}
-                pagination={data?.pagination}
+                fetchData={fetchNextPage}
+                pagination={hasNextPage}
             />}
-            data={data?.data}
+            data={data?.pages}
             createProps={createProps}
             setCreateProps={setCreateProps}
             label='New Airport'

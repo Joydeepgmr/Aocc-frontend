@@ -24,9 +24,13 @@ import {
 import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetGlobalAirport = (props) => {
-	const response = useMutation({
-		mutationKey: ['global-airport'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRPORT}`, props),
+	const response = useInfiniteQuery({
+		queryKey: ['global-airport'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GLOBAL_AIRPORT}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
 		...props,
 	});
 	return { ...response }
@@ -69,9 +73,13 @@ export const useGlobalAirportDropdown = (props) => {
 }
 
 export const useGetGlobalAirline = (props) => {
-	const response = useMutation({
-		mutationKey: ['global-airline'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRLINE}`, props),
+	const response = useInfiniteQuery({
+		queryKey: ['global-airline'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GLOBAL_AIRLINE}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
 		...props,
 	});
 	return { ...response }
@@ -87,10 +95,9 @@ export const usePostGlobalAirline = (props) => {
 export const usePatchGlobalAirline = (props) => {
 	const response = useMutation({
 		mutationKey: ['patch-global-airline'],
-		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRLINE}${payload.id}`, payload.values),
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRLINE}`, payload),
 		...props,
 	});
-
 	return { ...response };
 }
 export const useDeleteGlobalAirline = (props) => {
@@ -114,9 +121,13 @@ export const useGlobalAirlineDropdown = (props) => {
 }
 
 export const useGetGlobalAircraftType = (props) => {
-	const response = useMutation({
-		mutationKey: ['global-aircraft-type'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, props),
+	const response = useInfiniteQuery({
+		queryKey: ['global-aircraft-type'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
 		...props,
 	});
 	return { ...response }
@@ -154,12 +165,17 @@ export const useGlobalAircraftTypeDropdown = (props) => {
 		queryFn: async () => await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}?bulk=true`),
 		...props,
 	})
-	return { ...response }
+	const data = response?.data?.data ?? []
+	return { ...response, data }
 }
 export const useGetGlobalAircraftRegistration = (props) => {
-	const response = useMutation({
-		mutationKey: ['global-aircraft-registration'],
-		mutationFn: async (props) => await Post(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`, props),
+	const response = useInfiniteQuery({
+		queryKey: ['global-aircraft-registration'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GLOBAL_AIRCRAFT_REGISTRATION}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
 		...props,
 	});
 	return { ...response }
@@ -175,7 +191,7 @@ export const usePostGlobalAircraftRegistration = (props) => {
 export const usePatchGlobalAircraftRegistration = (props) => {
 	const response = useMutation({
 		mutationKey: ['patch-global-aircraft-registration'],
-		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}${payload.id}`, payload.values),
+		mutationFn: async (payload) => await Patch(`${PATCH_GLOBAL_AIRCRAFT_REGISTRATION}`, payload),
 		...props,
 	});
 
@@ -197,21 +213,6 @@ export const useCountriesDropdown = (props) => {
 		queryFn: async () => await Get(`${GET_COUNTRY_DATA}`),
 		...props,
 	})
-	return { ...response }
-}
-
-export const useGetGlobalAircraftTypePaginated = (props) => {
-	const response = useInfiniteQuery({
-		queryKey: ['global-aircraft-type-paginated'],
-		queryFn: async ({ pageParam = {} }) => { console.log("getNextPageParam fetch payload", pageParam); return await Post(`${GET_GLOBAL_AIRCRAFT_TYPE}`, { pagination: pageParam }) },
-		initialPageParam: 1,
-		getNextPageParam: (lastPage) => {
-			console.log('getNextPageParam function', lastPage);
-			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
-			return false;
-		},
-		...props,
-	});
 	return { ...response }
 }
 
