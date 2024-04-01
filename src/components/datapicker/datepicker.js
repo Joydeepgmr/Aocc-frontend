@@ -11,7 +11,7 @@ const Date = ({
 	placeholder,
 	disabledDate,
 	isDisabledDate = false,
-	acceptAllDate,
+	disabledFor, // 'past' | 'future'
 	format,
 	className,
 }) => {
@@ -23,7 +23,14 @@ const Date = ({
 			</>
 		);
 	};
-
+	const disablePastDates = (current) => {
+		let customDate = dayjs().format(format);
+		return current && current < dayjs(customDate, format);
+	}
+	const disableFutureDates = (current) => {
+		let customDate = dayjs().format(format);
+		return current && current > dayjs(customDate, format);
+	}
 	return (
 		<Form.Item
 			label={renderLabel()}
@@ -36,21 +43,25 @@ const Date = ({
 				},
 			]}
 		>
+
 			<DatePicker
 				placeholder={placeholder}
 				className="date_style"
 				format={format}
+				disabled={disabled}
 				disabledDate={(current) => {
-					if (acceptAllDate) {
-						return false;
+					if (disabledFor === 'past') {
+						return disablePastDates(current);
+					} else if (disabledFor === 'future') {
+						return disableFutureDates(current);
 					} else if (isDisabledDate) {
 						return disabledDate(current);
 					} else {
-						let customDate = dayjs().format(format);
-						return current && current < dayjs(customDate, format);
+						return false;
 					}
 				}}
 			/>
+
 		</Form.Item>
 	);
 };

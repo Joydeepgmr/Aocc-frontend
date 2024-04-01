@@ -20,6 +20,10 @@
     
 }
 
+.table_first_title{
+    width: auto;
+    display: flex
+}
 .action_buttons{
 @include flex(center, center, row);
 gap: 1.6rem;

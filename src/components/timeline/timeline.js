@@ -4,7 +4,7 @@ import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
 
 const TimelineDesign = (props) => {
-	const { items, groups, editable = true, height = '400px' } = props;
+	const { items, groups, editable = true, height = '400px', label } = props;
 
 	const options = {
 		orientation: 'top',
@@ -31,25 +31,21 @@ const TimelineDesign = (props) => {
 				hour: 'ha',
 			},
 		},
-
+		zoomMax: 1000 * 60 * 60 * 24,
 		onMove: (item) => console.log(item),
+		min: new Date().setDate(new Date().getDate() - 1),
+		max: new Date().setDate(new Date().getDate() + 1),
 	};
-
-	const labels = [
-		{ name: 'Airline 1', color: '#02A0FC' },
-		{ name: 'Airline 2', color: '#FFD43B' },
-		{ name: 'Airline 3', color: '#2B8A3E' },
-	];
 
 	return (
 		<>
 			<Timeline options={options} groups={groups} items={items} itemsAlwaysDraggable />
 			<div className="timeline--BottomContainer">
-				{labels?.map((item) => (
-					<div className="timeline--LabelContainer">
+				{label?.map((item, index) => (
+					<div key={index} className="timeline--LabelContainer">
 						<div className="timeline--Label" style={{ background: item.color }}></div>{' '}
 						<CustomTypography fontSize="1.4rem" color="#909296" fontWeight={400}>
-							{item?.name}
+							{item?.label}
 						</CustomTypography>
 					</div>
 				))}

@@ -1,154 +1,222 @@
-import React from 'react';
-import InputField from '../../../../../components/input/field/field';
 import { Divider } from 'antd';
-import Date from '../../../../../components/datapicker/datepicker';
-import './aircraftTypeForm.scss';
+import React, { useMemo } from 'react';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
+import Date from '../../../../../components/datapicker/datepicker';
+import InputField from '../../../../../components/input/field/field';
+import CustomSelect from '../../../../../components/select/select';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
+import './aircraftTypeForm.scss';
 
-const AircraftTypeForm = () => {
+const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
+	const SelectedAirlineData = useMemo(() => {
+		return airlineDropdownData.map((data) => {
+			return { label: data.name, value: data.id }
+		})
+	}, [airlineDropdownData]);
+	const isNotEditable = type === 'edit'
 	return (
-		<div className="airport_type_form_container">
-			<div className="airport_type_form_inputfields">
+		<div className="aircraft_type_form_container">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Identifier"
-					name="itentifier"
-					placeholder="Enter the identifier name"
+					name="identifier"
+					placeholder={!isReadOnly && "Enter the identifier name"}
 					className="custom_input"
+					max={32}
 					required
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="IATA Code"
-					name="IataCode"
-					placeholder="Enter the IATA Code"
+					name="iataCode"
+					placeholder={!isReadOnly && "Enter the IATA Code"}
 					className="custom_input"
+					min={3}
+					max={3}
 					required
+					disabled={isReadOnly || isNotEditable}
 				/>
 				<InputField
 					label="Model"
 					name="model"
-					placeholder="Enter the model name"
+					max={32}
+					placeholder={!isReadOnly && "Enter the model name"}
 					className="custom_input"
 					required
+					disabled={isReadOnly || isNotEditable}
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
-				<InputField
+			<div className="aircraft_type_form_inputfields">
+				<CustomSelect
+					SelectData={SelectedAirlineData}
 					label="Airline"
-					name="airline"
-					placeholder="Enter the airline name"
+					name="globalAirlineId"
+					placeholder={!isReadOnly && "Enter the airline name"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
-					placeholder="Enter the ICAO Code"
+					min={3}
+					max={4}
+					placeholder={!isReadOnly && "Enter the ICAO Code"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="ICAO Code Modified"
 					name="icaoCodeModified"
-					placeholder="Enter the ICAO code modified"
+					min={3}
+					max={4}
+					placeholder={!isReadOnly && "Enter the ICAO code modified"}
 					className="custom_input"
-					required
+					disabled={isReadOnly}
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="A/C Family"
-					name="acFamily"
-					placeholder="Enter the aircraft family"
+					name="family"
+					max={32}
+					placeholder={!isReadOnly && "Enter the aircraft family"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
-				<InputField
+				<CustomSelect
+					SelectData={SelectAcBodyType}
 					label="A/C Body Type"
-					name="acBodyType"
-					placeholder="Enter the Aircraft Body Type"
+					name="bodyType"
+					placeholder={!isReadOnly && "Enter the Aircraft Body Type"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
-				<CheckBoxField name="dockersystem" label="Don't use docking system" title="Single Checkbox" />
-			</div>
-			<div className="airport_type_form_inputfields">
 				<InputField
 					label="Minimum Ground Time"
-					name="minimumGroundTime"
-					placeholder="Enter the minimum ground time"
+					name="minGroundTime"
+					max={999}
+					placeholder={!isReadOnly && "Enter the minimum ground time"}
+					type='number'
 					className="custom_input"
 					suffixText="minutes"
+					disabled={isReadOnly}
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Wingspan"
 					name="wingspan"
-					placeholder="Enter the wingspan"
+					max={999}
+					placeholder={!isReadOnly && "Enter the wingspan"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Length"
 					name="length"
-					placeholder="Enter the length"
+					max={999}
+					placeholder={!isReadOnly && "Enter the length"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Height"
 					name="height"
-					placeholder="Enter the Height"
+					max={999}
+					placeholder={!isReadOnly && "Enter the Height"}
+					type='number'
 					className="custom_input"
 					suffixText="meters"
+					disabled={isReadOnly}
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
-				<InputField
+			<div className="aircraft_type_form_inputfields">
+				<CustomSelect
+					SelectData={SelectEngineType}
 					label="Engine Type"
 					name="engineType"
-					placeholder="Enter the engine type"
+					placeholder={!isReadOnly && "Enter the engine type"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Number of Engines"
-					name="numberOfEngines"
-					placeholder="Enter the number of engines"
+					name="engineCount"
+					max={999}
+					type='number'
+					placeholder={!isReadOnly && "Enter the number of engines"}
 					className="custom_input"
+					disabled={isReadOnly}
+				/>
+				<CheckBoxField
+					name="isUsingDockingSystem"
+					disabled={isReadOnly}
+					label="Don't use docking system"
+					title="Single Checkbox"
 				/>
 			</div>
 			<Divider />
-			<div className="airport_type_form_inputfields">
-				<InputField
+			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
+			<div className="aircraft_type_form_inputfields">
+				{/* <InputField
 					label="Total Seats"
 					name="totalSeats"
-					placeholder="Enter the total seats"
+					type='number'
+					placeholder={!isReadOnly && "Enter the total seats"}
 					className="custom_input"
-				/>
+					disabled={isReadOnly}
+				/> */}
 				<InputField
 					label="First Class"
-					name="firstClass"
-					placeholder="Enter the first class seats"
+					name="firstClassSeats"
+					max={999}
+					type='number'
+					placeholder={!isReadOnly && "Enter the first class seats"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Business Class"
-					name="businessClass"
-					placeholder="Enter the business class seats"
+					name="businessClassSeats"
+					max={999}
+					type='number'
+					placeholder={!isReadOnly && "Enter the business class seats"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Economy Class"
-					name="economyClass"
-					placeholder="Enter the economy class seats"
+					name="economyClassSeats"
+					max={999}
+					type='number'
+					placeholder={!isReadOnly && "Enter the economy class seats"}
 					className="custom_input"
+					disabled={isReadOnly}
 				/>
 			</div>
-			<div className="airport_type_form_inputfields">
+			<div className="aircraft_type_form_inputfields">
 				<Date
 					label="Valid From"
-					placeholder="Select valid from date"
+					placeholder={!isReadOnly && "Select valid from date"}
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
+					disabledFor='future'
+					required
+					disabled={isReadOnly || isNotEditable}
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date
+					label="Valid To"
+					placeholder={!isReadOnly && "Select valid to date"}
+					name="validTill"
+					disabledFor='past'
+					format="MM-DD-YYYY"
+					disabled={isReadOnly} />
 			</div>
 		</div>
 	);

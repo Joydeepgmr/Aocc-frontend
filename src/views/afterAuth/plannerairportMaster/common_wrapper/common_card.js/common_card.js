@@ -3,6 +3,7 @@ import Button from '../../../../../components/button/button';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ModalComponent from '../../../../../components/modal/modal';
 import './common_card.scss';
+import { Dropdown } from 'antd';
 const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formComponent, formClassName }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -22,7 +23,8 @@ const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formCompon
 	return (
 		<div className="aircraft-container">
 			<div className="container">
-				<Button title={title1} id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
+				{title1 && <Button title={title1} id="btn" type="filledText" isSubmit="submit" onClick={openModal} />}
+
 				<ModalComponent
 					isModalOpen={isModalOpen}
 					width="auto"

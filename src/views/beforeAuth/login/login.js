@@ -14,7 +14,7 @@ import './login.scss';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
-	const imageUrl = [{ name: 'GMR Hyderbad International Aiport, Hyderabad, India', url: loginPageImage, key: 1 }];
+	const imageUrl = [{ name: 'GMR Hyderbad International Airport, Hyderabad, India', url: loginPageImage, key: 1 }];
 	const [nextImage, setNextTime] = useState(0);
 	const navigate = useNavigate();
 	const { mutate: loginUser } = useLoginUser();
@@ -55,8 +55,10 @@ export const Login = () => {
 					console.log("What is Data after login", data);
 					const role = data.data.roleName.toLowerCase();
 
-					await localStorage.setItem('_tid', data?.data?.accessToken)
-					await localStorage.setItem('role', role);
+					localStorage.setItem('_tid', data?.data?.accessToken)
+					localStorage.setItem('role', role);
+					localStorage.setItem('name', data?.data?.name)
+					localStorage.setItem('email', data?.data?.email)
 
 					roleRedirectFlow(role);
 				},

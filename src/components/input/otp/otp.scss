@@ -1,20 +1,22 @@
-@import "../../../styles/sass/variables";
+@import '../../../styles/sass/variables';
 
 .otp_form_item {
-    display: flex;
-    flex-direction: column;
+	margin: 0;
 
-    .otp_field {
-        display: flex;
-        flex-direction: column;
-        width: 5rem;
-        height: 5rem;
-        padding: 1.6rem;
-        border: 1px solid #EDEDED;
-        border-radius: 1.2rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+	.otp_field {
+		display: flex;
+		flex-direction: column;
+		width: 5rem;
+		height: 5rem;
+		padding: 1rem;
+		border: 1px solid #ededed;
+		border-radius: 1.2rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
-    }
+	.input-otp__field {
+		font-weight: 400;
+	}
 }

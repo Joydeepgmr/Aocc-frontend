@@ -1,138 +1,94 @@
 import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modal/modal';
-import { Divider, Form } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
-import { useForm } from 'rc-field-form';
-import { formDisabled } from '../../redux/reducer';
-import {usePostGlobalAirport} from '../../../../../services/globalMasters/globalMaster';
 import './createWrapper.scss';
 
-const CreateWrapper = ({ formComponent, title, width, tableComponent, action, data }) => {
-	const { mutate: postGlobalAirport, isLoading, isSuccess, isError, postData, message } = usePostGlobalAirport();
-
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { additionalAirportData, disabled } = useSelector((store) => store.globalMasters);
+const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label, isLoading }) => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
-	const [form] = Form.useForm();
+	const onOpenChange = () => {
+		if (createProps.new) {
+			setCreateProps({ ...createProps, new: false });
+		}
+	}
+	let dropdownItems = [{
+		label,
+		value: 'createNew',
+		key: '0',
+	},
+	{
+		label: 'Upload CSV',
+		value: 'uploadCSV',
+		key: '1',
+	},
+	{
+		label: 'Download CSV Template',
+		value: 'downloadCsv',
+		key: '2',
+	},];
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
-	const dropdownItems = [
-		{
-			label: 'Add Airport',
-			value: 'addAirport',
-			key: '0',
-		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'Download CSV Template',
-			key: '2',
-		},
-	];
-
 	const openAddModal = () => {
-		setIsModalOpen(true);
+		setCreateProps((props) => { return { ...props, new: true } });
 	};
-
-	const dispatch = useDispatch();
-
-	const closeAddModal = () => {
+	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
-		setIsModalOpen(false);
 	};
+	const handleCsvUpload = (files) => {
+		createProps.onUpload(files);
+		closeCsvModal();
+	}
 
-	const onFinishHanlder = (values) => {
-	
-	postGlobalAirport(values);
-		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
-		values.iataCode = values?.iataCode?.join('');
-		values.icaoCode = values?.icaoCode?.join('');
-		values.countryCode = values?.countryCode?.join('');
-		form.resetFields();
-	
-		closeAddModal();
-	};
 
 	const handleDropdownChange = (value) => {
-		console.log('Dropdown value:', value); // Add this line
-		if (value === 'addAirport') {
+		if (value === 'createNew') {
 			openAddModal();
-			if (disabled) {
-				dispatch(formDisabled());
-			}
 		}
-
-		if (value === 'uploadCSV') {
+		else if (value === 'uploadCSV') {
 			openCsvModal();
+		} else {
+			createProps.onDownload();
 		}
 	};
-
 	return (
 		<>
-			{data && data?.length > 0 ? (
-				<div className="table_container">
-					<div className="create_button">
-						<DropdownButton
-							dropdownItems={dropdownItems}
-							buttonText="Create"
-							onChange={handleDropdownChange}
-						/>
+			<>
+				{data && data?.length ?
+					<div className="table_container">
+
+						<div className="create_button">
+							<DropdownButton
+								dropdownItems={dropdownItems}
+								buttonText="Create"
+								onChange={handleDropdownChange}
+								onOpenChange={onOpenChange}
+							/>
+						</div>
+						{tableComponent && tableComponent}
 					</div>
-					<div>{tableComponent && tableComponent}</div>
-				</div>
-			) : (
-				<div className="create_wrapper_container">
-					<ButtonComponent
-						title="Create"
-						type="filledText"
-						className="custom_button_create"
-						onClick={openAddModal}
-					/>
-					<ButtonComponent
-						title="Upload CSV"
-						type="filledText"
-						className="custom_button"
-						onClick={openCsvModal}
-					/>
-					<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
-				</div>
-			)}
-			<ModalComponent
-				isModalOpen={isModalOpen}
-				closeModal={closeAddModal}
-				title={title}
-				width={width ?? 'auto'}
-				className="custom_modal"
-			>
-				<Form form={form} layout="vertical" onFinish={onFinishHanlder}>
-					{formComponent && formComponent}
-					<Divider />
-					<div className="custom_buttons">
-						<ButtonComponent
-							title="Cancel"
-							type="filledText"
-							className="custom_button_cancel"
-							onClick={closeAddModal}
-						/>
-						<ButtonComponent
-							title="Save"
-							type="filledText"
-							className="custom_button_save"
-							isSubmit="submit"
-						/>
-					</div>
-				</Form>
-			</ModalComponent>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeAddModal} />
+					: !isLoading ? <>
+						{tableComponent && tableComponent}
+						<div className="create_wrapper_container">
+							<ButtonComponent
+								title="Create"
+								type="filledText"
+								className="custom_button_create"
+								onClick={openAddModal}
+							/>
+							<ButtonComponent
+								title="Upload CSV"
+								type="filledText"
+								className="custom_button"
+								onClick={openCsvModal}
+							/>
+							<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
+						</div>
+					</> : <PageLoader loading={isLoading} />
+				}
+			</>
+			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
 		</>
 	);
 };

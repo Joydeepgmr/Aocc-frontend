@@ -5,8 +5,6 @@
 @import './styles/sass/variables';
 @import './styles/sass/mixins';
 
-
-
 * {
 	margin: 0;
 	padding: 0;
@@ -72,4 +70,8 @@ input::-webkit-inner-spin-button {
 
 input[type='number'] {
 	-moz-appearance: textfield;
+}
+
+.ant-divider {
+	margin: 1rem 0;
 }

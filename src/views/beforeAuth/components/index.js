@@ -58,17 +58,17 @@ export const Components = () => {
 	const SelectData = [
 		{
 			id: '1',
-			label: 'options',
+			label: 'option 1',
 			value: 'options',
 		},
 		{
 			id: '2',
-			label: 'options',
+			label: 'option 2',
 			value: 'options',
 		},
 		{
 			id: '3',
-			label: 'options',
+			label: 'option 3',
 			value: 'options',
 		},
 	];
@@ -226,7 +226,7 @@ export const Components = () => {
 		},
 	];
 
-	const {} = useDummyApi();
+	const { } = useDummyApi();
 
 	return (
 		<React.Fragment>
@@ -343,7 +343,11 @@ export const Components = () => {
 					</Form>
 				</div>
 
-				<hr />
+				<Divider />
+				<div>
+					<Button title="Open Delete Modal" isSubmit="submit" onClick={openModal} type="filledText" />
+				</div>
+				<Divider />
 
 				<div className="container">
 					<Button

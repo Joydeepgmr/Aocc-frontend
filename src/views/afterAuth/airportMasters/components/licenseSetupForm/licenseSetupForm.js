@@ -1,28 +1,66 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react';
+import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
-import Date from '../../../../../components/datapicker/datepicker'
 import CustomSelect from '../../../../../components/select/select';
-import OtpField from '../../../../../components/input/otp/otp';
-import { SelectData } from '../../../userAccess/userAccessData';
-import { useSelector } from 'react-redux';
-
+import NumericField from '../numericField/numericField';
 import './licenseSetupForm.scss';
 
-const LicenseSetupForm = () => {
-	const { disabled } = useSelector((store) => store.airportMasters);
+const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
+	const [iataCode, setIataCode] = useState([]);
+	const [icaoCode, setIcaoCode] = useState([]);
+	const SelectAirportData = useMemo(() => {
+		return airportDropdownData.map((data) => {
+			return { label: data.name, value: data.id, id: data.id }
+		})
+	}, [airportDropdownData]);
+	const SelectCountryData = useMemo(() => {
+		return countryDropdownData.map((data) => {
+			return { label: data.name, value: data.name, id: data.name }
+		})
+	}, [countryDropdownData]);
+
+	const handleAirportChange = (selectedAirport) => {
+		const selectedAirportData = airportDropdownData.find((airport) => airport.id === selectedAirport);
+		const iataValue = selectedAirportData.iataCode.split('');
+		const icaoValue = selectedAirportData.icaoCode.split('');
+		if (selectedAirportData) {
+			setIataCode(iataValue);
+			setIcaoCode(icaoValue);
+		} else {
+			setIataCode([]);
+			setIcaoCode([]);
+		}
+	};
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
-				<InputField
-					label="Airport Name"
-					name="airportName"
-					placeholder="Enter the airport name"
-					className="custom_input"
+				<CustomSelect
+					name="airportId"
 					required
+					label="Airport Name"
+					placeholder="Enter the airport name"
+					SelectData={SelectAirportData}
+					className="custom_input"
+					onChange={handleAirportChange}
 				/>
-				<OtpField otpLength={3} label="3-Letter Code" required name="threeCode" disabled={disabled} />
-				<OtpField otpLength={4} label="4-Letter Code" required name="fourCode" disabled={disabled} />
-
+				<NumericField
+					otpLength={3}
+					label="IATA Code"
+					required
+					name="iataCode"
+					value={iataCode}
+					onChange={setIataCode}
+					disabled
+				/>
+				<NumericField
+					otpLength={4}
+					label="ICAO Code"
+					required
+					name="icaoCode"
+					value={icaoCode}
+					onChange={setIcaoCode}
+					disabled
+				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -30,25 +68,24 @@ const LicenseSetupForm = () => {
 					name="abbreviatedName"
 					placeholder="Enter the abbreviated name "
 					className="custom_input"
+					disabled={true}
 				/>
 				<InputField
 					label="Email Address"
 					name="email"
 					placeholder="Enter the Email Address"
 					className="custom_input"
+					required
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<InputField
-					label="City"
-					name="city"
-					placeholder="Enter the city name"
-					className="custom_input"
-				/>
-				<InputField
+				<InputField label="City" name="city" placeholder="Enter the city name" className="custom_input" />
+
+				<CustomSelect
+					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
-					placeholder="Enter the country name"
+					placeholder="Select country"
 					className="custom_input"
 				/>
 			</div>
@@ -58,13 +95,14 @@ const LicenseSetupForm = () => {
 					placeholder="Select valid from date"
 					name="validFrom"
 					className="custom_date"
+					disabledFor='future'
 					format="MM-DD-YYYY"
+					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTo" format="MM-DD-YYYY" />
+				<Date label="Valid To" placeholder="Select valid to date" name="validTill" required format="MM-DD-YYYY" />
 			</div>
-			{/* <Divider /> */}
 		</div>
-	)
-}
+	);
+};
 
 export default LicenseSetupForm;

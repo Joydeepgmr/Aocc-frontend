@@ -1,32 +1,19 @@
-import React, { useEffect } from 'react';
-import './globalMasters.scss';
-import TopHeader from '../../../components/topHeader/topHeader';
+import React, { useState } from 'react';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import { useGetGlobalAirport } from '../../../services/globalMasters/globalMaster';
-import CreateWrapper from './components/createWrapper/createWrapper';
-import AirportSetupForm from './components/airportSetupForm/airportSetupForm';
-import AirportSetupTable from './components/airportSetupTable/airportSetupTable';
-import { addAirport } from './redux/reducer';
+import TopHeader from '../../../components/topHeader/topHeader';
 import AircraftTabs from './components/aircraftTabs/aircraftTabs';
-import AirlineSetupForm from './components/airlineSetupForm/airlineSetupForm';
+import AirlineTab from './components/airlineTab/airlineTab';
+import AirportTab from './components/airportTab/airportTab';
+import './globalMasters.scss';
 
 const GlobalMasters = () => {
-	const { data: fetchedGlobalAirport } = useGetGlobalAirport();
-
+	const [activeTab, setActiveTab] = useState('1');
 	const items = [
 		{
 			key: '1',
 			label: 'Airports',
 			children: (
-				<CreateWrapper
-					formComponent={<AirportSetupForm  />}
-					title="Setup your Airport"
-					width="120rem"
-					tableComponent={<AirportSetupTable data={fetchedGlobalAirport} formComponent={<AirportSetupForm />} />}
-					action={addAirport}
-					data={fetchedGlobalAirport}
-					
-				/>
+				<AirportTab />
 			),
 		},
 		{
@@ -37,10 +24,11 @@ const GlobalMasters = () => {
 		{
 			key: '3',
 			label: 'Airlines',
-			children: <CreateWrapper title="Setup your airline" width="120rem" formComponent={<AirlineSetupForm />} />,
+			children: (
+				<AirlineTab />
+			),
 		},
 	];
-
 	return (
 		<div className="global_masters_container">
 			<div className="global_master_header">

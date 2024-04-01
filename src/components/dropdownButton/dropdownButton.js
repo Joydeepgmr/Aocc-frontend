@@ -3,7 +3,7 @@ import downOutLined from '../../assets/DownOutLined.svg';
 import { Dropdown, Menu, Space } from 'antd';
 import './dropdownButton.scss';
 
-const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...rest }) => {
+const DropdownButton = ({ dropdownItems, buttonText, className, onChange, onOpenChange, ...rest }) => {
     const handleItemClick = (e, item) => {
         onChange(item.value);
     };
@@ -19,7 +19,7 @@ const DropdownButton = ({ dropdownItems, buttonText, className, onChange, ...res
     );
 
     return (
-        <Dropdown menu={menu} trigger={['click']}>
+        <Dropdown onOpenChange={onOpenChange} menu={menu} trigger={['click']}>
             <a className={`create ${className}`} {...rest}>
                 <Space>
                     {buttonText}
