@@ -5,41 +5,77 @@ import toast from 'react-hot-toast';
 import deleteIcon from '../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../assets/logo/edit.svg';
 import ButtonComponent from '../../../../../components/button/button';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import { useGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
+import { useDeleteGlobalAircraftType, usePatchGlobalAircraftType, usePostGlobalAircraftType } from "../../../../../services/globalMasters/globalMaster";
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 
-const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) => {
-	const {
-		postGlobalAirCraftType,
-		patchGlobalAircraftType,
-		deleteGlobalAircraftType,
-		updatedData: data = [],
-		successMessage,
-		errorMessage
-	} = useGlobalAircraftType();
-	const { mutate: postAircraftType, isSuccess: isCreateNewSuccess, error: isCreateNewError, isLoading: isCreateNewLoading } = postGlobalAirCraftType;
-	const { mutate: patchAircraftType, isSuccess: isEditSuccess, error: isEditError, isLoading: isEditLoading, isIdle: isEditIdle } = patchGlobalAircraftType;
-	const { mutate: deleteAircraftType, isSuccess: isDeleteSuccess, error: isDeleteError, isLoading: isDeleteLoading } = deleteGlobalAircraftType;
-	const [initial] = Form.useForm();
-	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
+const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, airlineDropdownData }) => {
+	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
-	const [isLoading, setIsLoading] = useState(false);
+	const [aircraftTypeData, setAircraftTypeData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const postApiProps = {
+		onSuccess: ({ message, data }) => {
+			toast.success(message);
+			setAircraftTypeData((oldData) => [data, ...oldData]);
+			closeAddModal();
+		},
+		onError
+	}
+	const { mutate: postAircraftType, isLoading: isCreateNewLoading } = usePostGlobalAircraftType(postApiProps);
+	const patchApiProps = {
+		onSuccess: ({ message, data }) => {
+			toast.success(message);
+			const updatedData = aircraftTypeData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			})
+			setAircraftTypeData([...updatedData]);
+			closeAddModal();
+		},
+		onError
+	}
+	const { mutate: patchAircraftType, isLoading: isEditLoading } = usePatchGlobalAircraftType(patchApiProps);
+	const deleteApiProps = {
+		onSuccess: ({ message, data }) => {
+			toast.success(message);
+			const updatedData = aircraftTypeData.filter((elm) => {
+				return elm.id !== deleteModal.id;
+			})
+			setAircraftTypeData([...updatedData]);
+			closeDeleteModal();
+		},
+		onError
+	}
+	const { mutate: deleteAircraftType, isLoading: isDeleteLoading } = useDeleteGlobalAircraftType(deleteApiProps);
+	const [initial] = Form.useForm();
 
-	const closeAddModal = () => {
+	function handleDetails(data) {
+		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
+	};
+	function handleEdit(data) {
+		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
+	};
+	function handleDelete() {
+		deleteAircraftType(deleteModal.id);
+	};
+
+	function closeAddModal() {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams)
 	};
-	const closeDeleteModal = () => {
+	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
 	}
-	const getFormValues = (data) => {
+	function getFormValues(data) {
 		return {
 			identifier: data?.identifier,
 			iataCode: data?.iataCode,
@@ -64,7 +100,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}
 	}
-	const onFinishHandler = (values) => {
+	function onFinishHandler(values) {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
@@ -80,18 +116,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		}
 	};
 
-	const handleDelete = () => {
-		deleteAircraftType(deleteModal.id);
-		closeDeleteModal();
-	};
 
-	const handleEdit = (data) => {
-		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
-	};
-
-	const handleDetails = (data) => {
-		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
-	};
 
 	useEffect(() => {
 		const { data } = aircraftTypeModal
@@ -101,34 +126,20 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 		}
 	}, [aircraftTypeModal.isOpen]);
 	useEffect(() => {
-		console.log("under success effect", successMessage)
-		if (isEditSuccess || isCreateNewSuccess || isDeleteSuccess) {
-			toast.dismiss();
-			toast.success(successMessage)
-			if (aircraftTypeModal.isOpen) {
-				closeAddModal();
-			}
-		}
-	}, [isEditSuccess, isCreateNewSuccess, isDeleteSuccess]);
-	useEffect(() => {
-		if (isEditError || isCreateNewError || isDeleteError) {
-			toast.dismiss();
-			toast.error(errorMessage)
-		}
-	}, [isEditError, isCreateNewError, isDeleteError])
-	useEffect(() => {
-		if (isCreateNewLoading || isEditLoading || isDeleteLoading) {
-			setIsLoading(true);
-		} else {
-			setIsLoading(false);
-		}
-	}, [isCreateNewLoading, isEditLoading, isDeleteLoading])
-	useEffect(() => {
 		if (createProps.new) {
 			setAircraftTypeModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
+	useEffect(() => {
+		if (data?.pages) {
+			let updatedData = [];
+			data.pages.forEach((data) => {
+				updatedData = [...updatedData, ...data.data]
+			})
+			setAircraftTypeData(updatedData);
+		}
+	}, [data]);
 	const columns = useMemo(() => {
 		return [
 			{
@@ -213,11 +224,11 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 				),
 			},
 		];
-	}, [data])
+	}, [aircraftTypeData])
 
 	return (
-		<div>
-			<PageLoader loading={isLoading} />
+		<>
+			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
 			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
 			<ModalComponent
 				isModalOpen={aircraftTypeModal.isOpen}
@@ -227,7 +238,7 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} type={aircraftTypeModal.type} />
+					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} type={aircraftTypeModal.type} airlineDropdownData={airlineDropdownData} />
 					{aircraftTypeModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">
@@ -247,17 +258,17 @@ const AircraftTable = ({ createProps, setCreateProps, pagination, fetchData }) =
 					</>}
 				</Form>
 			</ModalComponent>
-			{data?.length ?
+			<div>
 				<div className="create_wrapper_table aircraftType">
 					<div className="table_container">
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Type
 						</CustomTypography>
-						<TableComponent {...{ data, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: aircraftTypeData, columns, fetchData, pagination }} />
 					</div>
-				</div> : <></>
-			}
-		</div>
+				</div>
+			</div>
+		</>
 	);
 };
 

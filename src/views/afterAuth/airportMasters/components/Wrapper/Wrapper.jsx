@@ -1,23 +1,45 @@
-import React, { useState } from 'react';
+import { Divider, Form } from 'antd';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import ButtonComponent from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modal/modal';
-import { Divider, Form} from 'antd'
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
-import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
-import { useForm } from 'rc-field-form';
+import ModalComponent from '../../../../../components/modal/modal';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import { usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
+import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 import './Wrapper.scss';
 
-const Wrapper = ({formComponent, title, width, tableComponent, action, data}) => {
-    const {mutate: postLicenseAirport, isLoading, isSuccess, isError, postData, message} = usePostLicenseAirport();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const openCsvModal = () => {
+const Wrapper = ({ title, width, tableComponent, action, data, isLoading }) => {
+	const {
+		mutate: postLicenseAirport,
+		isLoading: isCreateNewLoading,
+		isSuccess,
+		isError,
+		postData,
+		message,
+	} = usePostLicenseAirport();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [form] = Form.useForm();
+
+	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
 
-    const dropdownItems = [
+	useEffect(() => {
+		if (isSuccess) {
+			closeAddModal();
+			toast.dismiss();
+			toast.success(message);
+		}
+	}, [isSuccess]);
+	useEffect(() => {
+		if (isError) {
+			toast.dismiss();
+			toast.error(message);
+		}
+	}, [isError]);
+	const dropdownItems = [
 		{
 			label: 'Add Airport License',
 			value: 'addLicense',
@@ -35,37 +57,37 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 		},
 	];
 
-    const openAddModal = () => {
+	const openAddModal = () => {
 		setIsModalOpen(true);
 	};
 
-    const closeAddModal = () => {
+	const closeAddModal = () => {
 		setIsCsvModalOpen(false);
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
-    const onFinishHandler = (values) => {
-		console.log("These are the Airport masters values", values);
+	const onFinishHandler = (values) => {
+		console.log('These are the Airport masters values', values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');
 		values.icaoCode = values?.icaoCode?.join('');
-        postLicenseAirport(values);
-        form.resetFieldS();
-        closeAddModal();
-    }
+		postLicenseAirport(values);
+	};
 
-    const handleDropdownChange= (value) => {
-        if(value === 'addLicense') {
-            openAddModal();
-        }
-    }
+	const handleDropdownChange = (value) => {
+		if (value === 'addLicense') {
+			openAddModal();
+		}
+	};
 
-    return (
-        <>
-        {
-            data && data?.length>0 ? (
-                <div className="table_container">
+	return (
+		<>
+			{isLoading || isCreateNewLoading ? (
+				<PageLoader loading={true} />
+			) : data && data?.length > 0 ? (
+				<div className="table_container">
 					<div className="create_button">
 						<DropdownButton
 							dropdownItems={dropdownItems}
@@ -75,8 +97,8 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 					</div>
 					<div>{tableComponent && tableComponent}</div>
 				</div>
-            ) : (
-                <div className="create_wrapper_container">
+			) : (
+				<div className="create_wrapper_container">
 					<ButtonComponent
 						title="Add"
 						type="filledText"
@@ -84,9 +106,8 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 						onClick={openAddModal}
 					/>
 				</div>
-            )
-        }
-        <ModalComponent
+			)}
+			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={closeAddModal}
 				title={title}
@@ -94,7 +115,7 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 				className="custom_modal"
 			>
 				<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-					{formComponent && formComponent}
+					<LicenseSetupForm form={form} />
 					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent
@@ -112,9 +133,8 @@ const Wrapper = ({formComponent, title, width, tableComponent, action, data}) =>
 					</div>
 				</Form>
 			</ModalComponent>
-        </>
-    )
-
-}
+		</>
+	);
+};
 
 export default Wrapper;

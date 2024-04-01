@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import gmrLogo from '../../assets/logo/gmr-logo.png';
 import temperatureLogo from '../../assets/logo/sun.svg';
 import windLogo from '../../assets/logo/wind.svg';
@@ -41,6 +41,29 @@ const TopNav = () => {
 		setIsSettingCardOpen(!isSettingCardOpen);
 		navigate('/user-access');
 	};
+
+	const handleSelectedNavItem = () => {
+		if (navItems?.length) {
+			navItems.forEach((data) => {
+				if (data.children === pathname) {
+					return data.key
+				}
+			})
+		}
+		return '0';
+	}
+
+	useEffect(() => {
+		if (navItems?.length) {
+			navItems.forEach((data) => {
+				if (data.children === pathname) {
+					setActiveTab(data.key);
+					return;
+				}
+			})
+		}
+	}, [pathname])
+	console.log("nav items ", navItems, activeTab, pathname)
 
 	return (
 		<>
