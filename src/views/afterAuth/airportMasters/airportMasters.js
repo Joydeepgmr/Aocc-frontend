@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import './airportMasters.scss';
+import toast from 'react-hot-toast';
 import TopHeader from '../../../components/topHeader/topHeader';
-import CustomTabs from '../../../components/customTabs/customTabs';
-import CreateWrapper from '../globalMasters/components/createWrapper/createWrapper';
-import Wrapper from './components/Wrapper/Wrapper';
-// import { addAirportLicense } from './redux/reducer';
+import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../services';
 import { useGetLicenseData } from '../../../services/airportMasters/airportMasters';
-import LicenseSetupForm from './components/licenseSetupForm/licenseSetupForm';
+import CreateWrapper from '../globalMasters/components/createWrapper/createWrapper';
+import './airportMasters.scss';
 import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable';
 
 const AirportMasters = () => {
-	const { data: fetchedLicenseData, isLoading } = useGetLicenseData();
-	console.log('what is fetched data', fetchedLicenseData);
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const { data, isLoading, hasNextPage, fetchNextPage } = useGetLicenseData({ onError });
+	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
+	const { data: countryDropdownData } = useCountriesDropdown({ onError });
+	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
+	function onUpload() {
+
+	}
+	function onDownload() {
+
+	}
 
 	return (
 		<div className="airport_masters_container">
@@ -22,23 +29,22 @@ const AirportMasters = () => {
 				/>
 			</div>
 			<div>
-				{/* <CreateWrapper
-					formComponent={<LicenseSetupForm />}
-					title="New Airport License"
-					width="87.2rem"
-					tableComponent={<LicenseSetupTable formComponent={<LicenseSetupForm />} />}
-					action={addAirportLicense}
-				/> */}
-				<Wrapper
-					title="New Airport License"
-					width="87.2rem"
-					tableComponent={
-						<LicenseSetupTable
-							data={fetchedLicenseData}
-						/>
-					}
+				<CreateWrapper
+					width="120rem"
+					tableComponent={<LicenseSetupTable
+						data={data}
+						createProps={createProps}
+						setCreateProps={setCreateProps}
+						fetchData={fetchNextPage}
+						pagination={{ isMore: hasNextPage }}
+						airportDropdownData={airportDropdownData}
+						countryDropdownData={countryDropdownData}
+					/>}
+					data={data?.pages}
+					createProps={createProps}
+					setCreateProps={setCreateProps}
+					label='New Airport License'
 					isLoading={isLoading}
-					data={fetchedLicenseData}
 				/>
 			</div>
 		</div>

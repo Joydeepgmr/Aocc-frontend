@@ -1,80 +1,25 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { POST_LICENSE, GET_LICENSE, GET_AIRPORT_NAME } from '../../api/endpoints';
-import { Get, Post } from '../HttpServices/HttpServices';
+import { useInfiniteQuery, useMutation } from 'react-query';
+import { GET_LICENSE, POST_LICENSE } from '../../api/endpoints';
+import { Post } from '../HttpServices/HttpServices';
+
+export const useGetLicenseData = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['license'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_LICENSE}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
+		...props,
+	});
+	return { ...response };
+};
 
 export const usePostLicenseAirport = (props) => {
-	const queryClient = useQueryClient();
-
 	const response = useMutation({
 		mutationKey: ['add-license'],
 		mutationFn: async (props) => await Post(`${POST_LICENSE}`, props),
-		onSuccess: () => {
-			queryClient.invalidateQueries('airport-license');
-		},
 		...props,
 	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
-};
-
-export const useGetLicenseData = (props) => {
-	const response = useQuery({
-		queryKey: ['license'],
-		queryFn: async () => await Get(`${GET_LICENSE}`),
-		...props,
-	});
-
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
-};
-
-// export const useGetAirportName = (props) => {
-// 	const response = useQuery({
-// 		queryKey: ["airport-data"],
-// 		queryFn: async () => await Get(`${GET_AIRPORT_NAME}`),
-// 		...props,
-// 	})
-
-// 	const { data, error, isSuccess} =  response;
-
-// 	const statusMessage = isSuccess ? data?.message : error?.message;
-
-// 	return {
-// 		...response,
-// 		data: data,
-// 		message: statusMessage,
-// 	}
-// }
-
-export const usePostAirportName = (props) => {
-	const queryClient = useQueryClient();
-
-	const response = useMutation({
-		mutationKey: ['airport-data'],
-		mutationFn: async () => await Post(`${GET_AIRPORT_NAME}?bulk=true`, props),
-		onSuccess: () => {
-			queryClient.invalidateQueries('airport-name');
-		},
-		...props,
-	});
-
-	const { data, error, isSuccess } = response;
-	console.log('under api response', response);
-
-	const statusMessage = isSuccess ? data?.message : error?.response?.data?.data?.error;
-
-	return { ...response, data: data, message: statusMessage };
+	return { ...response };
 };
