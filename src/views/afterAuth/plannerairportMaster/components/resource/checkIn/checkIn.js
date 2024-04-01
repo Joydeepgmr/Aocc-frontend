@@ -74,7 +74,7 @@ const CheckIn = () => {
 		onError: (error) => handleEditCheckinError(error),
 	};
 
-	const {mutate: editCheckin} = useEditCheckin(editCheckinHandler)
+	const {mutate: editCheckin} = useEditCheckin(rowData?.id,editCheckinHandler)
 	
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
@@ -88,17 +88,18 @@ const CheckIn = () => {
 
 	const handleEdit = (record) => {
 		record = {...record,
-			validFrom : dayjs(record?.validFrom),
-			validTill: dayjs(record?.validTo),
-			unavailableFrom: dayjs(record?.unavailableFrom),
-			unavailableTo: dayjs(record?.unavailableTo)
+			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
+			validTill: record?.validTo ? dayjs(record?.validTo) : "",
+			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
+			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			terminal: record.terminal.id,
 		}
+
 		setRowData(record);
 		openEditModal();
 	};
 
 	const handleEditSave = (value) => {
-		value["id"] =  rowData.id;
 		editCheckin(value);
 	};
 
@@ -158,7 +159,7 @@ const CheckIn = () => {
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
-			render: (terminal) => terminal ?? '-',
+			render: (terminal) => terminal.name ?? '-',
 		},
 		{
 			title: 'Row',
@@ -224,7 +225,7 @@ const CheckIn = () => {
 					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Check-in Counters'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
 				/>
 			) : (
 				<>
@@ -241,7 +242,7 @@ const CheckIn = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
 							</CustomTypography>
-							<TableComponent data={fetchCheckIn.map(item => ({ ...item, terminal: item.terminal?.name }))} columns={columns} />
+							<TableComponent data={fetchCheckIn} columns={columns} />
 						</div>
 					</div>
 
@@ -257,6 +258,7 @@ const CheckIn = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
@@ -273,7 +275,6 @@ const CheckIn = () => {
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit = {true}
-						// type={index}
 						initialValues={rowData}
 						isReadOnly = {isReadOnly}
 					/>
