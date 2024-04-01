@@ -128,11 +128,8 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 	}, [createProps.new]);
 	useEffect(() => {
 		if (data?.pages) {
-			let updatedData = [];
-			data.pages.forEach((data) => {
-				updatedData = [...updatedData, ...data.data]
-			})
-			setAirlineData(updatedData);
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setAirlineData([...airlineData, ...lastPage.data]);
 		}
 	}, [data]);
 
