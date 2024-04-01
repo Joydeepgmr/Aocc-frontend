@@ -85,7 +85,7 @@ const LicenseSetupTable = ({ formComponent, data, isLoading }) => {
 	const columns = useMemo(
 		() => [
 			{
-				title: 'Airport Name',
+				title: <div className='table_first_title'>Airport Name</div>,
 				dataIndex: ['globalAirport', 'name'],
 				key: 'airportName',
 				render: (text) => text || '-',
@@ -132,7 +132,6 @@ const LicenseSetupTable = ({ formComponent, data, isLoading }) => {
 
 	return (
 		<div>
-			<PageLoader loading={isLoading} />
 			{data && data?.length ? (
 				<div className="create_wrapper_table">
 					<div className="table_container">
