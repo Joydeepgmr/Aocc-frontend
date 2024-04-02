@@ -33,10 +33,10 @@ const UserAccess = () => {
 	return (
 		<div className="user_access_container">
 			<div className="user_access_content">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineHeight="3.36rem">
+				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineheight="3.36rem">
 					Manage User Access
 				</CustomTypography>
-				<CustomTypography type="paragraph" fontSize={14} fontWeight="400" color="#909296" lineHeight="3.36rem">
+				<CustomTypography type="paragraph" fontSize={14} fontWeight="400" color="#909296" lineheight="3.36rem">
 					Overview of access management for airport operating system
 				</CustomTypography>
 				<div className="user_add_button">

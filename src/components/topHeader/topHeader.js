@@ -9,7 +9,7 @@ const TopHeader = ({ heading, subHeading, className, searchBox, condition, child
 		<>
 			<div className={`top_header_container ${className}`}>
 				<div>
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineHeight="3.36rem">
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineheight="3.36rem">
 						{heading}
 					</CustomTypography>
 					<CustomTypography
@@ -17,7 +17,7 @@ const TopHeader = ({ heading, subHeading, className, searchBox, condition, child
 						fontSize={14}
 						fontWeight="400"
 						color="#909296"
-						lineHeight="3.36rem"
+						lineheight="3.36rem"
 					>
 						{subHeading}
 					</CustomTypography>
