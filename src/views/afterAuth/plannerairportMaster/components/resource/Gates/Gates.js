@@ -69,8 +69,9 @@ const Gates = () => {
 
 	//CREATE
 	const handleAddGateSuccess = (data) => {
-		queryClient.invalidateQueries('get-gate');
+		setGateData([]);
 		closeModal();
+		queryClient.invalidateQueries('get-gate');
 		toast.success(data?.message);
 	};
 
@@ -100,8 +101,9 @@ const Gates = () => {
 	};
 
 	const handleEditGateSuccess = (data) => {
-		queryClient.invalidateQueries('get-gate');
+		setGateData([]);
 		closeEditModal();
+		queryClient.invalidateQueries('get-gate');
 		toast.success(data?.message);
 	};
 

@@ -75,6 +75,7 @@ const CheckIn = () => {
 
 	//CREATE
 	const handleAddCheckinSuccess = (data) => {
+		setCheckinData([])
 		queryClient.invalidateQueries('get-check-in');
 		closeModal();
 		toast.success(data?.message);
@@ -110,8 +111,9 @@ const CheckIn = () => {
 	const {mutate: editCheckin, isLoading: isEditLoading} = useEditCheckin(rowData?.id,editCheckinHandler)
 	
 	const handleEditCheckinSuccess = (data) => {
-		queryClient.invalidateQueries('get-check-in');
+		setCheckinData([]);
 		closeEditModal();
+		queryClient.invalidateQueries('get-check-in');
 		toast.success(data?.message);
 	}
 
