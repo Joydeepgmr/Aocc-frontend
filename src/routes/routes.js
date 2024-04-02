@@ -3,6 +3,10 @@ import { Navigate, useRoutes } from "react-router-dom";
 
 import PrivateOutlet from '../privateRoute';
 import { Pathname } from '../pathname';
+import AccessControl from "../rbac/access-control";
+import NoAccess from "../rbac/no-access";
+import { Permission } from "../rbac/permission";
+
 
 
 import Loader from '../components/loader';
@@ -19,11 +23,19 @@ import Components from '../views/beforeAuth/components';
 
 // ----------------------------------------------------------------------
 
-const RouteHOC = (props) => {
-    return <Layout>{props.element}</Layout>
+const AccessControlHOC = (props) => {
+    return (
+        <AccessControl
+            allowedPermissions={props.access}
+            renderNoAccess={() => <NoAccess permissionsNeeded={props.access} />}
+        >
+            <Layout>{props.element}</Layout>
+        </AccessControl>
+    )
 }
 
-export default function Router() {
+export default function Router(props) {
+
     const routes = useRoutes([
         {
             element: (
@@ -32,12 +44,51 @@ export default function Router() {
                 </Suspense>
             ),
             children: [
-                { path: Pathname.DASHBOARD, element: <RouteHOC element={<Dashboard />} />, index: true },
-                { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
-                { path: Pathname.GLOBALMASTERS, element: <RouteHOC element={<GlobalMasters />} />, },
-                { path: Pathname.AIRPORTMASTERS, element: <RouteHOC element={<AirportMasters />} />, },
-                { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
-                { path: Pathname.PLAN, element: <Layout><Plans /></Layout> },
+                // ------- Planner ---------
+                {
+                    path: Pathname.DASHBOARD,
+                    element: <AccessControlHOC
+                        element={<Dashboard />}
+                        access={Permission.planner}
+                    />,
+                    index: true
+                },
+                {
+                    path: Pathname.PLAN,
+                    element: <AccessControlHOC
+                        element={<Plans />}
+                        access={Permission.planner}
+                    />
+                },
+                {
+                    path: Pathname.USERACCESS,
+                    element: <AccessControlHOC
+                        element={<UserAccess />}
+                        access={Permission.planner}
+                    />
+                },
+                {
+                    path: Pathname.PLANAIRPORTMASTER,
+                    element: <AccessControlHOC
+                        element={<PlannerAirportMaster />}
+                        access={Permission.planner}
+                    />,
+                },
+                // ------- Admin ---------
+                {
+                    path: Pathname.GLOBALMASTERS,
+                    element: <AccessControlHOC
+                        element={<GlobalMasters />}
+                        access={Permission.admin}
+                    />,
+                },
+                {
+                    path: Pathname.AIRPORTMASTERS,
+                    element: <AccessControlHOC
+                        element={<AirportMasters />}
+                        access={Permission.admin}
+                    />,
+                },
             ],
         },
         // {

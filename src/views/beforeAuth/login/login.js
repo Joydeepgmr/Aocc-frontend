@@ -59,6 +59,8 @@ export const Login = () => {
 					localStorage.setItem('role', role);
 					localStorage.setItem('name', data?.data?.name)
 					localStorage.setItem('email', data?.data?.email)
+					if (role === 'admin') { localStorage.setItem('permission', JSON.stringify(permission.admin)) }
+					else if (role === 'planner') { localStorage.setItem('permission', JSON.stringify(permission.planner)) }
 
 					roleRedirectFlow(role);
 				},
