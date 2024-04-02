@@ -13,7 +13,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		{
 			id: '1',
 			label: 'terminal1',
-			value: 'c44cf6c1-8da0-485f-8d54-dbd0e72aae84',
+			value: 'c9634ce5-b670-4a3b-9090-799324b49866',
 		},
 		{
 			id: '2',
@@ -88,6 +88,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								placeholder={!isReadOnly && 'Filled Text'}
 								warning="Required field"
 								disabled={isReadOnly}
+								type="number"
 							/>
 							<InputField
 								label="Phones"
