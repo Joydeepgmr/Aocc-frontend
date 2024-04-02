@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import Button from '../../../../../../components/button/button';
@@ -59,7 +60,6 @@ const Taxiway = () => {
 	const { mutate: postTaxiway } = usePostTaxiway(addTaxiwayHandler);
 	
 	const handleSaveButton = (value) => {
-		value["isAllocatedToLounge"] = false;
 		value && postTaxiway(value);
 	};
 
@@ -123,7 +123,7 @@ const Taxiway = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -143,28 +143,22 @@ const Taxiway = () => {
 			),
 		},
 		{
-			title: 'Counter Name',
+			title: 'Taxiway Name',
 			dataIndex: 'name',
 			key: 'name',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
-			title: 'Group',
-			dataIndex: 'group',
-			key: 'group',
+			title: 'Airport',
+			dataIndex: 'airport',
+			key: 'airport',
 			render: (group) => group ?? '-',
 		},
 		{
-			title: 'Terminal',
-			dataIndex: 'terminal',
-			key: 'terminal',
+			title: 'Connected to Runway',
+			dataIndex: 'runwayId',
+			key: 'runwayId',
 			render: (terminal) => terminal ?? '-',
-		},
-		{
-			title: 'Row',
-			dataIndex: 'row',
-			key: 'row',
-			render: (row) => row ?? '-',
 		},
 		{
 			title: 'Status',
@@ -246,7 +240,6 @@ const Taxiway = () => {
 						</div>
 					</div>
 
-					{/* modals */}
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
