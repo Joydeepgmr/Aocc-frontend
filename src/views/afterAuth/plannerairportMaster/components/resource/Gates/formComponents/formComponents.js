@@ -1,101 +1,131 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Divider } from 'antd';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from "../../../../../../../components/input/field/field";
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
-import { useDispatch, useSelector } from 'react-redux';
+import CustomSelect from '../../../../../../../components/select/select';
+import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
+import './formComponent.scss';
 
-const FormComponent = ({ closeModal }) => {
-	const dispatch = useDispatch();
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+	const SelectData = [
+		{
+			id: '1',
+			label: 'terminal1',
+			value: 'c9634ce5-b670-4a3b-9090-799324b49866',
+		},
+		{
+			id: '2',
+			label: 'terminal2',
+			value: 'ed35e026-8b67-43c7-a9d2-4af2fd470a5a',
+		},
+		{
+			id: '3',
+			label: 'terminal3',
+			value: 'ed7ffe96-4506-4f67-ab24-07eee49e59a7',
+		},
+		{
+			id: '4',
+			label: 'Cargo',
+			value: 'f1bff7a4-02f6-4c9d-98cc-6e5917e60e1f',
+		},
+	];
+
 	const [form] = Form.useForm();
     const onFinishHandler = (values) => {
-       
+		const changedValues = isEdit ? {} : {...values, busGate : values.busGate ?? false};
+		
+		changedValues && Object.keys(values).forEach((key) => {
+			if (isEdit && values[key] !== initialValues[key]) {
+				changedValues[key] = values[key];
+			}
+		});
+
+		changedValues && handleSaveButton(changedValues);
 		form.resetFields();
-		dispatch(addAircraftRegistration(values));
-		dispatch(updateIsShowTableComponents());
 	};
 
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
+
 	return (
-		<div className="main_form">
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+		<div className='gates'>
+		<div className="main_form" key={initialValues?.id}>
+			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
 				<div className="form_section">
 					<div className="form_content">
 						<InputField
 							label="Gate Name"
-							name="gate_name"
+							name="name"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
+							disabled={isEdit || isReadOnly}
 						/>
-						<InputField label="Airport" name="airport" placeholder="Filled Text" warning="Required field" />
-						<InputField
-							label="Bus Gate"
-							name="bus_gate"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
+						<CheckBoxField
+								name="busGate"
+								label="Bus Gate"
+								disabled={isReadOnly}
+							/>
 					</div>
-
 					<div className="form_content">
-						<InputField
-							label="Terminal"
-							name="terminal"
-							placeholder="Filled Text"
-							warning="Required field"
-							type="number"
-						/>
+					<CustomSelect
+								SelectData={SelectData}
+								label="Terminal"
+								placeholder={'Select Terminal'}
+								name="terminal"
+								disabled={isReadOnly}
+							/>
 						<InputField
 							label="Gate ID"
-							name="gate_id"
+							name="gateId"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
-						/>
-						<InputField
-							label="Gate Type"
-							name="gate_type"
-							placeholder="Filled Text"
-							warning="Required field"
+							disabled={isReadOnly}
 						/>
 					</div>
 					<div className="form_content">
 						<InputField
 							label="Default Allocation Duration"
-							name="default_allocation_duration"
+							name="defaultAllocationDuration"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
 							suffixText="min"
+							disabled={isReadOnly}
 						/>
 					</div>
 					<Divider />
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reason_if_unavailable"
+							name="reasonIdUnavailable"
 							placeholder="Filled Text"
 							warning="Required field"
+							disabled={isReadOnly}
 						/>
-						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailableFrom" placeholder="Enter the airport name" disabled={isReadOnly}/>
 
-						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
+						<Date label="Unavailable to" name="unavailableTo" placeholder="Enter the airport name" disabled={isReadOnly}/>
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="valid_to" placeholder="Enter the airport name" />
+						<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required disabled={isEdit || isReadOnly}/>
+						<Date label="Valid To" name="validTo" placeholder="Enter the airport name" disabled={isReadOnly}/>
 					</div>
 				</div>
 				<div className="form_section">
 					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
+						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
 			</Form>
+		</div>
 		</div>
 	);
 };
