@@ -1,10 +1,10 @@
 @import '../../../styles/sass/utils';
 
-.hello{
+.hello {
     width: 50rem;
 }
 
-.margin{
+.margin {
     @extend .mt-2;
     margin-left: 10px;
 }
@@ -13,41 +13,42 @@
 
 .container {
     display: flex;
-    justify-content: space-around;
+    // justify-content: space-around;
     align-items: center;
     padding: 3rem 0;
 }
 
-.custom_textarea{
-    &.custom_field{
+.custom_textarea {
+    &.custom_field {
         background-color: #e8ebf0;
         width: 30rem;
     }
 }
 
-.custom_chip{
+.custom_chip {
     border: 0;
+
     &.criticalChip {
         color: white;
         background-color: #FA5252;
         width: 7rem;
         height: 3rem;
     }
-    
-    &.noticeChip{
+
+    &.noticeChip {
         color: #5C5F66;
         background-color: #E9ECEF;
         width: 7rem;
         height: 3rem;
     }
-    
+
     &.cancelledChip {
         color: #FA5252;
         background-color: #FFE5E5;
         width: 9rem;
         height: 3rem;
     }
-    
+
     &.delayChip {
         color: #FFD43B;
         background-color: #FFFAE5;
@@ -65,7 +66,7 @@
     // background-color: black;
 }
 
-.main_form{
+.main_form {
     width: 120rem;
     height: 9.82rem;
     top: 6.4rem;

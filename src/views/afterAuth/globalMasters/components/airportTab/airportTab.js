@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useGetGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import AirportTable from '../airportTable/airportTable';

@@ -11,14 +11,14 @@ import line from '../../assets/logo/line.svg';
 import './topNav.scss';
 import { navMenu, roleBasedNav } from './navData';
 import { useNavigate, useLocation } from 'react-router-dom';
+import PageLoader from '../../components/pageLoader/pageLoader';
 
-const TopNav = () => {
-	const [activeTab, setActiveTab] = useState(navMenu[0].key);
+const TopNav = ({ data }) => {
+	const [activeTab, setActiveTab] = useState('0');
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
+	const [navItems, setNavItems] = useState([]);
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
-	console.log(pathname);
-	const navItems = roleBasedNav(pathname);
 
 	const handleTabClick = (key) => {
 		setActiveTab(key);
@@ -31,39 +31,27 @@ const TopNav = () => {
 
 	const logoutHandler = () => {
 		localStorage.clear();
-		// localStorage.setItem('_tid', '');
-		// localStorage.setItem('role', '');
 		navigate('/login');
-		console.log('logged out', localStorage.getItem('_tid'));
 	};
 
 	const manageAccessHandler = () => {
 		setIsSettingCardOpen(!isSettingCardOpen);
 		navigate('/user-access');
 	};
-
-	const handleSelectedNavItem = () => {
-		if (navItems?.length) {
-			navItems.forEach((data) => {
-				if (data.children === pathname) {
-					return data.key
-				}
-			})
-		}
-		return '0';
-	}
-
 	useEffect(() => {
-		if (navItems?.length) {
-			navItems.forEach((data) => {
-				if (data.children === pathname) {
-					setActiveTab(data.key);
-					return;
-				}
-			})
+		const role = data?.role?.name;
+		if (role) {
+			const allNavItem = roleBasedNav(role);
+			const selectedNavItem = allNavItem.find((data) => data.children === pathname)
+			if (!selectedNavItem) {
+				navigate('/404', { previousRoute: pathname });
+			} else {
+				setNavItems([...allNavItem]);
+				setActiveTab(selectedNavItem.key)
+				navigate(selectedNavItem.children);
+			}
 		}
-	}, [pathname])
-	console.log("nav items ", navItems, activeTab, pathname)
+	}, [data])
 
 	return (
 		<>
@@ -104,9 +92,9 @@ const TopNav = () => {
 					<div className="setting_bell">
 						<img src={setting} onClick={toggleSettingCard} />
 						{/* <div>
-							<img src={bell} />
-							<img src={ellipse} className="ellipse" />
-						</div> */}
+						<img src={bell} />
+						<img src={ellipse} className="ellipse" />
+					</div> */}
 					</div>
 					<div className="user_info">
 						<img src={user} />

@@ -10,6 +10,7 @@ export let Pathname = {
 	COMPONENTS: '/components',
 	PLANAIRPORTMASTER: '/plan-airport-masters',
 	PLAN: '/plans',
+	404: '/404'
 };
 
 
