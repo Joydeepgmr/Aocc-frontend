@@ -1,8 +1,7 @@
-import {useMutation} from 'react-query';
-import { USER_LOGIN } from '../../api/endpoints';
+import { useMutation, useQueries, useQuery } from 'react-query';
+import { GET_ADMIN_DETAILS, USER_LOGIN } from '../../api/endpoints';
 
-import { Post } from '../HttpServices/HttpServices';
-import { localStorageKey } from '../../keys';
+import { Get, Post } from '../HttpServices/HttpServices';
 
 export const useLoginUser = (props) => {
     const response = useMutation({
@@ -15,5 +14,14 @@ export const useLoginUser = (props) => {
 
     const statusMessage = isSuccess ? data?.message : error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
 
-    return { ...response, data: data?.data?.payload, message:statusMessage}
+    return { ...response, data: data?.data?.payload, message: statusMessage }
+}
+
+export const useGetUserDetails = (props) => {
+    const response = useMutation({
+        mutationKey: ['get-admin-detail'],
+        mutationFn: () => Get(GET_ADMIN_DETAILS),
+        ...props
+    })
+    return { ...response }
 }

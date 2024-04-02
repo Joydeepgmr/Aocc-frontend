@@ -224,9 +224,9 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
 			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
 			<ModalComponent
-				isModalOpen={airportModal.isOpen}
+				isModalOpen={airportModal?.isOpen}
 				closeModal={closeAddModal}
-				title={airportModal.title}
+				title={airportModal?.title}
 				width="120rem"
 				className="custom_modal"
 			>

@@ -11,8 +11,8 @@ const TableComponent = ({
     onChange = () => { },
     tableTitle = '',
     emptyText = 'No data available',
-    fetchData = null,
-    pagination = null,
+    fetchData,
+    pagination,
 }) => {
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
@@ -33,6 +33,7 @@ const TableComponent = ({
                     dataLength={data.length} // This is important to determine when to fetch more data
                     next={fetchData} // Function to call when reaching the end of the list
                     hasMore={pagination?.isMore ?? pagination} // Boolean to indicate if there is more data to load
+                    scrollThreshold={0.8}
                 >
                     <Table
                         columns={columns}

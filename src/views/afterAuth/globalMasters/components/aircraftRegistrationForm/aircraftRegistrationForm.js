@@ -68,7 +68,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				/>
 				<CustomSelect
 					SelectData={SelectAircraftData}
-					placeholder={!isReadOnly && "Aircraft Typey"}
+					placeholder={!isReadOnly && "Aircraft Type"}
 					className="custom_input"
 					disabled={isReadOnly || isNotEditable}
 					label="Aircraft Type"
