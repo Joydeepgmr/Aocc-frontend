@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -8,10 +8,12 @@ import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
 import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
+import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import {useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway} from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
+import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -21,7 +23,8 @@ const Taxiway = () => {
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
-	const { data: fetchTaxiway } = useGetTaxiway();
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const { data: fetchTaxiway, isLoading: isFetchLoading  } = useGetTaxiway();
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -40,6 +43,17 @@ const Taxiway = () => {
 		setIsReadOnly(false);
 	};
 
+	const openDeleteModal = (record) => {
+		setRowData(record);
+		setIsDeleteConfirm(true);
+	}
+
+	const closeDeleteModal = () => {
+		setRowData(null);
+		setIsDeleteConfirm(false);
+
+	}
+
 
 	//CREATE
 	const handleAddTaxiwaySuccess = (data) => {
@@ -57,8 +71,8 @@ const Taxiway = () => {
 		onError: (error) => handleAddTaxiwayError(error),
 	};
 
-	const { mutate: postTaxiway } = usePostTaxiway(addTaxiwayHandler);
-	
+	const { mutate: postTaxiway, isLoading: isPostLoading  } = usePostTaxiway(addTaxiwayHandler);
+
 	const handleSaveButton = (value) => {
 		value && postTaxiway(value);
 	};
@@ -74,8 +88,8 @@ const Taxiway = () => {
 		onError: (error) => handleEditTaxiwayError(error),
 	};
 
-	const {mutate: editTaxiway} = useEditTaxiway(editTaxiwayHandler)
-	
+	const { mutate: editTaxiway, isLoading: isEditLoading } = useEditTaxiway(editTaxiwayHandler)
+
 	const handleEditTaxiwaySuccess = (data) => {
 		queryClient.invalidateQueries('get-taxiway');
 		closeEditModal();
@@ -87,39 +101,57 @@ const Taxiway = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : dayjs(record?.validFrom),
-			validTill: dayjs(record?.validTo),
-			unavailableFrom: dayjs(record?.unavailableFrom),
-			unavailableTo: dayjs(record?.unavailableTo)
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
+			validTill: record?.validTo ? dayjs(record?.validTo) : "",
+			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
+			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
+			// runwayId: record?.runway?.id,
 		}
 		setRowData(record);
 		openEditModal();
 	};
 
 	const handleEditSave = (value) => {
-		value["id"] =  rowData.id;
+		value["id"] = rowData.id;
 		editTaxiway(value);
 	};
 
 	//DELETE
-	const {mutate: deleteTaxiway} = useDeleteTaxiway();
-	const handleDelete = (record) => {
-		deleteTaxiway(record.id);	
+	const deleteCheckinHandler = {
+		onSuccess: (data) => handleDeleteTaxiwaySuccess(data),
+		onError: (error) => handleDeleteTaxiwayError(error),
+	};
+
+	const handleDeleteTaxiwaySuccess = (data) => {
+		queryClient.invalidateQueries('get-taxiway');
+		closeDeleteModal();
+		toast.success(data?.message);
+	}
+
+	const handleDeleteTaxiwayError = (error) => {
+		toast.error(error?.response?.data?.message)
+	}
+	const { mutate: deleteTaxiway } = useDeleteTaxiway(deleteCheckinHandler);
+	const handleDelete = () => {
+		deleteTaxiway(rowData.id);
 	}
 
 	//table actions handlers
-	const handleViewDetail = (record) => {
-		record = {...record,
-			validFrom : dayjs(record?.validFrom),
-			validTill: dayjs(record?.validTo),
-			unavailableFrom: dayjs(record?.unavailableFrom),
-			unavailableTo: dayjs(record?.unavailableTo)
-		}
-		setRowData(record)
-		setIsReadOnly(true);
-		openEditModal(true);
-	};
+	// const handleViewDetail = (record) => {
+	// 	record = {
+	// 		...record,
+	// 		validFrom: dayjs(record?.validFrom),
+	// 		validTill: dayjs(record?.validTo),
+	// 		unavailableFrom: dayjs(record?.unavailableFrom),
+	// 		unavailableTo: dayjs(record?.unavailableTo),
+	// 		runwayId: record.runway.id,
+	// 	}
+	// 	setRowData(record)
+	// 	setIsReadOnly(true);
+	// 	openEditModal(true);
+	// };
 
 	const columns = [
 		{
@@ -134,7 +166,7 @@ const Taxiway = () => {
 						className="custom_icon_buttons"
 					/>
 					<Button
-						onClick={() => handleDelete(record)}
+						onClick={() => openDeleteModal(record)}
 						type="iconWithBorder"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
@@ -158,7 +190,7 @@ const Taxiway = () => {
 			title: 'Connected to Runway',
 			dataIndex: 'runwayId',
 			key: 'runwayId',
-			render: (terminal) => terminal ?? '-',
+			render: (runway) => runway ?? '-',
 		},
 		{
 			title: 'Status',
@@ -177,7 +209,13 @@ const Taxiway = () => {
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => handleViewDetail(record)} title="View Details" type="text" />
+					<Button
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
+						title="View Details"
+						type="text" />
 				</>
 			),
 		},
@@ -185,8 +223,8 @@ const Taxiway = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
-			value: 'create',
+			label: 'Add New Taxi',
+			value: 'addNewTaxi',
 			key: '0',
 		},
 		{
@@ -202,16 +240,17 @@ const Taxiway = () => {
 	];
 
 	const handleDropdownItemClick = (value) => {
-		if (value === 'create') {
+		if (value === 'addNewTaxi') {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 
 	return (
 		<>
+			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			{!Boolean(fetchTaxiway?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -219,7 +258,7 @@ const Taxiway = () => {
 					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}/>}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
 				/>
 			) : (
 				<>
@@ -227,7 +266,7 @@ const Taxiway = () => {
 						<div className="taxiway--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
-								buttonText="Actions"
+								buttonText="Create"
 								className="custom_dropdownButton"
 								onChange={handleDropdownItemClick}
 							/>
@@ -236,7 +275,7 @@ const Taxiway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Taxiway Counters
 							</CustomTypography>
-							<TableComponent data={fetchTaxiway.map(item => ({ ...item, terminal: item.terminal?.name }))} columns={columns} />
+							<TableComponent data={fetchTaxiway} columns={columns} />
 						</div>
 					</div>
 
@@ -272,6 +311,12 @@ const Taxiway = () => {
 							/>
 						</div>
 					</ModalComponent>
+					<ConfirmationModal
+						isOpen={isDeleteConfirm}
+						onClose={closeDeleteModal}
+						onSave={handleDelete}
+						content={`You want to delete ${rowData?.name}?`}
+					/>
 				</>
 			)}
 		</>

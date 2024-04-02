@@ -6,8 +6,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, type }) => {
-	// const isNotEditable = type === 'edit';
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	const SelectData = [
 		{
 			id: '1',

@@ -70,7 +70,7 @@ const CheckIn = () => {
 	};
 
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
-	
+
 	const handleSaveButton = (value) => {
 		value["isAllocatedToLounge"] = false;
 		value && postCheckIn(value);
@@ -87,8 +87,8 @@ const CheckIn = () => {
 		onError: (error) => handleEditCheckinError(error),
 	};
 
-	const {mutate: editCheckin, isLoading: isEditLoading} = useEditCheckin(rowData?.id,editCheckinHandler)
-	
+	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler)
+
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
 		closeEditModal();
@@ -100,11 +100,12 @@ const CheckIn = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
 			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
+			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
 			terminalId: record.terminal.id,
 		}
 		setRowData(record);
@@ -131,9 +132,9 @@ const CheckIn = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteCheckin} = useDeleteCheckin(deleteCheckinHandler);
+	const { mutate: deleteCheckin } = useDeleteCheckin(deleteCheckinHandler);
 	const handleDelete = () => {
-		deleteCheckin(rowData.id);	
+		deleteCheckin(rowData.id);
 	}
 
 	const columns = [
@@ -200,8 +201,9 @@ const CheckIn = () => {
 				<>
 					<Button onClick={() => {
 						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+						handleEdit(record)
+					}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -232,7 +234,7 @@ const CheckIn = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
@@ -281,30 +283,30 @@ const CheckIn = () => {
 							/>
 						</div>
 					</ModalComponent>
-					
-				<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="120rem"
-				closeModal={closeEditModal}
-				title={`Edit Check-in Counters`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
+
+					<ModalComponent
+						isModalOpen={isEditModalOpen}
+						width="120rem"
+						closeModal={closeEditModal}
+						title={`Edit Check-in Counters`}
+						className="custom_modal"
+					>
+						<div className="modal_content">
+							<FormComponent
+								handleSaveButton={handleEditSave}
+								handleButtonClose={handleCloseButton}
+								isEdit={true}
+								initialValues={rowData}
+								isReadOnly={isReadOnly}
+							/>
+						</div>
+					</ModalComponent>
+					<ConfirmationModal
+						isOpen={isDeleteConfirm}
+						onClose={closeDeleteModal}
+						onSave={handleDelete}
+						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</div>
-			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
-			/>
 				</>
 			)}
 		</>
