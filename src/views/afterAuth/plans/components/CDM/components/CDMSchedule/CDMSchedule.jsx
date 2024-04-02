@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import Button from '../../../../../../../components/button/button';
 import ModalComponent from '../../../../../../../components/modal/modal';
 import FormComponent from '../../../formComponent/formComponent';
@@ -9,6 +11,7 @@ import Filter from '../../../../../../../assets/Filter.svg';
 import InputField from '../../../../../../../components/input/field/field';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../../../components/dropdownButton/dropdownButton';
+import PageLoader from '../../../../../../../components/pageLoader/pageLoader';
 import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 import editIcon from '../../../../../../../assets/logo/edit.svg';
@@ -20,17 +23,38 @@ import './CDMSchedule.scss';
 
 const DailySchedule = ({tab}) => {
 	const queryClient = useQueryClient();
+	const [seasonalData, setSeasonalData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
-	const [isError, setIsError] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
 
-	const { data: fetchedSeasonalPlans, isLoading: isSeasonalPlansLoading } = useGetSeasonalPlans(flightType,tab);
+	const getSeasonalHandler = {
+		onSuccess: (data) => handleGetSeasonalSuccess(data),
+		onError: (error) => handleGetSeasonalError(error),
+	};
 
+	const handleGetSeasonalSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data?.flightSchedule || []);
+			}, []);
+		
+			setSeasonalData([...newData]);
+		}
+	};
+
+	const handleGetSeasonalError = (error) => {
+		toast.error(error?.response?.data?.message);
+	}
+	const { data: fetchedSeasonalPlans, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetSeasonalPlans(flightType,tab,getSeasonalHandler);
+
+	useEffect(() => {
+		console.log(isFetchLoading,"loadingg");
+	}, [isFetchLoading])
+	console.log(fetchedSeasonalPlans,hasNextPage, fetchNextPage,"fetched");
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -70,12 +94,28 @@ const DailySchedule = ({tab}) => {
 	};
 
 	//CREATE
-	const { mutate: postSeasonalPlans } = usePostSeasonalPlans();
+	const addseasonalHandler = {
+		onSuccess: (data) => handleAddSeasonalSuccess(data),
+		onError: (error) => handleAddSeasonalError(error),
+	};
+
+	const handleAddSeasonalSuccess = (data) => {
+		setSeasonalData([])
+		closeModal();
+		toast.success(data?.message);
+		queryClient.invalidateQueries('get-seasonal-plans');
+	};
+
+	const handleAddSeasonalError = (error) => {
+		console.log(error);
+		toast.error(error?.response?.data?.message);
+	};
+	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
 	const handleSaveButton = (value) => {
 		const data = {
 			FLIGHTNO: value.FLIGHTNO,
-			START: ConvertIstToUtc(value.start ?? value.date).split('T')[0],
-			END: ConvertIstToUtc(value.end ?? value.date).split('T')[0],
+			START: value.start ?? value.date,
+			END: value.end ?? value.date,
 			callSign: value.callSign,
 			natureCode: value.natureCode,
 			origin: value.origin,
@@ -87,7 +127,6 @@ const DailySchedule = ({tab}) => {
 		};
 
 		data && postSeasonalPlans(data);
-		closeModal();
 	};
 
 	const handleCloseButton = () => {
@@ -97,16 +136,32 @@ const DailySchedule = ({tab}) => {
 
 	//EDIT 
 	const handleEdit = (record) => {
+		record = {
+			...record,
+			date: record?.PDATE ? dayjs(record?.PDATE) : '',
+		}
+		console.log(record,"record");
 		setRowData(record);
 		openEditModal();
 	};
+
+	const handleSeasonalEditSuccess = (data) => {
+		closeEditModal();
+		setSeasonalData([]);
+		toast.success(data?.message);	
+		queryClient.invalidateQueries('get-seasonal-plans');	
+	}
+
+	const handleSeasonalEditError = (error) => {
+		toast.error(error?.response?.data?.message);
+	}
 
 	const editSeasonalPlansHandler = {
 		onSuccess: (data) =>handleSeasonalEditSuccess(data),
 		onError: (error) => handleSeasonalEditError(error),
 	};
 	
-	const {mutate: editSeasonalPlanArrival} = useEditSeasonalPlanArrival(rowData?.id,editSeasonalPlansHandler)
+	const {mutate: editSeasonalPlanArrival, isLoading: isEditLoading} = useEditSeasonalPlanArrival(rowData?.id,editSeasonalPlansHandler)
 	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler)
 	const handleEditSave = (value) => {
 		const data = {
@@ -122,16 +177,6 @@ const DailySchedule = ({tab}) => {
 		index === '1' && editSeasonalPlanArrival(data);
 		index=== '2' && editSeasonalPlanDeparture(data);
 	};
-	
-	const handleSeasonalEditSuccess = () => {
-		queryClient.invalidateQueries('get-seasonal-plans');
-		closeEditModal();
-	}
-
-	const handleSeasonalEditError = (error) => {
-		setIsError(true);
-		setErrorMessage(error?.response?.data?.message);
-	}
 
 	const dropdownItems = [
 		{
@@ -161,32 +206,37 @@ const DailySchedule = ({tab}) => {
 			/>
 		</div>
 	);
-
 	
+	const handleUploadCsvSuccess = () => {
+		queryClient.invalidateQueries('get-seasonal-plans');
+		closeCsvModal();
+	}
 
+	const handleUploadCsvError = () => {
+		toast.error("Invalid File Type");
+	}
+	
 	const uploadCsvHandler = {
-		onSuccess: (data) =>handleUploadCsvSuccess(data),
-		onError: (error) => handleUploadCsvError(error),
+		onSuccess: () => handleUploadCsvSuccess(),
+		onError: () => handleUploadCsvError(),
 	};
 
 	const {mutate: onUploadCSV} = useUploadCSV(uploadCsvHandler);
 
 	//UPLOAD
 	const handleUpload = (file) => {
-		const data = file[0].originFileObj;
-		const formData = new FormData();
-        file && formData.append('file', data);
-		onUploadCSV(formData);
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			
+			console.log(file[0].originFileObj, file, formData, "data"); // Ensure that the data is present
+			
+			onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
 	}
-
-	const handleUploadCsvSuccess = () => {
-		queryClient.invalidateQueries('get-seasonal-plans');
-		closeCsvModal();
-	}
-
-	const handleUploadCsvError = (error) => {
-		setErrorMessage("Incorrect File Type")
-	}
+	
 
 	const columns = [
 		{
@@ -210,11 +260,10 @@ const DailySchedule = ({tab}) => {
 		},
 		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin ?? '-') },
 		index === '1'
-			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA).split('T')[1].slice(0,5) : '-') }
-			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD).split('T')[1].slice(0,5) : '-'), },
+			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA)?.split('T')[1].slice(0,5) : '-') }
+			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD)?.split('T')[1].slice(0,5) : '-'), },
 		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos ?? '-'), },
 		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => ( registration ?? '-'), },
-        { title: 'Flight Split (No.)', dataIndex: 'flightSplit', key: 'flightSplit', render: (flightSplit) => ( flightSplit ?? '-'), },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -242,7 +291,6 @@ const DailySchedule = ({tab}) => {
 							type="filledText"
 							isSubmit="submit"
 							onClick={openModal}
-							disabled={isSeasonalPlansLoading}
 						/>
 						<Button
 							id="btn"
@@ -270,8 +318,8 @@ const DailySchedule = ({tab}) => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: Boolean(fetchedSeasonalPlans?.length) ? (
-				<Arrival data={fetchedSeasonalPlans} columns={columns} />
+			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
+				<Arrival data={seasonalData} columns={columns}  fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()
 			),
@@ -279,8 +327,8 @@ const DailySchedule = ({tab}) => {
 		{
 			key: '2',
 			label: 'Departure',
-			children: Boolean(fetchedSeasonalPlans?.length) ? (
-				<Departure data={fetchedSeasonalPlans} columns={columns} />
+			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
+				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 			) : (
 				noDataHandler()
 			),
@@ -289,6 +337,7 @@ const DailySchedule = ({tab}) => {
 
 	return (
 		<>
+		<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading}/>
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>
@@ -305,7 +354,6 @@ const DailySchedule = ({tab}) => {
 							className={'custom_filter'}
 							icon={Filter}
 							alt="arrow icon"
-							disabled={isSeasonalPlansLoading}
 						/>
 						<InputField
 							label="search"
@@ -314,7 +362,6 @@ const DailySchedule = ({tab}) => {
 							className="custom_inputField"
 							warning="Required field"
 							type="search"
-							disabled={isSeasonalPlansLoading}
 						/>
 					</div>
 				</div>
@@ -363,8 +410,6 @@ const DailySchedule = ({tab}) => {
 						type={index}
 						initialValues={rowData}
 						isEdit = {true}
-						isError = {isError}
-						errorMessage = {errorMessage}
 					/>
 				</div>
 			</ModalComponent>

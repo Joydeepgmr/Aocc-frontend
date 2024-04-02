@@ -1,11 +1,15 @@
-import { useQuery, useMutation } from 'react-query';
-import { GATE } from "../../../../api";
+import { useInfiniteQuery, useMutation } from 'react-query';
+import { GATE, GET_GATE } from "../../../../api";
 import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetGate = (props) => {
-	const response = useQuery({
+	const response = useInfiniteQuery({
 		queryKey: ['get-gate'],
-		queryFn: async () => await Get(`${GATE}`),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GATE}`, {pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
+		},
 		...props,
 	});
 

@@ -1,11 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { CHECKIN_COUNTER } from '../../../../api';
+import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { CHECKIN_COUNTER,GET_CHECKIN_COUNTER } from '../../../../api';
 import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetCheckIn = (props) => {
-	const response = useQuery({
+	const response = useInfiniteQuery({
 		queryKey: ['get-check-in'],
-		queryFn: async () => await Get(`${CHECKIN_COUNTER}`),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`,{pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
+		},
 		...props,
 	});
 
