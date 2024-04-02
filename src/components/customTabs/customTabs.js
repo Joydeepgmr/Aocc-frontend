@@ -13,13 +13,16 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 				type="card"
 				className={`custom_tabs_card ${className}`}
 				{...rest}
-			>
-				{items.map((item) => (
-					<Tabs.TabPane tab={item.label} key={item.key}>
-						{item.children}
-					</Tabs.TabPane>
-				))}
-			</Tabs>
+				items={items.map((item, i) => {
+					const id = String(i + 1);
+					return {
+						key: id,
+						label: item.label,
+						children: item.children,
+						//   icon: <Icon />,
+					};
+				})}
+			/>
 		);
 	}
 
@@ -30,13 +33,16 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 			tabBarExtraContent={extraContent}
 			className={`custom_tabs_plain ${className}`}
 			{...rest}
-		>
-			{items.map((item) => (
-				<Tabs.TabPane tab={item.label} key={item.key}>
-					{item.children}
-				</Tabs.TabPane>
-			))}
-		</Tabs>
+			items={items.map((item, i) => {
+				const id = String(i + 1);
+				return {
+					key: id,
+					label: item.label,
+					children: item.children,
+					//   icon: <Icon />,
+				};
+			})}
+		/>
 	);
 };
 

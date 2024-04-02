@@ -3,12 +3,12 @@ import React from 'react';
 import TopNav from '../topNav/topNav';
 import { Outlet } from 'react-router-dom';
 
-const Layout = () => {
+const Layout = (props) => {
 	return (
 		<div>
 			<TopNav />
 			<div>
-				<Outlet />
+				{props.children}
 			</div>
 		</div>
 	);

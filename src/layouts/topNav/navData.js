@@ -4,9 +4,10 @@ import Dashboard from '../../views/afterAuth/dashboard/dashboard';
 import Plans from '../../views/afterAuth/plans/plans';
 import PlannerAirportMaster from "../../views/afterAuth/plannerairportMaster/airport"
 import * as userType from "../../utils/roles";
+import { Pathname } from '../../pathname';
+
 
 const role = localStorage.getItem('role');
-console.log('what is the role', role);
 
 export const navMenu = [
 	{
@@ -39,38 +40,38 @@ export const navMenu = [
 // 	},
 // ];
 
-export const roleBasedNav = (pathname) => {
+export const roleBasedNav = () => {
 	let navItems = [];
 
-	if (role === userType.IT_ADMIN || pathname === '/global-masters') {
+	if (role === userType.IT_ADMIN) {
 		navItems = [
 			{
 				key: '0',
 				label: 'Global Masters',
-				children: '/global-masters',
+				children: Pathname.GLOBALMASTERS,
 			},
 			{
 				key: '1',
 				label: 'Airport Masters',
-				children: '/airport-masters',
+				children: Pathname.AIRPORTMASTERS,
 			},
 		];
-	} else if (role === userType.PLANNER || pathname === '/dashboard' || role === '/plan-airport-masters') {
+	} else if (role === userType.PLANNER) {
 		navItems = [
 			{
 				key: '0',
 				label: 'Dashboard',
-				children: '/dashboard',
+				children: Pathname.DASHBOARD,
 			},
 			{
 				key: '1',
 				label: 'Plans',
-				children: '/plans',
+				children: Pathname.PLAN,
 			},
 			{
 				key: '2',
 				label: 'Airport Masters',
-				children: '/plan-airport-masters',
+				children: Pathname.PLANAIRPORTMASTER,
 			},
 		];
 	}
