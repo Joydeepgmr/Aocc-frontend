@@ -1,9 +1,9 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Router from "./routes/routes"
 
-import './app.scss';
 import { Toaster } from 'react-hot-toast';
+import './app.scss';
+import Router from './routes/routes';
 
 export function App() {
 	const token = localStorage.getItem('_tid');
@@ -39,7 +39,7 @@ export function App() {
 				}}
 			/>
 			<Router />
-		</QueryClientProvider >
+		</QueryClientProvider>
 	);
 }
 

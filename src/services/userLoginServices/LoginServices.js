@@ -1,7 +1,7 @@
 import { useMutation, useQueries, useQuery } from 'react-query';
 import { GET_ADMIN_DETAILS, USER_LOGIN } from '../../api/endpoints';
 
-import { Post } from '../HttpServices/HttpServices';
+import { Get, Post } from '../HttpServices/HttpServices';
 
 export const useLoginUser = (props) => {
     const response = useMutation({
@@ -18,9 +18,9 @@ export const useLoginUser = (props) => {
 }
 
 export const useGetUserDetails = (props) => {
-    const response = useQuery({
-        queryKey: ['get-admin-detail'],
-        queryFn: () => Get(GET_ADMIN_DETAILS),
+    const response = useMutation({
+        mutationKey: ['get-admin-detail'],
+        mutationFn: () => Get(GET_ADMIN_DETAILS),
         ...props
     })
     return { ...response }
