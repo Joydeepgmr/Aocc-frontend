@@ -119,7 +119,7 @@ const Taxiway = () => {
 	};
 
 	//DELETE
-	const deleteCheckinHandler = {
+	const deleteTaxiwayHandler = {
 		onSuccess: (data) => handleDeleteTaxiwaySuccess(data),
 		onError: (error) => handleDeleteTaxiwayError(error),
 	};
@@ -133,7 +133,7 @@ const Taxiway = () => {
 	const handleDeleteTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message)
 	}
-	const { mutate: deleteTaxiway } = useDeleteTaxiway(deleteCheckinHandler);
+	const { mutate: deleteTaxiway } = useDeleteTaxiway(deleteTaxiwayHandler);
 	const handleDelete = () => {
 		deleteTaxiway(rowData.id);
 	}

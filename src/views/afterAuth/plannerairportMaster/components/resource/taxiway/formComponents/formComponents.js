@@ -49,7 +49,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	return (
 		<div className="taxiway">
-			<div className="main_form" key={initialValues?.id}>
+			<div className="main_form" >
 				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
 					<div className="form_section">
 						<div className="form_content">

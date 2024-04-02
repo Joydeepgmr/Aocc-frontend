@@ -56,3 +56,4 @@ export const CHECKIN_COUNTER = '/checkin-counter';
 export const GATE = '/gate'
 export const PARKING_STAND = '/parking-stand';
 export const TAXIWAY = '/taxiway';
+export const BAGGAGE_BELT = '/baggage-belt';
