@@ -19,7 +19,7 @@ const DropdownButton = ({ dropdownItems, buttonText, className, onChange, onOpen
     );
 
     return (
-        <Dropdown onOpenChange={onOpenChange} menu={menu} trigger={['click']}>
+        <Dropdown onOpenChange={onOpenChange} overlay={menu} trigger={['click']}>
             <a className={`create ${className}`} {...rest}>
                 <Space>
                     {buttonText}

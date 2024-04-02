@@ -127,8 +127,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	useEffect(() => {
 		if (createProps.new) {
-			console.log("under create new tab", defaultModalParams)
-			// setAirportModal({ ...defaultModalParams, isOpen: true });
+			setAirportModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
 	}, [createProps.new])
