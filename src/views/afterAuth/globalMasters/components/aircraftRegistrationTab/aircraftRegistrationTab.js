@@ -20,7 +20,7 @@ const AircraftRegistrationTab = () => {
     return (
         <>
             <CreateWrapper
-                width="120rem"
+                width="80%"
                 tableComponent={<AircraftRegistrationTable
                     data={data}
                     createProps={createProps}

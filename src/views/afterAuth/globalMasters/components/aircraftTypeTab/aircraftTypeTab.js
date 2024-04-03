@@ -18,7 +18,7 @@ const AircraftTypeTab = () => {
     return (
         <>
             <CreateWrapper
-                width="120rem"
+                width="80%"
                 tableComponent={<AircraftTypeTable
                     data={data}
                     createProps={createProps}

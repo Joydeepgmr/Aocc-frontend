@@ -218,7 +218,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
 				title={airlineRegistrationModal.title}
-				width="120rem"
+				width="80%"
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>

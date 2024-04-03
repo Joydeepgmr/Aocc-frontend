@@ -16,7 +16,7 @@ const AirportTab = () => {
     }
     return (
         <CreateWrapper
-            width="120rem"
+            width="80%"
             tableComponent={<AirportTable
                 data={data}
                 createProps={createProps}
