@@ -242,7 +242,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}
 				title={aircraftRegistrationModal.title}
-				width="120rem"
+				width="80%"
 				className="custom_modal"
 			>
 				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >

@@ -18,7 +18,7 @@ const AirlineTab = () => {
     }
     return (
         <CreateWrapper
-            width="120rem"
+            width="80%"
             tableComponent={<AirlineTable
                 data={data}
                 fetchData={fetchNextPage}

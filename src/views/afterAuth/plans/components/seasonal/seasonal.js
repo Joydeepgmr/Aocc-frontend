@@ -18,7 +18,6 @@ import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, 
 import './seasonal.scss';
 
 const Seasonal = ({tab}) => {
-	console.log(tab, "tabbb");
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -332,7 +331,7 @@ const Seasonal = ({tab}) => {
 			{/* modals */}
 			<ModalComponent
 				isModalOpen={isModalOpen}
-				width="120rem"
+				width="80%"
 				closeModal={closeModal}
 				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
 				className="custom_modal"
@@ -349,7 +348,7 @@ const Seasonal = ({tab}) => {
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
 			<ModalComponent
 				isModalOpen={isEditModalOpen}
-				width="120rem"
+				width="80%"
 				closeModal={closeEditModal}
 				title={`Edit ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
 				className="custom_modal"
