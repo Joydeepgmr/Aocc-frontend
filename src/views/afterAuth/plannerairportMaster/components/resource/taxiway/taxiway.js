@@ -66,6 +66,7 @@ const Taxiway = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 	};
+	
 
 	const openDeleteModal = (record) => {
 		setRowData(record);
@@ -104,6 +105,7 @@ const Taxiway = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		setIsReadOnly(false)
 	};
 
 	//EDIT 
@@ -221,9 +223,8 @@ const Taxiway = () => {
 				<>
 					<Button
 						onClick={() => {
-							setIsReadOnly(true);
-							handleEdit(record)
-						}}
+						setIsReadOnly(true);
+						handleEdit(record)}}
 						title="View Details"
 						type="text" />
 				</>
@@ -306,7 +307,7 @@ const Taxiway = () => {
 
 					<ModalComponent
 						isModalOpen={isEditModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeEditModal}
 						title={`Edit taxiway Counters`}
 						className="custom_modal"
