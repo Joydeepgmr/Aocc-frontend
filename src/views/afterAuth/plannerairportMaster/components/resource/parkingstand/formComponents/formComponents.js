@@ -1,24 +1,46 @@
-import React, { useState } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
-
+import CustomSelect from '../../../../../../../components/select/select';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './formComponents.scss';
 
-const FormComponent = () => {
-	const dispatch = useDispatch();
+const FormComponent = ({
+	handleSaveButton,
+	handleButtonClose,
+	initialValues,
+	isEdit,
+	isReadOnly,
+	gateDropdownData,
+}) => {
+	isEdit && (initialValues['gate'] = initialValues?.gate?.id);
+	const SelectGateData = useMemo(() => {
+		return gateDropdownData.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [gateDropdownData]);
+
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		console.log('ihfdhduhdu', values);
+		const changedValues = isEdit ? {} : values;
+		Object.keys(values).forEach((key) => {
+			if (!isEdit || values[key] !== initialValues[key]) {
+				changedValues[key] = values[key];
+			}
+		});
+
+		handleSaveButton(changedValues);
 		form.resetFields();
-		dispatch(addAircraftRegistration(values));
-		dispatch(updateIsShowTableComponents());
 	};
+
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
 
 	return (
 		<div className="main_form">
@@ -27,34 +49,37 @@ const FormComponent = () => {
 					<div className="form_content">
 						<InputField
 							label="Stand Name"
-							name="stand_name"
-							placeholder="Enter the airport name"
+							name="name"
+							placeholder="Enter the stand name"
 							warning="Required field"
+							disabled={isReadOnly || isEdit}
 							required
 						/>
-						<InputField label="Airport" name="airport" placeholder="Filled Text" warning="Required field" />
 					</div>
 
 					<div className="form_content">
-						<InputField
+						<CustomSelect
+							SelectData={SelectGateData}
 							label="Connected to Gate"
-							name="connected_to_gate"
-							placeholder="Filled Text"
-							warning="Required field"
+							placeholder={'Select Gate'}
+							name="gate"
+							disabled={isReadOnly || isEdit}
 						/>
 						<InputField
 							label="Connected to Taxiway"
-							name="connected_to_taxiway"
+							name="taxiway"
 							placeholder="Filled Text"
 							warning="Required field"
 							type="number"
+							disabled={isReadOnly || isEdit}
 						/>
 						<InputField
 							label="Default Allocation Duration"
-							name="default_allocation_duration"
+							name="defaultAllocationDuration"
 							placeholder="Filled Text"
 							warning="Required field"
 							suffixText="min"
+							disabled={isReadOnly}
 						/>
 					</div>
 					<Divider />
@@ -64,33 +89,59 @@ const FormComponent = () => {
 						</CustomTypography>
 
 						<div className="custom_content">
-							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" />
-							<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" />
-							<CheckBoxField name="fuel_pits" label="Fuel Pits" title="Single Checkbox" />
-							<CheckBoxField name="push_back" label="Pushback" title="Single Checkbox" />
-							<CheckBoxField name="air_bridge" label="Air Bridge" title="Single Checkbox" />
-							<CheckBoxField name="air_condition" label="Air Condition" title="Single Checkbox" />
-							<CheckBoxField name="docking_system" label="Docking System" title="Single Checkbox" />
+							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="fuelPit" label="Fuel Pits" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="pushBack" label="Pushback" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="airBridge" label="Air Bridge" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="airCondition" label="Air Condition" title="Single Checkbox" disabled={isReadOnly}/>
+							<CheckBoxField name="dockingSystem" label="Docking System" title="Single Checkbox" disabled={isReadOnly}/>
 						</div>
 					</div>
 					<Divider />
 					<div className="form_content">
 						<InputField
 							label="Reason, if unavailable"
-							name="reason_if_unavailable"
+							name="reason"
 							placeholder="Filled Text"
 							warning="Required field"
+							disabled={isReadOnly}
 						/>
-						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
+						<Date
+							label="Unavailable from"
+							name="unavailableFrom"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+						/>
 
-						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
+						<Date
+							label="Unavailable to"
+							name="unavailableTo"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+						/>
 					</div>
 				</div>
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
+						<Date
+							label="Valid From"
+							name="validFrom"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							required
+							format="MM-DD-YYYY"
+							disabled={isReadOnly || isEdit}
+						/>
+						<Date
+							label="Valid To"
+							name="validTill"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+						/>
 					</div>
 				</div>
 				<Divider />

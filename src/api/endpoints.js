@@ -56,3 +56,5 @@ export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated'
 export const CHECKIN_COUNTER = '/checkin-counter';
 export const GET_GATE = '/gate/paginated'
 export const GATE = '/gate'
+export const GET_PARKING_STAND = '/parking-stand/paginated'
+export const PARKING_STAND = '/parking-stand'
