@@ -231,7 +231,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
 				title={aircraftTypeModal.title}
-				width="120rem"
+				width="80%"
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
