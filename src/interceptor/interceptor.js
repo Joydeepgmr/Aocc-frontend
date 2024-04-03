@@ -4,7 +4,8 @@ import { localStorageKey } from '../keys';
 let retryCount = 0;
 
 export const axiosInstance = Axios.create({
-	baseURL: process.env.baseURL,
+	baseURL: process.env.baseURL
+	// baseURL: "https://09b9-121-243-82-214.ngrok-free.app/frms/api/v1",
 });
 
 axiosInstance.interceptors.request.use(
@@ -13,6 +14,7 @@ axiosInstance.interceptors.request.use(
 
 		if (token) {
 			config.headers['Authorization'] = `Bearer ${token}`;
+			// config.headers['ngrok-skip-browser-warning'] = true;
 		}
 
 		// Remove keys with null values from the request payload
