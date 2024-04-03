@@ -44,7 +44,7 @@ const CheckIn = () => {
 		toast.error(error?.response?.data?.message);
 	}
 	const { data: fetchCheckIn, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetCheckIn(getCheckinHandler);
-	console.log(fetchCheckIn,"checkinData");
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -94,6 +94,9 @@ const CheckIn = () => {
 	
 	const handleSaveButton = (value) => {
 		value["isAllocatedToLounge"] = false;
+		value["name"] = value?.name.toString();
+		value["row"] = value?.row.toString();
+		value["phoneNumber"] = value?.phoneNumber.toString();
 		value && postCheckIn(value);
 	};
 
@@ -134,6 +137,7 @@ const CheckIn = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.row && (value["row"] = value?.row.toString());
 		editCheckin(value);
 	};
 

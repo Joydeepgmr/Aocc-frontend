@@ -19,7 +19,7 @@ export const useGetCheckIn = (props) => {
 export const usePostCheckIn = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-check-in'],
-		mutationFn: (data) => Post(`${CHECKIN_COUNTER}`, data),
+		mutationFn: async (data) => await Post(`${CHECKIN_COUNTER}`, data),
 		...props,
 	});
 
@@ -29,7 +29,7 @@ export const usePostCheckIn = (props) => {
 export const useEditCheckin = (id,props) => {
 	const response = useMutation({
 		mutationKey: ['edit-checkin'],
-		mutationFn: (data) => Patch(`${CHECKIN_COUNTER}/${id}`, data),
+		mutationFn: async (data) => await Patch(`${CHECKIN_COUNTER}/${id}`, data),
 		...props,
 	});
 
@@ -40,7 +40,7 @@ export const useDeleteCheckin = (props) => {
 	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-checkin'],
-		mutationFn: (id) => Delete(`${CHECKIN_COUNTER}/${id}`),
+		mutationFn: async (id) => await Delete(`${CHECKIN_COUNTER}/${id}`),
 		...props,
 	});
 	return response;

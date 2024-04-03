@@ -86,7 +86,8 @@ const Gates = () => {
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
 	const handleSaveButton = (value) => {
-		postGate(value);
+		value["name"] = value?.name.toString();
+		value && postGate(value);
 	};
 
 	const handleCloseButton = () => {

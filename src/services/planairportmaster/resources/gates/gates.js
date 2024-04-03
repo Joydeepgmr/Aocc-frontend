@@ -19,7 +19,7 @@ export const useGetGate = (props) => {
 export const usePostGate = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-gate'],
-		mutationFn: (data) => Post(`${GATE}`, data),
+		mutationFn: async (data) => await Post(`${GATE}`, data),
 		...props,
 	});
 
@@ -29,7 +29,7 @@ export const usePostGate = (props) => {
 export const useEditGate = (id,props) => {
 	const response = useMutation({
 		mutationKey: ['edit-gate'],
-		mutationFn: (data) => Patch(`${GATE}/${id}`, data),
+		mutationFn: async (data) => await Patch(`${GATE}/${id}`, data),
 		...props,
 	});
 
@@ -39,7 +39,7 @@ export const useEditGate = (id,props) => {
 export const useDeleteGate = (props) => {
 	const response = useMutation({
 		mutationKey: ['delete-gate'],
-		mutationFn: (id) => Delete(`${GATE}/${id}`),
+		mutationFn: async (id) => await Delete(`${GATE}/${id}`),
 		...props,
 	});
 
