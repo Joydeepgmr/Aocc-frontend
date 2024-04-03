@@ -138,21 +138,6 @@ const Taxiway = () => {
 		deleteTaxiway(rowData.id);
 	}
 
-	//table actions handlers
-	// const handleViewDetail = (record) => {
-	// 	record = {
-	// 		...record,
-	// 		validFrom: dayjs(record?.validFrom),
-	// 		validTill: dayjs(record?.validTo),
-	// 		unavailableFrom: dayjs(record?.unavailableFrom),
-	// 		unavailableTo: dayjs(record?.unavailableTo),
-	// 		runwayId: record.runway.id,
-	// 	}
-	// 	setRowData(record)
-	// 	setIsReadOnly(true);
-	// 	openEditModal(true);
-	// };
-
 	const columns = [
 		{
 			title: 'Actions',

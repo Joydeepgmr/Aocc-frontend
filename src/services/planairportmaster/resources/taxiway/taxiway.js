@@ -1,24 +1,43 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { TAXIWAY } from '../../../../api';
-import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetTaxiway = (props) => {
-	const response = useQuery({
+	const response = useInfiniteQuery({
 		queryKey: ['get-taxiway'],
-		queryFn: async () => await Get(`${TAXIWAY}`),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${TAXIWAY}`, {pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
+		},
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
+	// const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
+	// const statusMessage = isSuccess ? data?.message : error?.message;
 
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return response;
+	// return {
+	// 	...response,
+	// 	data: data,
+	// 	message: statusMessage,
+	// };
 };
+
+// export const useGetCheckIn = (props) => {
+//     const response = useInfiniteQuery({
+//         queryKey: ['get-check-in'],
+//         queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`,{pagination}),
+//         getNextPageParam: (lastPage) => {
+//             if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+//             return false;
+//         },
+//         ...props,
+//     });
+ 
+//     return response;
+// };
 
 export const usePostTaxiway = (props) => {
 	const response = useMutation({
