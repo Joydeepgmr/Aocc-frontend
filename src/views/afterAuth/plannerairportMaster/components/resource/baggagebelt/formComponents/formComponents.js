@@ -13,7 +13,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		{
 			id: '1',
 			label: 'Options1',
-			value: 'options1',
+			value: 'a79d3f96-c134-41e3-b91d-440964cbf771',
 		},
 		{
 			id: '2',
@@ -51,29 +51,16 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<div className="form_content">
 							<InputField
 								label="Belt Name"
-								name="belt_name"
+								name="name"
 								placeholder="Enter the airport name"
 								warning="Required field"
 								required
 								disabled={isReadOnly || isEdit}
 							/>
-							<InputField
-								label="Belt Type"
-								name="belt_type"
-								placeholder="Filled Text"
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
+							
 						</div>
 
 						<div className="form_content">
-							<CustomSelect
-								SelectData={SelectData}
-								name="airport"
-								label="Airport"
-								placeholder={'Filled Text'}
-								disabled={isReadOnly}
-							/>
 							<InputField
 								label="Status"
 								name="status"
@@ -122,8 +109,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					<Divider />
 					<div className="form_section">
 						<div className="form_content">
-							<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required disabled={isReadOnly || isEdit} />
-							<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" disabled={isReadOnly} />
+							<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required disabled={isReadOnly || isEdit} />
+							<Date label="Valid To" name="validTill" placeholder="Enter the airport name" disabled={isReadOnly} />
 						</div>
 					</div>
 					<Divider />

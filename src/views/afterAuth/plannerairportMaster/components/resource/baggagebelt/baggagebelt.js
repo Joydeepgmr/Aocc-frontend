@@ -20,12 +20,34 @@ const BaggageBelt = () => {
 
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [baggageBeltData, setBaggageBeltData] = useState([]);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: fetchBaggageBelt, isLoading: isFetchLoading  } = useGetBaggageBelt();
+	// const { data: fetchBaggageBelt, isLoading: isFetchLoading  } = useGetBaggageBelt();
 
+	const getBaggageBeltHandler = {
+        onSuccess: (data) => handleGetBaggageBeltSuccess(data),
+        onError: (error) => handleGetBaggageBeltError(error),
+    };
+ 
+    const handleGetBaggageBeltSuccess = (data) => {
+		console.log(data,"data here");
+        if (data?.pages) {
+            const newData = data.pages.reduce((acc, page) => {
+                return acc.concat(page.data || []);
+            }, []);
+       
+            setBaggageBeltData([...newData]);
+        }
+    };
+
+	const handleGetBaggageBeltError = (error) => {
+        toast.error(error?.response?.data?.message);
+    }
+	const { data: fetchBaggageBelt, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetBaggageBelt(getBaggageBeltHandler);
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -80,6 +102,7 @@ const BaggageBelt = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		setIsReadOnly(false)
 	};
 
 	//EDIT 
@@ -92,6 +115,7 @@ const BaggageBelt = () => {
 
 	const handleEditBaggageBeltSuccess = (data) => {
 		queryClient.invalidateQueries('get-baggage-belt');
+		setBaggageBeltData([]);
 		closeEditModal();
 		toast.success(data?.message);
 	}
@@ -104,10 +128,10 @@ const BaggageBelt = () => {
 		record = {
 			...record,
 			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
+			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			// runwayId: record?.runway?.id,
+			terminal: record?.terminal?.id,
 		}
 		setRowData(record);
 		openEditModal();
@@ -160,28 +184,22 @@ const BaggageBelt = () => {
 			),
 		},
 		{
-			title: 'Taxiway Name',
+			title: 'Belt Name',
 			dataIndex: 'name',
 			key: 'name',
-			render: (counterName) => counterName ?? '-',
+			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Airport',
-			dataIndex: 'airport',
-			key: 'airport',
-			render: (group) => group ?? '-',
-		},
-		{
-			title: 'Connected to Runway',
-			dataIndex: 'runwayId',
-			key: 'runwayId',
-			render: (runway) => runway ?? '-',
+			title: 'Terminal',
+			dataIndex: 'terminal',
+			key: 'terminal',
+			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
-			render: (status) => status ?? '-',
+			dataIndex: 'reason',
+			key: 'reason',
+			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
@@ -196,8 +214,8 @@ const BaggageBelt = () => {
 				<>
 					<Button
 						onClick={() => {
-							setIsReadOnly(true);
-							handleEdit(record)
+						setIsReadOnly(true);
+						handleEdit(record)
 						}}
 						title="View Details"
 						type="text" />
@@ -208,8 +226,8 @@ const BaggageBelt = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Add New Taxi',
-			value: 'addNewTaxi',
+			label: 'Add New Baggage Belt',
+			value: 'addNewBaggageBelt',
 			key: '0',
 		},
 		{
@@ -225,7 +243,7 @@ const BaggageBelt = () => {
 	];
 
 	const handleDropdownItemClick = (value) => {
-		if (value === 'addNewTaxi') {
+		if (value === 'addNewBaggageBelt') {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
@@ -234,7 +252,7 @@ const BaggageBelt = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchBaggageBelt?.length) ? (
+			{!Boolean(baggageBeltData?.length) ? (
 				<Common_Card
                 title1="Create"
                 title2={'Import Global Reference'}
@@ -245,8 +263,8 @@ const BaggageBelt = () => {
             />
 			) : (
 				<>
-					<div className="taxiway">
-						<div className="taxiway--dropdown">
+					<div className="baggage_belt">
+						<div className="baggage_belt--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
 								buttonText="Create"
@@ -256,9 +274,9 @@ const BaggageBelt = () => {
 						</div>
 						<div className="taxiway--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Taxiway Counters
+								Baggage Belt Counters
 							</CustomTypography>
-							<TableComponent data={fetchTaxiway} columns={columns} />
+							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
 
@@ -266,7 +284,7 @@ const BaggageBelt = () => {
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add taxiway Counters'}
+						title={'Add Baggage Belt Counters'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
