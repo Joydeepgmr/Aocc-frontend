@@ -55,5 +55,6 @@ export const GET_COUNTRY_DATA = '/country/';
 export const CHECKIN_COUNTER = '/checkin-counter';
 export const GATE = '/gate'
 export const PARKING_STAND = '/parking-stand';
-export const TAXIWAY = '/taxiway/paginated';
+export const GET_TAXIWAY = '/taxiway/paginated';
+export const TAXIWAY = '/taxiway';
 export const BAGGAGE_BELT = '/baggage-belt';

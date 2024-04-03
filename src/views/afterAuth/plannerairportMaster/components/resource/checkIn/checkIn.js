@@ -290,7 +290,7 @@ const CheckIn = () => {
                     {/* modals */}
                     <ModalComponent
                         isModalOpen={isModalOpen}
-                        width="80%"
+                        width="120rem"
                         closeModal={closeModal}
                         title={'Add Checkin Counters'}
                         className="custom_modal"
@@ -305,11 +305,11 @@ const CheckIn = () => {
                     </ModalComponent>
                    
                 <ModalComponent
-	                isModalOpen={isEditModalOpen}
-	                width="80%"
-	                closeModal={closeEditModal}
-	                title={`Edit Check-in Counters`}
-	                className="custom_modal"
+                isModalOpen={isEditModalOpen}
+                width="120rem"
+                closeModal={closeEditModal}
+                title={`Edit Check-in Counters`}
+                className="custom_modal"
             >
                 <div className="modal_content">
                     <FormComponent

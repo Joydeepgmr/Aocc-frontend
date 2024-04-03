@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import { TAXIWAY } from '../../../../api';
+import { GET_TAXIWAY, TAXIWAY } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetTaxiway = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-taxiway'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${TAXIWAY}`, {pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_TAXIWAY}`, {pagination}),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
 			return false;
