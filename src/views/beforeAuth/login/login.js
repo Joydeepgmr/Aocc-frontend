@@ -25,6 +25,7 @@ export const Login = () => {
 			localStorage.setItem('_tid', data?.accessToken)
 			localStorage.setItem('name', data?.name)
 			localStorage.setItem('email', data?.email)
+			localStorage.setItem('permission', JSON.stringify(data?.permission));
 			roleRedirectFlow(data.roleName);
 		},
 		onError: ({ response: { data: { message } } }) => toast.error(message)

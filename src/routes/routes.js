@@ -1,11 +1,13 @@
-import React, { Suspense } from "react";
-import { useRoutes } from "react-router-dom";
+import React from "react";
+import { Navigate, useRoutes } from "react-router-dom";
 
 import { Pathname } from '../pathname';
-import PrivateOutlet from '../privateRoute';
+import AccessControl from "../rbac/access-control";
+import NoAccess from "../rbac/no-access";
+import { Permission } from "../rbac/permission";
 
 
-import Loader from '../components/loader';
+
 import Layout from '../layouts/layout/layout';
 import NotFound from '../views/404';
 import AirportMasters from '../views/afterAuth/airportMasters/airportMasters';
@@ -19,55 +21,86 @@ import Login from '../views/beforeAuth/login/login';
 
 // ----------------------------------------------------------------------
 
-const RouteHOC = (props) => {
-    return <Layout>{props.element}</Layout>
+const AccessControlHOC = (props) => {
+    return (
+        <AccessControl
+            allowedPermissions={props.access}
+            renderNoAccess={() => <NoAccess permissionsNeeded={props.access} />}
+        >
+            <Layout>{props.element}</Layout>
+        </AccessControl>
+    )
 }
 
-export default function Router() {
+export default function Router(props) {
+
     const routes = useRoutes([
         {
             errorElement: <NotFound />,
             children: [
+                // ------- Planner ---------
                 {
-                    path: Pathname.LOGIN,
-                    element: <Login />,
+                    path: Pathname.DASHBOARD,
+                    element: <AccessControlHOC
+                        element={<Dashboard />}
+                        access={Permission.planner}
+                    />,
+                    index: true
                 },
                 {
-                    path: Pathname.COMPONENTS,
-                    element: <Components />
+                    path: Pathname.PLAN,
+                    element: <AccessControlHOC
+                        element={<Plans />}
+                        access={Permission.planner}
+                    />
                 },
                 {
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.GLOBALMASTERS, element: <RouteHOC element={<GlobalMasters />} />, },
-                        { path: Pathname.AIRPORTMASTERS, element: <RouteHOC element={<AirportMasters />} />, },
-                    ],
+                    path: Pathname.USERACCESS,
+                    element: <AccessControlHOC
+                        element={<UserAccess />}
+                        access={Permission.planner}
+                    />
                 },
                 {
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.DASHBOARD, element: <RouteHOC element={<Dashboard />} />, index: true },
-                        { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
-                        { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
-                        { path: Pathname.PLAN, element: <Layout><Plans /></Layout> },
-                    ],
+                    path: Pathname.PLANAIRPORTMASTER,
+                    element: <AccessControlHOC
+                        element={<PlannerAirportMaster />}
+                        access={Permission.planner}
+                    />,
+                },
+                // ------- Admin ---------
+                {
+                    path: Pathname.GLOBALMASTERS,
+                    element: <AccessControlHOC
+                        element={<GlobalMasters />}
+                        access={Permission.admin}
+                    />,
                 },
                 {
-                    path: '*',
-                    element: <NotFound replace />,
+                    path: Pathname.AIRPORTMASTERS,
+                    element: <AccessControlHOC
+                        element={<AirportMasters />}
+                        access={Permission.admin}
+                    />,
                 },
-            ]
-        }
+            ],
+        },
+        {
+            path: Pathname.LOGIN,
+            element: <Login />,
+        },
+        {
+            path: Pathname.COMPONENTS,
+            element: <Components />
+        },
+        {
+            path: Pathname[404],
+            element: <NotFound />
+        },
+        {
+            path: "*",
+            element: <Navigate to="/404" replace />,
+        },
     ]);
 
     return routes;
