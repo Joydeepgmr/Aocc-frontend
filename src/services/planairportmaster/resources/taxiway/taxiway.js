@@ -25,20 +25,6 @@ export const useGetTaxiway = (props) => {
 	// };
 };
 
-// export const useGetCheckIn = (props) => {
-//     const response = useInfiniteQuery({
-//         queryKey: ['get-check-in'],
-//         queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`,{pagination}),
-//         getNextPageParam: (lastPage) => {
-//             if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
-//             return false;
-//         },
-//         ...props,
-//     });
- 
-//     return response;
-// };
-
 export const usePostTaxiway = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-taxiway'],

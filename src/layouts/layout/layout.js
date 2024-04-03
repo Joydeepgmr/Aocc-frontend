@@ -5,10 +5,12 @@ import { useGetUserDetails } from '../../services/userLoginServices/LoginService
 import TopNav from '../topNav/topNav';
 
 const Layout = (props) => {
-	const { data, isLoading, mutate: getUserDetails } = useGetUserDetails();
-	useEffect(() => {
-		getUserDetails();
-	}, []);
+	// const { data, isLoading, mutate: getUserDetails } = useGetUserDetails();
+    // useEffect(() => {
+    //  getUserDetails();
+    // }, []);
+    const data = {role:{name:'Planner'}}
+    const isLoading=false
 	return (
 		<>
 			{isLoading ?

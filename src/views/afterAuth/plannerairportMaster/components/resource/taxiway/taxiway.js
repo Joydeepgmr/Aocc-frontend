@@ -20,11 +20,35 @@ const Taxiway = () => {
 
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [taxiwayData, setTaxiwayData] = useState([]);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: fetchTaxiway, isLoading: isFetchLoading  } = useGetTaxiway();
+	
+	const getTaxiwayHandler = {
+        onSuccess: (data) => handleGetTaxiwaySuccess(data),
+        onError: (error) => handleGetTaxiwayError(error),
+    };
+ 
+    const handleGetTaxiwaySuccess = (data) => {
+		console.log(data,"data here");
+        if (data?.pages) {
+            const newData = data.pages.reduce((acc, page) => {
+                return acc.concat(page.data || []);
+            }, []);
+       
+            setTaxiwayData([...newData]);
+        }
+    };
+	console.log(taxiwayData,'taxiwaydata' );
+
+	const handleGetTaxiwayError = (error) => {
+        toast.error(error?.response?.data?.message);
+    }
+	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
+	console.log(fetchTaxiway,"fetchTaxiway");
+
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -54,12 +78,12 @@ const Taxiway = () => {
 
 	}
 
-
 	//CREATE
 	const handleAddTaxiwaySuccess = (data) => {
-		queryClient.invalidateQueries('get-taxiway');
+		setTaxiwayData([]);
 		closeModal();
 		toast.success(data?.message);
+		queryClient.invalidateQueries('get-taxiway');
 	}
 
 	const handleAddTaxiwayError = (error) => {
@@ -76,7 +100,7 @@ const Taxiway = () => {
 	const handleSaveButton = (value) => {
 		value && postTaxiway(value);
 	};
-
+	
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
@@ -92,6 +116,7 @@ const Taxiway = () => {
 
 	const handleEditTaxiwaySuccess = (data) => {
 		queryClient.invalidateQueries('get-taxiway');
+		setTaxiwayData([]);
 		closeEditModal();
 		toast.success(data?.message);
 	}
@@ -236,7 +261,7 @@ const Taxiway = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchTaxiway?.length) ? (
+			{!Boolean(taxiwayData?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Import Global Reference'}
@@ -260,7 +285,7 @@ const Taxiway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Taxiway Counters
 							</CustomTypography>
-							<TableComponent data={fetchTaxiway} columns={columns} />
+							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
 
