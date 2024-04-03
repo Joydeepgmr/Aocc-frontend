@@ -8,7 +8,6 @@ import CustomSelect from '../../../../../../../components/select/select';
 import './formComponent.scss';
 
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly } ) => {
-
 	const SelectData = [
 		{
 			id: '1',
@@ -52,18 +51,17 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	return (
 		<div className="checkin">
-			<div className="main_form" key={initialValues?.id}>
+			<div className="checkin_form_component" key={initialValues?.id}>
 				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-					<div className="form_section">
-						<div className="form_content">
+						<div className="checkin_form_content">
 							<InputField
 								label="Counter Name"
 								name="name"
-								type="number"
 								placeholder={!isReadOnly && 'Enter the airport name'}
 								warning="Required field"
 								required
 								disabled={isReadOnly || isEdit}
+								type="number"
 							/>
 							<InputField
 								label="Counter Group"
@@ -74,7 +72,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							/>
 						</div>
 
-						<div className="form_content">
+						<div className="checkin_form_content">
 							<CustomSelect
 								SelectData={SelectData}
 								label="Terminal"
@@ -100,7 +98,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							/>
 						</div>
 						<Divider />
-						<div className="form_content">
+						<div className="checkin_form_content">
 							<InputField
 								label="Reason, if unavailable"
 								name="reason"
@@ -126,7 +124,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						</div>
 
 						<Divider />
-						<div className="form_content">
+						<div className="checkin_form_content">
 							<Date
 								label="Valid From"
 								name="validFrom"
@@ -143,8 +141,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								disabled={isReadOnly}
 							/>
 						</div>
-					</div>
-					<div className="form_section">
 						<div className="form_bottomButton">
 							<Button
 								title="Cancel"
@@ -161,7 +157,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								disabled={isReadOnly}
 							/>
 						</div>
-					</div>
 				</Form>
 			</div>
 		</div>
