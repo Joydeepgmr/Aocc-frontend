@@ -114,8 +114,8 @@ const DailySchedule = ({tab}) => {
 	const handleSaveButton = (value) => {
 		const data = {
 			FLIGHTNO: value.FLIGHTNO,
-			START: value.start ?? value.date,
-			END: value.end ?? value.date,
+			START: ConvertIstToUtc(value.start ?? value.date),
+			END: ConvertIstToUtc(value.end ?? value.date),
 			callSign: value.callSign,
 			natureCode: value.natureCode,
 			origin: value.origin,

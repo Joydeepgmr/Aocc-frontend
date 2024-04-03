@@ -108,8 +108,8 @@ const Seasonal = ({tab}) => {
 	const handleSaveButton = (value) => {
 		const data = {
 			FLIGHTNO: value.FLIGHTNO,
-			START: value.start ?? value.date,
-			END: value.end ?? value.date,
+			START: ConvertIstToUtc(value.start ?? value.date),
+			END: ConvertIstToUtc(value.end ?? value.date),
 			callSign: value.callSign,
 			natureCode: value.natureCode,
 			origin: value.origin,
@@ -165,8 +165,9 @@ const Seasonal = ({tab}) => {
 			STA: value.STA,
 			STD: value.STD,
 			pos: value.pos,
+			PDATE: ConvertIstToUtc(value.date),
 			registration: value.registration,
-		};
+		}
 		index === '1' && editSeasonalPlanArrival(data);
 		index=== '2' && editSeasonalPlanDeparture(data);
 	};
