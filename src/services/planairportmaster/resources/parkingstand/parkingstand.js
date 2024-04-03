@@ -1,6 +1,6 @@
 import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
 import { PARKING_STAND,GET_PARKING_STAND } from '../../../../api';
-import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetParkingStand = (props) => {
 	const response = useInfiniteQuery({

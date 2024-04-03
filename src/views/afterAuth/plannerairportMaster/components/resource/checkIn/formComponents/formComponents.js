@@ -57,6 +57,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							<InputField
 								label="Counter Name"
 								name="name"
+<<<<<<< HEAD
+=======
+								// type="number"
+>>>>>>> 36be803002d1fb3792075e3b116d330908562b2e
 								placeholder={!isReadOnly && 'Enter the airport name'}
 								warning="Required field"
 								required

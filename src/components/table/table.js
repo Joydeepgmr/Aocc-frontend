@@ -26,6 +26,8 @@ const TableComponent = ({
         });
     };
 
+    console.log(data, "dattaaa");
+
     return (
         <>
             {fetchData ?

@@ -58,3 +58,7 @@ export const GET_GATE = '/gate/paginated'
 export const GATE = '/gate'
 export const GET_PARKING_STAND = '/parking-stand/paginated'
 export const PARKING_STAND = '/parking-stand'
+export const PARKING_STAND = '/parking-stand';
+export const GET_TAXIWAY = '/taxiway/paginated';
+export const TAXIWAY = '/taxiway';
+export const BAGGAGE_BELT = '/baggage-belt';

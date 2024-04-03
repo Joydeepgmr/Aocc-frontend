@@ -6,8 +6,6 @@ import Button from '../../../../../../../components/button/button';
 import CustomSelect from '../../../../../../../components/select/select';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
-import { useDispatch, useSelector } from 'react-redux';
-
 import './formComponents.scss';
 
 const FormComponent = ({
@@ -26,6 +24,7 @@ const FormComponent = ({
 	}, [gateDropdownData]);
 
 	const [form] = Form.useForm();
+
 	const onFinishHandler = (values) => {
 		const changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -33,10 +32,13 @@ const FormComponent = ({
 				changedValues[key] = values[key];
 			}
 		});
-
 		handleSaveButton(changedValues);
 		form.resetFields();
 	};
+
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues);
@@ -147,7 +149,7 @@ const FormComponent = ({
 				<Divider />
 				<div className="form_section">
 					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
+						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
 						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
