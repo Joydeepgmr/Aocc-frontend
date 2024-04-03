@@ -15,18 +15,18 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		},
 		{
 			id: '2',
-			label: 'Cargo',
-			value: 'bbf94541-45f2-416b-8bd3-7357cc49da96',
+			label: 'terminal2',
+			value: 'xyz',
 		},
 		{
 			id: '3',
 			label: 'terminal3',
-			value: 'bbf94541-45f2-416b-8bd3-7357cc49da96',
+			value: 'xyz',
 		},
 		{
 			id: '4',
-			label: 'terminal2',
-			value: 'bbf94541-45f2-416b-8bd3-7357cc49da96',
+			label: 'Cargo',
+			value: 'xyz',
 		},
 	];
 	
