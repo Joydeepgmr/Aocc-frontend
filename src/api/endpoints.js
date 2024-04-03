@@ -52,5 +52,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner airport master ---------------------*/
 
+export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated'
 export const CHECKIN_COUNTER = '/checkin-counter';
+export const GET_GATE = '/gate/paginated'
 export const GATE = '/gate'

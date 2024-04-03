@@ -9,7 +9,7 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 
 import './formComponent.scss';
 
-const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues, isEdit, isError, errorMessage }) => {
+const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues, isEdit }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [form] = Form.useForm();
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -40,7 +40,7 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							<InputField label="Nature Code" name="natureCode" placeholder="D/I/F/D" />
 							<InputField label="Origin Airport" name="origin" placeholder="Filled Text" />
 							{type == 1 ? (
-								<InputField label="STA" name="STA" placeholder="Filled Text" type="time" required/>
+								<InputField label="STA" name="STA" placeholder="Filled Text" required/>
 							) : (
 								<InputField label="STD" name="STD" placeholder="Filled Text" required/>
 							)}
@@ -117,9 +117,6 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 						<Divider />
 					</div>}
 					<div className="form_bottomButton">
-						{isError && <CustomTypography type="text" fontSize={14} fontWeight="400" color="#db0000">
-							{errorMessage}
-						</CustomTypography>}
 						<Button
 							id="btn"
 							title="Discard"

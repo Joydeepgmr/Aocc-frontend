@@ -2,16 +2,12 @@ import React from 'react';
 import './departure.scss';
 import TableComponent from '../../../../../../../components/table/table';
 
-const Departure = ({data, columns}) => {
-    
-    const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
+const Departure = ({data, columns, fetchData, pagination}) => {
 
     return (
         <div className="main">
             <div>
-				<TableComponent columns={columns} data={data} onChange={handleTableChange} />
+				<TableComponent {...{ data, columns, fetchData, pagination }} />
 			</div>
         </div>
     );

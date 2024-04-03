@@ -18,13 +18,33 @@ import './checkIn.scss';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
+	const [checkinData, setCheckinData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: fetchCheckIn, isLoading: isFetchLoading } = useGetCheckIn();
 
+	const getCheckinHandler = {
+		onSuccess: (data) => handleGetCheckinSuccess(data),
+		onError: (error) => handleGetCheckinError(error),
+	};
+
+	const handleGetCheckinSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+		
+			setCheckinData([...newData]);
+		}
+	};
+
+	const handleGetCheckinError = (error) => {
+		toast.error(error?.response?.data?.message);
+	}
+	const { data: fetchCheckIn, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetCheckIn(getCheckinHandler);
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -55,9 +75,10 @@ const CheckIn = () => {
 
 	//CREATE
 	const handleAddCheckinSuccess = (data) => {
-		queryClient.invalidateQueries('get-check-in');
+		setCheckinData([])
 		closeModal();
 		toast.success(data?.message);
+		queryClient.invalidateQueries('get-check-in');
 	}
 
 	const handleAddCheckinError = (error) => {
@@ -73,6 +94,9 @@ const CheckIn = () => {
 	
 	const handleSaveButton = (value) => {
 		value["isAllocatedToLounge"] = false;
+		value["name"] = value?.name.toString();
+		value["row"] = value?.row.toString();
+		value["phoneNumber"] = value?.phoneNumber.toString();
 		value && postCheckIn(value);
 	};
 
@@ -90,9 +114,10 @@ const CheckIn = () => {
 	const {mutate: editCheckin, isLoading: isEditLoading} = useEditCheckin(rowData?.id,editCheckinHandler)
 	
 	const handleEditCheckinSuccess = (data) => {
-		queryClient.invalidateQueries('get-check-in');
 		closeEditModal();
+		setCheckinData([]);
 		toast.success(data?.message);
+		queryClient.invalidateQueries('get-check-in');
 	}
 
 	const handleEditCheckinError = (error) => {
@@ -112,6 +137,7 @@ const CheckIn = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.row && (value["row"] = value?.row.toString());
 		editCheckin(value);
 	};
 
@@ -237,7 +263,7 @@ const CheckIn = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchCheckIn?.length) ? (
+			{!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Import Global Reference'}
@@ -261,7 +287,7 @@ const CheckIn = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
 							</CustomTypography>
-							<TableComponent data={fetchCheckIn} columns={columns} />
+							<TableComponent data={checkinData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
 

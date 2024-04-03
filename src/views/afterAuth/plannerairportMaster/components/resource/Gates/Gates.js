@@ -23,12 +23,32 @@ import './Gates.scss';
 
 const Gates = () => {
 	const queryClient = useQueryClient();
+	const [gateData, setGateData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: fetchGates, isLoading: isFetchLoading } = useGetGate();
+	
+	const getGateHandler = {
+		onSuccess: (data) => handleGetGateSuccess(data),
+		onError: (error) => handleGetGateError(error),
+	};
+
+	const handleGetGateSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+		
+			setGateData([...newData]);
+		}
+	};
+
+	const handleGetGateError = (error) => {
+		toast.error(error?.response?.data?.message);
+	}
+	const { data: fetchGates, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -49,8 +69,9 @@ const Gates = () => {
 
 	//CREATE
 	const handleAddGateSuccess = (data) => {
-		queryClient.invalidateQueries('get-gate');
+		setGateData([]);
 		closeModal();
+		queryClient.invalidateQueries('get-gate');
 		toast.success(data?.message);
 	};
 
@@ -65,7 +86,8 @@ const Gates = () => {
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
 	const handleSaveButton = (value) => {
-		postGate(value);
+		value["name"] = value?.name.toString();
+		value && postGate(value);
 	};
 
 	const handleCloseButton = () => {
@@ -80,8 +102,9 @@ const Gates = () => {
 	};
 
 	const handleEditGateSuccess = (data) => {
-		queryClient.invalidateQueries('get-gate');
+		setGateData([]);
 		closeEditModal();
+		queryClient.invalidateQueries('get-gate');
 		toast.success(data?.message);
 	};
 
@@ -96,7 +119,7 @@ const Gates = () => {
 			validTill: record?.validTo ? dayjs(record?.validTo) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
-			terminal: record.terminal.id,
+			terminal: record?.terminal?.id,
 		};
 		setRowData(record);
 		openEditModal();
@@ -169,7 +192,7 @@ const Gates = () => {
 			title: 'Airport',
 			dataIndex: 'airport',
 			key: 'airport',
-			render: (airport) => airport.name ?? '-',
+			render: (airport) => airport?.name ?? '-',
 		},
 		{
 			title: 'Bus Gate',
@@ -181,7 +204,7 @@ const Gates = () => {
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
-			render: (terminal) => terminal.name ?? '-',
+			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Gate ID',
@@ -254,7 +277,7 @@ const Gates = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchGates?.length) ? (
+			{!Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Upload CSV'}
@@ -284,7 +307,7 @@ const Gates = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Gates
 							</CustomTypography>
-							<TableComponent data={fetchGates} columns={columns} />
+							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
 
