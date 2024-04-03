@@ -51,16 +51,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	return (
 		<div className="checkin">
-			<div className="checkin_form_component" key={initialValues?.id}>
+			<div className="main_form" key={initialValues?.id}>
 				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-						<div className="checkin_form_content">
+					<div className="form_section">
+						<div className="form_content">
 							<InputField
 								label="Counter Name"
 								name="name"
-<<<<<<< HEAD
-=======
-								// type="number"
->>>>>>> 36be803002d1fb3792075e3b116d330908562b2e
 								placeholder={!isReadOnly && 'Enter the airport name'}
 								warning="Required field"
 								required
@@ -76,7 +73,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							/>
 						</div>
 
-						<div className="checkin_form_content">
+						<div className="form_content">
 							<CustomSelect
 								SelectData={SelectData}
 								label="Terminal"
@@ -102,7 +99,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							/>
 						</div>
 						<Divider />
-						<div className="checkin_form_content">
+						<div className="form_content">
 							<InputField
 								label="Reason, if unavailable"
 								name="reason"
@@ -128,7 +125,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						</div>
 
 						<Divider />
-						<div className="checkin_form_content">
+						<div className="form_content">
 							<Date
 								label="Valid From"
 								name="validFrom"
@@ -145,6 +142,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								disabled={isReadOnly}
 							/>
 						</div>
+					</div>
+					<div className="form_section">
 						<div className="form_bottomButton">
 							<Button
 								title="Cancel"
@@ -161,6 +160,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								disabled={isReadOnly}
 							/>
 						</div>
+					</div>
 				</Form>
 			</div>
 		</div>
