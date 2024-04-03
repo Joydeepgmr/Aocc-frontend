@@ -262,7 +262,7 @@ const Taxiway = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(taxiwayData?.length) ? (
+			{!Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Import Global Reference'}

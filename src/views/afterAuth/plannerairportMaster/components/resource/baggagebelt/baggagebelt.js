@@ -25,8 +25,7 @@ const BaggageBelt = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	// const { data: fetchBaggageBelt, isLoading: isFetchLoading  } = useGetBaggageBelt();
-
+	
 	const getBaggageBeltHandler = {
         onSuccess: (data) => handleGetBaggageBeltSuccess(data),
         onError: (error) => handleGetBaggageBeltError(error),
@@ -252,7 +251,7 @@ const BaggageBelt = () => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(baggageBeltData?.length) ? (
+			{!Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
                 title1="Create"
                 title2={'Import Global Reference'}
@@ -272,7 +271,7 @@ const BaggageBelt = () => {
 								onChange={handleDropdownItemClick}
 							/>
 						</div>
-						<div className="taxiway--tableContainer">
+						<div className="baggage_belt--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Baggage Belt Counters
 							</CustomTypography>

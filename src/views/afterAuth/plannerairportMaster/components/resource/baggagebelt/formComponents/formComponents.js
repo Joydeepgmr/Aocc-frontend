@@ -52,7 +52,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							<InputField
 								label="Belt Name"
 								name="name"
-								placeholder="Enter the airport name"
+								placeholder={isReadOnly && "Enter the belt name"}
 								warning="Required field"
 								required
 								disabled={isReadOnly || isEdit}
@@ -64,7 +64,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							<InputField
 								label="Status"
 								name="status"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								type="number"
 								disabled={isReadOnly}
@@ -73,7 +73,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							<InputField
 								label="Phone Number"
 								name="phone_number"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								disabled={isReadOnly}
 							/>
@@ -83,34 +83,35 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								SelectData={SelectData}
 								name="terminal"
 								label="Terminal"
-								placeholder={'Filled Text'}
+								placeholder={isReadOnly && 'Filled Text'}
 								disabled={isReadOnly}
 							/>
 							<InputField
 								label="Default Allocation Duration"
 								name="default_allocation_duration"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								suffixText={'minutes'}
+								disabled={isReadOnly}
 							/>
 						</div>
 						<div className="form_content">
 							<InputField
 								label="Reason, if unavailable"
 								name="reason_if_unavailable"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								disabled={isReadOnly}
 							/>
-							<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" disabled={isReadOnly}/>
+							<Date label="Unavailable from" name="unavailable_from" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly}/>
 
-							<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" disabled={isReadOnly}/>
+							<Date label="Unavailable to" name="unavailable_to" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly}/>
 						</div>
 					</div>
 					<Divider />
 					<div className="form_section">
 						<div className="form_content">
-							<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required disabled={isReadOnly || isEdit} />
-							<Date label="Valid To" name="validTill" placeholder="Enter the airport name" disabled={isReadOnly} />
+							<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name" }required disabled={isReadOnly || isEdit} />
+							<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
 						</div>
 					</div>
 					<Divider />
