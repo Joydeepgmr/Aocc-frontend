@@ -72,7 +72,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								SelectData={SelectData}
 								label="Connected to Runway"
 								placeholder={!isReadOnly && 'Select Runways'}
-								name="runwayId"
+								name="runway"
 								disabled={isReadOnly | isEdit}
 							/>
 						</div>

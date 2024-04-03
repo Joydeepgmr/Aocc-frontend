@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './arrival.scss';
 import TableComponent from '../../../../../../../components/table/table';
 
-const Arrival = ({data,columns}) => {
-
-    const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
+const Arrival = ({data,columns, fetchData, pagination}) => {
 
     return (
         <div className="main">
             <div>    
-				<TableComponent columns={columns} data={data} onChange={handleTableChange} />
+				<TableComponent {...{ data, columns, fetchData, pagination }} />
 			</div>
         </div>
     );

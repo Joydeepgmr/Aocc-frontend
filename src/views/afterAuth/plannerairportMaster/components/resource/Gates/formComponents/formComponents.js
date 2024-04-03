@@ -62,6 +62,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							required
 							disabled={isEdit || isReadOnly}
+							type="number"
 						/>
 						<CheckBoxField
 								name="busGate"

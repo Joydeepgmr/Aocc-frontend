@@ -1,11 +1,15 @@
-import { useQuery, useMutation } from 'react-query';
-import { GATE } from "../../../../api";
+import { useInfiniteQuery, useMutation } from 'react-query';
+import { GATE, GET_GATE } from "../../../../api";
 import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetGate = (props) => {
-	const response = useQuery({
+	const response = useInfiniteQuery({
 		queryKey: ['get-gate'],
-		queryFn: async () => await Get(`${GATE}`),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GATE}`, {pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
+		},
 		...props,
 	});
 
@@ -15,7 +19,7 @@ export const useGetGate = (props) => {
 export const usePostGate = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-gate'],
-		mutationFn: (data) => Post(`${GATE}`, data),
+		mutationFn: async (data) => await Post(`${GATE}`, data),
 		...props,
 	});
 
@@ -25,7 +29,7 @@ export const usePostGate = (props) => {
 export const useEditGate = (id,props) => {
 	const response = useMutation({
 		mutationKey: ['edit-gate'],
-		mutationFn: (data) => Patch(`${GATE}/${id}`, data),
+		mutationFn: async (data) => await Patch(`${GATE}/${id}`, data),
 		...props,
 	});
 
@@ -35,7 +39,7 @@ export const useEditGate = (id,props) => {
 export const useDeleteGate = (props) => {
 	const response = useMutation({
 		mutationKey: ['delete-gate'],
-		mutationFn: (id) => Delete(`${GATE}/${id}`),
+		mutationFn: async (id) => await Delete(`${GATE}/${id}`),
 		...props,
 	});
 

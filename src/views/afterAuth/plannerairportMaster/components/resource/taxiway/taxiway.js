@@ -134,7 +134,7 @@ const Taxiway = () => {
 			validTill: record?.validTo ? dayjs(record?.validTo) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			// runwayId: record?.runway?.id,
+			runway: record?.runway?.id,
 		}
 		setRowData(record);
 		openEditModal();
