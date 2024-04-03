@@ -313,7 +313,7 @@ const Gates = () => {
 					{/* modals */}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeModal}
 						title={'Add Gate'}
 						className="custom_modal"
@@ -329,7 +329,7 @@ const Gates = () => {
 
 					<ModalComponent
 						isModalOpen={isEditModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeEditModal}
 						title={`Edit Gate`}
 						className="custom_modal"

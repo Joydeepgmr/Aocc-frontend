@@ -381,7 +381,7 @@ const DailySchedule = ({tab}) => {
 			{/* modals */}
 			<ModalComponent
 				isModalOpen={isModalOpen}
-				width="120rem"
+				width="80%"
 				closeModal={closeModal}
 				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
 				className="custom_modal"
@@ -398,7 +398,7 @@ const DailySchedule = ({tab}) => {
 			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
 			<ModalComponent
 				isModalOpen={isEditModalOpen}
-				width="120rem"
+				width="80%"
 				closeModal={closeEditModal}
 				title={`Edit ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
 				className="custom_modal"
