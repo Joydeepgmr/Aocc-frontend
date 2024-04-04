@@ -235,7 +235,7 @@ const Taxiway = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Add New Taxi',
+			label: 'Add Taxiway',
 			value: 'addNewTaxi',
 			key: '0',
 		},

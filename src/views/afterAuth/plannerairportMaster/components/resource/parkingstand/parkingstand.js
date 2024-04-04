@@ -234,7 +234,7 @@ const ParkingStand = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Parking Stand',
 			value: 'create',
 			key: '0',
 		},

@@ -238,7 +238,7 @@ const CheckIn = () => {
 
     const dropdownItems = [
         {
-            label: 'Create',
+            label: 'Add Checkin Counter',
             value: 'create',
             key: '0',
         },

@@ -225,7 +225,7 @@ const BaggageBelt = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Add New Baggage Belt',
+			label: 'Add Baggage Belt',
 			value: 'addNewBaggageBelt',
 			key: '0',
 		},

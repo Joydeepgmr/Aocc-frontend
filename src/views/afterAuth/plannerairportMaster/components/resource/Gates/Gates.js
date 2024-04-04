@@ -250,7 +250,7 @@ const Gates = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Gate',
 			value: 'create',
 			key: '0',
 		},
