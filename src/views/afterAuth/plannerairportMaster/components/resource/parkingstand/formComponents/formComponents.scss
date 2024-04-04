@@ -1,10 +1,35 @@
-.custom_content{
+@import '../../../../../../../styles/sass/mixins';
+@import '../../../../../../../styles/sass/variables';
+@import '../../../../../../../styles/sass/utils';
+ 
+.parking_form_container {
+    padding: 2rem 0rem 2.4rem 0rem;
+    box-sizing: content-box;
     display: flex;
-}
-.custom_checkbox{
-    display: flex;
-    flex-direction:row-reverse;
-}
-#custom_checkbox{
-    border-radius: 50%;
+    flex-direction: column;
+    gap: 1rem;
+ 
+    .parking_form_inputfields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.4rem;
+        .ant-row {
+            display: flex;
+            flex-flow: column;
+        }
+        .ant-form-item-label {
+            text-align: start;
+        }
+        .input_form_item {
+            &.custom_input {
+                width: calc(33% - 2.4rem);
+            }
+        }
+        .select {
+            width: calc(33% - 2.4rem);
+        }
+        .custom_date {
+            width: calc(33% - 2.4rem);
+        }
+    }
 }
