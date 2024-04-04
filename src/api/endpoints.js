@@ -50,6 +50,9 @@ export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 
 export const GET_COUNTRY_DATA = '/country/';
 
+/*--------------------------planner Dashboard ---------------------*/
+export const GET_MILESTONE_DATA = '/milestone/paginated'
+
 /*--------------------------planner airport master ---------------------*/
 
 export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated';
