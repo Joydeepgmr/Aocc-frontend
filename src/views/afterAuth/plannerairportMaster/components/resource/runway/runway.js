@@ -195,7 +195,7 @@ const Runway = () => {
 			title: 'Type',
 			dataIndex: 'type',
 			key: 'type',
-			render: (type) => type?.name ?? '-',
+			render: (reason) => reason?.name ?? '-',
 		},
 		{
 			title: 'Status',
