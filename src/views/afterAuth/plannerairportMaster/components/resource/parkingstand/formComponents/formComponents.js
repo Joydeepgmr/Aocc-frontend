@@ -1,24 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
+import CustomSelect from '../../../../../../../components/select/select';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import './formComponents.scss';
 
-
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+const FormComponent = ({
+	handleSaveButton,
+	handleButtonClose,
+	initialValues,
+	isEdit,
+	isReadOnly,
+	gateDropdownData,
+}) => {
+	isEdit && (initialValues['gate'] = initialValues?.gate?.id);
+	const SelectGateData = useMemo(() => {
+		return gateDropdownData.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [gateDropdownData]);
 
 	const [form] = Form.useForm();
-
-	// const onFinishHandler = (values) => {
-	// 	console.log('Values are ', values);
-	// 	form.resetFields();
-	// 	dispatch(addAircraftRegistration(values));
-	// 	dispatch(updateIsShowTableComponents());
-	// };
-
 
 	const onFinishHandler = (values) => {
 		const changedValues = isEdit ? {} : values;
@@ -27,7 +32,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				changedValues[key] = values[key];
 			}
 		});
-
 		handleSaveButton(changedValues);
 		form.resetFields();
 	};
@@ -36,127 +40,126 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		form.setFieldsValue(initialValues);
 	}, [form, initialValues]);
 
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
+
 	return (
-		<div className="main_form">
-			<div className="main_form" key={initialValues?.id}>
-				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-					<div className="form_section">
-						<div className="form_content">
-							<InputField
-								label="Stand Name"
-								name="stand_name"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								warning="Required field"
-								required
-							/>
-							<InputField
-								label="Airport"
-								name="airport"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field" />
-						</div>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+				<div className='parking_form_container'>
+					<div className="parking_form_inputfields">
+						<InputField
+							label="Stand Name"
+							name="name"
+							placeholder="Enter the stand name"
+							warning="Required field"
+							disabled={isReadOnly || isEdit}
+							required
+							className="custom_input"
+						/>
+					</div>
 
-						<div className="form_content">
-							<InputField
-								label="Connected to Gate"
-								name="connected_to_gate"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field"
-							/>
-							<InputField
-								label="Connected to Taxiway"
-								name="connected_to_taxiway"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field"
-								type="number"
-							/>
-							<InputField
-								label="Default Allocation Duration"
-								name="default_allocation_duration"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field"
-								suffixText="min"
-							/>
-						</div>
-						<Divider />
-						<div className="custom_equipped">
-							<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
-								Equipped with
-							</CustomTypography>
-
-							<div className="custom_content">
-								<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" />
-								<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" />
-								<CheckBoxField name="fuel_pits" label="Fuel Pits" title="Single Checkbox" />
-								<CheckBoxField name="push_back" label="Pushback" title="Single Checkbox" />
-								<CheckBoxField name="air_bridge" label="Air Bridge" title="Single Checkbox" />
-								<CheckBoxField name="air_condition" label="Air Condition" title="Single Checkbox" />
-								<CheckBoxField name="docking_system" label="Docking System" title="Single Checkbox" />
-							</div>
-						</div>
-						<Divider />
-						<div className="form_content">
-							<InputField
-								label="Reason, if unavailable"
-								name="reason_if_unavailable"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field"
-							/>
-							<Date
-								label="Unavailable from"
-								name="unavailable_from"
-								placeholder={!isReadOnly && "Enter the airport name"} 
-								disabled={isReadOnly}
-							/>
-
-							<Date
-								label="Unavailable to"
-								name="unavailable_to"
-								placeholder={!isReadOnly && "Enter the airport name"}
-								disabled={isReadOnly}
-							/>
-						</div>
+					<div className="parking_form_inputfields">
+						<CustomSelect
+							SelectData={SelectGateData}
+							label="Connected to Gate"
+							placeholder={'Select Gate'}
+							name="gate"
+							disabled={isReadOnly || isEdit}
+							className="select"
+						/>
+						<InputField
+							label="Connected to Taxiway"
+							name="taxiway"
+							placeholder="Filled Text"
+							warning="Required field"
+							type="number"
+							disabled={isReadOnly || isEdit}
+							className="custom_input"
+						/>
+						<InputField
+							label="Default Allocation Duration"
+							name="defaultAllocationDuration"
+							placeholder="Filled Text"
+							warning="Required field"
+							suffixText="min"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
 					</div>
 					<Divider />
-					<div className="form_section">
-						<div className="form_content">
-							<Date
-								label="Valid From"
-								name="valid_from"
-								placeholder={!isReadOnly && "Enter the airport name"}
-								required 
-								disabled={isReadOnly || isEdit}
-							/>
-							<Date
-								label="Valid To"
-								name="valid_till"
-								placeholder={!isReadOnly && "Enter the airport name"}
-								disabled={isReadOnly}
-							/>
-						</div>
+					<div className="parking_form_inputfields">
+						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
+							Equipped with
+						</CustomTypography>
+							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="apu" label="APU" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="fuelPit" label="Fuel Pits" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="pushBack" label="Pushback" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="airBridge" label="Air Bridge" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="airCondition" label="Air Condition" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="dockingSystem" label="Docking System" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
 					</div>
 					<Divider />
-					<div className="form_section">
-						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-								onClick={handleButtonClose} 
-							/>
-							<Button
-								title="Save"
-								type="filledText"
-								id="btn"
-								isSubmit="submit" 
-								disabled={isReadOnly}
-							/>
-						</div>
+					<div className="parking_form_inputfields">
+						<InputField
+							label="Reason, if unavailable"
+							name="reason"
+							placeholder="Filled Text"
+							warning="Required field"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
+						<Date
+							label="Unavailable from"
+							name="unavailableFrom"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
+
+						<Date
+							label="Unavailable to"
+							name="unavailableTo"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
 					</div>
-				</Form>
-			</div>
-		</div >
+				
+				<Divider />
+					<div className="parking_form_inputfields">
+						<Date
+							label="Valid From"
+							name="validFrom"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							required
+							format="MM-DD-YYYY"
+							disabled={isReadOnly || isEdit}
+							className="custom_date"
+						/>
+						<Date
+							label="Valid To"
+							name="validTill"
+							placeholder={!isReadOnly && 'Enter the parking stand name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
+					</div>
+					</div>
+				<Divider />
+				<div className="parking_form_inputfields">
+					<div className="form_bottomButton">
+						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
+						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+					</div>
+				</div>
+				
+			</Form>
+		
 	);
 };
 

@@ -3,7 +3,6 @@ import Button from '../../../../../components/button/button';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ModalComponent from '../../../../../components/modal/modal';
 import './common_card.scss';
-import { Dropdown } from 'antd';
 const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formComponent, formClassName }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -27,7 +26,7 @@ const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formCompon
 
 				<ModalComponent
 					isModalOpen={isModalOpen}
-					width="120rem"
+					width="80vw"
 					closeModal={closeModal}
 					title={
 						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">

@@ -1,45 +1,35 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { PARKING_STAND } from '../../../../api';
-import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { PARKING_STAND,GET_PARKING_STAND } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetParkingStand = (props) => {
-	const response = useQuery({
+	const response = useInfiniteQuery({
 		queryKey: ['get-parking-stand'],
-		queryFn: async () => await Get(`${PARKING_STAND}`),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_PARKING_STAND}`,{pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
+		},
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return response;
 };
 
 export const usePostParkingStand = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-parking-stand'],
-		mutationFn: (data) => Post(`${PARKING_STAND}`, data),
+		mutationFn: async (data) => await Post(`${PARKING_STAND}`, data),
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return response;
 };
 
-export const useEditParkingStand = (props) => {
+export const useEditParkingStand = (id,props) => {
 	const response = useMutation({
 		mutationKey: ['edit-parking-stand'],
-		mutationFn: (data) => Patch(`${PARKING_STAND}`, data),
+		mutationFn: async (data) => await Patch(`${PARKING_STAND}/${id}`, data),
 		...props,
 	});
 
@@ -50,17 +40,8 @@ export const useDeleteParkingStand = (props) => {
 	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-parking-stand'],
-		mutationFn: (id) => Delete(`${PARKING_STAND}/${id}`),
-		onSuccess: () => {
-			queryClient.invalidateQueries('get-parking-stand');
-		},
+		mutationFn: async (id) => await Delete(`${PARKING_STAND}/${id}`),
 		...props,
 	});
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.data?.message
-		: error?.message;
-
-	return { ...response, data: data?.data, message: statusMessage };
+	return response;
 };
