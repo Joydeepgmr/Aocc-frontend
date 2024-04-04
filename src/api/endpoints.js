@@ -61,3 +61,5 @@ export const PARKING_STAND = '/parking-stand'
 export const GET_TAXIWAY = '/taxiway/paginated';
 export const TAXIWAY = '/taxiway';
 export const BAGGAGE_BELT = '/baggage-belt';
+export const GET_TERMINAL = '/terminal/paginated';
+export const TERMINAL = '/terminal';

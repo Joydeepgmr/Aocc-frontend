@@ -14,8 +14,9 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import { useGetGate } from '../../../../../../services/planairportmaster/resources/gates/gates';
-import './parkingStand.scss';
+import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
+import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
+import './parkingstand.scss';
 
 const ParkingStand = () => {
 	const queryClient = useQueryClient();
@@ -26,8 +27,9 @@ const ParkingStand = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-	const { data: gateDropdownData = [],isSuccess: isGetGateDropdownSuccess } = useGetGate();
-	
+	const { data: gateDropdownData = [] } = useGateDropdown();
+	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
+
 	const getParkingStandHandler = {
 		onSuccess: (data) => handleGetParkingStandSuccess(data),
 		onError: (error) => handleGetParkingStandError(error),
@@ -270,7 +272,8 @@ const ParkingStand = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
-						gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+						gateDropdownData = {gateDropdownData}
+						taxiwayDropdownData = {taxiwayDropdownData}
 					/>}
 				/>
 			) : (
@@ -305,7 +308,8 @@ const ParkingStand = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								key={Math.random() * 100}
-								gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+								gateDropdownData = {gateDropdownData}
+								taxiwayDropdownData = {taxiwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>
@@ -324,7 +328,8 @@ const ParkingStand = () => {
 						isEdit = {true}
 						initialValues={rowData}
 						isReadOnly = {isReadOnly}
-						gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+						gateDropdownData = {gateDropdownData}
+						taxiwayDropdownData = {taxiwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
