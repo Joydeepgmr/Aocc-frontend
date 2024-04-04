@@ -1,40 +1,56 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../../../HttpServices/HttpServices';
+import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
+import { TERMINAL, GET_TERMINAL } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
-export const usePostBaggageBelt = (props) => {
-	const queryClient = useQueryClient();
-	const response = useMutation({
-		mutationKey: [''],
-		mutationFn: async (data) => await Post(``, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('');
+export const useGetTerminal = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-terminal'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_TERMINAL}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
 		},
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return response;
 };
 
-export const useGetBaggageBelt = (props) => {
-	const response = useQuery({
-		queryKey: [''],
-		queryFn: async () => await Get(``),
+export const usePostTerminal = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-terminal'],
+		mutationFn: async (data) => await Post(`${TERMINAL}`, data),
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return response;
 };
+
+export const useEditTerminal = (id, props) => {
+	const response = useMutation({
+		mutationKey: ['edit-terminal'],
+		mutationFn: async (data) => await Patch(`${TERMINAL}/${id}`, data),
+		...props,
+	});
+
+	return response;
+};
+
+export const useDeleteTerminal = (props) => {
+	const response = useMutation({
+		mutationKey: ['delete-terminal'],
+		mutationFn: async (id) => await Delete(`${TERMINAL}/${id}`),
+		...props,
+	});
+	return response;
+};
+
+export const useTerminalDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-terminal-dropdown'],
+		queryFn: async () => await Post(`${GET_TERMINAL}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

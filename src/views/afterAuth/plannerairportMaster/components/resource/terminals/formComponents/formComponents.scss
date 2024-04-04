@@ -2,14 +2,14 @@
 @import '../../../../../../../styles/sass/variables';
 @import '../../../../../../../styles/sass/utils';
  
-.baggageBelt_form_container {
+.terminal_form_container {
     padding: 2rem 0rem 2.4rem 0rem;
     box-sizing: content-box;
     display: flex;
     flex-direction: column;
     gap: 1rem;
  
-    .baggageBelt_form_inputFields {
+    .terminal_form_inputfields {
         display: flex;
         flex-wrap: wrap;
         gap: 2.4rem;
@@ -22,14 +22,14 @@
         }
         .input_form_item {
             &.custom_input {
-                width: calc(33% - 2.4rem);
+                width: 45%;
             }
         }
         .select {
-            width: calc(33% - 2.4rem);
+            width: 45%;
         }
         .custom_date {
-            width: calc(33% - 2.4rem);
+            width: 45%;
         }
     }
 }

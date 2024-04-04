@@ -29,7 +29,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			value: 'xyz',
 		},
 	];
-	
+
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		const changedValues = isEdit ? {} : values;
@@ -48,73 +48,75 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	}, [form, initialValues]);
 
 	return (
-		<div className="taxiway">
-			<div className="main_form" >
-				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-					<div className="form_section">
-						<div className="form_content">
-							<InputField
-								label="Taxiway Name"
-								name="name"
-								placeholder={!isReadOnly && "Enter the airport name"}
-								warning="Required field"
-								required
-								disabled={isReadOnly || isEdit}
-							/>
-							{/* <InputField
-								label="Airport"
-								name="airport"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field" 
-								disabled={isReadOnly}
-							/> */}
-							<CustomSelect
-								SelectData={SelectData}
-								label="Connected to Runway"
-								placeholder={!isReadOnly && 'Select Runways'}
-								name="runway"
-								disabled={isReadOnly | isEdit}
-							/>
-						</div>
-						<Divider />
-						<div className="form_content">
-							<InputField
-								label="Reason, if unavailable"
-								name="reason"
-								placeholder={!isReadOnly && "Filled Text"}
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
-							<Date
-								label="Unavailable from"
-								name="unavailableFrom"
-								placeholder={!isReadOnly && "Enter the airport name" }
-								disabled={isReadOnly}
-							/>
-
-							<Date
-								label="Unavailable to"
-								name="unavailableTo"
-								placeholder={!isReadOnly && "Enter the airport name"}
-								disabled={isReadOnly}
-							/>
-						</div>
+		<div key={initialValues?.id}>
+			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+				<div className='taxiway_form_container'>
+					<div className="taxiway_form_inputFields">
+						<InputField
+							label="Taxiway Name"
+							name="name"
+							placeholder={!isReadOnly && "Enter the airport name"}
+							warning="Required field"
+							required
+							disabled={isReadOnly || isEdit}
+							className='custom_input'
+						/>
+						<CustomSelect
+							SelectData={SelectData}
+							label="Connected to Runway"
+							placeholder={!isReadOnly && 'Select Runways'}
+							name="runway"
+							disabled={isReadOnly | isEdit}
+							className='custom_input'
+						/>
 					</div>
 					<Divider />
-					<div className="form_section">
-						<div className="form_content">
-							<Date label="Valid From" name="validFrom" placeholder={!isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} />
-							<Date label="Valid To" name="validTill" placeholder={!isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
-						</div>
+					<div className="taxiway_form_inputFields">
+						<InputField
+							label="Reason, if unavailable"
+							name="reason"
+							placeholder={!isReadOnly && "Filled Text"}
+							warning="Required field"
+							disabled={isReadOnly}
+							className='custom_input'
+						/>
+						<Date
+							label="Unavailable from"
+							name="unavailableFrom"
+							placeholder={!isReadOnly && "Enter the airport name"}
+							disabled={isReadOnly}
+							className='custom_date'
+						/>
+						<Date
+							label="Unavailable to"
+							name="unavailableTo"
+							placeholder={!isReadOnly && "Enter the airport name"}
+							disabled={isReadOnly}
+							className='custom_date'
+						/>
 					</div>
-					<div className="form_section">
-						<div className="form_bottomButton">
-							<Button title='Cancel' type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
-							<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
-						</div>
+					<Divider />
+					<div className="taxiway_form_inputFields">
+						<Date
+							label="Valid From"
+							name="validFrom"
+							placeholder={!isReadOnly && "Enter the airport name"}
+							required
+							disabled={isReadOnly || isEdit}
+							className='custom_date' />
+						<Date
+							label="Valid To"
+							name="validTill"
+							placeholder={!isReadOnly && "Enter the airport name"}
+							disabled={isReadOnly}
+							className='custom_date' />
 					</div>
-				</Form>
-			</div>
+					<div className="custom_buttons">
+						<Button title='Cancel' type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
+						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
+					</div>
+				</div>
+			</Form>
 		</div>
 	);
 };
