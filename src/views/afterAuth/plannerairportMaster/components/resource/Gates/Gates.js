@@ -298,7 +298,7 @@ const Gates = () => {
 						<div className="gate--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
-								buttonText="Actions"
+								buttonText="Create"
 								className="custom_dropdownButton"
 								onChange={handleDropdownItemClick}
 							/>

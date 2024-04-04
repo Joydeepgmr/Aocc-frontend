@@ -73,7 +73,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							label="Terminal"
 							placeholder={'Select Terminal'}
 							name="terminal"
-							disabled={isReadOnly}
+							disabled={isReadOnly || isEdit}
 						/>
 						<InputField
 							label="Gate ID"
@@ -138,18 +138,18 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className="custom_date"
 						/>
 					</div>
-					<Divider />
-					<div className="gate_form_inputfields">
-						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-								onClick={handleButtonClose}
-							/>
-							<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
-						</div>
+				</div>
+				<Divider />
+				<div className="gate_form_inputfields">
+					<div className="form_bottomButton">
+						<Button
+							title="Cancel"
+							type="filledText"
+							id="btn"
+							className="custom_svgButton"
+							onClick={handleButtonClose}
+						/>
+						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
 			</Form>

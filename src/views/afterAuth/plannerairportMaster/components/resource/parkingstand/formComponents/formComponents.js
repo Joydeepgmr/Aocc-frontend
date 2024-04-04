@@ -45,10 +45,9 @@ const FormComponent = ({
 	}, [form, initialValues]);
 
 	return (
-		<div className="main_form">
 			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-				<div className="form_section">
-					<div className="form_content">
+				<div className='parking_form_container'>
+					<div className="parking_form_inputfields">
 						<InputField
 							label="Stand Name"
 							name="name"
@@ -56,16 +55,18 @@ const FormComponent = ({
 							warning="Required field"
 							disabled={isReadOnly || isEdit}
 							required
+							className="custom_input"
 						/>
 					</div>
 
-					<div className="form_content">
+					<div className="parking_form_inputfields">
 						<CustomSelect
 							SelectData={SelectGateData}
 							label="Connected to Gate"
 							placeholder={'Select Gate'}
 							name="gate"
 							disabled={isReadOnly || isEdit}
+							className="select"
 						/>
 						<InputField
 							label="Connected to Taxiway"
@@ -74,6 +75,7 @@ const FormComponent = ({
 							warning="Required field"
 							type="number"
 							disabled={isReadOnly || isEdit}
+							className="custom_input"
 						/>
 						<InputField
 							label="Default Allocation Duration"
@@ -82,32 +84,31 @@ const FormComponent = ({
 							warning="Required field"
 							suffixText="min"
 							disabled={isReadOnly}
+							className="custom_input"
 						/>
 					</div>
 					<Divider />
-					<div className="custom_equipped">
+					<div className="parking_form_inputfields">
 						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
 							Equipped with
 						</CustomTypography>
-
-						<div className="custom_content">
-							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="fuelPit" label="Fuel Pits" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="pushBack" label="Pushback" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="airBridge" label="Air Bridge" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="airCondition" label="Air Condition" title="Single Checkbox" disabled={isReadOnly}/>
-							<CheckBoxField name="dockingSystem" label="Docking System" title="Single Checkbox" disabled={isReadOnly}/>
-						</div>
+							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="apu" label="APU" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="fuelPit" label="Fuel Pits" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="pushBack" label="Pushback" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="airBridge" label="Air Bridge" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="airCondition" label="Air Condition" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
+							<CheckBoxField name="dockingSystem" label="Docking System" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
 					</div>
 					<Divider />
-					<div className="form_content">
+					<div className="parking_form_inputfields">
 						<InputField
 							label="Reason, if unavailable"
 							name="reason"
 							placeholder="Filled Text"
 							warning="Required field"
 							disabled={isReadOnly}
+							className="custom_input"
 						/>
 						<Date
 							label="Unavailable from"
@@ -115,6 +116,7 @@ const FormComponent = ({
 							placeholder={!isReadOnly && 'Enter the parking stand name'}
 							format="MM-DD-YYYY"
 							disabled={isReadOnly}
+							className="custom_date"
 						/>
 
 						<Date
@@ -123,12 +125,12 @@ const FormComponent = ({
 							placeholder={!isReadOnly && 'Enter the parking stand name'}
 							format="MM-DD-YYYY"
 							disabled={isReadOnly}
+							className="custom_date"
 						/>
 					</div>
-				</div>
+				
 				<Divider />
-				<div className="form_section">
-					<div className="form_content">
+					<div className="parking_form_inputfields">
 						<Date
 							label="Valid From"
 							name="validFrom"
@@ -136,6 +138,7 @@ const FormComponent = ({
 							required
 							format="MM-DD-YYYY"
 							disabled={isReadOnly || isEdit}
+							className="custom_date"
 						/>
 						<Date
 							label="Valid To"
@@ -143,18 +146,20 @@ const FormComponent = ({
 							placeholder={!isReadOnly && 'Enter the parking stand name'}
 							format="MM-DD-YYYY"
 							disabled={isReadOnly}
+							className="custom_date"
 						/>
 					</div>
-				</div>
+					</div>
 				<Divider />
-				<div className="form_section">
+				<div className="parking_form_inputfields">
 					<div className="form_bottomButton">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
 						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>
+				
 			</Form>
-		</div>
+		
 	);
 };
 

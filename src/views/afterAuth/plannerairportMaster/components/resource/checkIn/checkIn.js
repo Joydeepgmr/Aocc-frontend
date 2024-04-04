@@ -280,7 +280,7 @@ const CheckIn = () => {
 						<div className="check-in--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
-								buttonText="Actions"
+								buttonText="Create"
 								className="custom_dropdownButton"
 								onChange={handleDropdownItemClick}
 							/>
