@@ -238,7 +238,7 @@ const CheckIn = () => {
 
     const dropdownItems = [
         {
-            label: 'Create',
+            label: 'Add Checkin Counter',
             value: 'create',
             key: '0',
         },
@@ -268,8 +268,8 @@ const CheckIn = () => {
             {!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
                 <Common_Card
                     title1="Create"
-                    title2={'Import Global Reference'}
-                    title3={'Download CSV Template'}
+                    // title2={'Import Global Reference'}
+                    // title3={'Download CSV Template'}
                     btnCondition={true}
                     Heading={'Add Check-in Counters'}
                     formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}

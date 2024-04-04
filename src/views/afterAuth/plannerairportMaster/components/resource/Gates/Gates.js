@@ -250,7 +250,7 @@ const Gates = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Gate',
 			value: 'create',
 			key: '0',
 		},
@@ -280,8 +280,8 @@ const Gates = () => {
 			{!Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Upload CSV'}
-					title3={'Download CSV Template'}
+					// title2={'Upload CSV'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Gate'}
 					formComponent={

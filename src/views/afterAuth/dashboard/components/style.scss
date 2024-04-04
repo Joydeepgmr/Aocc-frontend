@@ -3,71 +3,75 @@
 @import '../../../../styles/sass/variables';
 @import '../../../../styles/sass/utils';
 
+.chart-container {
+	height: 40rem; 
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 .body-container {
-    border: 1px solid $gray_300;
-    border-radius: 0.75rem;
-    padding-top: 0.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 1rem;
-    padding-left: 1.5rem;
+	border: 1px solid $gray_300;
+	border-radius: 0.75rem;
+	padding-top: 0.5rem;
+	padding-right: 1.5rem;
+	padding-bottom: 1rem;
+	padding-left: 1.5rem;
 }
 
 .top-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
-.filter-section{
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    // align-items: center;
+.filter-section {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	// align-items: center;
 }
 
 .filter-btn {
-    width: 50px;
-    height: 50px;
-    padding: 12px;
-    border: 1px solid $gray_300;
-    border-radius: 1rem ;
-
+	width: 50px;
+	height: 50px;
+	padding: 12px;
+	border: 1px solid $gray_300;
+	border-radius: 1rem;
 }
 
-
-.progress-card{
-    width: 31.4rem;
-    height: auto;
-    padding: 0 !important;
-    border-radius: 1.6rem;
+.progress-card {
+	width: 31.4rem;
+	height: auto;
+	padding: 0 !important;
+	border-radius: 1.6rem;
 }
 
-.ant-card-body{
-    padding: 0 !important;
+.ant-card-body {
+	padding: 0 !important;
 }
 
-.progress-card-body{
-    width: 100%;
+.progress-card-body {
+	width: 100%;
 }
 
 .card-title {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
-.progress-body{
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.progress-body {
+	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
-.progress-status-body{
-    display: flex;
-    // justify-content: space-between;
-    margin-top: 0.8rem;
-    margin-bottom: 0.8rem;
-    gap: 1.6rem;
+.progress-status-body {
+	display: flex;
+	// justify-content: space-between;
+	margin-top: 0.8rem;
+	margin-bottom: 0.8rem;
+	gap: 1.6rem;
 }
 
 // .icon-width{
@@ -75,20 +79,20 @@
 //     height: 1.75rem;
 // }
 
-.progress-status-item{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    gap: 1.6rem;
+.progress-status-item {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	gap: 1.6rem;
 }
 
 .view-details {
-    display: flex;
-    justify-content: space-between;
-    background-color: $gray_100;
-    border: 1px solid $gray_300;
-    padding-top: 1.2rem;
-    padding-right: 2.4rem;
-    padding-bottom: 1.2rem;
-    padding-left: 2.4rem;
+	display: flex;
+	justify-content: space-between;
+	background-color: $gray_100;
+	border: 1px solid $gray_300;
+	padding-top: 1.2rem;
+	padding-right: 2.4rem;
+	padding-bottom: 1.2rem;
+	padding-left: 2.4rem;
 }
