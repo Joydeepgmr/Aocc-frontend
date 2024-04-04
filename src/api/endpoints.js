@@ -56,9 +56,11 @@ export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated';
 export const CHECKIN_COUNTER = '/checkin-counter';
 export const GET_GATE = '/gate/paginated';
 export const GATE = '/gate';
-export const PARKING_STAND = '/parking-stand';
+export const GET_PARKING_STAND = '/parking-stand/paginated'
+export const PARKING_STAND = '/parking-stand'
 export const GET_TAXIWAY = '/taxiway/paginated';
 export const TAXIWAY = '/taxiway';
+export const GET_BAGGAGE_BELT = '/baggage-belt/paginated';
 export const BAGGAGE_BELT = '/baggage-belt';
 
 /*--------------------------planner aircraft master ---------------------*/

@@ -13,7 +13,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		{
 			id: '1',
 			label: 'Options1',
-			value: 'options1',
+			value: 'a79d3f96-c134-41e3-b91d-440964cbf771',
 		},
 		{
 			id: '2',
@@ -51,33 +51,20 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<div className="form_content">
 							<InputField
 								label="Belt Name"
-								name="belt_name"
-								placeholder="Enter the airport name"
+								name="name"
+								placeholder={isReadOnly && "Enter the belt name"}
 								warning="Required field"
 								required
 								disabled={isReadOnly || isEdit}
 							/>
-							<InputField
-								label="Belt Type"
-								name="belt_type"
-								placeholder="Filled Text"
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
+							
 						</div>
 
 						<div className="form_content">
-							<CustomSelect
-								SelectData={SelectData}
-								name="airport"
-								label="Airport"
-								placeholder={'Filled Text'}
-								disabled={isReadOnly}
-							/>
 							<InputField
 								label="Status"
 								name="status"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								type="number"
 								disabled={isReadOnly}
@@ -86,7 +73,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							<InputField
 								label="Phone Number"
 								name="phone_number"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								disabled={isReadOnly}
 							/>
@@ -96,34 +83,35 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 								SelectData={SelectData}
 								name="terminal"
 								label="Terminal"
-								placeholder={'Filled Text'}
+								placeholder={isReadOnly && 'Filled Text'}
 								disabled={isReadOnly}
 							/>
 							<InputField
 								label="Default Allocation Duration"
 								name="default_allocation_duration"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								suffixText={'minutes'}
+								disabled={isReadOnly}
 							/>
 						</div>
 						<div className="form_content">
 							<InputField
 								label="Reason, if unavailable"
 								name="reason_if_unavailable"
-								placeholder="Filled Text"
+								placeholder={isReadOnly && "Filled Text"}
 								warning="Required field"
 								disabled={isReadOnly}
 							/>
-							<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" disabled={isReadOnly}/>
+							<Date label="Unavailable from" name="unavailable_from" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly}/>
 
-							<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" disabled={isReadOnly}/>
+							<Date label="Unavailable to" name="unavailable_to" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly}/>
 						</div>
 					</div>
 					<Divider />
 					<div className="form_section">
 						<div className="form_content">
-							<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required disabled={isReadOnly || isEdit} />
-							<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" disabled={isReadOnly} />
+							<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name" }required disabled={isReadOnly || isEdit} />
+							<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
 						</div>
 					</div>
 					<Divider />
