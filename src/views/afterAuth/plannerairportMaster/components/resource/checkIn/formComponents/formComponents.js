@@ -7,8 +7,7 @@ import CustomTypography from '../../../../../../../components/typographyComponen
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponent.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly } ) => {
-
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	const SelectData = [
 		{
 			id: '1',
@@ -51,119 +50,127 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	}, [form, initialValues]);
 
 	return (
-		<div className="checkin">
-			<div className="main_form" key={initialValues?.id}>
-				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-					<div className="form_section">
-						<div className="form_content">
-							<InputField
-								label="Counter Name"
-								name="name"
-								// type="number"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								warning="Required field"
-								required
-								disabled={isReadOnly || isEdit}
-							/>
-							<InputField
-								label="Counter Group"
-								name="group"
-								placeholder={!isReadOnly && 'Filled Text'}
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
-						</div>
-
-						<div className="form_content">
-							<CustomSelect
-								SelectData={SelectData}
-								label="Terminal"
-								placeholder={'Select Terminal'}
-								name="terminalId"
-								disabled={isReadOnly || isEdit}
-							/>
-							<InputField
-								label="Row"
-								name="row"
-								placeholder={!isReadOnly && 'Filled Text'}
-								warning="Required field"
-								disabled={isReadOnly}
-								type="number"
-							/>
-							<InputField
-								label="Phones"
-								name="phoneNumber"
-								type="number"
-								placeholder={!isReadOnly && 'Filled Text'}
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
-						</div>
-						<Divider />
-						<div className="form_content">
-							<InputField
-								label="Reason, if unavailable"
-								name="reason"
-								placeholder={!isReadOnly && 'Filled Text'}
-								warning="Required field"
-								disabled={isReadOnly}
-							/>
-							<Date
-								label="Unavailable from"
-								name="unavailableFrom"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								format="MM-DD-YYYY"
-								disabled={isReadOnly}
-							/>
-
-							<Date
-								label="Unavailable to"
-								name="unavailableTo"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								format="MM-DD-YYYY"
-								disabled={isReadOnly}
-							/>
-						</div>
-
-						<Divider />
-						<div className="form_content">
-							<Date
-								label="Valid From"
-								name="validFrom"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								required
-								format="MM-DD-YYYY"
-								disabled={isReadOnly || isEdit}
-							/>
-							<Date
-								label="Valid To"
-								name="validTill"
-								placeholder={!isReadOnly && 'Enter the airport name'}
-								format="MM-DD-YYYY"
-								disabled={isReadOnly}
-							/>
-						</div>
+		<div key={initialValues?.id}>
+			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+				<div className="checkin_form_container">
+					<div className="checkin_form_inputfields">
+						<InputField
+							label="Counter Name"
+							name="name"
+							placeholder={!isReadOnly && 'Enter the airport name'}
+							warning="Required field"
+							required
+							disabled={isReadOnly || isEdit}
+							type="number"
+							className="custom_input"
+						/>
+						<InputField
+							label="Counter Group"
+							name="group"
+							placeholder={!isReadOnly && 'Filled Text'}
+							warning="Required field"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
 					</div>
-					<div className="form_section">
-						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-								onClick={handleButtonClose}
-							/>
-							<Button
-								title={isEdit ? 'Edit' : 'Save'}
-								type="filledText"
-								id="btn"
-								isSubmit="submit"
-								disabled={isReadOnly}
-							/>
-						</div>
+
+					<div className="checkin_form_inputfields">
+						<CustomSelect
+							SelectData={SelectData}
+							label="Terminal"
+							placeholder={'Select Terminal'}
+							name="terminalId"
+							disabled={isReadOnly || isEdit}
+							className="select"
+						/>
+						<InputField
+							label="Row"
+							name="row"
+							placeholder={!isReadOnly && 'Filled Text'}
+							warning="Required field"
+							disabled={isReadOnly}
+							type="number"
+							className="custom_input"
+						/>
+						<InputField
+							label="Phones"
+							name="phoneNumber"
+							type="number"
+							placeholder={!isReadOnly && 'Filled Text'}
+							warning="Required field"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
 					</div>
-				</Form>
-			</div>
+					<Divider />
+					<div className="checkin_form_inputfields">
+						<InputField
+							label="Reason, if unavailable"
+							name="reason"
+							placeholder={!isReadOnly && 'Filled Text'}
+							warning="Required field"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
+						<Date
+							label="Unavailable from"
+							name="unavailableFrom"
+							placeholder={!isReadOnly && 'Enter the airport name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
+
+						<Date
+							label="Unavailable to"
+							name="unavailableTo"
+							placeholder={!isReadOnly && 'Enter the airport name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
+					</div>
+
+					<Divider />
+					<div className="checkin_form_inputfields">
+						<Date
+							label="Valid From"
+							name="validFrom"
+							placeholder={!isReadOnly && 'Enter the airport name'}
+							required
+							format="MM-DD-YYYY"
+							disabled={isReadOnly || isEdit}
+							className="custom_date"
+						/>
+						<Date
+							label="Valid To"
+							name="validTill"
+							placeholder={!isReadOnly && 'Enter the airport name'}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
+							className="custom_date"
+						/>
+					</div>
+				</div>
+				<div className="checkin_form_inputfields">
+					<div className="form_bottomButton">
+						<Button
+							title="Cancel"
+							type="filledText"
+							id="btn"
+							className="custom_svgButton"
+							onClick={handleButtonClose}
+						/>
+						<Button
+							title={isEdit ? 'Edit' : 'Save'}
+							type="filledText"
+							id="btn"
+							isSubmit="submit"
+							disabled={isReadOnly}
+						/>
+					</div>
+				</div>
+			</Form>
 		</div>
 	);
 };

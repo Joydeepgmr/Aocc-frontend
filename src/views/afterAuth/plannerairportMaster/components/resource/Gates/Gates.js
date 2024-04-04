@@ -46,7 +46,7 @@ const Gates = () => {
 	};
 
 	const handleGetGateError = (error) => {
-		toast.error(error?.response?.data?.message);
+		toast.error(error?.message);
 	}
 	const { data: fetchGates, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
 

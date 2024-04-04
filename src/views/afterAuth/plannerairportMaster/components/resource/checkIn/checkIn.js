@@ -41,7 +41,7 @@ const CheckIn = () => {
 	};
 
 	const handleGetCheckinError = (error) => {
-		toast.error(error?.response?.data?.message);
+		toast.error(error?.message);
 	}
 	const { data: fetchCheckIn, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetCheckIn(getCheckinHandler);
 	
@@ -94,9 +94,9 @@ const CheckIn = () => {
 	
 	const handleSaveButton = (value) => {
 		value["isAllocatedToLounge"] = false;
-		value["name"] = value?.name.toString();
-		value["row"] = value?.row.toString();
-		value["phoneNumber"] = value?.phoneNumber.toString();
+		value["name"] = value?.name?.toString();
+		value["row"] = value?.row?.toString();
+		value["phoneNumber"] = value?.phoneNumber?.toString();
 		value && postCheckIn(value);
 	};
 
