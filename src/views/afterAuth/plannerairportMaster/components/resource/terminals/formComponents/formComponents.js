@@ -1,70 +1,124 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
+import CustomSelect from '../../../../../../../components/select/select';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
-import { useDispatch, useSelector } from 'react-redux';
+import './formComponents.scss';
 
-const FormComponent = () => {
-	const dispatch = useDispatch();
+const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData}) => {
+	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
+	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
+	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
+	
+	const SelectStandData = useMemo(() => {
+		return standDropdownData?.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [standDropdownData]);
+
+	const SelectTaxiwayData = useMemo(() => {
+		return taxiwayDropdownData?.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [taxiwayDropdownData]);
+
+	const SelectRunwayData = useMemo(() => {
+		return runwayDropdownData?.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [runwayDropdownData]);
+
 	const [form] = Form.useForm();
-	const onFinishHandler = (values) => {
-		form.resetFields();
 
+	const onFinishHandler = (values) => {
+		const changedValues = isEdit ? {} : values;
+		Object.keys(values).forEach((key) => {
+			if (!isEdit || values[key] !== initialValues[key]) {
+				changedValues[key] = values[key];
+			}
+		});
+
+		handleSaveButton(changedValues);
+		form.resetFields();
 	};
 
-	return (
-		<div className="main_form">
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-				<div className="form_section">
-					<div className="form_content">
-						<InputField
-							label="Terminal Name"
-							name="terminal_name"
-							placeholder="Enter the airport name"
-							warning="Required field"
-							required
-						/>
-						<InputField
-							label="Connected to Taxiway"
-							name="connected_to_taxiway"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
-					<div className="form_content">
-						<InputField
-							label="Connected to Stands"
-							name="connected_to_stands"
-							placeholder="Enter the airport name"
-							warning="Required field"
-							required
-						/>
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
 
-						<InputField
-							label="Connected to Runway"
-							name="connected_to_runway"
-							placeholder="Filled Text"
-							warning="Required field"
-						/>
-					</div>
+	return (
+		<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+			<div className="terminal_form_container">
+				<div className="terminal_form_inputfields">
+					<InputField
+						label="Terminal Name"
+						name="name"
+						placeholder="Enter the airport name"
+						warning="Required field"
+						required
+						className="custom_input"
+					/>
+					<CustomSelect
+						SelectData={SelectTaxiwayData}
+						label="Connected to Taxiway"
+						placeholder={'Select Taxiway'}
+						name="taxiway"
+						disabled={isReadOnly || isEdit}
+						className="select"
+					/>
 				</div>
+				<div className="terminal_form_inputfields">
+					<CustomSelect
+						SelectData={SelectStandData}
+						label="Connected to Stands"
+						placeholder={'Select Stand'}
+						name="parkingStand"
+						disabled={isReadOnly || isEdit}
+						className="select"
+					/>
+
+					<CustomSelect
+						SelectData={SelectRunwayData}
+						label="Connected to Runway"
+						placeholder={'Select Runway'}
+						name="runway"
+						disabled={isReadOnly || isEdit}
+						className="select"
+					/>
+				</div>
+
 				<Divider />
-				<div className="form_section">
-					<div className="form_content">
-						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
-					</div>
+				<div className="terminal_form_inputfields">
+					<Date
+						label="Valid From"
+						name="validFrom"
+						placeholder="Enter the airport name"
+						//required
+						className="custom_date"
+					/>
+					<Date
+						label="Valid To"
+						name="validTill"
+						placeholder="Enter the airport name"
+						className="custom_date"
+					/>
 				</div>
-				<div className="form_section">
-					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
-					</div>
+			</div>
+			<div className="terminal_form_inputfields">
+				<div className="form_bottomButton">
+					<Button
+						title="Cancel"
+						type="filledText"
+						id="btn"
+						className="custom_svgButton"
+						onClick={handleButtonClose}
+					/>
+					<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 				</div>
-			</Form>
-		</div>
+			</div>
+		</Form>
 	);
 };
 
