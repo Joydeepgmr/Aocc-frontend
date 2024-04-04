@@ -254,8 +254,8 @@ const BaggageBelt = () => {
 			{!Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add belts'}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
