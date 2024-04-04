@@ -1,11 +1,11 @@
 import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
-import { TERMINAL,GET_TERMINAL } from '../../../../api';
+import { TERMINAL, GET_TERMINAL } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetTerminal = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-terminal'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_TERMINAL}`,{pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_TERMINAL}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
 			return false;
@@ -26,7 +26,7 @@ export const usePostTerminal = (props) => {
 	return response;
 };
 
-export const useEditTerminal = (id,props) => {
+export const useEditTerminal = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-terminal'],
 		mutationFn: async (data) => await Patch(`${TERMINAL}/${id}`, data),
