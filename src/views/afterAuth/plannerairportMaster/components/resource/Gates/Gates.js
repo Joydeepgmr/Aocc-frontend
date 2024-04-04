@@ -29,7 +29,7 @@ const Gates = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	
+
 	const getGateHandler = {
 		onSuccess: (data) => handleGetGateSuccess(data),
 		onError: (error) => handleGetGateError(error),
@@ -40,7 +40,7 @@ const Gates = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setGateData([...newData]);
 		}
 	};
@@ -254,16 +254,16 @@ const Gates = () => {
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -307,7 +307,7 @@ const Gates = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Gates
 							</CustomTypography>
-							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 
