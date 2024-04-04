@@ -54,3 +54,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 export const CHECKIN_COUNTER = '/checkin-counter';
 export const GATE = '/gate'
+
+
+/*--------------------------planner Dashboard ---------------------*/
+export const GET_MILESTONE_DATA = '/milestone/paginated'
