@@ -20,7 +20,8 @@ const InputField = ({
 	codeLength,
 	validator,
 	min,
-	max
+	max,
+	defaultValue,
 }) => {
 	const numberPattern = /^[0-9]*$/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -33,14 +34,14 @@ const InputField = ({
 		let errorMessage;
 		if (min !== undefined && max !== undefined) {
 			if (min === max) {
-				errorMessage = `Required ${type === 'number' ? 'value' : 'length'} is ${min}${type !== 'number' ? ' characters' : ''}.`
+				errorMessage = `Required ${type === 'number' ? 'value' : 'length'} is ${min}${type !== 'number' ? ' characters' : ''}.`;
 			} else {
-				errorMessage = `${type === 'number' ? 'Value' : 'Length'} must be between ${min} and ${max}${type !== 'number' ? ' characters' : ''}.`
+				errorMessage = `${type === 'number' ? 'Value' : 'Length'} must be between ${min} and ${max}${type !== 'number' ? ' characters' : ''}.`;
 			}
 		} else if (min !== undefined) {
-			errorMessage = `Minimum ${type === 'number' ? 'Value' : 'Length'} required is ${min}${type !== 'number' ? ' characters' : ''}.`
+			errorMessage = `Minimum ${type === 'number' ? 'Value' : 'Length'} required is ${min}${type !== 'number' ? ' characters' : ''}.`;
 		} else if (max !== undefined) {
-			errorMessage = `Maximum ${type === 'number' ? 'Value' : 'Length'} required is ${max}${type !== 'number' ? ' characters' : ''}.`
+			errorMessage = `Maximum ${type === 'number' ? 'Value' : 'Length'} required is ${max}${type !== 'number' ? ' characters' : ''}.`;
 		}
 		if (type === 'number') {
 			if ((max !== undefined && value > max) || (min !== undefined && value < min)) {
@@ -54,11 +55,7 @@ const InputField = ({
 		return Promise.resolve();
 	};
 	const renderLabel = () => {
-		return (
-			<>
-				{label}
-			</>
-		);
+		return <>{label}</>;
 	};
 
 	const handleCodeChange = (index, value) => {
@@ -74,7 +71,8 @@ const InputField = ({
 					disabled={disabled ? disabled : false}
 					className={`input_field code_input_single`}
 					maxLength={1}
-					max-
+					max={max}
+					defaultValue={defaultValue}
 					{...rest}
 					onChange={(e) => handleCodeChange(i, e.target.value)}
 				/>
@@ -107,6 +105,7 @@ const InputField = ({
 						className={`input_number_field`}
 						suffix={suffixText && <span>{suffixText}</span>}
 						{...rest}
+						defaultValue={defaultValue}
 					/>
 				</Form.Item>
 			) : type === 'password' ? (
@@ -132,6 +131,7 @@ const InputField = ({
 						disabled={disabled ? disabled : false}
 						className={`input_field`}
 						{...rest}
+						defaultValue={defaultValue}
 					/>
 				</Form.Item>
 			) : type === 'code' ? (
@@ -172,7 +172,7 @@ const InputField = ({
 							pattern: pattern,
 							message: 'Enter the valid format',
 						},
-						{ validator: validator ?? validateRange }
+						{ validator: validator ?? validateRange },
 					]}
 				>
 					<Input
@@ -182,6 +182,7 @@ const InputField = ({
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
 						status={status}
+						defaultValue={defaultValue}
 						{...rest}
 					/>
 				</Form.Item>

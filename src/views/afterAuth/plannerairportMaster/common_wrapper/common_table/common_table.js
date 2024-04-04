@@ -6,14 +6,12 @@ import ModalComponent from '../../../../../components/modal/modal';
 import FormComponent from '../../components/aircraft/formComponent/formComponent';
 import TableComponent from '../../../../../components/table/table';
 import ButtonComponent from '../../../../../components/button/button';
-import { columns, dummyData } from './data';
 import { useDispatch } from 'react-redux';
 
 import './common_table.scss';
 import { deleteAircraftRegistration, updateAircraftRegistration } from '../../redux/actionCreator';
 
-const Common_table = ({ Heading }) => {
-	const [loading, setLoading] = useState(false);
+const Common_table = ({ Heading, data, columns, loading, fetchData, pagination, title, formComponent }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dispatch = useDispatch();
 	const openModal = () => {
@@ -25,9 +23,6 @@ const Common_table = ({ Heading }) => {
 		setIsModalOpen(false);
 	};
 
-	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
-	};
 	const handleButtonChange = (label) => {
 		console.log('hdbhbdhbd', label);
 	};
@@ -66,7 +61,7 @@ const Common_table = ({ Heading }) => {
 			</div>
 			<ModalComponent
 				isModalOpen={isModalOpen}
-				width="auto"
+				width="80vw"
 				closeModal={closeModal}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
@@ -75,16 +70,20 @@ const Common_table = ({ Heading }) => {
 				}
 				className="custom_modal"
 			>
-				<div className="modal_content">
-					<FormComponent closeModal={closeModal} />
-				</div>
+				<div className="modal_content">{formComponent && formComponent}</div>
 			</ModalComponent>
 			<div className="custom_table">
 				<div className="details_table">
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Aircraft Registrations
+						{title}
 					</CustomTypography>
-					<TableComponent columns={columns} data={dummyData} loading={loading} onChange={handleTableChange} />
+					<TableComponent
+						columns={columns}
+						data={data}
+						loading={loading}
+						fetchData={fetchData}
+						pagination={pagination}
+					/>
 				</div>
 			</div>
 		</div>
