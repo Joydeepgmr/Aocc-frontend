@@ -78,6 +78,7 @@ const BaggageBelt = () => {
 
 	//CREATE
 	const handleAddBaggageBeltSuccess = (data) => {
+		setBaggageBeltData([]);
 		queryClient.invalidateQueries('get-baggage-belt');
 		closeModal();
 		toast.success(data?.message);
@@ -95,6 +96,7 @@ const BaggageBelt = () => {
 	const { mutate: postBaggageBelt, isLoading: isPostLoading  } = usePostBaggageBelt(addBaggageBeltHandler);
 
 	const handleSaveButton = (value) => {
+		value["name"] = value?.name.toString();
 		value && postBaggageBelt(value);
 	};
 
@@ -130,7 +132,7 @@ const BaggageBelt = () => {
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			terminal: record?.terminal?.id,
+			terminalId: record?.terminalId?.id,
 		}
 		setRowData(record);
 		openEditModal();
@@ -148,7 +150,7 @@ const BaggageBelt = () => {
 	};
 
 	const handleDeleteBaggageBeltSuccess = (data) => {
-		queryClient.invalidateQueries('get-taxiway');
+		queryClient.invalidateQueries('get-baggage-belt');
 		closeDeleteModal();
 		toast.success(data?.message);
 	}
@@ -193,12 +195,6 @@ const BaggageBelt = () => {
 			dataIndex: 'terminal',
 			key: 'terminal',
 			render: (terminal) => terminal?.name ?? '-',
-		},
-		{
-			title: 'Status',
-			dataIndex: 'reason',
-			key: 'reason',
-			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
