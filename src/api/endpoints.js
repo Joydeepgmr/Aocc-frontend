@@ -67,8 +67,10 @@ export const BAGGAGE_BELT = '/baggage-belt';
 
 export const GET_PLANNER_AIRCRAFT = '/planner-aircraft/paginated';
 export const POST_PLANNER_AIRCRAFT = '/planner-aircraft/';
+export const DELETE_PLANNER_AIRCRAFT = '/planner-aircraft';
 
 /*--------------------------planner airline master ---------------------*/
 
 export const GET_PLANNER_AIRLINE = '/planner-airline/paginated';
 export const POST_PLANNER_AIRLINE = '/planner-airline';
+export const DELETE_PLANNER_AIRLINE = '/planner-airline';
