@@ -40,7 +40,7 @@ const ParkingStand = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setparkingData([...newData]);
 		}
 	};
@@ -48,7 +48,7 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const { data: fetchParking, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -95,7 +95,7 @@ const ParkingStand = () => {
 	};
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
-	
+
 	const handleSaveButton = (value) => {
 		value && postParkingStand(value);
 	};
@@ -111,8 +111,8 @@ const ParkingStand = () => {
 		onError: (error) => handleEditParkingStandError(error),
 	};
 
-	const {mutate: editParkingStand, isLoading: isEditLoading} = useEditParkingStand(rowData?.id,editParkingStandHandler)
-	
+	const { mutate: editParkingStand, isLoading: isEditLoading } = useEditParkingStand(rowData?.id, editParkingStandHandler)
+
 	const handleEditParkingStandSuccess = (data) => {
 		closeEditModal();
 		setparkingData([]);
@@ -125,11 +125,12 @@ const ParkingStand = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
 			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
+			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
 		}
 		setRowData(record);
 		openEditModal();
@@ -155,9 +156,9 @@ const ParkingStand = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteParkingStand} = useDeleteParkingStand(deleteParkingStandHandler);
+	const { mutate: deleteParkingStand } = useDeleteParkingStand(deleteParkingStandHandler);
 	const handleDelete = () => {
-		deleteParkingStand(rowData.id);	
+		deleteParkingStand(rowData.id);
 	}
 
 	const columns = [
@@ -224,8 +225,9 @@ const ParkingStand = () => {
 				<>
 					<Button onClick={() => {
 						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+						handleEdit(record)
+					}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -234,20 +236,20 @@ const ParkingStand = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Parking Stand',
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -256,7 +258,7 @@ const ParkingStand = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
@@ -264,8 +266,8 @@ const ParkingStand = () => {
 			{!Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Parking Stands'}
 					formComponent={<FormComponent
@@ -291,7 +293,7 @@ const ParkingStand = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
 							</CustomTypography>
-							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 

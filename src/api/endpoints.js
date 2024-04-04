@@ -9,7 +9,7 @@ export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
 export const USER_LOGIN = 'user/login';
 
 /*--------------Admin details -----------*/
-export const GET_ADMIN_DETAILS = 'user/userinfo'
+export const GET_ADMIN_DETAILS = 'user/userinfo';
 
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = 'airport-license';
@@ -50,16 +50,32 @@ export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 
 export const GET_COUNTRY_DATA = '/country/';
 
+/*--------------------------planner Dashboard ---------------------*/
+export const GET_MILESTONE_DATA = '/milestone/paginated'
+
 /*--------------------------planner airport master ---------------------*/
 
-export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated'
+export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated';
 export const CHECKIN_COUNTER = '/checkin-counter';
-export const GET_GATE = '/gate/paginated'
-export const GATE = '/gate'
+export const GET_GATE = '/gate/paginated';
+export const GATE = '/gate';
 export const GET_PARKING_STAND = '/parking-stand/paginated'
 export const PARKING_STAND = '/parking-stand'
 export const GET_TAXIWAY = '/taxiway/paginated';
 export const TAXIWAY = '/taxiway';
+export const GET_BAGGAGE_BELT = '/baggage-belt/paginated';
 export const BAGGAGE_BELT = '/baggage-belt';
 export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
+
+/*--------------------------planner aircraft master ---------------------*/
+
+export const GET_PLANNER_AIRCRAFT = '/planner-aircraft/paginated';
+export const POST_PLANNER_AIRCRAFT = '/planner-aircraft/';
+export const DELETE_PLANNER_AIRCRAFT = '/planner-aircraft';
+
+/*--------------------------planner airline master ---------------------*/
+
+export const GET_PLANNER_AIRLINE = '/planner-airline/paginated';
+export const POST_PLANNER_AIRLINE = '/planner-airline';
+export const DELETE_PLANNER_AIRLINE = '/planner-airline';

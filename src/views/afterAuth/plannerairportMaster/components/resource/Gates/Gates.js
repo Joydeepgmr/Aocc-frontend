@@ -43,7 +43,7 @@ const Gates = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setGateData([...newData]);
 		}
 	};
@@ -253,20 +253,20 @@ const Gates = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Gate',
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -283,8 +283,8 @@ const Gates = () => {
 			{!Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Upload CSV'}
-					title3={'Download CSV Template'}
+					// title2={'Upload CSV'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Gate'}
 					formComponent={
@@ -311,7 +311,7 @@ const Gates = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Gates
 							</CustomTypography>
-							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 

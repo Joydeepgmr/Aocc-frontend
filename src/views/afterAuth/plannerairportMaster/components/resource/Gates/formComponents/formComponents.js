@@ -84,7 +84,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					<div className="gate_form_inputfields">
 						<InputField
 							label="Reason, if unavailable"
-							name="reasonIdUnavailable"
+							name="reasonIfUnavailable"
 							placeholder="Filled Text"
 							warning="Required field"
 							disabled={isReadOnly}

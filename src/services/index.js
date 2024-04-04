@@ -1,4 +1,14 @@
 import {
+	useDeletePlannerAircraft,
+	useGetAllPlannerAircraft,
+	usePostPlannerAircraft,
+} from './PlannerAirportMaster/PlannerAircraftAirportMaster';
+import {
+	useDeletePlannerAirline,
+	useGetAllPlannerAirline,
+	usePostPlannerAirline,
+} from './PlannerAirportMaster/PlannerAirlineAirportMaster';
+import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
 } from './ResourceAllocationServices/ResourceAllocationServices';
@@ -58,4 +68,10 @@ export {
 	usePatchGlobalAircraftRegistration,
 	useDeleteGlobalAircraftRegistration,
 	useCountriesDropdown,
+	useGetAllPlannerAircraft,
+	useGetAllPlannerAirline,
+	usePostPlannerAirline,
+	usePostPlannerAircraft,
+	useDeletePlannerAircraft,
+	useDeletePlannerAirline,
 };
