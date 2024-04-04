@@ -76,7 +76,7 @@ const FormComponent = ({
 					<CustomSelect
 						SelectData={SelectTaxiwayData}
 						label="Connected to Taxiway"
-						placeholder={'Select Gate'}
+						placeholder={'Select Taxiway'}
 						name="taxiway"
 						disabled={isReadOnly || isEdit}
 						className="select"
