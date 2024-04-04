@@ -72,7 +72,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<CustomSelect
 							SelectData={SelectData}
 							name="terminalId"
-							label="TerminalId"
+							label="Terminal"
 							placeholder={isReadOnly && 'Filled Text'}
 							disabled={isReadOnly}
 							className='custom_input'

@@ -1,34 +1,35 @@
 @import '../../../../../../../styles/sass/mixins';
 @import '../../../../../../../styles/sass/variables';
-
-.taxiway {
-    width: 100%;
-    .main_form {
-        .form_section {
-            padding-top: 0rem;
-            .form_content {
-                @include flex(stretch, flex-start, row);
-                gap: 1.6rem;
-                margin-bottom: 1rem;
-    
-                .date {
-                    margin: 0rem;
-                }
+@import '../../../../../../../styles/sass/utils';
+ 
+.taxiway_form_container {
+    padding: 2rem 0rem 2.4rem 0rem;
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+ 
+    .taxiway_form_inputFields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.4rem;
+        .ant-row {
+            display: flex;
+            flex-flow: column;
+        }
+        .ant-form-item-label {
+            text-align: start;
+        }
+        .input_form_item {
+            &.custom_input {
+                width: calc(33% - 2.4rem);
             }
         }
-    
-        .form_bottomButton {
-            @include flex(stretch, end, row);
-            gap: 1.6rem;
-            bottom: 0;
-            width: 100%;
-            
-            .button {
-                .custom_svgButton {
-                    color: $black;
-                    background-color: $gray_200;
-                }
-            }
+        .select {
+            width: calc(33% - 2.4rem);
+        }
+        .custom_date {
+            width: calc(33% - 2.4rem);
         }
     }
 }
