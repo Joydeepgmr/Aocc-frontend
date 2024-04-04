@@ -6,11 +6,11 @@ const Terminal = () => {
 		<>
 			<Common_Card
 				title1="Create"
-				title2={'Import Global Reference'}
-				title3={'Download CSV Template'}
+				// title2={'Import Global Reference'}
+				// title3={'Download CSV Template'}
 				btnCondition={true}
 				Heading={'Setup aircraft registration'}
-				formComponent={<FormComponent/>}
+				formComponent={<FormComponent />}
 			/>
 		</>
 	);

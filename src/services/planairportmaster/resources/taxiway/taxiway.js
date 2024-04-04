@@ -1,14 +1,34 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
+import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
+import { GET_TAXIWAY, TAXIWAY } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
-export const usePostBaggageBelt = (props) => {
-	const queryClient = useQueryClient();
-	const response = useMutation({
-		mutationKey: [''],
-		mutationFn: async (data) => await Post(``, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('');
+export const useGetTaxiway = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-taxiway'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_TAXIWAY}`, {pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
 		},
+		...props,
+	});
+
+	// const { data, error, isSuccess } = response;
+
+	// const statusMessage = isSuccess ? data?.message : error?.message;
+
+	return response;
+	// return {
+	// 	...response,
+	// 	data: data,
+	// 	message: statusMessage,
+	// };
+};
+
+export const usePostTaxiway = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-taxiway'],
+		mutationFn: (data) => Post(`${TAXIWAY}`, data),
 		...props,
 	});
 
@@ -21,20 +41,31 @@ export const usePostBaggageBelt = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-export const useGetBaggageBelt = (props) => {
-	const response = useQuery({
-		queryKey: [''],
-		queryFn: async () => await Get(``),
+export const useEditTaxiway = (props) => {
+	const response = useMutation({
+		mutationKey: ['edit-taxiway'],
+		mutationFn: (data) => Patch(`${TAXIWAY}`, data),
 		...props,
 	});
 
+	return response;
+};
+
+export const useDeleteTaxiway = (props) => {
+	const queryClient = useQueryClient();
+	const response = useMutation({
+		mutationKey: ['delete-taxiway'],
+		mutationFn: (id) => Delete(`${TAXIWAY}/${id}`),
+		onSuccess: () => {
+			queryClient.invalidateQueries('get-taxiway');
+		},
+		...props,
+	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
+	const statusMessage = isSuccess
+		? data?.data?.message
+		: error?.message;
 
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return { ...response, data: data?.data, message: statusMessage };
 };

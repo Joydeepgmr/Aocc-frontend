@@ -1,40 +1,47 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
+import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { PARKING_STAND,GET_PARKING_STAND } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
-export const usePostBaggageBelt = (props) => {
-	const queryClient = useQueryClient();
-	const response = useMutation({
-		mutationKey: [''],
-		mutationFn: async (data) => await Post(``, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('');
+export const useGetParkingStand = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-parking-stand'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_PARKING_STAND}`,{pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
 		},
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return response;
 };
 
-export const useGetBaggageBelt = (props) => {
-	const response = useQuery({
-		queryKey: [''],
-		queryFn: async () => await Get(``),
+export const usePostParkingStand = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-parking-stand'],
+		mutationFn: async (data) => await Post(`${PARKING_STAND}`, data),
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
+	return response;
+};
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
+export const useEditParkingStand = (id,props) => {
+	const response = useMutation({
+		mutationKey: ['edit-parking-stand'],
+		mutationFn: async (data) => await Patch(`${PARKING_STAND}/${id}`, data),
+		...props,
+	});
 
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return response;
+};
+
+export const useDeleteParkingStand = (props) => {
+	const queryClient = useQueryClient();
+	const response = useMutation({
+		mutationKey: ['delete-parking-stand'],
+		mutationFn: async (id) => await Delete(`${PARKING_STAND}/${id}`),
+		...props,
+	});
+	return response;
 };

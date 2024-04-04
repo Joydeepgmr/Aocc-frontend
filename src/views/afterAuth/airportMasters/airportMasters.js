@@ -30,7 +30,7 @@ const AirportMasters = () => {
 			</div>
 			<div>
 				<CreateWrapper
-					width="120rem"
+					width="80%"
 					tableComponent={<LicenseSetupTable
 						data={data}
 						createProps={createProps}

@@ -1,3 +1,5 @@
+import { useGetAllPlannerAircraft, usePostPlannerAircraft } from './PlannerAirportMaster/PlannerAircraftAirportMaster';
+import { useGetAllPlannerAirline, usePostPlannerAirline } from './PlannerAirportMaster/PlannerAirlineAirportMaster';
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
@@ -58,4 +60,8 @@ export {
 	usePatchGlobalAircraftRegistration,
 	useDeleteGlobalAircraftRegistration,
 	useCountriesDropdown,
+	useGetAllPlannerAircraft,
+	useGetAllPlannerAirline,
+	usePostPlannerAirline, 
+	usePostPlannerAircraft,
 };
