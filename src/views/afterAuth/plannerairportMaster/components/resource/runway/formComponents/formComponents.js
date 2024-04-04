@@ -46,11 +46,22 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
 							Runway Type
 						</CustomTypography>
+						<CheckBoxField
+							name="takeOff"
+							label="Take-off"
+							id="custom_checkbox"
+							title="Single Checkbox"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
+						<CheckBoxField 
+							name="landing"
+							label="Landing"
+							title="Single Checkbox"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
 					</div>
-					<div className="runway_form_inputFields">
-							<CheckBoxField name="takeOff" label="Take-off" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly} />
-							<CheckBoxField name="landing" label="Landing" title="Single Checkbox" disabled={isReadOnly} />
-						</div>
 					<Divider />
 					<div className="runway_form_inputFields">
 						<InputField
@@ -61,17 +72,17 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							className='custom_input'
 						/>
-						<Date label="Unavailable from" name="unavailableFrom" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date'/>
-						<Date label="Unavailable to" name="unavailableTo" placeholder={isReadOnly && "Enter the airport name" } disabled={isReadOnly} className='custom_date'/>
+						<Date label="Unavailable from" name="unavailableFrom" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
+						<Date label="Unavailable to" name="unavailableTo" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
 					<Divider />
 					<div className="runway_form_inputFields">
-						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} className='custom_date'/>
+						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} className='custom_date' />
 						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
 					<div className="custom_buttons">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly}/>
+						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
 					</div>
 				</div>
 			</Form>
