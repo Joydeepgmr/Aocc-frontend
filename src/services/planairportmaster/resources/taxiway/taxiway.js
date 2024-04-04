@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import { GET_TAXIWAY, TAXIWAY } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
