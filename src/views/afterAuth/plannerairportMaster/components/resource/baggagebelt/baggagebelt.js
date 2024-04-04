@@ -14,7 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import {useEditBaggageBelt, useGetBaggageBelt,useDeleteBaggageBelt,usePostBaggageBelt} from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
-import './baggagebelt.js';
+import './baggagebelt.scss';
 
 const BaggageBelt = () => {
 

@@ -27,7 +27,7 @@ const Common_Card = ({ title1, title2, title3, Heading, btnCondition, formCompon
 
 				<ModalComponent
 					isModalOpen={isModalOpen}
-					width="auto"
+					width="120rem"
 					closeModal={closeModal}
 					title={
 						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">

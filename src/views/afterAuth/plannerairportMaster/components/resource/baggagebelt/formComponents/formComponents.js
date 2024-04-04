@@ -55,6 +55,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							required
 							disabled={isReadOnly || isEdit}
+							className='custom_input'
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
@@ -64,15 +65,17 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							placeholder={isReadOnly && "Filled Text"}
 							warning="Required field"
 							disabled={isReadOnly}
+							className='custom_input'
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
 						<CustomSelect
 							SelectData={SelectData}
-							name="terminal"
-							label="Terminal"
+							name="terminalId"
+							label="TerminalId"
 							placeholder={isReadOnly && 'Filled Text'}
 							disabled={isReadOnly}
+							className='custom_input'
 						/>
 						<InputField
 							label="Default Allocation Duration"
@@ -80,6 +83,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							placeholder={isReadOnly && "Filled Text"}
 							suffixText={'minutes'}
 							disabled={isReadOnly}
+							className='custom_input'
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
@@ -89,19 +93,28 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							placeholder={isReadOnly && "Filled Text"}
 							warning="Required field"
 							disabled={isReadOnly}
+							className='custom_input'
 						/>
-						<Date label="Unavailable from" name="unavailableFrom" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
-						<Date label="Unavailable to" name="unavailableTo" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
+						<Date
+							label="Unavailable from"
+							name="unavailableFrom"
+							placeholder={isReadOnly && "Enter the airport name"}
+							disabled={isReadOnly}
+							className='custom_date' />
+						<Date
+							label="Unavailable to"
+							name="unavailableTo"
+							placeholder={isReadOnly && "Enter the airport name"}
+							disabled={isReadOnly}
+							className='custom_date' />
 					</div>
 					<Divider />
 					<div className="baggageBelt_form_inputFields">
-						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} />
-						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} />
+						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} className='custom_date' />
+						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
 					<Divider />
-				</div>
-				<div className="baggageBelt_form_inputFields">
-					<div className='baggageBelt_form_inputFieldButtons'>
+					<div className="custom_buttons">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
 						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
 					</div>
