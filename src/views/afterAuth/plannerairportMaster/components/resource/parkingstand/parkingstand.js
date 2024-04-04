@@ -234,20 +234,20 @@ const ParkingStand = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Parking Stand',
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -264,8 +264,8 @@ const ParkingStand = () => {
 			{!Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Parking Stands'}
 					formComponent={<FormComponent

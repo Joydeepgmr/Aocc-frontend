@@ -17,37 +17,37 @@ import { useEditCheckin, useGetCheckIn, usePostCheckIn, useDeleteCheckin } from 
 import './checkIn.scss';
 
 const CheckIn = () => {
-	const queryClient = useQueryClient();
-	const [checkinData, setCheckinData] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [isReadOnly, setIsReadOnly] = useState(false);
-	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+    const queryClient = useQueryClient();
+    const [checkinData, setCheckinData] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [rowData, setRowData] = useState(null);
+    const [isReadOnly, setIsReadOnly] = useState(false);
+    const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-	const getCheckinHandler = {
-		onSuccess: (data) => handleGetCheckinSuccess(data),
-		onError: (error) => handleGetCheckinError(error),
-	};
+    const getCheckinHandler = {
+        onSuccess: (data) => handleGetCheckinSuccess(data),
+        onError: (error) => handleGetCheckinError(error),
+    };
 
-	const handleGetCheckinSuccess = (data) => {
-		if (data?.pages) {
-			const newData = data.pages.reduce((acc, page) => {
-				return acc.concat(page.data || []);
-			}, []);
-		
-			setCheckinData([...newData]);
-		}
-	};
+    const handleGetCheckinSuccess = (data) => {
+        if (data?.pages) {
+            const newData = data.pages.reduce((acc, page) => {
+                return acc.concat(page.data || []);
+            }, []);
 
-	const handleGetCheckinError = (error) => {
-		toast.error(error?.message);
-	}
-	const { data: fetchCheckIn, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetCheckIn(getCheckinHandler);
-	
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
+            setCheckinData([...newData]);
+        }
+    };
+
+    const handleGetCheckinError = (error) => {
+        toast.error(error?.message);
+    }
+    const { data: fetchCheckIn, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetCheckIn(getCheckinHandler);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -73,13 +73,13 @@ const CheckIn = () => {
 
     }
 
-	//CREATE
-	const handleAddCheckinSuccess = (data) => {
-		setCheckinData([])
-		closeModal();
-		toast.success(data?.message);
-		queryClient.invalidateQueries('get-check-in');
-	}
+    //CREATE
+    const handleAddCheckinSuccess = (data) => {
+        setCheckinData([])
+        closeModal();
+        toast.success(data?.message);
+        queryClient.invalidateQueries('get-check-in');
+    }
 
     const handleAddCheckinError = (error) => {
         toast.error(error?.response?.data?.message);
@@ -90,15 +90,15 @@ const CheckIn = () => {
         onError: (error) => handleAddCheckinError(error),
     };
 
-	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
-	
-	const handleSaveButton = (value) => {
-		value["isAllocatedToLounge"] = false;
-		value["name"] = value?.name?.toString();
-		value["row"] = value?.row?.toString();
-		value["phoneNumber"] = value?.phoneNumber?.toString();
-		value && postCheckIn(value);
-	};
+    const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
+
+    const handleSaveButton = (value) => {
+        value["isAllocatedToLounge"] = false;
+        value["name"] = value?.name?.toString();
+        value["row"] = value?.row?.toString();
+        value["phoneNumber"] = value?.phoneNumber?.toString();
+        value && postCheckIn(value);
+    };
 
     const handleCloseButton = () => {
         setIsModalOpen(false);
@@ -111,14 +111,14 @@ const CheckIn = () => {
         onError: (error) => handleEditCheckinError(error),
     };
 
-	const {mutate: editCheckin, isLoading: isEditLoading} = useEditCheckin(rowData?.id,editCheckinHandler)
-	
-	const handleEditCheckinSuccess = (data) => {
-		closeEditModal();
-		setCheckinData([]);
-		toast.success(data?.message);
-		queryClient.invalidateQueries('get-check-in');
-	}
+    const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler)
+
+    const handleEditCheckinSuccess = (data) => {
+        closeEditModal();
+        setCheckinData([]);
+        toast.success(data?.message);
+        queryClient.invalidateQueries('get-check-in');
+    }
 
     const handleEditCheckinError = (error) => {
         toast.error(error?.response?.data?.message)
@@ -137,10 +137,10 @@ const CheckIn = () => {
         openEditModal();
     };
 
-	const handleEditSave = (value) => {
-		value.row && (value["row"] = value?.row.toString());
-		editCheckin(value);
-	};
+    const handleEditSave = (value) => {
+        value.row && (value["row"] = value?.row.toString());
+        editCheckin(value);
+    };
 
     //DELETE
     const deleteCheckinHandler = {
@@ -238,20 +238,20 @@ const CheckIn = () => {
 
     const dropdownItems = [
         {
-            label: 'Create',
+            label: 'Add Checkin Counter',
             value: 'create',
             key: '0',
         },
-        {
-            label: 'Upload CSV',
-            value: 'uploadCSV',
-            key: '1',
-        },
-        {
-            label: 'Download CSV Template',
-            value: 'downloadCSVTemplate',
-            key: '2',
-        },
+        // {
+        //     label: 'Upload CSV',
+        //     value: 'uploadCSV',
+        //     key: '1',
+        // },
+        // {
+        //     label: 'Download CSV Template',
+        //     value: 'downloadCSVTemplate',
+        //     key: '2',
+        // },
     ];
 
     const handleDropdownItemClick = (value) => {
@@ -262,36 +262,36 @@ const CheckIn = () => {
         }
     };
 
-	return (
-		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
-				<Common_Card
-					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
-					btnCondition={true}
-					Heading={'Add Check-in Counters'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
-				/>
-			) : (
-				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Actions"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
-						<div className="check-in--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Check-in Counters
-							</CustomTypography>
-							<TableComponent data={checkinData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
-						</div>
-					</div>
+    return (
+        <>
+            <PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
+            {!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
+                <Common_Card
+                    title1="Create"
+                    // title2={'Import Global Reference'}
+                    // title3={'Download CSV Template'}
+                    btnCondition={true}
+                    Heading={'Add Check-in Counters'}
+                    formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
+                />
+            ) : (
+                <>
+                    <div className="check-in">
+                        <div className="check-in--dropdown">
+                            <DropdownButton
+                                dropdownItems={dropdownItems}
+                                buttonText="Create"
+                                className="custom_dropdownButton"
+                                onChange={handleDropdownItemClick}
+                            />
+                        </div>
+                        <div className="check-in--tableContainer">
+                            <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+                                Check-in Counters
+                            </CustomTypography>
+                            <TableComponent data={checkinData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+                        </div>
+                    </div>
 
                     {/* modals */}
                     <ModalComponent

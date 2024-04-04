@@ -25,29 +25,29 @@ const Taxiway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	
+
 	const getTaxiwayHandler = {
-        onSuccess: (data) => handleGetTaxiwaySuccess(data),
-        onError: (error) => handleGetTaxiwayError(error),
-    };
- 
-    const handleGetTaxiwaySuccess = (data) => {
-		console.log(data,"data here");
-        if (data?.pages) {
-            const newData = data.pages.reduce((acc, page) => {
-                return acc.concat(page.data || []);
-            }, []);
-       
-            setTaxiwayData([...newData]);
-        }
-    };
-	console.log(taxiwayData,'taxiwaydata' );
+		onSuccess: (data) => handleGetTaxiwaySuccess(data),
+		onError: (error) => handleGetTaxiwayError(error),
+	};
+
+	const handleGetTaxiwaySuccess = (data) => {
+		console.log(data, "data here");
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setTaxiwayData([...newData]);
+		}
+	};
+	console.log(taxiwayData, 'taxiwaydata');
 
 	const handleGetTaxiwayError = (error) => {
-        toast.error(error?.response?.data?.message);
-    }
+		toast.error(error?.response?.data?.message);
+	}
 	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
-	console.log(fetchTaxiway,"fetchTaxiway");
+	console.log(fetchTaxiway, "fetchTaxiway");
 
 
 	const openModal = () => {
@@ -66,7 +66,7 @@ const Taxiway = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 	};
-	
+
 
 	const openDeleteModal = (record) => {
 		setRowData(record);
@@ -96,12 +96,12 @@ const Taxiway = () => {
 		onError: (error) => handleAddTaxiwayError(error),
 	};
 
-	const { mutate: postTaxiway, isLoading: isPostLoading  } = usePostTaxiway(addTaxiwayHandler);
+	const { mutate: postTaxiway, isLoading: isPostLoading } = usePostTaxiway(addTaxiwayHandler);
 
 	const handleSaveButton = (value) => {
 		value && postTaxiway(value);
 	};
-	
+
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
@@ -223,8 +223,9 @@ const Taxiway = () => {
 				<>
 					<Button
 						onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)}}
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
 						title="View Details"
 						type="text" />
 				</>
@@ -234,20 +235,20 @@ const Taxiway = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Add New Taxi',
+			label: 'Add Taxiway',
 			value: 'addNewTaxi',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -265,8 +266,8 @@ const Taxiway = () => {
 			{!Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
@@ -286,7 +287,7 @@ const Taxiway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Taxiway Counters
 							</CustomTypography>
-							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 
