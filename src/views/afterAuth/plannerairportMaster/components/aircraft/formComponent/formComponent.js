@@ -13,7 +13,7 @@ import {
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit }) => {
 	const isNotEditable = type === 'edit';
 	const onError = ({
 		response: {
@@ -35,10 +35,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue }) => {
 	}, [countryDropdownData]);
 
 	const onFinishHandler = (value) => {
-		console.log(value);
+		handleSubmit(value);
 	};
-
-	console.log(initialValue);
 	return (
 		<Form layout="vertical" onFinish={onFinishHandler} initialValues={initialValue} key={initialValue?.id}>
 			<div className="airport_form_container">
@@ -258,7 +256,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue }) => {
 					<Date
 						label="Valid From"
 						placeholder={!isReadOnly && 'Select valid from date'}
-						name="valid_from"
+						name="validFrom"
 						className="custom_date"
 						format="MM-DD-YYYY"
 						disabledFor="future"
@@ -269,23 +267,31 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue }) => {
 					<Date
 						label="Valid To"
 						placeholder={!isReadOnly && 'Select valid to date'}
-						name="valid_till"
+						name="validTill"
 						format="MM-DD-YYYY"
 						disabled={isReadOnly}
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 					/>
 				</div>
-
-				<Divider />
-				<div className="custom_buttons">
-					<ButtonComponent
-						title="Cancel"
-						type="filledText"
-						className="custom_button_cancel"
-						onClick={closeModal}
-					/>
-					<ButtonComponent title={'save'} type="filledText" className="custom_button_save" isSubmit={true} />
-				</div>
+				{!isReadOnly && (
+					<>
+						<Divider />
+						<div className="custom_buttons">
+							<ButtonComponent
+								title="Cancel"
+								type="filledText"
+								className="custom_button_cancel"
+								onClick={closeModal}
+							/>
+							<ButtonComponent
+								title={'save'}
+								type="filledText"
+								className="custom_button_save"
+								isSubmit={true}
+							/>
+						</div>
+					</>
+				)}
 			</div>
 		</Form>
 	);

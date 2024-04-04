@@ -1,5 +1,13 @@
-import { useGetAllPlannerAircraft, usePostPlannerAircraft } from './PlannerAirportMaster/PlannerAircraftAirportMaster';
-import { useGetAllPlannerAirline, usePostPlannerAirline } from './PlannerAirportMaster/PlannerAirlineAirportMaster';
+import {
+	useDeletePlannerAircraft,
+	useGetAllPlannerAircraft,
+	usePostPlannerAircraft,
+} from './PlannerAirportMaster/PlannerAircraftAirportMaster';
+import {
+	useDeletePlannerAirline,
+	useGetAllPlannerAirline,
+	usePostPlannerAirline,
+} from './PlannerAirportMaster/PlannerAirlineAirportMaster';
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
@@ -62,6 +70,8 @@ export {
 	useCountriesDropdown,
 	useGetAllPlannerAircraft,
 	useGetAllPlannerAirline,
-	usePostPlannerAirline, 
+	usePostPlannerAirline,
 	usePostPlannerAircraft,
+	useDeletePlannerAircraft,
+	useDeletePlannerAirline,
 };

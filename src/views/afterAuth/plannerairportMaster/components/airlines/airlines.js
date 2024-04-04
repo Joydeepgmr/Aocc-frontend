@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Common_table from '../../common_wrapper/common_table/common_table';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
 
-import { useGetAllPlannerAirline } from '../../../../../services';
+import { useDeletePlannerAirline, useGetAllPlannerAirline } from '../../../../../services';
 import ButtonComponent from '../../../../../components/button/button';
 import Delete from '../../../../../assets/Delete.svg';
 import Edit from '../../../../../assets/Edit.svg';
 import FormComponent from './formComponent/formComponent';
+import { useQueryClient } from 'react-query';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
+import ModalComponent from '../../../../../components/modal/modal';
+import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 
 const Airlines = () => {
+	const queryClient = useQueryClient();
 	const [airlineData, setAirlineData] = useState([]);
+	const [openDeleteModal, setOpenDeleteModal] = useState(false);
+	const [openEditModal, setOpenEditModal] = useState(false);
+	const [detailModal, setDetailModal] = useState(false);
+	const [rowData, setRowData] = useState({});
+
 	const getAirlineHandler = {
 		onSuccess: (data) => handleGetAirlineSuccess(data),
 		onError: (error) => handleGetAirlineError(error),
+	};
+
+	const deleteAirlineHandler = {
+		onSuccess: (data) => handleDeleteAirlineSuccess(data),
+		onError: (error) => handleDeleteAirlineError(error),
 	};
 
 	const handleGetAirlineSuccess = (data) => {
@@ -29,6 +45,17 @@ const Airlines = () => {
 		toast.error(error?.response?.data?.message);
 	};
 
+	const handleDeleteAirlineSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-planner-airline');
+		toast.success(data?.message);
+		setRowData({});
+		setOpenDeleteModal(false);
+	};
+
+	const handleDeleteAirlineError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
 	const {
 		data: fetchedPlannerAirline,
 		isLoading: isPlannerAirlineLoading,
@@ -36,15 +63,46 @@ const Airlines = () => {
 		fetchNextPage,
 	} = useGetAllPlannerAirline(getAirlineHandler);
 
+	const { mutate: onDeleteAirline, isLoading: isDeleteAirlineLoading } =
+		useDeletePlannerAirline(deleteAirlineHandler);
+
+	const handleDeleteAirline = () => {
+		onDeleteAirline(rowData?.id);
+	};
+
 	const columns = [
 		{
 			title: '',
 			dataIndex: 'edit',
 			key: 'edit',
-			render: () => (
+			render: (text, record) => (
 				<div className="custom-button">
-					<ButtonComponent type={'iconWithBorder'} icon={Delete} id="delete_button"></ButtonComponent>
-					<ButtonComponent type={'iconWithBorder'} icon={Edit} id="edit_button"></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Delete}
+						onClick={() => {
+							setOpenDeleteModal(true);
+							setRowData({
+								...record,
+								validFrom: dayjs(record?.validFrom),
+								validTill: dayjs(record?.validTill),
+							});
+						}}
+						id="delete_button"
+					></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Edit}
+						onClick={() => {
+							setOpenEditModal(true);
+							setRowData({
+								...record,
+								validFrom: dayjs(record?.validFrom),
+								validTill: dayjs(record?.validTill),
+							});
+						}}
+						id="edit_button"
+					></ButtonComponent>
 				</div>
 			),
 		},
@@ -89,10 +147,24 @@ const Airlines = () => {
 			title: '',
 			dataIndex: 'viewdetails',
 			key: 'viewdetails',
-			render: () => <ButtonComponent title="View Details" type="text" />,
+			render: (text, record) => (
+				<ButtonComponent
+					onClick={() => {
+						setDetailModal(true);
+						setRowData({
+							...record,
+							validFrom: dayjs(record?.validFrom),
+							validTill: dayjs(record?.validTill),
+						});
+					}}
+					title="View Details"
+					type="text"
+				/>
+			),
 		},
 	];
 
+	console.log(rowData);
 	return (
 		<>
 			{Boolean(airlineData?.length) ? (
@@ -115,6 +187,54 @@ const Airlines = () => {
 					formComponent={<FormComponent />}
 				/>
 			)}
+
+			<ConfirmationModal
+				isOpen={openDeleteModal}
+				onClose={() => {
+					setOpenDeleteModal(false);
+					setRowData({});
+				}}
+				onSave={handleDeleteAirline}
+				content={`You want to delete this ${rowData?.name} record`}
+			/>
+			<ModalComponent
+				isModalOpen={openEditModal}
+				closeModal={() => {
+					setOpenEditModal(false);
+					setRowData({});
+				}}
+				title="Setup your airline"
+				width="80vw"
+				className="custom_modal"
+			>
+				<FormComponent
+					type={'edit'}
+					closeModal={() => {
+						setOpenEditModal(false);
+						setRowData({});
+					}}
+					initialValue={rowData}
+				/>
+			</ModalComponent>
+			<ModalComponent
+				isModalOpen={detailModal}
+				closeModal={() => {
+					setDetailModal(false);
+					setRowData({});
+				}}
+				title="Setup your airline"
+				width="80vw"
+				className="custom_modal"
+			>
+				<FormComponent
+					isReadOnly={true}
+					closeModal={() => {
+						setOpenEditModal(false);
+						setRowData({});
+					}}
+					initialValue={rowData}
+				/>
+			</ModalComponent>
 		</>
 	);
 };
