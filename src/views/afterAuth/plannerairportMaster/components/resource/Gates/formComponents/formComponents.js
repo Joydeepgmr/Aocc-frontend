@@ -50,11 +50,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	}, [form, initialValues]);
 
 	return (
-		<div className='gates'>
-		<div className="main_form" key={initialValues?.id}>
+		<div key={initialValues?.id}>
 			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
-				<div className="form_section">
-					<div className="form_content">
+				<div className="gate_form_container">
+					<div className="gate_form_inputfields">
 						<InputField
 							label="Gate Name"
 							name="name"
@@ -63,14 +62,16 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							required
 							disabled={isEdit || isReadOnly}
 							type="number"
+							className="custom_input"
 						/>
 						<CheckBoxField
 								name="busGate"
 								label="Bus Gate"
 								disabled={isReadOnly}
+								className="custom_input"
 							/>
 					</div>
-					<div className="form_content">
+					<div className="gate_form_inputfields">
 					<CustomSelect
 								SelectData={SelectData}
 								label="Terminal"
@@ -85,9 +86,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							type="number"
 							disabled={isReadOnly}
+							className="custom_input"
 						/>
-					</div>
-					<div className="form_content">
 						<InputField
 							label="Default Allocation Duration"
 							name="defaultAllocationDuration"
@@ -96,30 +96,32 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							type="number"
 							suffixText="min"
 							disabled={isReadOnly}
+							className="custom_input"
 						/>
 					</div>
 					<Divider />
-					<div className="form_content">
+					<div className="gate_form_inputfields">
 						<InputField
 							label="Reason, if unavailable"
 							name="reasonIdUnavailable"
 							placeholder="Filled Text"
 							warning="Required field"
 							disabled={isReadOnly}
+							className="custom_input"
 						/>
-						<Date label="Unavailable from" name="unavailableFrom" placeholder="Enter the airport name" disabled={isReadOnly}/>
+						<Date label="Unavailable from" name="unavailableFrom" placeholder="Enter the airport name" disabled={isReadOnly} className="custom_date"/>
 
-						<Date label="Unavailable to" name="unavailableTo" placeholder="Enter the airport name" disabled={isReadOnly}/>
+						<Date label="Unavailable to" name="unavailableTo" placeholder="Enter the airport name" disabled={isReadOnly} className="custom_date"/>
 					</div>
 				</div>
 				<Divider />
-				<div className="form_section">
+				<div className="gate_form_inputfields">
 					<div className="form_content">
-						<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required disabled={isEdit || isReadOnly}/>
-						<Date label="Valid To" name="validTo" placeholder="Enter the airport name" disabled={isReadOnly}/>
+						<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required disabled={isEdit || isReadOnly} className="custom_date"/>
+						<Date label="Valid To" name="validTo" placeholder="Enter the airport name" disabled={isReadOnly} className="custom_date"/>
 					</div>
 				</div>
-				<div className="form_section">
+				<div className="gate_form_inputfields">
 					<div className="form_bottomButton">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
 						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
@@ -127,7 +129,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				</div>
 			</Form>
 		</div>
-		</div>
+	
 	);
 };
 
