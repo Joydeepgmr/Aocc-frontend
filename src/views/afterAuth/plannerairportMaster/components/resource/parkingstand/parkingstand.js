@@ -15,7 +15,7 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useGetGate } from '../../../../../../services/planairportmaster/resources/gates/gates';
-import './parkingStand.scss';
+import './parkingstand.scss';
 
 const ParkingStand = () => {
 	const queryClient = useQueryClient();
@@ -26,8 +26,8 @@ const ParkingStand = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-	const { data: gateDropdownData = [],isSuccess: isGetGateDropdownSuccess } = useGetGate();
-	
+	const { data: gateDropdownData = [], isSuccess: isGetGateDropdownSuccess } = useGetGate();
+
 	const getParkingStandHandler = {
 		onSuccess: (data) => handleGetParkingStandSuccess(data),
 		onError: (error) => handleGetParkingStandError(error),
@@ -38,7 +38,7 @@ const ParkingStand = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setparkingData([...newData]);
 		}
 	};
@@ -46,7 +46,7 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const { data: fetchParking, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -93,7 +93,7 @@ const ParkingStand = () => {
 	};
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
-	
+
 	const handleSaveButton = (value) => {
 		value && postParkingStand(value);
 	};
@@ -109,8 +109,8 @@ const ParkingStand = () => {
 		onError: (error) => handleEditParkingStandError(error),
 	};
 
-	const {mutate: editParkingStand, isLoading: isEditLoading} = useEditParkingStand(rowData?.id,editParkingStandHandler)
-	
+	const { mutate: editParkingStand, isLoading: isEditLoading } = useEditParkingStand(rowData?.id, editParkingStandHandler)
+
 	const handleEditParkingStandSuccess = (data) => {
 		closeEditModal();
 		setparkingData([]);
@@ -123,11 +123,12 @@ const ParkingStand = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
 			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
+			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
 		}
 		setRowData(record);
 		openEditModal();
@@ -153,9 +154,9 @@ const ParkingStand = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteParkingStand} = useDeleteParkingStand(deleteParkingStandHandler);
+	const { mutate: deleteParkingStand } = useDeleteParkingStand(deleteParkingStandHandler);
 	const handleDelete = () => {
-		deleteParkingStand(rowData.id);	
+		deleteParkingStand(rowData.id);
 	}
 
 	const columns = [
@@ -222,8 +223,9 @@ const ParkingStand = () => {
 				<>
 					<Button onClick={() => {
 						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+						handleEdit(record)
+					}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -254,7 +256,7 @@ const ParkingStand = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
@@ -270,7 +272,7 @@ const ParkingStand = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
-						gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+						gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
 					/>}
 				/>
 			) : (
@@ -288,7 +290,7 @@ const ParkingStand = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
 							</CustomTypography>
-							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 
@@ -305,35 +307,35 @@ const ParkingStand = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								key={Math.random() * 100}
-								gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+								gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
 							/>
 						</div>
 					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="80%"
-					closeModal={closeEditModal}
-					title={`Edit Parking Stands`}
-					className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
-						gateDropdownData = {isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+
+					<ModalComponent
+						isModalOpen={isEditModalOpen}
+						width="80%"
+						closeModal={closeEditModal}
+						title={`Edit Parking Stands`}
+						className="custom_modal"
+					>
+						<div className="modal_content">
+							<FormComponent
+								handleSaveButton={handleEditSave}
+								handleButtonClose={handleCloseButton}
+								isEdit={true}
+								initialValues={rowData}
+								isReadOnly={isReadOnly}
+								gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+							/>
+						</div>
+					</ModalComponent>
+					<ConfirmationModal
+						isOpen={isDeleteConfirm}
+						onClose={closeDeleteModal}
+						onSave={handleDelete}
+						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</div>
-			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
-			/>
 				</>
 			)}
 		</>
