@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -13,7 +13,7 @@ import TableComponent from '../../../../../../components/table/table';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import {useEditBaggageBelt, useGetBaggageBelt,useDeleteBaggageBelt,usePostBaggageBelt} from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
+import { useEditBaggageBelt, useGetBaggageBelt, useDeleteBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
 import './baggagebelt.js';
 
 const BaggageBelt = () => {
@@ -25,28 +25,28 @@ const BaggageBelt = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	
+
 	const getBaggageBeltHandler = {
-        onSuccess: (data) => handleGetBaggageBeltSuccess(data),
-        onError: (error) => handleGetBaggageBeltError(error),
-    };
- 
-    const handleGetBaggageBeltSuccess = (data) => {
-		console.log(data,"data here");
-        if (data?.pages) {
-            const newData = data.pages.reduce((acc, page) => {
-                return acc.concat(page.data || []);
-            }, []);
-       
-            setBaggageBeltData([...newData]);
-        }
-    };
+		onSuccess: (data) => handleGetBaggageBeltSuccess(data),
+		onError: (error) => handleGetBaggageBeltError(error),
+	};
+
+	const handleGetBaggageBeltSuccess = (data) => {
+		console.log(data, "data here");
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setBaggageBeltData([...newData]);
+		}
+	};
 
 	const handleGetBaggageBeltError = (error) => {
-        toast.error(error?.response?.data?.message);
-    }
+		toast.error(error?.response?.data?.message);
+	}
 	const { data: fetchBaggageBelt, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetBaggageBelt(getBaggageBeltHandler);
-	
+
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -92,7 +92,7 @@ const BaggageBelt = () => {
 		onError: (error) => handleAddBaggageBeltError(error),
 	};
 
-	const { mutate: postBaggageBelt, isLoading: isPostLoading  } = usePostBaggageBelt(addBaggageBeltHandler);
+	const { mutate: postBaggageBelt, isLoading: isPostLoading } = usePostBaggageBelt(addBaggageBeltHandler);
 
 	const handleSaveButton = (value) => {
 		value && postBaggageBelt(value);
@@ -213,8 +213,8 @@ const BaggageBelt = () => {
 				<>
 					<Button
 						onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)
+							setIsReadOnly(true);
+							handleEdit(record)
 						}}
 						title="View Details"
 						type="text" />
@@ -229,16 +229,16 @@ const BaggageBelt = () => {
 			value: 'addNewBaggageBelt',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -253,13 +253,13 @@ const BaggageBelt = () => {
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			{!Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
-                title1="Create"
-                title2={'Import Global Reference'}
-                title3={'Download CSV Template'}
-                btnCondition={true}
-                Heading={'Add belts'}
-                formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}/>}
-            />
+					title1="Create"
+					title2={'Import Global Reference'}
+					title3={'Download CSV Template'}
+					btnCondition={true}
+					Heading={'Add belts'}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
+				/>
 			) : (
 				<>
 					<div className="baggage_belt">
@@ -275,7 +275,7 @@ const BaggageBelt = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Baggage Belt Counters
 							</CustomTypography>
-							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 
