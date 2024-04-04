@@ -14,6 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
+import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -25,6 +26,7 @@ const Taxiway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getTaxiwayHandler = {
 		onSuccess: (data) => handleGetTaxiwaySuccess(data),
@@ -190,13 +192,7 @@ const Taxiway = () => {
 			title: 'Taxiway Name',
 			dataIndex: 'name',
 			key: 'name',
-			render: (counterName) => counterName ?? '-',
-		},
-		{
-			title: 'Airport',
-			dataIndex: 'airport',
-			key: 'airport',
-			render: (group) => group?.name ?? '-',
+			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Connected to Runway',
@@ -270,7 +266,7 @@ const Taxiway = () => {
 					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData}/>}
 				/>
 			) : (
 				<>
@@ -302,6 +298,7 @@ const Taxiway = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								terminalDropdownData = {terminalDropdownData}
 							/>
 						</div>
 					</ModalComponent>
@@ -320,6 +317,7 @@ const Taxiway = () => {
 								isEdit={true}
 								initialValues={rowData}
 								isReadOnly={isReadOnly}
+								terminalDropdownData = {terminalDropdownData}
 							/>
 						</div>
 					</ModalComponent>
