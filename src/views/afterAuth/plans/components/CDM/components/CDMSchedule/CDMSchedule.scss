@@ -2,29 +2,44 @@
 @import '../../../../../../../styles/sass/mixins';
 
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
 }
 
 .container {
-    @include flex(center, center, row);
-    gap: 1rem;
-    height: 50vh;
+	@include flex(center, center, row);
+	gap: 1rem;
+	height: 50vh;
 }
 
 .modal_content {
-    // position: relative;
-    // @include flex(center, center, column);
-    // min-height: 40vh;
+	// position: relative;
+	// @include flex(center, center, column);
+	// min-height: 40vh;
 }
 
-.custom_modal{
-    max-height: 50rem;
-    overflow: auto;
-    border-radius: 1rem;
+.custom_modal {
+	max-height: 50rem;
+	overflow: auto;
+	border-radius: 1rem;
 }
 
-.table-container{
-    margin-top: 2rem;
+.table-container {
+	margin-top: 2rem;
+}
+.view_map_button {
+	margin: auto;
+}
+.view_img_modal {
+	max-height: 75rem;
+	overflow: auto;
+	border-radius: 1rem;
+}
+
+.map_img {
+	max-width: 100%; /* Ensure the image doesn't exceed its container */
+	max-height: 80%; /* Maintain aspect ratio */
+	display: block; /* Ensure proper rendering as a block element */
+	margin: auto; /* Center the image horizontally */
 }
