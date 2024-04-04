@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
 import { GET_TAXIWAY, TAXIWAY } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
@@ -69,3 +69,13 @@ export const useDeleteTaxiway = (props) => {
 
 	return { ...response, data: data?.data, message: statusMessage };
 };
+
+export const useTaxiwayDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-taxiway-dropdown'],
+		queryFn: async () => await Post(`${GET_TAXIWAY}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

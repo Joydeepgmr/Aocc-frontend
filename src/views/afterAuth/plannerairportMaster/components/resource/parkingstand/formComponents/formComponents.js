@@ -15,13 +15,22 @@ const FormComponent = ({
 	isEdit,
 	isReadOnly,
 	gateDropdownData,
+	taxiwayDropdownData
 }) => {
 	isEdit && (initialValues['gate'] = initialValues?.gate?.id);
+	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
+
 	const SelectGateData = useMemo(() => {
 		return gateDropdownData.map((data) => {
 			return { label: data.name, value: data.id };
 		});
 	}, [gateDropdownData]);
+
+	const SelectTaxiwayData = useMemo(() => {
+		return taxiwayDropdownData.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [taxiwayDropdownData]);
 
 	const [form] = Form.useForm();
 
@@ -40,126 +49,169 @@ const FormComponent = ({
 		form.setFieldsValue(initialValues);
 	}, [form, initialValues]);
 
-	useEffect(() => {
-		form.setFieldsValue(initialValues);
-	}, [form, initialValues]);
-
 	return (
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-				<div className='parking_form_container'>
-					<div className="parking_form_inputfields">
-						<InputField
-							label="Stand Name"
-							name="name"
-							placeholder="Enter the stand name"
-							warning="Required field"
-							disabled={isReadOnly || isEdit}
-							required
-							className="custom_input"
-						/>
-					</div>
+		<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+			<div className="parking_form_container">
+				<div className="parking_form_inputfields">
+					<InputField
+						label="Stand Name"
+						name="name"
+						placeholder="Enter the stand name"
+						warning="Required field"
+						disabled={isReadOnly || isEdit}
+						required
+						className="custom_input"
+					/>
+				</div>
 
-					<div className="parking_form_inputfields">
-						<CustomSelect
-							SelectData={SelectGateData}
-							label="Connected to Gate"
-							placeholder={'Select Gate'}
-							name="gate"
-							disabled={isReadOnly || isEdit}
-							className="select"
-						/>
-						<InputField
-							label="Connected to Taxiway"
-							name="taxiway"
-							placeholder="Filled Text"
-							warning="Required field"
-							type="number"
-							disabled={isReadOnly || isEdit}
-							className="custom_input"
-						/>
-						<InputField
-							label="Default Allocation Duration"
-							name="defaultAllocationDuration"
-							placeholder="Filled Text"
-							warning="Required field"
-							suffixText="min"
-							disabled={isReadOnly}
-							className="custom_input"
-						/>
-					</div>
-					<Divider />
-					<div className="parking_form_inputfields">
-						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
-							Equipped with
-						</CustomTypography>
-							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="apu" label="APU" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="fuelPit" label="Fuel Pits" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="pushBack" label="Pushback" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="airBridge" label="Air Bridge" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="airCondition" label="Air Condition" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-							<CheckBoxField name="dockingSystem" label="Docking System" title="Single Checkbox" disabled={isReadOnly} className="custom_input"/>
-					</div>
-					<Divider />
-					<div className="parking_form_inputfields">
-						<InputField
-							label="Reason, if unavailable"
-							name="reason"
-							placeholder="Filled Text"
-							warning="Required field"
-							disabled={isReadOnly}
-							className="custom_input"
-						/>
-						<Date
-							label="Unavailable from"
-							name="unavailableFrom"
-							placeholder={!isReadOnly && 'Enter the parking stand name'}
-							format="MM-DD-YYYY"
-							disabled={isReadOnly}
-							className="custom_date"
-						/>
-
-						<Date
-							label="Unavailable to"
-							name="unavailableTo"
-							placeholder={!isReadOnly && 'Enter the parking stand name'}
-							format="MM-DD-YYYY"
-							disabled={isReadOnly}
-							className="custom_date"
-						/>
-					</div>
-				
-				<Divider />
-					<div className="parking_form_inputfields">
-						<Date
-							label="Valid From"
-							name="validFrom"
-							placeholder={!isReadOnly && 'Enter the parking stand name'}
-							required
-							format="MM-DD-YYYY"
-							disabled={isReadOnly || isEdit}
-							className="custom_date"
-						/>
-						<Date
-							label="Valid To"
-							name="validTill"
-							placeholder={!isReadOnly && 'Enter the parking stand name'}
-							format="MM-DD-YYYY"
-							disabled={isReadOnly}
-							className="custom_date"
-						/>
-					</div>
-					</div>
+				<div className="parking_form_inputfields">
+					<CustomSelect
+						SelectData={SelectGateData}
+						label="Connected to Gate"
+						placeholder={'Select Gate'}
+						name="gate"
+						disabled={isReadOnly || isEdit}
+						className="select"
+					/>
+					<CustomSelect
+						SelectData={SelectTaxiwayData}
+						label="Connected to Taxiway"
+						placeholder={'Select Taxiway'}
+						name="taxiway"
+						disabled={isReadOnly || isEdit}
+						className="select"
+					/>
+					<InputField
+						label="Default Allocation Duration"
+						name="defaultAllocationDuration"
+						placeholder="Filled Text"
+						warning="Required field"
+						suffixText="min"
+						disabled={isReadOnly}
+						className="custom_input"
+						type="number"
+					/>
+				</div>
 				<Divider />
 				<div className="parking_form_inputfields">
-					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
-					</div>
+					<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
+						Equipped with
+					</CustomTypography>
+					<CheckBoxField
+						name="gpu"
+						label="GPU"
+						id="custom_checkbox"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="apu"
+						label="APU"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="fuelPit"
+						label="Fuel Pits"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="pushBack"
+						label="Pushback"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="airBridge"
+						label="Air Bridge"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="airCondition"
+						label="Air Condition"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<CheckBoxField
+						name="dockingSystem"
+						label="Docking System"
+						title="Single Checkbox"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
 				</div>
-				
-			</Form>
-		
+				<Divider />
+				<div className="parking_form_inputfields">
+					<InputField
+						label="Reason, if unavailable"
+						name="reason"
+						placeholder="Filled Text"
+						warning="Required field"
+						disabled={isReadOnly}
+						className="custom_input"
+					/>
+					<Date
+						label="Unavailable from"
+						name="unavailableFrom"
+						placeholder={!isReadOnly && 'Enter the parking stand name'}
+						format="MM-DD-YYYY"
+						disabled={isReadOnly}
+						className="custom_date"
+					/>
+
+					<Date
+						label="Unavailable to"
+						name="unavailableTo"
+						placeholder={!isReadOnly && 'Enter the parking stand name'}
+						format="MM-DD-YYYY"
+						disabled={isReadOnly}
+						className="custom_date"
+					/>
+				</div>
+
+				<Divider />
+				<div className="parking_form_inputfields">
+					<Date
+						label="Valid From"
+						name="validFrom"
+						placeholder={!isReadOnly && 'Enter the parking stand name'}
+						required
+						format="MM-DD-YYYY"
+						disabled={isReadOnly || isEdit}
+						className="custom_date"
+					/>
+					<Date
+						label="Valid To"
+						name="validTill"
+						placeholder={!isReadOnly && 'Enter the parking stand name'}
+						format="MM-DD-YYYY"
+						disabled={isReadOnly}
+						className="custom_date"
+					/>
+				</div>
+			</div>
+			<Divider />
+			<div className="parking_form_inputfields">
+				<div className="form_bottomButton">
+					<Button
+						title="Cancel"
+						type="filledText"
+						id="btn"
+						className="custom_svgButton"
+						onClick={handleButtonClose}
+					/>
+					<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+				</div>
+			</div>
+		</Form>
 	);
 };
 

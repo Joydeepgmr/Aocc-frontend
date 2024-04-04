@@ -65,6 +65,8 @@ export const GET_TAXIWAY = '/taxiway/paginated';
 export const TAXIWAY = '/taxiway';
 export const GET_BAGGAGE_BELT = '/baggage-belt/paginated';
 export const BAGGAGE_BELT = '/baggage-belt';
+export const GET_TERMINAL = '/terminal/paginated';
+export const TERMINAL = '/terminal';
 
 /*--------------------------planner aircraft master ---------------------*/
 

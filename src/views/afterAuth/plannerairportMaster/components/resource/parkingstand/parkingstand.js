@@ -14,7 +14,8 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import { useGetGate } from '../../../../../../services/planairportmaster/resources/gates/gates';
+import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
+import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -26,7 +27,8 @@ const ParkingStand = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-	const { data: gateDropdownData = [], isSuccess: isGetGateDropdownSuccess } = useGetGate();
+	const { data: gateDropdownData = [] } = useGateDropdown();
+	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
 
 	const getParkingStandHandler = {
 		onSuccess: (data) => handleGetParkingStandSuccess(data),
@@ -272,7 +274,8 @@ const ParkingStand = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
-						gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+						gateDropdownData = {gateDropdownData}
+						taxiwayDropdownData = {taxiwayDropdownData}
 					/>}
 				/>
 			) : (
@@ -307,35 +310,37 @@ const ParkingStand = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								key={Math.random() * 100}
-								gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
+								gateDropdownData = {gateDropdownData}
+								taxiwayDropdownData = {taxiwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>
-
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`Edit Parking Stands`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								gateDropdownData={isGetGateDropdownSuccess && gateDropdownData?.pages[0]?.data}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+					
+				<ModalComponent
+					isModalOpen={isEditModalOpen}
+					width="80%"
+					closeModal={closeEditModal}
+					title={`Edit Parking Stands`}
+					className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit = {true}
+						initialValues={rowData}
+						isReadOnly = {isReadOnly}
+						gateDropdownData = {gateDropdownData}
+						taxiwayDropdownData = {taxiwayDropdownData}
 					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal 
+			isOpen={isDeleteConfirm} 
+			onClose={closeDeleteModal} 
+			onSave={handleDelete} 
+			content={`You want to delete ${rowData?.name}?`}
+			/>
 				</>
 			)}
 		</>
