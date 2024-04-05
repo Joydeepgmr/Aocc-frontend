@@ -106,7 +106,6 @@ const CheckIn = () => {
 
 	const handleSaveButton = (value) => {
 		value['isAllocatedToLounge'] = false;
-		value['name'] = value?.name?.toString();
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
 		value && postCheckIn(value);
@@ -341,7 +340,7 @@ const CheckIn = () => {
 						isModalOpen={isEditModalOpen}
 						width="120rem"
 						closeModal={closeEditModal}
-						title={`Edit Check-in Counters`}
+						title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
