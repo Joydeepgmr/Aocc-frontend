@@ -22,6 +22,7 @@ export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
 export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
+export const DOWNLOAD_CSV_TEMPLATE = '/system-constant/sample-planner-sheet';
 
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/paginated';
@@ -51,7 +52,9 @@ export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
+export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated'
 export const GET_MILESTONE_DATA = '/milestone/paginated'
+export const GET_TELEX_MESSAGE = '/telex/paginated'
 
 /*--------------------------planner airport master ---------------------*/
 
@@ -69,6 +72,8 @@ export const GET_RUNWAY = '/runway/paginated';
 export const RUNWAY = '/runway';
 export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
+export const GET_DELAY_CODE = '/delay-code/paginated';
+export const DELAY_CODE = '/delay-code';
 
 
 /*--------------------------planner aircraft master ---------------------*/
@@ -76,9 +81,11 @@ export const TERMINAL = '/terminal';
 export const GET_PLANNER_AIRCRAFT = '/planner-aircraft/paginated';
 export const POST_PLANNER_AIRCRAFT = '/planner-aircraft/';
 export const DELETE_PLANNER_AIRCRAFT = '/planner-aircraft';
+export const UPDATE_PLANNER_AIRCRAFT = '/planner-aircraft';
 
 /*--------------------------planner airline master ---------------------*/
 
 export const GET_PLANNER_AIRLINE = '/planner-airline/paginated';
 export const POST_PLANNER_AIRLINE = '/planner-airline';
 export const DELETE_PLANNER_AIRLINE = '/planner-airline';
+export const UPDATE_PLANNER_AIRLINE = '/planner-airline';

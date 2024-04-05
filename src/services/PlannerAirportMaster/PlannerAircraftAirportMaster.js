@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
-import { DELETE_PLANNER_AIRCRAFT, GET_PLANNER_AIRCRAFT, POST_PLANNER_AIRCRAFT } from '../../api';
-import { Delete, Post } from '../HttpServices/HttpServices';
+import {
+	DELETE_PLANNER_AIRCRAFT,
+	GET_PLANNER_AIRCRAFT,
+	POST_PLANNER_AIRCRAFT,
+	UPDATE_PLANNER_AIRCRAFT,
+} from '../../api';
+import { Delete, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetAllPlannerAircraft = (props) => {
 	const response = useInfiniteQuery({
@@ -47,4 +52,18 @@ export const useDeletePlannerAircraft = (props) => {
 		...props,
 	});
 	return response;
+};
+
+export const useUpdatePlannerAircraft = (id, props) => {
+	const response = useMutation({
+		mutationKey: ['update-planner-aircraft', id],
+		mutationFn: async (data) => await Patch(`${UPDATE_PLANNER_AIRCRAFT}/${id}`, data),
+		...props,
+	});
+
+	const { data, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : data?.error;
+
+	return { ...response, data, message: statusMessage };
 };

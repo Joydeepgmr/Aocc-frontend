@@ -1,40 +1,46 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../../../HttpServices/HttpServices';
+import { useMutation, useInfiniteQuery } from 'react-query';
+import { DELAY_CODE,GET_DELAY_CODE } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
-export const usePostBaggageBelt = (props) => {
-	const queryClient = useQueryClient();
-	const response = useMutation({
-		mutationKey: [''],
-		mutationFn: async (data) => await Post(``, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('');
+export const useGetDelayCode = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-delay-code'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_DELAY_CODE}`,{pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			return false;
 		},
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
-
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.data?.message ?? error?.response?.data?.data?.error;
-
-	return { ...response, data, message: statusMessage };
+	return response;
 };
 
-export const useGetBaggageBelt = (props) => {
-	const response = useQuery({
-		queryKey: [''],
-		queryFn: async () => await Get(``),
+export const usePostDelayCode = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-delay-code'],
+		mutationFn: async (data) => await Post(`${DELAY_CODE}`, data),
 		...props,
 	});
 
-	const { data, error, isSuccess } = response;
+	return response;
+};
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
+export const useEditDelayCode = (id,props) => {
+	const response = useMutation({
+		mutationKey: ['edit-delay-code'],
+		mutationFn: async (data) => await Patch(`${DELAY_CODE}/${id}`, data),
+		...props,
+	});
 
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return response;
+};
+
+export const useDeleteDelayCode = (props) => {
+	const response = useMutation({
+		mutationKey: ['delete-delay-code'],
+		mutationFn: async (id) => await Delete(`${DELAY_CODE}/${id}`),
+		...props,
+	});
+	return response;
 };

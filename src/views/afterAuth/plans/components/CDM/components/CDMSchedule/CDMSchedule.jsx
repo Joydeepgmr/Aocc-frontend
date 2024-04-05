@@ -16,17 +16,24 @@ import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 import editIcon from '../../../../../../../assets/logo/edit.svg';
 import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../../../utils';
-import { useEditSeasonalPlanArrival, useGetSeasonalPlans, usePostSeasonalPlans, useEditSeasonalPlanDeparture, useUploadCSV } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
+import {
+	useEditSeasonalPlanArrival,
+	useGetSeasonalPlans,
+	usePostSeasonalPlans,
+	useEditSeasonalPlanDeparture,
+	useUploadCSV,
+} from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 import './CDMSchedule.scss';
+import ButtonComponent from '../../../../../../../components/button/button';
 
-
-const DailySchedule = ({tab}) => {
+const DailySchedule = ({ tab }) => {
 	const queryClient = useQueryClient();
 	const [seasonalData, setSeasonalData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
@@ -41,20 +48,25 @@ const DailySchedule = ({tab}) => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data?.flightSchedule || []);
 			}, []);
-		
+
 			setSeasonalData([...newData]);
 		}
 	};
 
 	const handleGetSeasonalError = (error) => {
 		toast.error(error?.response?.data?.message);
-	}
-	const { data: fetchedSeasonalPlans, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetSeasonalPlans(flightType,tab,getSeasonalHandler);
+	};
+	const {
+		data: fetchedSeasonalPlans,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
 
 	useEffect(() => {
-		console.log(isFetchLoading,"loadingg");
-	}, [isFetchLoading])
-	console.log(fetchedSeasonalPlans,hasNextPage, fetchNextPage,"fetched");
+		console.log(isFetchLoading, 'loadingg');
+	}, [isFetchLoading]);
+	console.log(fetchedSeasonalPlans, hasNextPage, fetchNextPage, 'fetched');
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -65,6 +77,9 @@ const DailySchedule = ({tab}) => {
 
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
+	};
+	const openMapModal = (data) => {
+		setMapModalOpen({ isOpen: true, data });
 	};
 
 	const closeModal = () => {
@@ -77,6 +92,9 @@ const DailySchedule = ({tab}) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+	};
+	const closeMapModal = () => {
+		setMapModalOpen({ isOpen: null, data: null });
 	};
 
 	const handleChange = (key) => {
@@ -100,7 +118,7 @@ const DailySchedule = ({tab}) => {
 	};
 
 	const handleAddSeasonalSuccess = (data) => {
-		setSeasonalData([])
+		setSeasonalData([]);
 		closeModal();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-seasonal-plans');
@@ -134,13 +152,13 @@ const DailySchedule = ({tab}) => {
 		setIsEditModalOpen(false);
 	};
 
-	//EDIT 
+	//EDIT
 	const handleEdit = (record) => {
 		record = {
 			...record,
 			date: record?.PDATE ? dayjs(record?.PDATE) : '',
-		}
-		console.log(record,"record");
+		};
+		console.log(record, 'record');
 		setRowData(record);
 		openEditModal();
 	};
@@ -148,21 +166,24 @@ const DailySchedule = ({tab}) => {
 	const handleSeasonalEditSuccess = (data) => {
 		closeEditModal();
 		setSeasonalData([]);
-		toast.success(data?.message);	
-		queryClient.invalidateQueries('get-seasonal-plans');	
-	}
+		toast.success(data?.message);
+		queryClient.invalidateQueries('get-seasonal-plans');
+	};
 
 	const handleSeasonalEditError = (error) => {
 		toast.error(error?.response?.data?.message);
-	}
+	};
 
 	const editSeasonalPlansHandler = {
-		onSuccess: (data) =>handleSeasonalEditSuccess(data),
+		onSuccess: (data) => handleSeasonalEditSuccess(data),
 		onError: (error) => handleSeasonalEditError(error),
 	};
-	
-	const {mutate: editSeasonalPlanArrival, isLoading: isEditLoading} = useEditSeasonalPlanArrival(rowData?.id,editSeasonalPlansHandler)
-	const {mutate: editSeasonalPlanDeparture} = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler)
+
+	const { mutate: editSeasonalPlanArrival, isLoading: isEditLoading } = useEditSeasonalPlanArrival(
+		rowData?.id,
+		editSeasonalPlansHandler
+	);
+	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler);
 	const handleEditSave = (value) => {
 		const data = {
 			FLIGHTNO: value.FLIGHTNO,
@@ -175,7 +196,7 @@ const DailySchedule = ({tab}) => {
 			registration: value.registration,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
-		index=== '2' && editSeasonalPlanDeparture(data);
+		index === '2' && editSeasonalPlanDeparture(data);
 	};
 
 	const dropdownItems = [
@@ -206,64 +227,101 @@ const DailySchedule = ({tab}) => {
 			/>
 		</div>
 	);
-	
+
 	const handleUploadCsvSuccess = () => {
 		queryClient.invalidateQueries('get-seasonal-plans');
 		closeCsvModal();
-	}
+	};
 
 	const handleUploadCsvError = () => {
-		toast.error("Invalid File Type");
-	}
-	
+		toast.error('Invalid File Type');
+	};
+
 	const uploadCsvHandler = {
 		onSuccess: () => handleUploadCsvSuccess(),
 		onError: () => handleUploadCsvError(),
 	};
 
-	const {mutate: onUploadCSV} = useUploadCSV(uploadCsvHandler);
+	const { mutate: onUploadCSV } = useUploadCSV(uploadCsvHandler);
 
 	//UPLOAD
 	const handleUpload = (file) => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-			
-			console.log(file[0].originFileObj, file, formData, "data"); // Ensure that the data is present
-			
+
+			console.log(file[0].originFileObj, file, formData, 'data'); // Ensure that the data is present
+
 			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
-	}
-	
+	};
 
+	const base64Img = '';
 	const columns = [
 		{
 			title: 'Flight No.',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
-			render: (FLIGHTNO) => (FLIGHTNO ?? '-'),
+			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
-		{ title: 'Date', dataIndex: 'PDATE', key: 'PDATE', render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-') },
+		{
+			title: 'Date',
+			dataIndex: 'PDATE',
+			key: 'PDATE',
+			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+		},
 		{
 			title: 'Call Sign',
 			dataIndex: 'callSign',
 			key: 'callSign',
-			render: (callSign) => (callSign ?? '-'),
+			render: (callSign) => callSign ?? '-',
 		},
 		{
 			title: 'Nature Code',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
-			render: (natureCode) => (natureCode ?? '-'),
+			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => (origin ?? '-') },
+		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
 		index === '1'
-			? { title: 'STA', dataIndex: 'STA', key: 'STA', render: (STA) => (STA !== null ? (STA)?.split('T')[1].slice(0,5) : '-') }
-			: { title: 'STD', dataIndex: 'STD', key: 'STD', render: (STD) => (STD !== null ? (STD)?.split('T')[1].slice(0,5) : '-'), },
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => (pos ?? '-'), },
-		{ title: 'REG No.', dataIndex: 'registration', key: 'registration', render: (registration) => ( registration ?? '-'), },
+			? {
+					title: 'STA',
+					dataIndex: 'STA',
+					key: 'STA',
+					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+				}
+			: {
+					title: 'STD',
+					dataIndex: 'STD',
+					key: 'STD',
+					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+				},
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => pos ?? '-' },
+		{
+			title: 'REG No.',
+			dataIndex: 'registration',
+			key: 'registration',
+			render: (registration) => registration ?? '-',
+		},
+		{
+			title: 'Map',
+			key: 'map',
+			render: (
+				text,
+				record // Use the render function to customize the content of the cell
+			) => (
+				<ButtonComponent
+					title="View map"
+					type="text"
+					className="view_map_button"
+					onClick={() => {
+						openMapModal(record);
+					}}
+				></ButtonComponent>
+			),
+		},
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -285,13 +343,7 @@ const DailySchedule = ({tab}) => {
 			<>
 				<div className="main_buttonContainer">
 					<div className="seasonal_container">
-						<Button
-							title="Create"
-							id="btn"
-							type="filledText"
-							isSubmit="submit"
-							onClick={openModal}
-						/>
+						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
 						<Button
 							id="btn"
 							title="Upload CSV"
@@ -319,7 +371,7 @@ const DailySchedule = ({tab}) => {
 			key: '1',
 			label: 'Arrival',
 			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
-				<Arrival data={seasonalData} columns={columns}  fetchData={fetchNextPage} pagination={hasNextPage} />
+				<Arrival data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()
 			),
@@ -328,7 +380,7 @@ const DailySchedule = ({tab}) => {
 			key: '2',
 			label: 'Departure',
 			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
-				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()
 			),
@@ -337,13 +389,20 @@ const DailySchedule = ({tab}) => {
 
 	return (
 		<>
-		<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading}/>
+			<ModalComponent
+				isModalOpen={mapModalOpen?.isOpen}
+				width="60rem"
+				closeModal={closeMapModal}
+				title={`Flight ${mapModalOpen?.data?.FLIGHTNO}`}
+				className="view_img_modal"
+			>
+				<img src={base64Img} alt="base64Img" className="map_img" />
+			</ModalComponent>
+			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>
-					<TopHeader
-                heading="Daily Flight Schedule"
-            	/>
+						<TopHeader heading="Daily Flight Schedule" />
 					</div>
 					<div className="icon_container">
 						<Button
@@ -395,7 +454,12 @@ const DailySchedule = ({tab}) => {
 					/>
 				</div>
 			</ModalComponent>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleUpload} />
+			<UploadCsvModal
+				isModalOpen={isCsvModalOpen}
+				width="720px"
+				closeModal={closeCsvModal}
+				handleUpload={handleUpload}
+			/>
 			<ModalComponent
 				isModalOpen={isEditModalOpen}
 				width="80%"
@@ -409,7 +473,7 @@ const DailySchedule = ({tab}) => {
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
-						isEdit = {true}
+						isEdit={true}
 					/>
 				</div>
 			</ModalComponent>

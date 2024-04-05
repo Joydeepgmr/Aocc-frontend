@@ -200,7 +200,7 @@ const FormComponent = ({
 			</div>
 			<Divider />
 			<div className="parking_form_inputfields">
-				<div className="form_bottomButton">
+			{ !isReadOnly && <div className="form_bottomButton">
 					<Button
 						title="Cancel"
 						type="filledText"
@@ -209,7 +209,7 @@ const FormComponent = ({
 						onClick={handleButtonClose}
 					/>
 					<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
-				</div>
+				</div>}
 			</div>
 		</Form>
 	);

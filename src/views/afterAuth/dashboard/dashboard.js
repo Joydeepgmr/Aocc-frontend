@@ -30,11 +30,11 @@ export const Dashboard = () => {
 			label: 'Milestone',
 			children: <Milestone />,
 		},
-		{
-			key: '3',
-			label: 'Map View',
-			children: <MapView />,
-		},
+		// {
+		// 	key: '3',
+		// 	label: 'Map View',
+		// 	children: <MapView />,
+		// },
 		{
 			key: '4',
 			label: 'Telex Messaging Gateway',
