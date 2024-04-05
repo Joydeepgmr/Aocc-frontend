@@ -33,6 +33,7 @@ const DailySchedule = ({ tab }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
@@ -77,6 +78,9 @@ const DailySchedule = ({ tab }) => {
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
 	};
+	const openMapModal = (data) => {
+		setMapModalOpen({ isOpen: true, data });
+	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
@@ -88,6 +92,9 @@ const DailySchedule = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+	};
+	const closeMapModal = () => {
+		setMapModalOpen({ isOpen: null, data: null });
 	};
 
 	const handleChange = (key) => {
@@ -251,7 +258,7 @@ const DailySchedule = ({ tab }) => {
 		}
 	};
 
-	// const base64Img = '';
+	const base64Img = '';
 	const columns = [
 		{
 			title: 'Flight No.',
@@ -299,8 +306,8 @@ const DailySchedule = ({ tab }) => {
 			render: (registration) => registration ?? '-',
 		},
 		{
-			title: 'Action',
-			key: 'action',
+			title: 'Map',
+			key: 'map',
 			render: (
 				text,
 				record // Use the render function to customize the content of the cell
@@ -309,9 +316,9 @@ const DailySchedule = ({ tab }) => {
 					title="View map"
 					type="text"
 					className="view_map_button"
-					// onClick={() => {
-					// 	openDeleteModal(record);
-					// }}
+					onClick={() => {
+						openMapModal(record);
+					}}
 				></ButtonComponent>
 			),
 		},
@@ -382,17 +389,15 @@ const DailySchedule = ({ tab }) => {
 
 	return (
 		<>
-			{/* <ModalComponent
-				isModalOpen={true}
-				width="80%"
-				closeModal={closeModal}
-				title={`Flight 8194`}
+			<ModalComponent
+				isModalOpen={mapModalOpen?.isOpen}
+				width="60rem"
+				closeModal={closeMapModal}
+				title={`Flight ${mapModalOpen?.data?.FLIGHTNO}`}
 				className="view_img_modal"
 			>
-				<div className="modal_content">
-					<img src={base64Img} alt="base64Img" className="map_img" />
-				</div>
-			</ModalComponent> */}
+				<img src={base64Img} alt="base64Img" className="map_img" />
+			</ModalComponent>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			<div className="main_TableContainer">
 				<div className="top_container">

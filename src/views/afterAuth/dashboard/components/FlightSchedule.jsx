@@ -1,269 +1,114 @@
-import React, { useState } from 'react'
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import { Form } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import CustomTabs from '../../../../components/customTabs/customTabs';
-import TableComponent from '../../../../components/table/table';
 import InputField from '../../../../components/input/field/field';
-import Button from '../../../../components/button/button';
-import Filter from '../../../../assets/Filter.svg'
+import TableComponent from '../../../../components/table/table';
+import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import { useGetFlightScheduled } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import './style.scss';
 
+const FlightScheduleDataTab = ({ type }) => {
+	const [FlightScheduleData, setFlightScheduleData] = useState([]);
+	const { data, isLoading, fetchNextPage, hasNextPage } = useGetFlightScheduled({ type });
+	const [form] = Form.useForm();
+	const columns = useMemo(() => {
+		return [
+			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber' },
+			{ title: 'Status', dataIndex: 'status', key: 'status' },
+			{ title: 'ORG', dataIndex: 'org', key: 'org' },
+			{ title: 'VIA', dataIndex: 'via', key: 'via' },
+			{ title: 'STA', dataIndex: 'sta', key: 'sta' },
+			{ title: 'ETA', dataIndex: 'eta', key: 'eta' },
+			{ title: 'TMO', dataIndex: 'tmo', key: 'tmo' },
+			{ title: 'ATA', dataIndex: 'ata', key: 'ata' },
+			{ title: 'RNY', dataIndex: 'rny', key: 'rny' },
+			{ title: 'EOB', dataIndex: 'eob', key: 'eob' },
+			{ title: 'ONB', dataIndex: 'onBlock', key: 'onBlock' },
+			{ title: 'POS', dataIndex: 'pos', key: 'pos' },
+			{ title: 'Gate', dataIndex: 'gate', key: 'gate' },
+			{ title: 'Belt', dataIndex: 'belt', key: 'belt' },
+			{ title: 'AC/ REGN', dataIndex: 'acRegn', key: 'acRegn' },
+			{ title: 'Call Sign', dataIndex: 'cs', key: 'cs' },
+			{ title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
+		];
+	}, [FlightScheduleData]);
+	useEffect(() => {
+		console.log('type data', type,data);
+		if (data?.pages) {
+			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
+			setFlightScheduleData([...FlightScheduleData, ...lastPage.data]);
+		}
+	}, [data]);
+	console.log('type and data ', type, FlightScheduleData);
+	return (
+		<>
+			<div className="tab_container">
+				<div className="top-bar">
+					<CustomTypography
+						type="title"
+						fontSize={24}
+						fontWeight="600"
+						color="black"
+						children={'Flight Schedule'}
+					/>
+					{/* <Button
+						onClick={() => {
+							alert('Icon Button');
+						}}
+						icon={Filter}
+						alt="bell icon"
+						className={'filter-btn'}
+					/> */}
+					<Form form={form}>
+						<InputField
+							label="Flight number"
+							name="flightNo"
+							placeholder="Flight number"
+							warning="Required field"
+							type="search"
+						/>
+					</Form>
+				</div>
+				<TableComponent
+					columns={columns}
+					data={FlightScheduleData}
+					loading={isLoading}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
+			</div>
+		</>
+	);
+};
 const FlightSchedule = () => {
-    const [loading, setLoading] = useState(false);
-    const handleTableChange = (pagination, filters, sorter) => {
-        console.log('Table changed:', pagination, filters, sorter);
-    };
+	const items = [
+		{
+			key: '1',
+			label: 'Arrival',
+			children: (
+				<>
+					<FlightScheduleDataTab type="arrival" />
+				</>
+			),
+		},
+		{
+			key: '2',
+			label: 'Departure',
+			children: (
+				<>
+					<FlightScheduleDataTab type="departure" />
+				</>
+			),
+		},
+	];
 
-    const columns = [
-        { title: 'Flight', dataIndex: 'flight', key: 'flight' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
-        { title: 'ORG', dataIndex: 'org', key: 'org' },
-        { title: 'VIA', dataIndex: 'via', key: 'via' },
-        { title: 'STA', dataIndex: 'sta', key: 'sta' },
-        { title: 'ETA', dataIndex: 'eta', key: 'eta' },
-        { title: 'TMO', dataIndex: 'tmo', key: 'tmo' },
-        { title: 'ATA', dataIndex: 'ata', key: 'ata' },
-        { title: 'RNY', dataIndex: 'rny', key: 'rny' },
-        { title: 'EOB', dataIndex: 'eob', key: 'eob' },
-        { title: 'ONB', dataIndex: 'onBlock', key: 'onBlock' },
-        { title: 'POS', dataIndex: 'pos', key: 'pos' },
-        { title: 'Gate', dataIndex: 'gate', key: 'gate' },
-        { title: 'Belt', dataIndex: 'belt', key: 'belt' },
-        { title: 'AC/ REGN', dataIndex: 'acRegn', key: 'acRegn' },
-        { title: 'Call Sign', dataIndex: 'cs', key: 'cs' },
-        { title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
-    ];
-    const dummyData = [
-        {
-            flight: 'AI 812',
-            status: 'Airborne',
-            org: 'Delhi',
-            via: 'ST | HYD | DEL',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-        {
-            flight: '6E 6172',
-            status: 'Landed',
-            org: 'Surat',
-            via: 'ST',
-            sta: '13:00',
-            eta: '13:30',
-            tmo: '13:45',
-            ata: '14:00',
-            rny: 'Stand 1',
-            eob: '14:15',
-            onBlock: '11:30',
-            pos: 'Stand 2',
-            gate: 'Gate B',
-            belt: '6',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-780',
-        },
-        {
-            flight: 'UK 642',
-            status: 'Airborne',
-            org: 'Chicago',
-            via: 'IST',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-        {
-            flight: 'AI 812',
-            status: 'Airborne',
-            org: 'Delhi',
-            via: 'ST | HYD | DEL',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-        {
-            flight: '6E 1234',
-            status: 'Landed',
-            org: 'San Antonio',
-            via: 'LA',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 5',
-            gate: 'Gate C',
-            belt: '9',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-110',
-        },
-    ];
-
-    const dummyData2 = [
-        {
-            flight: 'UK 642',
-            status: 'Airborne',
-            org: 'Chicago',
-            via: 'IST',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-        {
-            flight: 'AI 812',
-            status: 'Airborne',
-            org: 'Delhi',
-            via: 'ST | HYD | DEL',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-
-        {
-            flight: 'AI 812',
-            status: 'Airborne',
-            org: 'Delhi',
-            via: 'ST | HYD | DEL',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-        {
-            flight: 'AI 812',
-            status: 'Airborne',
-            org: 'Delhi',
-            via: 'ST | HYD | DEL',
-            sta: '10:00',
-            eta: '10:30',
-            tmo: '10:45',
-            ata: '11:00',
-            rny: 'Stand 1',
-            eob: '11:15',
-            onBlock: '11:30',
-            pos: 'Stand 1',
-            gate: 'Gate A',
-            belt: '7',
-            acRegn: 'A1/S321',
-            remarks: 'AS321',
-            cs: 'DAC-910',
-        },
-    ];
-
-    const items = [
-        {
-            key: '1',
-            label: 'Arrival',
-            children: <><TableComponent
-                columns={columns}
-                data={dummyData}
-                loading={loading}
-                onChange={handleTableChange}
-            /></>,
-        },
-        {
-            key: '2',
-            label: 'Departure',
-            children: <><TableComponent
-                columns={columns}
-                data={dummyData2}
-                loading={loading}
-                onChange={handleTableChange}
-            /></>,
-        },
-    ];
-    const handleChange = () => {
-        console.log('Tab switch');
-    };
-
-    return (
-        <div className='body-container'>
-            <div className='top-bar'>
-                <CustomTypography type="title" fontSize={24} fontWeight="600" color="black" children={"Flight Schedule"} />
-                <div className='filter-section'>
-                    <Button
-                        onClick={() => {
-                            alert('Icon Button');
-                        }}
-                        icon={Filter}
-                        alt="bell icon"
-                        className={"filter-btn"}
-                    />
-                    <InputField
-                        label="Airport Name"
-                        name="search"
-                        placeholder="Search"
-                        warning="Required field"
-                        type="search"
-                    />
-
-                </div>
-            </div>
-            <div className='flights-table'>
-                <CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-            </div>
-        </div>
-    )
-}
+	return (
+		<div className="body-container">
+			<div className="flights-table">
+				<CustomTabs defaultActiveKey="1" items={items} />
+			</div>
+		</div>
+	);
+};
 
 export default FlightSchedule;
