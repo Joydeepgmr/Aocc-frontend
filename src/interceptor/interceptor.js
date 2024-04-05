@@ -8,6 +8,8 @@ export const axiosInstance = Axios.create({
 	// baseURL: "https://09b9-121-243-82-214.ngrok-free.app/frms/api/v1",
 });
 
+console.log(process.env.baseURL, "base url");
+
 axiosInstance.interceptors.request.use(
 	async (config) => {
 		const token = localStorage.getItem(localStorageKey.AUTH_TOKEN);
