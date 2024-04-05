@@ -323,7 +323,7 @@ const ParkingStand = () => {
 					isModalOpen={isEditModalOpen}
 					width="80%"
 					closeModal={closeEditModal}
-					title={`Edit Parking Stands`}
+					title={`${isReadOnly ? '':'Edit'} Parking Stands`}
 					className="custom_modal"
 			>
 				<div className="modal_content">

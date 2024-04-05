@@ -58,7 +58,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							label="Terminal"
 							placeholder={'Select Terminal'}
 							name="terminal"
-							disabled={isReadOnly || isEdit}
+							disabled={isReadOnly}
 						/>
 						<InputField
 							label="Gate ID"

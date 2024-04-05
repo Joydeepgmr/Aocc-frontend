@@ -221,12 +221,6 @@ const Gates = () => {
 			render: (type) => type ?? '-',
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
-			render: (status) => status ?? '-',
-		},
-		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
@@ -339,7 +333,7 @@ const Gates = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit Gate`}
+						title={`${isReadOnly? '':'Edit'} Gate`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
