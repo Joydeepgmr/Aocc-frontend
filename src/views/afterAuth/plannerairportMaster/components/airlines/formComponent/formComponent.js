@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
 	const onError = ({
 		response: {
 			data: { message },
@@ -29,7 +29,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	const isNotEditable = type === 'edit';
 
 	const onFinishHandler = (value) => {
-		console.log(value);
 		handleSubmit(value);
 	};
 
@@ -76,6 +75,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						placeholder={!isReadOnly && 'Filled Text'}
 						className="custom_input"
 						disabled={isReadOnly}
+						min={3}
+						max={3}
 					/>
 					<InputField
 						label="Remark"
@@ -151,6 +152,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						name="validTill"
 						format="MM-DD-YYYY"
 						disabled={isReadOnly}
+						className="custom_date"
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 					/>
 				</div>
@@ -163,12 +165,14 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								type="filledText"
 								className="custom_button_cancel"
 								onClick={closeModal}
+								disabled={isLoading}
 							/>
 							<ButtonComponent
 								title={'save'}
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}
+								disabled={isLoading}
 							/>
 						</div>
 					</>

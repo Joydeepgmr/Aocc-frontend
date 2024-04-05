@@ -8,6 +8,7 @@ import {
 	useDeletePlannerAirline,
 	useGetAllPlannerAirline,
 	usePostPlannerAirline,
+	useUpdatePlannerAirline,
 } from './PlannerAirportMaster/PlannerAirlineAirportMaster';
 import {
 	useGetAllTimelineData,
@@ -76,4 +77,5 @@ export {
 	useDeletePlannerAircraft,
 	useDeletePlannerAirline,
 	useUpdatePlannerAircraft,
+	useUpdatePlannerAirline,
 };

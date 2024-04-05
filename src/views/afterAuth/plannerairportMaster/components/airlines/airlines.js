@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Common_table from '../../common_wrapper/common_table/common_table';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
 
-import { useDeletePlannerAirline, useGetAllPlannerAirline } from '../../../../../services';
+import {
+	useDeletePlannerAirline,
+	useGetAllPlannerAirline,
+	usePostPlannerAirline,
+	useUpdatePlannerAirline,
+} from '../../../../../services';
 import ButtonComponent from '../../../../../components/button/button';
 import Delete from '../../../../../assets/Delete.svg';
 import Edit from '../../../../../assets/Edit.svg';
@@ -13,6 +18,8 @@ import ModalComponent from '../../../../../components/modal/modal';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -31,6 +38,15 @@ const Airlines = () => {
 	const deleteAirlineHandler = {
 		onSuccess: (data) => handleDeleteAirlineSuccess(data),
 		onError: (error) => handleDeleteAirlineError(error),
+	};
+
+	const addAirlineHandler = {
+		onSuccess: (data) => handleAddAirlineSuccess(data),
+		onError: (error) => handleAddAirlineError(error),
+	};
+	const editAirlineHandler = {
+		onSuccess: (data) => handleEditAirlineSuccess(data),
+		onError: (error) => handleEditAirlineError(error),
 	};
 
 	const handleGetAirlineSuccess = (data) => {
@@ -58,6 +74,27 @@ const Airlines = () => {
 		toast.error(error?.response?.data?.message);
 	};
 
+	const handleAddAirlineSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-planner-airline');
+		toast.success(data?.message);
+		setRowData({});
+		setIsAddModalOpen(false);
+	};
+
+	const handleAddAirlineError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+	const handleEditAirlineSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-planner-airline');
+		toast.success(data?.message);
+		setRowData({});
+		setOpenEditModal(false);
+	};
+
+	const handleEditAirlineError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
 	const {
 		data: fetchedPlannerAirline,
 		isLoading: isPlannerAirlineLoading,
@@ -68,8 +105,40 @@ const Airlines = () => {
 	const { mutate: onDeleteAirline, isLoading: isDeleteAirlineLoading } =
 		useDeletePlannerAirline(deleteAirlineHandler);
 
+	const { mutate: onAddAirline, isLoading: isAddAirlineLoading } = usePostPlannerAirline(addAirlineHandler);
+	const { mutate: onUpdateAirline, isLoading: isUpdateAirlineLoading } = useUpdatePlannerAirline(
+		rowData?.id,
+		editAirlineHandler
+	);
+
 	const handleDeleteAirline = () => {
 		onDeleteAirline(rowData?.id);
+	};
+
+	const handleAddAirline = (value) => {
+		const data = {
+			...value,
+			twoLetterCode: value.twoLetterCode.join(''),
+			threeLetterCode: value.threeLetterCode.join(''),
+			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
+			validFrom: value?.validFrom ? ConvertIstToUtc(value?.validFrom) : undefined,
+		};
+		onAddAirline(data);
+	};
+
+	const handleUpdateAirline = (value) => {
+		const data = {
+			name: value?.name,
+			country: value?.country,
+			remark: value?.remark,
+			terminal: value?.terminal,
+			airlineType: value?.airlineType,
+			paymentMode: value?.paymentMode,
+			address: value?.address,
+			phoneNumber: value?.phoneNumber,
+			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
+		};
+		onUpdateAirline(data);
 	};
 
 	const columns = [
@@ -86,8 +155,8 @@ const Airlines = () => {
 							setOpenDeleteModal(true);
 							setRowData({
 								...record,
-								validFrom: dayjs(record?.validFrom),
-								validTill: dayjs(record?.validTill),
+								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 							});
 						}}
 						id="delete_button"
@@ -99,8 +168,8 @@ const Airlines = () => {
 							setOpenEditModal(true);
 							setRowData({
 								...record,
-								validFrom: dayjs(record?.validFrom),
-								validTill: dayjs(record?.validTill),
+								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 							});
 						}}
 						id="edit_button"
@@ -155,8 +224,8 @@ const Airlines = () => {
 						setDetailModal(true);
 						setRowData({
 							...record,
-							validFrom: dayjs(record?.validFrom),
-							validTill: dayjs(record?.validTill),
+							validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 						});
 					}}
 					title="View Details"
@@ -168,6 +237,16 @@ const Airlines = () => {
 
 	return (
 		<>
+			{isPlannerAirlineLoading && (
+				<PageLoader
+					loading={
+						isPlannerAirlineLoading ||
+						isAddAirlineLoading ||
+						isDeleteAirlineLoading ||
+						isUpdateAirlineLoading
+					}
+				/>
+			)}
 			{Boolean(airlineData?.length) ? (
 				<Common_table
 					data={airlineData}
@@ -194,6 +273,7 @@ const Airlines = () => {
 					setRowData({});
 				}}
 				onSave={handleDeleteAirline}
+				isLoading={isDeleteAirlineLoading}
 				content={`You want to delete this ${rowData?.name} record`}
 			/>
 			<ModalComponent
@@ -214,6 +294,8 @@ const Airlines = () => {
 					}}
 					initialValue={rowData}
 					key={Math.random() * 100}
+					isLoading={isUpdateAirlineLoading}
+					handleSubmit={handleUpdateAirline}
 				/>
 			</ModalComponent>
 			<ModalComponent
@@ -249,7 +331,12 @@ const Airlines = () => {
 				className="custom_modal"
 			>
 				<div className={`modal_content`}>
-					<FormComponent key={Math.random() * 100} closeModal={() => setIsAddModalOpen(false)} />
+					<FormComponent
+						key={Math.random() * 100}
+						isLoading={isAddAirlineLoading}
+						closeModal={() => setIsAddModalOpen(false)}
+						handleSubmit={handleAddAirline}
+					/>
 				</div>
 			</ModalComponent>
 		</>
