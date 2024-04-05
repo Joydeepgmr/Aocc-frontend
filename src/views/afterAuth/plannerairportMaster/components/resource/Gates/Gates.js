@@ -165,7 +165,7 @@ const Gates = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -233,7 +233,7 @@ const Gates = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -294,6 +294,7 @@ const Gates = () => {
 							terminalDropdownData = {terminalDropdownData}
 						/>
 					}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -313,6 +314,8 @@ const Gates = () => {
 							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
+					</>
+				)}
 
 					{/* modals */}
 					<ModalComponent
@@ -356,8 +359,7 @@ const Gates = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
+				
 		</>
 	);
 };

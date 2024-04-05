@@ -165,7 +165,7 @@ const Terminal = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -221,7 +221,7 @@ const Terminal = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -237,20 +237,20 @@ const Terminal = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Terminal',
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -267,8 +267,8 @@ const Terminal = () => {
 			{!Boolean(fetchTerminal?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Terminal'}
 					formComponent={<FormComponent
@@ -278,12 +278,14 @@ const Terminal = () => {
 						standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
 						taxiwayDropdownData = {taxiwayDropdownData}
 						runwayDropdownData = {runwayDropdownData}
+						
 					/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
+					<div className="terminal">
+						<div className="terminal--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
 								buttonText="Create"
@@ -291,13 +293,15 @@ const Terminal = () => {
 								onChange={handleDropdownItemClick}
 							/>
 						</div>
-						<div className="check-in--tableContainer">
+						<div className="terminal--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Check-in Counters
+								Terminals
 							</CustomTypography>
 							<TableComponent data={terminalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
+					</>
+			)}
 
 					{/* modals */}
 					<ModalComponent
@@ -323,7 +327,7 @@ const Terminal = () => {
 					isModalOpen={isEditModalOpen}
 					width="50%"
 					closeModal={closeEditModal}
-					title={`Edit Terminal`}
+					title={`${isReadOnly ? '' : 'Edit'} Terminal`}
 					className="custom_modal"
 			>
 				<div className="modal_content">
@@ -345,8 +349,7 @@ const Terminal = () => {
 			onSave={handleDelete} 
 			content={`You want to delete ${rowData?.name}?`}
 			/>
-				</>
-			)}
+				
 		</>
 	);
 };

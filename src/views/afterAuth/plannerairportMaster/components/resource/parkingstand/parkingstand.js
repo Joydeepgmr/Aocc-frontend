@@ -163,7 +163,7 @@ const ParkingStand = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -219,7 +219,7 @@ const ParkingStand = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -277,11 +277,12 @@ const ParkingStand = () => {
 						gateDropdownData = {gateDropdownData}
 						taxiwayDropdownData = {taxiwayDropdownData}
 					/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
+					<div className="parking-stand">
+						<div className="parking-stand--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
 								buttonText="Create"
@@ -289,13 +290,15 @@ const ParkingStand = () => {
 								onChange={handleDropdownItemClick}
 							/>
 						</div>
-						<div className="check-in--tableContainer">
+						<div className="parking-stand--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Check-in Counters
+								Parking Stands
 							</CustomTypography>
 							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
+					</>
+					)}
 
 					{/* modals */}
 					<ModalComponent
@@ -341,8 +344,6 @@ const ParkingStand = () => {
 			onSave={handleDelete} 
 			content={`You want to delete ${rowData?.name}?`}
 			/>
-				</>
-			)}
 		</>
 	);
 };
