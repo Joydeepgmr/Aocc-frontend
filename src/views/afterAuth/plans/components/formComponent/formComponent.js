@@ -27,30 +27,29 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	}, [form, initialValues]);
 
 	return (
-		<div className="plan">
-			<div className="main_form" key={initialValues?.id}>
+			<div key={initialValues?.id}>
 				<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinish}>
-					<div className="form_section">
-						<div className="form_content">
-							<InputField label="Flight Number" name="FLIGHTNO" placeholder="Enter the airport name" />
-							<Date label="Date" name="date" placeholder="Date" className="date" required/>
-							<InputField label="Call Sign" name="callSign" placeholder="Filled Text" />
+					<div className="seasonal_form_container">
+						<div className="seasonal_form_inputfields">
+							<InputField label="Flight Number" name="FLIGHTNO" placeholder="Enter the airport name" className="custom_input"/>
+							<Date label="Date" name="date" placeholder="Date" required className="custom_date"/>
+							<InputField label="Call Sign" name="callSign" placeholder="Filled Text" className="custom_input"/>
 						</div>
-						<div className="form_content">
-							<InputField label="Nature Code" name="natureCode" placeholder="D/I/F/D" />
-							<InputField label="Origin Airport" name="origin" placeholder="Filled Text" />
+						<div className="seasonal_form_inputfields">
+							<InputField label="Nature Code" name="natureCode" placeholder="D/I/F/D" className="custom_input"/>
+							<InputField label="Origin Airport" name="origin" placeholder="Filled Text" className="custom_input"/>
 							{type == 1 ? (
-								<InputField label="STA" name="STA" placeholder="Filled Text" required/>
+								<InputField label="STA" name="STA" placeholder="Filled Text" required className="custom_input"/>
 							) : (
-								<InputField label="STD" name="STD" placeholder="Filled Text" required/>
+								<InputField label="STD" name="STD" placeholder="Filled Text" required className="custom_input"/>
 							)}
 						</div>
-						<div className="form_content">
-							<InputField label="POS" name="pos" placeholder="Filled Text" />
-							<InputField label="Registration" name="registration" placeholder="Filled Text" />
+						<div className="seasonal_form_inputfields">
+							<InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input"/>
+							<InputField label="Registration" name="registration" placeholder="Filled Text" className="custom_input"/>
 							<CheckBoxField
 								name="toh"
-								label="Tower to Hanger"
+								label="Towing to Hanger"
 								checked={tohChecked}
 								onChange={(e) => {
 									setTohChecked(e.target.checked);
@@ -58,14 +57,14 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 								className="check_box"
 							/>
 						</div>
-						<div className="form_content">
-							<InputField label="Duration" name="duration" placeholder="Filled text" />
+						<div className="seasonal_form_inputfields">
+							<InputField label="Duration" name="duration" placeholder="Filled text" className="custom_input"/>
 						</div>
-					</div>
+					
 					<Divider />
 
 					{tohChecked && (
-						<div className="form_section">
+						<div>
 							<CustomTypography
 								type="text"
 								fontSize={14}
@@ -75,47 +74,52 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							>
 								Flight Split
 							</CustomTypography>
-							<div className="form_content">
+							<div className="seasonal_form_inputfields">
 								<InputField
 									label="Flight Number"
 									name="flightNumber"
 									placeholder="Enter the airport name"
+									className="custom_input"
 								/>
-								<InputField label="Call Sign" name="callSign" placeholder="Filled Text" />
-								<InputField label="Nature Code" name="natureCode" placeholder="Filled Text" />
+								<InputField label="Call Sign" name="callSign" placeholder="Filled Text" className="custom_input"/>
+								<InputField label="Nature Code" name="natureCode" placeholder="Filled Text" className="custom_input"/>
 							</div>
 
-							<div className="form_content">
-								<InputField label="Registration" name="registration" placeholder="Filled Text" />
-								<InputField label="Destination" name="destination" placeholder="Filled Text" />
+							<div className="seasonal_form_inputfields">
+								<InputField label="Registration" name="registration" placeholder="Filled Text" className="custom_input"/>
+								<InputField label="Destination" name="destination" placeholder="Filled Text" className="custom_input"/>
 							</div>
 							<Divider />
 						</div>
 					)}
 
-					{!isEdit && <div className="form_section">
+					
+					{!isEdit && <div>
 						<CustomTypography type="text" fontSize={14} fontWeight="400" color="#5C5F66" className="label">
 							Flight Recurrence
 						</CustomTypography>
-						<div className="form_content">
-							<Date label="Absolute Period" name="start" placeholder="From" className="date" />
-							<Date label="" name="end" placeholder="To" className="date" />
-							<InputField label="Days" name="days" placeholder="Enter the total No. of days" />
+						<div className="seasonal_form_inputfields">
+							<Date label="Absolute Period" name="start" placeholder="From" className="custom_date"/>
+							<Date label="" name="end" placeholder="To" className="custom_date" />
+							<InputField label="Days" name="days" placeholder="Enter the total No. of days" className="custom_input"/>
 						</div>
 
-						<div className="form_content">
-							<Date label="Relative Period" placeholder="From" className="date" />
-							<Date label="" placeholder="To" className="date" />
+						<div className="seasonal_form_inputfields">
+							<Date label="Relative Period" placeholder="From" className="cutom_date" />
+							<Date label="" placeholder="To" className="custom_date" />
 							<WeeklySelect
 								name="weeklySelect"
 								label="Set Flight Recurrence"
 								days={days}
 								onChange={handleDaysChange}
 								value={initialValues?.weeklySelect}
+								className = "select"
 							/>
 						</div>
 						<Divider />
 					</div>}
+					</div>
+					<div className='seasonal_form_inputfields'>
 					<div className="form_bottomButton">
 						<Button
 							id="btn"
@@ -126,9 +130,10 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 						/>
 						<Button id="btn" title="Save" type="filledText" isSubmit="submit" />
 					</div>
+					</div>
+					
 				</Form>
 			</div>
-		</div>
 	);
 };
 
