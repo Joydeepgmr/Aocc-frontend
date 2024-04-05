@@ -7,7 +7,8 @@ import './style.scss';
 import { useGetMileStoneData } from '../../../../services/dashboard/milestones/milestones';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
 
-const MilestoneTabData = ({ type }) => {
+function Milestone() {
+	const [type, setType] = useState('arrival');
 	const { data, isLoading, hasNextPage, fetchNextPage } = useGetMileStoneData({ flightType: type });
 	const [milestoneData, setMilestoneData] = useState([]);
 	const [labels, setLabels] = useState([]);
@@ -21,33 +22,43 @@ const MilestoneTabData = ({ type }) => {
 			}
 		}
 	}, [data]);
-	return (
-		<>
-			{isLoading ? (
-				<PageLoader loading={isLoading} />
-			) : (
-				<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
-			)}
-		</>
-	);
-};
-function Milestone() {
+	const handleTabChange = (key) => {
+		if (key == '1') {
+			setType('arrival');
+		} else {
+			setType('departure');
+		}
+		setMilestoneData([]);
+		setLabels([]);
+	};
 	const items = [
 		{
 			key: '1',
 			label: 'Arrival',
-			children: <MilestoneTabData type={'arrival'} />,
+			children: (
+				<>
+					{isLoading ? (
+						<PageLoader loading={isLoading} />
+					) : (
+						<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
+					)}
+				</>
+			),
 		},
 		{
 			key: '2',
 			label: 'Departure',
-			children: <MilestoneTabData type={'departure'} />,
+			children: (
+				<>
+					{isLoading ? (
+						<PageLoader loading={isLoading} />
+					) : (
+						<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
+					)}
+				</>
+			),
 		},
 	];
-
-	const handleChange = () => {
-		console.log('Tab switch');
-	};
 	return (
 		<div className="body-container">
 			<div className="top-bar">
@@ -63,7 +74,7 @@ function Milestone() {
 				</div>
 			</div>
 			<div className="flights-table">
-				<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+				<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
 			</div>
 		</div>
 	);
