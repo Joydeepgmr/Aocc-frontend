@@ -380,7 +380,7 @@ const Seasonal = ({ tab }) => {
 						</CustomTypography>
 					</div>
 					<div className="icon_container">
-						<Button
+						{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -388,7 +388,7 @@ const Seasonal = ({ tab }) => {
 							className={'custom_filter'}
 							icon={Filter}
 							alt="arrow icon"
-						/>
+						/> */}
 						<InputField
 							label="search"
 							name="search"

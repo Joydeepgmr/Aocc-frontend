@@ -165,13 +165,13 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
-				render: (text) => text || '-',
+				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
-				title: 'ICAO Type',
-				dataIndex: 'airportType',
-				key: 'airportType',
-				render: (text) => text || '-',
+				title: 'ICAO Code',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
 				title: 'Country',
