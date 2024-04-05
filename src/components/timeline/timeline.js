@@ -4,7 +4,7 @@ import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
 
 const TimelineDesign = (props) => {
-	const { items, groups, editable = true, height = '400px', label } = props;
+	const { items, groups, editable = true, height = '400px', label, handleMove } = props;
 
 	const options = {
 		orientation: 'top',
@@ -32,7 +32,7 @@ const TimelineDesign = (props) => {
 			},
 		},
 		zoomMax: 1000 * 60 * 60 * 24,
-		onMove: (item) => console.log(item),
+		onMove: (item) => handleMove(item),
 		min: new Date().setDate(new Date().getDate() - 1),
 		max: new Date().setDate(new Date().getDate() + 1),
 	};

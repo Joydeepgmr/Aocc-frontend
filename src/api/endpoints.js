@@ -4,6 +4,7 @@ export const DUMMY = '/dummy';
 
 export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resources';
 export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
+export const UPDATE_RESOURCE_ALLOCATION = '/resource-allocation/updateResource';
 
 /*------------- login --------------*/
 export const USER_LOGIN = 'user/login';
