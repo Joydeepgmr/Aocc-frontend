@@ -44,7 +44,7 @@ function TelexMessage() {
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
-	const { data, isLoading, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter });
+	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter });
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
@@ -160,7 +160,7 @@ function TelexMessage() {
 				<TableComponent
 					columns={columns}
 					data={telexMessageData}
-					loading={isLoading}
+					loading={isFetching}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
 				/>
@@ -174,7 +174,7 @@ function TelexMessage() {
 					<TableComponent
 						columns={columns}
 						data={telexMessageData}
-						loading={isLoading}
+						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
 					/>
@@ -189,7 +189,7 @@ function TelexMessage() {
 					<TableComponent
 						columns={columns}
 						data={telexMessageData}
-						loading={isLoading}
+						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
 					/>
