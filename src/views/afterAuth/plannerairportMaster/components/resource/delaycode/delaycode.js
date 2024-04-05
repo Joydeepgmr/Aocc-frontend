@@ -14,6 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
+import {useAirlineDropdown} from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
 import './delaycode.scss';
 
 const DelayCode = () => {
@@ -25,6 +26,7 @@ const DelayCode = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
 	const getDelayCodeHandler = {
 		onSuccess: (data) => handleGetDelayCodeSuccess(data),
 		onError: (error) => handleGetDelayCodeError(error),
@@ -44,7 +46,7 @@ const DelayCode = () => {
 		toast.error(error?.message);
 	}
 	const { data: fetchDelayCode, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetDelayCode(getDelayCodeHandler);
-
+	console.log(fetchDelayCode,"delaycode");
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -245,6 +247,7 @@ const DelayCode = () => {
 					formComponent={<FormComponent
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
+						airlineDropdownData = {airlineDropdownData}
 						key={Math.random() * 100}
 					/>}
 					openModal={openModal}
@@ -283,6 +286,7 @@ const DelayCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
+						airlineDropdownData = {airlineDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -301,6 +305,7 @@ const DelayCode = () => {
 				isEdit = {true}
 				initialValues={rowData}
 				isReadOnly = {isReadOnly}
+				airlineDropdownData = {airlineDropdownData}
 			/>
 		</div>
 	</ModalComponent>

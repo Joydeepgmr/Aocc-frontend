@@ -1,50 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
-import { useDispatch, useSelector } from 'react-redux';
+import './formComponents.scss'
 
-const FormComponent = ({ closeModal }) => {
-	const dispatch = useDispatch();
+const FormComponent = ({
+	handleSaveButton,
+	handleButtonClose,
+	initialValues,
+	isEdit,
+	isReadOnly,
+}) => {
+
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
+		const changedValues = isEdit ? {} : values;
+		Object.keys(values).forEach((key) => {
+			if (!isEdit || values[key] !== initialValues[key]) {
+				changedValues[key] = values[key];
+			}
+		});
+
+		handleSaveButton(changedValues);
 		form.resetFields();
-		dispatch(addAircraftRegistration(values));
-		dispatch(updateIsShowTableComponents());
 	};
-	const SelectData = [];
+
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
 
 	return (
-		<div className="main_form">
 			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-				<div className="form_section">
-					<div className="form_content">
+				<div className="nature_code_form_container">
+					<div className="nature_code_form_inputfields">
 						<InputField
 							label="Nature Code"
-							name="nature_code"
+							name="natureCode"
 							placeholder="Enter the airport name"
 							warning="Required field"
 							required
+							className='custom_input'
+							max="16"
+							disabled={isReadOnly || isEdit}
 						/>
-						<InputField label="Name" name="name" placeholder="Filled Text" warning="Required field" />
+						<InputField label="Name" name="name" placeholder="Filled Text" className='custom_input' max="32" disabled={isReadOnly}/>
 					</div>
-				</div>
+				
 				<Divider />
-				<div className="form_section">
-					<div className="form_content">
-						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" required />
-					</div>
+				<div className="nature_code_form_inputfields">
+						<Date label="Valid From" name="validFrom" placeholder="Enter the airport name" required className='custom_date' disabled={isReadOnly || isEdit}/>
+						<Date label="Valid To" name="validTill" placeholder="Enter the airport name" className='custom_date' disabled={isReadOnly}/>
 				</div>
-				<div className="form_section">
+				</div>
+				<Divider/>
+				
+				{!isReadOnly && <div className="nature_code_form_inputfields">
 					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
+						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
 						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
 					</div>
-				</div>
+				</div>}
 			</Form>
-		</div>
 	);
 };
 
