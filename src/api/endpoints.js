@@ -69,6 +69,8 @@ export const GET_RUNWAY = '/runway/paginated';
 export const RUNWAY = '/runway';
 export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
+export const GET_DELAY_CODE = '/delay-code/paginated';
+export const DELAY_CODE = '/delay-code';
 
 
 /*--------------------------planner aircraft master ---------------------*/

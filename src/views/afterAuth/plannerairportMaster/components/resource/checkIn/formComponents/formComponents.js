@@ -44,8 +44,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							required
 							disabled={isReadOnly || isEdit}
-							type="number"
 							className="custom_input"
+							max="16"
 						/>
 						<InputField
 							label="Counter Group"
@@ -54,6 +54,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className="custom_input"
+							max="32"
 						/>
 					</div>
 
@@ -65,6 +66,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							name="terminalId"
 							disabled={isReadOnly || isEdit}
 							className="select"
+							required
 						/>
 						<InputField
 							label="Row"
@@ -136,7 +138,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					</div>
 				</div>
 				<div className="checkin_form_inputfields">
-					<div className="form_bottomButton">
+					{ !isReadOnly && <div className="form_bottomButton">
 						<Button
 							title="Cancel"
 							type="filledText"
@@ -151,7 +153,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							isSubmit="submit"
 							disabled={isReadOnly}
 						/>
-					</div>
+					</div>}
 				</div>
 			</Form>
 		</div>
