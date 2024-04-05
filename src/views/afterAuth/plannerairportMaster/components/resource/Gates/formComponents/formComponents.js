@@ -68,7 +68,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							type="number"
 							disabled={isReadOnly}
 							className="custom_input"
-							max="3"
+							max="999"
 						/>
 						<InputField
 							label="Default Allocation Duration"

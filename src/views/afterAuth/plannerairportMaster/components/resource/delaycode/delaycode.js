@@ -158,7 +158,7 @@ const DelayCode = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -197,18 +197,12 @@ const DelayCode = () => {
 		},
 		{
 			title: 'Status',
-			dataIndex: 'runway',
-			key: 'runway',
-			render: (runway) => runway?.name ?? '-',
-		},
-		{
-			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
 			render: (status) => status ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -228,16 +222,6 @@ const DelayCode = () => {
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
 	];
 
 	const handleDropdownItemClick = (value) => {
@@ -254,8 +238,8 @@ const DelayCode = () => {
 			{!Boolean(fetchDelayCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'DelayCode'}
 					formComponent={<FormComponent
@@ -263,11 +247,12 @@ const DelayCode = () => {
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
 					/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
+					<div className="delay-code">
+						<div className="delay-code--dropdown">
 							<DropdownButton
 								dropdownItems={dropdownItems}
 								buttonText="Create"
@@ -275,56 +260,56 @@ const DelayCode = () => {
 								onChange={handleDropdownItemClick}
 							/>
 						</div>
-						<div className="check-in--tableContainer">
+						<div className="delay-code--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Check-in Counters
+								Delay Code
 							</CustomTypography>
 							<TableComponent data={delayCodeData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
 						</div>
 					</div>
 
 					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="50%"
-						closeModal={closeModal}
-						title={'DelayCode'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="50%"
-					closeModal={closeEditModal}
-					title={`Edit Delay Code`}
-					className="custom_modal"
+				</>
+			)}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="50%"
+				closeModal={closeModal}
+				title={'DelayCode'}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
-						handleSaveButton={handleEditSave}
+						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
+						key={Math.random() * 100}
 					/>
 				</div>
 			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
+			
+		<ModalComponent
+			isModalOpen={isEditModalOpen}
+			width="50%"
+			closeModal={closeEditModal}
+			title={`${isReadOnly? '': 'Edit'} Delay Code`}
+			className="custom_modal"
+	>
+		<div className="modal_content">
+			<FormComponent
+				handleSaveButton={handleEditSave}
+				handleButtonClose={handleCloseButton}
+				isEdit = {true}
+				initialValues={rowData}
+				isReadOnly = {isReadOnly}
 			/>
-				</>
-			)}
+		</div>
+	</ModalComponent>
+	<ConfirmationModal 
+	isOpen={isDeleteConfirm} 
+	onClose={closeDeleteModal} 
+	onSave={handleDelete} 
+	content={`You want to delete ${rowData?.delayCode}?`}
+	/>
 		</>
 	);
 };
