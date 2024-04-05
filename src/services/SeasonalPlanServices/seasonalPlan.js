@@ -1,13 +1,24 @@
-import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
-import { GET_SEASONAL_PLANS, POST_SEASONAL_PLANS, EDIT_SEASONAL_PLANS_ARRIVAL, EDIT_SEASONAL_PLANS_DEPARTURE, UPLOAD_CSV_BULK } from '../../api';
-import { Get, Post,Patch } from '../HttpServices/HttpServices';
+import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
+import {
+	GET_SEASONAL_PLANS,
+	POST_SEASONAL_PLANS,
+	EDIT_SEASONAL_PLANS_ARRIVAL,
+	EDIT_SEASONAL_PLANS_DEPARTURE,
+	UPLOAD_CSV_BULK,
+	DOWNLOAD_CSV_TEMPLATE,
+} from '../../api';
+import { Get, Post, Patch } from '../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
 
-export const useGetSeasonalPlans = (flightType,tab,props) => {
+export const useGetSeasonalPlans = (flightType, tab, props) => {
 	const response = useInfiniteQuery({
-		queryKey: ['get-seasonal-plans', flightType,tab],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`, {pagination}),
+		queryKey: ['get-seasonal-plans', flightType, tab],
+		queryFn: async ({ pageParam: pagination = {} }) =>
+			await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.data?.paginated?.isMore) {
+				return lastPage?.data?.paginated;
+			}
 			return false;
 		},
 		...props,
@@ -17,7 +28,6 @@ export const useGetSeasonalPlans = (flightType,tab,props) => {
 };
 
 export const usePostSeasonalPlans = (props) => {
-    
 	const response = useMutation({
 		mutationKey: ['post-seasonal-plans'],
 		mutationFn: async (data) => await Post(`${POST_SEASONAL_PLANS}`, data),
@@ -27,7 +37,7 @@ export const usePostSeasonalPlans = (props) => {
 	return response;
 };
 
-export const useEditSeasonalPlanArrival = (id,props) => {
+export const useEditSeasonalPlanArrival = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-seasonal-plan-arrival'],
 		mutationFn: async (data) => await Patch(`${EDIT_SEASONAL_PLANS_ARRIVAL}/${id}`, data),
@@ -35,14 +45,12 @@ export const useEditSeasonalPlanArrival = (id,props) => {
 	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess
-		? data?.message
-		: error?.response?.data?.message;
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
 
-	return { ...response, data: data?.data , message : statusMessage};
+	return { ...response, data: data?.data, message: statusMessage };
 };
 
-export const useEditSeasonalPlanDeparture = (id,props) => {
+export const useEditSeasonalPlanDeparture = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-seasonal-plan-departure'],
 		mutationFn: async (data) => await Patch(`${EDIT_SEASONAL_PLANS_DEPARTURE}/${id}`, data),
@@ -50,9 +58,7 @@ export const useEditSeasonalPlanDeparture = (id,props) => {
 	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess
-		? data?.data?.message
-		: error?.message;
+	const statusMessage = isSuccess ? data?.data?.message : error?.message;
 
 	return { ...response, data: data?.data, message: statusMessage };
 };
@@ -60,7 +66,7 @@ export const useEditSeasonalPlanDeparture = (id,props) => {
 export const useUploadCSV = (props) => {
 	const response = useMutation({
 		mutationKey: ['upload-csv'],
-		mutationFn: async (data) => await Post(`${UPLOAD_CSV_BULK}`, data),
+		mutationFn: async (data) => await Post(`${UPLOAD_CSV_BULK}`, data),	
 		...props,
 	});
 
@@ -68,5 +74,24 @@ export const useUploadCSV = (props) => {
 
 	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
 
+	if (isSuccess && data) {
+		const downloadUrl = GenerateDownloadUrl(data);
+		DownloadFileByUrl(downloadUrl);
+	}
+
 	return { ...response, data: data?.data, message: statusMessage };
+};
+
+export const useDownloadCSV = (props) => {
+	const response = useQuery({
+		queryKey: ['get-download-csv'],
+		queryFn: async () => {
+			const resp = await Get(`${DOWNLOAD_CSV_TEMPLATE}`);
+			DownloadFileByUrl(resp?.url);
+			return resp;
+		},
+		enabled: false,
+		...props,
+	});
+	return { ...response };
 };

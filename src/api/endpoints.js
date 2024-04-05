@@ -4,6 +4,7 @@ export const DUMMY = '/dummy';
 
 export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resources';
 export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
+export const UPDATE_RESOURCE_ALLOCATION = '/resource-allocation/updateResource';
 
 /*------------- login --------------*/
 export const USER_LOGIN = 'user/login';
@@ -22,6 +23,7 @@ export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
 export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
+export const DOWNLOAD_CSV_TEMPLATE = '/system-constant/sample-planner-sheet';
 
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/paginated';
@@ -51,7 +53,9 @@ export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
+export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated'
 export const GET_MILESTONE_DATA = '/milestone/paginated'
+export const GET_TELEX_MESSAGE = '/telex/paginated'
 
 /*--------------------------planner airport master ---------------------*/
 

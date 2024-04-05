@@ -13,6 +13,7 @@ import {
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
+	useUpdateResourceAllocation,
 } from './ResourceAllocationServices/ResourceAllocationServices';
 
 import { useDummyApi } from './dummyApi/dummyApi';
@@ -78,4 +79,5 @@ export {
 	useDeletePlannerAirline,
 	useUpdatePlannerAircraft,
 	useUpdatePlannerAirline,
+	useUpdateResourceAllocation
 };
