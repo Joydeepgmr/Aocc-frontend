@@ -7,11 +7,30 @@ import CustomTypography from '../../../../components/typographyComponent/typogra
 import { useGetFlightScheduled } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import './style.scss';
 import { ConvertUtcToIst } from '../../../../utils';
+import toast from 'react-hot-toast';
 
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
-	const { data, isFetching, fetchNextPage, hasNextPage, ...rest } = useGetFlightScheduled({ tab });
+	const onSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setFlightScheduleData([...newData]);
+		}
+	};
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage, ...rest } = useGetFlightScheduled({
+		tab,
+		onSuccess,
+		onError,
+	});
 	const [form] = Form.useForm();
 	const columns = useMemo(() => {
 		return [
@@ -56,13 +75,6 @@ const FlightSchedule = () => {
 		}
 		setFlightScheduleData([]);
 	};
-	useEffect(() => {
-		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setFlightScheduleData([...FlightScheduleData, ...lastPage.data]);
-		}
-	}, [data]);
-	console.log('isFetching', rest, isFetching);
 	const items = [
 		{
 			key: '1',
