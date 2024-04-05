@@ -19,6 +19,7 @@ import {
 	useEditGate,
 	useDeleteGate,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
+import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import './Gates.scss';
 
 const Gates = () => {
@@ -29,6 +30,8 @@ const Gates = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	
+	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getGateHandler = {
 		onSuccess: (data) => handleGetGateSuccess(data),
@@ -86,7 +89,6 @@ const Gates = () => {
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
 	const handleSaveButton = (value) => {
-		value["name"] = value?.name.toString();
 		value && postGate(value);
 	};
 
@@ -289,6 +291,7 @@ const Gates = () => {
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
+							terminalDropdownData = {terminalDropdownData}
 						/>
 					}
 				/>
@@ -324,6 +327,7 @@ const Gates = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								key={Math.random() * 100}
+								terminalDropdownData = {terminalDropdownData}
 							/>
 						</div>
 					</ModalComponent>
@@ -342,6 +346,7 @@ const Gates = () => {
 								isEdit={true}
 								initialValues={rowData}
 								isReadOnly={isReadOnly}
+								terminalDropdownData = {terminalDropdownData}
 							/>
 						</div>
 					</ModalComponent>

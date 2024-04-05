@@ -1,4 +1,4 @@
-import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
 import { PARKING_STAND,GET_PARKING_STAND } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
@@ -37,7 +37,6 @@ export const useEditParkingStand = (id,props) => {
 };
 
 export const useDeleteParkingStand = (props) => {
-	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-parking-stand'],
 		mutationFn: async (id) => await Delete(`${PARKING_STAND}/${id}`),
@@ -45,3 +44,13 @@ export const useDeleteParkingStand = (props) => {
 	});
 	return response;
 };
+
+export const useStandDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-stand-dropdown'],
+		queryFn: async () => await Post(`${GET_PARKING_STAND}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

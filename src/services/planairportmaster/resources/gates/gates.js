@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useMutation } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import { GATE, GET_GATE } from "../../../../api";
-import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetGate = (props) => {
 	const response = useInfiniteQuery({
@@ -45,3 +45,13 @@ export const useDeleteGate = (props) => {
 
 	return response;
 };
+
+export const useGateDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-gate-dropdown'],
+		queryFn: async () => await Post(`${GET_GATE}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

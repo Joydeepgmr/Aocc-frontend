@@ -2,11 +2,13 @@ import {
 	useDeletePlannerAircraft,
 	useGetAllPlannerAircraft,
 	usePostPlannerAircraft,
+	useUpdatePlannerAircraft,
 } from './PlannerAirportMaster/PlannerAircraftAirportMaster';
 import {
 	useDeletePlannerAirline,
 	useGetAllPlannerAirline,
 	usePostPlannerAirline,
+	useUpdatePlannerAirline,
 } from './PlannerAirportMaster/PlannerAirlineAirportMaster';
 import {
 	useGetAllTimelineData,
@@ -74,4 +76,6 @@ export {
 	usePostPlannerAircraft,
 	useDeletePlannerAircraft,
 	useDeletePlannerAirline,
+	useUpdatePlannerAircraft,
+	useUpdatePlannerAirline,
 };

@@ -1,73 +1,88 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
-import { useDispatch, useSelector } from 'react-redux';
 import './formComponents.scss';
-const FormComponent = ({ closeModal }) => {
-	const dispatch = useDispatch();
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+
 	const [form] = Form.useForm();
-    const onFinishHandler = (values) => {
+	const onFinishHandler = (values) => {
+		const changedValues = isEdit ? {} : values;
+		Object.keys(values).forEach((key) => {
+			if (!isEdit || values[key] !== initialValues[key]) {
+				changedValues[key] = values[key];
+			}
+		});
 
-
+		handleSaveButton(changedValues);
 		form.resetFields();
-		dispatch(addAircraftRegistration(values));
-		dispatch(updateIsShowTableComponents());
 	};
 
+	useEffect(() => {
+		form.setFieldsValue(initialValues);
+	}, [form, initialValues]);
+
 	return (
-		<div className="main_form">
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-				<div className="form_section">
-					<div className="form_content">
+		<div key={initialValues?.id}>
+			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+				<div className='runway_form_container'>
+
+					<div className="runway_form_inputFields">
 						<InputField
 							label="Runway Name"
-							name="runway_name"
-							placeholder="Enter the airport name"
+							name="name"
+							placeholder={isReadOnly && "Enter the airport name"}
 							warning="Required field"
+							disabled={isReadOnly || isEdit}
 							required
+							className='custom_input'
 						/>
-						<InputField label="Airport" name="airport" placeholder="Filled Text" warning="Required field" />
 					</div>
 					<Divider />
-					<div className="custom_content_runway">
-						<div className="runway_heading">
-							<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
-								Runway Type
-							</CustomTypography>
-						</div>
-						<div className="custom_checkbox_runway">
-							<CheckBoxField name="gpu" label="GPU" id="custom_checkbox" title="Single Checkbox" />
-							<CheckBoxField name="apu" className="" label="APU" title="Single Checkbox" />
-						</div>
+					<div className="runway_form_inputFields">
+						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
+							Runway Type
+						</CustomTypography>
+						<CheckBoxField
+							name="takeOff"
+							label="Take-off"
+							id="custom_checkbox"
+							title="Single Checkbox"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
+						<CheckBoxField 
+							name="landing"
+							label="Landing"
+							title="Single Checkbox"
+							disabled={isReadOnly}
+							className="custom_input"
+						/>
 					</div>
 					<Divider />
-					<div className="form_content">
+					<div className="runway_form_inputFields">
 						<InputField
 							label="Reason, if unavailable"
-							name="reason_if_unavailable"
-							placeholder="Filled Text"
+							name="reason"
+							placeholder={isReadOnly && "Filled Text"}
+							disabled={isReadOnly}
 							warning="Required field"
+							className='custom_input'
 						/>
-						<Date label="Unavailable from" name="unavailable_from" placeholder="Enter the airport name" />
-
-						<Date label="Unavailable to" name="unavailable_to" placeholder="Enter the airport name" />
+						<Date label="Unavailable from" name="unavailableFrom" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
+						<Date label="Unavailable to" name="unavailableTo" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
-				</div>
-				<Divider />
-				<div className="form_section">
-					<div className="form_content">
-						<Date label="Valid From" name="valid_from" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="valid_till" placeholder="Enter the airport name" />
+					<Divider />
+					<div className="runway_form_inputFields">
+						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} className='custom_date' />
+						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
-				</div>
-				<div className="form_section">
-					<div className="form_bottomButton">
-						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+					<div className="custom_buttons">
+						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
+						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
 					</div>
 				</div>
 			</Form>

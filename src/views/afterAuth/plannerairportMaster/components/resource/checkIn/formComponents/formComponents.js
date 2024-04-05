@@ -1,35 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponent.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
-	const SelectData = [
-		{
-			id: '1',
-			label: 'terminal1',
-			value: 'c9634ce5-b670-4a3b-9090-799324b49866',
-		},
-		{
-			id: '2',
-			label: 'terminal2',
-			value: 'ed35e026-8b67-43c7-a9d2-4af2fd470a5a',
-		},
-		{
-			id: '3',
-			label: 'terminal3',
-			value: 'ed7ffe96-4506-4f67-ab24-07eee49e59a7',
-		},
-		{
-			id: '4',
-			label: 'Cargo',
-			value: 'f1bff7a4-02f6-4c9d-98cc-6e5917e60e1f',
-		},
-	];
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
+	
+	const SelectTerminalData = useMemo(() => {
+		return terminalDropdownData.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [terminalDropdownData]);
 
 	const [form] = Form.useForm();
 
@@ -40,7 +24,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				changedValues[key] = values[key];
 			}
 		});
-
 		handleSaveButton(changedValues);
 		form.resetFields();
 	};
@@ -61,8 +44,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							required
 							disabled={isReadOnly || isEdit}
-							type="number"
 							className="custom_input"
+							max="16"
 						/>
 						<InputField
 							label="Counter Group"
@@ -71,17 +54,19 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className="custom_input"
+							max="32"
 						/>
 					</div>
 
 					<div className="checkin_form_inputfields">
 						<CustomSelect
-							SelectData={SelectData}
+							SelectData={SelectTerminalData}
 							label="Terminal"
 							placeholder={'Select Terminal'}
 							name="terminalId"
 							disabled={isReadOnly || isEdit}
 							className="select"
+							required
 						/>
 						<InputField
 							label="Row"
@@ -153,7 +138,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					</div>
 				</div>
 				<div className="checkin_form_inputfields">
-					<div className="form_bottomButton">
+					{ !isReadOnly && <div className="form_bottomButton">
 						<Button
 							title="Cancel"
 							type="filledText"
@@ -168,7 +153,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							isSubmit="submit"
 							disabled={isReadOnly}
 						/>
-					</div>
+					</div>}
 				</div>
 			</Form>
 		</div>

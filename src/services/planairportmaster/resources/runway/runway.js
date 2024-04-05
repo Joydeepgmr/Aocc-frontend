@@ -1,14 +1,25 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
+import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
+import { GET_RUNWAY, RUNWAY } from '../../../../api';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
-export const usePostBaggageBelt = (props) => {
-	const queryClient = useQueryClient();
-	const response = useMutation({
-		mutationKey: [''],
-		mutationFn: async (data) => await Post(``, data),
-		onSuccess: () => {
-			queryClient.invalidateQueries('');
+export const useGetRunway = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-runway'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_RUNWAY}`, {pagination}),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
+			return false;
 		},
+		...props,
+	});
+
+	return response;
+};
+
+export const usePostRunway = (props) => {
+	const response = useMutation({
+		mutationKey: ['post-runway'],
+		mutationFn: (data) => Post(`${RUNWAY}`, data),
 		...props,
 	});
 
@@ -21,20 +32,42 @@ export const usePostBaggageBelt = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-export const useGetBaggageBelt = (props) => {
-	const response = useQuery({
-		queryKey: [''],
-		queryFn: async () => await Get(``),
+export const useEditRunway= (id,props) => {
+	const response = useMutation({
+		mutationKey: ['edit-runway'],
+		mutationFn: (data) => Patch(`${RUNWAY}/${id}`, data),
 		...props,
 	});
 
+	return response;
+};
+
+export const useDeleteRunway = (props) => {
+	const queryClient = useQueryClient();
+	const response = useMutation({
+		mutationKey: ['delete-runway'],
+		mutationFn: (id) => Delete(`${RUNWAY}/${id}`),
+		onSuccess: () => {
+			queryClient.invalidateQueries('get-runway');
+		},
+		...props,
+	});
 	const { data, error, isSuccess } = response;
 
-	const statusMessage = isSuccess ? data?.message : error?.message;
+	const statusMessage = isSuccess
+		? data?.data?.message
+		: error?.message;
 
-	return {
-		...response,
-		data: data,
-		message: statusMessage,
-	};
+	return { ...response, data: data?.data, message: statusMessage };
 };
+
+
+export const useRunwayDropdown = (props) => {
+    const response = useQuery({
+        queryKey: ['get-runway-dropdown'],
+        queryFn: async () => await Post(`${GET_RUNWAY}?bulk=true`),
+        ...props,
+    })
+    const data = response?.data?.data ?? []
+    return { ...response, data }
+}
