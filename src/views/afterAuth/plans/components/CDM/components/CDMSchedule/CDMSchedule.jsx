@@ -443,7 +443,7 @@ const DailySchedule = ({ tab }) => {
 				width="80%"
 				closeModal={closeModal}
 				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
-				className="custom_modal"
+				className="custom_modal_cdm"
 			>
 				<div className="modal_content">
 					<FormComponent
