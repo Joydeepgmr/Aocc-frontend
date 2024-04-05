@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -6,7 +6,15 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData}) => {
+	
+	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
+	const SelectTerminalData = useMemo(() => {
+        return terminalDropdownData.map((data) => {
+            return { label: data.name, value: data.id };
+        });
+    }, [terminalDropdownData]);
+
 	const SelectData = [
 		{
 			id: '1',
@@ -62,11 +70,11 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_input'
 						/>
 						<CustomSelect
-							SelectData={SelectData}
+							SelectData={SelectTerminalData}
 							label="Connected to Runway"
 							placeholder={!isReadOnly && 'Select Runways'}
 							name="runway"
-							disabled={isReadOnly | isEdit}
+							disabled={isReadOnly || isEdit}
 							className='custom_input'
 						/>
 					</div>

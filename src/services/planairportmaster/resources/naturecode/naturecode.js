@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
+import { Get, Post, Patch } from '../../../HttpServices/HttpServices';
 
 export const usePostBaggageBelt = (props) => {
 	const queryClient = useQueryClient();

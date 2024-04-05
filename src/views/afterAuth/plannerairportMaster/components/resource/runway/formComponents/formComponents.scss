@@ -1,8 +1,45 @@
-.custom_checkbox_runway{
+@import '../../../../../../../styles/sass/mixins';
+@import '../../../../../../../styles/sass/variables';
+@import '../../../../../../../styles/sass/utils';
+ 
+.runway_form_container {
+    padding: 2rem 0rem 2.4rem 0rem;
+    box-sizing: content-box;
     display: flex;
+    flex-direction: column;
+    gap: 1rem;
+ 
+    .runway_form_inputFields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.4rem;
+        .ant-row {
+            display: flex;
+            flex-flow: column;
+        }
+        .ant-form-item-label {
+            text-align: start;
+        }
+        .input_form_item {
+            &.custom_input {
+                width: calc(33% - 2.4rem);
+            }
+        }
+        .select {
+            width: calc(33% - 2.4rem);
+        }
+        .custom_date {
+            width: calc(33% - 2.4rem);
+        }
+    }
+}
+
+
+.custom_checkbox_runway{
+  display: flex;
 }
 .custom_content_runway{
-    display: flex;
-  flex-direction: column;
-    gap:1rem;
+  display: flex;
+flex-direction: column;
+  gap:1rem;
 }
