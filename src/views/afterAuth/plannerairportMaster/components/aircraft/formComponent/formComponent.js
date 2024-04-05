@@ -13,7 +13,7 @@ import {
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
 	const isNotEditable = type === 'edit';
 	const onError = ({
 		response: {
@@ -269,6 +269,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						placeholder={!isReadOnly && 'Select valid to date'}
 						name="validTill"
 						format="MM-DD-YYYY"
+						className="custom_date"
 						disabled={isReadOnly}
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 					/>
@@ -282,12 +283,14 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								type="filledText"
 								className="custom_button_cancel"
 								onClick={closeModal}
+								disabled={isLoading}
 							/>
 							<ButtonComponent
 								title={'save'}
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}
+								disabled={isLoading}
 							/>
 						</div>
 					</>

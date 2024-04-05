@@ -1,31 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-
-import ModalComponent from '../../../../../components/modal/modal';
-import FormComponent from '../../components/aircraft/formComponent/formComponent';
 import TableComponent from '../../../../../components/table/table';
 import ButtonComponent from '../../../../../components/button/button';
-import { useDispatch } from 'react-redux';
 
 import './common_table.scss';
-import { deleteAircraftRegistration, updateAircraftRegistration } from '../../redux/actionCreator';
 
-const Common_table = ({ Heading, data, columns, loading, fetchData, pagination, title, formComponent }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const dispatch = useDispatch();
-	const openModal = () => {
-		setIsModalOpen(true);
-		dispatch(updateAircraftRegistration(''));
-	};
-
-	const closeModal = () => {
-		setIsModalOpen(false);
-	};
-
-	const handleButtonChange = (label) => {
-		console.log('hdbhbdhbd', label);
-	};
+const Common_table = ({ data, columns, loading, fetchData, pagination, title, openModal }) => {
 	const handleDropdownChange = (value) => {
 		// Add this line
 		if (value === 'Create') {
@@ -59,19 +40,7 @@ const Common_table = ({ Heading, data, columns, loading, fetchData, pagination, 
 					onChange={handleDropdownChange}
 				/>
 			</div>
-			<ModalComponent
-				isModalOpen={isModalOpen}
-				width="80vw"
-				closeModal={closeModal}
-				title={
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						{Heading}
-					</CustomTypography>
-				}
-				className="custom_modal"
-			>
-				<div className="modal_content">{formComponent && formComponent}</div>
-			</ModalComponent>
+
 			<div className="custom_table">
 				<div className="details_table">
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
