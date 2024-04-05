@@ -13,13 +13,13 @@
 	height: 50vh;
 }
 
-.modal_content {
-	position: relative;
-	@include flex(center, center, column);
-	min-height: 40vh;
-}
+// .modal_content {
+// 	position: relative;
+// 	@include flex(center, center, column);
+// 	min-height: 40vh;
+// }
 
-.custom_modal {
+.custom_modal_cdm {
 	max-height: 50rem;
 	overflow: auto;
 	border-radius: 1rem;
