@@ -47,7 +47,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							required
 							disabled={isEdit || isReadOnly}
-							type="number"
 							className="custom_input"
 						/>
 						<CheckBoxField name="busGate" label="Bus Gate" disabled={isReadOnly} className="custom_input" />
@@ -126,7 +125,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				</div>
 				<Divider />
 				<div className="gate_form_inputfields">
-					<div className="form_bottomButton">
+				{ !isReadOnly && <div className="form_bottomButton">
 						<Button
 							title="Cancel"
 							type="filledText"
@@ -135,7 +134,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							onClick={handleButtonClose}
 						/>
 						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
-					</div>
+					</div>}
 				</div>
 			</Form>
 		</div>

@@ -107,7 +107,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 				</div>
 			</div>
 			<div className="terminal_form_inputfields">
-				<div className="form_bottomButton">
+			{ !isReadOnly && <div className="form_bottomButton">
 					<Button
 						title="Cancel"
 						type="filledText"
@@ -116,7 +116,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						onClick={handleButtonClose}
 					/>
 					<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
-				</div>
+				</div>}
 			</div>
 		</Form>
 	);
