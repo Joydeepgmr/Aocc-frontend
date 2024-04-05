@@ -11,7 +11,7 @@ import { ConvertUtcToIst } from '../../../../utils';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
-	const { data, isLoading, fetchNextPage, hasNextPage } = useGetFlightScheduled({ tab });
+	const { data, isFetching, fetchNextPage, hasNextPage, ...rest } = useGetFlightScheduled({ tab });
 	const [form] = Form.useForm();
 	const columns = useMemo(() => {
 		return [
@@ -62,6 +62,7 @@ const FlightSchedule = () => {
 			setFlightScheduleData([...FlightScheduleData, ...lastPage.data]);
 		}
 	}, [data]);
+	console.log('isFetching', rest, isFetching);
 	const items = [
 		{
 			key: '1',
@@ -71,7 +72,7 @@ const FlightSchedule = () => {
 					<TableComponent
 						columns={columns}
 						data={FlightScheduleData}
-						loading={isLoading}
+						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
 					/>
@@ -86,7 +87,7 @@ const FlightSchedule = () => {
 					<TableComponent
 						columns={columns}
 						data={FlightScheduleData}
-						loading={isLoading}
+						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
 					/>
