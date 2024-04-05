@@ -14,9 +14,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
-import { useStandDropdown } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import './delaycode.scss';
 
 const DelayCode = () => {
@@ -27,10 +24,6 @@ const DelayCode = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-
-	const { data: standDropdownData = [],isSuccess: isGetStandDropdownSuccess } = useStandDropdown();
-	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
-	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 
 	const getDelayCodeHandler = {
 		onSuccess: (data) => handleGetDelayCodeSuccess(data),
@@ -269,9 +262,6 @@ const DelayCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
-						standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
-						runwayDropdownData = {runwayDropdownData}
 					/>}
 				/>
 			) : (
@@ -306,9 +296,6 @@ const DelayCode = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								key={Math.random() * 100}
-								standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-								taxiwayDropdownData = {taxiwayDropdownData}
-								runwayDropdownData = {runwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>
@@ -327,9 +314,6 @@ const DelayCode = () => {
 						isEdit = {true}
 						initialValues={rowData}
 						isReadOnly = {isReadOnly}
-						standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
-						runwayDropdownData = {runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
