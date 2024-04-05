@@ -44,7 +44,17 @@ function TelexMessage() {
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
-	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter });
+	const onSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setTelexMessageData([...newData]);
+		}
+	};
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter,onSuccess,onError });
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
@@ -145,13 +155,6 @@ function TelexMessage() {
 		}, 500);
 		return () => clearTimeout(debounceTimer);
 	}, [watchFlightNo]);
-
-	useEffect(() => {
-		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setTelexMessageData([...telexMessageData, ...lastPage.data]);
-		}
-	}, [data]);
 	const items = [
 		{
 			key: '1',

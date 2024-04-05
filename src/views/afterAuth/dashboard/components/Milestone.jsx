@@ -9,19 +9,30 @@ import PageLoader from '../../../../components/pageLoader/pageLoader';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
-	const { data, isLoading, hasNextPage, fetchNextPage } = useGetMileStoneData({ flightType: type });
 	const [milestoneData, setMilestoneData] = useState([]);
 	const [labels, setLabels] = useState([]);
-	useEffect(() => {
+	const onSuccess = (data) => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setMilestoneData([...milestoneData, ...lastPage.data.milestoneList]);
-			if (!labels.length) {
-				const labels = lastPage.data.milestones.map((milestone) => Object.values(milestone)[0]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data.milestoneList || []);
+			}, []);
+			setMilestoneData([...newData]);
+			if (!labels.length && data?.pages?.length) {
+				const labels = data?.pages[0].data.milestones.map((milestone) => Object.values(milestone)[0]);
 				setLabels([...labels]);
 			}
 		}
-	}, [data]);
+	};
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data, isLoading, hasNextPage, fetchNextPage } = useGetMileStoneData({
+		flightType: type,
+		onSuccess,
+		onError,
+	});
 	const handleTabChange = (key) => {
 		if (key == '1') {
 			setType('arrival');
