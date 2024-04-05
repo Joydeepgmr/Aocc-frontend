@@ -431,7 +431,7 @@ const Seasonal = ({ tab }) => {
 			</ModalComponent>
 			<UploadCsvModal
 				isModalOpen={isCsvModalOpen}
-				width="720px"
+				width="72rem"
 				closeModal={closeCsvModal}
 				handleUpload={handleUpload}
 			/>
