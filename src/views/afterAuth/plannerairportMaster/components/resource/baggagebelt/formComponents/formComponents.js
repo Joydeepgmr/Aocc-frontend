@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -6,26 +6,33 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+
+	isEdit && (initialValues['terminalId'] = initialValues?.terminalId?.id);
+	const SelectTerminalData = useMemo(() => {
+        return terminalDropdownData.map((data) => {
+            return { label: data.name, value: data.id };
+        });
+    }, [terminalDropdownData]);
 
 	const [form] = Form.useForm();
-	const SelectData = [
-		{
-			id: '1',
-			label: 'Options1',
-			value: '458089e4-d6dd-4178-8b9b-16ce10984f0d',
-		},
-		{
-			id: '2',
-			label: 'Options2',
-			value: 'Options2',
-		},
-		{
-			id: '3',
-			label: 'Options3',
-			value: 'Options3',
-		},
-	];
+	// const SelectData = [
+	// 	{
+	// 		id: '1',
+	// 		label: 'Options1',
+	// 		value: '458089e4-d6dd-4178-8b9b-16ce10984f0d',
+	// 	},
+	// 	{
+	// 		id: '2',
+	// 		label: 'Options2',
+	// 		value: 'Options2',
+	// 	},
+	// 	{
+	// 		id: '3',
+	// 		label: 'Options3',
+	// 		value: 'Options3',
+	// 	},
+	// ];
 
 	const onFinishHandler = (values) => {
 		const changedValues = isEdit ? {} : values;
@@ -70,7 +77,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					</div>
 					<div className="baggageBelt_form_inputFields">
 						<CustomSelect
-							SelectData={SelectData}
+							SelectData={SelectTerminalData}
 							name="terminalId"
 							label="Terminal"
 							placeholder={isReadOnly && 'Filled Text'}
@@ -83,6 +90,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							placeholder={isReadOnly && "Filled Text"}
 							suffixText={'minutes'}
 							disabled={isReadOnly}
+							type='number'
 							className='custom_input'
 						/>
 					</div>
