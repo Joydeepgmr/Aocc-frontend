@@ -16,7 +16,7 @@ const ParsedMessageComponent = ({ message = '', maxLength = 30 }) => {
 	};
 	return (
 		<>
-			{message && (
+			{typeof message === 'string' && (
 				<div>
 					{message.length <= maxLength ? (
 						<p>{message}</p>
