@@ -12,9 +12,11 @@ import ConfirmationModal from '../../../../../components/confirmationModal/confi
 import ModalComponent from '../../../../../components/modal/modal';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
+	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [airlineData, setAirlineData] = useState([]);
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [openEditModal, setOpenEditModal] = useState(false);
@@ -164,27 +166,24 @@ const Airlines = () => {
 		},
 	];
 
-	console.log(rowData);
 	return (
 		<>
 			{Boolean(airlineData?.length) ? (
 				<Common_table
-					Heading={'Setup your airline'}
 					data={airlineData}
 					columns={columns}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
 					loading={isPlannerAirlineLoading}
 					title={'Airlines'}
-					formComponent={<FormComponent />}
+					openModal={() => setIsAddModalOpen(true)}
 				/>
 			) : (
 				<Common_Card
 					title1="Create"
 					title2={'Import Global Reference'}
 					btnCondition={false}
-					Heading={'Setup your airline'}
-					formComponent={<FormComponent />}
+					openModal={() => setIsAddModalOpen(true)}
 				/>
 			)}
 
@@ -214,6 +213,7 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
+					key={Math.random() * 100}
 				/>
 			</ModalComponent>
 			<ModalComponent
@@ -233,7 +233,24 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
+					key={Math.random() * 100}
 				/>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isAddModalOpen}
+				width="80vw"
+				closeModal={() => setIsAddModalOpen(false)}
+				title={
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+						Setup your airline
+					</CustomTypography>
+				}
+				className="custom_modal"
+			>
+				<div className={`modal_content`}>
+					<FormComponent key={Math.random() * 100} closeModal={() => setIsAddModalOpen(false)} />
+				</div>
 			</ModalComponent>
 		</>
 	);

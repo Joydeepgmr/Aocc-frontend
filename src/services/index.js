@@ -2,6 +2,7 @@ import {
 	useDeletePlannerAircraft,
 	useGetAllPlannerAircraft,
 	usePostPlannerAircraft,
+	useUpdatePlannerAircraft,
 } from './PlannerAirportMaster/PlannerAircraftAirportMaster';
 import {
 	useDeletePlannerAirline,
@@ -74,4 +75,5 @@ export {
 	usePostPlannerAircraft,
 	useDeletePlannerAircraft,
 	useDeletePlannerAirline,
+	useUpdatePlannerAircraft,
 };
