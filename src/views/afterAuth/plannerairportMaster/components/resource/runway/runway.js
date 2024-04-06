@@ -190,9 +190,9 @@ const Runway = () => {
 		},
 		{
 			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
-			render: (reason) => reason?.name ?? '-',
+			dataIndex: 'status',
+			key: 'status',
+			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Reason',
@@ -207,7 +207,7 @@ const Runway = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
