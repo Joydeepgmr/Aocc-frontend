@@ -34,7 +34,6 @@ const Taxiway = () => {
 	};
 
 	const handleGetTaxiwaySuccess = (data) => {
-		console.log(data, "data here");
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
@@ -43,14 +42,11 @@ const Taxiway = () => {
 			setTaxiwayData([...newData]);
 		}
 	};
-	console.log(taxiwayData, 'taxiwaydata');
 
 	const handleGetTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
 	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
-	console.log(fetchTaxiway, "fetchTaxiway");
-
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -119,10 +115,10 @@ const Taxiway = () => {
 	const { mutate: editTaxiway, isLoading: isEditLoading } = useEditTaxiway(editTaxiwayHandler)
 
 	const handleEditTaxiwaySuccess = (data) => {
-		queryClient.invalidateQueries('get-taxiway');
 		setTaxiwayData([]);
 		closeEditModal();
 		toast.success(data?.message);
+		queryClient.invalidateQueries('get-taxiway');
 	}
 
 	const handleEditTaxiwayError = (error) => {
@@ -232,7 +228,7 @@ const Taxiway = () => {
 	const dropdownItems = [
 		{
 			label: 'Add Taxiway',
-			value: 'addNewTaxi',
+			value: 'create',
 			key: '0',
 		},
 		// {
@@ -248,7 +244,7 @@ const Taxiway = () => {
 	];
 
 	const handleDropdownItemClick = (value) => {
-		if (value === 'addNewTaxi') {
+		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
@@ -267,6 +263,7 @@ const Taxiway = () => {
 					btnCondition={true}
 					Heading={'Add Taxiway '}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData}/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -281,17 +278,19 @@ const Taxiway = () => {
 						</div>
 						<div className="taxiway--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Taxiway Counters
+								Taxiway
 							</CustomTypography>
 							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
+					</>
+			)}
 
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add taxiway Counters'}
+						title={'Add Taxiway'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -307,7 +306,7 @@ const Taxiway = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit taxiway Counters`}
+						title={`${isReadOnly ? '':'Edit'} Taxiway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -327,8 +326,6 @@ const Taxiway = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

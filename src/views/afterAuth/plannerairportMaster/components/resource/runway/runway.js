@@ -120,8 +120,6 @@ const Runway = () => {
 		queryClient.invalidateQueries('get-runway');
 	}
 
-	console.log(runwayData,"runwayyy");
-
 	const handleEditRunwayError = (error) => {
 		toast.error(error?.response?.data?.message)
 	}
@@ -140,7 +138,6 @@ const Runway = () => {
 	};
 
 	const handleEditSave = (value) => {
-		console.log(value,"edittedd");
 		value && editRunway(value);
 	};
 
@@ -249,11 +246,12 @@ const Runway = () => {
 			{!Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}  />}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -268,17 +266,18 @@ const Runway = () => {
 						</div>
 						<div className="runway--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Runway Counters
+								Runway
 							</CustomTypography>
 							<TableComponent data={runwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-
+					</>
+			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add Runway Counters'}
+						title={'Add Runway'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -293,7 +292,7 @@ const Runway = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit Runway Counters`}
+						title={`${isReadOnly? '' : 'Edit'} Runway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -312,8 +311,6 @@ const Runway = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

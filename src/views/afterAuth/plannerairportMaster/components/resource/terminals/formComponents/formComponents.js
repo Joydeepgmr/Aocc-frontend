@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { Form, Divider } from 'antd';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import CustomSelect from '../../../../../../../components/select/select';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -59,6 +58,8 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						warning="Required field"
 						required
 						className="custom_input"
+						max="16"
+						disabled={isReadOnly || isEdit}
 					/>
 					<CustomSelect
 						SelectData={SelectTaxiwayData}
@@ -95,14 +96,16 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						label="Valid From"
 						name="validFrom"
 						placeholder="Enter the airport name"
-						//required
+						required
 						className="custom_date"
+						disabled={isReadOnly}
 					/>
 					<Date
 						label="Valid To"
 						name="validTill"
 						placeholder="Enter the airport name"
 						className="custom_date"
+						disabled={isReadOnly}
 					/>
 				</div>
 			</div>

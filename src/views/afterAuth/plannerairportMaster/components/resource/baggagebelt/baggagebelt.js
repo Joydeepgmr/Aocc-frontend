@@ -255,6 +255,7 @@ const BaggageBelt = () => {
 					btnCondition={true}
 					Heading={'Add belts'}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -269,17 +270,18 @@ const BaggageBelt = () => {
 						</div>
 						<div className="baggage_belt--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Baggage Belt Counters
+								Baggage Belt
 							</CustomTypography>
 							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-
+					</>
+			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add Baggage Belt Counters'}
+						title={'Add Baggage Belt'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -294,7 +296,7 @@ const BaggageBelt = () => {
 						isModalOpen={isEditModalOpen}
 						width="120rem"
 						closeModal={closeEditModal}
-						title={`Edit taxiway Counters`}
+						title={`Edit taxiway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -313,8 +315,6 @@ const BaggageBelt = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

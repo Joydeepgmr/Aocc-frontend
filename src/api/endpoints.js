@@ -75,6 +75,8 @@ export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
 export const GET_DELAY_CODE = '/delay-code/paginated';
 export const DELAY_CODE = '/delay-code';
+export const GET_NATURE_CODE = '/nature-code/paginated';
+export const NATURE_CODE = '/nature-code';
 
 
 /*--------------------------planner aircraft master ---------------------*/
