@@ -66,18 +66,18 @@ export const useEditSeasonalPlanDeparture = (id, props) => {
 export const useUploadCSV = (props) => {
 	const response = useMutation({
 		mutationKey: ['upload-csv'],
-		mutationFn: async (data) => await Post(`${UPLOAD_CSV_BULK}`, data),	
+		mutationFn: async (data) => {
+			const resp = await Post(`${UPLOAD_CSV_BULK}`, data);
+			const downloadUrl = GenerateDownloadUrl(resp.data);
+			DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
 		...props,
 	});
 
 	const { data, error, isSuccess } = response;
 
 	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
-
-	if (isSuccess && data) {
-		const downloadUrl = GenerateDownloadUrl(data);
-		DownloadFileByUrl(downloadUrl);
-	}
 
 	return { ...response, data: data?.data, message: statusMessage };
 };
