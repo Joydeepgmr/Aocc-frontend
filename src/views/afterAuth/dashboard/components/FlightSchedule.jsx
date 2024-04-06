@@ -7,10 +7,30 @@ import CustomTypography from '../../../../components/typographyComponent/typogra
 import { useGetFlightScheduled } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import './style.scss';
 import { ConvertUtcToIst } from '../../../../utils';
+import toast from 'react-hot-toast';
 
-const FlightScheduleDataTab = ({ type }) => {
+const FlightSchedule = () => {
+	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
-	const { data, isLoading, fetchNextPage, hasNextPage } = useGetFlightScheduled({ type });
+	const onSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setFlightScheduleData([...newData]);
+		}
+	};
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage, ...rest } = useGetFlightScheduled({
+		tab,
+		onSuccess,
+		onError,
+	});
 	const [form] = Form.useForm();
 	const columns = useMemo(() => {
 		return [
@@ -47,62 +67,27 @@ const FlightScheduleDataTab = ({ type }) => {
 			{ title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
 		];
 	}, [FlightScheduleData]);
-	useEffect(() => {
-		console.log('type data', type, data);
-		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setFlightScheduleData([...FlightScheduleData, ...lastPage.data]);
+	const handleTabChange = (key) => {
+		if (key == '1') {
+			setTab('arrival');
+		} else {
+			setTab('departure');
 		}
-	}, [data]);
-	console.log('type and data ', type, FlightScheduleData);
-	return (
-		<>
-			<div className="tab_container">
-				<div className="top-bar">
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight="600"
-						color="black"
-						children={'Flight Schedule'}
-					/>
-					{/* <Button
-						onClick={() => {
-							alert('Icon Button');
-						}}
-						icon={Filter}
-						alt="bell icon"
-						className={'filter-btn'}
-					/> */}
-					<Form form={form}>
-						<InputField
-							label="Flight number"
-							name="flightNo"
-							placeholder="Flight number"
-							warning="Required field"
-							type="search"
-						/>
-					</Form>
-				</div>
-				<TableComponent
-					columns={columns}
-					data={FlightScheduleData}
-					loading={isLoading}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-				/>
-			</div>
-		</>
-	);
-};
-const FlightSchedule = () => {
+		setFlightScheduleData([]);
+	};
 	const items = [
 		{
 			key: '1',
 			label: 'Arrival',
 			children: (
 				<>
-					<FlightScheduleDataTab type="arrival" />
+					<TableComponent
+						columns={columns}
+						data={FlightScheduleData}
+						loading={isFetching}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
 				</>
 			),
 		},
@@ -111,7 +96,13 @@ const FlightSchedule = () => {
 			label: 'Departure',
 			children: (
 				<>
-					<FlightScheduleDataTab type="departure" />
+					<TableComponent
+						columns={columns}
+						data={FlightScheduleData}
+						loading={isFetching}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
 				</>
 			),
 		},
@@ -119,8 +110,34 @@ const FlightSchedule = () => {
 
 	return (
 		<div className="body-container">
+			<div className="top-bar">
+				<CustomTypography
+					type="title"
+					fontSize={24}
+					fontWeight="600"
+					color="black"
+					children={'Flight Schedule'}
+				/>
+				{/* <Button
+						onClick={() => {
+							alert('Icon Button');
+						}}
+						icon={Filter}
+						alt="bell icon"
+						className={'filter-btn'}
+					/> */}
+				<Form form={form}>
+					<InputField
+						label="Flight number"
+						name="flightNo"
+						placeholder="Flight number"
+						warning="Required field"
+						type="search"
+					/>
+				</Form>
+			</div>
 			<div className="flights-table">
-				<CustomTabs defaultActiveKey="1" items={items} />
+				<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
-import { DUMMY, GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA } from '../../api';
-import { Get } from '../HttpServices/HttpServices';
+import { useMutation, useQuery } from 'react-query';
+import { DUMMY, GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA, UPDATE_RESOURCE_ALLOCATION } from '../../api';
+import { Get, Post } from '../HttpServices/HttpServices';
 
 export const useGetAllTimelineData = (type, timeFormat, props) => {
 	const response = useQuery({
@@ -36,4 +36,18 @@ export const useGetTimelineGroupData = (type, timeFormat, props) => {
 		data: data,
 		message: statusMessage,
 	};
+};
+
+export const useUpdateResourceAllocation = (props) => {
+	const response = useMutation({
+		mutationKey: ['update-resource-allocation'],
+		mutationFn: async (data) => await Post(`${UPDATE_RESOURCE_ALLOCATION}`, data),
+		...props,
+	});
+
+	const { data, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : data?.error;
+
+	return { ...response, data, message: statusMessage };
 };

@@ -6,10 +6,14 @@ import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import Button from '../../../../../../../components/button/button';
 import CustomSelect from '../../../../../../../components/select/select';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import { useGetAllTimelineData, useGetTimelineGroupData } from '../../../../../../../services';
+import { useGetAllTimelineData, useGetTimelineGroupData, useUpdateResourceAllocation } from '../../../../../../../services';
 import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
+import dayjs from 'dayjs';
+import { useQueryClient } from 'react-query';
+import toast from 'react-hot-toast';
 
 const ResourceAllocation = () => {
+	const queryClient = useQueryClient();
 	const divRef = useRef(null);
 	const [activeTab, setActiveTab] = useState('1');
 	const [tabValue, setTabValue] = useState('counter');
@@ -18,6 +22,21 @@ const ResourceAllocation = () => {
 	const [fullScreen, setFullScreen] = useState(false);
 	const handleTimeValueChange = (value) => {
 		setSelectedTimeValue(value);
+	};
+
+	const updateResourceHandler = {
+		onSuccess: (data) => handleUpdateResourceSuccess(data),
+		onError: (error) => handleUpdateResourceError(error),
+	};
+
+	const handleUpdateResourceSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-timeline-data');
+		toast.success(data?.message);
+	};
+
+	const handleUpdateResourceError = (error) => {
+		queryClient.invalidateQueries('get-all-timeline-data');
+		toast.error(error?.response?.data?.message);
 	};
 
 	const toggleFullscreen = () => {
@@ -48,6 +67,17 @@ const ResourceAllocation = () => {
 	const color = ['#02A0FC', '#FFD43B', '#2B8A3E', '#a83c32', '#a86132', '#a8a832', '#6fa832', '#32a89a'];
 	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue, selectedTimeValue?.slice(0, 2));
 	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue, selectedTimeValue?.slice(0, 2));
+	const {mutate : updateResource} = useUpdateResourceAllocation(updateResourceHandler)
+
+	const handleResourceMove = (data) =>{	
+		const item = {
+			type : tabValue,
+			time : dayjs(data.start).format('YYYY-MM-DD HH:mm:ss'),
+			mainSlotId : data?.id,
+			resourceId: data?.group,
+		}
+		updateResource(item);
+	}
 
 	const timelineLabel =
 		fetchedGroupData &&
@@ -93,6 +123,7 @@ const ResourceAllocation = () => {
 								groups={timelineGroups}
 								editable={isEditable}
 								label={timelineLabel}
+								handleMove={handleResourceMove}
 							/>
 						</div>
 					) : (
@@ -101,6 +132,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							label={timelineLabel}
 							editable={isEditable}
+							handleMove={handleResourceMove}
 						/>
 					)}
 				</div>
@@ -123,6 +155,7 @@ const ResourceAllocation = () => {
 								groups={timelineGroups}
 								editable={isEditable}
 								label={timelineLabel}
+								handleMove={handleResourceMove}
 							/>
 						</div>
 					) : (
@@ -131,6 +164,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							groups={timelineGroups}
 							editable={isEditable}
+							handleMove={handleResourceMove}
 						/>
 					)}
 				</div>
@@ -153,6 +187,7 @@ const ResourceAllocation = () => {
 								groups={timelineGroups}
 								editable={isEditable}
 								label={timelineLabel}
+								handleMove={handleResourceMove}
 							/>
 						</div>
 					) : (
@@ -161,6 +196,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							groups={timelineGroups}
 							editable={isEditable}
+							handleMove={handleResourceMove}
 						/>
 					)}
 				</div>
@@ -183,6 +219,7 @@ const ResourceAllocation = () => {
 								groups={timelineGroups}
 								editable={isEditable}
 								label={timelineLabel}
+								handleMove={handleResourceMove}
 							/>
 						</div>
 					) : (
@@ -191,6 +228,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							groups={timelineGroups}
 							editable={isEditable}
+							handleMove={handleResourceMove}
 						/>
 					)}
 				</div>
@@ -213,6 +251,7 @@ const ResourceAllocation = () => {
 								groups={timelineGroups}
 								editable={isEditable}
 								label={timelineLabel}
+								handleMove={handleResourceMove}
 							/>
 						</div>
 					) : (
@@ -221,6 +260,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							groups={timelineGroups}
 							editable={isEditable}
+							handleMove={handleResourceMove}
 						/>
 					)}
 				</div>

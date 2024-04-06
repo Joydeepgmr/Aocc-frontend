@@ -40,11 +40,21 @@ const ParsedMessageComponent = ({ message = '', maxLength = 30 }) => {
 	);
 };
 
-function TelexMessageTabData({ type }) {
+function TelexMessage() {
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
-	const [filter, setFilter] = useState({ type: [type] });
+	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
-	const { data, isLoading, isError, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter });
+	const onSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setTelexMessageData([...newData]);
+		}
+	};
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter,onSuccess,onError });
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
@@ -55,6 +65,18 @@ function TelexMessageTabData({ type }) {
 	};
 	const handleDelete = () => {
 		closeDeleteModal();
+	};
+	const handleTabChange = (key) => {
+		let messageType;
+		if (key == '1') {
+			messageType = 'mvt';
+		} else if (key == '2') {
+			messageType = 'ldm';
+		} else {
+			messageType = 'ptm';
+		}
+		setFilter({ type: [messageType] });
+		setTelexMessageData([]);
 	};
 	const columns = useMemo(() => {
 		return [
@@ -133,13 +155,52 @@ function TelexMessageTabData({ type }) {
 		}, 500);
 		return () => clearTimeout(debounceTimer);
 	}, [watchFlightNo]);
+	const items = [
+		{
+			key: '1',
+			label: 'MVT',
+			children: (
+				<TableComponent
+					columns={columns}
+					data={telexMessageData}
+					loading={isFetching}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
+			),
+		},
+		{
+			key: '2',
+			label: 'LDM',
+			children: (
+				<>
+					<TableComponent
+						columns={columns}
+						data={telexMessageData}
+						loading={isFetching}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
+				</>
+			),
+		},
+		{
+			key: '3',
+			label: 'PTM',
+			children: (
+				<>
+					<TableComponent
+						columns={columns}
+						data={telexMessageData}
+						loading={isFetching}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
+				</>
+			),
+		},
+	];
 
-	useEffect(() => {
-		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setTelexMessageData([...telexMessageData, ...lastPage.data]);
-		}
-	}, [data]);
 	return (
 		<>
 			<ConfirmationModal
@@ -149,7 +210,7 @@ function TelexMessageTabData({ type }) {
 				content={`You want to Acknowledge flight ${deleteModal?.id?.flight}`}
 				buttonTitle2="Acknowledge"
 			/>
-			<div className="tab_container">
+			<div className="body-container">
 				<div className="top-bar">
 					<CustomTypography
 						type="title"
@@ -178,51 +239,11 @@ function TelexMessageTabData({ type }) {
 						</Form>
 					</div>
 				</div>
-				<TableComponent
-					columns={columns}
-					data={telexMessageData}
-					loading={isLoading}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-				/>
+				<div className="flights-table">
+					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
+				</div>
 			</div>
 		</>
-	);
-}
-
-function TelexMessage() {
-	const items = [
-		{
-			key: '1',
-			label: 'MVT',
-			children: <TelexMessageTabData type="mvt" />,
-		},
-		{
-			key: '2',
-			label: 'LDM',
-			children: (
-				<>
-					<TelexMessageTabData type="ldm" />
-				</>
-			),
-		},
-		{
-			key: '2',
-			label: 'PTM',
-			children: (
-				<>
-					<TelexMessageTabData type="ptm" />
-				</>
-			),
-		},
-	];
-
-	return (
-		<div className="body-container">
-			<div className="flights-table">
-				<CustomTabs defaultActiveKey="1" items={items} />
-			</div>
-		</div>
 	);
 }
 
