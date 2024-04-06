@@ -14,7 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import {useRunwayDropdown} from '../../../../../../services/planairportmaster/resources/runway/runway';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -26,7 +26,7 @@ const Taxiway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: terminalDropdownData = [] } = useTerminalDropdown();
+	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 
 	const getTaxiwayHandler = {
 		onSuccess: (data) => handleGetTaxiwaySuccess(data),
@@ -132,7 +132,6 @@ const Taxiway = () => {
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			runway: record?.runway?.id,
 		}
 		setRowData(record);
 		openEditModal();
@@ -197,7 +196,7 @@ const Taxiway = () => {
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
 			render: (reason) => reason ?? '-',
@@ -262,7 +261,7 @@ const Taxiway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData}/>}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData} key={Math.random() * 100}/>}
 					openModal={openModal}
 				/>
 			) : (
@@ -297,7 +296,8 @@ const Taxiway = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
-								terminalDropdownData = {terminalDropdownData}
+								runwayDropdownData = {runwayDropdownData}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
@@ -316,7 +316,7 @@ const Taxiway = () => {
 								isEdit={true}
 								initialValues={rowData}
 								isReadOnly={isReadOnly}
-								terminalDropdownData = {terminalDropdownData}
+								runwayDropdownData = {runwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>

@@ -4,18 +4,20 @@ import CustomTypography from '../../../../../../../components/typographyComponen
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
-import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
+import CustomRadioGroup from '../../../../../../../components/radioButton/radioButton';
 import './formComponents.scss';
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
+		console.log(values, 'valuesssss');
 		const changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {
 				changedValues[key] = values[key];
 			}
 		});
+
 
 		handleSaveButton(changedValues);
 		form.resetFields();
@@ -46,20 +48,16 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
 							Runway Type
 						</CustomTypography>
-						<CheckBoxField
-							name="takeOff"
-							label="Take-off"
-							id="custom_checkbox"
-							title="Single Checkbox"
+					</div>
+					<div className="runway_form_inputFields">
+						<CustomRadioGroup
+							name="status"
+							options={[
+								{ label: 'Take-off', value: 'take-off' },
+								{ label: 'Landing', value: 'landing' },
+							]}
+							// onChange={(e) => console.log('Radio button Selected:', e.target.value)}
 							disabled={isReadOnly}
-							className="custom_input"
-						/>
-						<CheckBoxField 
-							name="landing"
-							label="Landing"
-							title="Single Checkbox"
-							disabled={isReadOnly}
-							className="custom_input"
 						/>
 					</div>
 					<Divider />

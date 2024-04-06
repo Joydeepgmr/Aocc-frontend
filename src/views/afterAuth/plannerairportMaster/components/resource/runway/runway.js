@@ -195,7 +195,7 @@ const Runway = () => {
 			render: (reason) => reason?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
 			render: (reason) => reason ?? '-',
@@ -250,7 +250,7 @@ const Runway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}  />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -284,6 +284,7 @@ const Runway = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
