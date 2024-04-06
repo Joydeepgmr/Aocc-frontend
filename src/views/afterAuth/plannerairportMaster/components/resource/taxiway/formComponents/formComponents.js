@@ -53,7 +53,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							label="Connected to Runway"
 							placeholder={!isReadOnly && 'Select Runways'}
 							name="runway"
-							disabled={isReadOnly || isEdit}
+							disabled={isReadOnly}
 							className='custom_input'
 						/>
 					</div>

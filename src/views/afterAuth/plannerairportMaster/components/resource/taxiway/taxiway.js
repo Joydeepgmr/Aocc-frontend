@@ -139,6 +139,7 @@ const Taxiway = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value["id"] = rowData.id;
 		editTaxiway(value);
 	};
 
