@@ -48,7 +48,6 @@ const Taxiway = () => {
 	}
 	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
 
-
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -116,10 +115,10 @@ const Taxiway = () => {
 	const { mutate: editTaxiway, isLoading: isEditLoading } = useEditTaxiway(editTaxiwayHandler)
 
 	const handleEditTaxiwaySuccess = (data) => {
-		queryClient.invalidateQueries('get-taxiway');
 		setTaxiwayData([]);
 		closeEditModal();
 		toast.success(data?.message);
+		queryClient.invalidateQueries('get-taxiway');
 	}
 
 	const handleEditTaxiwayError = (error) => {
@@ -197,7 +196,7 @@ const Taxiway = () => {
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
 			render: (reason) => reason ?? '-',
@@ -228,7 +227,7 @@ const Taxiway = () => {
 	const dropdownItems = [
 		{
 			label: 'Add Taxiway',
-			value: 'addNewTaxi',
+			value: 'create',
 			key: '0',
 		},
 		// {
@@ -244,7 +243,7 @@ const Taxiway = () => {
 	];
 
 	const handleDropdownItemClick = (value) => {
-		if (value === 'addNewTaxi') {
+		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
@@ -261,8 +260,9 @@ const Taxiway = () => {
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
-					Heading={'Add Taxiway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData}/>}
+					Heading={'Add Taxiway '}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData} key={Math.random() * 100}/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -282,12 +282,14 @@ const Taxiway = () => {
 							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
+					</>
+			)}
 
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add taxiway'}
+						title={'Add Taxiway'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -295,6 +297,7 @@ const Taxiway = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								runwayDropdownData = {runwayDropdownData}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
@@ -303,7 +306,7 @@ const Taxiway = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit taxiway`}
+						title={`${isReadOnly ? '':'Edit'} Taxiway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -323,8 +326,6 @@ const Taxiway = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

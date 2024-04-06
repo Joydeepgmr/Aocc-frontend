@@ -176,7 +176,7 @@ const CheckIn = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -211,7 +211,7 @@ const CheckIn = () => {
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
-			render: (terminal) => terminal.name ?? '-',
+			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Row',
@@ -232,7 +232,7 @@ const CheckIn = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -293,6 +293,7 @@ const CheckIn = () => {
                             terminalDropdownData = {terminalDropdownData}
 						/>
 					}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -317,6 +318,7 @@ const CheckIn = () => {
 							/>
 						</div>
 					</div>
+					</>)}
 
 					{/* modals */}
 					<ModalComponent
@@ -360,8 +362,6 @@ const CheckIn = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

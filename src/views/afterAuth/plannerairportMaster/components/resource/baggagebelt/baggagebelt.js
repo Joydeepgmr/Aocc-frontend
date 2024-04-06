@@ -197,6 +197,12 @@ const BaggageBelt = () => {
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
+			title: 'Reason',
+			dataIndex: 'reason',
+			key: 'reason',
+			render: (reason) => reason ?? '-',
+		},
+		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
@@ -254,7 +260,8 @@ const BaggageBelt = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add belts'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} key={Math.random() * 100}/>}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -274,12 +281,13 @@ const BaggageBelt = () => {
 							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-
+					</>
+			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add Baggage Belt Counters'}
+						title={'Add Baggage Belt'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -287,6 +295,7 @@ const BaggageBelt = () => {
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
 								terminalDropdownData = {terminalDropdownData}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
@@ -295,7 +304,7 @@ const BaggageBelt = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit baggage belt Counters`}
+						title={`${isReadOnly ? '' : 'Edit'} baggage belt`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -315,8 +324,6 @@ const BaggageBelt = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

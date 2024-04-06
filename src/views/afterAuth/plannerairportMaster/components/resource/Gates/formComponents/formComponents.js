@@ -48,6 +48,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							required
 							disabled={isEdit || isReadOnly}
 							className="custom_input"
+							max="16"
 						/>
 						<CheckBoxField name="busGate" label="Bus Gate" disabled={isReadOnly} className="custom_input" />
 					</div>
@@ -57,7 +58,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							label="Terminal"
 							placeholder={'Select Terminal'}
 							name="terminal"
-							disabled={isReadOnly || isEdit}
+							disabled={isReadOnly}
 						/>
 						<InputField
 							label="Gate ID"
@@ -67,6 +68,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							type="number"
 							disabled={isReadOnly}
 							className="custom_input"
+							max="999"
 						/>
 						<InputField
 							label="Default Allocation Duration"
@@ -77,6 +79,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							suffixText="min"
 							disabled={isReadOnly}
 							className="custom_input"
+							defaultValue={15}
 						/>
 					</div>
 					<Divider />
@@ -88,6 +91,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className="custom_input"
+							max="32"
 						/>
 						<Date
 							label="Unavailable from"

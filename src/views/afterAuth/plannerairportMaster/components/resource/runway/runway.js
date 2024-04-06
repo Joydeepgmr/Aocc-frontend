@@ -138,7 +138,6 @@ const Runway = () => {
 	};
 
 	const handleEditSave = (value) => {
-		console.log(value,"edittedd");
 		value && editRunway(value);
 	};
 
@@ -196,7 +195,7 @@ const Runway = () => {
 			render: (reason) => reason?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
 			render: (reason) => reason ?? '-',
@@ -247,11 +246,12 @@ const Runway = () => {
 			{!Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
-					title3={'Download CSV Template'}
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}  />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
+					openModal={openModal}
 				/>
 			) : (
 				<>
@@ -266,23 +266,25 @@ const Runway = () => {
 						</div>
 						<div className="runway--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Runway Counters
+								Runway
 							</CustomTypography>
 							<TableComponent data={runwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-
+					</>
+			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add Runway Counters'}
+						title={'Add Runway'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
@@ -291,7 +293,7 @@ const Runway = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit Runway Counters`}
+						title={`${isReadOnly? '' : 'Edit'} Runway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -310,8 +312,6 @@ const Runway = () => {
 						onSave={handleDelete}
 						content={`You want to delete ${rowData?.name}?`}
 					/>
-				</>
-			)}
 		</>
 	);
 };

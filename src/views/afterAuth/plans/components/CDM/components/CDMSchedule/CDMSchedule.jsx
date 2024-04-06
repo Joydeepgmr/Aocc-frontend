@@ -205,16 +205,16 @@ const DailySchedule = ({ tab }) => {
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const operations = (
@@ -344,7 +344,7 @@ const DailySchedule = ({ tab }) => {
 				<div className="main_buttonContainer">
 					<div className="seasonal_container">
 						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-						<Button
+						{/* <Button
 							id="btn"
 							title="Upload CSV"
 							className="custom_svgButton"
@@ -359,7 +359,7 @@ const DailySchedule = ({ tab }) => {
 							type="filledText"
 							isSubmit="submit"
 							onClick={openCsvModal}
-						/>
+						/> */}
 					</div>
 				</div>
 			</>
@@ -405,7 +405,7 @@ const DailySchedule = ({ tab }) => {
 						<TopHeader heading="Daily Flight Schedule" />
 					</div>
 					<div className="icon_container">
-						<Button
+						{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -413,7 +413,7 @@ const DailySchedule = ({ tab }) => {
 							className={'custom_filter'}
 							icon={Filter}
 							alt="arrow icon"
-						/>
+						/> */}
 						<InputField
 							label="search"
 							name="search"

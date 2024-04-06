@@ -61,6 +61,7 @@ const FormComponent = ({
 						disabled={isReadOnly || isEdit}
 						required
 						className="custom_input"
+						max="16"
 					/>
 				</div>
 
@@ -90,6 +91,7 @@ const FormComponent = ({
 						disabled={isReadOnly}
 						className="custom_input"
 						type="number"
+						defaultValue={15}
 					/>
 				</div>
 				<Divider />
@@ -157,6 +159,7 @@ const FormComponent = ({
 						warning="Required field"
 						disabled={isReadOnly}
 						className="custom_input"
+						max="32"
 					/>
 					<Date
 						label="Unavailable from"

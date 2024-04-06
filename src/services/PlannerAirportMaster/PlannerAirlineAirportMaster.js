@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import { DELETE_PLANNER_AIRLINE, GET_PLANNER_AIRLINE, POST_PLANNER_AIRLINE, UPDATE_PLANNER_AIRLINE } from '../../api';
 import { Delete, Patch, Post } from '../HttpServices/HttpServices';
 
@@ -62,3 +62,14 @@ export const useUpdatePlannerAirline = (id, props) => {
 
 	return { ...response, data, message: statusMessage };
 };
+
+export const useAirlineDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-airline-dropdown'],
+		queryFn: async () => await Post(`${GET_PLANNER_AIRLINE}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}
+

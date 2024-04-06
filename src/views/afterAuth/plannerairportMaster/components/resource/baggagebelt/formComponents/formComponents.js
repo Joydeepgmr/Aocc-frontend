@@ -106,10 +106,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
 					</div>
 					<Divider />
-					<div className="custom_buttons">
+					{ !isReadOnly && <div className="custom_buttons">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
-					</div>
+						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
+					</div>}
 				</div>
 			</Form>
 		</div>

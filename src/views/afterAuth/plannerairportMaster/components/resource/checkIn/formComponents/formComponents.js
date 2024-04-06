@@ -64,9 +64,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							label="Terminal"
 							placeholder={'Select Terminal'}
 							name="terminalId"
-							disabled={isReadOnly || isEdit}
+							disabled={isReadOnly}
 							className="select"
-							required
 						/>
 						<InputField
 							label="Row"

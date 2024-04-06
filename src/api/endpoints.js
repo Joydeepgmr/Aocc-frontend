@@ -4,6 +4,7 @@ export const DUMMY = '/dummy';
 
 export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resources';
 export const GET_TIMELINE_GROUP_DATA = '/resource-allocation/get-resources';
+export const UPDATE_RESOURCE_ALLOCATION = '/resource-allocation/updateResource';
 
 /*------------- login --------------*/
 export const USER_LOGIN = 'user/login';
@@ -74,6 +75,8 @@ export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
 export const GET_DELAY_CODE = '/delay-code/paginated';
 export const DELAY_CODE = '/delay-code';
+export const GET_NATURE_CODE = '/nature-code/paginated';
+export const NATURE_CODE = '/nature-code';
 
 
 /*--------------------------planner aircraft master ---------------------*/
