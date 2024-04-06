@@ -89,22 +89,24 @@ export const Login = () => {
 						</div>
 						<div className="login_input_fields">
 							<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-								<InputField
-									label="Email"
-									name="email"
-									required
-									placeholder="Enter your email"
-									className="custom_input"
-								/>
-								<InputField
-									label="Password"
-									name="password"
-									type="password"
-									required
-									placeholder="Enter your password"
-									className="custom_input"
-								/>
-								<CheckboxField name="remember" label="Remember me" />
+								<div className='login_form_fields'>
+									<InputField
+										label="Email"
+										name="email"
+										required
+										placeholder="Enter your email"
+										className="custom_input"
+									/>
+									<InputField
+										label="Password"
+										name="password"
+										type="password"
+										required
+										placeholder="Enter your password"
+										className="custom_input"
+									/>
+								</div>
+								{/* <CheckboxField name="remember" label="Remember me" /> */}
 								<ButtonComponent
 									title="Sign In"
 									isSubmit="submit"
