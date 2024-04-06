@@ -190,12 +190,12 @@ const Runway = () => {
 		},
 		{
 			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
-			render: (reason) => reason?.name ?? '-',
+			dataIndex: 'status',
+			key: 'status',
+			render: (status) => status ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
 			render: (reason) => reason ?? '-',
@@ -207,7 +207,7 @@ const Runway = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -250,7 +250,7 @@ const Runway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton}  />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -284,6 +284,7 @@ const Runway = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>

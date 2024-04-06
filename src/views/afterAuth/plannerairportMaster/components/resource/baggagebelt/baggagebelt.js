@@ -14,6 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditBaggageBelt, useGetBaggageBelt, useDeleteBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
+import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import './baggagebelt.scss';
 
 const BaggageBelt = () => {
@@ -25,6 +26,7 @@ const BaggageBelt = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getBaggageBeltHandler = {
 		onSuccess: (data) => handleGetBaggageBeltSuccess(data),
@@ -32,7 +34,6 @@ const BaggageBelt = () => {
 	};
 
 	const handleGetBaggageBeltSuccess = (data) => {
-		console.log(data, "data here");
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
@@ -132,7 +133,6 @@ const BaggageBelt = () => {
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			terminalId: record?.terminalId?.id,
 		}
 		setRowData(record);
 		openEditModal();
@@ -197,13 +197,19 @@ const BaggageBelt = () => {
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
+			title: 'Reason',
+			dataIndex: 'reason',
+			key: 'reason',
+			render: (reason) => reason ?? '-',
+		},
+		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -254,7 +260,7 @@ const BaggageBelt = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add belts'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} key={Math.random() * 100}/>}
 					openModal={openModal}
 				/>
 			) : (
@@ -288,15 +294,17 @@ const BaggageBelt = () => {
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
+								terminalDropdownData = {terminalDropdownData}
+								key={Math.random() * 100}
 							/>
 						</div>
 					</ModalComponent>
 
 					<ModalComponent
 						isModalOpen={isEditModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit taxiway`}
+						title={`${isReadOnly ? '' : 'Edit'} baggage belt`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -306,6 +314,7 @@ const BaggageBelt = () => {
 								isEdit={true}
 								initialValues={rowData}
 								isReadOnly={isReadOnly}
+								terminalDropdownData = {terminalDropdownData}
 							/>
 						</div>
 					</ModalComponent>

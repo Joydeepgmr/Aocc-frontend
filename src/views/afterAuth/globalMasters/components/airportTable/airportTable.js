@@ -171,7 +171,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				render: (text) => <div className="centered-content">{text || '-'}</div>,
 			},
 			{
-				title: 'Airport Code',
+				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
 				render:(text) => <div className="centered-content">{text || '-'}</div>,
