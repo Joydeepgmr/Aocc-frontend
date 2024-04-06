@@ -10,7 +10,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		console.log(values, 'valuesssss');
+		// console.log(values, 'valuesssss');
 		const changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {
@@ -53,12 +53,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<CustomRadioGroup
 							name="status"
 							options={[
-								{ label: 'Take-off', value: 'take-off' },
-								{ label: 'Landing', value: 'landing' },
+								{ label: 'Take-off', value: 'Take-off' },
+								{ label: 'Landing', value: 'Landing' },
 							]}
-							// onChange={(e) => console.log('Radio button Selected:', e.target.value)}
 							disabled={isReadOnly}
 						/>
+
 					</div>
 					<Divider />
 					<div className="runway_form_inputFields">

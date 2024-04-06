@@ -209,7 +209,7 @@ const BaggageBelt = () => {
 			render: (availability) => availability ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
