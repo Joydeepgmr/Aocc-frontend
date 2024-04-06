@@ -120,8 +120,6 @@ const Runway = () => {
 		queryClient.invalidateQueries('get-runway');
 	}
 
-	console.log(runwayData,"runwayyy");
-
 	const handleEditRunwayError = (error) => {
 		toast.error(error?.response?.data?.message)
 	}

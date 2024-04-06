@@ -10,13 +10,14 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		console.log(values);
+		console.log(values, 'valuesssss');
 		const changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {
 				changedValues[key] = values[key];
 			}
 		});
+
 
 		handleSaveButton(changedValues);
 		form.resetFields();
@@ -50,7 +51,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					</div>
 					<div className="runway_form_inputFields">
 						<CustomRadioGroup
-							name="runway_type"
+							name="status"
 							options={[
 								{ label: 'Take-off', value: 'take-off' },
 								{ label: 'Landing', value: 'landing' },

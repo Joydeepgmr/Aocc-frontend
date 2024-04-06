@@ -14,7 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import {useRunwayDropdown} from '../../../../../../services/planairportmaster/resources/runway/runway';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -26,7 +26,7 @@ const Taxiway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: terminalDropdownData = [] } = useTerminalDropdown();
+	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 
 	const getTaxiwayHandler = {
 		onSuccess: (data) => handleGetTaxiwaySuccess(data),
@@ -34,7 +34,6 @@ const Taxiway = () => {
 	};
 
 	const handleGetTaxiwaySuccess = (data) => {
-		console.log(data, "data here");
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
@@ -43,13 +42,11 @@ const Taxiway = () => {
 			setTaxiwayData([...newData]);
 		}
 	};
-	console.log(taxiwayData, 'taxiwaydata');
 
 	const handleGetTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
 	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
-	console.log(fetchTaxiway, "fetchTaxiway");
 
 
 	const openModal = () => {
@@ -136,14 +133,12 @@ const Taxiway = () => {
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			runway: record?.runway?.id,
 		}
 		setRowData(record);
 		openEditModal();
 	};
 
 	const handleEditSave = (value) => {
-		value["id"] = rowData.id;
 		editTaxiway(value);
 	};
 
@@ -265,8 +260,8 @@ const Taxiway = () => {
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
-					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData}/>}
+					Heading={'Add Taxiway'}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData}/>}
 				/>
 			) : (
 				<>
@@ -281,7 +276,7 @@ const Taxiway = () => {
 						</div>
 						<div className="taxiway--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Taxiway Counters
+								Taxiway
 							</CustomTypography>
 							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
@@ -291,14 +286,14 @@ const Taxiway = () => {
 						isModalOpen={isModalOpen}
 						width="120rem"
 						closeModal={closeModal}
-						title={'Add taxiway Counters'}
+						title={'Add taxiway'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
 							<FormComponent
 								handleSaveButton={handleSaveButton}
 								handleButtonClose={handleCloseButton}
-								terminalDropdownData = {terminalDropdownData}
+								runwayDropdownData = {runwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>
@@ -307,7 +302,7 @@ const Taxiway = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit taxiway Counters`}
+						title={`Edit taxiway`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -317,7 +312,7 @@ const Taxiway = () => {
 								isEdit={true}
 								initialValues={rowData}
 								isReadOnly={isReadOnly}
-								terminalDropdownData = {terminalDropdownData}
+								runwayDropdownData = {runwayDropdownData}
 							/>
 						</div>
 					</ModalComponent>

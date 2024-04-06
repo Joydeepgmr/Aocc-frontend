@@ -6,37 +6,16 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData}) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, runwayDropdownData}) => {
 	
-	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
-	const SelectTerminalData = useMemo(() => {
-        return terminalDropdownData.map((data) => {
+	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
+	
+	const SelectRunwayData = useMemo(() => {
+        return runwayDropdownData.map((data) => {
             return { label: data.name, value: data.id };
         });
-    }, [terminalDropdownData]);
+    }, [runwayDropdownData]);
 
-	const SelectData = [
-		{
-			id: '1',
-			label: 'terminal1',
-			value: 'bbf94541-45f2-416b-8bd3-7357cc49da96',
-		},
-		{
-			id: '2',
-			label: 'terminal2',
-			value: 'xyz',
-		},
-		{
-			id: '3',
-			label: 'terminal3',
-			value: 'xyz',
-		},
-		{
-			id: '4',
-			label: 'Cargo',
-			value: 'xyz',
-		},
-	];
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
@@ -70,7 +49,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_input'
 						/>
 						<CustomSelect
-							SelectData={SelectTerminalData}
+							SelectData={SelectRunwayData}
 							label="Connected to Runway"
 							placeholder={!isReadOnly && 'Select Runways'}
 							name="runway"

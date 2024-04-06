@@ -8,7 +8,9 @@ import './formComponents.scss';
 
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
 
-	isEdit && (initialValues['terminalId'] = initialValues?.terminalId?.id);
+	isEdit && (initialValues['terminalId'] = initialValues?.terminal?.name);
+	
+
 	const SelectTerminalData = useMemo(() => {
         return terminalDropdownData.map((data) => {
             return { label: data.name, value: data.id };
@@ -16,24 +18,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
     }, [terminalDropdownData]);
 
 	const [form] = Form.useForm();
-	// const SelectData = [
-	// 	{
-	// 		id: '1',
-	// 		label: 'Options1',
-	// 		value: '458089e4-d6dd-4178-8b9b-16ce10984f0d',
-	// 	},
-	// 	{
-	// 		id: '2',
-	// 		label: 'Options2',
-	// 		value: 'Options2',
-	// 	},
-	// 	{
-	// 		id: '3',
-	// 		label: 'Options3',
-	// 		value: 'Options3',
-	// 	},
-	// ];
-
 	const onFinishHandler = (values) => {
 		const changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {

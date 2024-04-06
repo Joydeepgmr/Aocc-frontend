@@ -34,7 +34,6 @@ const BaggageBelt = () => {
 	};
 
 	const handleGetBaggageBeltSuccess = (data) => {
-		console.log(data, "data here");
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
@@ -134,7 +133,6 @@ const BaggageBelt = () => {
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
-			terminalId: record?.terminalId?.name,
 		}
 		setRowData(record);
 		openEditModal();
@@ -271,7 +269,7 @@ const BaggageBelt = () => {
 						</div>
 						<div className="baggage_belt--tableContainer">
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Baggage Belt Counters
+								Baggage Belt
 							</CustomTypography>
 							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
@@ -297,7 +295,7 @@ const BaggageBelt = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`Edit taxiway Counters`}
+						title={`Edit baggage belt Counters`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
