@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import AircraftRegistrationTab from '../aircraftRegistrationTab/aircraftRegistrationTab';
 import AircraftTypeTab from '../aircraftTypeTab/aircraftTypeTab';
 
 
 const AircraftTabs = () => {
-	const [activeTab, setActiveTab] = useState('1');
 	const items = [
 		{
 			key: '1',

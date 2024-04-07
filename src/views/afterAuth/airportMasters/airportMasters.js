@@ -9,7 +9,7 @@ import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable'
 
 const AirportMasters = () => {
 	const onError = ({ response: { data: { message } } }) => toast.error(message);
-	const { data, isLoading, hasNextPage, fetchNextPage } = useGetLicenseData({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetLicenseData({ onError });
 	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
 	const { data: countryDropdownData } = useCountriesDropdown({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
@@ -39,6 +39,7 @@ const AirportMasters = () => {
 						pagination={{ isMore: hasNextPage }}
 						airportDropdownData={airportDropdownData}
 						countryDropdownData={countryDropdownData}
+						loading={isFetching}
 					/>}
 					data={data?.pages}
 					createProps={createProps}

@@ -25,15 +25,14 @@ const TableComponent = ({
             ...filters,
         });
     };
-
+    const hasMoreData = pagination?.isMore ?? pagination;
     return (
         <>
             {fetchData ?
                 <InfiniteScroll
                     dataLength={data.length} // This is important to determine when to fetch more data
-                    next={fetchData} // Function to call when reaching the end of the list
-                    hasMore={pagination?.isMore ?? pagination} // Boolean to indicate if there is more data to load
-                    scrollThreshold={0.8}
+                    next={!loading && fetchData} // Function to call when reaching the end of the list
+                    hasMore={hasMoreData} // Boolean to indicate if there is more data to load
                 >
                     <Table
                         columns={columns}
@@ -45,6 +44,7 @@ const TableComponent = ({
                         }}
                         pagination={false}
                     />
+                    {loading && hasMoreData ? <h6>Loading...</h6> : null}
                 </InfiniteScroll >
                 : <Table
                     columns={columns}
