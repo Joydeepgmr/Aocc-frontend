@@ -14,7 +14,7 @@ import { useDeleteGlobalAircraftType, usePatchGlobalAircraftType, usePostGlobalA
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
-const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, airlineDropdownData }) => {
+const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, airlineDropdownData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 	const [aircraftTypeData, setAircraftTypeData] = useState([]);
@@ -133,8 +133,10 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 	}, [createProps.new])
 	useEffect(() => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setAircraftTypeData([...aircraftTypeData, ...lastPage.data]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+			setAircraftTypeData([...newData]);
 		}
 	}, [data]);
 	const columns = useMemo(() => {
@@ -172,6 +174,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -190,6 +193,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				title: 'ICAO Code',
 				dataIndex: 'icaoCode',
 				key: 'icaoCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -261,7 +265,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Type
 						</CustomTypography>
-						<TableComponent {...{ data: aircraftTypeData, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: aircraftTypeData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
 			</div>

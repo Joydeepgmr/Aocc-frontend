@@ -11,7 +11,7 @@ import { usePostLicenseAirport } from '../../../../../services/airportMasters/ai
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 
-const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData }) => {
+const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData,loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -69,15 +69,17 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	}, [createProps.new])
 	useEffect(() => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setAirportData([...airportData, ...lastPage.data]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+			setAirportData([...newData]);
 		}
 	}, [data]);
 
 	const columns = useMemo(
 		() => [
 			{
-				title: <div className='table_first_title'>Airport Name</div>,
+				title: 'Airport Name',
 				dataIndex: ['globalAirport', 'name'],
 				key: 'airportName',
 				render: (text) => text || '-',
@@ -86,12 +88,14 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				title: 'IATA Code',
 				dataIndex: ['globalAirport', 'iataCode'],
 				key: 'iataCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'ICAO Code',
 				dataIndex: ['globalAirport', 'icaoCode'],
 				key: 'icaoCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -110,12 +114,14 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				title: 'Valid From',
 				dataIndex: 'validFrom',
 				key: 'validFrom',
+				align: 'center',
 				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
 			},
 			{
 				title: 'Valid To',
 				dataIndex: 'validTill',
 				key: 'validTill',
+				align: 'center',
 				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
 			},
 		],
@@ -129,7 +135,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				isModalOpen={airportModal.isOpen}
 				closeModal={closeAddModal}
 				title={airportModal.title}
-				width={'120rem'}
+				width={'90rem'}
 				className="custom_modal"
 			>
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
@@ -154,7 +160,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<TableComponent {...{ data: airportData, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: airportData, columns, fetchData, pagination,loading }} />
 					</div>
 				</div>
 			</div>

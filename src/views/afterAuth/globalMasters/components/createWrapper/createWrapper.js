@@ -57,7 +57,6 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 			<>
 				{data && data?.length ?
 					<div className="table_container">
-
 						<div className="create_button">
 							<DropdownButton
 								dropdownItems={dropdownItems}

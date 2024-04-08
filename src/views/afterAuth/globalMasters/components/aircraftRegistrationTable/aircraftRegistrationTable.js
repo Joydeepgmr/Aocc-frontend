@@ -16,7 +16,7 @@ import {
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, aircraftTypeDropdownData, countryDropdownData }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, aircraftTypeDropdownData, countryDropdownData,loading }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [aircraftRegistrationData, setAircraftRegistrationData] = useState([]);
@@ -158,8 +158,10 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 	}, [createProps.new])
 	useEffect(() => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setAircraftRegistrationData([...aircraftRegistrationData, ...lastPage.data]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+			setAircraftRegistrationData([...newData]);
 		}
 	}, [data]);
 
@@ -189,6 +191,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				title: 'Registration',
 				dataIndex: 'registration',
 				key: 'registration',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -201,6 +204,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -274,7 +278,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Registrations
 						</CustomTypography>
-						<TableComponent {...{ data: aircraftRegistrationData, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: aircraftRegistrationData, columns, fetchData, pagination,loading }} />
 					</div>
 
 				</div>
