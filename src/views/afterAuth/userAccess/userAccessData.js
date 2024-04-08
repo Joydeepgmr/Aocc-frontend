@@ -1,5 +1,17 @@
 import { useGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
+export const userAccessType = [
+	{
+		id: '1',
+		label: 'Planner',
+		value: 'Planner',
+	},
+	{
+		id: '2',
+		label: 'Daily Ops',
+		value: 'daily Ops',
+	},
+];
 export const SelectData = [
 	{
 		id: '1',
