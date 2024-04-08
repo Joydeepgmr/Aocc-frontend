@@ -258,14 +258,10 @@ const Aircrafts = () => {
 					loading={isPlannerAircraftLoading}
 					title={'Aircraft Registration'}
 					openModal={() => setIsAddModalOpen(true)}
+					type="aircraft"
 				/>
 			) : (
-				<Common_Card
-					title1="Create"
-					title2={'Import Global Reference'}
-					btnCondition={false}
-					openModal={() => setIsAddModalOpen(true)}
-				/>
+				<Common_Card title1="Create" btnCondition={false} openModal={() => setIsAddModalOpen(true)} />
 			)}
 
 			<ConfirmationModal

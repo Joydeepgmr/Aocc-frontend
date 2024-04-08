@@ -217,19 +217,19 @@ const Seasonal = ({ tab }) => {
 			/>
 		</div>
 	);
+	const uploadCsvHandler = {
+		onSuccess: (data) => handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
+	};
 
 	const handleUploadCsvSuccess = () => {
+		toast.success('CSV Uploaded Successfully');
 		queryClient.invalidateQueries('get-seasonal-plans');
 		closeCsvModal();
 	};
 
-	const handleUploadCsvError = () => {
-		toast.error('Invalid File Type');
-	};
-
-	const uploadCsvHandler = {
-		onSuccess: () => handleUploadCsvSuccess(),
-		onError: () => handleUploadCsvError(),
+	const handleUploadCsvError = (error) => {
+		toast.error(error?.response?.data?.message);
 	};
 
 	const { mutate: onUploadCSV } = useUploadCSV(uploadCsvHandler);
@@ -251,7 +251,7 @@ const Seasonal = ({ tab }) => {
 		},
 	}) => toast.error(message);
 
-	const { refetch, isLoading: isDownloading } = useDownloadCSV({ onError });
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('planner-sample-file', { onError });
 
 	//DOWNLOAD
 	const handleDownloadCSV = () => {

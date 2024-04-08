@@ -128,6 +128,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -137,6 +138,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -160,6 +162,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -169,6 +172,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -192,6 +196,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -201,6 +206,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -224,6 +230,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -233,6 +240,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -256,6 +264,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -265,6 +274,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
