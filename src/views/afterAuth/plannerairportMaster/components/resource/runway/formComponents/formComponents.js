@@ -53,8 +53,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						<CustomRadioGroup
 							name="status"
 							options={[
-								{ label: 'Take-off', value: 'Take-off' },
-								{ label: 'Landing', value: 'Landing' },
+								{ label: 'Take-off', value: 'take-off' },
+								{ label: 'Landing', value: 'landing' },
 							]}
 							disabled={isReadOnly}
 						/>
