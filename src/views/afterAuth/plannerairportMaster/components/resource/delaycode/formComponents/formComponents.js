@@ -4,6 +4,7 @@ import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
+import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss';
 
 const FormComponent = ({
@@ -23,12 +24,17 @@ const FormComponent = ({
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		const changedValues = isEdit ? {} : values;
+		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {
 				changedValues[key] = values[key];
 			}
 		});
+
+		changedValues = {...changedValues,
+			validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
+		}
 
 		handleSaveButton(changedValues);
 		form.resetFields();

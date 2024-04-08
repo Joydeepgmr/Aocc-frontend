@@ -5,6 +5,7 @@ import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
+import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponent.scss';
 
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
@@ -18,7 +19,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		const changedValues = isEdit ? {} : { ...values, busGate: values.busGate ?? false };
+		let changedValues = isEdit ? {} : { ...values, busGate: values.busGate ?? false };
 
 		changedValues &&
 			Object.keys(values).forEach((key) => {
@@ -27,6 +28,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				}
 			});
 
+			changedValues = {...changedValues,
+				validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+				validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
+				unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
+				unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
+			}
 		changedValues && handleSaveButton(changedValues);
 		form.resetFields();
 	};
@@ -120,7 +127,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						/>
 						<Date
 							label="Valid To"
-							name="validTo"
+							name="validTill"
 							placeholder="Enter the airport name"
 							disabled={isReadOnly}
 							className="custom_date"

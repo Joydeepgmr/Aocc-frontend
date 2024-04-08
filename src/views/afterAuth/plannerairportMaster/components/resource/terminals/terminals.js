@@ -18,7 +18,6 @@ import { useStandDropdown } from '../../../../../../services/planairportmaster/r
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import './terminals.scss';
-
 const Terminal = () => {
 	const queryClient = useQueryClient();
 	const [terminalData, setTerminalData] = useState([]);
@@ -129,10 +128,8 @@ const Terminal = () => {
 
 	const handleEdit = (record) => {
 		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			validFrom : record?.validFrom ? dayjs(record?.validFrom): undefined,
+			validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 		}
 		setRowData(record);
 		openEditModal();
@@ -306,7 +303,7 @@ const Terminal = () => {
 					{/* modals */}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="50%"
+						width="80%"
 						closeModal={closeModal}
 						title={'Add Terminal'}
 						className="custom_modal"
@@ -325,7 +322,7 @@ const Terminal = () => {
 					
 				<ModalComponent
 					isModalOpen={isEditModalOpen}
-					width="50%"
+					width="80%"
 					closeModal={closeEditModal}
 					title={`${isReadOnly ? '' : 'Edit'} Terminal`}
 					className="custom_modal"
