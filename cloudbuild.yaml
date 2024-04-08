@@ -1,0 +1,50 @@
+steps:
+  # Set the Google Cloud project ID
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - 'gcloud config set project gmr-green-energy-398407'
+   # Set the Google Cloud project ID
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - 'ls'    
+      
+  # Pull the Git repository
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['pull']
+    dir: '/workspace/Aocc-frontend'
+    
+  # Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '--force']
+    dir: '/workspace/Aocc-frontend'
+    
+  # Build the frontend
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    dir: '/workspace/Aocc-frontend'
+    
+  # Cleanup existing build directory
+  - name: 'gcr.io/cloud-builders/bash'
+    entrypoint: 'bash'
+    args: ['-c', 'rm -rf build']
+    dir: '/workspace/app-engine/aocc'
+    
+  # Create a new build directory
+  - name: 'gcr.io/cloud-builders/bash'
+    entrypoint: 'bash'
+    args: ['-c', 'mkdir build']
+    dir: '/workspace/app-engine/aocc'
+    
+  # Copy the built files to the app-engine directory
+  - name: 'gcr.io/cloud-builders/bash'
+    entrypoint: 'bash'
+    args: ['-c', 'cp -r /workspace/Aocc-frontend/build/* /workspace/app-engine/aocc/build']
+    
+  # Deploy the app to Google App Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy']
+    dir: '/workspace/app-engine/aocc'
