@@ -8,7 +8,7 @@ import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
 import { useGetUserDetails, useLoginUser } from '../../../services/userLoginServices/LoginServices';
-import * as userType from "../../../utils/roles";
+import * as userType from '../../../utils/roles';
 
 import './login.scss';
 import toast from 'react-hot-toast';
@@ -22,13 +22,17 @@ export const Login = () => {
 	const navigate = useNavigate();
 	const loginApiProps = {
 		onSuccess: ({ data }) => {
-			localStorage.setItem('_tid', data?.accessToken)
-			localStorage.setItem('name', data?.name)
-			localStorage.setItem('email', data?.email)
+			localStorage.setItem('_tid', data?.accessToken);
+			localStorage.setItem('name', data?.roleName);
+			localStorage.setItem('email', data?.email);
 			roleRedirectFlow(data.roleName);
 		},
-		onError: ({ response: { data: { message } } }) => toast.error(message)
-	}
+		onError: ({
+			response: {
+				data: { message },
+			},
+		}) => toast.error(message),
+	};
 	const { mutate: loginUser } = useLoginUser(loginApiProps);
 	const { data, isLoading, mutate: getUserDetails } = useGetUserDetails();
 	const handleChangeLoginPageImage = () => {
@@ -53,14 +57,14 @@ export const Login = () => {
 				navigate(Pathname[404]);
 				break;
 		}
-	}
+	};
 	const onFinishHandler = (values) => {
 		loginUser(values);
 	};
 
 	useEffect(() => {
 		if (localStorage.getItem('_tid')) {
-			console.log(localStorage.getItem('_tid'))
+			console.log(localStorage.getItem('_tid'));
 			getUserDetails();
 		}
 	}, []);
@@ -73,10 +77,12 @@ export const Login = () => {
 				navigate(allNavItem[0].children);
 			}
 		}
-	}, [data])
+	}, [data]);
 
-	return (
-		isLoading ? <PageLoader loading={isLoading} /> : <div className="login_page">
+	return isLoading ? (
+		<PageLoader loading={isLoading} />
+	) : (
+		<div className="login_page">
 			<div className="login_container">
 				<div className="login_content_container">
 					<div className="gmr_logo">
@@ -89,7 +95,7 @@ export const Login = () => {
 						</div>
 						<div className="login_input_fields">
 							<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-								<div className='login_form_fields'>
+								<div className="login_form_fields">
 									<InputField
 										label="Email"
 										name="email"
@@ -113,7 +119,9 @@ export const Login = () => {
 									className="submit_button"
 									type="filledText"
 								/>
-								<p className="contact-admin">Need help? <a className='admin-link'>Contact admin</a></p>
+								<p className="contact-admin">
+									Need help? <a className="admin-link">Contact admin</a>
+								</p>
 							</Form>
 						</div>
 					</div>

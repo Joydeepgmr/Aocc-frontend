@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../../../components/button/button';
 import './common_card.scss';
-const Common_Card = ({ title1, title2, title3, btnCondition, openModal, openCsvModal }) => {
+const Common_Card = ({ title1, title2,title3, openModal, openCSVModal, downloadCSV }) => {
 	return (
 		<div className="aircraft-container">
 			<div className="container">
@@ -14,19 +14,20 @@ const Common_Card = ({ title1, title2, title3, btnCondition, openModal, openCsvM
 						className="custom_svgButton"
 						type="filledText"
 						isSubmit="submit"
-						onClick={openCsvModal}
+						onClick={openCSVModal}
 					/>
 				)}
-				{btnCondition && title3 ? (
+
+				{title3 && (
 					<Button
 						id="btn"
-						title={title3}
+						title={title2}
 						className="custom_svgButton"
 						type="filledText"
 						isSubmit="submit"
-						onClick={openCsvModal}
+						onClick={downloadCSV}
 					/>
-				) : null}
+				)}
 			</div>
 		</div>
 	);

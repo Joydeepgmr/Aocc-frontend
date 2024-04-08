@@ -1,6 +1,13 @@
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
-import { DELETE_PLANNER_AIRLINE, GET_PLANNER_AIRLINE, POST_PLANNER_AIRLINE, UPDATE_PLANNER_AIRLINE } from '../../api';
+import {
+	BULK_IMPORT_PLANNER_AIRLINE,
+	DELETE_PLANNER_AIRLINE,
+	GET_PLANNER_AIRLINE,
+	POST_PLANNER_AIRLINE,
+	UPDATE_PLANNER_AIRLINE,
+} from '../../api';
 import { Delete, Patch, Post } from '../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
 
 export const useGetAllPlannerAirline = (props) => {
 	const response = useInfiniteQuery({
@@ -68,8 +75,26 @@ export const useAirlineDropdown = (props) => {
 		queryKey: ['get-airline-dropdown'],
 		queryFn: async () => await Post(`${GET_PLANNER_AIRLINE}?bulk=true`),
 		...props,
-	})
-	const data = response?.data?.data ?? []
-	return { ...response, data }
-}
+	});
+	const data = response?.data?.data ?? [];
+	return { ...response, data };
+};
 
+export const useUploadCSVPlannerAirline = (props) => {
+	const response = useMutation({
+		mutationKey: ['upload-csv-planner-airline'],
+		mutationFn: async (data) => {
+			const resp = await Post(`${BULK_IMPORT_PLANNER_AIRLINE}`, data);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};

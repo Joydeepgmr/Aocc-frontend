@@ -43,7 +43,9 @@ const UploadCsvModal = ({ isModalOpen, closeModal, width, handleUpload }) => {
 			<ModalComponent
 				title="Upload a CSV sheet"
 				isModalOpen={isModalOpen}
+				className="upload_csv--modal"
 				width={width}
+				height={"auto"}
 				closeModal={() => {
 					closeModal();
 					setFiles([]);

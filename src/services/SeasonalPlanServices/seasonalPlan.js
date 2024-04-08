@@ -68,7 +68,7 @@ export const useUploadCSV = (props) => {
 		mutationKey: ['upload-csv'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK}`, data);
-			const downloadUrl = GenerateDownloadUrl(resp.data);
+			const downloadUrl = GenerateDownloadUrl(resp);
 			DownloadFileByUrl(downloadUrl);
 			return resp;
 		},
@@ -82,11 +82,11 @@ export const useUploadCSV = (props) => {
 	return { ...response, data: data?.data, message: statusMessage };
 };
 
-export const useDownloadCSV = (props) => {
+export const useDownloadCSV = (name, props) => {
 	const response = useQuery({
-		queryKey: ['get-download-csv'],
+		queryKey: ['get-download-csv', name],
 		queryFn: async () => {
-			const resp = await Get(`${DOWNLOAD_CSV_TEMPLATE}`);
+			const resp = await Get(`${DOWNLOAD_CSV_TEMPLATE}?name=${name}`);
 			DownloadFileByUrl(resp?.url);
 			return resp;
 		},
