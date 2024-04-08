@@ -54,6 +54,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
 export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated'
+export const GET_VIEW_MAP = '/flight-track'
 export const GET_MILESTONE_DATA = '/milestone/paginated'
 export const GET_TELEX_MESSAGE = '/telex/paginated'
 
@@ -92,3 +93,7 @@ export const GET_PLANNER_AIRLINE = '/planner-airline/paginated';
 export const POST_PLANNER_AIRLINE = '/planner-airline';
 export const DELETE_PLANNER_AIRLINE = '/planner-airline';
 export const UPDATE_PLANNER_AIRLINE = '/planner-airline';
+
+/*--------------------------Manage Access ---------------------*/
+
+export const POST_MANAGE_ACCESS = '/access-management'

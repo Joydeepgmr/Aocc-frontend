@@ -1,14 +1,14 @@
-import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import {
-	GET_SEASONAL_PLANS,
-	POST_SEASONAL_PLANS,
+	DOWNLOAD_CSV_TEMPLATE,
 	EDIT_SEASONAL_PLANS_ARRIVAL,
 	EDIT_SEASONAL_PLANS_DEPARTURE,
-	UPLOAD_CSV_BULK,
-	DOWNLOAD_CSV_TEMPLATE,
+	GET_SEASONAL_PLANS,
+	POST_SEASONAL_PLANS,
+	UPLOAD_CSV_BULK
 } from '../../api';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
+import { Get, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetSeasonalPlans = (flightType, tab, props) => {
 	const response = useInfiniteQuery({
