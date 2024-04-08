@@ -123,7 +123,7 @@ const NatureCode = () => {
 	const handleEdit = (record) => {
 		record = {...record,
 			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
+			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 		}
 		setRowData(record);
 		openEditModal();
@@ -210,7 +210,7 @@ const NatureCode = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Nature Code',
 			value: 'create',
 			key: '0',
 		},
@@ -265,9 +265,9 @@ const NatureCode = () => {
 					{/* modals */}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="50%"
+						width="80%"
 						closeModal={closeModal}
-						title={'NatureCode'}
+						title={'Add Nature Code'}
 						className="custom_modal"
 					>
 						<div className="modal_content">
@@ -281,7 +281,7 @@ const NatureCode = () => {
 					
 				<ModalComponent
 					isModalOpen={isEditModalOpen}
-					width="50%"
+					width="80%"
 					closeModal={closeEditModal}
 					title={`${isReadOnly ? '':'Edit'} Nature Code`}
 					className="custom_modal"
