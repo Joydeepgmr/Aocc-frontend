@@ -6,7 +6,11 @@ import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import Button from '../../../../../../../components/button/button';
 import CustomSelect from '../../../../../../../components/select/select';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import { useGetAllTimelineData, useGetTimelineGroupData, useUpdateResourceAllocation } from '../../../../../../../services';
+import {
+	useGetAllTimelineData,
+	useGetTimelineGroupData,
+	useUpdateResourceAllocation,
+} from '../../../../../../../services';
 import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
 import dayjs from 'dayjs';
 import { useQueryClient } from 'react-query';
@@ -67,17 +71,17 @@ const ResourceAllocation = () => {
 	const color = ['#02A0FC', '#FFD43B', '#2B8A3E', '#a83c32', '#a86132', '#a8a832', '#6fa832', '#32a89a'];
 	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue, selectedTimeValue?.slice(0, 2));
 	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue, selectedTimeValue?.slice(0, 2));
-	const {mutate : updateResource} = useUpdateResourceAllocation(updateResourceHandler)
+	const { mutate: updateResource } = useUpdateResourceAllocation(updateResourceHandler);
 
-	const handleResourceMove = (data) =>{	
+	const handleResourceMove = (data) => {
 		const item = {
-			type : tabValue,
-			time : dayjs(data.start).format('YYYY-MM-DD HH:mm:ss'),
-			mainSlotId : data?.id,
+			type: tabValue,
+			time: dayjs(data.start).format('YYYY-MM-DD HH:mm:ss'),
+			mainSlotId: data?.id,
 			resourceId: data?.group,
-		}
+		};
 		updateResource(item);
-	}
+	};
 
 	const timelineLabel =
 		fetchedGroupData &&
@@ -306,7 +310,7 @@ const ResourceAllocation = () => {
 					<div className="resourceAllocation--SideTabContent">
 						<Button
 							id="btn"
-							title="Edit"
+							title={isEditable ? `Stop Editing` : `Edit`}
 							className={
 								isEditable
 									? 'resourceAllocation--Button'
@@ -314,7 +318,7 @@ const ResourceAllocation = () => {
 							}
 							type="filledText"
 							isSubmit="submit"
-							onClick={() => setIsEditable(true)}
+							onClick={() => setIsEditable(!isEditable)}
 						/>
 						<CustomSelect
 							SelectData={SelectTime}
