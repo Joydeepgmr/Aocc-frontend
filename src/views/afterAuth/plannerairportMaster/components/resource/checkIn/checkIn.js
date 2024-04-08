@@ -105,6 +105,7 @@ const CheckIn = () => {
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
 	const handleSaveButton = (value) => {
+		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
 		value && postCheckIn(value);

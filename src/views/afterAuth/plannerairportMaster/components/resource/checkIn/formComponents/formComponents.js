@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -6,8 +6,14 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponent.scss';
+import dayjs from 'dayjs';
 
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+	const [isValidFrom, setIsValidFrom] = useState(false);
+	const [currentValidFrom, setCurrentValidFrom] = useState("");
+	const [currentValidTill, setCurrentValidTill] = useState("");
+	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
+	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
 	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
 	
 	const SelectTerminalData = useMemo(() => {
@@ -17,6 +23,52 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	}, [terminalDropdownData]);
 
 	const [form] = Form.useForm();
+
+	const handleValidFrom = (dateString) => {
+		form.setFieldsValue({ 
+			validTill: null,
+			unavailableFrom : null,
+			unavailableTo: null
+		 });
+		if(dateString === null) {
+			setIsValidFrom(false);
+			setCurrentValidFrom(null);
+		}
+		else{
+			setIsValidFrom(true);
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'))
+		}
+	  };
+
+	  const handleValidTill = (dateString) => {
+		if(dateString){
+			setCurrentValidTill(dateString?.format('YYYY-MM-DD'));
+		}
+		else{
+			setCurrentValidTill(null);
+		}
+		if(currentUnavailableFrom > dateString?.format('YYYY-MM-DD')){
+			form.setFieldsValue({ 
+				unavailableFrom : null,
+				unavailableTo: null,
+			 });
+		}
+		
+	  }
+	  
+	  const handleUnavailableFrom = (dateString) => {
+		form.setFieldsValue({ 
+			unavailableTo: null
+		 });
+
+		if(dateString) {
+			setIsUnavailableFrom(true);
+			setCurrentUnavailableFrom(dateString?.format('YYYY-MM-DD'))	
+		}
+		else{
+			setIsUnavailableFrom(false);
+		}
+	  };
 
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
@@ -110,8 +162,16 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							name="unavailableFrom"
 							placeholder={!isReadOnly && 'Enter the airport name'}
 							format="MM-DD-YYYY"
-							disabled={isReadOnly}
+							disabled={isReadOnly || !isValidFrom}
 							className="custom_date"
+							onChange={handleUnavailableFrom}
+							isDisabledDate={true}
+							disabledDate={(current) => {
+								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
+								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD");
+								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+							}}
+							
 						/>
 
 						<Date
@@ -119,8 +179,14 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							name="unavailableTo"
 							placeholder={!isReadOnly && 'Enter the airport name'}
 							format="MM-DD-YYYY"
-							disabled={isReadOnly}
+							disabled={isReadOnly || !isValidFrom || !isUnavailableFrom}
 							className="custom_date"
+							isDisabledDate={true}
+							disabledDate={(current) => {
+								let prevDate = dayjs(currentUnavailableFrom).format("YYYY-MM-DD");
+								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD")
+								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+							}}
 						/>
 					</div>
 
@@ -134,14 +200,21 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							format="MM-DD-YYYY"
 							disabled={isReadOnly || isEdit}
 							className="custom_date"
+							onChange={handleValidFrom}
 						/>
 						<Date
 							label="Valid To"
 							name="validTill"
 							placeholder={!isReadOnly && 'Enter the airport name'}
 							format="MM-DD-YYYY"
-							disabled={isReadOnly}
+							disabled={isReadOnly || !isValidFrom}
 							className="custom_date"
+							isDisabledDate={true}
+							disabledDate={(current) => {
+								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
+								return current && current < dayjs(prevDate, "YYYY-MM-DD");
+							}}
+							onChange={handleValidTill}
 						/>
 					</div>
 				</div>

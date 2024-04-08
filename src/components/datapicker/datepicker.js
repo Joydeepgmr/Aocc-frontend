@@ -15,6 +15,7 @@ const Date = ({
 	format,
 	className,
 	defaultValue,
+	onChange,
 }) => {
 	const renderLabel = () => {
 		return (
@@ -62,6 +63,7 @@ const Date = ({
 					}
 				}}
 				defaultValue={defaultValue}
+				onChange={onChange}
 			/>
 
 		</Form.Item>
