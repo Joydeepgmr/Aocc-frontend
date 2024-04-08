@@ -259,7 +259,7 @@ const BaggageBelt = () => {
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
-					Heading={'Add belts'}
+					Heading={'Add Belts'}
 					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} key={Math.random() * 100}/>}
 					openModal={openModal}
 				/>
@@ -285,7 +285,7 @@ const BaggageBelt = () => {
 			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeModal}
 						title={'Add Baggage Belt'}
 						className="custom_modal"
@@ -304,7 +304,7 @@ const BaggageBelt = () => {
 						isModalOpen={isEditModalOpen}
 						width="80%"
 						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} baggage belt`}
+						title={`${isReadOnly ? '' : 'Edit'} Baggage Belt`}
 						className="custom_modal"
 					>
 						<div className="modal_content">
