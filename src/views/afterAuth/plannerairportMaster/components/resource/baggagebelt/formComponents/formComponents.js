@@ -66,6 +66,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className='custom_input'
+							max="15"
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
