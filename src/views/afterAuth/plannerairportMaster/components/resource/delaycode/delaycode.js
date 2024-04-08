@@ -125,9 +125,7 @@ const DelayCode = () => {
 	const handleEdit = (record) => {
 		record = {...record,
 			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 		}
 		setRowData(record);
 		openEditModal();
@@ -220,7 +218,7 @@ const DelayCode = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Delay Code',
 			value: 'create',
 			key: '0',
 		},
@@ -276,9 +274,9 @@ const DelayCode = () => {
 			)}
 			<ModalComponent
 				isModalOpen={isModalOpen}
-				width="50%"
+				width="80%"
 				closeModal={closeModal}
-				title={'DelayCode'}
+				title={' Add Delay Code'}
 				className="custom_modal"
 			>
 				<div className="modal_content">
@@ -293,7 +291,7 @@ const DelayCode = () => {
 			
 		<ModalComponent
 			isModalOpen={isEditModalOpen}
-			width="50%"
+			width="80%"
 			closeModal={closeEditModal}
 			title={`${isReadOnly? '': 'Edit'} Delay Code`}
 			className="custom_modal"

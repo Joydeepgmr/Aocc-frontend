@@ -139,7 +139,7 @@ const CheckIn = () => {
 		record = {
 			...record,
 			validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
-			validTill: record?.validTo ? dayjs(record?.validTo) : '',
+			validTill: record?.validTill ? dayjs(record?.validTill) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
 			terminalId: record?.terminal?.id,
@@ -323,7 +323,7 @@ const CheckIn = () => {
 					{/* modals */}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeModal}
 						title={'Add Checkin Counters'}
 						className="custom_modal"
@@ -340,7 +340,7 @@ const CheckIn = () => {
 
 					<ModalComponent
 						isModalOpen={isEditModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeEditModal}
 						title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
 						className="custom_modal"

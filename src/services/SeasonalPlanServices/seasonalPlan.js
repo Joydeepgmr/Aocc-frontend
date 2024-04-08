@@ -1,14 +1,14 @@
-import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import {
-	GET_SEASONAL_PLANS,
-	POST_SEASONAL_PLANS,
+	DOWNLOAD_CSV_TEMPLATE,
 	EDIT_SEASONAL_PLANS_ARRIVAL,
 	EDIT_SEASONAL_PLANS_DEPARTURE,
-	UPLOAD_CSV_BULK,
-	DOWNLOAD_CSV_TEMPLATE,
+	GET_SEASONAL_PLANS,
+	POST_SEASONAL_PLANS,
+	UPLOAD_CSV_BULK
 } from '../../api';
-import { Get, Post, Patch } from '../HttpServices/HttpServices';
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
+import { Get, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetSeasonalPlans = (flightType, tab, props) => {
 	const response = useInfiniteQuery({
@@ -68,7 +68,7 @@ export const useUploadCSV = (props) => {
 		mutationKey: ['upload-csv'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK}`, data);
-			const downloadUrl = GenerateDownloadUrl(resp.data);
+			const downloadUrl = GenerateDownloadUrl(resp);
 			DownloadFileByUrl(downloadUrl);
 			return resp;
 		},
@@ -82,11 +82,11 @@ export const useUploadCSV = (props) => {
 	return { ...response, data: data?.data, message: statusMessage };
 };
 
-export const useDownloadCSV = (props) => {
+export const useDownloadCSV = (name, props) => {
 	const response = useQuery({
-		queryKey: ['get-download-csv'],
+		queryKey: ['get-download-csv', name],
 		queryFn: async () => {
-			const resp = await Get(`${DOWNLOAD_CSV_TEMPLATE}`);
+			const resp = await Get(`${DOWNLOAD_CSV_TEMPLATE}?name=${name}`);
 			DownloadFileByUrl(resp?.url);
 			return resp;
 		},

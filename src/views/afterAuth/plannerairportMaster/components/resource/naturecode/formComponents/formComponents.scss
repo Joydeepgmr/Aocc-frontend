@@ -22,14 +22,11 @@
         }
         .input_form_item {
             &.custom_input {
-                width: 45%;
+                width: calc(33% - 2.4rem);
             }
         }
-        .select {
-            width: 45%;
-        }
         .custom_date {
-            width: 45%;
+            width: calc(33% - 2.4rem);
         }
     }
 }

@@ -118,7 +118,7 @@ const Gates = () => {
 		record = {
 			...record,
 			validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
-			validTill: record?.validTo ? dayjs(record?.validTo) : '',
+			validTill: record?.validTill ? dayjs(record?.validTill) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
 		};
