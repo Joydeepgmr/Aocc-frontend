@@ -75,6 +75,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							disabled={isReadOnly}
 							type="number"
 							className="custom_input"
+							max="999"
 						/>
 						<InputField
 							label="Phones"

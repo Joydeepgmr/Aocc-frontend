@@ -142,7 +142,7 @@ const CheckIn = () => {
 			validTill: record?.validTo ? dayjs(record?.validTo) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
-			terminalId: record.terminal.id,
+			terminalId: record?.terminal?.id,
 		};
 		setRowData(record);
 		openEditModal();

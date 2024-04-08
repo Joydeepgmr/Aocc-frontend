@@ -121,7 +121,6 @@ const Gates = () => {
 			validTill: record?.validTo ? dayjs(record?.validTo) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
-			terminal: record?.terminal?.id,
 		};
 		setRowData(record);
 		openEditModal();
@@ -213,12 +212,6 @@ const Gates = () => {
 			dataIndex: 'gateId',
 			key: 'gateId',
 			render: (gateId) => gateId ?? '-',
-		},
-		{
-			title: 'Gate Type',
-			dataIndex: 'type',
-			key: 'type',
-			render: (type) => type ?? '-',
 		},
 		{
 			title: 'Availability',

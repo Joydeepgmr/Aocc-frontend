@@ -66,7 +66,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						label="Connected to Taxiway"
 						placeholder={'Select Taxiway'}
 						name="taxiway"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 					/>
 				</div>
@@ -76,7 +76,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						label="Connected to Stands"
 						placeholder={'Select Stand'}
 						name="parkingStand"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 					/>
 
@@ -85,7 +85,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						label="Connected to Runway"
 						placeholder={'Select Runway'}
 						name="runway"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 					/>
 				</div>
@@ -98,7 +98,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						placeholder="Enter the airport name"
 						required
 						className="custom_date"
-						disabled={isReadOnly}
+						disabled={isReadOnly || isEdit}
 					/>
 					<Date
 						label="Valid To"

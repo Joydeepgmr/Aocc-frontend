@@ -71,7 +71,7 @@ const FormComponent = ({
 						label="Connected to Gate"
 						placeholder={'Select Gate'}
 						name="gate"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 					/>
 					<CustomSelect
@@ -79,7 +79,7 @@ const FormComponent = ({
 						label="Connected to Taxiway"
 						placeholder={'Select Taxiway'}
 						name="taxiway"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 					/>
 					<InputField
