@@ -81,12 +81,14 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							name="unavailableFrom"
 							placeholder={!isReadOnly && "Enter the airport name"}
 							disabled={isReadOnly}
+							format="MM-DD-YYYY"
 							className='custom_date'
 						/>
 						<Date
 							label="Unavailable to"
 							name="unavailableTo"
 							placeholder={!isReadOnly && "Enter the airport name"}
+							format="MM-DD-YYYY"
 							disabled={isReadOnly}
 							className='custom_date'
 						/>
@@ -99,11 +101,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							placeholder={!isReadOnly && "Enter the airport name"}
 							required
 							disabled={isReadOnly || isEdit}
+							format="MM-DD-YYYY"
 							className='custom_date' />
 						<Date
 							label="Valid To"
 							name="validTill"
 							placeholder={!isReadOnly && "Enter the airport name"}
+							format="MM-DD-YYYY"
 							disabled={isReadOnly}
 							className='custom_date' />
 					</div>

@@ -101,18 +101,20 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							name="unavailableFrom"
 							placeholder={isReadOnly && "Enter the airport name"}
 							disabled={isReadOnly}
+							format="MM-DD-YYYY"
 							className='custom_date' />
 						<Date
 							label="Unavailable to"
 							name="unavailableTo"
 							placeholder={isReadOnly && "Enter the airport name"}
+							format="MM-DD-YYYY"
 							disabled={isReadOnly}
 							className='custom_date' />
 					</div>
 					<Divider />
 					<div className="baggageBelt_form_inputFields">
-						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} className='custom_date' />
-						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} className='custom_date' />
+						<Date label="Valid From" name="validFrom" placeholder={isReadOnly && "Enter the airport name"} required disabled={isReadOnly || isEdit} format="MM-DD-YYYY" className='custom_date' />
+						<Date label="Valid To" name="validTill" placeholder={isReadOnly && "Enter the airport name"} disabled={isReadOnly} format="MM-DD-YYYY" className='custom_date' />
 					</div>
 					<Divider />
 					{ !isReadOnly && <div className="custom_buttons">
