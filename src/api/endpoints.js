@@ -1,3 +1,5 @@
+export const DUMMY = '/dummy';
+
 /*------------------ Resource Allocation--------------------*/
 
 export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resources';
