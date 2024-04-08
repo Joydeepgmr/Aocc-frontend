@@ -15,7 +15,7 @@ import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
 
 
-const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData }) => {
+const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -134,8 +134,10 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	useEffect(() => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setAirportData([...airportData, ...lastPage.data]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+			setAirportData([...newData]);
 		}
 	}, [data]);
 
@@ -174,6 +176,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -186,6 +189,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				title: 'Country Code',
 				dataIndex: 'countryCode',
 				key: 'countryCode',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -257,7 +261,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airports
 						</CustomTypography>
-						<TableComponent {...{ data: airportData, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: airportData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
 			</div>

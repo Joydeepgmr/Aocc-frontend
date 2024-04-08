@@ -7,7 +7,7 @@ import CreateWrapper from '../createWrapper/createWrapper';
 const AircraftTypeTab = () => {
     const onError = ({ response: { data: { message } } }) => toast.error(message);
     const { data: airlineDropdownData = [] } = useGlobalAirlineDropdown({ onError });
-    const { data, isLoading, hasNextPage, fetchNextPage } = useGetGlobalAircraftType({ onError });
+    const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAircraftType({ onError });
     const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
     function onUpload() {
 
@@ -26,6 +26,7 @@ const AircraftTypeTab = () => {
                     fetchData={fetchNextPage}
                     pagination={hasNextPage}
                     airlineDropdownData={airlineDropdownData}
+                    loading={isFetching}
                 />}
                 data={data?.pages}
                 createProps={createProps}

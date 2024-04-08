@@ -9,7 +9,7 @@ const AircraftRegistrationTab = () => {
     const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
     const { data: aircraftTypeDropdownData } = useGlobalAircraftTypeDropdown({ onError });
     const { data: countryDropdownData } = useCountriesDropdown({ onError });
-    const { data, isLoading, hasNextPage, fetchNextPage } = useGetGlobalAircraftRegistration({ onError });
+    const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAircraftRegistration({ onError });
     const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
     function onUpload() {
 
@@ -27,6 +27,7 @@ const AircraftRegistrationTab = () => {
                     setCreateProps={setCreateProps}
                     fetchData={fetchNextPage}
                     pagination={hasNextPage}
+                    loading={isFetching}
                     airportDropdownData={airportDropdownData}
                     aircraftTypeDropdownData={aircraftTypeDropdownData}
                     countryDropdownData={countryDropdownData}

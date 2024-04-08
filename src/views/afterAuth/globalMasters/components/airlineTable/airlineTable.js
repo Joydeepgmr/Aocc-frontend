@@ -18,7 +18,7 @@ import {
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 
-const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData }) => {
+const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData,loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
@@ -128,8 +128,10 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 	}, [createProps.new]);
 	useEffect(() => {
 		if (data?.pages) {
-			const lastPage = data.pages.length >= 1 ? data.pages[data.pages.length - 1] : [];
-			setAirlineData([...airlineData, ...lastPage.data]);
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+			setAirlineData([...newData]);
 		}
 	}, [data]);
 
@@ -165,12 +167,14 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
+				align:'center',
 				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
 				title: 'ICAO Code',
 				dataIndex: 'icaoCode',
 				key: 'icaoCode',
+				align:'center',
 				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
@@ -256,7 +260,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airlines
 						</CustomTypography>
-						<TableComponent {...{ data: airlineData, columns, fetchData, pagination }} />
+						<TableComponent {...{ data: airlineData, columns, fetchData, pagination,loading }} />
 					</div>
 				</div>
 
