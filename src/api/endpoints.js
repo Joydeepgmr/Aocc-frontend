@@ -1,5 +1,3 @@
-export const DUMMY = '/dummy';
-
 /*------------------ Resource Allocation--------------------*/
 
 export const GET_ALL_TIMELINE_DATA = '/resource-allocation/get-allocated-resources';
@@ -32,7 +30,6 @@ export const PATCH_GLOBAL_AIRPORT = '/global-airport/';
 export const DELETE_GLOBAL_AIRPORT = '/global-airport/';
 export const POST_BULK_GLOBAL_AIRPORT = '/global-airport/upload/';
 
-export const POST_BAGGED_BELT = '';
 export const GET_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/paginated/';
 export const POST_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
 export const PATCH_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/';
@@ -54,6 +51,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
 export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated';
+export const GET_VIEW_MAP = '/flight-track'
 export const GET_MILESTONE_DATA = '/milestone/paginated';
 export const GET_TELEX_MESSAGE = '/telex/paginated';
 
@@ -92,3 +90,7 @@ export const POST_PLANNER_AIRLINE = '/planner-airline';
 export const DELETE_PLANNER_AIRLINE = '/planner-airline';
 export const UPDATE_PLANNER_AIRLINE = '/planner-airline';
 export const BULK_IMPORT_PLANNER_AIRLINE = '/planner-airline/bulk';
+
+/*--------------------------Manage Access ---------------------*/
+
+export const POST_MANAGE_ACCESS = '/access-management'

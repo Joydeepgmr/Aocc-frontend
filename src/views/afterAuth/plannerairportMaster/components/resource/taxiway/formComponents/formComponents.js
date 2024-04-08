@@ -4,6 +4,7 @@ import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
+import {ConvertIstToUtc} from '../../../../../../../utils';
 import './formComponents.scss';
 
 const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, runwayDropdownData}) => {
@@ -19,12 +20,19 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		const changedValues = isEdit ? {} : values;
+		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {
 				changedValues[key] = values[key];
 			}
 		});
+
+		changedValues = {...changedValues,
+            validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+            validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
+            unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
+            unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
+        }
 
 		handleSaveButton(changedValues);
 		form.resetFields();
@@ -47,6 +55,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							required
 							disabled={isReadOnly || isEdit}
 							className='custom_input'
+							max="16"
 						/>
 						<CustomSelect
 							SelectData={SelectRunwayData}
