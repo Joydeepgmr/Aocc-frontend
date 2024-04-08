@@ -275,7 +275,7 @@ const Runway = () => {
 			)}
 					<ModalComponent
 						isModalOpen={isModalOpen}
-						width="120rem"
+						width="80%"
 						closeModal={closeModal}
 						title={'Add Runway'}
 						className="custom_modal"

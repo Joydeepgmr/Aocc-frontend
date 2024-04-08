@@ -14,14 +14,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import PageLoader from '../../components/pageLoader/pageLoader';
 
 const TopNav = ({ data }) => {
-	const [activeTab, setActiveTab] = useState('0');
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const [navItems, setNavItems] = useState([]);
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
 	const handleTabClick = (key) => {
-		setActiveTab(key);
 		navigate(navItems[key].children);
 	};
 
@@ -43,11 +41,11 @@ const TopNav = ({ data }) => {
 		if (role) {
 			const allNavItem = roleBasedNav(role);
 			const selectedNavItem = allNavItem.find((data) => data.children === pathname)
+			console.log("selected nav item", selectedNavItem)
 			if (!selectedNavItem) {
 				navigate('/404', { previousRoute: pathname });
 			} else {
 				setNavItems([...allNavItem]);
-				setActiveTab(selectedNavItem.key)
 				navigate(selectedNavItem.children);
 			}
 		}
@@ -63,8 +61,8 @@ const TopNav = ({ data }) => {
 					<div className="tabs_container">
 						{navItems.map((menu) => (
 							<div key={menu.key} className="tab-wrapper" onClick={() => handleTabClick(menu.key)}>
-								<div className={`tab ${activeTab === menu.key ? 'active' : ''}`}>{menu.label}</div>
-								{activeTab === menu.key && <div className="active-line" />}
+								<div className={`tab ${pathname === menu.children ? 'active' : ''}`}>{menu.label}</div>
+								{pathname === menu.children && <div className="active-line" />}
 							</div>
 						))}
 					</div>

@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import editIcon from '../../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../../components/button/button';
-import ModalComponent from '../../../../../../../components/modal/modal';
-import FormComponent from '../../../formComponent/formComponent';
-import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
-import TopHeader from '../../../../../../../components/topHeader/topHeader';
-import Filter from '../../../../../../../assets/Filter.svg';
-import InputField from '../../../../../../../components/input/field/field';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../../../components/dropdownButton/dropdownButton';
+import InputField from '../../../../../../../components/input/field/field';
+import ModalComponent from '../../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../../components/pageLoader/pageLoader';
-import Arrival from '../arrival/arrival';
-import Departure from '../departure/departure';
-import editIcon from '../../../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../../../utils';
+import TopHeader from '../../../../../../../components/topHeader/topHeader';
+import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useEditSeasonalPlanArrival,
+	useEditSeasonalPlanDeparture,
 	useGetSeasonalPlans,
 	usePostSeasonalPlans,
-	useEditSeasonalPlanDeparture,
-	useUploadCSV,
+	useUploadCSV
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
+import { ConvertIstToUtc, ConvertUtcToIst } from '../../../../../../../utils';
+import FormComponent from '../../../formComponent/formComponent';
+import Arrival from '../arrival/arrival';
+import Departure from '../departure/departure';
 
 import './CDMSchedule.scss';
-import ButtonComponent from '../../../../../../../components/button/button';
 
 const DailySchedule = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -33,7 +31,6 @@ const DailySchedule = ({ tab }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
@@ -62,7 +59,6 @@ const DailySchedule = ({ tab }) => {
 		hasNextPage,
 		fetchNextPage,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
-
 	useEffect(() => {
 		console.log(isFetchLoading, 'loadingg');
 	}, [isFetchLoading]);
@@ -78,9 +74,6 @@ const DailySchedule = ({ tab }) => {
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
 	};
-	const openMapModal = (data) => {
-		setMapModalOpen({ isOpen: true, data });
-	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
@@ -92,9 +85,6 @@ const DailySchedule = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-	};
-	const closeMapModal = () => {
-		setMapModalOpen({ isOpen: null, data: null });
 	};
 
 	const handleChange = (key) => {
@@ -257,8 +247,6 @@ const DailySchedule = ({ tab }) => {
 			console.error('No file provided for upload.');
 		}
 	};
-
-	const base64Img = '';
 	const columns = [
 		{
 			title: 'Flight No.',
@@ -304,23 +292,6 @@ const DailySchedule = ({ tab }) => {
 			dataIndex: 'registration',
 			key: 'registration',
 			render: (registration) => registration ?? '-',
-		},
-		{
-			title: 'Map',
-			key: 'map',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View map"
-					type="text"
-					className="view_map_button"
-					onClick={() => {
-						openMapModal(record);
-					}}
-				></ButtonComponent>
-			),
 		},
 		{
 			title: 'Actions',
@@ -389,15 +360,6 @@ const DailySchedule = ({ tab }) => {
 
 	return (
 		<>
-			<ModalComponent
-				isModalOpen={mapModalOpen?.isOpen}
-				width="60rem"
-				closeModal={closeMapModal}
-				title={`Flight ${mapModalOpen?.data?.FLIGHTNO}`}
-				className="view_img_modal"
-			>
-				<img src={base64Img} alt="base64Img" className="map_img" />
-			</ModalComponent>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			<div className="main_TableContainer">
 				<div className="top_container">

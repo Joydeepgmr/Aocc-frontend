@@ -59,7 +59,7 @@ export default function Router() {
                         { path: Pathname.DASHBOARD, element: <RouteHOC element={<Dashboard />} />, index: true },
                         { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
                         { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
-                        { path: Pathname.PLAN, element: <Layout><Plans /></Layout> },
+                        { path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
                     ],
                 },
                 {
