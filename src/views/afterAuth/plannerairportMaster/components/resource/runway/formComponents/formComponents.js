@@ -80,7 +80,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					</div>
 					<div className="custom_buttons">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
+						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
 					</div>
 				</div>
 			</Form>
