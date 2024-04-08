@@ -1,24 +1,22 @@
 import { Modal } from 'antd';
 import React from 'react';
-import "./modal.scss"
+import './modal.scss';
 
-const ModalComponent = ({ isModalOpen, children, width, closeModal, title, className }) => {
+const ModalComponent = ({ isModalOpen, children, width, closeModal, title, className, height }) => {
 	return (
-	
-			<Modal
-				open={isModalOpen}
-				closable={true}
-				className={`modal ${className}`}
-				width={width ? width : '80%'}
-				height={"80%"}
-				centered
-				footer={null}
-				onCancel={closeModal}
-				title={title}
-			>
-				{children}
-			</Modal>
-		
+		<Modal
+			open={isModalOpen}
+			closable={true}
+			className={`modal ${className}`}
+			width={width ? width : '80%'}
+			height={height ?? '80%'}
+			centered
+			footer={null}
+			onCancel={closeModal}
+			title={title}
+		>
+			{children}
+		</Modal>
 	);
 };
 

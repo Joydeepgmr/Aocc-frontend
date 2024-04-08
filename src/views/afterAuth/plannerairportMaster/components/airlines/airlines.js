@@ -7,6 +7,7 @@ import {
 	useGetAllPlannerAirline,
 	usePostPlannerAirline,
 	useUpdatePlannerAirline,
+	useUploadCSVPlannerAirline,
 } from '../../../../../services';
 import ButtonComponent from '../../../../../components/button/button';
 import Delete from '../../../../../assets/Delete.svg';
@@ -20,6 +21,8 @@ import toast from 'react-hot-toast';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
+import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -29,6 +32,7 @@ const Airlines = () => {
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
+	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
 	const getAirlineHandler = {
 		onSuccess: (data) => handleGetAirlineSuccess(data),
@@ -47,6 +51,11 @@ const Airlines = () => {
 	const editAirlineHandler = {
 		onSuccess: (data) => handleEditAirlineSuccess(data),
 		onError: (error) => handleEditAirlineError(error),
+	};
+
+	const uploadCsvHandler = {
+		onSuccess: (data) => handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
 	};
 
 	const handleGetAirlineSuccess = (data) => {
@@ -95,6 +104,16 @@ const Airlines = () => {
 		toast.error(error?.response?.data?.message);
 	};
 
+	const handleUploadCsvSuccess = () => {
+		toast.success('CSV Uploaded Successfully');
+		queryClient.invalidateQueries('get-all-planner-airline');
+		setIsCsvModalOpen(false);
+	};
+
+	const handleUploadCsvError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
 	const {
 		data: fetchedPlannerAirline,
 		isLoading: isPlannerAirlineLoading,
@@ -110,6 +129,21 @@ const Airlines = () => {
 		rowData?.id,
 		editAirlineHandler
 	);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { mutate: onUploadCSV } = useUploadCSVPlannerAirline(uploadCsvHandler);
+
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError });
+
+	//DOWNLOAD
+	const handleDownloadCSV = () => {
+		refetch();
+	};
 
 	const handleDeleteAirline = () => {
 		onDeleteAirline(rowData?.id);
@@ -139,6 +173,16 @@ const Airlines = () => {
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
 		};
 		onUpdateAirline(data);
+	};
+
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
 	};
 
 	const columns = [
@@ -256,13 +300,19 @@ const Airlines = () => {
 					loading={isPlannerAirlineLoading}
 					title={'Airlines'}
 					openModal={() => setIsAddModalOpen(true)}
+					openCSVModal={() => setIsCsvModalOpen(true)}
+					type="airline"
+					downloadCSV={handleDownloadCSV}
 				/>
 			) : (
 				<Common_Card
 					title1="Create"
 					title2={'Import Global Reference'}
+					title3="Download CSV Template"
 					btnCondition={false}
 					openModal={() => setIsAddModalOpen(true)}
+					openCSVModal={() => setIsCsvModalOpen(true)}
+					downloadCSV={handleDownloadCSV}
 				/>
 			)}
 
@@ -339,6 +389,12 @@ const Airlines = () => {
 					/>
 				</div>
 			</ModalComponent>
+			<UploadCsvModal
+				isModalOpen={isCsvModalOpen}
+				width="72rem"
+				closeModal={() => setIsCsvModalOpen(false)}
+				handleUpload={handleUpload}
+			/>
 		</>
 	);
 };

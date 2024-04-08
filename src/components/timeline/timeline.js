@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Timeline from 'react-visjs-timeline';
 import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
 
 const TimelineDesign = (props) => {
-	const { items, groups, editable = true, height = '400px', label, handleMove } = props;
+	const { items, groups, editable = true, height = '400px', label, handleMove, time } = props;
 
 	const options = {
 		orientation: 'top',
@@ -31,10 +31,13 @@ const TimelineDesign = (props) => {
 				hour: 'ha',
 			},
 		},
-		zoomMax: 1000 * 60 * 60 * 24,
+		zoomMax: time === '24' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 60 * 12,
 		onMove: (item) => handleMove(item),
-		min: new Date().setDate(new Date().getDate() - 1),
-		max: new Date().setDate(new Date().getDate() + 1),
+		min: new Date().setHours(new Date().getHours() - 4),
+		max:
+			time === '12'
+				? new Date().setHours(new Date().getHours() + 12)
+				: new Date().setHours(new Date().getHours() + 24),
 	};
 
 	return (
