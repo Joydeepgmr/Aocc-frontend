@@ -187,6 +187,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				title: 'Airline',
 				dataIndex: 'globalAirline',
 				key: 'globalAirline',
+				align: 'center',
 				render: (text) => text?.name || '-',
 			},
 			{
@@ -200,12 +201,14 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				title: 'A/C Family',
 				dataIndex: 'family',
 				key: 'family',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'A/C Body Type',
 				dataIndex: 'bodyType',
 				key: 'bodyType',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -216,6 +219,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 					record
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {
