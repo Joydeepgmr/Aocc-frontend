@@ -54,6 +54,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				unavailableFrom: null,
 				unavailableTo: null,
 			});
+			setIsUnavailableFrom(false);
 		}
 
 	}
@@ -95,6 +96,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues);
+		if(isEdit){
+			setIsValidFrom(true);
+			setCurrentValidFrom(initialValues?.validFrom?.format('YYYY-MM-DD'))
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -122,6 +127,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							disabled={isReadOnly}
 							className='custom_input'
 							max="15"
+							type="number"
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
