@@ -41,10 +41,10 @@ const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 			{Object.entries(data).map(([key, value]) => (
 				<div
 					key={key}
-					style={{ margin: 'auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}
+					className="telex_parsed_message_container"
 				>
-					<span>{key}: </span>
-					<span>{value}</span>
+					<span className="message_key">{key}: </span>
+					<span className="message_value">{value}</span>
 				</div>
 			))}
 		</div>
