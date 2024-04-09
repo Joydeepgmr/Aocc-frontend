@@ -147,7 +147,7 @@ const Aircrafts = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -216,7 +216,7 @@ const Aircrafts = () => {
 		},
 		{ title: 'Type of Use', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-' },
 		{
-			title: '',
+			title: 'View Details',
 			dataIndex: 'viewdetails',
 			key: 'viewdetails',
 			render: (text, record) => (

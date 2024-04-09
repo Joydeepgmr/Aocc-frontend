@@ -187,7 +187,7 @@ const Airlines = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -259,7 +259,7 @@ const Airlines = () => {
 			render: (homeAirport) => homeAirport?.name ?? '-',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			dataIndex: 'viewdetails',
 			key: 'viewdetails',
 			render: (text, record) => (
