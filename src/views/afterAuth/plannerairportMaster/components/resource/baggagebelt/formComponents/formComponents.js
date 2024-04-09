@@ -126,7 +126,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className='custom_input'
-							max="15"
 							type="number"
 						/>
 					</div>
