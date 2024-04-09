@@ -208,7 +208,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					<ButtonComponent
 						style={{ margin: 'auto' }}
 						title="View Details"
-						type="text"
+						type="text" 
 						onClick={() => {
 							handleDetails(record);
 						}}

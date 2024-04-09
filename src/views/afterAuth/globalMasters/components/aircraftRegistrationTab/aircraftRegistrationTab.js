@@ -37,6 +37,7 @@ const AircraftRegistrationTab = () => {
                 setCreateProps={setCreateProps}
                 label='New Aircraft Registration'
                 isLoading={isLoading}
+                isCsv={false}
             />
         </>
     )
