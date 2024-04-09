@@ -197,7 +197,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							disabled={isReadOnly || isEdit}
 							format="MM-DD-YYYY"
 							className='custom_date'
-							onChange={handleValidFrom} />
+							onChange={handleValidFrom} 
+						/>
 						<Date
 							label="Valid To"
 							name="validTill"
