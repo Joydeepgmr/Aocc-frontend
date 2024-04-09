@@ -53,7 +53,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
 export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated';
-export const GET_VIEW_MAP = '/flight-track'
+export const GET_VIEW_MAP = '/flight-track';
 export const GET_MILESTONE_DATA = '/milestone/paginated';
 export const GET_TELEX_MESSAGE = '/telex/paginated';
 
@@ -95,4 +95,10 @@ export const BULK_IMPORT_PLANNER_AIRLINE = '/planner-airline/bulk';
 
 /*--------------------------Manage Access ---------------------*/
 
-export const POST_MANAGE_ACCESS = '/access-management'
+export const POST_MANAGE_ACCESS = '/access-management';
+
+/*--------------------------IT Admin Bulk import ---------------------*/
+
+export const BULK_UPLOAD_GLOBAL_AIRPORT = '/global-airport/bulk';
+export const BULK_UPLOAD_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/bulk/';
+export const BULK_UPLOAD_GLOBAL_AIRLINE = '/global-airline/bulk';

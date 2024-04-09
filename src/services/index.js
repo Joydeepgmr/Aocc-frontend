@@ -43,6 +43,10 @@ import {
 	usePatchGlobalAircraftRegistration,
 	useDeleteGlobalAircraftRegistration,
 	useCountriesDropdown,
+	useUploadCSVAirport,
+	useUploadCSVGlobalAircraftType,
+	useUploadCSVGlobalAirline,
+	useUploadCSVGlobalAirport,
 } from './globalMasters/globalMaster';
 
 export {
@@ -81,5 +85,9 @@ export {
 	useUpdatePlannerAircraft,
 	useUpdatePlannerAirline,
 	useUpdateResourceAllocation,
-	useUploadCSVPlannerAirline
+	useUploadCSVPlannerAirline,
+	useUploadCSVAirport,
+	useUploadCSVGlobalAircraftType,
+	useUploadCSVGlobalAirline,
+	useUploadCSVGlobalAirport,
 };
