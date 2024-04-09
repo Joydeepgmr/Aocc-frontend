@@ -39,7 +39,10 @@ const FlightSchedule = () => {
 	});
 	const getMapViewApiProps = {
 		onSuccess: (data) => {
-			setMapModalOpen({ isOpen: true, base64Img: data });
+			console.log('data is ', data);
+			if (data?.isMap) {
+				setMapModalOpen({ isOpen: true, base64Img: `data:image/png;base64,${data.map}` });
+			}
 		},
 		onError: ({
 			response: {
@@ -49,7 +52,7 @@ const FlightSchedule = () => {
 	};
 	const { mutate: getViewMap, isLoading: isMapLoading } = useGetViewMap({ ...getMapViewApiProps });
 	const [form] = Form.useForm();
-
+	console.log('modal data is ', mapModalOpen);
 	const closeMapModal = () => {
 		setMapModalOpen({ isOpen: null, data: null });
 	};
@@ -58,51 +61,60 @@ const FlightSchedule = () => {
 			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber' },
 			{ title: 'Status', dataIndex: 'status', key: 'status' },
 			{ title: 'ORG', dataIndex: 'org', key: 'org' },
-			{ title: 'STA', dataIndex: 'sta', key: 'sta' },
-			{ title: 'ETA', dataIndex: 'eta', key: 'eta' },
-			{ title: 'TMO', dataIndex: 'tmo', key: 'tmo' },
-			{ title: 'ATA', dataIndex: 'ata', key: 'ata' },
+			{ title: 'STA', dataIndex: 'sta', key: 'sta', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
+			{ title: 'ETA', dataIndex: 'eta', key: 'eta', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
+			{ title: 'TMO', dataIndex: 'tmo', key: 'tmo', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
+			{ title: 'ATA', dataIndex: 'ata', key: 'ata', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
 			{ title: 'RNY', dataIndex: 'rny', key: 'rny' },
-			{ title: 'EOB', dataIndex: 'eob', key: 'eob' },
+			{ title: 'EOB', dataIndex: 'eob', key: 'eob', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
 			{
 				title: 'ONB',
 				dataIndex: 'onBlock',
 				key: 'onBlock',
-				render: (text) => text && ConvertUtcToIst(text, 'YYYY/MM/DD'),
+				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
 			},
 			{
 				title: 'POS',
 				dataIndex: 'pos',
 				key: 'pos',
-				render: (_, record) => record?.resourceAllocation?.parkingStand,
+				render: (_, record) => record?.resourceAllocation?.parkingStand?.name,
 			},
-			{ title: 'Gate', dataIndex: 'gate', key: 'gate', render: (_, record) => record?.resourceAllocation?.gates },
+			{
+				title: 'Gate',
+				dataIndex: 'gate',
+				key: 'gate',
+				render: (_, record) => record?.resourceAllocation?.gates?.name,
+			},
 			{
 				title: 'Belt',
-				dataIndex: 'belt',
-				key: 'belt',
-				render: (_, record) => record?.resourceAllocation?.baggageBelt,
+				dataIndex: 'resourceAllocation',
+				key: 'resourceAllocation',
+				render: (_, record) => record?.resourceAllocation?.baggageBelt?.name,
 			},
 			{ title: 'AC/ REGN', dataIndex: 'acRegn', key: 'acRegn' },
 			{ title: 'Call Sign', dataIndex: 'cs', key: 'cs' },
 			{ title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
-			{
-				title: 'Map',
-				key: 'map',
-				render: (
-					text,
-					record // Use the render function to customize the content of the cell
-				) => (
-					<ButtonComponent
-						title="View map"
-						type="text"
-						className="view_map_button"
-						onClick={() => {
-							getViewMap(record?.id);
-						}}
-					></ButtonComponent>
-				),
-			},
+			tab == 'arrival'
+				? {
+						title: 'Map',
+						key: 'map',
+						render: (
+							text,
+							record // Use the render function to customize the content of the cell
+						) => (
+							<ButtonComponent
+								disabled={record?.isMap}
+								title="View map"
+								style={{ margin: 'auto' }}
+								type="text"
+								className="view_map_button"
+								onClick={() => {
+									getViewMap(record?.flight);
+								}}
+							/>
+						),
+					}
+				: {},
 		];
 	}, [FlightScheduleData]);
 	const handleTabChange = (key) => {
@@ -147,7 +159,7 @@ const FlightSchedule = () => {
 	];
 	return (
 		<>
-			<PageLoader isLoading={isMapLoading} />
+			<PageLoader loading={isMapLoading} />
 			<ModalComponent
 				isModalOpen={mapModalOpen?.isOpen}
 				width="60rem"
@@ -155,7 +167,7 @@ const FlightSchedule = () => {
 				title="Map view"
 				className="view_img_modal"
 			>
-				{/* <img src={base64Img} alt="base64Img" className="map_img" /> */}
+				<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
 			</ModalComponent>
 			<div className="body-container">
 				<div className="top-bar">
