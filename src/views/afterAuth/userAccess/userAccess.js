@@ -170,6 +170,7 @@ const UserAccess = () => {
 								label="Valid From"
 								placeholder="Select Date"
 								name="validFrom"
+								required
 								className="custom_date"
 								format="MM-DD-YYYY"
 							/>

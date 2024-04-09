@@ -120,6 +120,7 @@ const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownDat
 				<InputField
 					label="Phone"
 					name="phoneNumber"
+					pattern='^\d+$'
 					max={20}
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"

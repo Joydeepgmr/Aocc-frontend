@@ -196,12 +196,14 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				title: 'Standard Flight Time',
 				dataIndex: 'standardFlightTime',
 				key: 'standardFlightTime',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'Time Change',
 				dataIndex: 'timeChange',
 				key: 'timeChange',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -212,12 +214,13 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		];
