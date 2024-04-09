@@ -232,31 +232,42 @@ const Airlines = () => {
 			dataIndex: 'twoLetterCode',
 			key: 'twoLetterCode',
 			render: (twoLetterCode) => twoLetterCode ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'ATC Code',
 			dataIndex: 'threeLetterCode',
 			key: 'threeLetterCode',
 			render: (threeLetterCode) => threeLetterCode ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'IATA Code',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.iataCode ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'ICAO Code',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.icaoCode ?? '-',
+			align: 'center',
 		},
-		{ title: 'Country', dataIndex: 'country', key: 'country', render: (country) => country ?? '-' },
+		{
+			title: 'Country',
+			dataIndex: 'country',
+			key: 'country',
+			render: (country) => country ?? '-',
+			align: 'center',
+		},
 		{
 			title: 'Home Airport',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.name ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'View Details',
@@ -274,8 +285,10 @@ const Airlines = () => {
 					}}
 					title="View Details"
 					type="text"
+					style={{ margin: 'auto' }}
 				/>
 			),
+			align: 'center',
 		},
 	];
 

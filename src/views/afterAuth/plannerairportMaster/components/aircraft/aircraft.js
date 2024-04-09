@@ -188,33 +188,44 @@ const Aircrafts = () => {
 			dataIndex: 'registration',
 			key: 'registration',
 			render: (registration) => registration ?? '-',
+			align: 'center',
 		},
-		{ title: 'Internal', dataIndex: 'internal', key: 'internal', render: (internal) => internal ?? '-' },
+		{
+			title: 'Internal',
+			dataIndex: 'internal',
+			key: 'internal',
+			render: (internal) => internal ?? '-',
+			align: 'center',
+		},
 		{
 			title: 'IATA Code',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
 			render: (iataCode) => iataCode ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'ICAO Code',
 			dataIndex: 'icaoCode',
 			key: 'icaoCode',
 			render: (icaoCode) => icaoCode ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'Home Airport',
 			dataIndex: 'airportId',
 			key: 'airportId',
 			render: (airportId) => airportId?.name ?? '-',
+			align: 'center',
 		},
 		{
 			title: 'Nationality',
 			dataIndex: 'nationality',
 			key: 'nationality',
 			render: (nationality) => nationality ?? '-',
+			align: 'center',
 		},
-		{ title: 'Type of Use', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-' },
+		{ title: 'Type of Use', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
 		{
 			title: 'View Details',
 			dataIndex: 'viewdetails',
@@ -232,8 +243,11 @@ const Aircrafts = () => {
 					}}
 					title="View Details"
 					type="text"
+					style={{ margin: 'auto' }}
 				/>
 			),
+			align: 'center',
+
 		},
 	];
 
