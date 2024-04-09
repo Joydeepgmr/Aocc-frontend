@@ -107,8 +107,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Cockpit Crew"
 					name="cockpitCrew"
-					max={3}
-					pattern='^\d+$'
+					max={999}
+					type='number'
 					placeholder={!isReadOnly && "Enter the cockpit crew"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -116,8 +116,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Cabin crew"
 					name="cabinCrew"
-					max={3}
-					pattern='^\d+$'
+					max={999}
+					type='number'
 					placeholder={!isReadOnly && "Enter the cabin crew"}
 					className="custom_input"
 					disabled={isReadOnly}

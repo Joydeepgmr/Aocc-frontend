@@ -9,34 +9,45 @@ import CustomTypography from '../../../../components/typographyComponent/typogra
 import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/telexMessage';
 import './style.scss';
 
-const ParsedMessageComponent = ({ message = '', maxLength = 30 }) => {
+const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 	const [showFull, setShowFull] = useState(false);
 	const handleToggle = () => {
 		setShowFull(!showFull);
 	};
 	return (
-		<>
-			{typeof message === 'string' && (
-				<div>
-					{message.length <= maxLength ? (
-						<p>{message}</p>
-					) : (
-						<p>
-							{showFull ? message : `${message.slice(0, maxLength)}...`}
-							{!showFull ? (
-								<a onClick={handleToggle} className="read_more_button">
-									Read more
-								</a>
-							) : (
-								<a onClick={handleToggle} className="read_less_button">
-									Read less
-								</a>
-							)}
-						</p>
-					)}
+		// <>
+		// 	{typeof message === 'string' && (
+		// 		<div>
+		// 			{message.length <= maxLength ? (
+		// 				<p>{message}</p>
+		// 			) : (
+		// 				<p>
+		// 					{showFull ? message : `${message.slice(0, maxLength)}...`}
+		// 					{!showFull ? (
+		// 						<a onClick={handleToggle} className="read_more_button">
+		// 							Read more
+		// 						</a>
+		// 					) : (
+		// 						<a onClick={handleToggle} className="read_less_button">
+		// 							Read less
+		// 						</a>
+		// 					)}
+		// 				</p>
+		// 			)}
+		// 		</div>
+		// 	)}
+		// </>
+		<div>
+			{Object.entries(data).map(([key, value]) => (
+				<div
+					key={key}
+					style={{ margin: 'auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}
+				>
+					<span >{key}: </span>
+					<span >{value}</span>
 				</div>
-			)}
-		</>
+			))}
+		</div>
 	);
 };
 
@@ -53,8 +64,12 @@ function TelexMessage() {
 			setTelexMessageData([...newData]);
 		}
 	};
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
-	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter,onSuccess,onError });
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter, onSuccess, onError });
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
@@ -107,18 +122,26 @@ function TelexMessage() {
 						title: 'Raw Message',
 						dataIndex: 'originalMessage',
 						key: 'originalMessage',
+						align: 'center',
+						render: (text) => {
+							if (text) {
+								const textArray = text.split('\\n');
+								return (
+									<div>
+										{textArray.map((part) => (
+											<div>{part}</div>
+										))}
+									</div>
+								);
+							}
+							return '-';
+						},
 					},
 					{
 						title: 'Parsed Message',
 						dataIndex: 'parsedMessage',
 						key: 'parsedMessage',
-						render: (text) => <ParsedMessageComponent message={text} maxLength={45} />,
-					},
-					{
-						title: 'Milestones achieved',
-						dataIndex: 'milestonesAchieved',
-						key: 'milestonesAchieved',
-						render: (text, record) => <a href={`/details/${record.key}`}>View Details</a>,
+						render: (text) => <ParsedMessageComponent data={text} maxLength={45} />,
 					},
 				],
 			},
