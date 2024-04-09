@@ -4,73 +4,70 @@ import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
-import {ConvertIstToUtc} from '../../../../../../../utils';
+import { ConvertIstToUtc } from '../../../../../../../utils';
 import dayjs from 'dayjs';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, runwayDropdownData}) => {
-	
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, runwayDropdownData }) => {
+
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState("");
 	const [currentValidTill, setCurrentValidTill] = useState("");
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
-	
+
 	const SelectRunwayData = useMemo(() => {
-        return runwayDropdownData.map((data) => {
-            return { label: data.name, value: data.id };
-        });
-    }, [runwayDropdownData]);
+		return runwayDropdownData.map((data) => {
+			return { label: data.name, value: data.id };
+		});
+	}, [runwayDropdownData]);
 
 
 	const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
-		form.setFieldsValue({ 
+		form.setFieldsValue({
 			validTill: null,
-			unavailableFrom : null,
-			unavailableTo: null
-		 });
-		if(dateString === null) {
+			unavailableFrom: null,
+			unavailableTo: null,
+		});
+		if (dateString === null) {
 			setIsValidFrom(false);
 			setCurrentValidFrom(null);
-		}
-		else{
+		} else {
 			setIsValidFrom(true);
-			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'))
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
 		}
-	  };
+	};
 
-	  const handleValidTill = (dateString) => {
-		if(dateString){
+	const handleValidTill = (dateString) => {
+		if (dateString) {
 			setCurrentValidTill(dateString?.format('YYYY-MM-DD'));
-		}
-		else{
+		} else {
 			setCurrentValidTill(null);
 		}
-		if(currentUnavailableFrom > dateString?.format('YYYY-MM-DD')){
-			form.setFieldsValue({ 
-				unavailableFrom : null,
+		if (currentUnavailableFrom > dateString?.format('YYYY-MM-DD')) {
+			form.setFieldsValue({
+				unavailableFrom: null,
 				unavailableTo: null,
-			 });
-		}
-		
-	  }
-	  
-	  const handleUnavailableFrom = (dateString) => {
-		form.setFieldsValue({ 
-			unavailableTo: null
-		 });
-
-		if(dateString) {
-			setIsUnavailableFrom(true);
-			setCurrentUnavailableFrom(dateString?.format('YYYY-MM-DD'))	
-		}
-		else{
+			});
 			setIsUnavailableFrom(false);
 		}
-	  };
+	};
+
+	const handleUnavailableFrom = (dateString) => {
+		form.setFieldsValue({
+			unavailableTo: null,
+		});
+
+		if (dateString) {
+			setIsUnavailableFrom(true);
+			setCurrentUnavailableFrom(dateString?.format('YYYY-MM-DD'));
+		} else {
+			setIsUnavailableFrom(false);
+		}
+	};
 
 
 	const onFinishHandler = (values) => {
@@ -81,12 +78,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			}
 		});
 
-		changedValues = {...changedValues,
-            validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
-            validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
-            unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
-            unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
-        }
+		changedValues = {
+			...changedValues,
+			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
+			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
+			unavailableFrom: changedValues?.unavailableFrom ? ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
+			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
+		}
 
 		handleSaveButton(changedValues);
 		form.resetFields();
@@ -94,6 +92,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues);
+		if (isEdit) {
+			setIsValidFrom(true);
+			setIsUnavailableFrom(true);
+			setCurrentValidFrom(initialValues?.validFrom ? dayjs(initialValues.validFrom).format('YYYY-MM-DD') : '');
+			setCurrentValidTill(initialValues?.validTill ? dayjs(initialValues.validTill).format('YYYY-MM-DD') : '');
+			setCurrentUnavailableFrom(initialValues?.unavailableFrom ? dayjs(initialValues.unavailableFrom).format('YYYY-MM-DD') : '');
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -140,9 +145,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							onChange={handleUnavailableFrom}
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
-								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD");
-								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+								let nextDate = dayjs(currentValidTill).format('YYYY-MM-DD');
+								return (
+									current &&
+									(current < dayjs(prevDate, 'YYYY-MM-DD') || current > dayjs(nextDate, 'YYYY-MM-DD'))
+								);
 							}}
 						/>
 						<Date
@@ -154,9 +162,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_date'
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentUnavailableFrom).format("YYYY-MM-DD");
-								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD")
-								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+								let prevDate = dayjs(currentUnavailableFrom).format('YYYY-MM-DD');
+								let nextDate = dayjs(currentValidTill).format('YYYY-MM-DD');
+								return (
+									current &&
+									(current < dayjs(prevDate, 'YYYY-MM-DD') || current > dayjs(nextDate, 'YYYY-MM-DD'))
+								);
 							}}
 						/>
 					</div>
@@ -181,8 +192,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_date'
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
-								return current && current < dayjs(prevDate, "YYYY-MM-DD");
+								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+								return current && current < dayjs(prevDate, 'YYYY-MM-DD');
 							}}
 							onChange={handleValidTill}
 						/>

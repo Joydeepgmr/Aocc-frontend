@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { GET_FLIGHT_SCHEDULE, GET_VIEW_MAP } from "../../../api/endpoints";
-import { Post } from "../../HttpServices/HttpServices";
+import { Get, Post } from "../../HttpServices/HttpServices";
 
 export const useGetFlightScheduled = ({ tab, ...rest }) => {
     const response = useInfiniteQuery({
