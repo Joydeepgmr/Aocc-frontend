@@ -61,32 +61,18 @@ const FlightSchedule = () => {
 			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber' },
 			{ title: 'Status', dataIndex: 'status', key: 'status' },
 			{ title: 'ORG', dataIndex: 'org', key: 'org' },
-			tab == 'arrival'
-				? {
-						title: 'STA',
-						dataIndex: 'sta',
-						key: 'sta',
-						render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
-					}
-				: {
-						title: 'STD',
-						dataIndex: 'std',
-						key: 'std',
-						render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
-					},
-			tab == 'arrival'
-				? {
-						title: 'ETA',
-						dataIndex: 'eta',
-						key: 'eta',
-						render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
-					}
-				: {
-						title: 'ETD',
-						dataIndex: 'etd',
-						key: 'etd',
-						render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
-					},
+			{
+				title: tab == 'arrival' ? 'STA' : 'STD',
+				dataIndex: tab == 'arrival' ? 'sta' : 'std',
+				key: tab == 'arrival' ? 'sta' : 'std',
+				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
+			},
+			{
+				title: tab == 'arrival' ? 'ETA' : 'ETD',
+				dataIndex: tab == 'arrival' ? 'eta' : 'etd',
+				key: tab == 'arrival' ? 'eta' : 'etd',
+				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
+			},
 			{ title: 'TMO', dataIndex: 'tmo', key: 'tmo', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
 			{ title: 'ATA', dataIndex: 'ata', key: 'ata', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
 			{ title: 'RNY', dataIndex: 'rny', key: 'rny' },
