@@ -102,12 +102,14 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				title: 'Country',
 				dataIndex: 'country',
 				key: 'country',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'City',
 				dataIndex: 'city',
 				key: 'city',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{

@@ -16,7 +16,7 @@ import {
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, aircraftTypeDropdownData, countryDropdownData,loading }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, aircraftTypeDropdownData, countryDropdownData, loading }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [aircraftRegistrationData, setAircraftRegistrationData] = useState([]);
@@ -211,12 +211,14 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				title: 'Nationality',
 				dataIndex: 'nationality',
 				key: 'nationality',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'Home Airport',
 				dataIndex: 'globalAirportId',
 				key: 'globalAirportId',
+				align: 'center',
 				render: (text) => text?.name || '-',
 			},
 			{
@@ -227,12 +229,13 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		],
@@ -278,7 +281,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Aircraft Registrations
 						</CustomTypography>
-						<TableComponent {...{ data: aircraftRegistrationData, columns, fetchData, pagination,loading }} />
+						<TableComponent {...{ data: aircraftRegistrationData, columns, fetchData, pagination, loading }} />
 					</div>
 
 				</div>
