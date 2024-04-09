@@ -30,23 +30,21 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		form.setFieldsValue({
 			validTill: null,
 			unavailableFrom: null,
-			unavailableTo: null
+			unavailableTo: null,
 		});
 		if (dateString === null) {
 			setIsValidFrom(false);
 			setCurrentValidFrom(null);
-		}
-		else {
+		} else {
 			setIsValidFrom(true);
-			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'))
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
 		}
 	};
 
 	const handleValidTill = (dateString) => {
 		if (dateString) {
 			setCurrentValidTill(dateString?.format('YYYY-MM-DD'));
-		}
-		else {
+		} else {
 			setCurrentValidTill(null);
 		}
 		if (currentUnavailableFrom > dateString?.format('YYYY-MM-DD')) {
@@ -56,19 +54,17 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			});
 			setIsUnavailableFrom(false);
 		}
-
-	}
+	};
 
 	const handleUnavailableFrom = (dateString) => {
 		form.setFieldsValue({
-			unavailableTo: null
+			unavailableTo: null,
 		});
 
 		if (dateString) {
 			setIsUnavailableFrom(true);
-			setCurrentUnavailableFrom(dateString?.format('YYYY-MM-DD'))
-		}
-		else {
+			setCurrentUnavailableFrom(dateString?.format('YYYY-MM-DD'));
+		} else {
 			setIsUnavailableFrom(false);
 		}
 	};
@@ -96,9 +92,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues);
-		if(isEdit){
+		if (isEdit) {
 			setIsValidFrom(true);
-			setCurrentValidFrom(initialValues?.validFrom?.format('YYYY-MM-DD'))
+			setIsUnavailableFrom(true);
+			setCurrentValidFrom(initialValues?.validFrom ? dayjs(initialValues.validFrom).format('YYYY-MM-DD') : '');
+			setCurrentValidTill(initialValues?.validTill ? dayjs(initialValues.validTill).format('YYYY-MM-DD') : '');
+			setCurrentUnavailableFrom(initialValues?.unavailableFrom ? dayjs(initialValues.unavailableFrom).format('YYYY-MM-DD') : '');
 		}
 	}, [form, initialValues]);
 
@@ -167,9 +166,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							onChange={handleUnavailableFrom}
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
-								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD");
-								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+								let nextDate = dayjs(currentValidTill).format('YYYY-MM-DD');
+								return (
+									current &&
+									(current < dayjs(prevDate, 'YYYY-MM-DD') || current > dayjs(nextDate, 'YYYY-MM-DD'))
+								);
 							}}
 						/>
 						<Date
@@ -181,9 +183,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_date'
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentUnavailableFrom).format("YYYY-MM-DD");
-								let nextDate = dayjs(currentValidTill).format("YYYY-MM-DD")
-								return current && (current < dayjs(prevDate, "YYYY-MM-DD") || current > dayjs(nextDate, "YYYY-MM-DD"));
+								let prevDate = dayjs(currentUnavailableFrom).format('YYYY-MM-DD');
+								let nextDate = dayjs(currentValidTill).format('YYYY-MM-DD');
+								return (
+									current &&
+									(current < dayjs(prevDate, 'YYYY-MM-DD') || current > dayjs(nextDate, 'YYYY-MM-DD'))
+								);
 							}}
 						/>
 					</div>
@@ -208,8 +213,8 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className='custom_date'
 							isDisabledDate={true}
 							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format("YYYY-MM-DD");
-								return current && current < dayjs(prevDate, "YYYY-MM-DD");
+								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+								return current && current < dayjs(prevDate, 'YYYY-MM-DD');
 							}}
 							onChange={handleValidTill}
 						/>
