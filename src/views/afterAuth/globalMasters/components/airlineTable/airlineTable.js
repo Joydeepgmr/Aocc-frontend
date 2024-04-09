@@ -18,7 +18,7 @@ import {
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 
-const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData,loading }) => {
+const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
@@ -167,32 +167,35 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				title: 'IATA Code',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
-				align:'center',
+				align: 'center',
 				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
 				title: 'ICAO Code',
 				dataIndex: 'icaoCode',
 				key: 'icaoCode',
-				align:'center',
+				align: 'center',
 				render: (text, record) => record?.homeAirport?.iataCode || '-',
 			},
 			{
 				title: 'Country',
 				dataIndex: 'country',
 				key: 'country',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'Home Airport',
 				dataIndex: 'homeAirport',
 				key: 'homeAirport',
+				align: 'center',
 				render: (text) => text?.name || '-',
 			},
 			{
 				title: 'Terminal',
 				dataIndex: 'terminal',
 				key: 'timeChange',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -203,12 +206,13 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		],
@@ -260,7 +264,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airlines
 						</CustomTypography>
-						<TableComponent {...{ data: airlineData, columns, fetchData, pagination,loading }} />
+						<TableComponent {...{ data: airlineData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
 
