@@ -43,8 +43,8 @@ const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 					key={key}
 					style={{ margin: 'auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}
 				>
-					<span >{key}: </span>
-					<span >{value}</span>
+					<span>{key}: </span>
+					<span>{value}</span>
 				</div>
 			))}
 		</div>
@@ -52,7 +52,7 @@ const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 };
 
 function TelexMessage() {
-	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, data: null });
 	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
 	const onSuccess = (data) => {
@@ -73,10 +73,10 @@ function TelexMessage() {
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
-		setDeleteModal({ isOpen: true, id: id });
+		setDeleteModal({ isOpen: true, data: id });
 	};
 	const closeDeleteModal = () => {
-		setDeleteModal({ isOpen: false, id: null });
+		setDeleteModal({ isOpen: false, data: null });
 	};
 	const handleDelete = () => {
 		closeDeleteModal();
@@ -104,11 +104,13 @@ function TelexMessage() {
 				title: 'Flight Type',
 				dataIndex: 'flightType',
 				key: 'flightType',
+				align: 'center',
 			},
 			{
 				title: 'Call sign',
 				dataIndex: 'callSign',
 				key: 'callSign',
+				align: 'center',
 			},
 			{
 				title: 'Updates',
@@ -117,6 +119,7 @@ function TelexMessage() {
 						title: 'Message origin',
 						dataIndex: 'messageOrigin',
 						key: 'messageOrigin',
+						align: 'center',
 					},
 					{
 						title: 'Raw Message',
@@ -141,7 +144,7 @@ function TelexMessage() {
 						title: 'Parsed Message',
 						dataIndex: 'parsedMessage',
 						key: 'parsedMessage',
-						render: (text) => <ParsedMessageComponent data={text} maxLength={45} />,
+						render: (text) => text && <ParsedMessageComponent data={text} maxLength={45} />,
 					},
 				],
 			},
@@ -153,12 +156,13 @@ function TelexMessage() {
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="Acknowledge"
 						type="text"
 						onClick={() => {
 							openDeleteModal(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		];
@@ -230,7 +234,7 @@ function TelexMessage() {
 				isOpen={deleteModal.isOpen}
 				onClose={closeDeleteModal}
 				onSave={handleDelete}
-				content={`You want to Acknowledge flight ${deleteModal?.id?.flight}`}
+				content={`You want to Acknowledge flight ${deleteModal?.data?.flightNumber}`}
 				buttonTitle2="Acknowledge"
 			/>
 			<div className="body-container">

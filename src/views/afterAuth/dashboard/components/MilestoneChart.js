@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
     // const containerRef = useRef(null);
     const milestoneList = useMemo(() => {
-        return data.map((list) => { return { x: `${list.airline ?? 'airline'} ${list.flightNumber ?? 'number'}`, y: list.progress * labels.length + 100 } });
+        return data.map((list) => { return { x: `${list.airline ?? ''} ${list.flightNumber ?? ''}`, y: list.progress * labels.length + 100 } });
     }, [data]);
     const getDataLabel = (value) => {
         value = parseFloat((value - 100) / labels.length).toFixed(2);

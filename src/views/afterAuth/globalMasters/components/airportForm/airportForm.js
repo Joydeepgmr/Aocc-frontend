@@ -15,6 +15,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Airport Name"
 					name="name"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the airport name"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -28,6 +29,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Abbreviated Name 1"
 					name="abbreviatedName1"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the abbreviated name 1"}
 					className="custom_input"
 					max={32}
@@ -36,6 +38,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Abbreviated Name 2"
 					name="abbreviatedName2"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the abbreviated name 2"}
 					className="custom_input"
 					max={32}
@@ -44,6 +47,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Abbreviated Name 3"
 					name="abbreviatedName3"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the abbreviated name 3"}
 					className="custom_input"
 					max={32}
@@ -54,6 +58,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Abbreviated Name 4"
 					name="abbreviatedName4"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the abbreviated name 4"}
 					className="custom_input"
 					max={32}
@@ -73,6 +78,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Time Change"
 					name="timeChange"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the time change"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -80,6 +86,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Standard Flight Time"
 					name="standardFlightTime"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the standard flight time"}
 					className="custom_input"
 					suffixText="minutes"
