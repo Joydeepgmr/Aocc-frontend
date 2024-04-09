@@ -43,8 +43,8 @@ const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 					key={key}
 					style={{ margin: 'auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}
 				>
-					<span >{key}: </span>
-					<span >{value}</span>
+					<span>{key}: </span>
+					<span>{value}</span>
 				</div>
 			))}
 		</div>
@@ -104,11 +104,13 @@ function TelexMessage() {
 				title: 'Flight Type',
 				dataIndex: 'flightType',
 				key: 'flightType',
+				align:'center'
 			},
 			{
 				title: 'Call sign',
 				dataIndex: 'callSign',
 				key: 'callSign',
+				align:'center'
 			},
 			{
 				title: 'Updates',
@@ -117,6 +119,7 @@ function TelexMessage() {
 						title: 'Message origin',
 						dataIndex: 'messageOrigin',
 						key: 'messageOrigin',
+						align:'center'
 					},
 					{
 						title: 'Raw Message',
@@ -141,7 +144,7 @@ function TelexMessage() {
 						title: 'Parsed Message',
 						dataIndex: 'parsedMessage',
 						key: 'parsedMessage',
-						render: (text) => <ParsedMessageComponent data={text} maxLength={45} />,
+						render: (text) => text && <ParsedMessageComponent data={text} maxLength={45} />,
 					},
 				],
 			},
@@ -153,6 +156,7 @@ function TelexMessage() {
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{margin:'auto'}}
 						title="Acknowledge"
 						type="text"
 						onClick={() => {
