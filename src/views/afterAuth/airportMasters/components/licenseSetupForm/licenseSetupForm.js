@@ -66,6 +66,7 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
 				<InputField
 					label="Abbreviated Name"
 					name="abbreviatedName"
+					pattern='^(?!\s).*$'
 					placeholder="Enter the abbreviated name "
 					className="custom_input"
 					disabled={true}
@@ -73,13 +74,14 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
 				<InputField
 					label="Email Address"
 					name="email"
+					pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 					placeholder="Enter the Email Address"
 					className="custom_input"
 					required
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<InputField label="City" name="city" placeholder="Enter the city name" className="custom_input" />
+				<InputField label="City" pattern='^(?!\s).*$' name="city" placeholder="Enter the city name" className="custom_input" />
 
 				<CustomSelect
 					SelectData={SelectCountryData}

@@ -198,6 +198,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				title: 'Internal',
 				dataIndex: 'internal',
 				key: 'internal',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{

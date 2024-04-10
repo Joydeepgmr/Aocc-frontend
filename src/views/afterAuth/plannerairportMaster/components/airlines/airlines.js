@@ -320,7 +320,7 @@ const Airlines = () => {
 			) : (
 				<Common_Card
 					title1="Create"
-					title2={'Import Global Reference'}
+					title2={'Upload CSV'}
 					title3="Download CSV Template"
 					btnCondition={false}
 					openModal={() => setIsAddModalOpen(true)}
