@@ -14,7 +14,11 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	const [form] = Form.useForm();
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+	const handleCheckboxChange = () => {
+    	setTohChecked(!tohChecked);
+  	};
 	const onFinish = (values) => {
+		values["toh"] = tohChecked;
 		handleSaveButton(values);
 	};
 
@@ -48,14 +52,11 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							<InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input"/>
 							<InputField label="Registration" name="registration" placeholder="Filled Text" className="custom_input"/>
 							<CheckBoxField
-								name="toh"
-								label="Towing to Hanger"
-								checked={tohChecked}
-								onChange={(e) => {
-									setTohChecked(e.target.checked);
-								}}
-								className="check_box"
-							/>
+							name="toh"
+							label="Towing to Hanger"
+							checked={tohChecked}
+							onChange={handleCheckboxChange}
+						/>
 						</div>
 						<div className="seasonal_form_inputfields">
 							<InputField label="Duration" name="duration" placeholder="Filled text" className="custom_input"/>

@@ -9,14 +9,27 @@ import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponent.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+const FormComponent = ({
+	handleSaveButton,
+	handleButtonClose,
+	initialValues,
+	isEdit,
+	isReadOnly,
+	terminalDropdownData,
+}) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const [currentValidTill, setCurrentValidTill] = useState('');
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState('');
 	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
-	
+
+	const [isChecked, setIsChecked] = useState(false);
+
+	const handleCheckboxChange = () => {
+		setIsChecked(!isChecked);
+	};
+
 	const SelectTerminalData = useMemo(() => {
 		return terminalDropdownData.map((data) => {
 			return { label: data.name, value: data.id };
@@ -65,11 +78,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			setIsUnavailableFrom(false);
 		}
 	};
-	
+
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
-		let changedValues = isEdit ? {} : { ...values, busGate: values.busGate ?? false };
-
+		let changedValues = isEdit ? {} : { ...values, busGate: isChecked };
 		changedValues &&
 			Object.keys(values).forEach((key) => {
 				if (isEdit && values[key] !== initialValues[key]) {
@@ -77,12 +89,16 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				}
 			});
 
-			changedValues = {...changedValues,
-				validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
-				validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
-				unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
-				unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
-			}
+		changedValues = {
+			...changedValues,
+			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
+			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
+			unavailableFrom: changedValues?.unavailableFrom
+				? ConvertIstToUtc(changedValues?.unavailableFrom)
+				: undefined,
+			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
+			busGate: isChecked,
+		};
 		changedValues && handleSaveButton(changedValues);
 		form.resetFields();
 	};
@@ -92,9 +108,12 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
+			setIsChecked(initialValues?.busGate);
 			setCurrentValidFrom(initialValues?.validFrom ? dayjs(initialValues.validFrom).format('YYYY-MM-DD') : '');
 			setCurrentValidTill(initialValues?.validTill ? dayjs(initialValues.validTill).format('YYYY-MM-DD') : '');
-			setCurrentUnavailableFrom(initialValues?.unavailableFrom ? dayjs(initialValues.unavailableFrom).format('YYYY-MM-DD') : '');
+			setCurrentUnavailableFrom(
+				initialValues?.unavailableFrom ? dayjs(initialValues.unavailableFrom).format('YYYY-MM-DD') : ''
+			);
 		}
 	}, [form, initialValues]);
 
@@ -113,7 +132,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							className="custom_input"
 							max="16"
 						/>
-						<CheckBoxField name="busGate" label="Bus Gate" disabled={isReadOnly} className="custom_input" />
+						<CheckBoxField
+							name="busGate"
+							label="Bus Gate"
+							disabled={isReadOnly}
+							checked={isChecked}
+							onChange={handleCheckboxChange}
+						/>
 					</div>
 					<div className="gate_form_inputfields">
 						<CustomSelect
@@ -194,7 +219,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 						/>
 					</div>
 					<div className="gate_form_inputfields">
-					<Date
+						<Date
 							label="Valid From"
 							name="validFrom"
 							placeholder={!isReadOnly && 'Enter the airport name'}
@@ -222,16 +247,18 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 				</div>
 				<Divider />
 				<div className="gate_form_inputfields">
-				{ !isReadOnly && <div className="form_bottomButton">
-						<Button
-							title="Cancel"
-							type="filledText"
-							id="btn"
-							className="custom_svgButton"
-							onClick={handleButtonClose}
-						/>
-						<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
-					</div>}
+					{!isReadOnly && (
+						<div className="form_bottomButton">
+							<Button
+								title="Cancel"
+								type="filledText"
+								id="btn"
+								className="custom_svgButton"
+								onClick={handleButtonClose}
+							/>
+							<Button title={isEdit ? 'Edit' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
+						</div>
+					)}
 				</div>
 			</Form>
 		</div>
