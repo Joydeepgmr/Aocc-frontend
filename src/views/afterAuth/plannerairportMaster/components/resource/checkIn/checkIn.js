@@ -199,41 +199,48 @@ const CheckIn = () => {
 			title: 'Counter Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
 			title: 'Group',
 			dataIndex: 'group',
 			key: 'group',
+			align:'center',
 			render: (group) => group ?? '-',
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align:'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Row',
 			dataIndex: 'row',
 			key: 'row',
+			align:'center',
 			render: (row) => row ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button

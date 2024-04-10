@@ -179,18 +179,21 @@ const NatureCode = () => {
 			title: 'Nature Code',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
+			align:'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
 		{
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{

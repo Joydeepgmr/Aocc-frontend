@@ -181,29 +181,34 @@ const DelayCode = () => {
 			title: 'Delay Code',
 			dataIndex: 'delayCode',
 			key: 'delayCode',
+			align:'center',
 			render: (delayCode) => delayCode ?? '-',
 		},
 		{
 			title: 'Group',
 			dataIndex: 'group',
 			key: 'group',
+			align:'center',
 			render: (group) => group ?? '-',
 		},
 		{
 			title: 'Airline',
 			dataIndex: 'airline',
 			key: 'airline',
+			align:'center',
 			render: (airline) => airline?.name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button onClick={() => {

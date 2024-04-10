@@ -186,41 +186,48 @@ const ParkingStand = () => {
 			title: 'Stand Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (standName) => standName ?? '-',
 		},
 		{
 			title: 'Airport',
 			dataIndex: 'airport',
 			key: 'airport',
+			align:'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
 			title: 'Connected to Gate',
 			dataIndex: 'gate',
 			key: 'gate',
+			align:'center',
 			render: (gate) => gate?.name ?? '-',
 		},
 		{
 			title: 'Connected to Taxiway',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
+			align:'center',
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button onClick={() => {

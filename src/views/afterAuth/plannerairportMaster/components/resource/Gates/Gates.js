@@ -187,41 +187,48 @@ const Gates = () => {
 			title: 'Gate Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Airport',
 			dataIndex: 'airport',
 			key: 'airport',
+			align:'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
 			title: 'Bus Gate',
 			dataIndex: 'busGate',
 			key: 'busGate',
+			align:'center',
 			render: (busGate) => (busGate ? 'Yes' : 'No'),
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align:'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Gate ID',
 			dataIndex: 'gateId',
 			key: 'gateId',
+			align:'center',
 			render: (gateId) => gateId ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button

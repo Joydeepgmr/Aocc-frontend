@@ -185,41 +185,48 @@ const Terminal = () => {
 			title: 'Terminal Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (terminalName) => terminalName ?? '-',
 		},
 		{
 			title: 'Connected to Taxiway',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
+			align:'center',
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
 			title: 'Connected to Stands',
 			dataIndex: 'parkingStand',
 			key: 'parkingStand',
+			align:'center',
 			render: (stand) => stand?.name ?? '-',
 		},
 		{
 			title: 'Connected to Runway',
 			dataIndex: 'runway',
 			key: 'runway',
+			align:'center',
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button onClick={() => {

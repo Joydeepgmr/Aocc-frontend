@@ -187,29 +187,34 @@ const Taxiway = () => {
 			title: 'Taxiway Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Connected to Runway',
 			dataIndex: 'runway',
 			key: 'runway',
+			align:'center',
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align:'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button

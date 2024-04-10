@@ -189,29 +189,34 @@ const BaggageBelt = () => {
 			title: 'Belt Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align:'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align:'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button
@@ -220,7 +225,8 @@ const BaggageBelt = () => {
 							handleEdit(record)
 						}}
 						title="View Details"
-						type="text" />
+						type="text"
+					/>
 				</>
 			),
 		},

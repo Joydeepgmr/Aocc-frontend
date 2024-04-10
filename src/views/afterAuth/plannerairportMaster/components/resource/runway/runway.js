@@ -186,29 +186,34 @@ const Runway = () => {
 			title: 'Runway Name',
 			dataIndex: 'name',
 			key: 'name',
+			align:'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Type',
 			dataIndex: 'status',
 			key: 'status',
+			align:'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align:'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align:'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
+			align:'center',
 			render: (record) => (
 				<>
 					<Button
