@@ -35,7 +35,7 @@ const NatureCode = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setNatureCodeData([...newData]);
 		}
 	};
@@ -43,7 +43,7 @@ const NatureCode = () => {
 	const handleGetNatureCodeError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchNatureCode, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetNatureCode(getNatureCodeHandler);
+	const { data: fetchNatureCode, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetNatureCode(getNatureCodeHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -91,7 +91,7 @@ const NatureCode = () => {
 	};
 
 	const { mutate: postNatureCode, isLoading: isPostLoading } = usePostNatureCode(addNatureCodeHandler);
-	
+
 	const handleSaveButton = (value) => {
 		value && postNatureCode(value);
 	};
@@ -107,8 +107,8 @@ const NatureCode = () => {
 		onError: (error) => handleEditNatureCodeError(error),
 	};
 
-	const {mutate: editNatureCode, isLoading: isEditLoading} = useEditNatureCode(rowData?.id,editNatureCodeHandler)
-	
+	const { mutate: editNatureCode, isLoading: isEditLoading } = useEditNatureCode(rowData?.id, editNatureCodeHandler)
+
 	const handleEditNatureCodeSuccess = (data) => {
 		closeEditModal();
 		setNatureCodeData([]);
@@ -121,8 +121,9 @@ const NatureCode = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
 			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 		}
 		setRowData(record);
@@ -149,9 +150,9 @@ const NatureCode = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteNatureCode} = useDeleteNatureCode(deleteNatureCodeHandler);
+	const { mutate: deleteNatureCode } = useDeleteNatureCode(deleteNatureCodeHandler);
 	const handleDelete = () => {
-		deleteNatureCode(rowData.id);	
+		deleteNatureCode(rowData.id);
 	}
 
 	const columns = [
@@ -179,21 +180,21 @@ const NatureCode = () => {
 			title: 'Nature Code',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
-			align:'center',
+			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
 		{
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
-			align:'center',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
-			align:'center',
+			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
@@ -201,10 +202,13 @@ const NatureCode = () => {
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+					<Button
+						style={{ margin: 'auto' }}
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -225,12 +229,11 @@ const NatureCode = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchNatureCode?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchNatureCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -259,51 +262,53 @@ const NatureCode = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Nature Code
 							</CustomTypography>
-							<TableComponent data={natureCodeData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={natureCodeData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Nature Code'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="80%"
-					closeModal={closeEditModal}
-					title={`${isReadOnly ? '':'Edit'} Nature Code`}
-					className="custom_modal"
+
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Nature Code'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Nature Code`}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
-						isEdit = {true}
+						isEdit={true}
 						initialValues={rowData}
-						isReadOnly = {isReadOnly}
+						isReadOnly={isReadOnly}
 					/>
 				</div>
 			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.natureCode}?`}
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.natureCode}?`}
 			/>
 		</>
 	);

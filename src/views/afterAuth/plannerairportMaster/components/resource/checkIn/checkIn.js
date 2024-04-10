@@ -23,13 +23,13 @@ import { useTerminalDropdown } from '../../../../../../services/planairportmaste
 import './checkIn.scss';
 
 const CheckIn = () => {
-    const queryClient = useQueryClient();
-    const [checkinData, setCheckinData] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [rowData, setRowData] = useState(null);
-    const [isReadOnly, setIsReadOnly] = useState(false);
-    const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const queryClient = useQueryClient();
+	const [checkinData, setCheckinData] = useState([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [isReadOnly, setIsReadOnly] = useState(false);
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
@@ -53,6 +53,7 @@ const CheckIn = () => {
 	};
 	const {
 		data: fetchCheckIn,
+		isFetching,
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
@@ -199,51 +200,51 @@ const CheckIn = () => {
 			title: 'Counter Name',
 			dataIndex: 'name',
 			key: 'name',
-			align:'center',
+			align: 'center',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
 			title: 'Group',
 			dataIndex: 'group',
 			key: 'group',
-			align:'center',
+			align: 'center',
 			render: (group) => group ?? '-',
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
-			align:'center',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Row',
 			dataIndex: 'row',
 			key: 'row',
-			align:'center',
+			align: 'center',
 			render: (row) => row ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
-			align:'center',
+			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
-			align:'center',
+			align: 'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
-			align:'center',
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record);
@@ -256,23 +257,23 @@ const CheckIn = () => {
 		},
 	];
 
-    const dropdownItems = [
-        {
-            label: 'Add Checkin Counter',
-            value: 'create',
-            key: '0',
-        },
-        // {
-        //     label: 'Upload CSV',
-        //     value: 'uploadCSV',
-        //     key: '1',
-        // },
-        // {
-        //     label: 'Download CSV Template',
-        //     value: 'downloadCSVTemplate',
-        //     key: '2',
-        // },
-    ];
+	const dropdownItems = [
+		{
+			label: 'Add Checkin Counter',
+			value: 'create',
+			key: '0',
+		},
+		// {
+		//     label: 'Upload CSV',
+		//     value: 'uploadCSV',
+		//     key: '1',
+		// },
+		// {
+		//     label: 'Download CSV Template',
+		//     value: 'downloadCSVTemplate',
+		//     key: '2',
+		// },
+	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
@@ -284,91 +285,92 @@ const CheckIn = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
-				<Common_Card
-					title1="Create"
-					// title2={'Import Global Reference'}
-					// title3={'Download CSV Template'}
-					btnCondition={true}
-					Heading={'Add Check-in Counters'}
-					formComponent={
-						<FormComponent
-							handleSaveButton={handleSaveButton}
-							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
-                            terminalDropdownData = {terminalDropdownData}
-						/>
-					}
-					openModal={openModal}
-				/>
-			) : (
-				<>
-					<div className="check-in">
-						<div className="check-in--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
-						<div className="check-in--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Check-in Counters
-							</CustomTypography>
-							<TableComponent
-								data={checkinData}
-								columns={columns}
-								fetchData={fetchNextPage}
-								pagination={hasNextPage}
-							/>
-						</div>
-					</div>
-					</>)}
-
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Checkin Counters'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
+			<Common_Card
+				title1="Create"
+				// title2={'Import Global Reference'}
+				// title3={'Download CSV Template'}
+				btnCondition={true}
+				Heading={'Add Check-in Counters'}
+				formComponent={
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+						terminalDropdownData={terminalDropdownData}
 					/>
+				}
+				openModal={openModal}
+			/>
+			) : (
+			<>
+				<div className="check-in">
+					<div className="check-in--dropdown">
+						<DropdownButton
+							dropdownItems={dropdownItems}
+							buttonText="Create"
+							className="custom_dropdownButton"
+							onChange={handleDropdownItemClick}
+						/>
+					</div>
+					<div className="check-in--tableContainer">
+						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							Check-in Counters
+						</CustomTypography>
+						<TableComponent
+							data={checkinData}
+							columns={columns}
+							loading={isFetching}
+							fetchData={fetchNextPage}
+							pagination={hasNextPage}
+						/>
+					</div>
+				</div>
+			</>)}
+
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Checkin Counters'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };
