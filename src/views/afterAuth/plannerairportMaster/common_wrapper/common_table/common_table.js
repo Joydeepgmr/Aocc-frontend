@@ -24,7 +24,7 @@ const Common_table = ({
 			openModal();
 		}
 
-		if (value === 'ImportGlobalReference') {
+		if (value === 'UploadCSV') {
 			openCSVModal();
 		}
 		if (value === 'downloadCSVTemplate') {
@@ -50,8 +50,8 @@ const Common_table = ({
 					},
 					{
 						key: '2',
-						label: 'Import Global Reference',
-						value: 'ImportGlobalReference',
+						label: 'Upload CSV',
+						value: 'UploadCSV',
 						children: '',
 					},
 					{
