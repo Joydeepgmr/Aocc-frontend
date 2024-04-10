@@ -102,7 +102,7 @@ const ResourceAllocation = () => {
 					group: item?.resourceId?.id,
 					content: '',
 					className,
-					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.resourceId?.status}</div>`,
+					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.status}</div>`,
 				};
 			});
 
