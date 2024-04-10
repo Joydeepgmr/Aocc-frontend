@@ -8,17 +8,17 @@ import './airportMasters.scss';
 import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable';
 
 const AirportMasters = () => {
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetLicenseData({ onError });
 	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
 	const { data: countryDropdownData } = useCountriesDropdown({ onError });
-	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
-	function onUpload() {
+	const [createProps, setCreateProps] = useState({ new: false, onDownload });
 
-	}
-	function onDownload() {
-
-	}
+	function onDownload() {}
 
 	return (
 		<div className="airport_masters_container">
@@ -31,21 +31,24 @@ const AirportMasters = () => {
 			<div>
 				<CreateWrapper
 					width="80%"
-					tableComponent={<LicenseSetupTable
-						data={data}
-						createProps={createProps}
-						setCreateProps={setCreateProps}
-						fetchData={fetchNextPage}
-						pagination={{ isMore: hasNextPage }}
-						airportDropdownData={airportDropdownData}
-						countryDropdownData={countryDropdownData}
-						loading={isFetching}
-					/>}
+					tableComponent={
+						<LicenseSetupTable
+							data={data}
+							createProps={createProps}
+							setCreateProps={setCreateProps}
+							fetchData={fetchNextPage}
+							pagination={{ isMore: hasNextPage }}
+							airportDropdownData={airportDropdownData}
+							countryDropdownData={countryDropdownData}
+							loading={isFetching}
+						/>
+					}
 					data={data?.pages}
 					createProps={createProps}
 					setCreateProps={setCreateProps}
-					label='New Airport License'
+					label="New Airport License"
 					isLoading={isLoading}
+					isCsv={false}
 				/>
 			</div>
 		</div>

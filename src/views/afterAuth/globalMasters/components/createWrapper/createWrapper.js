@@ -5,48 +5,68 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import './createWrapper.scss';
 
-const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreateProps, label, isLoading }) => {
-	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+const CreateWrapper = ({
+	width,
+	tableComponent,
+	data = [],
+	createProps,
+	setCreateProps,
+	label,
+	isLoading,
+	isCsv = true,
+	isCsvModalOpen,
+	setIsCsvModalOpen
+}) => {
 	const onOpenChange = () => {
 		if (createProps.new) {
 			setCreateProps({ ...createProps, new: false });
 		}
-	}
-	let dropdownItems = [{
-		label,
-		value: 'createNew',
-		key: '0',
-	},
-	{
-		label: 'Upload CSV',
-		value: 'uploadCSV',
-		key: '1',
-	},
-	{
-		label: 'Download CSV Template',
-		value: 'downloadCsv',
-		key: '2',
-	},];
+	};
+	let dropdownItems = isCsv
+		? [
+				{
+					label,
+					value: 'createNew',
+					key: '0',
+				},
+				{
+					label: 'Upload CSV',
+					value: 'uploadCSV',
+					key: '1',
+				},
+				{
+					label: 'Download CSV Template',
+					value: 'downloadCsv',
+					key: '2',
+				},
+			]
+		: [
+				{
+					label,
+					value: 'createNew',
+					key: '0',
+				},
+			];
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
 	const openAddModal = () => {
-		setCreateProps((props) => { return { ...props, new: true } });
+		setCreateProps((props) => {
+			return { ...props, new: true };
+		});
 	};
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
 	};
 	const handleCsvUpload = (files) => {
 		createProps.onUpload(files);
-		closeCsvModal();
-	}
-
+		
+	};
 
 	const handleDropdownChange = (value) => {
 		if (value === 'createNew') {
 			openAddModal();
-		}
-		else if (value === 'uploadCSV') {
+		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		} else {
 			createProps.onDownload();
@@ -55,7 +75,7 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 	return (
 		<>
 			<>
-				{data && data?.length ?
+				{data && data?.length ? (
 					<div className="table_container">
 						<div className="create_button">
 							<DropdownButton
@@ -67,7 +87,8 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 						</div>
 						{tableComponent && tableComponent}
 					</div>
-					: !isLoading ? <>
+				) : !isLoading ? (
+					<>
 						{tableComponent && tableComponent}
 						<div className="create_wrapper_container">
 							<ButtonComponent
@@ -76,18 +97,33 @@ const CreateWrapper = ({ width, tableComponent, data = [], createProps, setCreat
 								className="custom_button_create"
 								onClick={openAddModal}
 							/>
-							<ButtonComponent
-								title="Upload CSV"
-								type="filledText"
-								className="custom_button"
-								onClick={openCsvModal}
-							/>
-							<ButtonComponent title="Download CSV Template" type="filledText" className="custom_button" />
+							{isCsv && (
+								<ButtonComponent
+									title="Upload CSV"
+									type="filledText"
+									className="custom_button"
+									onClick={openCsvModal}
+								/>
+							)}
+							{isCsv && (
+								<ButtonComponent
+									title="Download CSV Template"
+									type="filledText"
+									className="custom_button"
+								/>
+							)}
 						</div>
-					</> : <PageLoader loading={isLoading} />
-				}
+					</>
+				) : (
+					<PageLoader loading={isLoading} />
+				)}
 			</>
-			<UploadCsvModal isModalOpen={isCsvModalOpen} width="720px" closeModal={closeCsvModal} handleUpload={handleCsvUpload} />
+			<UploadCsvModal
+				isModalOpen={isCsvModalOpen}
+				width="720px"
+				closeModal={closeCsvModal}
+				handleUpload={handleCsvUpload}
+			/>
 		</>
 	);
 };

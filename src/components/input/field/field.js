@@ -11,6 +11,7 @@ const InputField = ({
 	required,
 	warning,
 	pattern,
+	patternWarning,
 	type,
 	disabled,
 	className = '',
@@ -170,7 +171,7 @@ const InputField = ({
 						},
 						{
 							pattern: pattern,
-							message: 'Enter the valid format',
+							message: patternWarning ?? 'Enter the valid format',
 						},
 						{ validator: validator ?? validateRange },
 					]}
