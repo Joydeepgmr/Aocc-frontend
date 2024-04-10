@@ -14,19 +14,19 @@ const Plans = () => {
         {
             key: '1',
             label: 'Seasonal',
-            children: <Seasonal action={addArrival} tab = {tab}/>,
+            children: <Seasonal action={addArrival} tab={tab} />,
         },
         {
             key: '2',
             label: 'Daily Schedule',
-            children: <CDM tab={tab}/>,
+            children: <CDM tab={tab} />,
         },
     ];
 
     const handleChange = (key) => {
         setIndex(key);
         key === '1' && setTab('seasonal');
-		key === '2' && setTab('dailyOps');
+        key === '2' && setTab('dailyOps');
     };
 
     return (
@@ -36,7 +36,7 @@ const Plans = () => {
                     <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">Operational Planning</CustomTypography>
                     <CustomTypography type="text" fontSize={14} fontWeight="400" color="#909296">Data for seasonal and daily operations of aircrafts</CustomTypography>
                 </div>
-                <CustomTabs defaultActiveKey={tab} items={planTabItems} onChange={handleChange} type="card" />
+                <CustomTabs defaultActiveKey={tab} items={planTabItems} onChange={handleChange} type="card" destroyInactiveTabPane={false} />
             </div>
         </>
     );

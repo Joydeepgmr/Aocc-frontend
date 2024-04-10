@@ -169,7 +169,7 @@ const FlightSchedule = () => {
 	];
 	return (
 		<>
-			<PageLoader loading={isMapLoading} />
+			<PageLoader loading={isMapLoading} message="It may take sometime..." />
 			<ModalComponent
 				isModalOpen={mapModalOpen?.isOpen}
 				width="60rem"
