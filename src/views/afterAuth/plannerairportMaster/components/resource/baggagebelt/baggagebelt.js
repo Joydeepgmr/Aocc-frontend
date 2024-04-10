@@ -98,6 +98,7 @@ const BaggageBelt = () => {
 
 	const handleSaveButton = (value) => {
 		value["name"] = value?.name.toString();
+		value['phoneNumber'] = value?.phoneNumber?.toString();
 		value && postBaggageBelt(value);
 	};
 
