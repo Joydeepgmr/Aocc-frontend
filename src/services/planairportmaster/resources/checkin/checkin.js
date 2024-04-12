@@ -1,6 +1,6 @@
-import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { useMutation, useInfiniteQuery } from 'react-query';
 import { CHECKIN_COUNTER,GET_CHECKIN_COUNTER } from '../../../../api';
-import { Get, Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetCheckIn = (props) => {
 	const response = useInfiniteQuery({
@@ -37,7 +37,6 @@ export const useEditCheckin = (id,props) => {
 };
 
 export const useDeleteCheckin = (props) => {
-	const queryClient = useQueryClient();
 	const response = useMutation({
 		mutationKey: ['delete-checkin'],
 		mutationFn: async (id) => await Delete(`${CHECKIN_COUNTER}/${id}`),
