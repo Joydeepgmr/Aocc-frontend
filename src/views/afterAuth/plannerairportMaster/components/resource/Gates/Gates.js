@@ -30,7 +30,7 @@ const Gates = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	
+
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getGateHandler = {
@@ -51,7 +51,7 @@ const Gates = () => {
 	const handleGetGateError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchGates, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
+	const { data: fetchGates, isFetching, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -187,36 +187,42 @@ const Gates = () => {
 			title: 'Gate Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Airport',
 			dataIndex: 'airport',
 			key: 'airport',
+			align: 'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
 			title: 'Bus Gate',
 			dataIndex: 'busGate',
 			key: 'busGate',
+			align: 'center',
 			render: (busGate) => (busGate ? 'Yes' : 'No'),
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Gate ID',
 			dataIndex: 'gateId',
 			key: 'gateId',
+			align: 'center',
 			render: (gateId) => gateId ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align: 'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
@@ -225,6 +231,7 @@ const Gates = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record);
@@ -265,8 +272,7 @@ const Gates = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchGates?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Upload CSV'}
@@ -278,7 +284,7 @@ const Gates = () => {
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
-							terminalDropdownData = {terminalDropdownData}
+							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 					openModal={openModal}
@@ -298,55 +304,57 @@ const Gates = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Gates
 							</CustomTypography>
-							<TableComponent data={gateData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={gateData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
-				)}
+				</>
+			)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Gate'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-								terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly? '':'Edit'} Gate`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Gate'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+						terminalDropdownData={terminalDropdownData}
 					/>
-				
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Gate`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
+
 		</>
 	);
 };
