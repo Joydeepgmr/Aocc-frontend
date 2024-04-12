@@ -48,7 +48,7 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const { data: fetchParking, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -186,36 +186,42 @@ const ParkingStand = () => {
 			title: 'Stand Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (standName) => standName ?? '-',
 		},
 		{
 			title: 'Airport',
 			dataIndex: 'airport',
 			key: 'airport',
+			align: 'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
 			title: 'Connected to Gate',
 			dataIndex: 'gate',
 			key: 'gate',
+			align: 'center',
 			render: (gate) => gate?.name ?? '-',
 		},
 		{
 			title: 'Connected to Taxiway',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
+			align: 'center',
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
+			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align: 'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
@@ -223,10 +229,12 @@ const ParkingStand = () => {
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)
-					}}
+					<Button
+						style={{ margin: 'auto' }}
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
 						title="View Details"
 						type="text" />
 				</>
@@ -262,8 +270,7 @@ const ParkingStand = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchParking?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -274,8 +281,8 @@ const ParkingStand = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
-						gateDropdownData = {gateDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
 					/>}
 					openModal={openModal}
 				/>
@@ -294,55 +301,57 @@ const ParkingStand = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Parking Stands
 							</CustomTypography>
-							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={parkingData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
-					)}
+				</>
+			)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Parking Stands'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-								gateDropdownData = {gateDropdownData}
-								taxiwayDropdownData = {taxiwayDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="80%"
-					closeModal={closeEditModal}
-					title={`${isReadOnly ? '':'Edit'} Parking Stands`}
-					className="custom_modal"
+
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Parking Stands'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Parking Stands`}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
-						isEdit = {true}
+						isEdit={true}
 						initialValues={rowData}
-						isReadOnly = {isReadOnly}
-						gateDropdownData = {gateDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
+						isReadOnly={isReadOnly}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
 			/>
 		</>
 	);

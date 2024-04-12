@@ -44,7 +44,7 @@ const Runway = () => {
 	const handleGetRunwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchRunway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetRunway(getRunwayHandler);
+	const { data: fetchRunway, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetRunway(getRunwayHandler);
 
 
 	const openModal = () => {
@@ -186,24 +186,28 @@ const Runway = () => {
 			title: 'Runway Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Type',
 			dataIndex: 'status',
 			key: 'status',
+			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align: 'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
@@ -212,6 +216,7 @@ const Runway = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
@@ -242,8 +247,7 @@ const Runway = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchRunway?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -268,50 +272,52 @@ const Runway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Runway
 							</CustomTypography>
-							<TableComponent data={runwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={runwayData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Runway'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly? '' : 'Edit'} Runway`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Runway'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Runway`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

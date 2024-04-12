@@ -17,7 +17,6 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
 	isEdit && (initialValues['terminalId'] = initialValues?.terminal?.name);
 
-
 	const SelectTerminalData = useMemo(() => {
 		return terminalDropdownData.map((data) => {
 			return { label: data.name, value: data.id };
@@ -114,6 +113,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							required
 							disabled={isReadOnly || isEdit}
 							className='custom_input'
+							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 						/>
 					</div>
@@ -125,7 +125,10 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							warning="Required field"
 							disabled={isReadOnly}
 							className='custom_input'
-							type="number"
+							type='text'
+							pattern="^\d+$"
+							title="Please enter only numbers."
+							max="15"
 						/>
 					</div>
 					<div className="baggageBelt_form_inputFields">
@@ -202,7 +205,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							disabled={isReadOnly || isEdit}
 							format="MM-DD-YYYY"
 							className='custom_date'
-							onChange={handleValidFrom} 
+							onChange={handleValidFrom}
 						/>
 						<Date
 							label="Valid To"

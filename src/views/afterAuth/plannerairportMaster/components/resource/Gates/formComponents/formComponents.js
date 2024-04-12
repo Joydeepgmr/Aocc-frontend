@@ -7,7 +7,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { ConvertIstToUtc } from '../../../../../../../utils';
-import './formComponent.scss';
+import './formComponents.scss';
 
 const FormComponent = ({
 	handleSaveButton,
@@ -130,6 +130,7 @@ const FormComponent = ({
 							required
 							disabled={isEdit || isReadOnly}
 							className="custom_input"
+							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 						/>
 						<CheckBoxField
