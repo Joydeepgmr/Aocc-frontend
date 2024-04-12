@@ -37,6 +37,11 @@ export const roleBasedNav = (role = 'Planner') => {
 				label: 'Airport Masters',
 				children: Pathname.PLANAIRPORTMASTER,
 			},
+			{
+				key: '3',
+				label: 'Approval',
+				children: Pathname.APPROVAL,
+			},
 		];
 	}
 	return navItems;

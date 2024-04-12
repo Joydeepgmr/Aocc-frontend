@@ -1,0 +1,10 @@
+@import '../../../../styles/sass/mixins';
+@import '../../../../styles/sass/variables';
+
+.approved {
+	&--top_container {
+		@include flex(center, space-between, row);
+		gap: 0.8rem;
+		padding: 0 0 2rem;
+	}
+}
