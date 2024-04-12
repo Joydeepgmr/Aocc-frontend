@@ -102,3 +102,6 @@ export const POST_MANAGE_ACCESS = '/access-management';
 export const BULK_UPLOAD_GLOBAL_AIRPORT = '/global-airport/bulk';
 export const BULK_UPLOAD_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/bulk/';
 export const BULK_UPLOAD_GLOBAL_AIRLINE = '/global-airline/bulk';
+
+/*--------------------------Socket event name ---------------------*/
+export const SOCKET_EVENT_NAME = 'UPDATE_API'

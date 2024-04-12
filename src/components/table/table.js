@@ -38,6 +38,7 @@ const TableComponent = ({
                         columns={columns}
                         dataSource={data}
                         loading={loading}
+                        bordered
                         onChange={handleTableChange}
                         locale={{
                             emptyText: <Empty description={emptyText} />

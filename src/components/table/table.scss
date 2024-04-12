@@ -27,3 +27,9 @@
     color: $dark_400 !important;
   }
 }
+.ant-table-thead >tr>td {
+  border-bottom: none !important;
+}
+.ant-table-tbody >tr >td {
+  border-bottom: none !important;
+}

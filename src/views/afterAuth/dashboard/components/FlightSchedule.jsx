@@ -12,6 +12,7 @@ import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashb
 import { ConvertUtcToIst } from '../../../../utils';
 import './style.scss';
 import SocketEventListener from '../../../../socket/listner/socketListner';
+import { GET_FLIGHT_SCHEDULE } from '../../../../api';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
@@ -170,11 +171,7 @@ const FlightSchedule = () => {
 	return (
 		<>
 			<PageLoader loading={isMapLoading} message="It may take sometime..." />
-			<SocketEventListener
-				refetch={refetch}
-				eventName="UPDATE_API"
-				apiName={`flight-track/paginated?flightType=${tab}`}
-			/>
+			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE}?flightType=${tab}`} />
 			<ModalComponent
 				isModalOpen={mapModalOpen?.isOpen}
 				width="60rem"

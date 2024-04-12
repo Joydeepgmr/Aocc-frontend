@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 import { socket } from '../../app';
-const SocketEventListener = ({ refetch, eventName, apiName }) => {
+import { SOCKET_EVENT_NAME } from '../../api';
+
+const SocketEventListener = ({ refetch, apiName }) => {
     useEffect(() => {
         const socketEventCallback = (data) => {
-            console.log("socket ", apiName, data, apiName === data)
-            if (apiName === data) {
-                console.log('socket is refetching the api', apiName)
-                refetch();
-            }
+            const parsedData = JSON.parse(data);
+            console.log("socket ", parsedData, typeof parsedData);
         };
-        socket.on(eventName, socketEventCallback);
+        socket.on(SOCKET_EVENT_NAME, socketEventCallback);
         return () => {
-            socket.off(eventName, socketEventCallback);
+            socket.off(SOCKET_EVENT_NAME, socketEventCallback);
         };
-    }, [socket, refetch, eventName, apiName]);
+    }, [socket, refetch, apiName]);
     return null;
 };
 

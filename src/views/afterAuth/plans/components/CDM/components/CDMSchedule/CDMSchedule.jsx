@@ -16,7 +16,7 @@ import {
 	useEditSeasonalPlanDeparture,
 	useGetSeasonalPlans,
 	usePostSeasonalPlans,
-	useUploadCSV
+	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
 import { ConvertIstToUtc, ConvertUtcToIst } from '../../../../../../../utils';
 import FormComponent from '../../../formComponent/formComponent';
@@ -24,6 +24,8 @@ import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 
 import './CDMSchedule.scss';
+import SocketEventListener from '../../../../../../../socket/listner/socketListner';
+import { GET_SEASONAL_PLANS } from '../../../../../../../api';
 
 const DailySchedule = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -58,6 +60,7 @@ const DailySchedule = ({ tab }) => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
 	useEffect(() => {
 		console.log(isFetchLoading, 'loadingg');
@@ -361,6 +364,10 @@ const DailySchedule = ({ tab }) => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
+			<SocketEventListener
+				refetch={refetch}
+				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
+			/>
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>

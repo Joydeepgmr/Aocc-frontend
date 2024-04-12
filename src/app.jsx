@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { io } from 'socket.io-client';
 
@@ -6,10 +6,8 @@ import { Toaster } from 'react-hot-toast';
 import './app.scss';
 import Router from './routes/routes';
 
-const socket = io('https://57c4-2401-4900-1c55-4805-6d91-ecf9-4fc3-4c9d.ngrok-free.app');
+const socket = io(process.env.socketURL);
 export function App() {
-	const [socketError, setSocketError] = useState('');
-	const [socketConnected, setSocketConnected] = useState(false);
 	const token = localStorage.getItem('_tid');
 	console.log('What is token here:', token);
 	const userRole = localStorage.getItem('role');
@@ -24,15 +22,11 @@ export function App() {
 	});
 	useEffect(() => {
 		socket.on('connect', () => {
-			console.log('Socket connected');
-			setSocketConnected(true);
+			console.log('socket is connected');
 		});
-
 		socket.on('connect_error', (error) => {
 			console.error('Socket connection error:', error);
-			setSocketError(error);
 		});
-
 		return () => {
 			socket.disconnect();
 		};
