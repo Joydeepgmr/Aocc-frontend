@@ -4,7 +4,6 @@ import { useRoutes } from "react-router-dom";
 import { Pathname } from '../pathname';
 import PrivateOutlet from '../privateRoute';
 
-
 import Loader from '../components/loader';
 import Layout from '../layouts/layout/layout';
 import NotFound from '../views/404';
@@ -16,6 +15,7 @@ import Plans from '../views/afterAuth/plans/plans';
 import UserAccess from '../views/afterAuth/userAccess/userAccess';
 import Components from '../views/beforeAuth/components';
 import Login from '../views/beforeAuth/login/login';
+import Approval from "../views/afterAuth/approvals/approvals";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ export default function Router() {
                         { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
                         { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
                         { path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
+                        { path: Pathname.APPROVAL, element: <RouteHOC element={<Approval />} /> },
                     ],
                 },
                 {
