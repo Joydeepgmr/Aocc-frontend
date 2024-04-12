@@ -25,26 +25,28 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	};
 
 	const handleDateChange = (dateString) => {
-		if(dateString){
+		if (dateString) {
 			setIsDate(true);
 			form.setFieldsValue({
 				start: null,
 				end: null,
 				days: 0,
+				weeklySelect: [],
 			});
-		}
-		else{
+		} else {
+			setStartDate(null);
+			setEndDate(null);
 			setIsDate(false);
 		}
-	}
+	};
 
 	const handleStartDate = (dateString) => {
-		if(dateString > endDate){
+		if (dateString > endDate) {
 			form.setFieldsValue({
 				end: null,
 			});
 		}
-		
+
 		if (dateString === null) {
 			setIsStart(false);
 			setStartDate(null);
@@ -79,8 +81,8 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	};
 
 	const onFinish = (values) => {
-		values["toh"] = tohChecked;
-		const { days, ...otherValues } = values; 
+		values['toh'] = tohChecked;
+		const { days, ...otherValues } = values;
 		handleSaveButton(otherValues);
 	};
 
@@ -108,7 +110,15 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							placeholder="Enter the airport name"
 							className="custom_input"
 						/>
-						<Date label="Date" name="date" placeholder="Date" className="custom_date" onChange={handleDateChange}/>
+						<Date
+							label="Date"
+							name="date"
+							placeholder="Date"
+							className="custom_date"
+							disabledFor="past"
+							onChange={handleDateChange}
+							required={!startDate || !endDate}
+						/>
 						<InputField
 							label="Call Sign"
 							name="callSign"
@@ -276,6 +286,7 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 									onChange={handleDaysChange}
 									value={initialValues?.weeklySelect}
 									className="select"
+									required={Boolean(startDate) && Boolean(endDate)}
 								/>
 							</div>
 							<Divider />
