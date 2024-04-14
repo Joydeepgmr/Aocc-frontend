@@ -13,6 +13,7 @@ const TableComponent = ({
     emptyText = 'No data available',
     fetchData,
     pagination,
+    isColored
 }) => {
     const handleTableChange = (pagination, filters, sorter) => {
         const sortField = sorter?.field;
@@ -44,6 +45,7 @@ const TableComponent = ({
                             emptyText: <Empty description={emptyText} />
                         }}
                         pagination={false}
+                        className={`${isColored && 'color_table'}`}
                     />
                     {loading && hasMoreData ? <h6>Loading...</h6> : null}
                 </InfiniteScroll >

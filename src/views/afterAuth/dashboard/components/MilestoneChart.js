@@ -38,8 +38,8 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                 bar: {
                     borderRadius: 2,
                     horizontal: true,
-                    barWidth: '50%',
-                    barHeight: '50%',
+                    barWidth: '15rem',
+                    barHeight: '15rem',
                     barSpacing: 14,
                     colors: {
                         backgroundBarColors: [],

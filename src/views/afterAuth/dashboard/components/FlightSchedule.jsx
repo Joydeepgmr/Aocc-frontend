@@ -148,6 +148,7 @@ const FlightSchedule = () => {
 						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
+						isColored
 					/>
 				</>
 			),
@@ -163,6 +164,7 @@ const FlightSchedule = () => {
 						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
+						isColored
 					/>
 				</>
 			),
@@ -186,7 +188,7 @@ const FlightSchedule = () => {
 					<CustomTypography
 						type="title"
 						fontSize={24}
-						fontWeight="600"
+						fontWeight={600}
 						color="black"
 						children={'Flight Schedule'}
 					/>
