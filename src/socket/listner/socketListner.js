@@ -6,7 +6,14 @@ const SocketEventListener = ({ refetch, apiName }) => {
     useEffect(() => {
         const socketEventCallback = (data) => {
             const parsedData = JSON.parse(data);
-            console.log("socket ", parsedData, typeof parsedData);
+            if (parsedData?.length) {
+                parsedData.forEach((endpoint) => {
+                    if (endpoint === apiName) {
+                        refetch();
+                        return;
+                    }
+                })
+            }
         };
         socket.on(SOCKET_EVENT_NAME, socketEventCallback);
         return () => {
