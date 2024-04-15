@@ -5,7 +5,7 @@ import Table from '../../../../components/table/table';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './rejected.scss';
 
-const Rejected = ({ data, hasNextPage, fetchNextPage }) => {
+const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	const columns = [
 		{
 			title: 'Time',
