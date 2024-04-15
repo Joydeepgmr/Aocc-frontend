@@ -178,7 +178,7 @@ const InputField = ({
 				>
 					<Input
 						placeholder={placeholder}
-						className={`input_field`}
+						className={`${type === 'search' ? 'input_field_search' : 'input_field'}`}
 						disabled={disabled ? disabled : false}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}

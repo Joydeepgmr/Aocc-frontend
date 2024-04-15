@@ -1,18 +1,14 @@
 import React from 'react';
-import './dashboard.scss';
-import "../../../styles/sass/_variables.scss"
-import "../../../styles/sass/_utils.scss"
-import { Col, Row } from 'antd';
-import CustomTypography from '../../../components/typographyComponent/typographyComponent';
-import TableComponent from '../../../components/table/table';
 import CustomTabs from '../../../components/customTabs/customTabs';
-import MultiSelectComponent from '../../../components/multiSelect/multiSelect';
+import TopHeader from '../../../components/topHeader/topHeader';
+import "../../../styles/sass/_utils.scss";
+import "../../../styles/sass/_variables.scss";
 import FlightSchedule from './components/FlightSchedule';
-import ProgressionCard from './components/ProgressionCard';
 import GraphCard from './components/GraphCard';
 import Milestone from './components/Milestone';
+import ProgressionCard from './components/ProgressionCard';
 import TelexMessage from './components/TelexMessage';
-import MapView from './components/MapView';
+import './dashboard.scss';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -59,15 +55,10 @@ export const Dashboard = () => {
 
 	return (
 		<div className='container-div'>
-			<div className='top-div'>
-				<div className='title-div'>
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" children={"Flight Information"} />
-					<CustomTypography type="title" fontSize={14} fontWeight="400" color="black" children={"Access information regarding your airlines and track milestones."} />
-				</div>
+				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
 				<div className='main-container'>
 					<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
 				</div>
-			</div>
 			<div className='widgets-container'>
 				<div className='airport-info'>
 					<ProgressionCard cardTitle="On Time Performer" airlineData={airlineData} />

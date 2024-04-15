@@ -26,6 +26,8 @@ import {
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 import './seasonal.scss';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_SEASONAL_PLANS } from '../../../../../api';
 
 const Seasonal = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -60,6 +62,7 @@ const Seasonal = ({ tab }) => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getSeasonalPlanRefetch
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
 
 	const openModal = () => {
@@ -286,17 +289,17 @@ const Seasonal = ({ tab }) => {
 		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
-					title: 'STA',
-					dataIndex: 'STA',
-					key: 'STA',
-					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
-				}
+				title: 'STA',
+				dataIndex: 'STA',
+				key: 'STA',
+				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+			}
 			: {
-					title: 'STD',
-					dataIndex: 'STD',
-					key: 'STD',
-					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
-				},
+				title: 'STD',
+				dataIndex: 'STD',
+				key: 'STD',
+				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+			},
 		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => pos ?? '-' },
 		{
 			title: 'REG No.',
@@ -372,6 +375,7 @@ const Seasonal = ({ tab }) => {
 	return (
 		<>
 			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading || isDownloading} />
+			<SocketEventListener refetch={getSeasonalPlanRefetch} apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`} />
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>

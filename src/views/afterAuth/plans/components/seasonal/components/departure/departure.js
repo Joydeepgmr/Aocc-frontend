@@ -7,7 +7,7 @@ const Departure = ({data, columns, fetchData, pagination}) => {
     return (
         <div className="main">
             <div>
-				<TableComponent {...{ data, columns, fetchData, pagination }} />
+				<TableComponent {...{ data, columns, fetchData, pagination, isColored:true }} />
 			</div>
         </div>
     );

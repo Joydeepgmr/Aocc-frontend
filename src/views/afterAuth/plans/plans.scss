@@ -8,7 +8,10 @@
 }
 
 .box {
-    @include flex(stretch, center, column);
-    padding: 5rem 2rem 0rem 3rem;
-    gap: 2rem;
+    display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 0rem 4rem;
+	gap: 2.4rem;
+	margin-top: 2.4rem;
 }
