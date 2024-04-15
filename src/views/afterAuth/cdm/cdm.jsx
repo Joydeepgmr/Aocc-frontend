@@ -5,10 +5,16 @@ import './cdm.scss';
 import TableComponent from '../../../components/table/table';
 import { ArrivalData, DepartureData, TurnAroundData } from './dummyData/dummy-data';
 import { ConvertUtcToIst } from '../../../utils';
+import CustomSelect from '../../../components/select/select';
 
 const CDM = () => {
 	const [activeTab, setActiveTab] = useState('1');
 	const [data, setData] = useState(ArrivalData);
+	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
+
+	const handleTimeValueChange = (value) => {
+		setSelectedTimeValue(value);
+	};
 
 	const handleTabChange = (key) => {
 		setActiveTab(key);
@@ -553,6 +559,19 @@ const CDM = () => {
 		},
 	];
 
+	const SelectTime = [
+		{
+			id: '1',
+			label: '12hr',
+			value: '12hrs',
+		},
+		{
+			id: '2',
+			label: '24hr',
+			value: '24hrs',
+		},
+	];
+
 	return (
 		<>
 			<div className="container-style">
@@ -564,7 +583,20 @@ const CDM = () => {
 					condition={false}
 				/>
 				<div className="tabs">
-					<CustomTabs defaultActiveKey="1" items={items} type="simple" onChange={handleTabChange} />
+					<CustomTabs
+						defaultActiveKey="1"
+						items={items}
+						type="simple"
+						onChange={handleTabChange}
+						extraContent={
+							<CustomSelect
+								SelectData={SelectTime}
+								placeholder={'Select Format'}
+								onChange={handleTimeValueChange}
+								value={selectedTimeValue}
+							/>
+						}
+					/>
 				</div>
 			</div>
 		</>
