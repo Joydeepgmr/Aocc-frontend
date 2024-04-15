@@ -330,7 +330,6 @@ const BaggageBelt = () => {
 				</>
 			)}
 
-
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				width="80%"
