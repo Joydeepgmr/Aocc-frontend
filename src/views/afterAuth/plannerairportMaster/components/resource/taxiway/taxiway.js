@@ -14,7 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import {useRunwayDropdown} from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -46,7 +46,7 @@ const Taxiway = () => {
 	const handleGetTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
+	const { data: fetchTaxiway, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -187,24 +187,35 @@ const Taxiway = () => {
 			title: 'Taxiway Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Connected to Runway',
 			dataIndex: 'runway',
 			key: 'runway',
+			align: 'center',
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
+		},
+		{
+			title: 'Status',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (status) => status ?? '-',
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
+			align: 'center',
 			render: (availability) => availability ?? '-',
 		},
 		{
@@ -213,6 +224,7 @@ const Taxiway = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
@@ -253,15 +265,14 @@ const Taxiway = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData} key={Math.random() * 100}/>}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -279,53 +290,55 @@ const Taxiway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Taxiway
 							</CustomTypography>
-							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={taxiwayData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
 
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Taxiway'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								runwayDropdownData = {runwayDropdownData}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '':'Edit'} Taxiway`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								runwayDropdownData = {runwayDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Taxiway'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						runwayDropdownData={runwayDropdownData}
+						key={Math.random() * 100}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Taxiway`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						runwayDropdownData={runwayDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

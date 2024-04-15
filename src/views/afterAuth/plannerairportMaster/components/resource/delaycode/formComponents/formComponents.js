@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Form, Divider } from 'antd';
+import dayjs from 'dayjs';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
@@ -15,12 +16,28 @@ const FormComponent = ({
 	isReadOnly,
 	airlineDropdownData,
 }) => {
+	const [isValidFrom, setIsValidFrom] = useState(false);
+	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	isEdit && (initialValues['airlineId'] = initialValues?.airline?.id);
+	
 	const SelectAirlineData = useMemo(() => {
 		return airlineDropdownData?.map((data) => {
 			return { label: data.name, value: data.id };
 		});
 	}, [airlineDropdownData]);
+
+	const handleValidFrom = (dateString) => {
+		form.setFieldsValue({
+			validTill: null,
+		});
+		if (dateString === null) {
+			setIsValidFrom(false);
+			setCurrentValidFrom(null);
+		} else {
+			setIsValidFrom(true);
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
+		}
+	};
 
 	const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
@@ -42,6 +59,10 @@ const FormComponent = ({
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues);
+		if (isEdit) {
+			setIsValidFrom(true);
+			setCurrentValidFrom(initialValues?.validFrom ? dayjs(initialValues.validFrom).format('YYYY-MM-DD') : '');
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -55,6 +76,7 @@ const FormComponent = ({
 						warning="Required field"
 						required
 						className="custom_input"
+						pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 						max="16"
 						disabled={isReadOnly || isEdit}
 					/>
@@ -87,13 +109,19 @@ const FormComponent = ({
 						required
 						className="custom_date"
 						disabled={isReadOnly || isEdit}
+						onChange={handleValidFrom}
 					/>
 					<Date
 						label="Valid To"
 						name="validTill"
 						placeholder="Enter the airport name"
 						className="custom_date"
-						disabled={isReadOnly}
+						disabled={isReadOnly || !isValidFrom}
+						isDisabledDate={true}
+							disabledDate={(current) => {
+								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+								return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+							}}
 					/>
 				</div>
 			</div>

@@ -114,6 +114,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 							required
 							disabled={isReadOnly || isEdit}
 							className='custom_input'
+							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 						/>
 						<CustomSelect
