@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import Pending from './pending/pending';
 import Rejected from './rejected/rejected';
 import Approved from './approved/approved';
-import './securityApproval.scss';
 import { useGetUser } from '../../../services/securityApproval/securityApproval';
-import toast from 'react-hot-toast';
+import './securityApproval.scss';
 
 const SecurityApproval = () => {
-    //const [index, setIndex] = useState(0);
+    const [userData, setUserData] = useState([]);
     const [tab, setTab] = useState("in-process");
     const getUserHandler = {
 		onSuccess: (data) => handleGetUserSuccess(data),
@@ -18,8 +18,9 @@ const SecurityApproval = () => {
 
 	const handleGetUserSuccess = (data) => {
 		if (data?.pages) {
+            console.log(data?.pages,"dataa");
 			const newData = data.pages.reduce((acc, page) => {
-				return acc.concat(page.data || []);
+				return acc.concat(page.data?.userList?.data || []);
 			}, []);
 
 			setUserData([...newData]);
@@ -94,17 +95,17 @@ const SecurityApproval = () => {
         {
             key: '1',
             label: 'Pending',
-            children: <Pending data={rows} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage}/>,
+            children: <Pending data={userData} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} loading={isFetchLoading || isFetching}/>,
         },
         {
             key: '2',
             label: 'Approved',
-            children: <Approved data={rows} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage}/>,
+            children: <Approved data={userData} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} loading={isFetchLoading || isFetching}/>,
         },
         {
             key: '3',
             label: 'Rejected',
-            children: <Rejected data={rows} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage}/>,
+            children: <Rejected data={userData} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} loading={isFetchLoading || isFetching}/>,
         },
     ];
 

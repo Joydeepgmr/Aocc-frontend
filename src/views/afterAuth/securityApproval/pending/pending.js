@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import Input from '../../../../components/input/field/field';
@@ -11,7 +12,8 @@ import { useStatusUser } from '../../../../services/securityApproval/securityApp
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './pending.scss';
 
-const Pending = ({data, hasNextPage, fetchNextPage}) => {
+const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
+	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
 
@@ -123,7 +125,7 @@ const Pending = ({data, hasNextPage, fetchNextPage}) => {
 					<Button
 						onClick={()=>{
 							setRowData(record);
-							rowData && handleStatus({status: "approve"});
+							rowData && handleStatus({status: "approved"});
 						}}
 						type="iconWithBorder"
 						icon={checkIcon}
@@ -132,7 +134,7 @@ const Pending = ({data, hasNextPage, fetchNextPage}) => {
 					<Button
 						onClick={()=>{
 							setRowData(record);
-							rowData && handleStatus({status:"reject"});
+							rowData && handleStatus({status:"rejected"});
 						}}
 						type="iconWithBorder"
 						icon={crossIcon}
@@ -152,7 +154,7 @@ const Pending = ({data, hasNextPage, fetchNextPage}) => {
 					</CustomTypography>
 					<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
 				</div>
-				<Table data={data} columns={columns} />
+				<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage}/>
 			</div>
 			{/*Preview Modal */}
 			<Modal

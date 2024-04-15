@@ -7,13 +7,13 @@ import './rejected.scss';
 
 const Rejected = ({ data, hasNextPage, fetchNextPage }) => {
 	const columns = [
-    {
+		{
 			title: 'Time',
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			render: (time) => {
-				const {value, unit} = getNearestTimeDifference(time);
-				return <div>{`${value} ${unit}`} ago</div>
+				const { value, unit } = getNearestTimeDifference(time);
+				return <div>{`${value} ${unit}`} ago</div>;
 			},
 			align: 'center',
 		},
@@ -90,7 +90,7 @@ const Rejected = ({ data, hasNextPage, fetchNextPage }) => {
 				</CustomTypography>
 				<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
 			</div>
-			<Table data={data} columns={columns} />
+			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />
 		</div>
 	);
 };

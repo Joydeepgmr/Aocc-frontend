@@ -42,7 +42,7 @@ export const roleBasedNav = (role = 'Planner') => {
 		else if (role === userType.SECURITY_OFFICER) {
 			navItems = [
 				{
-					key: '1',
+					key: '0',
 					label: 'Approval',
 					children: Pathname.SECURITY_OFFICER,
 				},]

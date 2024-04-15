@@ -18,8 +18,8 @@ export const useGetUser = (tab,props) => {
 
 export const useStatusUser = (id,props) => {
 	const response = useMutation({
-		mutationKey: ['post-status'],
-		mutationFn: async (data) => await Patch(`${USER}/?id=${id}`,data),
+		mutationKey: ['post-status',id],
+		mutationFn: async (data) => await Patch(`${USER}/${id}`,data),
 		...props,
 	});
 

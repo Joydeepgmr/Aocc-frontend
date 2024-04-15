@@ -5,7 +5,7 @@ import Table from '../../../../components/table/table';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './approved.scss';
 
-const Approved = ({ data, hasNextPage, fetchNextPage }) => {
+const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	const columns = [
 		{
 			title: 'Time',
@@ -90,7 +90,7 @@ const Approved = ({ data, hasNextPage, fetchNextPage }) => {
 				</CustomTypography>
 				<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
 			</div>
-			<Table data={data} columns={columns} />
+			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage}/>
 		</div>
 	);
 };
