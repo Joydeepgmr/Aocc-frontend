@@ -6,6 +6,8 @@ import MilestoneChart from './MilestoneChart';
 import './style.scss';
 import { useGetMileStoneData } from '../../../../services/dashboard/milestones/milestones';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
+import { GET_MILESTONE_DATA } from '../../../../api';
+import SocketEventListener from '../../../../socket/listner/socketListner';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
@@ -28,7 +30,7 @@ function Milestone() {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data, isLoading, hasNextPage, fetchNextPage } = useGetMileStoneData({
+	const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useGetMileStoneData({
 		flightType: type,
 		onSuccess,
 		onError,
@@ -71,23 +73,32 @@ function Milestone() {
 		},
 	];
 	return (
-		<div className="body-container">
-			<div className="top-bar">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" children={'Milestones'} />
-				<div className="filter-section">
-					<InputField
-						label="Airport Name"
-						name="search"
-						placeholder="Search"
-						warning="Required field"
-						type="search"
+		<>
+			<SocketEventListener refetch={refetch} apiName={`${GET_MILESTONE_DATA}?flightType=${type}`} />
+			<div className="body-container">
+				<div className="top-bar">
+					<CustomTypography
+						type="title"
+						fontSize={24}
+						fontWeight="600"
+						color="black"
+						children={'Milestones'}
 					/>
+					<div className="filter-section">
+						<InputField
+							label="Airport Name"
+							name="search"
+							placeholder="Search"
+							warning="Required field"
+							type="search"
+						/>
+					</div>
+				</div>
+				<div className="flights-table">
+					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
 				</div>
 			</div>
-			<div className="flights-table">
-				<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
-			</div>
-		</div>
+		</>
 	);
 }
 

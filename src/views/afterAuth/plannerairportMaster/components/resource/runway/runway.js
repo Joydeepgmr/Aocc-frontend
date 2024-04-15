@@ -205,17 +205,47 @@ const Runway = () => {
 		},
 		{
 			title: 'Status',
-			dataIndex: '',
-			key: '',
+			dataIndex: 'status',
+			key: 'status',
 			align: 'center',
-			render: () => '-',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'Active';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'Active';
+				} else {
+					return 'Inactive';
+				}
+			},
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
-			render: (availability) => availability ?? '-',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'Available';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'Unavailable';
+				} else {
+					return 'Available';
+				}
+			},
 		},
 		{
 			title: 'View Details',

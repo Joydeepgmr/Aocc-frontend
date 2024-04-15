@@ -15,7 +15,7 @@ export const GET_ADMIN_DETAILS = '/user/userinfo';
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = '/airport-license';
 export const GET_LICENSE = '/airport-license/paginated/';
-export const GET_AIRPORT_NAME ='/global-airport/paginated';
+export const GET_AIRPORT_NAME = '/global-airport/paginated';
 
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
@@ -106,3 +106,6 @@ export const BULK_UPLOAD_GLOBAL_AIRLINE = '/global-airline/bulk';
 /*-------------------------Security Approval -------------------------*/
 export const GET_USER = '/bbs/paginated';
 export const USER = '/bbs';
+
+/*--------------------------Socket event name ---------------------*/
+export const SOCKET_EVENT_NAME = 'UPDATE_API'

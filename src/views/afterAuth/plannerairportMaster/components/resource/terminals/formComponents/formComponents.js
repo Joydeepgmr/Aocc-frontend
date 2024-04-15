@@ -127,7 +127,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 						className="custom_svgButton"
 						onClick={handleButtonClose}
 					/>
-					<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+					<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 				</div>}
 			</div>
 		</Form>

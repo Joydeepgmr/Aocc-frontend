@@ -109,6 +109,9 @@ const CheckIn = () => {
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postCheckIn(value);
 	};
 
@@ -126,10 +129,10 @@ const CheckIn = () => {
 	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
 
 	const handleEditCheckinSuccess = (data) => {
-		closeEditModal();
-		setCheckinData([]);
-		toast.success(data?.message);
 		queryClient.invalidateQueries('get-check-in');
+		setCheckinData([]);
+		closeEditModal();
+		toast.success(data?.message);
 	};
 
 	const handleEditCheckinError = (error) => {
@@ -229,14 +232,44 @@ const CheckIn = () => {
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',
-			render: (status) => status ?? '-',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'Active';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'Active';
+				} else {
+					return 'Inactive';
+				}
+			},
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
-			render: (availability) => availability ?? '-',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'Available';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'Unavailable';
+				} else {
+					return 'Available';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -286,47 +319,47 @@ const CheckIn = () => {
 	return (
 		<>
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
-			<Common_Card
-				title1="Create"
-				// title2={'Import Global Reference'}
-				// title3={'Download CSV Template'}
-				btnCondition={true}
-				Heading={'Add Check-in Counters'}
-				formComponent={
-					<FormComponent
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
-						terminalDropdownData={terminalDropdownData}
-					/>
-				}
-				openModal={openModal}
-			/>
+				<Common_Card
+					title1="Create"
+					// title2={'Import Global Reference'}
+					// title3={'Download CSV Template'}
+					btnCondition={true}
+					Heading={'Add Check-in Counters'}
+					formComponent={
+						<FormComponent
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							key={Math.random() * 100}
+							terminalDropdownData={terminalDropdownData}
+						/>
+					}
+					openModal={openModal}
+				/>
 			) : (
-			<>
-				<div className="check-in">
-					<div className="check-in--dropdown">
-						<DropdownButton
-							dropdownItems={dropdownItems}
-							buttonText="Create"
-							className="custom_dropdownButton"
-							onChange={handleDropdownItemClick}
-						/>
+				<>
+					<div className="check-in">
+						<div className="check-in--dropdown">
+							<DropdownButton
+								dropdownItems={dropdownItems}
+								buttonText="Create"
+								className="custom_dropdownButton"
+								onChange={handleDropdownItemClick}
+							/>
+						</div>
+						<div className="check-in--tableContainer">
+							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+								Check-in Counters
+							</CustomTypography>
+							<TableComponent
+								data={checkinData}
+								columns={columns}
+								loading={isFetching}
+								fetchData={fetchNextPage}
+								pagination={hasNextPage}
+							/>
+						</div>
 					</div>
-					<div className="check-in--tableContainer">
-						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-							Check-in Counters
-						</CustomTypography>
-						<TableComponent
-							data={checkinData}
-							columns={columns}
-							loading={isFetching}
-							fetchData={fetchNextPage}
-							pagination={hasNextPage}
-						/>
-					</div>
-				</div>
-			</>)}
+				</>)}
 
 
 			{/* modals */}
