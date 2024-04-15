@@ -36,9 +36,10 @@
 		border-radius: 1.2rem !important;
 		padding: 1.2rem !important;
 	}
-	// &--custom_modal{
-	// 	border-radius: 1.2rem;
-	// }
+	&--custom_modal{
+		max-height: 85%;
+		border-radius: 1.2rem;
+	}
 	&--img_container {
 		display: flex;
 		gap: 4rem;
@@ -65,4 +66,7 @@
         height: 25.6rem;
         object-fit: cover;
     }
+	&--footer{
+		margin-top: 2.4rem;
+	}
 }

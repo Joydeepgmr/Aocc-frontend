@@ -15,7 +15,7 @@ import Plans from '../views/afterAuth/plans/plans';
 import UserAccess from '../views/afterAuth/userAccess/userAccess';
 import Components from '../views/beforeAuth/components';
 import Login from '../views/beforeAuth/login/login';
-import Approval from "../views/afterAuth/approvals/approvals";
+import SecurityApproval from "../views/afterAuth/securityApproval/securityApproval";
 
 // ----------------------------------------------------------------------
 
@@ -60,12 +60,22 @@ export default function Router() {
                         { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
                         { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
                         { path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
-                        { path: Pathname.APPROVAL, element: <RouteHOC element={<Approval />} /> },
                     ],
                 },
                 {
                     path: '*',
                     element: <NotFound replace />,
+                },
+                {
+                    path: '',
+                    element: (
+                        <Suspense fallback={<Loader />}>
+                            <PrivateOutlet />
+                        </Suspense>
+                    ),
+                    children: [
+                        { path: Pathname.SECURITY_OFFICER, element: <RouteHOC element={<SecurityApproval />} /> },
+                    ],
                 },
             ]
         }
