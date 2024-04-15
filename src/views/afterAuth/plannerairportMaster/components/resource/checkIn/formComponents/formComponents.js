@@ -252,7 +252,7 @@ const FormComponent = ({
 								onClick={handleButtonClose}
 							/>
 							<Button
-								title={isEdit ? 'Edit' : 'Save'}
+								title={isEdit ? 'Update' : 'Save'}
 								type="filledText"
 								id="btn"
 								isSubmit="submit"

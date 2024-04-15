@@ -78,7 +78,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Time Change"
 					name="timeChange"
-					pattern='^(?!\s).*$'
+					pattern='^[0-9+\-:]+$'
 					placeholder={!isReadOnly && "Enter the time change"}
 					className="custom_input"
 					disabled={isReadOnly}
