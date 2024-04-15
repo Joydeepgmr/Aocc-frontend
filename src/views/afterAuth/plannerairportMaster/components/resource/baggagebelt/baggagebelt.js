@@ -99,6 +99,9 @@ const BaggageBelt = () => {
 	const handleSaveButton = (value) => {
 		value["name"] = value?.name.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postBaggageBelt(value);
 	};
 
@@ -211,14 +214,44 @@ const BaggageBelt = () => {
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',
-			render: (status) => status ?? '-',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'Active';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'Active';
+				} else {
+					return 'Inactive';
+				}
+			},
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
-			render: (availability) => availability ?? '-',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'Available';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'Unavailable';
+				} else {
+					return 'Available';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -226,7 +259,7 @@ const BaggageBelt = () => {
 			render: (record) => (
 				<>
 					<Button
-						style={{margin:'auto'}}
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
