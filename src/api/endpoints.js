@@ -10,7 +10,7 @@ export const UPDATE_RESOURCE_ALLOCATION = '/resource-allocation/updateResource';
 export const USER_LOGIN = '/user/login';
 
 /*--------------Admin details -----------*/
-export const GET_ADMIN_DETAILS = 'user/userinfo';
+export const GET_ADMIN_DETAILS = '/user/userinfo';
 
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = '/airport-license';
@@ -20,10 +20,10 @@ export const GET_AIRPORT_NAME = '/global-airport/paginated';
 /*------------------ Seasonal Plans --------------------- */
 export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
 export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
-export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
-export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
+export const EDIT_SEASONAL_PLANS_ARRIVAL =  '/seasonalPlan/arrival';
+export const EDIT_SEASONAL_PLANS_DEPARTURE =  'seasonalPlan/departure';
 export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
-export const DOWNLOAD_CSV_TEMPLATE = '/system-constant/';
+export const DOWNLOAD_CSV_TEMPLATE =  '/system-constant/';
 
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/paginated';
@@ -62,7 +62,7 @@ export const GET_TELEX_MESSAGE = '/telex/paginated';
 export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated';
 export const CHECKIN_COUNTER = '/checkin-counter';
 export const GET_GATE = '/gate/paginated';
-export const GATE = '/gate';
+export const GATE ='/gate';
 export const GET_PARKING_STAND = '/parking-stand/paginated';
 export const PARKING_STAND = '/parking-stand';
 export const GET_TAXIWAY = '/taxiway/paginated';
@@ -102,6 +102,10 @@ export const POST_MANAGE_ACCESS = '/access-management';
 export const BULK_UPLOAD_GLOBAL_AIRPORT = '/global-airport/bulk';
 export const BULK_UPLOAD_GLOBAL_AIRCRAFT_TYPE = '/global-aircraft-type/bulk/';
 export const BULK_UPLOAD_GLOBAL_AIRLINE = '/global-airline/bulk';
+
+/*-------------------------Security Approval -------------------------*/
+export const GET_USER = '/bbs/paginated';
+export const USER = '/bbs';
 
 /*--------------------------Socket event name ---------------------*/
 export const SOCKET_EVENT_NAME = 'UPDATE_API'
