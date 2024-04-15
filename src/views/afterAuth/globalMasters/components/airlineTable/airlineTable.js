@@ -100,6 +100,10 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 	function onFinishHandler(values) {
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
+		if (!values.phoneNumber) {
+			delete values.phoneNumber;
+		}
+
 		if (airlineRegistrationModal.type === 'edit') {
 			delete values.twoLetterCode;
 			delete values.threeLetterCode;
@@ -165,17 +169,17 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 			},
 			{
 				title: 'IATA Code',
-				dataIndex: 'iataCode',
-				key: 'iataCode',
+				dataIndex: 'twoLetterCode',
+				key: 'twoLetterCode',
 				align: 'center',
-				render: (text, record) => record?.homeAirport?.iataCode || '-',
+				render: (text) => text || '-',
 			},
 			{
 				title: 'ICAO Code',
-				dataIndex: 'icaoCode',
-				key: 'icaoCode',
+				dataIndex: 'threeLetterCode',
+				key: 'threeLetterCode',
 				align: 'center',
-				render: (text, record) => record?.homeAirport?.iataCode || '-',
+				render: (text) => text || '-',
 			},
 			{
 				title: 'Country',

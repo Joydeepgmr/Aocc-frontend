@@ -34,19 +34,9 @@ const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownDat
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField
-					otpLength={2}
-					label="Two Letter Code"
-					name="twoLetterCode"
-					disabled={isReadOnly || isNotEditable}
-					required
+				<OtpField otpLength={2} label="Two Letter Code" name="twoLetterCode" disabled={isReadOnly || isNotEditable} required
 				/>
-				<OtpField
-					otpLength={3}
-					label="Three Letter Code"
-					name="threeLetterCode"
-					disabled={isReadOnly || isNotEditable}
-					required
+				<OtpField otpLength={3} label="Three Letter Code" name="threeLetterCode" disabled={isReadOnly || isNotEditable} required
 				/>
 			</div>
 			<div className="airline_setup_form_inputfields">
@@ -125,6 +115,7 @@ const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownDat
 					label="Phone"
 					name="phoneNumber"
 					pattern='^\d+$'
+					min={10}
 					max={20}
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
 					className="custom_input"
