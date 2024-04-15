@@ -15,7 +15,7 @@ const AirportTab = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -67,7 +67,7 @@ const AirportTab = () => {
 			createProps={createProps}
 			setCreateProps={setCreateProps}
 			label="New Airport"
-			isLoading={isFetching}
+			isLoading={isLoading}
             isCsvModalOpen={isCsvModalOpen}
             setIsCsvModalOpen={setIsCsvModalOpen}
 		/>

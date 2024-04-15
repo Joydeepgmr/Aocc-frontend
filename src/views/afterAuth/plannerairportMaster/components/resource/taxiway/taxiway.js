@@ -205,6 +205,13 @@ const Taxiway = () => {
 			render: (reason) => reason ?? '-',
 		},
 		{
+			title: 'Status',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (status) => status ?? '-',
+		},
+		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',

@@ -198,6 +198,13 @@ const NatureCode = () => {
 			render: (status) => status ?? '-',
 		},
 		{
+			title: 'Availability',
+			dataIndex: 'availability',
+			key: 'availability',
+			align: 'center',
+			render: (availability) => availability ?? '-',
+		},
+		{
 			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
