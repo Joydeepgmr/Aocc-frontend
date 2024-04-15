@@ -53,6 +53,10 @@ export const Login = () => {
 			case userType.ACCESS_MANAGER:
 				navigate(Pathname.DASHBOARD);
 				break;
+
+			case userType.CDM:
+				navigate(Pathname.CDM);
+				break;
 			default:
 				navigate(Pathname[404]);
 				break;

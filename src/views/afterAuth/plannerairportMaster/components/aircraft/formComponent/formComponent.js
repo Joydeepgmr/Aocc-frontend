@@ -286,7 +286,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								disabled={isLoading}
 							/>
 							<ButtonComponent
-								title={'save'}
+								title={'Save'}
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}
