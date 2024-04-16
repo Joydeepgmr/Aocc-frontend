@@ -11,7 +11,8 @@ import CustomTypography from '../../../../components/typographyComponent/typogra
 import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import { ConvertUtcToIst } from '../../../../utils';
 import './style.scss';
-
+import SocketEventListener from '../../../../socket/listner/socketListner';
+import { GET_FLIGHT_SCHEDULE } from '../../../../api';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
@@ -34,7 +35,7 @@ const FlightSchedule = () => {
 			},
 		}) => toast.error(message),
 	};
-	const { isFetching, fetchNextPage, hasNextPage } = useGetFlightScheduled({
+	const { isFetching, fetchNextPage, hasNextPage, refetch } = useGetFlightScheduled({
 		...getFlightScheduleApiProps,
 	});
 	const getMapViewApiProps = {
@@ -147,6 +148,7 @@ const FlightSchedule = () => {
 						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
+						isColored
 					/>
 				</>
 			),
@@ -162,6 +164,7 @@ const FlightSchedule = () => {
 						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
+						isColored
 					/>
 				</>
 			),
@@ -169,7 +172,8 @@ const FlightSchedule = () => {
 	];
 	return (
 		<>
-			<PageLoader loading={isMapLoading} />
+			<PageLoader loading={isMapLoading} message="It may take sometime..." />
+			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE}?flightType=${tab}`} />
 			<ModalComponent
 				isModalOpen={mapModalOpen?.isOpen}
 				width="60rem"
@@ -184,18 +188,10 @@ const FlightSchedule = () => {
 					<CustomTypography
 						type="title"
 						fontSize={24}
-						fontWeight="600"
+						fontWeight={600}
 						color="black"
 						children={'Flight Schedule'}
 					/>
-					{/* <Button
-						onClick={() => {
-							alert('Icon Button');
-						}}
-						icon={Filter}
-						alt="bell icon"
-						className={'filter-btn'}
-					/> */}
 					<Form form={form}>
 						<InputField
 							label="Flight number"

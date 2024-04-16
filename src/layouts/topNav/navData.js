@@ -37,12 +37,16 @@ export const roleBasedNav = (role = 'Planner') => {
 				label: 'Airport Masters',
 				children: Pathname.PLANAIRPORTMASTER,
 			},
-			{
-				key: '3',
-				label: 'Approval',
-				children: Pathname.APPROVAL,
-			},
 		];
 	}
+		else if (role === userType.SECURITY_OFFICER) {
+			navItems = [
+				{
+					key: '0',
+					label: 'Approval',
+					children: Pathname.SECURITY_OFFICER,
+				},]
+		}
+	
 	return navItems;
 };

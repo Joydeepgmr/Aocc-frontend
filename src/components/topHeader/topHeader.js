@@ -8,8 +8,8 @@ const TopHeader = ({ heading, subHeading, className, searchBox, condition, child
 	return (
 		<>
 			<div className={`top_header_container ${className}`}>
-				<div>
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineheight="3.36rem">
+				<div className='top_header'>
+					<CustomTypography type="title" fontSize={24} fontWeight={600} color="black" lineheight="3.36rem">
 						{heading}
 					</CustomTypography>
 					<CustomTypography

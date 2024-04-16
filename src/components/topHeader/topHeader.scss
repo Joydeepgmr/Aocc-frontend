@@ -7,6 +7,11 @@
 .top_header_container{
     width: 100%;
     @include flex(center, space-between, row);
+    .top_header{
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
     .filter_search_container{
         height: 4.4rem;
         @include flex(center, center, row);
