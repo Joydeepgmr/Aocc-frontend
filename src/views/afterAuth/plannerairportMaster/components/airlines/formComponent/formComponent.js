@@ -186,6 +186,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						}}
 					/>
 				</div>
+			</div>
+
+			<div className="airline_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />

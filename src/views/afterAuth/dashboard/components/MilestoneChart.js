@@ -4,32 +4,29 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import './style.scss';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
+    console.log("labels are ", labels)
     // const containerRef = useRef(null);
     const milestoneList = useMemo(() => {
         return data.map((list) => {
+            let currentMilestone = list.progress * labels.length + 100;
+            let goals = [];
+            for (let i = 0; i < Math.round(currentMilestone / 100); i++) {
+                const markObj = {
+                    name: labels[i]?.value,
+                    value: (i + 1) * 100,
+                    time: list[labels[i]?.key] ?? 'N/A',
+                    strokeWidth: 15,
+                    strokeHeight: 0,
+                    strokeLineCap: 'round',
+                    strokeColor: list[labels[i]?.key] ? '#2B8A3E' : '#FA5252'
+                }
+                goals.push(markObj);
+            }
             return {
                 x: `${list.airline ?? ''} ${list.flightNumber ?? ''}`,
                 y: list.progress * labels.length + 100,
-                // goals: [
-                //     {
-                //         name: 'EOBT-3 hour',
-                //         value: 100,
-                //         time: '16:30',
-                //         strokeWidth: 15,
-                //         strokeHeight: 0,
-                //         strokeLineCap: 'round',
-                //         strokeColor: '#FA5252'
-                //     },
-                //     {
-                //         name: 'EOBT-3 hour',
-                //         value: 200,
-                //         time: null,
-                //         strokeWidth: 15,
-                //         strokeHeight: 0,
-                //         strokeLineCap: 'round',
-                //         strokeColor: '#2B8A3E'
-                //     }
-                // ]
+                fillColor: '#196CFD',
+                goals,
             }
         });
     }, [data]);
@@ -37,7 +34,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
         value = parseFloat((value - 100) / labels.length).toFixed(2);
         const blockSize = parseFloat(100 / labels.length).toFixed(2);
         const index = Math.ceil(value / blockSize);
-        return labels[index]
+        return labels[index]?.value
     }
     // const handleScroll = useCallback(() => {
     //     const container = containerRef.current;
@@ -68,9 +65,9 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                     barHeight: '15rem',
                     barSpacing: 14,
                     colors: {
-                        backgroundBarColors: [],
+                        backgroundBarColors: ['#F1F3F5'],
                         ranges: [],
-                        color: '#196CFD',
+                        // color: ['#6a52fb'],
                     },
                 },
             },
@@ -90,38 +87,32 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                 min: 0,
                 max: 100 * labels.length,
             },
-            // tooltip: {
-            //     custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-            //         const data = w.config.series[seriesIndex].data[dataPointIndex];
-            //         console.log("data and goal", data)
-            //         return (
-            //             `<div class="tooltip_container">
-            //                 <p class="header">  ${data?.x}  </p>
-            //                 <div class="tooltip_heading">
-            //                     <span>  Current Milestone </span>
-            //                     <span class="tooltip_value">  ${getDataLabel(data?.y)}  </span>
-            //                 </div>
-            //                 <div class="milestone_container">
-            //                     <span class="milestone_header">  Milestone achieved  </span>
-            //                     ${data.goals.map((goal) => {
-            //                 return `<div class="tooltip_heading">
-            //                                 <span>  ${getDataLabel(data?.y)}  </span>
-            //                                 <span class="tooltip_value">  ${goal.time ?? 'N/A'}  </span>
-            //                                 </div>`
-            //             }).join('')}
-            //                 </div>
-            //             </div>`
-            //         );
-            //     }
-            // },
             tooltip: {
-                enabled: true,
-                y: {
-                    formatter: function (val) {
-                        // return parseFloat((val - 100) / labels.length).toFixed(2);
-                        return getDataLabel(val);
-                    },
-                },
+                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                    const data = w.config.series[seriesIndex].data[dataPointIndex];
+                    console.log("data and goal", data)
+                    return (
+                        `<div class="tooltip_container">
+                            <p class="header">  ${data?.x}  </p>
+                            <div class="tooltip_heading">
+                                <span>  Current Milestone </span>
+                                <span class="tooltip_value">  ${getDataLabel(data?.y)}  </span>
+                            </div>
+                            <div class="milestone_container">
+                                <span class="milestone_header">  Milestone achieved  </span>
+                                ${data.goals.map((goal) => {
+                            return `<div class="goal_heading">
+                                            <span class='goal_name'>  ${goal?.name} </span>
+                                            <div class='goal_achieved'>
+                                            <span class="tooltip_value">  Time:  </span>
+                                            <span class="tooltip_value">  ${goal?.time}  </span>
+                                            </div>
+                                            </div>`
+                        }).join('')}
+                            </div>
+                        </div>`
+                    );
+                }
             },
             grid: {
                 show: true,
@@ -158,7 +149,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
         //     className="chart-container"
         // />
         // </div>
-        <InfiniteScroll  hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ height: 400 }}>
+        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ height: 400 }}>
             <ReactApexChart
                 options={chartOptions.options}
                 series={chartOptions.series}

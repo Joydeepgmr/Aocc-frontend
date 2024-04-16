@@ -306,10 +306,12 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						}}
 					/>
 				</div>
+			</div>
+			<div className="airport_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />
-						<div className="custom_buttons">
+						<div className="form_bottomButton">
 							<ButtonComponent
 								title="Cancel"
 								type="filledText"
@@ -327,7 +329,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						</div>
 					</>
 				)}
-			</div>
+				</div>
 		</Form>
 	);
 };

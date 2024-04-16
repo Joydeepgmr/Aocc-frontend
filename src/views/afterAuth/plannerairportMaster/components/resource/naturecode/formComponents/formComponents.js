@@ -7,6 +7,7 @@ import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss'
 
 const FormComponent = ({
+	form,
 	handleSaveButton,
 	handleButtonClose,
 	initialValues,
@@ -14,7 +15,7 @@ const FormComponent = ({
 	isReadOnly,
 }) => {
 
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -28,7 +29,7 @@ const FormComponent = ({
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 		}
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {

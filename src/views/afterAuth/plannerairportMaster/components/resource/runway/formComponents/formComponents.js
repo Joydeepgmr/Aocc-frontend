@@ -10,14 +10,14 @@ import dayjs from 'dayjs';
 import './formComponents.scss';
 
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState("");
 	const [currentValidTill, setCurrentValidTill] = useState("");
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -79,7 +79,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		}
 
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {
