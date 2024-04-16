@@ -10,44 +10,15 @@ import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/
 import './style.scss';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
-	const [showFull, setShowFull] = useState(false);
-	const handleToggle = () => {
-		setShowFull(!showFull);
-	};
 	return (
-		// <>
-		// 	{typeof message === 'string' && (
-		// 		<div>
-		// 			{message.length <= maxLength ? (
-		// 				<p>{message}</p>
-		// 			) : (
-		// 				<p>
-		// 					{showFull ? message : `${message.slice(0, maxLength)}...`}
-		// 					{!showFull ? (
-		// 						<a onClick={handleToggle} className="read_more_button">
-		// 							Read more
-		// 						</a>
-		// 					) : (
-		// 						<a onClick={handleToggle} className="read_less_button">
-		// 							Read less
-		// 						</a>
-		// 					)}
-		// 				</p>
-		// 			)}
-		// 		</div>
-		// 	)}
-		// </>
-		<div>
-			{Object.entries(data).map(([key, value]) => (
-				<div
-					key={key}
-					className="telex_parsed_message_container"
-				>
-					<span className="message_key">{key}: </span>
-					<span className="message_value">{value}</span>
-				</div>
-			))}
-		</div>
+			<div className="telex_parsed_message">
+				{Object.entries(data).map(([key, value]) => (
+					<div key={key} className="telex_parsed_message_container">
+						<span className="message_key">{key}: </span>
+						<span className="message_value">{value}</span>
+					</div>
+				))}
+			</div>
 	);
 };
 
@@ -107,12 +78,6 @@ function TelexMessage() {
 				align: 'center',
 			},
 			{
-				title: 'Call sign',
-				dataIndex: 'callSign',
-				key: 'callSign',
-				align: 'center',
-			},
-			{
 				title: 'Updates',
 				children: [
 					{
@@ -125,10 +90,10 @@ function TelexMessage() {
 						title: 'Raw Message',
 						dataIndex: 'originalMessage',
 						key: 'originalMessage',
-						align: 'center',
+						align: 'left',
 						render: (text) => {
 							if (text) {
-								const textArray = text.split('\\n');
+								const textArray = text.split(/\n|\\n/);
 								return (
 									<div>
 										{textArray.map((part) => (
