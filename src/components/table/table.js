@@ -14,8 +14,8 @@ const TableComponent = ({
 	fetchData,
 	pagination,
 	handleEdit,
-	...rest,
     isColored,
+	...rest
 }) => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		const sortField = sorter?.field;
