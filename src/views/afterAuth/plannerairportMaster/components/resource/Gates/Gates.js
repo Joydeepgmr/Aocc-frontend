@@ -20,6 +20,7 @@ import {
 	useDeleteGate,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import { Form } from 'antd';
 import './Gates.scss';
 
 const Gates = () => {
@@ -30,7 +31,7 @@ const Gates = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-
+	const [form] = Form.useForm();
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getGateHandler = {
@@ -59,6 +60,7 @@ const Gates = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -67,6 +69,7 @@ const Gates = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -318,6 +321,7 @@ const Gates = () => {
 					Heading={'Add Gate'}
 					formComponent={
 						<FormComponent
+							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
@@ -359,6 +363,7 @@ const Gates = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -376,6 +381,7 @@ const Gates = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}

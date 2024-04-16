@@ -20,6 +20,7 @@ import {
 	useDeleteCheckin,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import { Form } from 'antd';
 import './checkIn.scss';
 
 const CheckIn = () => {
@@ -30,6 +31,7 @@ const CheckIn = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
@@ -65,6 +67,7 @@ const CheckIn = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -73,6 +76,7 @@ const CheckIn = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -292,7 +296,7 @@ const CheckIn = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Add Checkin Counter',
+			label: 'Add Check-in Counter',
 			value: 'create',
 			key: '0',
 		},
@@ -327,6 +331,7 @@ const CheckIn = () => {
 					Heading={'Add Check-in Counters'}
 					formComponent={
 						<FormComponent
+							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
@@ -367,11 +372,12 @@ const CheckIn = () => {
 				isModalOpen={isModalOpen}
 				width="80%"
 				closeModal={closeModal}
-				title={'Add Checkin Counters'}
+				title={'Add Check-in Counters'}
 				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -389,6 +395,7 @@ const CheckIn = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}

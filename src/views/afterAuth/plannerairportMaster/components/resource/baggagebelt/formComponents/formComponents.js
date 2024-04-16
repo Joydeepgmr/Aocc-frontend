@@ -8,7 +8,7 @@ import { ConvertIstToUtc } from '../../../../../../../utils';
 import dayjs from 'dayjs';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
 
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState("");
@@ -23,7 +23,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		});
 	}, [terminalDropdownData]);
 
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -86,7 +86,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 		}
 
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {

@@ -14,6 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditNatureCode, useGetNatureCode, usePostNatureCode, useDeleteNatureCode } from '../../../../../../services/planairportmaster/resources/naturecode/naturecode';
+import { Form } from 'antd';
 import './naturecode.scss';
 
 const NatureCode = () => {
@@ -24,6 +25,7 @@ const NatureCode = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const getNatureCodeHandler = {
 		onSuccess: (data) => handleGetNatureCodeSuccess(data),
@@ -51,6 +53,7 @@ const NatureCode = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -59,6 +62,7 @@ const NatureCode = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -234,6 +238,7 @@ const NatureCode = () => {
 					btnCondition={true}
 					Heading={'NatureCode'}
 					formComponent={<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -273,6 +278,7 @@ const NatureCode = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -289,6 +295,7 @@ const NatureCode = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}

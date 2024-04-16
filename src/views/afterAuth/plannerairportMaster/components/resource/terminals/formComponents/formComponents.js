@@ -7,7 +7,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import './formComponents.scss';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 
-const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData}) => {
+const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData}) => {
 	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
 	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
@@ -30,7 +30,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 		});
 	}, [runwayDropdownData]);
 
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
@@ -48,7 +48,7 @@ const FormComponent = ({handleSaveButton, handleButtonClose, initialValues, isEd
 		}
 
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {

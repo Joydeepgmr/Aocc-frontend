@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import CustomSelect from '../../../../../../components/select/select';
@@ -14,6 +14,9 @@ import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
+	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
+	const [currentValidFrom, setCurrentValidFrom] = useState('');
+
 	const isNotEditable = type === 'edit';
 	const onError = ({
 		response: {
@@ -37,8 +40,32 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	const onFinishHandler = (value) => {
 		handleSubmit(value);
 	};
+
+	const [form] = Form.useForm();
+
+	const handleValidFrom = (dateString) => {
+		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+		}
+		if (dateString === null) {
+			setIsValidFrom(false);
+			setCurrentValidFrom(null);
+		} else {
+			setIsValidFrom(true);
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
+		}
+	};
+
 	return (
-		<Form layout="vertical" onFinish={onFinishHandler} initialValues={initialValue} key={initialValue?.id}>
+		<Form
+			form={form}
+			layout="vertical"
+			onFinish={onFinishHandler}
+			initialValues={initialValue}
+			key={initialValue?.id}
+		>
 			<div className="airport_form_container">
 				<div className="airport_form_inputfields">
 					<InputField
@@ -259,10 +286,10 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						name="validFrom"
 						className="custom_date"
 						format="MM-DD-YYYY"
-						disabledFor="future"
 						required
 						disabled={isReadOnly || isNotEditable}
 						defaultValue={initialValue?.validFrom ? dayjs(initialValue?.validFrom) : undefined}
+						onChange={handleValidFrom}
 					/>
 					<Date
 						label="Valid To"
@@ -270,14 +297,21 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						name="validTill"
 						format="MM-DD-YYYY"
 						className="custom_date"
-						disabled={isReadOnly}
+						disabled={isReadOnly || !isValidFrom}
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
+						isDisabledDate={true}
+						disabledDate={(current) => {
+							let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+							return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+						}}
 					/>
 				</div>
+			</div>
+			<div className="airport_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />
-						<div className="custom_buttons">
+						<div className="form_bottomButton">
 							<ButtonComponent
 								title="Cancel"
 								type="filledText"
@@ -286,7 +320,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								disabled={isLoading}
 							/>
 							<ButtonComponent
-								title={'Save'}
+								title={isNotEditable ? 'Update' : 'Save'} 
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}
@@ -295,7 +329,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						</div>
 					</>
 				)}
-			</div>
+				</div>
 		</Form>
 	);
 };
