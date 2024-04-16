@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
@@ -13,11 +13,31 @@ import { useCountriesDropdown } from '../../../../../../services/globalMasters/g
 import dayjs from 'dayjs';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
+	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
+	const [currentValidFrom, setCurrentValidFrom] = useState('');
+
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
+
+	const [form] = Form.useForm();
+
+	const handleValidFrom = (dateString) => {
+		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+		}
+		if (dateString === null) {
+			setIsValidFrom(false);
+			setCurrentValidFrom(null);
+		} else {
+			setIsValidFrom(true);
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
+		}
+	};
 
 	const { data: countryDropdownData } = useCountriesDropdown({ onError });
 
@@ -31,9 +51,14 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	const onFinishHandler = (value) => {
 		handleSubmit(value);
 	};
-
 	return (
-		<Form layout="vertical" onFinish={onFinishHandler} initialValues={initialValue} key={initialValue?.id}>
+		<Form
+			form={form}
+			layout="vertical"
+			onFinish={onFinishHandler}
+			initialValues={initialValue}
+			key={initialValue?.id}
+		>
 			<div className="airline_form_container">
 				<div className="airline_form_inputfields">
 					<InputField
@@ -141,19 +166,24 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						name="validFrom"
 						className="custom_date"
 						format="MM-DD-YYYY"
-						disabledFor="future"
 						disabled={isReadOnly || isNotEditable}
 						required
 						defaultValue={initialValue?.validFrom ? dayjs(initialValue?.validFrom) : undefined}
+						onChange={handleValidFrom}
 					/>
 					<Date
 						label="Valid To"
 						placeholder={!isReadOnly && 'Select valid to date'}
 						name="validTill"
 						format="MM-DD-YYYY"
-						disabled={isReadOnly}
 						className="custom_date"
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
+						disabled={isReadOnly || !isValidFrom}
+						isDisabledDate={true}
+						disabledDate={(current) => {
+							let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+							return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+						}}
 					/>
 				</div>
 			</div>
