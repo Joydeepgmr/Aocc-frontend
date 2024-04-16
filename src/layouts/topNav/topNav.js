@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import * as userType from "../../utils/roles";
 import gmrLogo from '../../assets/logo/gmr-logo.png';
 import temperatureLogo from '../../assets/logo/sun.svg';
 import windLogo from '../../assets/logo/wind.svg';
 import setting from '../../assets/logo/setting.svg';
-import bell from '../../assets/logo/bell.svg';
 import user from '../../assets/logo/user.png';
-import ellipse from '../../assets/logo/ellipse.svg';
 import line from '../../assets/logo/line.svg';
-
+import { roleBasedNav } from './navData';
 import './topNav.scss';
-import { navMenu, roleBasedNav } from './navData';
-import { useNavigate, useLocation } from 'react-router-dom';
-import PageLoader from '../../components/pageLoader/pageLoader';
+
 
 const TopNav = ({ data }) => {
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
@@ -68,7 +66,7 @@ const TopNav = ({ data }) => {
 					</div>
 				</div>
 				<div className="nav_right_section">
-					<div className="weather_details">
+					{data?.role?.name !== userType.SECURITY_OFFICER && <div className="weather_details">
 						<div className="temperature_details">
 							<img src={temperatureLogo} />
 							<div>
@@ -83,7 +81,7 @@ const TopNav = ({ data }) => {
 								<div>85*3.7 kts</div>
 							</div>
 						</div>
-					</div>
+					</div>}
 					<div className="vertical_separation">
 						<img src={line}></img>
 					</div>

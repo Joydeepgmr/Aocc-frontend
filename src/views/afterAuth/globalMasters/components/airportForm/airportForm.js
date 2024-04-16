@@ -110,6 +110,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
 					name="validTill"
+					className="custom_date"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>
