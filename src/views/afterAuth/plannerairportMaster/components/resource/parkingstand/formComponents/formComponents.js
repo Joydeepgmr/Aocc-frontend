@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState,memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
@@ -83,8 +83,6 @@ const FormComponent = ({
 		}
 	};
 
-	// const [form] = Form.useForm();
-
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -103,10 +101,10 @@ const FormComponent = ({
 			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
 		};
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
+		form.resetFields();
 		form.setFieldsValue(initialValues);
 		if (isEdit) {
 			setIsValidFrom(true);
@@ -315,4 +313,4 @@ const FormComponent = ({
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

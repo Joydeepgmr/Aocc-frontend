@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -20,7 +20,6 @@ import './baggagebelt.scss';
 
 
 const BaggageBelt = () => {
-
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [baggageBeltData, setBaggageBeltData] = useState([]);
@@ -30,7 +29,7 @@ const BaggageBelt = () => {
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 	const [form] = Form.useForm();
-	
+
 	const getBaggageBeltHandler = {
 		onSuccess: (data) => handleGetBaggageBeltSuccess(data),
 		onError: (error) => handleGetBaggageBeltError(error),
@@ -56,12 +55,13 @@ const BaggageBelt = () => {
 	};
 
 	const closeModal = () => {
-		setIsModalOpen(false);
 		form.resetFields();
+		setIsModalOpen(false);
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
@@ -101,14 +101,15 @@ const BaggageBelt = () => {
 
 	const { mutate: postBaggageBelt, isLoading: isPostLoading } = usePostBaggageBelt(addBaggageBeltHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value["name"] = value?.name.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
 		if (!value.phoneNumber) {
 			delete value.phoneNumber;
 		}
 		value && postBaggageBelt(value);
-	};
+	}, []);
+
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -348,7 +349,6 @@ const BaggageBelt = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						terminalDropdownData={terminalDropdownData}
-						key={Math.random() * 100}
 					/>
 				</div>
 			</ModalComponent>

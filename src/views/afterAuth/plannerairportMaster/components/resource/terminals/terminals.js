@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback ,useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -66,11 +66,11 @@ const Terminal = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -104,9 +104,9 @@ const Terminal = () => {
 
 	const { mutate: postTerminal, isLoading: isPostLoading } = usePostTerminal(addTerminalHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postTerminal(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -317,7 +317,6 @@ const Terminal = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 						runwayDropdownData={runwayDropdownData}

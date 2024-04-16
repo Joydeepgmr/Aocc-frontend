@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback ,useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -65,11 +65,11 @@ const Gates = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -91,9 +91,10 @@ const Gates = () => {
 	};
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
-	const handleSaveButton = (value) => {
+	
+	const handleSaveButton = useCallback((value) => {
 		value && postGate(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		closeEditModal();
@@ -321,7 +322,6 @@ const Gates = () => {
 					Heading={'Add Gate'}
 					formComponent={
 						<FormComponent
-							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
@@ -366,7 +366,6 @@ const Gates = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>

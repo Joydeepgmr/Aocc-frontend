@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -58,11 +58,11 @@ const NatureCode = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -96,9 +96,9 @@ const NatureCode = () => {
 
 	const { mutate: postNatureCode, isLoading: isPostLoading } = usePostNatureCode(addNatureCodeHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postNatureCode(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -281,7 +281,6 @@ const NatureCode = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 					/>
 				</div>
 			</ModalComponent>

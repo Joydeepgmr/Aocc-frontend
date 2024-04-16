@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import { useQueryClient } from 'react-query';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import {
+	useDeleteCheckin,
 	useEditCheckin,
 	useGetCheckIn,
 	usePostCheckIn,
-	useDeleteCheckin,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import { Form } from 'antd';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './checkIn.scss';
+import FormComponent from './formComponents/formComponents';
+import { Form } from 'antd';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -31,10 +31,9 @@ const CheckIn = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const [form] = Form.useForm();
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
-
+	const [form] = Form.useForm();
 	const getCheckinHandler = {
 		onSuccess: (data) => handleGetCheckinSuccess(data),
 		onError: (error) => handleGetCheckinError(error),
@@ -66,17 +65,17 @@ const CheckIn = () => {
 	};
 
 	const closeModal = () => {
-		setIsModalOpen(false);
 		form.resetFields();
+		setIsModalOpen(false);
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -109,7 +108,7 @@ const CheckIn = () => {
 
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
@@ -117,7 +116,7 @@ const CheckIn = () => {
 			delete value.phoneNumber;
 		}
 		value && postCheckIn(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -331,7 +330,6 @@ const CheckIn = () => {
 					Heading={'Add Check-in Counters'}
 					formComponent={
 						<FormComponent
-							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
@@ -380,7 +378,6 @@ const CheckIn = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>

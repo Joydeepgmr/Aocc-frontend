@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 import { Form, Divider } from 'antd';
 import CustomSelect from '../../../../../../../components/select/select';
 import InputField from '../../../../../../../components/input/field/field';
@@ -30,8 +30,6 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 		});
 	}, [runwayDropdownData]);
 
-	// const [form] = Form.useForm();
-
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -48,10 +46,10 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
+		form.resetFields();
 		form.setFieldsValue(initialValues);
 	}, [form, initialValues]);
 
@@ -134,4 +132,4 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

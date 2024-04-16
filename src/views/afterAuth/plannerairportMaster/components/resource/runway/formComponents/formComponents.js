@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
@@ -17,7 +17,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	const [currentValidTill, setCurrentValidTill] = useState("");
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -79,10 +78,10 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
+		form.resetFields();
 		form.setFieldsValue(initialValues);
 		if (isEdit) {
 			setIsValidFrom(true);
@@ -210,4 +209,4 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

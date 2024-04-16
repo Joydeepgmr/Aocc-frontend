@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -22,9 +22,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 			return { label: data.name, value: data.id };
 		});
 	}, [runwayDropdownData]);
-
-
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -87,10 +84,10 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
+		form.resetFields();
 		form.setFieldsValue(initialValues);
 		if (isEdit) {
 			setIsValidFrom(true);
@@ -209,4 +206,4 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback ,useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -62,11 +62,11 @@ const ParkingStand = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -100,9 +100,9 @@ const ParkingStand = () => {
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postParkingStand(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -312,7 +312,6 @@ const ParkingStand = () => {
 					btnCondition={true}
 					Heading={'Add Parking Stands'}
 					formComponent={<FormComponent
-						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -357,7 +356,6 @@ const ParkingStand = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						gateDropdownData={gateDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 					/>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -60,11 +60,11 @@ const Runway = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -99,9 +99,9 @@ const Runway = () => {
 
 	const { mutate: postRunway, isLoading: isPostLoading } = usePostRunway(addRunwayHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postRunway(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -295,7 +295,13 @@ const Runway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
+					formComponent={
+						<FormComponent
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							key={Math.random() * 100}
+						/>
+					}
 					openModal={openModal}
 				/>
 			) : (
@@ -332,7 +338,6 @@ const Runway = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 					/>
 				</div>
 			</ModalComponent>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback ,useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -61,11 +61,11 @@ const Taxiway = () => {
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -100,9 +100,9 @@ const Taxiway = () => {
 
 	const { mutate: postTaxiway, isLoading: isPostLoading } = usePostTaxiway(addTaxiwayHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postTaxiway(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
@@ -306,7 +306,7 @@ const Taxiway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -345,7 +345,6 @@ const Taxiway = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						runwayDropdownData={runwayDropdownData}
-						key={Math.random() * 100}
 					/>
 				</div>
 			</ModalComponent>
