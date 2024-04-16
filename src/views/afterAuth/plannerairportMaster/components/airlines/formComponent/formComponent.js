@@ -156,6 +156,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 					/>
 				</div>
+			</div>
+
+			<div className="airline_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />
@@ -168,7 +171,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								disabled={isLoading}
 							/>
 							<ButtonComponent
-								title={'save'}
+								title={'Save'}
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}

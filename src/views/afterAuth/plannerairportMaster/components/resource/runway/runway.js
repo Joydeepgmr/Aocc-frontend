@@ -14,6 +14,7 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditRunway, useGetRunway, usePostRunway, useDeleteRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { Form } from 'antd';
 import './runway.scss';
 
 const Runway = () => {
@@ -25,6 +26,7 @@ const Runway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const getRunwayHandler = {
 		onSuccess: (data) => handleGetRunwaySuccess(data),
@@ -53,6 +55,7 @@ const Runway = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -61,6 +64,7 @@ const Runway = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -291,7 +295,7 @@ const Runway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
+					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -325,6 +329,7 @@ const Runway = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -341,6 +346,7 @@ const Runway = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}
