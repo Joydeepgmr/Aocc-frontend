@@ -349,7 +349,7 @@ const Airlines = () => {
 					setOpenEditModal(false);
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Edit your airline"
 				width="80vw"
 				className="custom_modal"
 			>
@@ -371,7 +371,7 @@ const Airlines = () => {
 					setDetailModal(false);
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Airline"
 				width="80vw"
 				className="custom_modal"
 			>
