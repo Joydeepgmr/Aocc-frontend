@@ -17,10 +17,11 @@ const Common_table = ({
 	openCSVModal,
 	type,
 	downloadCSV,
+	title1 = 'Create',
 }) => {
 	const handleDropdownChange = (value) => {
 		// Add this line
-		if (value === 'Create') {
+		if (value === title1) {
 			openModal();
 		}
 
@@ -36,16 +37,16 @@ const Common_table = ({
 			? [
 					{
 						key: '1',
-						label: 'Create',
-						value: 'Create',
+						label: title1,
+						value: title1,
 						children: '',
 					},
 				]
 			: [
 					{
 						key: '1',
-						label: 'Create',
-						value: 'Create',
+						label: title1,
+						value: title1,
 						children: '',
 					},
 					{

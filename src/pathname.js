@@ -11,7 +11,6 @@ export let Pathname = {
 	PLANAIRPORTMASTER: '/plan-airport-masters',
 	PLAN: '/plans',
 	SECURITY_OFFICER: '/security-officer',
-	404: '/404'
+	404: '/404',
+	CDM: '/cdm',
 };
-
-

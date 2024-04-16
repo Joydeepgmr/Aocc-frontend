@@ -20,7 +20,11 @@ function Milestone() {
 			}, []);
 			setMilestoneData([...newData]);
 			if (!labels.length && data?.pages?.length) {
-				const labels = data?.pages[0].data.milestones.map((milestone) => Object.values(milestone)[0]);
+				const labels = data?.pages[0].data.milestones.map((milestoneObj) => {
+					const [key] = Object.keys(milestoneObj);
+					const value = milestoneObj[key];
+					return { key: key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`), value };
+				});
 				setLabels([...labels]);
 			}
 		}

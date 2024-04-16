@@ -112,6 +112,10 @@
 	gap: 2rem;
 }
 
+.telex_parsed_message{
+	max-height: 15rem;
+	overflow-y: auto;
+}
 .telex_parsed_message_container {
 	width: 90%;
 	margin: auto;
@@ -140,6 +144,19 @@
 	.tooltip_heading {
 		display: flex;
 		gap: 1.3rem;
+	}
+	.goal_heading {
+		display: flex;
+		justify-content: space-between;
+		gap: 1.3rem;
+		.goal_name{
+			width: auto;
+			// text-transform: capitalize;
+		}
+		.goal_achieved{
+			display: flex;
+			gap:1rem;
+		}
 	}
 	.tooltip_value {
 		font-weight: 600;
