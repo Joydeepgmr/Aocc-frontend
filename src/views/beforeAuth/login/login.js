@@ -56,6 +56,10 @@ export const Login = () => {
 			case userType.SECURITY_OFFICER:
 					navigate(Pathname.SECURITY_OFFICER);
 				break;
+
+			case userType.CDM:
+				navigate(Pathname.CDM);
+				break;
 			default:
 				navigate(Pathname[404]);
 				break;

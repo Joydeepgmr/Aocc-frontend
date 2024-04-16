@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { useRoutes } from "react-router-dom";
+import React, { Suspense } from 'react';
+import { useRoutes } from 'react-router-dom';
 
 import { Pathname } from '../pathname';
 import PrivateOutlet from '../privateRoute';
@@ -16,56 +16,58 @@ import UserAccess from '../views/afterAuth/userAccess/userAccess';
 import Components from '../views/beforeAuth/components';
 import Login from '../views/beforeAuth/login/login';
 import SecurityApproval from "../views/afterAuth/securityApproval/securityApproval";
+import CDM from '../views/afterAuth/cdm/cdm';
 
 // ----------------------------------------------------------------------
 
 const RouteHOC = (props) => {
-    return <Layout>{props.element}</Layout>
-}
+	return <Layout>{props.element}</Layout>;
+};
 
 export default function Router() {
-    const routes = useRoutes([
-        {
-            errorElement: <NotFound />,
-            children: [
-                {
-                    path: Pathname.LOGIN,
-                    element: <Login />,
-                },
-                {
-                    path: Pathname.COMPONENTS,
-                    element: <Components />
-                },
-                {
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.GLOBALMASTERS, element: <RouteHOC element={<GlobalMasters />} />, },
-                        { path: Pathname.AIRPORTMASTERS, element: <RouteHOC element={<AirportMasters />} />, },
-                    ],
-                },
-                {
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.DASHBOARD, element: <RouteHOC element={<Dashboard />} />, index: true },
-                        { path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} />, },
-                        { path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
-                        { path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
-                    ],
-                },
-                {
-                    path: '*',
-                    element: <NotFound replace />,
-                },
+	const routes = useRoutes([
+		{
+			errorElement: <NotFound />,
+			children: [
+				{
+					path: Pathname.LOGIN,
+					element: <Login />,
+				},
+				{
+					path: Pathname.COMPONENTS,
+					element: <Components />,
+				},
+				{
+					path: '',
+					element: (
+						<Suspense fallback={<Loader />}>
+							<PrivateOutlet />
+						</Suspense>
+					),
+					children: [
+						{ path: Pathname.GLOBALMASTERS, element: <RouteHOC element={<GlobalMasters />} /> },
+						{ path: Pathname.AIRPORTMASTERS, element: <RouteHOC element={<AirportMasters />} /> },
+					],
+				},
+				{
+					path: '',
+					element: (
+						<Suspense fallback={<Loader />}>
+							<PrivateOutlet />
+						</Suspense>
+					),
+					children: [
+						{ path: Pathname.DASHBOARD, element: <RouteHOC element={<Dashboard />} />, index: true },
+						{ path: Pathname.PLANAIRPORTMASTER, element: <RouteHOC element={<PlannerAirportMaster />} /> },
+						{ path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
+						{ path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
+						{ path: Pathname.CDM, element: <RouteHOC element={<CDM />} /> },
+					],
+				},
+				{
+					path: '*',
+					element: <NotFound replace />,
+				},
                 {
                     path: '',
                     element: (
@@ -77,9 +79,9 @@ export default function Router() {
                         { path: Pathname.SECURITY_OFFICER, element: <RouteHOC element={<SecurityApproval />} /> },
                     ],
                 },
-            ]
-        }
-    ]);
+			],
+		},
+	]);
 
-    return routes;
-};
+	return routes;
+}
