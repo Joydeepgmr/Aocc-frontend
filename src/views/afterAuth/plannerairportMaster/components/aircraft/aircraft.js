@@ -97,6 +97,7 @@ const Aircrafts = () => {
 	const {
 		data: fetchedPlannerAircraft,
 		isLoading: isPlannerAircraftLoading,
+		isFetching: isPlannerAircraftFetching,
 		hasNextPage,
 		fetchNextPage,
 	} = useGetAllPlannerAircraft(getAircraftHandler);
@@ -247,19 +248,19 @@ const Aircrafts = () => {
 				/>
 			),
 			align: 'center',
-
 		},
 	];
 
 	return (
 		<>
-			{isPlannerAircraftLoading && (
+			{(isPlannerAircraftLoading || isPlannerAircraftFetching) && (
 				<PageLoader
 					loading={
 						isPlannerAircraftLoading ||
 						isAddAircraftLoading ||
 						isDeleteAircraftLoading ||
-						isUpdateAircraftLoading
+						isUpdateAircraftLoading ||
+						isPlannerAircraftFetching
 					}
 				/>
 			)}
@@ -269,13 +270,19 @@ const Aircrafts = () => {
 					data={aircraftData}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
-					loading={isPlannerAircraftLoading}
+					loading={isPlannerAircraftLoading || isPlannerAircraftFetching}
 					title={'Aircraft Registration'}
 					openModal={() => setIsAddModalOpen(true)}
 					type="aircraft"
+					title1="New Aircraft Registration"
 				/>
 			) : (
-				<Common_Card title1="Create" btnCondition={false} openModal={() => setIsAddModalOpen(true)} />
+				<Common_Card
+					title1="New Aircraft Registration"
+					btnCondition={false}
+					openModal={() => setIsAddModalOpen(true)}
+					loading={isPlannerAircraftFetching || isPlannerAircraftLoading}
+				/>
 			)}
 
 			<ConfirmationModal
