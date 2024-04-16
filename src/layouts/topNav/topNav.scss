@@ -2,181 +2,184 @@
 @import '../../styles/sass/utils';
 @import '../../styles/sass/mixins';
 
+.nav_container {
+	background-color: $gray_100;
+	position: sticky;
+	top: 0px;
+	z-index: 1;
+	height: 6.8rem;
+	width: 100%;
+	@include flex(center, space-between, row);
+	padding: 0px 4rem;
+	.nav_left_section {
+		@include flex(center, space-between, row);
+		width: 50%;
+		gap: 8rem;
+		.gmr_logo {
+			height: 3.2rem;
+			width: 8.8rem;
+			img {
+				display: block;
+				height: 100%;
+				width: 100%;
+			}
+		}
 
-.nav_container{
-    background-color: $gray_100;
-    position: sticky;
-    top: 0px;
-    z-index: 1;
-    height: 6.8rem;
-    width: 100%;
-    @include flex(center, space-between, row); 
-    padding: 0px 4rem;
-    .nav_left_section{
-        @include flex(center,space-between, row); 
-        width: 50%;
-        gap: 8rem;
-        .gmr_logo{
-            height: 3.2rem;
-            width: 8.8rem;
-            img{
-                display: block;
-                height: 100%;
-                width: 100%;
-            }    
-        
-        }
+		.tabs_container {
+			@include flex(center, start, row);
+			gap: 1.6rem;
+			width: 74%;
+			font-weight: 400;
+			font-size: 1.6rem;
+			line-height: 2.008rem;
+			color: $dark_300;
 
-        .tabs_container{
-           @include flex(center, start, row);
-           gap: 1.6rem; 
-            width: 74%;
-            font-weight: 400;
-            font-size: 1.6rem;
-            line-height: 2.008rem;
-            color: $dark_300;
+			.tab-wrapper {
+				position: relative;
+			}
 
-                .tab-wrapper {
-                    position: relative;
-                    }
+			.tab {
+				display: inline-block;
+				cursor: pointer;
+			}
 
-                .tab {
-                display: inline-block;
-                cursor: pointer;
-                }
+			.tab.active {
+				color: $black;
+				font-weight: 500;
+			}
 
-                .tab.active {
-                color: $black;
-                font-weight: 500;
-                }
-
-                .active-line {
-                position: absolute;
-                bottom: -2.2rem;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background-color: $button_color;
-                }
-
-        }
-
-       
-    }
-  
+			.active-line {
+				position: absolute;
+				bottom: -2.2rem;
+				left: 0;
+				width: 100%;
+				height: 4px;
+				background-color: $button_color;
+			}
+		}
+	}
 }
 
+.nav_right_section {
+	@include flex(center, end, row);
+	gap: 2.4rem;
+	width: 54.2rem;
+	.weather_details {
+		@include flex(center, center, row);
+		gap: 2.4rem;
+		img {
+			height: 1.8rem;
+			width: 2rem;
+		}
+		.temperature_details {
+			@include flex(center, center, row);
+			gap: 0.8rem;
+			div {
+				@include flex(center, center, column);
+				gap: 0.7rem;
+			}
+		}
+		.wind_details {
+			@include flex(center, center, row);
+			gap: 0.8rem;
+			div {
+				@include flex(center, center, column);
+				gap: 0.7rem;
+			}
+		}
+	}
 
-.nav_right_section{
-    @include flex(center, end, row); 
-    gap:2.4rem;
-    width: 54.2rem;
-    .weather_details{
-    @include flex(center, center, row); 
-        gap: 2.4rem;
-        img{
-            height: 1.8rem;
-            width: 2rem;
-        }
-        .temperature_details{
-            @include flex(center, center, row); 
-            gap: 0.8rem;
-            div{
-                @include flex(center, center, column); 
-                gap: 0.7rem;
-            }
-        }
-        .wind_details{
-            @include flex(center, center, row); 
-            gap: 0.8rem;
-             div{
-                @include flex(center, center, column); 
-                gap: 0.7rem;
-            }
-        }
-    }
+	.vertical_separation {
+		border: 1px solid $gray_300;
+	}
 
-    .vertical_separation{
-        border: 1px solid $gray_300;
-    }
+	.setting_bell {
+		@include flex(center, center, row);
+		gap: 1.4rem;
+		img {
+			cursor: pointer;
+		}
+		div {
+			position: relative;
+			.ellipse {
+				position: absolute;
+				right: 0;
+			}
+		}
+	}
 
-    .setting_bell{
-        @include flex(center, center, row); 
-        gap: 1.4rem;
-        img{
-            cursor: pointer;
-        }
-        div{
-        position: relative;
-        .ellipse{
-            position: absolute;
-            right: 0;
-        }
-        }
-    }
+	.user_info {
+		@include flex(center, center, row);
+		gap: 1.6rem;
+		img {
+			width: 4rem;
+			height: 4rem;
+			cursor: pointer;
+		}
 
-    .user_info{
-        @include flex(center, center, row); 
-        gap: 1.6rem;
-        img{
-            width: 4rem;
-            height: 4rem;
-            cursor: pointer;
-        }
+		.user_details {
+			@include flex(start, center, column);
+			gap: 0.4rem;
 
-        .user_details{
-            @include flex(start, center, column); 
-            gap: 0.4rem;
+			p:first-child {
+				font-weight: 600;
+				font-size: 1.6rem;
+				line-height: 2.008rem;
+			}
 
-            p:first-child{
-                font-weight: 600;
-                font-size: 1.6rem;
-                line-height: 2.008rem;
-            }
-
-              p:nth-child(2){
-                font-weight: 500;
-                font-size: 1.2rem;
-                line-height: 1.56rem;
-            }
-        }
-    }
+			p:nth-child(2) {
+				font-weight: 500;
+				font-size: 1.2rem;
+				line-height: 1.56rem;
+			}
+		}
+	}
 }
 
-.setting_card{
-    width: 16.5rem;
-    height: 8.8rem;
-    border-radius: 1.2rem;
-    border: 1px solid $gray_300;
-    background-color: $gray_100;
-    @include flex(center, space-around, column); 
-    position: fixed;
-    z-index: 1;
-    right: 12%;
-    top: 5rem;
-    p{
-        width: 100%;
-        height: 100%;
-        @include flex(center, center, row); 
-        font-weight: 600;
-        font-size: 1.6rem;
-        line-height: 2.008rem;
-        text-align: center;
-         &:first-child:hover{
-            border-radius: 1.2rem 1.2rem 0 0;
-            background-color: $button_color;
-            color: $white;
-            cursor: pointer;
-        }
-        &:hover:not(:first-child)  {
-            border-radius: 0 0 1.2rem 1.2rem;
-            background-color: $button_color;
-            color: $white;
-            cursor: pointer;
-        }
-    }
-    .line{
-        border-bottom: 1px solid $gray_300;
-        width: 100%;
-    }
+.setting_card {
+	width: 16.5rem;
+	height: 8.8rem;
+	border-radius: 1.2rem;
+	border: 1px solid $gray_300;
+	background-color: $gray_100;
+	@include flex(center, space-around, column);
+	position: fixed;
+	z-index: 1000;
+	right: 12%;
+	top: 5rem;
+	p {
+		width: 100%;
+		height: 100%;
+		@include flex(center, center, row);
+		font-weight: 600;
+		font-size: 1.6rem;
+		line-height: 2.008rem;
+		text-align: center;
+		&:first-child:hover {
+			border-radius: 1.2rem 1.2rem 0 0;
+			background-color: $button_color;
+			color: $white;
+			cursor: pointer;
+		}
+		&:hover:not(:first-child) {
+			border-radius: 0 0 1.2rem 1.2rem;
+			background-color: $button_color;
+			color: $white;
+			cursor: pointer;
+		}
+	}
+	.line {
+		border-bottom: 1px solid $gray_300;
+		width: 100%;
+	}
+	&--BackDrop {
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100;
+	}
 }
