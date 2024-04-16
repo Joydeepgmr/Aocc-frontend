@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 
 const FormComponent = ({
 	handleSaveButton,
+	form,
 	handleButtonClose,
 	initialValues,
 	isEdit,
@@ -29,7 +30,7 @@ const FormComponent = ({
 		});
 	}, [terminalDropdownData]);
 
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -92,7 +93,7 @@ const FormComponent = ({
 			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
 		};
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {

@@ -15,6 +15,7 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { Form } from 'antd';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -27,6 +28,7 @@ const Taxiway = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const { data: runwayDropdownData = [] } = useRunwayDropdown();
+	const [form] = Form.useForm();
 
 	const getTaxiwayHandler = {
 		onSuccess: (data) => handleGetTaxiwaySuccess(data),
@@ -54,6 +56,7 @@ const Taxiway = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -62,6 +65,7 @@ const Taxiway = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -302,7 +306,7 @@ const Taxiway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
+					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -337,6 +341,7 @@ const Taxiway = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						runwayDropdownData={runwayDropdownData}
@@ -354,6 +359,7 @@ const Taxiway = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}

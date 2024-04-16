@@ -156,6 +156,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 					/>
 				</div>
+			</div>
+
+			<div className="airline_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />

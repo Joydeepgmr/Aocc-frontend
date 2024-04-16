@@ -10,6 +10,7 @@ import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss';
 
 const FormComponent = ({
+	form,
 	handleSaveButton,
 	handleButtonClose,
 	initialValues,
@@ -79,7 +80,7 @@ const FormComponent = ({
 		}
 	};
 
-	const [form] = Form.useForm();
+	// const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : { ...values, busGate: isChecked };
 		changedValues &&
@@ -100,7 +101,7 @@ const FormComponent = ({
 			busGate: isChecked,
 		};
 		changedValues && handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {
