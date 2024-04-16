@@ -31,6 +31,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			});
 		}
 		if (dateString === null) {
+			form.setFieldsValue({
+				validTill: null,
+			});
 			setIsValidFrom(false);
 			setCurrentValidFrom(null);
 		} else {

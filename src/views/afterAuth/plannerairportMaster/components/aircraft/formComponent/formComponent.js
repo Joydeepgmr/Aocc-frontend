@@ -50,6 +50,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			});
 		}
 		if (dateString === null) {
+			form.setFieldsValue({
+				validTill: null,
+			});
 			setIsValidFrom(false);
 			setCurrentValidFrom(null);
 		} else {
@@ -329,7 +332,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						</div>
 					</>
 				)}
-				</div>
+			</div>
 		</Form>
 	);
 };
