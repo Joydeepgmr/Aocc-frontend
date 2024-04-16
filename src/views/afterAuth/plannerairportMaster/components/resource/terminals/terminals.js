@@ -17,7 +17,10 @@ import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } f
 import { useStandDropdown } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { Form } from 'antd';
 import './terminals.scss';
+
+
 const Terminal = () => {
 	const queryClient = useQueryClient();
 	const [terminalData, setTerminalData] = useState([]);
@@ -26,6 +29,7 @@ const Terminal = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const { data: standDropdownData = [], isSuccess: isGetStandDropdownSuccess } = useStandDropdown();
 	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
@@ -57,6 +61,7 @@ const Terminal = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -65,6 +70,7 @@ const Terminal = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -264,6 +270,7 @@ const Terminal = () => {
 					btnCondition={true}
 					Heading={'Add Terminal'}
 					formComponent={<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -307,6 +314,7 @@ const Terminal = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						key={Math.random() * 100}
@@ -326,6 +334,7 @@ const Terminal = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}
