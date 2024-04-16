@@ -119,6 +119,7 @@ const FormComponent = ({
 							required
 							disabled={isReadOnly || isEdit}
 							className="custom_input"
+							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 						/>
 						<InputField
@@ -154,11 +155,14 @@ const FormComponent = ({
 						<InputField
 							label="Phones"
 							name="phoneNumber"
-							type="number"
 							placeholder={!isReadOnly && 'Filled Text'}
 							warning="Required field"
 							disabled={isReadOnly}
 							className="custom_input"
+							type='text'
+							pattern="^\d+$"
+							title="Please enter only numbers."
+							max="15"
 						/>
 					</div>
 					<Divider />
@@ -248,7 +252,7 @@ const FormComponent = ({
 								onClick={handleButtonClose}
 							/>
 							<Button
-								title={isEdit ? 'Edit' : 'Save'}
+								title={isEdit ? 'Update' : 'Save'}
 								type="filledText"
 								id="btn"
 								isSubmit="submit"

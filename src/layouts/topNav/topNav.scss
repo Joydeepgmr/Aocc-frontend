@@ -13,7 +13,7 @@
     @include flex(center, space-between, row); 
     padding: 0px 4rem;
     .nav_left_section{
-        @include flex(center,center, row); 
+        @include flex(center,space-between, row); 
         width: 50%;
         gap: 8rem;
         .gmr_logo{
@@ -68,7 +68,8 @@
 
 
 .nav_right_section{
-    @include flex(center, space-between, row); 
+    @include flex(center, end, row); 
+    gap:2.4rem;
     width: 54.2rem;
     .weather_details{
     @include flex(center, center, row); 
@@ -149,7 +150,7 @@
     border: 1px solid $gray_300;
     background-color: $gray_100;
     @include flex(center, space-around, column); 
-    position: absolute;
+    position: fixed;
     z-index: 1;
     right: 12%;
     top: 5rem;

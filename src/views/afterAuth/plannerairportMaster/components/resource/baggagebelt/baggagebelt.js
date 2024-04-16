@@ -46,7 +46,7 @@ const BaggageBelt = () => {
 	const handleGetBaggageBeltError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchBaggageBelt, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetBaggageBelt(getBaggageBeltHandler);
+	const { data: fetchBaggageBelt, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetBaggageBelt(getBaggageBeltHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -98,6 +98,10 @@ const BaggageBelt = () => {
 
 	const handleSaveButton = (value) => {
 		value["name"] = value?.name.toString();
+		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postBaggageBelt(value);
 	};
 
@@ -188,25 +192,66 @@ const BaggageBelt = () => {
 			title: 'Belt Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Reason',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
+		},
+		{
+			title: 'Status',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'Active';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'Active';
+				} else {
+					return 'Inactive';
+				}
+			},
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'Available';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'Unavailable';
+				} else {
+					return 'Available';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -214,12 +259,14 @@ const BaggageBelt = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
 						title="View Details"
-						type="text" />
+						type="text"
+					/>
 				</>
 			),
 		},
@@ -252,15 +299,14 @@ const BaggageBelt = () => {
 	};
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Belts'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} key={Math.random() * 100}/>}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData={terminalDropdownData} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -278,52 +324,53 @@ const BaggageBelt = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Baggage Belt
 							</CustomTypography>
-							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={baggageBeltData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Baggage Belt'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								terminalDropdownData = {terminalDropdownData}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} Baggage Belt`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Baggage Belt'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						terminalDropdownData={terminalDropdownData}
+						key={Math.random() * 100}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Baggage Belt`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

@@ -99,7 +99,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	function onFinishHandler(values) {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
-		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 
 		if (airportModal.type === 'edit') {
 			const id = airportModal.data.id;

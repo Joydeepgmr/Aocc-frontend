@@ -53,6 +53,9 @@ export const Login = () => {
 			case userType.ACCESS_MANAGER:
 				navigate(Pathname.DASHBOARD);
 				break;
+			case userType.SECURITY_OFFICER:
+					navigate(Pathname.SECURITY_OFFICER);
+				break;
 
 			case userType.CDM:
 				navigate(Pathname.CDM);
@@ -62,6 +65,7 @@ export const Login = () => {
 				break;
 		}
 	};
+
 	const onFinishHandler = (values) => {
 		loginUser(values);
 	};

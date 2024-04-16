@@ -105,7 +105,7 @@ const TopNav = ({ data }) => {
 			</div>
 			{isSettingCardOpen && (
 				<div className="setting_card">
-					<p onClick={manageAccessHandler}>Manage Access</p>
+					{localStorage.getItem('name') === 'Planner' && <p onClick={manageAccessHandler}>Manage Access</p>}
 					<div className="line"></div>
 					<p onClick={logoutHandler}>Logout</p>
 				</div>

@@ -23,13 +23,13 @@ import { useTerminalDropdown } from '../../../../../../services/planairportmaste
 import './checkIn.scss';
 
 const CheckIn = () => {
-    const queryClient = useQueryClient();
-    const [checkinData, setCheckinData] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [rowData, setRowData] = useState(null);
-    const [isReadOnly, setIsReadOnly] = useState(false);
-    const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const queryClient = useQueryClient();
+	const [checkinData, setCheckinData] = useState([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [isReadOnly, setIsReadOnly] = useState(false);
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
@@ -53,6 +53,7 @@ const CheckIn = () => {
 	};
 	const {
 		data: fetchCheckIn,
+		isFetching,
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
@@ -108,6 +109,9 @@ const CheckIn = () => {
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postCheckIn(value);
 	};
 
@@ -125,10 +129,10 @@ const CheckIn = () => {
 	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
 
 	const handleEditCheckinSuccess = (data) => {
-		closeEditModal();
-		setCheckinData([]);
-		toast.success(data?.message);
 		queryClient.invalidateQueries('get-check-in');
+		setCheckinData([]);
+		closeEditModal();
+		toast.success(data?.message);
 	};
 
 	const handleEditCheckinError = (error) => {
@@ -199,37 +203,73 @@ const CheckIn = () => {
 			title: 'Counter Name',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
 			title: 'Group',
 			dataIndex: 'group',
 			key: 'group',
+			align: 'center',
 			render: (group) => group ?? '-',
 		},
 		{
 			title: 'Terminal',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
 			title: 'Row',
 			dataIndex: 'row',
 			key: 'row',
+			align: 'center',
 			render: (row) => row ?? '-',
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			key: 'status',
-			render: (status) => status ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'Active';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'Active';
+				} else {
+					return 'Inactive';
+				}
+			},
 		},
 		{
 			title: 'Availability',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'Available';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'Unavailable';
+				} else {
+					return 'Available';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -237,6 +277,7 @@ const CheckIn = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record);
@@ -249,23 +290,23 @@ const CheckIn = () => {
 		},
 	];
 
-    const dropdownItems = [
-        {
-            label: 'Add Checkin Counter',
-            value: 'create',
-            key: '0',
-        },
-        // {
-        //     label: 'Upload CSV',
-        //     value: 'uploadCSV',
-        //     key: '1',
-        // },
-        // {
-        //     label: 'Download CSV Template',
-        //     value: 'downloadCSVTemplate',
-        //     key: '2',
-        // },
-    ];
+	const dropdownItems = [
+		{
+			label: 'Add Checkin Counter',
+			value: 'create',
+			key: '0',
+		},
+		// {
+		//     label: 'Upload CSV',
+		//     value: 'uploadCSV',
+		//     key: '1',
+		// },
+		// {
+		//     label: 'Download CSV Template',
+		//     value: 'downloadCSVTemplate',
+		//     key: '2',
+		// },
+	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
@@ -277,8 +318,7 @@ const CheckIn = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -290,7 +330,7 @@ const CheckIn = () => {
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
 							key={Math.random() * 100}
-                            terminalDropdownData = {terminalDropdownData}
+							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 					openModal={openModal}
@@ -313,55 +353,57 @@ const CheckIn = () => {
 							<TableComponent
 								data={checkinData}
 								columns={columns}
+								loading={isFetching}
 								fetchData={fetchNextPage}
 								pagination={hasNextPage}
 							/>
 						</div>
 					</div>
-					</>)}
+				</>)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Checkin Counters'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Checkin Counters'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						key={Math.random() * 100}
+						terminalDropdownData={terminalDropdownData}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

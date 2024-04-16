@@ -14,7 +14,8 @@ const TableComponent = ({
 	fetchData,
 	pagination,
 	handleEdit,
-	...rest
+	...rest,
+    isColored,
 }) => {
 	const handleTableChange = (pagination, filters, sorter) => {
 		const sortField = sorter?.field;
@@ -143,11 +144,13 @@ const TableComponent = ({
 						columns={defaultColumns}
 						dataSource={data}
 						loading={loading}
+                        bordered
 						onChange={handleTableChange}
 						locale={{
 							emptyText: <Empty description={emptyText} />,
 						}}
 						pagination={false}
+                        className={`${isColored && 'color_table'}`}
 						components={components}
                         {...rest}
 					/>

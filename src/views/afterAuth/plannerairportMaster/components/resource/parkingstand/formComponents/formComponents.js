@@ -128,6 +128,7 @@ const FormComponent = ({
 						disabled={isReadOnly || isEdit}
 						required
 						className="custom_input"
+						pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 						max="16"
 					/>
 				</div>
@@ -305,7 +306,7 @@ const FormComponent = ({
 							className="custom_svgButton"
 							onClick={handleButtonClose}
 						/>
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				)}
 			</div>

@@ -46,6 +46,7 @@ const FormComponent = ({
 							warning="Required field"
 							required
 							className='custom_input'
+							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 							disabled={isReadOnly || isEdit}
 						/>
@@ -63,7 +64,7 @@ const FormComponent = ({
 				{!isReadOnly && <div className="nature_code_form_inputfields">
 					<div className="form_bottomButton">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose}/>
-						<Button title="Save" type="filledText" id="btn" isSubmit="submit" />
+						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
 					</div>
 				</div>}
 			</Form>
