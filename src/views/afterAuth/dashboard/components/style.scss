@@ -3,13 +3,6 @@
 @import '../../../../styles/sass/variables';
 @import '../../../../styles/sass/utils';
 
-.chart-container {
-	padding-top: 2rem;
-	// height: 40rem;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
-
 .body-container {
 	border: 1px solid $gray_300;
 	border-radius: 2.1rem;
@@ -135,6 +128,7 @@
 	display: flex;
 	z-index: 100;
 	flex-direction: column;
+	overflow: visible !important;
 	gap: 0.6rem;
 	padding: 0.5rem 1rem;
 	.header {

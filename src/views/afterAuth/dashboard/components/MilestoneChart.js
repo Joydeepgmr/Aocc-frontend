@@ -149,12 +149,13 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
         //     className="chart-container"
         // />
         // </div>
-        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ height: 400 }}>
+        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ maxHeight: 400,overflowY: 'auto' }}>
             <ReactApexChart
                 options={chartOptions.options}
                 series={chartOptions.series}
                 type="bar"
-                height={400}
+                height={100*data?.length}
+                style={{paddingTop:'5rem'}}
                 className="chart-container"
             />
         </InfiniteScroll>
