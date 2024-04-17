@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import ReactApexChart from 'react-apexcharts';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './style.scss';
+import { ConvertUtcToIst } from '../../../../utils';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
     console.log("labels are ", labels)
@@ -14,7 +15,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                 const markObj = {
                     name: labels[i]?.value,
                     value: (i + 1) * 100,
-                    time: list[labels[i]?.key] ?? 'N/A',
+                    time: list[labels[i]?.key] ? ConvertUtcToIst(list[labels[i]?.key], 'HH:MM') : 'N/A',
                     strokeWidth: 15,
                     strokeHeight: 0,
                     strokeLineCap: 'round',
@@ -149,12 +150,13 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
         //     className="chart-container"
         // />
         // </div>
-        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ height: 400 }}>
+        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ maxHeight: 400,overflowY: 'auto' }}>
             <ReactApexChart
                 options={chartOptions.options}
                 series={chartOptions.series}
                 type="bar"
-                height={400}
+                height={100*data?.length}
+                style={{paddingTop:'5rem'}}
                 className="chart-container"
             />
         </InfiniteScroll>
