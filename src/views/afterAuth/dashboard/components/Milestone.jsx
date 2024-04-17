@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import { GET_MILESTONE_DATA } from '../../../../api';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import InputField from '../../../../components/input/field/field';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
-import MilestoneChart from './MilestoneChart';
-import './style.scss';
-import { useGetMileStoneData } from '../../../../services/dashboard/milestones/milestones';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
-import { GET_MILESTONE_DATA } from '../../../../api';
+import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import { useGetMileStoneData } from '../../../../services/dashboard/milestones/milestones';
 import SocketEventListener from '../../../../socket/listner/socketListner';
+import MilestoneChart from './MilestoneChart';
+import { toast } from 'react-hot-toast';
+import './style.scss';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
@@ -33,7 +34,10 @@ function Milestone() {
 		response: {
 			data: { message },
 		},
-	}) => toast.error(message);
+	}) => {
+		toast.dismiss();
+		toast.error(message);
+	};
 	const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useGetMileStoneData({
 		flightType: type,
 		onSuccess,

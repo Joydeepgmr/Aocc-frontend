@@ -8,17 +8,19 @@ import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/telexMessage';
 import './style.scss';
+import SocketEventListener from '../../../../socket/listner/socketListner';
+import { GET_TELEX_MESSAGE } from '../../../../api';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 	return (
-			<div className="telex_parsed_message">
-				{Object.entries(data).map(([key, value]) => (
-					<div key={key} className="telex_parsed_message_container">
-						<span className="message_key">{key}: </span>
-						<span className="message_value">{value}</span>
-					</div>
-				))}
-			</div>
+		<div className="telex_parsed_message">
+			{Object.entries(data).map(([key, value]) => (
+				<div key={key} className="telex_parsed_message_container">
+					<span className="message_key">{key}: </span>
+					<span className="message_value">{value}</span>
+				</div>
+			))}
+		</div>
 	);
 };
 
@@ -40,7 +42,11 @@ function TelexMessage() {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter, onSuccess, onError });
+	const { data, isFetching, fetchNextPage, hasNextPage, refetch } = useGetTelexMessage({
+		filter,
+		onSuccess,
+		onError,
+	});
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
@@ -202,6 +208,7 @@ function TelexMessage() {
 				content={`You want to Acknowledge flight ${deleteModal?.data?.flightNumber}`}
 				buttonTitle2="Acknowledge"
 			/>
+			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
 			<div className="body-container">
 				<div className="top-bar">
 					<CustomTypography
