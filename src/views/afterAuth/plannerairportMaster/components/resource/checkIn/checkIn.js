@@ -65,8 +65,9 @@ const CheckIn = () => {
 	};
 
 	const closeModal = () => {
-		form.resetFields();
 		setIsModalOpen(false);
+		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -75,9 +76,10 @@ const CheckIn = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData(null);
 		setIsEditModalOpen(false);
-		setIsReadOnly(false);
 		form.resetFields();
+		setIsReadOnly(false);
 	};
 
 	const openDeleteModal = (record) => {

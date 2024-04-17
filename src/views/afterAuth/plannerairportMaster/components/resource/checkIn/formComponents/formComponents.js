@@ -96,7 +96,11 @@ const FormComponent = ({
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		} else {
+			form.setFieldsValue({});
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -244,6 +248,7 @@ const FormComponent = ({
 						/>
 					</div>
 				</div>
+				<Divider />
 				<div className="checkin_form_inputfields">
 					{!isReadOnly && (
 						<div className="form_bottomButton">

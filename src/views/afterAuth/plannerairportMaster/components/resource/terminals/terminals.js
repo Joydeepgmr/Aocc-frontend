@@ -70,6 +70,7 @@ const Terminal = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData(null);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();

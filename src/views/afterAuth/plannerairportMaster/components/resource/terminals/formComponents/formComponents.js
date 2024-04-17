@@ -7,11 +7,11 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import './formComponents.scss';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 
-const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData}) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData }) => {
 	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
 	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
-	
+
 	const SelectStandData = useMemo(() => {
 		return standDropdownData?.map((data) => {
 			return { label: data.name, value: data.id };
@@ -38,11 +38,12 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 			}
 		});
 
-		changedValues = {...changedValues,
-			validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+		changedValues = {
+			...changedValues,
+			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
-			unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
-			unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
+			unavailableFrom: changedValues?.unavailableFrom ? ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
+			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
 		}
 
 		handleSaveButton(changedValues);
@@ -117,7 +118,7 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 				</div>
 			</div>
 			<div className="terminal_form_inputfields">
-			{ !isReadOnly && <div className="form_bottomButton">
+				{!isReadOnly && <div className="form_bottomButton">
 					<Button
 						title="Cancel"
 						type="filledText"

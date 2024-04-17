@@ -66,6 +66,7 @@ const ParkingStand = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData();
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();

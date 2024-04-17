@@ -65,6 +65,7 @@ const BaggageBelt = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData(null);
 		setIsEditModalOpen(false);
 		form.resetFields();
 		setIsReadOnly(false);

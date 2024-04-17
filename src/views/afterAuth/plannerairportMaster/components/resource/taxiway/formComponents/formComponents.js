@@ -196,6 +196,9 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							onChange={handleValidTill}
 						/>
 					</div>
+				</div>
+				<Divider />
+				<div className="taxiway_form_inputFields">
 					{!isReadOnly && <div className="custom_buttons">
 						<Button title='Cancel' type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
 						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
