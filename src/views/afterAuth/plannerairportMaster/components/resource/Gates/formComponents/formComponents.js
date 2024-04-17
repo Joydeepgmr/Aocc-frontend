@@ -104,7 +104,9 @@ const FormComponent = ({
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -119,7 +121,7 @@ const FormComponent = ({
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="gate_form_container">
 					<div className="gate_form_inputfields">
 						<InputField

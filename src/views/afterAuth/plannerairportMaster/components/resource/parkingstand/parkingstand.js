@@ -57,16 +57,16 @@ const ParkingStand = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
-		form.resetFields();
 	};
 
 	const closeEditModal = () => {
-		setRowData();
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();
@@ -78,7 +78,7 @@ const ParkingStand = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -107,6 +107,7 @@ const ParkingStand = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		form.resetFields();

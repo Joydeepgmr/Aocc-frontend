@@ -65,21 +65,22 @@ const CheckIn = () => {
 	};
 
 	const closeModal = () => {
+		form.resetFields();
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
-		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
-		form.resetFields();
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		console.log("under close modal edit");
+		setRowData({});
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -88,7 +89,7 @@ const CheckIn = () => {
 	};
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 	};
 
@@ -122,6 +123,7 @@ const CheckIn = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		form.resetFields();
@@ -322,7 +324,6 @@ const CheckIn = () => {
 			openCsvModal();
 		}
 	};
-
 	return (
 		<>
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
@@ -336,7 +337,6 @@ const CheckIn = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							// key={Math.random() * 100}
 							terminalDropdownData={terminalDropdownData}
 						/>
 					}
@@ -380,6 +380,7 @@ const CheckIn = () => {
 				<div className="modal_content">
 					<FormComponent
 						form={form}
+						initialValues={rowData}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						terminalDropdownData={terminalDropdownData}

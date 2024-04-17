@@ -105,7 +105,9 @@ const FormComponent = ({
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);

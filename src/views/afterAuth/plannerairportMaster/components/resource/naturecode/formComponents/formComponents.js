@@ -32,7 +32,9 @@ const FormComponent = ({
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 	}, [form, initialValues]);
 
 	return (

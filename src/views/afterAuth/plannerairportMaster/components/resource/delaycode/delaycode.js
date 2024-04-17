@@ -55,6 +55,7 @@ const DelayCode = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
@@ -64,7 +65,7 @@ const DelayCode = () => {
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();
@@ -76,7 +77,7 @@ const DelayCode = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -105,6 +106,7 @@ const DelayCode = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		form.resetFields();

@@ -56,16 +56,16 @@ const BaggageBelt = () => {
 
 	const closeModal = () => {
 		form.resetFields();
+		setRowData({});
 		setIsModalOpen(false);
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
-		form.resetFields();
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsEditModalOpen(false);
 		form.resetFields();
 		setIsReadOnly(false);
@@ -77,7 +77,7 @@ const BaggageBelt = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -113,6 +113,7 @@ const BaggageBelt = () => {
 
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);

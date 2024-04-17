@@ -60,6 +60,7 @@ const Terminal = () => {
 	};
 
 	const closeModal = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		form.resetFields();
 	};
@@ -70,7 +71,7 @@ const Terminal = () => {
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();
@@ -82,7 +83,7 @@ const Terminal = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -111,6 +112,7 @@ const Terminal = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		form.resetFields();

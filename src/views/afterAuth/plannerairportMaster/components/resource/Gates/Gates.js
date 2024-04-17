@@ -60,16 +60,16 @@ const Gates = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
-		form.resetFields();
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();
@@ -99,6 +99,7 @@ const Gates = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		closeEditModal();
 		closeModal();
 		form.resetFields();
@@ -145,7 +146,7 @@ const Gates = () => {
 	};
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 	};
 

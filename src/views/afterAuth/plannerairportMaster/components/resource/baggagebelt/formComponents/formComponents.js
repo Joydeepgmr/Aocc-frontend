@@ -90,7 +90,9 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);

@@ -56,6 +56,7 @@ const Taxiway = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
@@ -65,7 +66,7 @@ const Taxiway = () => {
 	};
 
 	const closeEditModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
 		form.resetFields();
@@ -78,7 +79,7 @@ const Taxiway = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -107,6 +108,7 @@ const Taxiway = () => {
 	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false)

@@ -88,7 +88,9 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	useEffect(() => {
 		form.resetFields();
-		form.setFieldsValue(initialValues);
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -100,7 +102,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className='taxiway_form_container'>
 					<div className="taxiway_form_inputFields">
 						<InputField

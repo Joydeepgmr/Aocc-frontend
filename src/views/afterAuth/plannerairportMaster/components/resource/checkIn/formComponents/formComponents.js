@@ -98,8 +98,6 @@ const FormComponent = ({
 		form.resetFields();
 		if (initialValues) {
 			form.setFieldsValue(initialValues);
-		} else {
-			form.setFieldsValue({});
 		}
 		if (isEdit) {
 			setIsValidFrom(true);
@@ -115,7 +113,7 @@ const FormComponent = ({
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="checkin_form_container">
 					<div className="checkin_form_inputfields">
 						<InputField
