@@ -77,6 +77,7 @@ const CheckIn = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -121,6 +122,7 @@ const CheckIn = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT
@@ -332,7 +334,7 @@ const CheckIn = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
+							// key={Math.random() * 100}
 							terminalDropdownData={terminalDropdownData}
 						/>
 					}

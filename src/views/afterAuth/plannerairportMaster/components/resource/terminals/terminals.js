@@ -72,6 +72,7 @@ const Terminal = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -111,6 +112,7 @@ const Terminal = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -273,7 +275,6 @@ const Terminal = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 						runwayDropdownData={runwayDropdownData}

@@ -114,7 +114,8 @@ const BaggageBelt = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
-		setIsReadOnly(false)
+		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -312,7 +313,15 @@ const BaggageBelt = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Belts'}
-					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData={terminalDropdownData} key={Math.random() * 100} />}
+					formComponent={
+						<FormComponent
+							form={form}
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							terminalDropdownData={terminalDropdownData}
+						/>
+					}
+
 					openModal={openModal}
 				/>
 			) : (

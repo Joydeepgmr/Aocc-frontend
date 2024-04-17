@@ -66,6 +66,7 @@ const DelayCode = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -105,6 +106,7 @@ const DelayCode = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -251,7 +253,6 @@ const DelayCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						airlineDropdownData={airlineDropdownData}
-						key={Math.random() * 100}
 					/>}
 					openModal={openModal}
 				/>

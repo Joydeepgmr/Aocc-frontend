@@ -64,6 +64,7 @@ const NatureCode = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -103,6 +104,7 @@ const NatureCode = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -241,7 +243,6 @@ const NatureCode = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 					/>}
 					openModal={openModal}
 				/>

@@ -66,6 +66,7 @@ const Runway = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 
@@ -107,6 +108,7 @@ const Runway = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false)
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -299,7 +301,6 @@ const Runway = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
 						/>
 					}
 					openModal={openModal}

@@ -68,6 +68,7 @@ const ParkingStand = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -107,6 +108,7 @@ const ParkingStand = () => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -314,7 +316,6 @@ const ParkingStand = () => {
 					formComponent={<FormComponent
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						gateDropdownData={gateDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 					/>}

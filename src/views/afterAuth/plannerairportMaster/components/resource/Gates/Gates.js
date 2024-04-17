@@ -71,6 +71,7 @@ const Gates = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	//CREATE
@@ -99,6 +100,7 @@ const Gates = () => {
 	const handleCloseButton = () => {
 		closeEditModal();
 		closeModal();
+		form.resetFields();
 	};
 
 	//EDIT
@@ -324,7 +326,6 @@ const Gates = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
 							terminalDropdownData={terminalDropdownData}
 						/>
 					}

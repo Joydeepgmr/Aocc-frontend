@@ -67,6 +67,7 @@ const Taxiway = () => {
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 
@@ -108,6 +109,7 @@ const Taxiway = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false)
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -306,7 +308,7 @@ const Taxiway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} key={Math.random() * 100} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} />}
 					openModal={openModal}
 				/>
 			) : (
