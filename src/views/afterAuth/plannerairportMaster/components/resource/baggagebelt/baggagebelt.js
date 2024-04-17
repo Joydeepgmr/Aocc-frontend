@@ -15,7 +15,9 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditBaggageBelt, useGetBaggageBelt, useDeleteBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import { Form } from 'antd';
 import './baggagebelt.scss';
+
 
 const BaggageBelt = () => {
 
@@ -27,7 +29,8 @@ const BaggageBelt = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
-
+	const [form] = Form.useForm();
+	
 	const getBaggageBeltHandler = {
 		onSuccess: (data) => handleGetBaggageBeltSuccess(data),
 		onError: (error) => handleGetBaggageBeltError(error),
@@ -54,6 +57,7 @@ const BaggageBelt = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -62,6 +66,7 @@ const BaggageBelt = () => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -306,7 +311,7 @@ const BaggageBelt = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Belts'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData={terminalDropdownData} key={Math.random() * 100} />}
+					formComponent={<FormComponent form={form} handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData={terminalDropdownData} key={Math.random() * 100} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -339,6 +344,7 @@ const BaggageBelt = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						terminalDropdownData={terminalDropdownData}
@@ -356,6 +362,7 @@ const BaggageBelt = () => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						isEdit={true}

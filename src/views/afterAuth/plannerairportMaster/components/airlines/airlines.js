@@ -117,6 +117,7 @@ const Airlines = () => {
 	const {
 		data: fetchedPlannerAirline,
 		isLoading: isPlannerAirlineLoading,
+		isFetching: isPlannerAirlineFetching,
 		hasNextPage,
 		fetchNextPage,
 	} = useGetAllPlannerAirline(getAirlineHandler);
@@ -294,13 +295,14 @@ const Airlines = () => {
 
 	return (
 		<>
-			{isPlannerAirlineLoading && (
+			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
 				<PageLoader
 					loading={
 						isPlannerAirlineLoading ||
 						isAddAirlineLoading ||
 						isDeleteAirlineLoading ||
-						isUpdateAirlineLoading
+						isUpdateAirlineLoading ||
+						isPlannerAirlineFetching
 					}
 				/>
 			)}
@@ -310,22 +312,24 @@ const Airlines = () => {
 					columns={columns}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
-					loading={isPlannerAirlineLoading}
+					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
 					title={'Airlines'}
 					openModal={() => setIsAddModalOpen(true)}
 					openCSVModal={() => setIsCsvModalOpen(true)}
 					type="airline"
 					downloadCSV={handleDownloadCSV}
+					title1="New Airline"
 				/>
 			) : (
 				<Common_Card
-					title1="Create"
+					title1="New Airline"
 					title2={'Upload CSV'}
 					title3="Download CSV Template"
 					btnCondition={false}
 					openModal={() => setIsAddModalOpen(true)}
 					openCSVModal={() => setIsCsvModalOpen(true)}
 					downloadCSV={handleDownloadCSV}
+					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
 				/>
 			)}
 
@@ -345,7 +349,7 @@ const Airlines = () => {
 					setOpenEditModal(false);
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Edit your airline"
 				width="80vw"
 				className="custom_modal"
 			>
@@ -356,7 +360,7 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={Math.random() * 100}
+					key={airlineData?.length}
 					isLoading={isUpdateAirlineLoading}
 					handleSubmit={handleUpdateAirline}
 				/>
@@ -367,7 +371,7 @@ const Airlines = () => {
 					setDetailModal(false);
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Airline"
 				width="80vw"
 				className="custom_modal"
 			>
@@ -378,7 +382,7 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={Math.random() * 100}
+					key={airlineData?.length}
 				/>
 			</ModalComponent>
 
@@ -395,7 +399,7 @@ const Airlines = () => {
 			>
 				<div className={`modal_content`}>
 					<FormComponent
-						key={Math.random() * 100}
+						key={airlineData?.length}
 						isLoading={isAddAirlineLoading}
 						closeModal={() => setIsAddModalOpen(false)}
 						handleSubmit={handleAddAirline}

@@ -7,7 +7,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
+const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly , form}) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const handleValidFrom = (dateString) => {
@@ -22,7 +22,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
 		}
 	};
-	const [form] = Form.useForm();
+	//const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -37,7 +37,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 		};
 		handleSaveButton(changedValues);
-		form.resetFields();
+		// form.resetFields();
 	};
 
 	useEffect(() => {

@@ -1,6 +1,5 @@
 import { Pathname } from '../../pathname';
-import * as userType from "../../utils/roles";
-
+import * as userType from '../../utils/roles';
 
 // const role = localStorage.getItem('role');
 
@@ -36,6 +35,19 @@ export const roleBasedNav = (role = 'Planner') => {
 				key: '2',
 				label: 'Airport Masters',
 				children: Pathname.PLANAIRPORTMASTER,
+			},
+			{
+				key: '3',
+				label: 'CDM',
+				children: Pathname.CDM,
+			},
+		];
+	} else if (role === userType.CDM) {
+		navItems = [
+			{
+				key: '0',
+				label: 'CDM',
+				children: Pathname.CDM,
 			},
 		];
 	}
