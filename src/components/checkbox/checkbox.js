@@ -1,8 +1,8 @@
 import { Checkbox, Form } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import Vector from '../../assets/Vector.svg'
-import Check from '../../assets/Check.svg'
+import Vector from '../../assets/Vector.svg';
+import Check from '../../assets/Check.svg';
 import './checkbox.scss';
 
 const CheckBoxField = ({
@@ -18,6 +18,7 @@ const CheckBoxField = ({
 	onChange,
 	disabled,
 	checked,
+	type,
 	rest,
 }) => {
 	return (
@@ -49,12 +50,22 @@ const CheckBoxField = ({
 						})}
 					</Checkbox.Group>
 				</Form.Item>
-			) : (
+			) : type === 'custom' ? (
 				<Form.Item name={name} valuePropName="checked" {...rest} onChange={onChange} label={label}>
 					<div className="custom-checkbox" onClick={onChange}>
-					<input type="checkbox" checked={checked} onChange={onChange} disabled={disabled} style={{ display: 'none' }} />
-						{checked ? <img src={Vector} alt="" />: <img src={Check} alt="" />}
+						<input
+							type="checkbox"
+							checked={checked}
+							onChange={onChange}
+							disabled={disabled}
+							style={{ display: 'none' }}
+						/>
+						{checked ? <img src={Vector} alt="" /> : <img src={Check} alt="" />}
 					</div>
+				</Form.Item>
+			) : (
+				<Form.Item name={name} valuePropName="checked" {...rest} onChange={onChange}>
+						<Checkbox disabled={disabled}>{label}</Checkbox>
 				</Form.Item>
 			)}
 		</>
