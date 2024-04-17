@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import ReactApexChart from 'react-apexcharts';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './style.scss';
+import { ConvertUtcToIst } from '../../../../utils';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
     console.log("labels are ", labels)
@@ -14,7 +15,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                 const markObj = {
                     name: labels[i]?.value,
                     value: (i + 1) * 100,
-                    time: list[labels[i]?.key] ?? 'N/A',
+                    time: list[labels[i]?.key] ? ConvertUtcToIst(list[labels[i]?.key], 'HH:MM') : 'N/A',
                     strokeWidth: 15,
                     strokeHeight: 0,
                     strokeLineCap: 'round',
