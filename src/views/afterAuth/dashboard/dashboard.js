@@ -9,6 +9,7 @@ import Milestone from './components/Milestone';
 import ProgressionCard from './components/ProgressionCard';
 import TelexMessage from './components/TelexMessage';
 import './dashboard.scss';
+import FidsScreen from '../fids/fidsScreen';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -54,7 +55,8 @@ export const Dashboard = () => {
 	]
 
 	return (
-		<div className='container-div'>
+		<>
+		{/* <div className='container-div'>
 				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
 				<div className='main-container'>
 					<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
@@ -76,7 +78,9 @@ export const Dashboard = () => {
 
 				</div>
 			</div>
-		</div>
+		</div> */}
+		<FidsScreen/>
+		</>
 	);
 };
 

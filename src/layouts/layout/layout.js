@@ -14,7 +14,7 @@ const Layout = (props) => {
 			{isLoading ?
 				<PageLoader loading={isLoading} />
 				: <div>
-					<TopNav data={data} />
+					{/* <TopNav data={data} /> */}
 					{data &&
 						<div>
 							{props.children}
