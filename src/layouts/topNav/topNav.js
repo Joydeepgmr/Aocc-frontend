@@ -66,7 +66,7 @@ const TopNav = ({ data }) => {
 					</div>
 				</div>
 				<div className="nav_right_section">
-					{data?.role?.name !== userType.SECURITY_OFFICER && <div className="weather_details">
+				{data?.role?.name !== userType.SECURITY_OFFICER && data?.role?.name !== userType.VENDOR && <div className="weather_details">
 						<div className="temperature_details">
 							<img src={temperatureLogo} />
 							<div>

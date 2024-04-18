@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
 import { useGetUserDetails, useLoginUser } from '../../../services/userLoginServices/LoginServices';
 import * as userType from '../../../utils/roles';
-
 import './login.scss';
 import toast from 'react-hot-toast';
 import PageLoader from '../../../components/pageLoader/pageLoader';
@@ -48,7 +47,7 @@ export const Login = () => {
 				navigate(Pathname.DASHBOARD);
 				break;
 			case userType.VENDOR:
-				navigate(Pathname.DASHBOARD);
+				navigate(Pathname.VENDOR);
 				break;
 			case userType.ACCESS_MANAGER:
 				navigate(Pathname.DASHBOARD);
