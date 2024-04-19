@@ -1,7 +1,8 @@
-import React, { useCallback ,useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
@@ -17,7 +18,8 @@ import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } f
 import { useStandDropdown } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_TERMINAL } from '../../../../../../api';
 import './terminals.scss';
 
 
@@ -53,7 +55,14 @@ const Terminal = () => {
 	const handleGetTerminalError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchTerminal, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTerminal(getTerminalHandler);
+	const {
+		data: fetchTerminal,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getTerminalRefetch
+	} = useGetTerminal(getTerminalHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -267,6 +276,7 @@ const Terminal = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getTerminalRefetch} apiName={GET_TERMINAL} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTerminal?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

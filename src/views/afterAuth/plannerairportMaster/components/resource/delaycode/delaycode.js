@@ -15,6 +15,8 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
 import { useAirlineDropdown } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_DELAY_CODE } from '../../../../../../api';
 import { Form } from 'antd';
 import './delaycode.scss';
 
@@ -47,7 +49,14 @@ const DelayCode = () => {
 	const handleGetDelayCodeError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchDelayCode, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetDelayCode(getDelayCodeHandler);
+	const {
+		data: fetchDelayCode,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getDelayCodeRefetch
+	} = useGetDelayCode(getDelayCodeHandler);
 	console.log(fetchDelayCode, "delaycode");
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -244,6 +253,7 @@ const DelayCode = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getDelayCodeRefetch} apiName={GET_DELAY_CODE} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchDelayCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

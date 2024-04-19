@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
@@ -14,7 +15,8 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditNatureCode, useGetNatureCode, usePostNatureCode, useDeleteNatureCode } from '../../../../../../services/planairportmaster/resources/naturecode/naturecode';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_NATURE_CODE } from '../../../../../../api';
 import './naturecode.scss';
 
 const NatureCode = () => {
@@ -45,7 +47,14 @@ const NatureCode = () => {
 	const handleGetNatureCodeError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchNatureCode, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetNatureCode(getNatureCodeHandler);
+	const {
+		data: fetchNatureCode,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getNatureCodeRefetch
+	} = useGetNatureCode(getNatureCodeHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -234,6 +243,7 @@ const NatureCode = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getNatureCodeRefetch} apiName={GET_NATURE_CODE} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchNatureCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

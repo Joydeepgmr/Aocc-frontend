@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
@@ -14,7 +15,8 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditRunway, useGetRunway, usePostRunway, useDeleteRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_RUNWAY } from '../../../../../../api';
 import './runway.scss';
 
 const Runway = () => {
@@ -46,7 +48,14 @@ const Runway = () => {
 	const handleGetRunwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchRunway, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetRunway(getRunwayHandler);
+	const {
+		data: fetchRunway,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getRunwayRefetch
+	} = useGetRunway(getRunwayHandler);
 
 
 	const openModal = () => {
@@ -293,6 +302,7 @@ const Runway = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getRunwayRefetch} apiName={GET_RUNWAY} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

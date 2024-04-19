@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../components/button/button';
@@ -19,9 +20,10 @@ import {
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import './checkIn.scss';
 import FormComponent from './formComponents/formComponents';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_CHECKIN_COUNTER } from '../../../../../../api';
+import './checkIn.scss';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -58,6 +60,7 @@ const CheckIn = () => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getCheckInRefetch
 	} = useGetCheckIn(getCheckinHandler);
 
 	const openModal = () => {
@@ -326,6 +329,7 @@ const CheckIn = () => {
 	};
 	return (
 		<>
+			<SocketEventListener refetch={getCheckInRefetch} apiName={GET_CHECKIN_COUNTER} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

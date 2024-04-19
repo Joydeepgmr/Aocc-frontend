@@ -1,6 +1,7 @@
-import React, { useCallback ,useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
@@ -15,7 +16,8 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_TAXIWAY } from '../../../../../../api';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -48,7 +50,14 @@ const Taxiway = () => {
 	const handleGetTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchTaxiway, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
+	const {
+		data: fetchTaxiway,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getTaxiwayRefetch
+	} = useGetTaxiway(getTaxiwayHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -304,6 +313,7 @@ const Taxiway = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getTaxiwayRefetch} apiName={GET_TAXIWAY} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

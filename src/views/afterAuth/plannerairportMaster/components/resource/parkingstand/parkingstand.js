@@ -1,5 +1,6 @@
-import React, { useCallback ,useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
@@ -16,7 +17,8 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_PARKING_STAND } from '../../../../../../api';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -50,7 +52,14 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const {
+		data: fetchParking,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getParkingStandRefetch
+	} = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -308,6 +317,7 @@ const ParkingStand = () => {
 
 	return (
 		<>
+		<SocketEventListener refetch={getParkingStandRefetch} apiName={GET_PARKING_STAND} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"

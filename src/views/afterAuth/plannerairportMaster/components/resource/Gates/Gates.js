@@ -1,6 +1,7 @@
-import React, { useCallback ,useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import { Form } from 'antd';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
@@ -20,7 +21,8 @@ import {
 	useDeleteGate,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_GATE } from '../../../../../../api';
 import './Gates.scss';
 
 const Gates = () => {
@@ -52,7 +54,14 @@ const Gates = () => {
 	const handleGetGateError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchGates, isFetching, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
+	const {
+		data: fetchGates,
+		isFetching,
+		isLoading: isFetchLoading,
+		fetchNextPage,
+		hasNextPage,
+		refetch: getGateRefetch
+	} = useGetGate(getGateHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -93,7 +102,7 @@ const Gates = () => {
 	};
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
-	
+
 	const handleSaveButton = useCallback((value) => {
 		value && postGate(value);
 	}, []);
@@ -317,6 +326,7 @@ const Gates = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getGateRefetch} apiName={GET_GATE} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
