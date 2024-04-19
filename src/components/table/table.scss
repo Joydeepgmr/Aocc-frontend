@@ -24,7 +24,7 @@
 	th {
 		background-color: $gray_100 !important;
 		text-align: center !important;
-		color: $dark_400 !important;
+		color: black !important;
 	}
 }
 .ant-table-wrapper .ant-table.ant-table-bordered > .ant-table-container > .ant-table-content > table > thead > tr > th,
@@ -46,4 +46,10 @@
 		background-color: #f8f9fa !important;
 		color: $dark_900;
 	}
+}
+
+.editable-cell-value-wrap {
+	border: 1px solid gray;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
 }
