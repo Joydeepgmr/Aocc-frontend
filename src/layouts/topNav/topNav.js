@@ -40,8 +40,8 @@ const TopNav = ({ data }) => {
 		const role = data?.role?.name;
 		if (role) {
 			const allNavItem = roleBasedNav(role);
-			const selectedNavItem = allNavItem.find((data) => data.children === pathname)
-			console.log("selected nav item", selectedNavItem)
+			const selectedNavItem = allNavItem.find((data) => data.children === pathname);
+			console.log('selected nav item', selectedNavItem);
 			if (!selectedNavItem) {
 				navigate('/404', { previousRoute: pathname });
 			} else {
@@ -49,7 +49,7 @@ const TopNav = ({ data }) => {
 				navigate(selectedNavItem.children);
 			}
 		}
-	}, [data])
+	}, [data]);
 
 	return (
 		<>
@@ -104,11 +104,16 @@ const TopNav = ({ data }) => {
 				</div>
 			</div>
 			{isSettingCardOpen && (
-				<div className="setting_card">
-					{localStorage.getItem('name') === 'Planner' && <p onClick={manageAccessHandler}>Manage Access</p>}
-					<div className="line"></div>
-					<p onClick={logoutHandler}>Logout</p>
-				</div>
+				<>
+					<div className="setting_card--BackDrop" onClick={() => setIsSettingCardOpen(false)}></div>
+					<div className="setting_card">
+						{localStorage.getItem('name') === 'Planner' && (
+							<p onClick={manageAccessHandler}>Manage Access</p>
+						)}
+						<div className="line"></div>
+						<p onClick={logoutHandler}>Logout</p>
+					</div>
+				</>
 			)}
 		</>
 	);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Form, Divider } from 'antd';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
@@ -17,7 +17,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	const [currentValidTill, setCurrentValidTill] = useState("");
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -79,11 +78,13 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -95,9 +96,8 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className='runway_form_container'>
-
 					<div className="runway_form_inputFields">
 						<InputField
 							label="Runway Name"
@@ -200,6 +200,9 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							onChange={handleValidTill}
 						/>
 					</div>
+				</div>
+				<Divider />
+				<div className="runway_form_inputFields">
 					{!isReadOnly && <div className="custom_buttons">
 						<Button title="Cancel" type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
 						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
@@ -210,4 +213,4 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

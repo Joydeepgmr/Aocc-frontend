@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
-import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import {
+	useDeleteCheckin,
 	useEditCheckin,
 	useGetCheckIn,
 	usePostCheckIn,
-	useDeleteCheckin,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import { Form } from 'antd';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import FormComponent from './formComponents/formComponents';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_CHECKIN_COUNTER } from '../../../../../../api';
 import './checkIn.scss';
 
 const CheckIn = () => {
@@ -31,10 +33,9 @@ const CheckIn = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const [form] = Form.useForm();
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
-
+	const [form] = Form.useForm();
 	const getCheckinHandler = {
 		onSuccess: (data) => handleGetCheckinSuccess(data),
 		onError: (error) => handleGetCheckinError(error),
@@ -59,6 +60,7 @@ const CheckIn = () => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getCheckInRefetch
 	} = useGetCheckIn(getCheckinHandler);
 
 	const openModal = () => {
@@ -66,8 +68,10 @@ const CheckIn = () => {
 	};
 
 	const closeModal = () => {
-		setIsModalOpen(false);
 		form.resetFields();
+		setRowData({});
+		setIsModalOpen(false);
+		setIsEditModalOpen(false);
 	};
 
 	const openEditModal = () => {
@@ -75,9 +79,11 @@ const CheckIn = () => {
 	};
 
 	const closeEditModal = () => {
+		console.log("under close modal edit");
+		setRowData({});
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -86,7 +92,7 @@ const CheckIn = () => {
 	};
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 	};
 
@@ -109,7 +115,7 @@ const CheckIn = () => {
 
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
@@ -117,11 +123,13 @@ const CheckIn = () => {
 			delete value.phoneNumber;
 		}
 		value && postCheckIn(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT
@@ -319,9 +327,9 @@ const CheckIn = () => {
 			openCsvModal();
 		}
 	};
-
 	return (
 		<>
+			<SocketEventListener refetch={getCheckInRefetch} apiName={GET_CHECKIN_COUNTER} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -331,10 +339,8 @@ const CheckIn = () => {
 					Heading={'Add Check-in Counters'}
 					formComponent={
 						<FormComponent
-							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
 							terminalDropdownData={terminalDropdownData}
 						/>
 					}
@@ -378,9 +384,9 @@ const CheckIn = () => {
 				<div className="modal_content">
 					<FormComponent
 						form={form}
+						initialValues={rowData}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>

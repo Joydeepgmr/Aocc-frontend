@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
@@ -16,7 +17,8 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_PARKING_STAND } from '../../../../../../api';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -50,13 +52,21 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const {
+		data: fetchParking,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getParkingStandRefetch
+	} = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
@@ -65,9 +75,10 @@ const ParkingStand = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -76,7 +87,7 @@ const ParkingStand = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -100,13 +111,15 @@ const ParkingStand = () => {
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postParkingStand(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -304,6 +317,7 @@ const ParkingStand = () => {
 
 	return (
 		<>
+		<SocketEventListener refetch={getParkingStandRefetch} apiName={GET_PARKING_STAND} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -312,10 +326,8 @@ const ParkingStand = () => {
 					btnCondition={true}
 					Heading={'Add Parking Stands'}
 					formComponent={<FormComponent
-						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						gateDropdownData={gateDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 					/>}
@@ -357,7 +369,6 @@ const ParkingStand = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						gateDropdownData={gateDropdownData}
 						taxiwayDropdownData={taxiwayDropdownData}
 					/>

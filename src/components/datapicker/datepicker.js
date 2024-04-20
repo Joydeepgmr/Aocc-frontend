@@ -26,12 +26,12 @@ const Date = ({
 		);
 	};
 	const disablePastDates = (current) => {
-		let customDate = dayjs().format(format);
-		return current && current < dayjs(customDate, format);
+		let customDate = dayjs().format('YYYY-MM-DD');
+		return current && current < dayjs(customDate, 'YYYY-MM-DD');
 	};
 	const disableFutureDates = (current) => {
-		let customDate = dayjs().format(format);
-		return current && current > dayjs(customDate, format);
+		let customDate = dayjs().format('YYYY-MM-DD');
+		return current && current > dayjs(customDate, 'YYYY-MM-DD');
 	};
 	return (
 		<Form.Item
@@ -45,7 +45,6 @@ const Date = ({
 				},
 			]}
 		>
-
 			<DatePicker
 				placeholder={placeholder}
 				className="date_style"
@@ -65,7 +64,6 @@ const Date = ({
 				defaultValue={defaultValue}
 				onChange={onChange}
 			/>
-
 		</Form.Item>
 	);
 };

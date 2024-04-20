@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -15,6 +15,8 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
 import { useAirlineDropdown } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_DELAY_CODE } from '../../../../../../api';
 import { Form } from 'antd';
 import './delaycode.scss';
 
@@ -47,7 +49,14 @@ const DelayCode = () => {
 	const handleGetDelayCodeError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchDelayCode, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetDelayCode(getDelayCodeHandler);
+	const {
+		data: fetchDelayCode,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getDelayCodeRefetch
+	} = useGetDelayCode(getDelayCodeHandler);
 	console.log(fetchDelayCode, "delaycode");
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -55,17 +64,20 @@ const DelayCode = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -74,7 +86,7 @@ const DelayCode = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -98,13 +110,15 @@ const DelayCode = () => {
 
 	const { mutate: postDelayCode, isLoading: isPostLoading } = usePostDelayCode(addDelayCodeHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postDelayCode(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -239,6 +253,7 @@ const DelayCode = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getDelayCodeRefetch} apiName={GET_DELAY_CODE} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchDelayCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -251,7 +266,6 @@ const DelayCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						airlineDropdownData={airlineDropdownData}
-						key={Math.random() * 100}
 					/>}
 					openModal={openModal}
 				/>
@@ -291,7 +305,6 @@ const DelayCode = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						airlineDropdownData={airlineDropdownData}
 					/>
 				</div>

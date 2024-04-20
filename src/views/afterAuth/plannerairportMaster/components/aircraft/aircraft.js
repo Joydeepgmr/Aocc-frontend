@@ -20,6 +20,9 @@ import dayjs from 'dayjs';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
+
 
 const Aircrafts = () => {
 	const queryClient = useQueryClient();
@@ -100,6 +103,7 @@ const Aircrafts = () => {
 		isFetching: isPlannerAircraftFetching,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getPlannerAircraftRefetch
 	} = useGetAllPlannerAircraft(getAircraftHandler);
 
 	const { mutate: onDeleteAircraft, isLoading: isDeleteAircraftLoading } =
@@ -253,6 +257,7 @@ const Aircrafts = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getPlannerAircraftRefetch} apiName={`${GET_PLANNER_AIRCRAFT}`} />
 			{(isPlannerAircraftLoading || isPlannerAircraftFetching) && (
 				<PageLoader
 					loading={

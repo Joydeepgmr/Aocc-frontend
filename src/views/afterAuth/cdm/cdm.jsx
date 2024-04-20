@@ -1,16 +1,99 @@
-import React, { Children, useState } from 'react';
+import React, { useState } from 'react';
 import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './cdm.scss';
 import TableComponent from '../../../components/table/table';
-import { ArrivalData, DepartureData, TurnAroundData } from './dummyData/dummy-data';
-import { ConvertUtcToIst } from '../../../utils';
+import { CombineUtcDateAndIstTime, ConvertUtcToIst, SplitTimeFromDateAndTime } from '../../../utils';
 import CustomSelect from '../../../components/select/select';
+import {
+	useGetAllCdmArrivalDeparture,
+	useGetAllCdmTurnAround,
+	useUpdateCdmTurnAround,
+	useUpdateCdmTypes,
+} from '../../../services';
+import toast from 'react-hot-toast';
+import PageLoader from '../../../components/pageLoader/pageLoader';
+import { useQueryClient } from 'react-query';
 
 const CDM = () => {
+	const queryClient = useQueryClient();
 	const [activeTab, setActiveTab] = useState('1');
-	const [data, setData] = useState(ArrivalData);
+	const [type, setType] = useState('arrival');
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
+	const [cdmData, setCdmData] = useState([]);
+	const [rowData, setRowData] = useState({});
+
+	const getCdmHandler = {
+		onSuccess: (data) => handleGetCdmSuccess(data),
+		onError: (error) => handleGetCdmError(error),
+	};
+	const editCDMHandler = {
+		onSuccess: (data) => handleEditCDMSuccess(data),
+		onError: (error) => handleEditCDMError(error),
+	};
+
+	const {
+		data: fetchedPlannerCdmTurnAround,
+		isLoading: isPlannerCdmTurnAroundLoading,
+		isFetching: isPlannerCdmTurnAroundFetching,
+		hasNextPage: isPlannerCdmTurnAroundHasNextPage,
+		fetchNextPage: isPlannerCdmTurnAroundFetchNextPage,
+		refetch: isPlannerCdmTurnAroundRefetching,
+	} = useGetAllCdmTurnAround(selectedTimeValue?.slice(0, 2), getCdmHandler);
+
+	const { mutate: onUpdateCDMTurnAround, isLoading: isUpdateCDMTurnAroundLoading } = useUpdateCdmTurnAround(
+		rowData?.arrivalId,
+		rowData?.departureId,
+		editCDMHandler
+	);
+
+	const {
+		data: fetchedPlannerCdm,
+		isLoading: isPlannerCdmLoading,
+		isFetching: isPlannerCdmFetching,
+		hasNextPage: isPlannerCdmHasNextPage,
+		fetchNextPage: isPlannerCdmFetchNextPage,
+	} = useGetAllCdmArrivalDeparture(type, selectedTimeValue?.slice(0, 2), getCdmHandler);
+
+	const { mutate: onUpdateCDM, isLoading: isUpdateCDMLoading } = useUpdateCdmTypes(rowData?.id, editCDMHandler);
+
+	const handleGetCdmSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data?.pages.reduce((acc, page) => {
+				const modifiedPageData = page.data.map((item) => ({
+					...item,
+					eobt3: item?.eobt3 ? SplitTimeFromDateAndTime(item?.eobt3) : null,
+					eldt: item?.eldt ? SplitTimeFromDateAndTime(item?.eldt) : null,
+					aldt: item?.aldt ? SplitTimeFromDateAndTime(item?.aldt) : null,
+					eibt: item?.eibt ? SplitTimeFromDateAndTime(item?.eibt) : null,
+					aibt: item?.aibt ? SplitTimeFromDateAndTime(item?.aibt) : null,
+					tobt: item?.tobt ? SplitTimeFromDateAndTime(item?.tobt) : null,
+					aobt: item?.aobt ? SplitTimeFromDateAndTime(item?.aobt) : null,
+					tsat: item?.tsat ? SplitTimeFromDateAndTime(item?.tsat) : null,
+					atot: item?.atot ? SplitTimeFromDateAndTime(item?.atot) : null,
+				}));
+				return acc.concat(modifiedPageData);
+			}, []);
+
+			setCdmData([...newData]);
+		}
+	};
+
+	const handleGetCdmError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const handleEditCDMSuccess = (data) => {
+		activeTab === '3'
+			? isPlannerCdmTurnAroundRefetching()
+			: queryClient.invalidateQueries('get-all-cdm-arrival-departure');
+		toast.success(data?.message);
+		setRowData({});
+	};
+
+	const handleEditCDMError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
 
 	const handleTimeValueChange = (value) => {
 		setSelectedTimeValue(value);
@@ -18,55 +101,79 @@ const CDM = () => {
 
 	const handleTabChange = (key) => {
 		setActiveTab(key);
-
 		if (key === '1') {
-			setData(ArrivalData);
+			setType('arrival');
 		}
 		if (key === '2') {
-			setData(DepartureData);
+			setType('departure');
 		}
 		if (key === '3') {
-			setData(TurnAroundData);
+			setType('');
+			isPlannerCdmTurnAroundRefetching();
 		}
 	};
-	const handleEditTable = (row, data) => {
-		console.log(row, data);
-		setData(data);
+	const formattedTime = (data) => {
+		const timeRegex = /^\d{2}:\d{2}$/;
+		if (timeRegex.test(data)) {
+			return `${data}:00`;
+		} else {
+			return new Date(data).toLocaleTimeString('en-US', {
+				hour12: false,
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+			});
+		}
+	};
+
+	const handleEditTable = (item) => {
+		setRowData(item);
+		const currentDate = new Date();
+
+		const data = {
+			eobt3: item?.eobt3 ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eobt3)}` : null,
+			eldt: item?.eldt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eldt)}` : null,
+			aldt: item?.aldt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aldt)}` : null,
+			eibt: item?.eibt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eibt)}` : null,
+			aibt: item?.aibt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aibt)}` : null,
+			tobt: item?.tobt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.tobt)}` : null,
+			aobt: item?.aobt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aobt)}` : null,
+			tsat: item?.tsat ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.tsat)}` : null,
+			atot: item?.atot ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.atot)}` : null,
+			remark: item?.remark ?? null,
+		};
+		activeTab === '3' ? onUpdateCDMTurnAround(data) : onUpdateCDM(data);
 	};
 	const columns =
 		activeTab === '1'
 			? [
 					{
-						title: 'Flight ID',
-						dataIndex: 'flightID',
-						key: 'flightID',
-						render: (flightID) => flightID ?? '-',
+						title: 'Flight Number',
+						dataIndex: 'flight_number',
+						key: 'flight_number',
+						render: (flight_number) => flight_number ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'ICAO Code',
-						dataIndex: 'icao',
-						key: 'icao',
-						render: (icao) => icao ?? '-',
+						dataIndex: 'icao_code',
+						key: 'icao_code',
+						render: (icao_code) => icao_code ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'IATA Code',
-						dataIndex: 'iata',
-						key: 'iata',
-						render: (iata) => iata ?? '-',
+						dataIndex: 'iata_code',
+						key: 'iata_code',
+						render: (iata_code) => iata_code ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Aircraft Type',
-						dataIndex: 'aircraftType',
-						key: 'aircraftType',
-						render: (aircraftType) => aircraftType ?? '-',
+						dataIndex: 'aircraft',
+						key: 'aircraft',
+						render: (aircraft) => aircraft ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Registration',
@@ -74,7 +181,6 @@ const CDM = () => {
 						key: 'registration',
 						render: (registration) => registration ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Origin',
@@ -82,63 +188,46 @@ const CDM = () => {
 						key: 'origin',
 						render: (origin) => origin ?? '-',
 						align: 'center',
-						editable: true,
-					},
-					{
-						title: 'Status',
-						dataIndex: 'status',
-						key: 'status',
-						render: (status) => status ?? '-',
-						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Flight Date',
 						dataIndex: 'date',
 						key: 'date',
-						render: (date) => date ?? '-',
+						render: (date) => (date ? ConvertUtcToIst(date) : '-'),
 						align: 'center',
-						editable: true,
 					},
-					{
-						title: 'SIBT',
-						dataIndex: 'sibt',
-						key: 'sibt',
-						render: (sibt) => sibt ?? '-',
-						align: 'center',
-						editable: true,
-					},
+
 					{
 						title: 'ELDT',
 						dataIndex: 'eldt',
 						key: 'eldt',
-						render: (eldt) => eldt ?? '-',
+						render: (eldt) => (eldt ? eldt : '-'),
 						align: 'center',
-						editable: true,
+						editable: { type: 'time' },
 					},
 					{
 						title: 'ALDT',
 						dataIndex: 'aldt',
 						key: 'aldt',
-						render: (aldt) => aldt ?? '-',
+						render: (aldt) => (aldt ? aldt : '-'),
 						align: 'center',
-						editable: true,
+						editable: { type: 'time' },
 					},
 					{
 						title: 'EIBT',
 						dataIndex: 'eibt',
 						key: 'eibt',
-						render: (eibt) => eibt ?? '-',
+						render: (eibt) => (eibt ? eibt : '-'),
 						align: 'center',
-						editable: true,
+						editable: { type: 'time' },
 					},
 					{
 						title: 'AIBT',
 						dataIndex: 'aibt',
 						key: 'aibt',
-						render: (aibt) => aibt ?? '-',
+						render: (aibt) => (aibt ? aibt : '-'),
 						align: 'center',
-						editable: true,
+						editable: { type: 'time' },
 					},
 					{
 						title: 'Runway',
@@ -146,7 +235,6 @@ const CDM = () => {
 						key: 'runway',
 						render: (runway) => runway ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Stand',
@@ -154,7 +242,6 @@ const CDM = () => {
 						key: 'stand',
 						render: (stand) => stand ?? '-',
 						align: 'center',
-						editable: true,
 					},
 					{
 						title: 'Remark',
@@ -162,7 +249,7 @@ const CDM = () => {
 						key: 'remark',
 						render: (remark) => remark ?? '-',
 						align: 'center',
-						editable: true,
+						editable: { type: 'text' },
 					},
 					{
 						title: 'Link Flight',
@@ -170,42 +257,37 @@ const CDM = () => {
 						key: 'link',
 						render: (link) => link ?? '-',
 						align: 'center',
-						editable: true,
 					},
 				]
 			: activeTab === '2'
 				? [
 						{
-							title: 'Flight ID',
-							dataIndex: 'flightID',
-							key: 'flightID',
-							render: (flightID) => flightID ?? '-',
+							title: 'Flight Number',
+							dataIndex: 'flight_number',
+							key: 'flight_number',
+							render: (flight_number) => flight_number ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'ICAO Code',
-							dataIndex: 'icao',
-							key: 'icao',
-							render: (icao) => icao ?? '-',
+							dataIndex: 'icao_code',
+							key: 'icao_code',
+							render: (icao_code) => icao_code ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'IATA Code',
-							dataIndex: 'iata',
-							key: 'iata',
-							render: (iata) => iata ?? '-',
+							dataIndex: 'iata_code',
+							key: 'iata_code',
+							render: (iata_code) => iata_code ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'Aircraft Type',
-							dataIndex: 'aircraftType',
-							key: 'aircraftType',
-							render: (aircraftType) => aircraftType ?? '-',
+							dataIndex: 'aircraft',
+							key: 'aircraft',
+							render: (aircraft) => aircraft ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'Registration',
@@ -213,87 +295,62 @@ const CDM = () => {
 							key: 'registration',
 							render: (registration) => registration ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
-							title: 'Des',
-							dataIndex: 'des',
-							key: 'des',
-							render: (des) => des ?? '-',
+							title: 'Dest',
+							dataIndex: 'destination',
+							key: 'destination',
+							render: (destination) => destination ?? '-',
 							align: 'center',
-							editable: true,
-						},
-						{
-							title: 'Status',
-							dataIndex: 'status',
-							key: 'status',
-							render: (status) => status ?? '-',
-							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'Flight Date',
 							dataIndex: 'date',
 							key: 'date',
-							render: (date) => date ?? '-',
+							render: (date) => (date ? ConvertUtcToIst(date) : '-'),
 							align: 'center',
-							editable: true,
 						},
-						{
-							title: 'SOBT',
-							dataIndex: 'sobt',
-							key: 'sobt',
-							render: (sobt) => sobt ?? '-',
-							align: 'center',
-							editable: true,
-						},
+
 						{
 							title: 'EOBT',
-							dataIndex: 'eobt',
-							key: 'eobt',
-							render: (eobt) => eobt ?? '-',
+							dataIndex: 'eobt3',
+							key: 'eobt3',
+							render: (eobt3) => (eobt3 ? eobt3 : '-'),
 							align: 'center',
-							editable: true,
+							editable: { type: 'time' },
 						},
 						{
 							title: 'TOBT',
 							dataIndex: 'tobt',
 							key: 'tobt',
-							render: (tobt) => tobt ?? '-',
+							render: (tobt) => (tobt ? tobt : '-'),
 							align: 'center',
-							editable: true,
+							editable: { type: 'time' },
 						},
 						{
 							title: 'AOBT',
 							dataIndex: 'aobt',
 							key: 'aobt',
-							render: (aobt) => aobt ?? '-',
+							render: (aobt) => (aobt ? aobt : '-'),
 							align: 'center',
-							editable: true,
+							editable: { type: 'time' },
 						},
 						{
 							title: 'TSAT',
 							dataIndex: 'tsat',
 							key: 'tsat',
-							render: (tsat) => tsat ?? '-',
+							render: (tsat) => (tsat ? tsat : '-'),
 							align: 'center',
-							editable: true,
+							editable: { type: 'time' },
 						},
-						{
-							title: 'TTOT',
-							dataIndex: 'ttot',
-							key: 'ttot',
-							render: (ttot) => ttot ?? '-',
-							align: 'center',
-							editable: true,
-						},
+
 						{
 							title: 'ATOT',
 							dataIndex: 'atot',
 							key: 'atot',
-							render: (atot) => atot ?? '-',
+							render: (atot) => (atot ? atot : '-'),
 							align: 'center',
-							editable: true,
+							editable: { type: 'time' },
 						},
 						{
 							title: 'Runway',
@@ -301,7 +358,6 @@ const CDM = () => {
 							key: 'runway',
 							render: (runway) => runway ?? '-',
 							align: 'center',
-							editable: true,
 						},
 						{
 							title: 'Remark',
@@ -309,7 +365,7 @@ const CDM = () => {
 							key: 'remark',
 							render: (remark) => remark ?? '-',
 							align: 'center',
-							editable: true,
+							editable: { type: 'text' },
 						},
 						{
 							title: 'Stand',
@@ -317,7 +373,6 @@ const CDM = () => {
 							key: 'stand',
 							render: (stand) => stand ?? '-',
 							align: 'center',
-							editable: true,
 						},
 					]
 				: [
@@ -325,73 +380,68 @@ const CDM = () => {
 							title: 'Common',
 							children: [
 								{
-									title: 'Flight ID',
-									dataIndex: 'flightID',
-									key: 'flightID',
-									render: (flightID) => flightID ?? '-',
-									align: 'center',
-									editable: true,
-								},
-								{
 									title: 'Registration',
 									dataIndex: 'registration',
 									key: 'registration',
 									render: (registration) => registration ?? '-',
 									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'Aircraft Type',
-									dataIndex: 'aircraftType',
-									key: 'aircraftType',
-									render: (aircraftType) => aircraftType ?? '-',
+									dataIndex: 'aircraft',
+									key: 'aircraft',
+									render: (aircraft) => aircraft ?? '-',
 									align: 'center',
-									editable: true,
+								},
+								{
+									title: 'Stand',
+									dataIndex: 'stand',
+									key: 'stand',
+									render: (stand) => stand ?? '-',
+									align: 'center',
 								},
 							],
 						},
 						{
 							title: 'Arrival',
+							editable: true,
 							children: [
 								{
-									title: 'IATA Code',
-									dataIndex: 'iata',
-									key: 'iata',
-									render: (iata) => iata ?? '-',
+									title: 'Flight Number',
+									dataIndex: 'arrivalFlightNum',
+									key: 'arrivalFlightNum',
+									render: (arrivalFlightNum) => arrivalFlightNum ?? '-',
 									align: 'center',
-									editable: true,
+								},
+								{
+									title: 'IATA Code',
+									dataIndex: 'iataArrival',
+									key: 'iataArrival',
+									render: (iataArrival) => iataArrival ?? '-',
+									align: 'center',
 								},
 								{
 									title: 'ICAO Code',
-									dataIndex: 'icao',
-									key: 'icao',
-									render: (icao) => icao ?? '-',
+									dataIndex: 'icaoArrival',
+									key: 'icaoArrival',
+									render: (icaoArrival) => icaoArrival ?? '-',
 									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'Origin',
-									dataIndex: 'origin',
-									key: 'origin',
-									render: (origin) => origin ?? '-',
+									dataIndex: 'arrivalSector',
+									key: 'arrivalSector',
+									render: (arrivalSector) => arrivalSector ?? '-',
 									align: 'center',
-									editable: true,
 								},
-								{
-									title: 'SIBT',
-									dataIndex: 'sibt',
-									key: 'sibt',
-									render: (sibt) => sibt ?? '-',
-									align: 'center',
-									editable: true,
-								},
+
 								{
 									title: 'ELDT',
 									dataIndex: 'eldt',
 									key: 'eldt',
 									render: (eldt) => eldt ?? '-',
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'ALDT',
@@ -399,7 +449,7 @@ const CDM = () => {
 									key: 'aldt',
 									render: (aldt) => aldt ?? '-',
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'EIBT',
@@ -407,7 +457,7 @@ const CDM = () => {
 									key: 'eibt',
 									render: (eibt) => eibt ?? '-',
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'AIBT',
@@ -415,100 +465,95 @@ const CDM = () => {
 									key: 'aibt',
 									render: (aibt) => aibt ?? '-',
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'Runway',
-									dataIndex: 'runway',
-									key: 'runway',
-									render: (runway) => runway ?? '-',
+									dataIndex: 'runwayArrival',
+									key: 'runwayArrival',
+									render: (runwayArrival) => runwayArrival ?? '-',
 									align: 'center',
-									editable: true,
 								},
 							],
 						},
 						{
 							title: 'Departure',
+							editable: true,
 							children: [
 								{
-									title: 'Stand',
-									dataIndex: 'stand',
-									key: 'stand',
-									render: (stand) => stand ?? '-',
+									title: 'Flight Number',
+									dataIndex: 'departureFlightNum',
+									key: 'departureFlightNum',
+									render: (departureFlightNum) => departureFlightNum ?? '-',
 									align: 'center',
-									editable: true,
-								},
-								{
-									title: 'Status',
-									dataIndex: 'status',
-									key: 'status',
-									render: (status) => status ?? '-',
-									align: 'center',
-									editable: true,
-								},
-								{
-									title: 'STAT',
-									dataIndex: 'stat',
-									key: 'stat',
-									render: (stat) => stat ?? '-',
-									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'IATA Code',
-									dataIndex: 'iata',
-									key: 'iata',
-									render: (iata) => iata ?? '-',
+									dataIndex: 'iataDeparture',
+									key: 'iataDeparture',
+									render: (iataDeparture) => iataDeparture ?? '-',
 									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'ICAO Code',
-									dataIndex: 'icao',
-									key: 'icao',
-									render: (icao) => icao ?? '-',
+									dataIndex: 'icaoDeparture',
+									key: 'icaoDeparture',
+									render: (icaoDeparture) => icaoDeparture ?? '-',
 									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'Dest',
-									dataIndex: 'dest',
-									key: 'dest',
-									render: (dest) => dest ?? '-',
+									dataIndex: 'departureSector',
+									key: 'departureSector',
+									render: (departureSector) => departureSector ?? '-',
 									align: 'center',
-									editable: true,
-								},
-								{
-									title: 'SOBT',
-									dataIndex: 'sobt',
-									key: 'sobt',
-									render: (sobt) => sobt ?? '-',
-									align: 'center',
-									editable: true,
 								},
 								{
 									title: 'EOBT',
-									dataIndex: 'eobt',
-									key: 'eobt',
-									render: (eobt) => eobt ?? '-',
+									dataIndex: 'eobt3',
+									key: 'eobt3',
+									render: (eobt3) => (eobt3 ? eobt3 : '-'),
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'TOBT',
 									dataIndex: 'tobt',
 									key: 'tobt',
-									render: (tobt) => tobt ?? '-',
+									render: (tobt) => (tobt ? tobt : '-'),
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
 								},
 								{
 									title: 'AOBT',
 									dataIndex: 'aobt',
 									key: 'aobt',
-									render: (aobt) => aobt ?? '-',
+									render: (aobt) => (aobt ? aobt : '-'),
 									align: 'center',
-									editable: true,
+									editable: { type: 'time' },
+								},
+								{
+									title: 'TSAT',
+									dataIndex: 'tsat',
+									key: 'tsat',
+									render: (tsat) => (tsat ? tsat : '-'),
+									align: 'center',
+									editable: { type: 'time' },
+								},
+								{
+									title: 'ATOT',
+									dataIndex: 'atot',
+									key: 'atot',
+									render: (atot) => (atot ? atot : '-'),
+									align: 'center',
+									editable: { type: 'time' },
+								},
+								{
+									title: 'Runway',
+									dataIndex: 'runwayDeparture',
+									key: 'runwayDeparture',
+									render: (runwayDeparture) => runwayDeparture ?? '-',
+									align: 'center',
 								},
 							],
 						},
@@ -521,11 +566,12 @@ const CDM = () => {
 			children: (
 				<TableComponent
 					columns={columns}
-					data={data}
+					data={cdmData}
 					handleEdit={handleEditTable}
-					// loading={loading}
-					fetchData={data}
-					// pagination={pagination}
+					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					fetchData={isPlannerCdmFetchNextPage}
+					pagination={isPlannerCdmHasNextPage}
+					isColored
 				/>
 			),
 		},
@@ -535,11 +581,12 @@ const CDM = () => {
 			children: (
 				<TableComponent
 					columns={columns}
-					data={data}
+					data={cdmData}
 					handleEdit={handleEditTable}
-					// loading={loading}
-					fetchData={data}
-					// pagination={pagination}
+					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					fetchData={isPlannerCdmFetchNextPage}
+					pagination={isPlannerCdmHasNextPage}
+					isColored
 				/>
 			),
 		},
@@ -549,11 +596,12 @@ const CDM = () => {
 			children: (
 				<TableComponent
 					columns={columns}
-					data={data}
+					data={cdmData}
 					handleEdit={handleEditTable}
-					// loading={loading}
-					fetchData={data}
-					// pagination={pagination}
+					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					fetchData={isPlannerCdmFetchNextPage}
+					pagination={isPlannerCdmHasNextPage}
+					isColored
 				/>
 			),
 		},
@@ -598,6 +646,19 @@ const CDM = () => {
 						}
 					/>
 				</div>
+				{(isUpdateCDMLoading ||
+					isPlannerCdmLoading ||
+					isPlannerCdmFetching ||
+					isUpdateCDMTurnAroundLoading) && (
+					<PageLoader
+						loading={
+							isUpdateCDMLoading ||
+							isPlannerCdmLoading ||
+							isPlannerCdmFetching ||
+							isUpdateCDMTurnAroundLoading
+						}
+					/>
+				)}
 			</div>
 		</>
 	);

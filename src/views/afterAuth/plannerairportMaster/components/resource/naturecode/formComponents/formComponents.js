@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -15,7 +15,6 @@ const FormComponent = ({
 	isReadOnly,
 }) => {
 
-	// const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -29,11 +28,13 @@ const FormComponent = ({
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 		}
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -72,4 +73,4 @@ const FormComponent = ({
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

@@ -27,8 +27,8 @@ const AirportForm = ({ isReadOnly, type, timeZoneDropdownData = [] }) => {
 					max={32}
 					required
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={isReadOnly || isNotEditable} />
-				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={isReadOnly || isNotEditable} />
+				<OtpField otpLength={3} label="IATA Code" pattern='^[a-zA-Z0-9]+$' required name="iataCode" disabled={isReadOnly || isNotEditable} />
+				<OtpField otpLength={4} label="ICAO Code" pattern='^[a-zA-Z0-9]+$' required name="icaoCode" disabled={isReadOnly || isNotEditable} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField

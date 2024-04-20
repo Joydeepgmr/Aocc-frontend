@@ -16,6 +16,12 @@ import {
 	useGetTimelineGroupData,
 	useUpdateResourceAllocation,
 } from './ResourceAllocationServices/ResourceAllocationServices';
+import {
+	useGetAllCdmArrivalDeparture,
+	useGetAllCdmTurnAround,
+	useUpdateCdmTurnAround,
+	useUpdateCdmTypes,
+} from './cdm/cdmServices';
 
 import { useDummyApi } from './dummyApi/dummyApi';
 
@@ -90,4 +96,8 @@ export {
 	useUploadCSVGlobalAircraftType,
 	useUploadCSVGlobalAirline,
 	useUploadCSVGlobalAirport,
+	useGetAllCdmArrivalDeparture,
+	useUpdateCdmTypes,
+	useUpdateCdmTurnAround,
+	useGetAllCdmTurnAround,
 };

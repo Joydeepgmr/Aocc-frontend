@@ -31,6 +31,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			});
 		}
 		if (dateString === null) {
+			form.setFieldsValue({
+				validTill: null,
+			});
 			setIsValidFrom(false);
 			setCurrentValidFrom(null);
 		} else {
@@ -152,6 +155,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						label="Phone"
 						name="phoneNumber"
 						max={20}
+						min={10}
+						pattern='^[0-9]+$'
 						placeholder={!isReadOnly && 'Enter your Phone No.'}
 						className="custom_input"
 						disabled={isReadOnly}
