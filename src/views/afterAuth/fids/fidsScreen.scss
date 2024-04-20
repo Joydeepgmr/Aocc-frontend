@@ -42,6 +42,10 @@ $animation-duration: 0.5s;
 				animation: rotateX 1.5s ease-in-out;
 				animation: scaleText 1s ease-in-out;
 			}
+			.align-left {
+				text-align: left;
+				width: auto;
+			}
 			thead {
 				background-color: yellow;
 				th {

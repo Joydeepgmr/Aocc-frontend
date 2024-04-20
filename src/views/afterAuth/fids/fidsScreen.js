@@ -5,7 +5,7 @@ const FidsScreen = () => {
     const data2 = {
         std: '16:00',
         etd: '19:30',
-        toVia: 'Delhi',
+        toVia: 'Visakhapatnam',
         airline: 'IndiGo',
         flight: '6E123',
         status: 'On Time',
@@ -20,7 +20,7 @@ const FidsScreen = () => {
         status: 'On Time',
         gate: 'A6'
     }
-    const [data, setData] = useState([...Array(10).fill(data1).map((data, index) => { return { ...data, std: index } }), ...Array(30).fill(data2).map((data, index) => { return { ...data, std: 20 + index } })]);
+    const [data, setData] = useState([...Array(10).fill(data1).map((data, index) => data), ...Array(30).fill(data2).map((data, index) => data)]);
     const [dataToShow, setDataToShow] = useState([]);
     const [pagination, setPagination] = useState({});
     const [fonts, setFonts] = useState({ columnFont: '', dataFont: '', dataHeight: '' });
@@ -140,25 +140,25 @@ const FidsScreen = () => {
                     <table border="0" className={`fids-table ${isRotating ? 'rotate-animation' : ''}`} style={{ letterSpacing: fonts?.letterSpace }}>
                         <thead className='fids-table-header' style={{ fontSize: fonts?.columnFont, height: fonts?.dataHeight }}>
                             <tr>
+                                <th className='align-left'>Airline</th>
+                                <th className='align-left'>Flight</th>
+                                <th className='align-left'>TO/VIA</th>
                                 <th>STD</th>
                                 <th>ETD</th>
-                                <th>TO/VIA</th>
-                                <th>Airline</th>
-                                <th>Flight</th>
                                 <th>Status</th>
-                                <th>Gate</th>
+                                {/* <th>Gate</th> */}
                             </tr>
                         </thead>
                         <tbody className='fids-table-body'>
                             {dataToShow.map((item, index) => (
                                 <tr className={`${(index == dataToShow?.length - 1 || !item) && 'noBorder'}`} key={index} style={{ fontSize: fonts?.dataFont, height: fonts?.dataHeight }}>
+                                    <td className='align-left'>{item?.airline}</td>
+                                    <td className='align-left'>{item?.flight}</td>
+                                    <td className='align-left'>{item?.toVia}</td>
                                     <td>{item?.std}</td>
                                     <td>{item?.etd}</td>
-                                    <td>{item?.toVia}</td>
-                                    <td>{item?.airline}</td>
-                                    <td>{item?.flight}</td>
                                     <td>{item?.status}</td>
-                                    <td>{item?.gate}</td>
+                                    {/* <td>{item?.gate}</td> */}
                                 </tr>
                             ))}
                         </tbody>
