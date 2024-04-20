@@ -7,12 +7,17 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportForm = ({ isReadOnly, type, timeZoneDropdownData = [] }) => {
+const AirportForm = ({ isReadOnly, type, timezoneDropdown = [], countryDropdownData = [] }) => {
+	const SelectCountryData = useMemo(() => {
+		return countryDropdownData.map((data) => {
+			return { label: data.name, value: data.name, id: data.name }
+		})
+	}, [countryDropdownData])
 	const SelectedTimeZone = useMemo(() => {
-		return timeZoneDropdownData.map((data) => {
+		return timezoneDropdown.map((data) => {
 			return { label: data, value: data, id: data }
 		})
-	}, [timeZoneDropdownData])
+	}, [timezoneDropdown])
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_setup_form_container">
@@ -77,13 +82,20 @@ const AirportForm = ({ isReadOnly, type, timeZoneDropdownData = [] }) => {
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable} />
+				<CustomSelect
+					SelectData={SelectCountryData}
+					label="Country"
+					name="country"
+					placeholder={!isReadOnly && 'Country'}
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<CustomSelect
 					SelectData={SelectedTimeZone}
 					placeholder={!isReadOnly && "Enter the time change"}
-					label="Time Change"
+					label="Time Zone"
 					name="timeChange"
 					disabled={isReadOnly}
 					required

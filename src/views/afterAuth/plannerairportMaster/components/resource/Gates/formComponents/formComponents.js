@@ -156,10 +156,9 @@ const FormComponent = ({
 							name="gateId"
 							placeholder="Filled Text"
 							warning="Required field"
-							type="number"
+							max={16}
 							disabled={isReadOnly}
 							className="custom_input"
-							max="999"
 						/>
 						<InputField
 							label="Default Allocation Duration"

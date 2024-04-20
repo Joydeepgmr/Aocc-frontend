@@ -195,13 +195,13 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				align: 'center',
 				render: (text) => text?.name || '-',
 			},
-			{
-				title: 'Terminal',
-				dataIndex: 'terminal',
-				key: 'timeChange',
-				align: 'center',
-				render: (text) => text || '-',
-			},
+			// {
+			// 	title: 'Terminal',
+			// 	dataIndex: 'terminal',
+			// 	key: 'timeChange',
+			// 	align: 'center',
+			// 	render: (text) => text || '-',
+			// },
 			{
 				title: 'View Details',
 				key: 'viewDetails',

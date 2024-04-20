@@ -75,8 +75,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						label="Registration"
 						name="registration"
 						placeholder={!isReadOnly && 'Enter the airport name'}
-						min={6}
-						max={6}
+						min={4}
+						max={12}
 						className="custom_input"
 						required
 						disabled={isReadOnly}
