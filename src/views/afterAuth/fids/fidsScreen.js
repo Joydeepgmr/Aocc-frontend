@@ -20,7 +20,7 @@ const FidsScreen = () => {
         status: 'On Time',
         gate: 'A6'
     }
-    const [data, setData] = useState([...Array(20).fill(data1).map((data, index) => { return { ...data, std: index } }), ...Array(20).fill(data2).map((data, index) => { return { ...data, std: 20 + index } })]);
+    const [data, setData] = useState([...Array(10).fill(data1).map((data, index) => { return { ...data, std: index } }), ...Array(30).fill(data2).map((data, index) => { return { ...data, std: 20 + index } })]);
     const [dataToShow, setDataToShow] = useState([]);
     const [pagination, setPagination] = useState({});
     const [fonts, setFonts] = useState({ columnFont: '', dataFont: '', dataHeight: '' });
@@ -62,25 +62,27 @@ const FidsScreen = () => {
             const rows = document.querySelectorAll('.fids-table-body tr');
             rows.forEach((row, index) => {
                 setTimeout(() => {
-                    row.classList.add('rotate');
                     setTimeout(() => {
-                        const { dataPerPage, min, max } = pagination;
-                        if (max < data?.length) {
-                            let updatedData = dataToShow;
-                            updatedData[index] = data[dataPerPage + min + index];
-                            setDataToShow([...updatedData]);
-                        } else {
-                            let updatedData = dataToShow;
-                            updatedData[index] = data[index];
-                            setDataToShow([...updatedData]);
-                        }
-                        row.classList.remove('rotate');
+                        row.classList.add('rotate');
+                        setTimeout(() => {
+                            const { dataPerPage, min, max } = pagination;
+                            if (max < data?.length) {
+                                let updatedData = dataToShow;
+                                updatedData[index] = data[dataPerPage + min + index];
+                                setDataToShow([...updatedData]);
+                            } else {
+                                let updatedData = dataToShow;
+                                updatedData[index] = data[index];
+                                setDataToShow([...updatedData]);
+                            }
+                            row.classList.remove('rotate');
+                        }, 700)
                     }, 900)
                     if (index === rows.length - 1) {
                         handlePagination();
                         setIsRotating(false);
                     }
-                }, (index + 1) * 100);
+                }, (index + 1) * 500);
             });
         }
     };
@@ -91,19 +93,23 @@ const FidsScreen = () => {
             if (tableRef.current) {
                 const tbodyHeight = tableRef.current.clientHeight;
                 const tbodyWidth = tableRef.current.clientWidth;
-                let columnFont, dataFont, dataHeight, dataPerPage;
+                let columnFont, dataFont, dataHeight, dataPerPage, dateTimeFont, letterSpace;
                 if (tbodyWidth * 1.3 < tbodyHeight) {
                     console.log("under if ", tbodyWidth, tbodyHeight)
                     columnFont = `${Math.round(percentage(2.5, tbodyHeight))}px`
                     dataFont = `${Math.round(percentage(2.4, tbodyHeight))}px`
+                    dateTimeFont = `${Math.round(percentage(1.5, tbodyHeight))}px`
+                    letterSpace = `${Math.round(percentage(0.3, tbodyHeight))}px`
                     dataHeight = `${Math.round(percentage(10, tbodyHeight))}px`
                     dataPerPage = Math.floor(100 / ((percentage(10, tbodyHeight) * 100) / tbodyHeight)) - 1;
                 } else {
                     console.log("under else ", tbodyWidth, tbodyHeight)
-                    columnFont = `${Math.round(percentage(1.7, tbodyWidth))}px`
-                    dataFont = `${Math.round(percentage(1.5, tbodyWidth))}px`
-                    dataHeight = `${Math.round(percentage(4, tbodyWidth))}px`
-                    dataPerPage = Math.floor(100 / ((percentage(4, tbodyWidth) * 100) / tbodyHeight)) - 1;
+                    columnFont = `${Math.round(percentage(2.3, tbodyWidth))}px`
+                    dataFont = `${Math.round(percentage(2.4, tbodyWidth))}px`
+                    letterSpace = `${Math.round(percentage(0.3, tbodyWidth))}px`
+                    dateTimeFont = `${Math.round(percentage(1.5, tbodyWidth))}px`
+                    dataHeight = `${Math.round(percentage(5, tbodyWidth))}px`
+                    dataPerPage = Math.floor(100 / ((percentage(5, tbodyWidth) * 100) / tbodyHeight)) - 1;
                 }
                 setPagination({ min: 0, max: dataPerPage, page: 1, total: Math.ceil(data?.length / dataPerPage), dataPerPage })
                 setDataToShow([...data.slice(0, dataPerPage)]);
@@ -111,7 +117,7 @@ const FidsScreen = () => {
                     console.log(columnFont, dataFont, dataHeight, tbodyHeight, tbodyWidth, dataPerPage, dataHeight, Math.ceil(data?.length / dataPerPage), "___________________")
                 }, 0)
 
-                setFonts({ columnFont, dataFont, dataHeight })
+                setFonts({ columnFont, dataFont, dataHeight, dateTimeFont, letterSpace })
             }
         };
         console.log("this re renders")
@@ -122,7 +128,7 @@ const FidsScreen = () => {
         clearInterval(intervalId);
         intervalId = setInterval(() => {
             handleRotateClick();
-        }, 15000);
+        }, 5000);
         return () => {
             clearInterval(intervalId);
         };
@@ -131,7 +137,7 @@ const FidsScreen = () => {
         <>
             <div className='fids-container'>
                 <div className="table-container" ref={tableRef}>
-                    <table border="0" className={`fids-table ${isRotating ? 'rotate-animation' : ''}`}>
+                    <table border="0" className={`fids-table ${isRotating ? 'rotate-animation' : ''}`} style={{ letterSpacing: fonts?.letterSpace }}>
                         <thead className='fids-table-header' style={{ fontSize: fonts?.columnFont, height: fonts?.dataHeight }}>
                             <tr>
                                 <th>STD</th>
@@ -165,7 +171,7 @@ const FidsScreen = () => {
                         <p>GMR</p>
                     </div>
                     <div className="footer-logo">
-                        <p className='time-footer'>
+                        <p className='time-footer' style={{ fontSize: fonts?.dateTimeFont }}>
                             <span className="time">12:45 PM</span>
                             <span className='page'>Page {pagination?.page}/{pagination?.total}</span>
                         </p>
