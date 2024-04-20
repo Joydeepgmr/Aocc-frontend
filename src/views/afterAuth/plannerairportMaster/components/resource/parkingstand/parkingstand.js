@@ -200,7 +200,7 @@ const ParkingStand = () => {
 			),
 		},
 		{
-			title: 'Stand Name',
+			title: 'POS',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
@@ -214,14 +214,14 @@ const ParkingStand = () => {
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
-			title: 'Connected to Gate',
+			title: 'Gate',
 			dataIndex: 'gate',
 			key: 'gate',
 			align: 'center',
 			render: (gate) => gate?.name ?? '-',
 		},
 		{
-			title: 'Connected to Taxiway',
+			title: 'TWY',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
 			align: 'center',
@@ -250,7 +250,7 @@ const ParkingStand = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -259,15 +259,15 @@ const ParkingStand = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

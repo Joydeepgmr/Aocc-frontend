@@ -201,7 +201,7 @@ const Gates = () => {
 			),
 		},
 		{
-			title: 'Gate Name',
+			title: 'Gate',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
@@ -222,7 +222,7 @@ const Gates = () => {
 			render: (busGate) => (busGate ? 'Yes' : 'No'),
 		},
 		{
-			title: 'Terminal',
+			title: 'TERM',
 			dataIndex: 'terminal',
 			key: 'terminal',
 			align: 'center',
@@ -258,7 +258,7 @@ const Gates = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -267,15 +267,15 @@ const Gates = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

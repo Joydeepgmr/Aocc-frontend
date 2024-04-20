@@ -201,7 +201,7 @@ const Runway = () => {
 			),
 		},
 		{
-			title: 'Runway Name',
+			title: 'RWY',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
@@ -244,7 +244,7 @@ const Runway = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -253,15 +253,15 @@ const Runway = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

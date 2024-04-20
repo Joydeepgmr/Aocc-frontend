@@ -202,14 +202,14 @@ const Taxiway = () => {
 			),
 		},
 		{
-			title: 'Taxiway Name',
+			title: 'TWY',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Connected to Runway',
+			title: 'RWY',
 			dataIndex: 'runway',
 			key: 'runway',
 			align: 'center',
@@ -245,7 +245,7 @@ const Taxiway = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -254,15 +254,15 @@ const Taxiway = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

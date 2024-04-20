@@ -261,39 +261,45 @@ const DailySchedule = ({ tab }) => {
 			title: 'Date',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
+			align:'center',
 			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
 		},
 		{
 			title: 'Call Sign',
 			dataIndex: 'callSign',
 			key: 'callSign',
+			align:'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
 			title: 'Nature Code',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
+			align:'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title:flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
+		{ title:flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin',align:'center', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
 					title: 'STA',
 					dataIndex: 'STA',
 					key: 'STA',
+					align:'center',
 					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
 				}
 			: {
 					title: 'STD',
 					dataIndex: 'STD',
 					key: 'STD',
+					align:'center',
 					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 				},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => pos ?? '-' },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos',align:'center', render: (pos) => pos ?? '-' },
 		{
-			title: 'REG No.',
+			title: 'AC/ REGN',
 			dataIndex: 'registration',
 			key: 'registration',
+			align:'center',
 			render: (registration) => registration ?? '-',
 		},
 		{

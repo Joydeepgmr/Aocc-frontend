@@ -189,7 +189,7 @@ const Aircrafts = () => {
 			),
 		},
 		{
-			title: 'Registration',
+			title: 'AC/ REGN',
 			dataIndex: 'registration',
 			key: 'registration',
 			render: (registration) => registration ?? '-',
@@ -203,14 +203,14 @@ const Aircrafts = () => {
 			align: 'center',
 		},
 		{
-			title: 'IATA Code',
+			title: 'IATA',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
 			render: (iataCode) => iataCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'ICAO Code',
+			title: 'ICAO',
 			dataIndex: 'icaoCode',
 			key: 'icaoCode',
 			render: (icaoCode) => icaoCode ?? '-',
