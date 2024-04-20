@@ -17,6 +17,8 @@ $animation-duration: 0.5s;
 
 .fids-container {
 	overflow: hidden;
+	// display: flex;
+	// flex-direction: column;
 	padding: 0%;
 	margin: 0%;
 	width: 100vw;
@@ -24,6 +26,7 @@ $animation-duration: 0.5s;
 	gap: 0;
 	.table-container {
 		height: 90%;
+		// flex: 1 1 0%;
 		background-color: black;
 		overflow: hidden;
 		padding: 0%;
@@ -66,7 +69,7 @@ $animation-duration: 0.5s;
 		display: flex;
 		text-align: center;
 		justify-content: space-between;
-		font-size: 6rem;
+		// font-size: 6rem;
 		background-color: black;
 		.footer-logo {
 			background-color: yellow;
@@ -74,7 +77,8 @@ $animation-duration: 0.5s;
 			align-items: center;
 			justify-content: center;
 			height: 100%;
-			width: 15%;
+			width: auto;
+			padding: 0 6rem;
 		}
 		.time-footer {
 			display: flex;

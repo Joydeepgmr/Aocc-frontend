@@ -91,10 +91,20 @@ const FidsScreen = () => {
             if (tableRef.current) {
                 const tbodyHeight = tableRef.current.clientHeight;
                 const tbodyWidth = tableRef.current.clientWidth;
-                const columnFont = `${Math.round(percentage(1.7, tbodyWidth))}px`
-                const dataFont = `${Math.round(percentage(1.5, tbodyWidth))}px`
-                const dataHeight = `${Math.round(percentage(4, tbodyWidth))}px`
-                const dataPerPage = Math.floor(100 / ((percentage(4, tbodyWidth) * 100) / tbodyHeight)) - 1;
+                let columnFont, dataFont, dataHeight, dataPerPage;
+                if (tbodyWidth * 1.3 < tbodyHeight) {
+                    console.log("under if ", tbodyWidth, tbodyHeight)
+                    columnFont = `${Math.round(percentage(2.5, tbodyHeight))}px`
+                    dataFont = `${Math.round(percentage(2.4, tbodyHeight))}px`
+                    dataHeight = `${Math.round(percentage(10, tbodyHeight))}px`
+                    dataPerPage = Math.floor(100 / ((percentage(10, tbodyHeight) * 100) / tbodyHeight)) - 1;
+                } else {
+                    console.log("under else ", tbodyWidth, tbodyHeight)
+                    columnFont = `${Math.round(percentage(1.7, tbodyWidth))}px`
+                    dataFont = `${Math.round(percentage(1.5, tbodyWidth))}px`
+                    dataHeight = `${Math.round(percentage(4, tbodyWidth))}px`
+                    dataPerPage = Math.floor(100 / ((percentage(4, tbodyWidth) * 100) / tbodyHeight)) - 1;
+                }
                 setPagination({ min: 0, max: dataPerPage, page: 1, total: Math.ceil(data?.length / dataPerPage), dataPerPage })
                 setDataToShow([...data.slice(0, dataPerPage)]);
                 setTimeout(() => {
@@ -148,7 +158,9 @@ const FidsScreen = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className='fids-table-footer' style={{ fontSize: fonts?.dataFont }}>
+                <div className='fids-table-footer'
+                    style={{ fontSize: fonts?.columnFont }}
+                >
                     <div className="footer-logo">
                         <p>GMR</p>
                     </div>
