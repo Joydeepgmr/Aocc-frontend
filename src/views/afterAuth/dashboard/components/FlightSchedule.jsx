@@ -61,7 +61,7 @@ const FlightSchedule = () => {
 		return [
 			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber' },
 			{ title: 'Status', dataIndex: 'status', key: 'status' },
-			{ title: 'ORG', dataIndex: 'org', key: 'org' },
+			{ title: tab == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'org', key: 'org' },
 			{
 				title: tab == 'arrival' ? 'STA' : 'STD',
 				dataIndex: tab == 'arrival' ? 'sta' : 'std',

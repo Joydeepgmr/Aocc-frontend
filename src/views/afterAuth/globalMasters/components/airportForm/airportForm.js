@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
@@ -7,7 +7,12 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportForm = ({ isReadOnly, type }) => {
+const AirportForm = ({ isReadOnly, type, timeZoneDropdownData = [] }) => {
+	const SelectedTimeZone = useMemo(() => {
+		return timeZoneDropdownData.map((data) => {
+			return { label: data, value: data, id: data }
+		})
+	}, [timeZoneDropdownData])
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_setup_form_container">
@@ -75,13 +80,13 @@ const AirportForm = ({ isReadOnly, type }) => {
 				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable} />
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<InputField
+				<CustomSelect
+					SelectData={SelectedTimeZone}
+					placeholder={!isReadOnly && "Enter the time change"}
 					label="Time Change"
 					name="timeChange"
-					pattern='^[0-9+\-:]+$'
-					placeholder={!isReadOnly && "Enter the time change"}
-					className="custom_input"
 					disabled={isReadOnly}
+					required
 				/>
 				<InputField
 					label="Standard Flight Time"

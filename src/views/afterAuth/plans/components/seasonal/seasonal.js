@@ -286,7 +286,7 @@ const Seasonal = ({ tab }) => {
 			key: 'natureCode',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
+		{ title: flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
 				title: 'STA',

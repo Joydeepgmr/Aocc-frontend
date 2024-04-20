@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useGetGlobalAirport, useUploadCSVGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
+import { useGetGlobalAirport, useTimezoneDropdown, useUploadCSVGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import AirportTable from '../airportTable/airportTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 import { useQueryClient } from 'react-query';
@@ -16,6 +16,7 @@ const AirportTab = () => {
 		},
 	}) => toast.error(message);
 	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
+	const { data: timezoneDropdown = [] } = useTimezoneDropdown({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -68,8 +69,8 @@ const AirportTab = () => {
 			setCreateProps={setCreateProps}
 			label="New Airport"
 			isLoading={isLoading}
-            isCsvModalOpen={isCsvModalOpen}
-            setIsCsvModalOpen={setIsCsvModalOpen}
+			isCsvModalOpen={isCsvModalOpen}
+			setIsCsvModalOpen={setIsCsvModalOpen}
 		/>
 	);
 };
