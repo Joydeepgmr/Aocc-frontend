@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
 import InputField from '../../../../../../../components/input/field/field';
@@ -80,7 +80,6 @@ const FormComponent = ({
 		}
 	};
 
-	// const [form] = Form.useForm();
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : { ...values, busGate: isChecked };
 		changedValues &&
@@ -101,11 +100,13 @@ const FormComponent = ({
 			busGate: isChecked,
 		};
 		changedValues && handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -120,7 +121,7 @@ const FormComponent = ({
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="gate_form_container">
 					<div className="gate_form_inputfields">
 						<InputField
@@ -267,4 +268,4 @@ const FormComponent = ({
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

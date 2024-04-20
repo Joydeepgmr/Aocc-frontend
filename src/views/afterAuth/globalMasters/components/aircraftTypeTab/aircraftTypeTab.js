@@ -9,6 +9,8 @@ import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 import { useQueryClient } from 'react-query';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_GLOBAL_AIRCRAFT_TYPE } from '../../../../../api';
 
 const AircraftTypeTab = () => {
 	const queryClient = useQueryClient();
@@ -20,7 +22,7 @@ const AircraftTypeTab = () => {
 		},
 	}) => toast.error(message);
 	const { data: airlineDropdownData = [] } = useGlobalAirlineDropdown({ onError });
-	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAircraftType({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getAircraftTypeRefetch } = useGetGlobalAircraftType({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -57,6 +59,7 @@ const AircraftTypeTab = () => {
 	}
 	return (
 		<>
+			<SocketEventListener refetch={getAircraftTypeRefetch} apiName={GET_GLOBAL_AIRCRAFT_TYPE} />
 			<CreateWrapper
 				width="80%"
 				tableComponent={

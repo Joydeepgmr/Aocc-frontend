@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -22,9 +22,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 			return { label: data.name, value: data.id };
 		});
 	}, [runwayDropdownData]);
-
-
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -87,11 +84,13 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -103,7 +102,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className='taxiway_form_container'>
 					<div className="taxiway_form_inputFields">
 						<InputField
@@ -199,6 +198,9 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							onChange={handleValidTill}
 						/>
 					</div>
+				</div>
+				<Divider />
+				<div className="taxiway_form_inputFields">
 					{!isReadOnly && <div className="custom_buttons">
 						<Button title='Cancel' type="filledText" id="btn" className="custom_svgButton" onClick={handleButtonClose} />
 						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" disabled={isReadOnly} />
@@ -209,4 +211,4 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

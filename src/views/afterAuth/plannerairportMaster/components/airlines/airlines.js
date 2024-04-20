@@ -23,6 +23,8 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_PLANNER_AIRLINE } from '../../../../../api';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -120,6 +122,7 @@ const Airlines = () => {
 		isFetching: isPlannerAirlineFetching,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getPlannerAirlineRefetch
 	} = useGetAllPlannerAirline(getAirlineHandler);
 
 	const { mutate: onDeleteAirline, isLoading: isDeleteAirlineLoading } =
@@ -295,6 +298,7 @@ const Airlines = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getPlannerAirlineRefetch} apiName={`${GET_PLANNER_AIRLINE}`} />
 			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
 				<PageLoader
 					loading={

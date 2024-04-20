@@ -5,6 +5,8 @@ import AirportTable from '../airportTable/airportTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 import { useQueryClient } from 'react-query';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_GLOBAL_AIRPORT } from '../../../../../api';
 
 const AirportTab = () => {
 	const queryClient = useQueryClient();
@@ -15,7 +17,9 @@ const AirportTab = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getGlobalAirportRefetch } = useGetGlobalAirport({ onError });
+	console.log(getGlobalAirportRefetch, 'refetch dataaaa');
+	
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -51,26 +55,29 @@ const AirportTab = () => {
 		}
 	}
 	return (
-		<CreateWrapper
-			width="80%"
-			tableComponent={
-				<AirportTable
-					data={data}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-					loading={isFetching}
-				/>
-			}
-			data={data?.pages}
-			createProps={createProps}
-			setCreateProps={setCreateProps}
-			label="New Airport"
-			isLoading={isLoading}
-            isCsvModalOpen={isCsvModalOpen}
-            setIsCsvModalOpen={setIsCsvModalOpen}
-		/>
+		<>
+			<SocketEventListener refetch={getGlobalAirportRefetch} apiName={GET_GLOBAL_AIRPORT} />
+			<CreateWrapper
+				width="80%"
+				tableComponent={
+					<AirportTable
+						data={data}
+						createProps={createProps}
+						setCreateProps={setCreateProps}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+						loading={isFetching}
+					/>
+				}
+				data={data?.pages}
+				createProps={createProps}
+				setCreateProps={setCreateProps}
+				label="New Airport"
+				isLoading={isLoading}
+				isCsvModalOpen={isCsvModalOpen}
+				setIsCsvModalOpen={setIsCsvModalOpen}
+			/>
+		</>
 	);
 };
 

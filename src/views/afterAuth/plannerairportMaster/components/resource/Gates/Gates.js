@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import { Form } from 'antd';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
@@ -20,7 +21,8 @@ import {
 	useDeleteGate,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import { Form } from 'antd';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_GATE } from '../../../../../../api';
 import './Gates.scss';
 
 const Gates = () => {
@@ -52,7 +54,14 @@ const Gates = () => {
 	const handleGetGateError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchGates, isFetching, isLoading: isFetchLoading, fetchNextPage, hasNextPage } = useGetGate(getGateHandler);
+	const {
+		data: fetchGates,
+		isFetching,
+		isLoading: isFetchLoading,
+		fetchNextPage,
+		hasNextPage,
+		refetch: getGateRefetch
+	} = useGetGate(getGateHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -60,6 +69,7 @@ const Gates = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
 		form.resetFields();
 	};
 
@@ -68,9 +78,10 @@ const Gates = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
-		form.resetFields();
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	//CREATE
@@ -91,13 +102,16 @@ const Gates = () => {
 	};
 
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
-	const handleSaveButton = (value) => {
+
+	const handleSaveButton = useCallback((value) => {
 		value && postGate(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		closeEditModal();
 		closeModal();
+		form.resetFields();
 	};
 
 	//EDIT
@@ -141,7 +155,7 @@ const Gates = () => {
 	};
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 	};
 
@@ -312,6 +326,7 @@ const Gates = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getGateRefetch} apiName={GET_GATE} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchGates?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -321,10 +336,8 @@ const Gates = () => {
 					Heading={'Add Gate'}
 					formComponent={
 						<FormComponent
-							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
 							terminalDropdownData={terminalDropdownData}
 						/>
 					}
@@ -366,7 +379,6 @@ const Gates = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
 						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
