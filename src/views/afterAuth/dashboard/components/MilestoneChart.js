@@ -1,12 +1,11 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useMemo, useRef } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import './style.scss';
 import { ConvertUtcToIst } from '../../../../utils';
+import './style.scss';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
     console.log("labels are ", labels)
-    // const containerRef = useRef(null);
+    const containerRef = useRef(null);
     const milestoneList = useMemo(() => {
         return data.map((list) => {
             let currentMilestone = list.progress * labels.length + 100;
@@ -32,20 +31,21 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
         });
     }, [data]);
     const getDataLabel = (value) => {
+        console.log("value is ", value)
         value = parseFloat((value - 100) / labels.length).toFixed(2);
         const blockSize = parseFloat(100 / labels.length).toFixed(2);
         const index = Math.ceil(value / blockSize);
         return labels[index]?.value
     }
-    // const handleScroll = useCallback(() => {
-    //     const container = containerRef.current;
-    //     if (container) {
-    //         const { scrollTop, scrollHeight, clientHeight } = container;
-    //         if (scrollTop + clientHeight >= scrollHeight && hasNextPage && fetchNextPage) {
-    //             fetchNext(type);
-    //         }
-    //     }
-    // }, []);
+    const handleScroll = () => {
+        const container = containerRef.current;
+        if (container) {
+            const { scrollTop, scrollHeight, clientHeight } = container;
+            if (scrollTop + clientHeight >= scrollHeight && hasNextPage && fetchNextPage) {
+                fetchNextPage(type);
+            }
+        };
+    }
     const chartOptions = {
         series: [
             {
@@ -57,6 +57,9 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
             chart: {
                 type: 'bar',
                 height: 350,
+                animations: {
+                    enabled: false
+                }
             },
             plotOptions: {
                 bar: {
@@ -68,7 +71,6 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                     colors: {
                         backgroundBarColors: ['#F1F3F5'],
                         ranges: [],
-                        // color: ['#6a52fb'],
                     },
                 },
             },
@@ -86,7 +88,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
             },
             yaxis: {
                 min: 0,
-                max: 100 * labels.length,
+                max: type == 'arrival' ? 100 * labels.length : 100 * (labels.length - 1),
             },
             tooltip: {
                 custom: function ({ series, seriesIndex, dataPointIndex, w }) {
@@ -131,35 +133,37 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                     },
                 },
             },
-            colors: ['#1976D2'],
         },
     };
 
     return (
-        // <div
-        //     ref={containerRef}
-        //     className="chart-container"
-        //     style={{ height: '40rem', overflowY: 'scroll' }}
-        //     onScroll={handleScroll}
-        // >
-        // <ReactApexChart
-        //     options={chartOptions.options}
-        //     series={chartOptions.series}
-        //     type="bar"
-        //     height={400}
-        //     className="chart-container"
-        // />
-        // </div>
-        <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} style={{ maxHeight: 400,overflowY: 'auto' }}>
+        <div
+            ref={containerRef}
+            className="chart-container"
+            style={{ maxHeight: 600, overflowY: 'scroll' }}
+            onScroll={handleScroll}
+        >
             <ReactApexChart
                 options={chartOptions.options}
                 series={chartOptions.series}
                 type="bar"
-                height={100*data?.length}
-                style={{paddingTop:'5rem'}}
+                height={50 * data?.length}
+                style={{ paddingTop: '5rem' }}
                 className="chart-container"
             />
-        </InfiniteScroll>
+        </div>
+        // <div style={{ maxHeight: 400, overflowY: 'auto', backgroundColor: 'black' }}>
+        //     <InfiniteScroll hasMore={hasNextPage} next={fetchNextPage} dataLength={data?.length} >
+        //         <ReactApexChart
+        //             options={chartOptions.options}
+        //             series={chartOptions.series}
+        //             type="bar"
+        //             height={100 * data?.length}
+        //             style={{ paddingTop: '5rem' }}
+        //             className="chart-container"
+        //         />
+        //     </InfiniteScroll>
+        // </div>
 
     )
 }
