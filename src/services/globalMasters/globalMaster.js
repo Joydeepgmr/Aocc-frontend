@@ -7,6 +7,7 @@ import {
 	DELETE_GLOBAL_AIRCRAFT_TYPE,
 	DELETE_GLOBAL_AIRLINE,
 	DELETE_GLOBAL_AIRPORT,
+	DOWNLOAD_CSV_TEMPLATE,
 	GET_COUNTRY_DATA,
 	GET_GLOBAL_AIRCRAFT_REGISTRATION,
 	GET_GLOBAL_AIRCRAFT_TYPE,
@@ -216,6 +217,14 @@ export const useCountriesDropdown = (props) => {
 	const response = useQuery({
 		queryKey: ['get-countries'],
 		queryFn: async () => await Get(`${GET_COUNTRY_DATA}`),
+		...props,
+	});
+	return { ...response };
+};
+export const useTimezoneDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-timezone'],
+		queryFn: async () => await Get(`${DOWNLOAD_CSV_TEMPLATE}?name=time-zone`),
 		...props,
 	});
 	return { ...response };

@@ -212,21 +212,21 @@ const CheckIn = () => {
 			),
 		},
 		{
-			title: 'Counter Name',
+			title: 'CNTR',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
-			title: 'Group',
+			title: 'GRP',
 			dataIndex: 'group',
 			key: 'group',
 			align: 'center',
 			render: (group) => group ?? '-',
 		},
 		{
-			title: 'Terminal',
+			title: 'TERM',
 			dataIndex: 'terminal',
 			key: 'terminal',
 			align: 'center',
@@ -262,7 +262,7 @@ const CheckIn = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -271,15 +271,15 @@ const CheckIn = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

@@ -207,14 +207,14 @@ const BaggageBelt = () => {
 			),
 		},
 		{
-			title: 'Belt Name',
+			title: 'Belt',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Terminal',
+			title: 'TERM',
 			dataIndex: 'terminal',
 			key: 'terminal',
 			align: 'center',
@@ -250,7 +250,7 @@ const BaggageBelt = () => {
 			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
 			align: 'center',
@@ -259,15 +259,15 @@ const BaggageBelt = () => {
 				const currentDate = dayjs();
 
 				if (!unavailableFrom || !unavailableTo) {
-					return 'Available';
+					return 'A';
 				}
 				if (
 					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
 					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
 				) {
-					return 'Unavailable';
+					return 'U/A';
 				} else {
-					return 'Available';
+					return 'A';
 				}
 			},
 		},

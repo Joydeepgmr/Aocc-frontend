@@ -153,9 +153,8 @@ const FormComponent = ({
 							placeholder={!isReadOnly && 'Filled Text'}
 							warning="Required field"
 							disabled={isReadOnly}
-							type="number"
 							className="custom_input"
-							max="999"
+							max={3}
 						/>
 						<InputField
 							label="Phones"

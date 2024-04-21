@@ -197,14 +197,14 @@ const DelayCode = () => {
 			),
 		},
 		{
-			title: 'Delay Code',
+			title: 'Code',
 			dataIndex: 'delayCode',
 			key: 'delayCode',
 			align: 'center',
 			render: (delayCode) => delayCode ?? '-',
 		},
 		{
-			title: 'Group',
+			title: 'GRP',
 			dataIndex: 'group',
 			key: 'group',
 			align: 'center',

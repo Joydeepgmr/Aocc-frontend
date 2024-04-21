@@ -23,6 +23,7 @@ const InputField = ({
 	min,
 	max,
 	defaultValue,
+	isArticle=true,
 }) => {
 	const numberPattern = /^[0-9]*$/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -178,7 +179,7 @@ const InputField = ({
 				>
 					<Input
 						placeholder={placeholder}
-						className={`${type === 'search' ? 'input_field_search' : 'input_field'}`}
+						className={`${type === 'search' ? 'input_field_search' : 'input_field'} ${isArticle && 'article-input'}`}
 						disabled={disabled ? disabled : false}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}
