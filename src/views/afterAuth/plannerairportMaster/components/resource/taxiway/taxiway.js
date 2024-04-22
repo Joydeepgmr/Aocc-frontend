@@ -216,7 +216,7 @@ const Taxiway = () => {
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'REN',
+			title: 'REASON',
 			dataIndex: 'reason',
 			key: 'reason',
 			align: 'center',

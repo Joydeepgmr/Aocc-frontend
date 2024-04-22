@@ -217,14 +217,14 @@ const Aircrafts = () => {
 			align: 'center',
 		},
 		{
-			title: 'AIRPORT',
+			title: 'HOPO',
 			dataIndex: 'airportId',
 			key: 'airportId',
 			render: (airportId) => airportId?.name ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'NAT',
+			title: 'NATIONALITY',
 			dataIndex: 'nationality',
 			key: 'nationality',
 			render: (nationality) => nationality ?? '-',

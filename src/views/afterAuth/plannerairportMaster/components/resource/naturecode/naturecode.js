@@ -194,7 +194,7 @@ const NatureCode = () => {
 			),
 		},
 		{
-			title: 'NA',
+			title: 'NAT',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
