@@ -73,27 +73,27 @@ function TelexMessage() {
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'Flight',
+				title: 'FLNR',
 				dataIndex: 'flightNumber',
 				key: 'flightNumber',
 			},
 			{
-				title: 'Flight Type',
+				title: 'TYPE',
 				dataIndex: 'flightType',
 				key: 'flightType',
 				align: 'center',
 			},
 			{
-				title: 'Updates',
+				title: 'UPD',
 				children: [
 					{
-						title: 'Message origin',
+						title: 'ORG',
 						dataIndex: 'messageOrigin',
 						key: 'messageOrigin',
 						align: 'center',
 					},
 					{
-						title: 'Raw Message',
+						title: 'RAW',
 						dataIndex: 'originalMessage',
 						key: 'originalMessage',
 						align: 'left',
@@ -112,7 +112,7 @@ function TelexMessage() {
 						},
 					},
 					{
-						title: 'Parsed Message',
+						title: 'PD',
 						dataIndex: 'parsedMessage',
 						key: 'parsedMessage',
 						render: (text) => text && <ParsedMessageComponent data={text} maxLength={45} />,

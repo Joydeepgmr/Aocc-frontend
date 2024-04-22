@@ -216,14 +216,14 @@ const Taxiway = () => {
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'Reason',
+			title: 'REN',
 			dataIndex: 'reason',
 			key: 'reason',
 			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',

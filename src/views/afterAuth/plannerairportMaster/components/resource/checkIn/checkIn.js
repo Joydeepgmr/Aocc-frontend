@@ -233,14 +233,14 @@ const CheckIn = () => {
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
-			title: 'Row',
+			title: 'ROW',
 			dataIndex: 'row',
 			key: 'row',
 			align: 'center',
 			render: (row) => row ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',

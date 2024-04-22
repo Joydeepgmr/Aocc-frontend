@@ -207,7 +207,7 @@ const BaggageBelt = () => {
 			),
 		},
 		{
-			title: 'Belt',
+			title: 'BELT',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
@@ -221,14 +221,14 @@ const BaggageBelt = () => {
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
-			title: 'Reason',
+			title: 'REN',
 			dataIndex: 'reason',
 			key: 'reason',
 			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',

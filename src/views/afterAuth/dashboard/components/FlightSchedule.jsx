@@ -1,6 +1,7 @@
 import { Form } from 'antd';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { GET_FLIGHT_SCHEDULE } from '../../../../api';
 import ButtonComponent from '../../../../components/button/button';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import InputField from '../../../../components/input/field/field';
@@ -9,10 +10,9 @@ import PageLoader from '../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
-import { ConvertUtcToIst } from '../../../../utils';
-import './style.scss';
 import SocketEventListener from '../../../../socket/listner/socketListner';
-import { GET_FLIGHT_SCHEDULE } from '../../../../api';
+import { ConvertToDateTime } from '../../../../utils';
+import './style.scss';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
@@ -59,58 +59,94 @@ const FlightSchedule = () => {
 	};
 	const columns = useMemo(() => {
 		return [
-			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber' },
-			{ title: 'Status', dataIndex: 'status', key: 'status' },
-			{ title: tab == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'org', key: 'org', align:'center' },
+			{ title: 'FLNR', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
+			{ title: 'STS', dataIndex: 'flightType', key: 'flightType', align: 'center', render: (text) => text ?? '-' },
+			{
+				title: tab == 'arrival' ? 'ORG' : 'DES',
+				dataIndex: 'origin',
+				key: 'origin',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
 			{
 				title: tab == 'arrival' ? 'STA' : 'STD',
 				dataIndex: tab == 'arrival' ? 'sta' : 'std',
 				key: tab == 'arrival' ? 'sta' : 'std',
-				align:'center',
-				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
 				title: tab == 'arrival' ? 'ETA' : 'ETD',
 				dataIndex: tab == 'arrival' ? 'eta' : 'etd',
 				key: tab == 'arrival' ? 'eta' : 'etd',
-				align:'center',
-				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
-			{ title: 'TMO', dataIndex: 'tmo', key: 'tmo',align:'center', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
-			{ title: 'ATA', dataIndex: 'ata', key: 'ata',align:'center', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
-			{ title: 'RWY', dataIndex: 'rny', key: 'rny',align:'center', },
-			{ title: 'EOB', dataIndex: 'eob', key: 'eob',align:'center', render: (text) => text && ConvertUtcToIst(text, 'HH:MM') },
 			{
-				title: 'ONB',
+				title: 'TMO',
+				dataIndex: 'tmo',
+				key: 'tmo',
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
+			},
+			{
+				title: tab == 'arrival' ?'ATA':"ATD",
+				dataIndex: 'ata',
+				key: 'ata',
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
+			},
+			{ title: 'RWY', dataIndex: 'rny', key: 'rny', align: 'center', render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-', },
+			{
+				title: 'EOB',
+				dataIndex: 'eob',
+				key: 'eob',
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
+			},
+			{
+				title: 'ONBL',
 				dataIndex: 'onBlock',
 				key: 'onBlock',
-				align:'center',
-				render: (text) => text && ConvertUtcToIst(text, 'HH:MM'),
+				align: 'center',
+				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
 				title: 'POS',
 				dataIndex: 'pos',
 				key: 'pos',
-				align:'center',
-				render: (_, record) => record?.resourceAllocation?.parkingStand?.name,
+				align: 'center',
+				render: (_, record) => record?.resourceAllocation?.parkingStand?.name ?? '-',
 			},
 			{
-				title: 'Gate',
+				title: 'GAT',
 				dataIndex: 'gate',
 				key: 'gate',
-				align:'center',
-				render: (_, record) => record?.resourceAllocation?.gates?.name,
+				align: 'center',
+				render: (_, record) => record?.resourceAllocation?.gates?.name ?? '-',
 			},
 			{
-				title: 'Belt',
+				title: 'BLT',
 				dataIndex: 'resourceAllocation',
 				key: 'resourceAllocation',
-				align:'center',
-				render: (_, record) => record?.resourceAllocation?.baggageBelt?.name,
+				align: 'center',
+				render: (_, record) => record?.resourceAllocation?.baggageBelt?.name ?? '-',
 			},
-			{ title: 'AC/ REGN', dataIndex: 'registration', key: 'registration' ,align:'center',},
-			{ title: 'Call Sign', dataIndex: 'callSign', key: 'callSign',align:'center', },
-			{ title: 'Remarks', dataIndex: 'remarks', key: 'remarks',align:'center', },
+			{
+				title: 'REG',
+				dataIndex: 'registration',
+				key: 'registration',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: 'C/S',
+				dataIndex: 'callSign',
+				key: 'callSign',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{ title: 'REM', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
 			tab == 'arrival'
 				? {
 						title: 'Map',

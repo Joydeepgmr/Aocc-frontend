@@ -207,14 +207,14 @@ const ParkingStand = () => {
 			render: (standName) => standName ?? '-',
 		},
 		{
-			title: 'Airport',
+			title: 'AIRPORT',
 			dataIndex: 'airport',
 			key: 'airport',
 			align: 'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
-			title: 'Gate',
+			title: 'GAT',
 			dataIndex: 'gate',
 			key: 'gate',
 			align: 'center',
@@ -228,7 +228,7 @@ const ParkingStand = () => {
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',
