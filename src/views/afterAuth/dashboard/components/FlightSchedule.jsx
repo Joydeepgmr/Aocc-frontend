@@ -59,8 +59,8 @@ const FlightSchedule = () => {
 	};
 	const columns = useMemo(() => {
 		return [
-			{ title: 'Flight', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
-			{ title: 'Status', dataIndex: 'status', key: 'status', align: 'center', render: (text) => text ?? '-' },
+			{ title: 'FLT', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
+			{ title: 'STS', dataIndex: 'status', key: 'status', align: 'center', render: (text) => text ?? '-' },
 			{
 				title: tab == 'arrival' ? 'ORG' : 'DEST',
 				dataIndex: 'origin',
@@ -105,7 +105,7 @@ const FlightSchedule = () => {
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
-				title: 'ONB',
+				title: 'ONBL',
 				dataIndex: 'onBlock',
 				key: 'onBlock',
 				align: 'center',
@@ -140,7 +140,7 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
-				title: 'Call Sign',
+				title: 'C/S',
 				dataIndex: 'callSign',
 				key: 'callSign',
 				align: 'center',
