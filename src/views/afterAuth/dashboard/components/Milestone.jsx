@@ -38,7 +38,7 @@ function Milestone() {
 		toast.dismiss();
 		toast.error(message);
 	};
-	const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useGetMileStoneData({
+	const { data, isFetching, hasNextPage, fetchNextPage, refetch } = useGetMileStoneData({
 		flightType: type,
 		onSuccess,
 		onError,
@@ -58,11 +58,8 @@ function Milestone() {
 			label: 'Arrival',
 			children: (
 				<>
-					{isLoading ? (
-						<PageLoader loading={isLoading} />
-					) : (
-						<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
-					)}
+					<PageLoader loading={isFetching} />
+					<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
 				</>
 			),
 		},
@@ -71,11 +68,8 @@ function Milestone() {
 			label: 'Departure',
 			children: (
 				<>
-					{isLoading ? (
-						<PageLoader loading={isLoading} />
-					) : (
-						<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
-					)}
+					<PageLoader loading={isFetching} />
+					<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
 				</>
 			),
 		},
