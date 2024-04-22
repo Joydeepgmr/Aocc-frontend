@@ -18,7 +18,7 @@ import {
 	usePostSeasonalPlans,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
-import { ConvertIstToUtc, ConvertUtcToIst } from '../../../../../../../utils';
+import { ConvertIstToUtc, ConvertToDateTime, ConvertUtcToIst } from '../../../../../../../utils';
 import FormComponent from '../../../formComponent/formComponent';
 import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
@@ -252,27 +252,27 @@ const DailySchedule = ({ tab }) => {
 	};
 	const columns = [
 		{
-			title: 'Flight No.',
+			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
-			title: 'Date',
+			title: 'DT',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
 			align:'center',
-			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+			render: (DATE) => ConvertToDateTime(DATE, 'HH:mm') ?? '-',
 		},
 		{
-			title: 'Call Sign',
+			title: 'C/S',
 			dataIndex: 'callSign',
 			key: 'callSign',
 			align:'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: 'Nature Code',
+			title: 'NA',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align:'center',
@@ -296,7 +296,7 @@ const DailySchedule = ({ tab }) => {
 				},
 		{ title: 'POS', dataIndex: 'pos', key: 'pos',align:'center', render: (pos) => pos ?? '-' },
 		{
-			title: 'AC/ REGN',
+			title: 'REG',
 			dataIndex: 'registration',
 			key: 'registration',
 			align:'center',

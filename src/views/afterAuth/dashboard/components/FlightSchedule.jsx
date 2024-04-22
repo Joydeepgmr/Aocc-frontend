@@ -59,8 +59,8 @@ const FlightSchedule = () => {
 	};
 	const columns = useMemo(() => {
 		return [
-			{ title: 'FLT', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
-			{ title: 'STS', dataIndex: 'status', key: 'status', align: 'center', render: (text) => text ?? '-' },
+			{ title: 'FLNR', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
+			{ title: 'STS', dataIndex: 'flightType', key: 'flightType', align: 'center', render: (text) => text ?? '-' },
 			{
 				title: tab == 'arrival' ? 'ORG' : 'DEST',
 				dataIndex: 'origin',
@@ -96,7 +96,7 @@ const FlightSchedule = () => {
 				align: 'center',
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
-			{ title: 'RWY', dataIndex: 'rny', key: 'rny', align: 'center', render: (text) => text ?? '-' },
+			{ title: 'RWY', dataIndex: 'rny', key: 'rny', align: 'center', render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-', },
 			{
 				title: 'EOB',
 				dataIndex: 'eob',
@@ -119,21 +119,21 @@ const FlightSchedule = () => {
 				render: (_, record) => record?.resourceAllocation?.parkingStand?.name ?? '-',
 			},
 			{
-				title: 'Gate',
+				title: 'GAT',
 				dataIndex: 'gate',
 				key: 'gate',
 				align: 'center',
 				render: (_, record) => record?.resourceAllocation?.gates?.name ?? '-',
 			},
 			{
-				title: 'Belt',
+				title: 'BLT',
 				dataIndex: 'resourceAllocation',
 				key: 'resourceAllocation',
 				align: 'center',
 				render: (_, record) => record?.resourceAllocation?.baggageBelt?.name ?? '-',
 			},
 			{
-				title: 'AC/ REGN',
+				title: 'REG',
 				dataIndex: 'registration',
 				key: 'registration',
 				align: 'center',
@@ -146,7 +146,7 @@ const FlightSchedule = () => {
 				align: 'center',
 				render: (text) => text ?? '-',
 			},
-			{ title: 'Remarks', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
+			{ title: 'REM', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
 			tab == 'arrival'
 				? {
 						title: 'Map',

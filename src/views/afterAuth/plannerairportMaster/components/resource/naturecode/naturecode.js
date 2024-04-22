@@ -194,14 +194,14 @@ const NatureCode = () => {
 			),
 		},
 		{
-			title: 'Nature Code',
+			title: 'NA',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
 		{
-			title: 'Name',
+			title: 'NAME',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',

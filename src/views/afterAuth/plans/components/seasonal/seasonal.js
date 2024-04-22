@@ -15,7 +15,7 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import {
 	useEditSeasonalPlanArrival,
 	useGetSeasonalPlans,
@@ -263,54 +263,54 @@ const Seasonal = ({ tab }) => {
 
 	const columns = [
 		{
-			title: 'Flight No.',
+			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
-			title: 'Date',
+			title: 'DT',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
-			align:'center',
-			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+			align: 'center',
+			render: (DATE) => ConvertToDateTime(DATE, 'HH:mm') ?? '-',
 		},
 		{
-			title: 'Call Sign',
+			title: 'C/S',
 			dataIndex: 'callSign',
 			key: 'callSign',
-			align:'center',
+			align: 'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: 'Nature Code',
+			title: 'NA',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
-			align:'center',
+			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin',align:'center', render: (origin) => origin ?? '-' },
+		{ title: flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin', align: 'center', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
 				title: 'STA',
 				dataIndex: 'STA',
 				key: 'STA',
-				align:'center',
+				align: 'center',
 				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
 			}
 			: {
 				title: 'STD',
 				dataIndex: 'STD',
 				key: 'STD',
-				align:'center',
+				align: 'center',
 				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 			},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos',align:'center', render: (pos) => pos ?? '-' },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
-			title: 'AC/ REGN',
+			title: 'REG',
 			dataIndex: 'registration',
 			key: 'registration',
-			align:'center',
+			align: 'center',
 			render: (registration) => registration ?? '-',
 		},
 		{

@@ -197,7 +197,7 @@ const DelayCode = () => {
 			),
 		},
 		{
-			title: 'Code',
+			title: 'DEL',
 			dataIndex: 'delayCode',
 			key: 'delayCode',
 			align: 'center',
@@ -211,7 +211,7 @@ const DelayCode = () => {
 			render: (group) => group ?? '-',
 		},
 		{
-			title: 'Airline',
+			title: 'AL',
 			dataIndex: 'airline',
 			key: 'airline',
 			align: 'center',

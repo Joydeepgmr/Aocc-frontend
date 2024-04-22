@@ -226,13 +226,13 @@ const Airlines = () => {
 			),
 		},
 		{
-			title: 'Airline',
+			title: 'AL',
 			dataIndex: 'name',
 			key: 'name',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Code',
+			title: 'ALC',
 			dataIndex: 'twoLetterCode',
 			key: 'twoLetterCode',
 			render: (twoLetterCode) => twoLetterCode ?? '-',
@@ -246,14 +246,14 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
-			title: 'IATA',
+			title: '2L',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.iataCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'ICAO',
+			title: '3L',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.icaoCode ?? '-',
@@ -267,7 +267,7 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
-			title: 'Home Airport',
+			title: 'HOME AIRPORT',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.name ?? '-',
