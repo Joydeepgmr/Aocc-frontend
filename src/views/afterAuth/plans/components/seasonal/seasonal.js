@@ -263,6 +263,20 @@ const Seasonal = ({ tab }) => {
 
 	const columns = [
 		{
+			title: '2L',
+			dataIndex: 'iataCode',
+			key: 'iataCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: '3L',
+			dataIndex: 'icaoCode',
+			key: 'icaoCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
 			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
@@ -283,25 +297,18 @@ const Seasonal = ({ tab }) => {
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: '2L',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
-			align: 'center',
-			render: (text) => text ?? '-',
-		},
-		{
-			title: '3L',
-			dataIndex: 'icaoCode',
-			key: 'icaoCode',
-			align: 'center',
-			render: (text) => text ?? '-',
-		},
-		{
 			title: 'NAT',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
+		},
+		{
+			title: 'REG',
+			dataIndex: 'registration',
+			key: 'registration',
+			align: 'center',
+			render: (registration) => registration ?? '-',
 		},
 		{ title: flightType == 'arrival' ? 'ORG' : 'DES', dataIndex: 'origin', key: 'origin', align: 'center', render: (origin) => origin ?? '-' },
 		index === '1'
@@ -320,13 +327,6 @@ const Seasonal = ({ tab }) => {
 				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 			},
 		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
-		{
-			title: 'REG',
-			dataIndex: 'registration',
-			key: 'registration',
-			align: 'center',
-			render: (registration) => registration ?? '-',
-		},
 		{
 			title: 'Actions',
 			key: 'actions',
