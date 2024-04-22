@@ -15,7 +15,7 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import {
 	useEditSeasonalPlanArrival,
 	useGetSeasonalPlans,
@@ -263,54 +263,68 @@ const Seasonal = ({ tab }) => {
 
 	const columns = [
 		{
-			title: 'Flight No.',
+			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
-			title: 'Date',
+			title: 'FLDT',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
-			align:'center',
-			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+			align: 'center',
+			render: (DATE) => ConvertToDateTime(DATE, 'YYYY-MM-DD') ?? '-',
 		},
 		{
-			title: 'Call Sign',
+			title: 'CSGN',
 			dataIndex: 'callSign',
 			key: 'callSign',
-			align:'center',
+			align: 'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: 'Nature Code',
+			title: '2L',
+			dataIndex: 'iataCode',
+			key: 'iataCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: '3L',
+			dataIndex: 'icaoCode',
+			key: 'icaoCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: 'NAT',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
-			align:'center',
+			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin',align:'center', render: (origin) => origin ?? '-' },
+		{ title: flightType == 'arrival' ? 'ORG' : 'DES', dataIndex: 'origin', key: 'origin', align: 'center', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
 				title: 'STA',
 				dataIndex: 'STA',
 				key: 'STA',
-				align:'center',
+				align: 'center',
 				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
 			}
 			: {
 				title: 'STD',
 				dataIndex: 'STD',
 				key: 'STD',
-				align:'center',
+				align: 'center',
 				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 			},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos',align:'center', render: (pos) => pos ?? '-' },
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
-			title: 'AC/ REGN',
+			title: 'REG',
 			dataIndex: 'registration',
 			key: 'registration',
-			align:'center',
+			align: 'center',
 			render: (registration) => registration ?? '-',
 		},
 		{

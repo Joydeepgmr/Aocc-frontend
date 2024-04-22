@@ -11,7 +11,7 @@ import { usePostLicenseAirport } from '../../../../../services/airportMasters/ai
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 
-const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData,loading }) => {
+const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -79,48 +79,48 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	const columns = useMemo(
 		() => [
 			{
-				title: 'Airport Name',
+				title: 'AIRPORT',
 				dataIndex: ['globalAirport', 'name'],
 				key: 'airportName',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'IATA Code',
+				title: '3L',
 				dataIndex: ['globalAirport', 'iataCode'],
 				key: 'iataCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'ICAO Code',
+				title: '4L',
 				dataIndex: ['globalAirport', 'icaoCode'],
 				key: 'icaoCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Country',
+				title: 'CNTRY',
 				dataIndex: 'country',
 				key: 'country',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'City',
+				title: 'CITY',
 				dataIndex: 'city',
 				key: 'city',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Valid From',
+				title: 'VALID FROM',
 				dataIndex: 'validFrom',
 				key: 'validFrom',
 				align: 'center',
 				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
 			},
 			{
-				title: 'Valid To',
+				title: 'VALID TILL',
 				dataIndex: 'validTill',
 				key: 'validTill',
 				align: 'center',
@@ -162,7 +162,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<TableComponent {...{ data: airportData, columns, fetchData, pagination,loading }} />
+						<TableComponent {...{ data: airportData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
 			</div>
