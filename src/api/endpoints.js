@@ -109,3 +109,7 @@ export const USER = '/bbs';
 
 /*--------------------------Socket event name ---------------------*/
 export const SOCKET_EVENT_NAME = 'UPDATE_API'
+
+/*-------------------------Vendor----------------------------------*/
+export const VENDOR = '/vendor'
+export const GET_VENDOR ='/vendor/paginated'
