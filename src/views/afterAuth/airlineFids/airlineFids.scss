@@ -5,28 +5,37 @@
 	flex-direction: column;
 
 	.icon {
-		height: 65%;
-		background-color: lightblue;
+		flex-grow: 1;
+		display: flex;
+		justify-content: center; 
+		align-items: center;
+		img {
+			height: 30%;
+			width: 40%;
+		}
 	}
 
 	.status {
+		font-size: 5vh;
 		height: 15%;
 		background-color: black;
 		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center; 
 	}
 
 	.details {
-		flex-grow: 1; // Takes remaining height
-		display: flex;
-        justify-content: space-between;
-        align-items: center;
-	}
-
-	.destination {
-		background-color: lightgreen;
-	}
-
-	.departure-time {
-		background-color: lightcoral;
+		height: 20%;
+		padding: 2vh;
+		background-color: #ffdf00;
+		.info{
+			padding: 1vh;
+			font-weight: 500;
+			font-size: 4vh;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 	}
 }
