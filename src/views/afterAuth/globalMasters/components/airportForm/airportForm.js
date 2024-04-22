@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
 import Date from '../../../../../components/datapicker/datepicker';
@@ -7,7 +7,17 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 
-const AirportForm = ({ isReadOnly, type }) => {
+const AirportForm = ({ isReadOnly, type, timezoneDropdown = [], countryDropdownData = [] }) => {
+	const SelectCountryData = useMemo(() => {
+		return countryDropdownData.map((data) => {
+			return { label: data.name, value: data.name, id: data.name }
+		})
+	}, [countryDropdownData])
+	const SelectedTimeZone = useMemo(() => {
+		return timezoneDropdown.map((data) => {
+			return { label: data, value: data, id: data }
+		})
+	}, [timezoneDropdown])
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_setup_form_container">
@@ -22,8 +32,8 @@ const AirportForm = ({ isReadOnly, type }) => {
 					max={32}
 					required
 				/>
-				<OtpField otpLength={3} label="IATA Code" required name="iataCode" disabled={isReadOnly || isNotEditable} />
-				<OtpField otpLength={4} label="ICAO Code" required name="icaoCode" disabled={isReadOnly || isNotEditable} />
+				<OtpField otpLength={3} label="IATA Code" pattern='^[a-zA-Z0-9]+$' required name="iataCode" disabled={isReadOnly || isNotEditable} />
+				<OtpField otpLength={4} label="ICAO Code" pattern='^[a-zA-Z0-9]+$' required name="icaoCode" disabled={isReadOnly || isNotEditable} />
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField
@@ -72,16 +82,23 @@ const AirportForm = ({ isReadOnly, type }) => {
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={3} label="Country Code" name="countryCode" disabled={isReadOnly || isNotEditable} />
-			</div>
-			<div className="airport_setup_form_inputfields">
-				<InputField
-					label="Time Change"
-					name="timeChange"
-					pattern='^[0-9+\-:]+$'
-					placeholder={!isReadOnly && "Enter the time change"}
+				<CustomSelect
+					SelectData={SelectCountryData}
+					label="Country"
+					name="country"
+					placeholder={!isReadOnly && 'Country'}
 					className="custom_input"
 					disabled={isReadOnly}
+				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
+				<CustomSelect
+					SelectData={SelectedTimeZone}
+					placeholder={!isReadOnly && "Enter the time change"}
+					label="Time Zone"
+					name="timeChange"
+					disabled={isReadOnly}
+					required
 				/>
 				<InputField
 					label="Standard Flight Time"

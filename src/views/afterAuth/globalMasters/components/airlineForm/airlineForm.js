@@ -56,14 +56,14 @@ const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownDat
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<InputField
+				{/* <InputField
 					label="Terminal"
 					name="terminal"
 					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && 'Filled Text'}
 					className="custom_input"
 					disabled={isReadOnly}
-				/>
+				/> */}
 			</div>
 			<div className="airline_setup_form_inputfields">
 				<InputField

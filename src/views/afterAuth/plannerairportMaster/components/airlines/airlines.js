@@ -23,6 +23,8 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_PLANNER_AIRLINE } from '../../../../../api';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -120,6 +122,7 @@ const Airlines = () => {
 		isFetching: isPlannerAirlineFetching,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getPlannerAirlineRefetch
 	} = useGetAllPlannerAirline(getAirlineHandler);
 
 	const { mutate: onDeleteAirline, isLoading: isDeleteAirlineLoading } =
@@ -223,41 +226,41 @@ const Airlines = () => {
 			),
 		},
 		{
-			title: 'Airline Name',
+			title: 'Airline',
 			dataIndex: 'name',
 			key: 'name',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Airline Code',
+			title: 'Code',
 			dataIndex: 'twoLetterCode',
 			key: 'twoLetterCode',
 			render: (twoLetterCode) => twoLetterCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'ATC Code',
+			title: 'ATC',
 			dataIndex: 'threeLetterCode',
 			key: 'threeLetterCode',
 			render: (threeLetterCode) => threeLetterCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'IATA Code',
+			title: 'IATA',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.iataCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'ICAO Code',
+			title: 'ICAO',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.icaoCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: 'Country',
+			title: 'CNTRY',
 			dataIndex: 'country',
 			key: 'country',
 			render: (country) => country ?? '-',
@@ -295,6 +298,7 @@ const Airlines = () => {
 
 	return (
 		<>
+			<SocketEventListener refetch={getPlannerAirlineRefetch} apiName={`${GET_PLANNER_AIRLINE}`} />
 			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
 				<PageLoader
 					loading={

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useGetGlobalAirport, useUploadCSVGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
+import { useCountriesDropdown, useGetGlobalAirport, useTimezoneDropdown, useUploadCSVGlobalAirport } from '../../../../../services/globalMasters/globalMaster';
 import AirportTable from '../airportTable/airportTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 import { useQueryClient } from 'react-query';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_GLOBAL_AIRPORT } from '../../../../../api';
 
 const AirportTab = () => {
 	const queryClient = useQueryClient();
@@ -15,13 +17,15 @@ const AirportTab = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirport({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getGlobalAirportRefetch } = useGetGlobalAirport({ onError });
+	const { data: timezoneDropdown = [] } = useTimezoneDropdown({ onError });
+	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
 		onError: (error) => handleUploadCsvError(error),
 	};
-
+	console.log("timezoneDropdown ",timezoneDropdown)
 	const handleUploadCsvSuccess = () => {
 		toast.success('CSV Uploaded Successfully');
 		queryClient.invalidateQueries('global-airport');
@@ -51,26 +55,31 @@ const AirportTab = () => {
 		}
 	}
 	return (
-		<CreateWrapper
-			width="80%"
-			tableComponent={
-				<AirportTable
-					data={data}
-					createProps={createProps}
-					setCreateProps={setCreateProps}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-					loading={isFetching}
-				/>
-			}
-			data={data?.pages}
-			createProps={createProps}
-			setCreateProps={setCreateProps}
-			label="New Airport"
-			isLoading={isLoading}
-            isCsvModalOpen={isCsvModalOpen}
-            setIsCsvModalOpen={setIsCsvModalOpen}
-		/>
+		<>
+			<SocketEventListener refetch={getGlobalAirportRefetch} apiName={GET_GLOBAL_AIRPORT} />
+			<CreateWrapper
+				width="80%"
+				tableComponent={
+					<AirportTable
+						data={data}
+						createProps={createProps}
+						setCreateProps={setCreateProps}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+						loading={isFetching}
+						timezoneDropdown={timezoneDropdown?.url}
+						countryDropdownData={countryDropdownData}
+					/>
+				}
+				data={data?.pages}
+				createProps={createProps}
+				setCreateProps={setCreateProps}
+				label="New Airport"
+				isLoading={isLoading}
+				isCsvModalOpen={isCsvModalOpen}
+				setIsCsvModalOpen={setIsCsvModalOpen}
+			/>
+		</>
 	);
 };
 

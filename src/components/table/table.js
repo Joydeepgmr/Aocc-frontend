@@ -14,7 +14,7 @@ const TableComponent = ({
 	fetchData,
 	pagination,
 	handleEdit,
-    isColored,
+	isColored,
 	...rest
 }) => {
 	const handleTableChange = (pagination, filters, sorter) => {
@@ -43,7 +43,7 @@ const TableComponent = ({
 	};
 	const EditableCell = ({ title, editable, children, dataIndex, record, handleSave, ...restProps }) => {
 		const [editing, setEditing] = useState(false);
-		const inputRef = useRef(null);
+		const inputRef = useRef();
 		const form = useContext(EditableContext);
 		useEffect(() => {
 			if (editing) {
@@ -51,6 +51,7 @@ const TableComponent = ({
 			}
 		}, [editing]);
 		const toggleEdit = () => {
+			console.log('hreee');
 			setEditing(!editing);
 			form.setFieldsValue({
 				[dataIndex]: record[dataIndex],
@@ -70,29 +71,22 @@ const TableComponent = ({
 		};
 		let childNode = children;
 		if (editable) {
+			const inputType = editable.type || 'text';
 			childNode = editing ? (
 				<Form.Item
 					style={{
 						margin: 0,
 					}}
 					name={dataIndex}
-					rules={[
-						{
-							required: true,
-							message: `${title} is required.`,
-						},
-					]}
 				>
-					<Input ref={inputRef} onPressEnter={save} onBlur={save} />
+					{inputType === 'time' ? (
+						<Input type="time" ref={inputRef} format="HH:mm" onPressEnter={save} onBlur={save} />
+					) : (
+						<Input ref={inputRef} onPressEnter={save} onBlur={save} />
+					)}
 				</Form.Item>
 			) : (
-				<div
-					className="editable-cell-value-wrap"
-					style={{
-						paddingRight: 24,
-					}}
-					onClick={toggleEdit}
-				>
+				<div className="editable-cell-value-wrap" onClick={toggleEdit}>
 					{children}
 				</div>
 			);
@@ -116,11 +110,12 @@ const TableComponent = ({
 			cell: EditableCell,
 		},
 	};
-	const defaultColumns = columns.map((col) => {
+	const defaultColumns = (col) => {
 		if (!col.editable) {
 			return col;
 		}
-		return {
+
+		const newCol = {
 			...col,
 			onCell: (record) => ({
 				record,
@@ -130,7 +125,15 @@ const TableComponent = ({
 				handleSave,
 			}),
 		};
-	});
+
+		if (col.children) {
+			newCol.children = col.children?.map(defaultColumns);
+		}
+
+		return newCol;
+	};
+
+     const TableColumns = columns.map(defaultColumns);
 
 	return (
 		<>
@@ -141,24 +144,24 @@ const TableComponent = ({
 					hasMore={hasMoreData} // Boolean to indicate if there is more data to load
 				>
 					<Table
-						columns={defaultColumns}
+						columns={TableColumns}
 						dataSource={data}
 						loading={loading}
-                        bordered
+						bordered
 						onChange={handleTableChange}
 						locale={{
 							emptyText: <Empty description={emptyText} />,
 						}}
 						pagination={false}
-                        className={`${isColored && 'color_table'}`}
+						className={`${isColored && 'color_table'}`}
 						components={components}
-                        {...rest}
+						{...rest}
 					/>
 					{loading && hasMoreData ? <h6>Loading...</h6> : null}
 				</InfiniteScroll>
 			) : (
 				<Table
-					columns={defaultColumns}
+					columns={TableColumns}
 					dataSource={data}
 					loading={loading}
 					onChange={handleTableChange}
@@ -167,7 +170,7 @@ const TableComponent = ({
 					}}
 					pagination={false}
 					components={components}
-                    {...rest}
+					{...rest}
 				/>
 			)}
 		</>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 import { Form, Divider } from 'antd';
 import CustomSelect from '../../../../../../../components/select/select';
 import InputField from '../../../../../../../components/input/field/field';
@@ -7,11 +7,11 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import './formComponents.scss';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 
-const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData}) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData }) => {
 	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
 	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
-	
+
 	const SelectStandData = useMemo(() => {
 		return standDropdownData?.map((data) => {
 			return { label: data.name, value: data.id };
@@ -30,8 +30,6 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 		});
 	}, [runwayDropdownData]);
 
-	// const [form] = Form.useForm();
-
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -40,19 +38,22 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 			}
 		});
 
-		changedValues = {...changedValues,
-			validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+		changedValues = {
+			...changedValues,
+			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
-			unavailableFrom: changedValues?.unavailableFrom ?  ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
-			unavailableTo:changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo)  : undefined,
+			unavailableFrom: changedValues?.unavailableFrom ? ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,
+			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -119,7 +120,7 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 				</div>
 			</div>
 			<div className="terminal_form_inputfields">
-			{ !isReadOnly && <div className="form_bottomButton">
+				{!isReadOnly && <div className="form_bottomButton">
 					<Button
 						title="Cancel"
 						type="filledText"
@@ -134,4 +135,4 @@ const FormComponent = ({handleSaveButton, form, handleButtonClose, initialValues
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

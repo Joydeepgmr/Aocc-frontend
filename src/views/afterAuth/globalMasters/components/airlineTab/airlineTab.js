@@ -10,6 +10,8 @@ import AirlineTable from '../airlineTable/airlineTable';
 import CreateWrapper from '../createWrapper/createWrapper';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import { useQueryClient } from 'react-query';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_GLOBAL_AIRLINE } from '../../../../../api';
 
 const AirlineTab = () => {
 	const queryClient = useQueryClient();
@@ -22,7 +24,7 @@ const AirlineTab = () => {
 	}) => toast.error(message);
 	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
 	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
-	const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetGlobalAirline({ onError });
+	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getGlobalAirlineRefetch } = useGetGlobalAirline({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 
 	const uploadCsvHandler = {
@@ -59,25 +61,28 @@ const AirlineTab = () => {
 		}
 	}
 	return (
-		<CreateWrapper
-			width="80%"
-			tableComponent={
-				<AirlineTable
-					data={data}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-					loading={isFetching}
-					{...{ createProps, setCreateProps, countryDropdownData, airportDropdownData }}
-				/>
-			}
-			data={data?.pages}
-			createProps={createProps}
-			setCreateProps={setCreateProps}
-			label="New Airline"
-			isLoading={isLoading}
-			isCsvModalOpen={isCsvModalOpen}
-			setIsCsvModalOpen={setIsCsvModalOpen}
-		/>
+		<>
+			<SocketEventListener refetch={getGlobalAirlineRefetch} apiName={GET_GLOBAL_AIRLINE} />
+			<CreateWrapper
+				width="80%"
+				tableComponent={
+					<AirlineTable
+						data={data}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+						loading={isFetching}
+						{...{ createProps, setCreateProps, countryDropdownData, airportDropdownData }}
+					/>
+				}
+				data={data?.pages}
+				createProps={createProps}
+				setCreateProps={setCreateProps}
+				label="New Airline"
+				isLoading={isLoading}
+				isCsvModalOpen={isCsvModalOpen}
+				setIsCsvModalOpen={setIsCsvModalOpen}
+			/>
+		</>
 	);
 };
 

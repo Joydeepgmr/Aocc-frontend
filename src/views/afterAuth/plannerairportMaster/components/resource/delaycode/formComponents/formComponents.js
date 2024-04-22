@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
 import InputField from '../../../../../../../components/input/field/field';
@@ -40,7 +40,7 @@ const FormComponent = ({
 		}
 	};
 
-	// const [form] = Form.useForm();
+
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -55,11 +55,13 @@ const FormComponent = ({
 		}
 
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setCurrentValidFrom(initialValues?.validFrom ? dayjs(initialValues.validFrom).format('YYYY-MM-DD') : '');
@@ -145,4 +147,4 @@ const FormComponent = ({
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect,useState, memo } from 'react';
 import dayjs from 'dayjs';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
@@ -37,11 +37,13 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 		};
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 	}, [form, initialValues]);
 
 	return (
@@ -114,4 +116,4 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

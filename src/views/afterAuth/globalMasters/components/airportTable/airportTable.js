@@ -15,7 +15,7 @@ import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
 
 
-const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
+const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading,timezoneDropdown,countryDropdownData }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -88,7 +88,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			abbreviatedName3: data?.abbreviatedName3,
 			abbreviatedName4: data?.abbreviatedName4,
 			airportType: data?.airportType,
-			countryCode: data?.countryCode,
+			country: data?.country,
 			standardFlightTime: data?.standardFlightTime,
 			timeChange: data?.timeChange,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
@@ -103,15 +103,14 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 		if (airportModal.type === 'edit') {
 			const id = airportModal.data.id;
-			values.countryCode = values?.countryCode;
 			values.standardFlightTime = values?.standardFlightTime;
-			delete values.iataCode
-			delete values.validFrom
+			delete values.iataCode;
+			delete values.icaoCode;
+			delete values.validFrom;
 			patchAirport({ values, id });
 		} else {
 			values.iataCode = values?.iataCode?.join('');
 			values.icaoCode = values?.icaoCode?.join('');
-			values.countryCode = values?.countryCode?.join('');
 			postAirport(values);
 		}
 	};
@@ -186,9 +185,9 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Country Code',
-				dataIndex: 'countryCode',
-				key: 'countryCode',
+				title: 'Country',
+				dataIndex: 'country',
+				key: 'country',
 				align: 'center',
 				render: (text) => text || '-',
 			},
@@ -200,7 +199,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Time Change',
+				title: 'Time Zone',
 				dataIndex: 'timeChange',
 				key: 'timeChange',
 				align: 'center',
@@ -238,7 +237,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
+					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} timezoneDropdown={timezoneDropdown} countryDropdownData={countryDropdownData} />
 					{airportModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

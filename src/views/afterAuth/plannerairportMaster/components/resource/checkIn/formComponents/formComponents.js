@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, memo } from 'react';
 import { Form, Divider } from 'antd';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -10,10 +10,10 @@ import dayjs from 'dayjs';
 
 const FormComponent = ({
 	handleSaveButton,
-	form,
 	handleButtonClose,
 	initialValues,
 	isEdit,
+	form,
 	isReadOnly,
 	terminalDropdownData,
 }) => {
@@ -30,7 +30,6 @@ const FormComponent = ({
 		});
 	}, [terminalDropdownData]);
 
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({
@@ -93,11 +92,13 @@ const FormComponent = ({
 			unavailableTo: changedValues?.unavailableTo ? ConvertIstToUtc(changedValues?.unavailableTo) : undefined,
 		};
 		handleSaveButton(changedValues);
-		// form.resetFields();
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 		if (isEdit) {
 			setIsValidFrom(true);
 			setIsUnavailableFrom(true);
@@ -105,11 +106,14 @@ const FormComponent = ({
 			setCurrentValidTill(initialValues?.validTill ? dayjs(initialValues.validTill).format('YYYY-MM-DD') : '');
 			setCurrentUnavailableFrom(initialValues?.unavailableFrom ? dayjs(initialValues.unavailableFrom).format('YYYY-MM-DD') : '');
 		}
-	}, [form, initialValues]);
+	}, [initialValues]);
+	useEffect(() => {
+		console.log('under form component');
+	}, [])
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="checkin_form_container">
 					<div className="checkin_form_inputfields">
 						<InputField
@@ -149,9 +153,8 @@ const FormComponent = ({
 							placeholder={!isReadOnly && 'Filled Text'}
 							warning="Required field"
 							disabled={isReadOnly}
-							type="number"
 							className="custom_input"
-							max="999"
+							max={3}
 						/>
 						<InputField
 							label="Phones"
@@ -242,6 +245,7 @@ const FormComponent = ({
 						/>
 					</div>
 				</div>
+				<Divider />
 				<div className="checkin_form_inputfields">
 					{!isReadOnly && (
 						<div className="form_bottomButton">
@@ -253,7 +257,7 @@ const FormComponent = ({
 								onClick={handleButtonClose}
 							/>
 							<Button
-								title={isEdit ? 'Update' : 'Save'}
+								title={isEdit ? 'Edit' : 'Save'}
 								type="filledText"
 								id="btn"
 								isSubmit="submit"
@@ -267,4 +271,4 @@ const FormComponent = ({
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);
