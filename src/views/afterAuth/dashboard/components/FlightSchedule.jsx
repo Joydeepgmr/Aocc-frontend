@@ -60,7 +60,13 @@ const FlightSchedule = () => {
 	const columns = useMemo(() => {
 		return [
 			{ title: 'FLNR', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
-			{ title: 'STS', dataIndex: 'flightType', key: 'flightType', align: 'center', render: (text) => text ?? '-' },
+			{
+				title: 'STS',
+				dataIndex: 'flightType',
+				key: 'flightType',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
 			{
 				title: tab == 'arrival' ? 'ORG' : 'DES',
 				dataIndex: 'origin',
@@ -90,13 +96,33 @@ const FlightSchedule = () => {
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
-				title: tab == 'arrival' ?'ATA':"ATD",
+				title: tab == 'arrival' ? 'ATA' : 'ATD',
 				dataIndex: 'ata',
 				key: 'ata',
 				align: 'center',
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
-			{ title: 'RWY', dataIndex: 'rny', key: 'rny', align: 'center', render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-', },
+			{
+				title: '2L',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: '3L',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: 'RWY',
+				dataIndex: 'rny',
+				key: 'rny',
+				align: 'center',
+				render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-',
+			},
 			{
 				title: 'EOB',
 				dataIndex: 'eob',
@@ -140,7 +166,7 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
-				title: 'C/S',
+				title: 'CSGN',
 				dataIndex: 'callSign',
 				key: 'callSign',
 				align: 'center',

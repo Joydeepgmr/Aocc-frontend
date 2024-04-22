@@ -215,7 +215,7 @@ const Gates = () => {
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
-			title: 'B GAT',
+			title: 'BUS GAT',
 			dataIndex: 'busGate',
 			key: 'busGate',
 			align: 'center',

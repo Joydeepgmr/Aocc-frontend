@@ -215,7 +215,7 @@ const Runway = () => {
 			render: (status) => status ?? '-',
 		},
 		{
-			title: 'REN',
+			title: 'REASON',
 			dataIndex: 'reason',
 			key: 'reason',
 			align: 'center',
