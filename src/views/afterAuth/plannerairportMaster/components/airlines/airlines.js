@@ -246,14 +246,14 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
-			title: '2L',
+			title: '3L',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.iataCode ?? '-',
 			align: 'center',
 		},
 		{
-			title: '3L',
+			title: '4L',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.icaoCode ?? '-',
@@ -267,7 +267,7 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
-			title: 'HOME AIRPORT',
+			title: 'AIRPORT',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.name ?? '-',

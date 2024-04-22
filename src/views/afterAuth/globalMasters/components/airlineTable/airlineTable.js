@@ -189,7 +189,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				render: (text) => text || '-',
 			},
 			{
-				title: 'HOME AIRPORT',
+				title: 'AIRPORT',
 				dataIndex: 'homeAirport',
 				key: 'homeAirport',
 				align: 'center',

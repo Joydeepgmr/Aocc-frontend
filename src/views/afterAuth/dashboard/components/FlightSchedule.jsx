@@ -62,7 +62,7 @@ const FlightSchedule = () => {
 			{ title: 'FLNR', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
 			{ title: 'STS', dataIndex: 'flightType', key: 'flightType', align: 'center', render: (text) => text ?? '-' },
 			{
-				title: tab == 'arrival' ? 'ORG' : 'DEST',
+				title: tab == 'arrival' ? 'ORG' : 'DES',
 				dataIndex: 'origin',
 				key: 'origin',
 				align: 'center',
@@ -90,7 +90,7 @@ const FlightSchedule = () => {
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
-				title: 'ATA',
+				title: tab == 'arrival' ?'ATA':"ATD",
 				dataIndex: 'ata',
 				key: 'ata',
 				align: 'center',

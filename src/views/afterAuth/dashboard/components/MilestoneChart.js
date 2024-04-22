@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { ConvertUtcToIst } from '../../../../utils';
+import { ConvertToDateTime, ConvertUtcToIst } from '../../../../utils';
 import './style.scss';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {

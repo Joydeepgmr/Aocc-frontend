@@ -278,7 +278,7 @@ const DailySchedule = ({ tab }) => {
 			align:'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title:flightType == 'arrival' ? 'ORG' : 'DEST', dataIndex: 'origin', key: 'origin',align:'center', render: (origin) => origin ?? '-' },
+		{ title:flightType == 'arrival' ? 'ORG' : 'DES', dataIndex: 'origin', key: 'origin',align:'center', render: (origin) => origin ?? '-' },
 		index === '1'
 			? {
 					title: 'STA',

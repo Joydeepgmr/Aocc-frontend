@@ -85,14 +85,14 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				render: (text) => text || '-',
 			},
 			{
-				title: '2L',
+				title: '3L',
 				dataIndex: ['globalAirport', 'iataCode'],
 				key: 'iataCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: '3L',
+				title: '4L',
 				dataIndex: ['globalAirport', 'icaoCode'],
 				key: 'icaoCode',
 				align: 'center',
