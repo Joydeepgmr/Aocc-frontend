@@ -1,0 +1,32 @@
+.card {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+
+	.icon {
+		height: 65%;
+		background-color: lightblue;
+	}
+
+	.status {
+		height: 15%;
+		background-color: black;
+		color: white;
+	}
+
+	.details {
+		flex-grow: 1; // Takes remaining height
+		display: flex;
+        justify-content: space-between;
+        align-items: center;
+	}
+
+	.destination {
+		background-color: lightgreen;
+	}
+
+	.departure-time {
+		background-color: lightcoral;
+	}
+}
