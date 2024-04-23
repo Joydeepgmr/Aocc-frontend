@@ -280,6 +280,7 @@ const Seasonal = ({ tab }) => {
 			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
+			align: 'center',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
