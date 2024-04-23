@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
 import Common_table from '../../common_wrapper/common_table/common_table';
-import './aircraft.scss';
+import { Form } from 'antd';
 import FormComponent from './formComponent/formComponent';
 import {
 	useDeletePlannerAircraft,
@@ -22,6 +22,7 @@ import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
+import './aircraft.scss';
 
 
 const Aircrafts = () => {
@@ -32,6 +33,7 @@ const Aircrafts = () => {
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
+	const [form] = Form.useForm();
 
 	const getAircraftHandler = {
 		onSuccess: (data) => handleGetAircraftSuccess(data),
@@ -294,6 +296,7 @@ const Aircrafts = () => {
 				isOpen={openDeleteModal}
 				onClose={() => {
 					setOpenDeleteModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				onSave={handleDeleteAircraft}
@@ -304,6 +307,7 @@ const Aircrafts = () => {
 				isModalOpen={openEditModal}
 				closeModal={() => {
 					setOpenEditModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Setup aircraft registration"
@@ -311,12 +315,13 @@ const Aircrafts = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					type={'edit'}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
-					key={Math.random() * 100}
 					initialValue={rowData}
 					handleSubmit={handleUpdateAircraft}
 					isLoading={isUpdateAircraftLoading}
@@ -326,6 +331,7 @@ const Aircrafts = () => {
 				isModalOpen={detailModal}
 				closeModal={() => {
 					setDetailModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Setup aircraft registration"
@@ -333,12 +339,13 @@ const Aircrafts = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					isReadOnly={true}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
-					key={Math.random() * 100}
 					initialValue={rowData}
 				/>
 			</ModalComponent>
@@ -346,7 +353,11 @@ const Aircrafts = () => {
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
 				width="80vw"
-				closeModal={() => setIsAddModalOpen(false)}
+				closeModal={() => {
+						setIsAddModalOpen(false);
+						form.resetFields();
+						setRowData({});
+					}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Setup aircraft registration
@@ -356,8 +367,12 @@ const Aircrafts = () => {
 			>
 				<div className={`modal_content`}>
 					<FormComponent
-						key={Math.random() * 100}
-						closeModal={() => setIsAddModalOpen(false)}
+						form={form}
+						closeModal={() => {
+							setIsAddModalOpen(false);
+							form.resetFields();
+							setRowData({});
+						}}
 						handleSubmit={handleAddAircraft}
 						isLoading={isAddAircraftLoading}
 					/>

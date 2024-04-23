@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Common_table from '../../common_wrapper/common_table/common_table';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
-
+import { Form } from 'antd';
 import {
 	useDeletePlannerAirline,
 	useGetAllPlannerAirline,
@@ -35,6 +35,7 @@ const Airlines = () => {
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [form] = Form.useForm();
 
 	const getAirlineHandler = {
 		onSuccess: (data) => handleGetAirlineSuccess(data),
@@ -341,6 +342,7 @@ const Airlines = () => {
 				isOpen={openDeleteModal}
 				onClose={() => {
 					setOpenDeleteModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				onSave={handleDeleteAirline}
@@ -351,6 +353,7 @@ const Airlines = () => {
 				isModalOpen={openEditModal}
 				closeModal={() => {
 					setOpenEditModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Edit your airline"
@@ -358,9 +361,11 @@ const Airlines = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					type={'edit'}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
@@ -373,6 +378,7 @@ const Airlines = () => {
 				isModalOpen={detailModal}
 				closeModal={() => {
 					setDetailModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Airline"
@@ -380,9 +386,11 @@ const Airlines = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					isReadOnly={true}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
@@ -393,7 +401,10 @@ const Airlines = () => {
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
 				width="80vw"
-				closeModal={() => setIsAddModalOpen(false)}
+				closeModal={() => {
+					setIsAddModalOpen(false);
+					form.resetFields();
+				}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Setup your airline
@@ -403,9 +414,12 @@ const Airlines = () => {
 			>
 				<div className={`modal_content`}>
 					<FormComponent
-						key={airlineData?.length}
+						form={form}
 						isLoading={isAddAirlineLoading}
-						closeModal={() => setIsAddModalOpen(false)}
+						closeModal={() => {
+							setIsAddModalOpen(false);
+							form.resetFields();
+						}}
 						handleSubmit={handleAddAirline}
 					/>
 				</div>

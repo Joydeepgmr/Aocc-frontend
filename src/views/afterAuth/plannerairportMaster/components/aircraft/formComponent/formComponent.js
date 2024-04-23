@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import CustomSelect from '../../../../../../components/select/select';
@@ -13,7 +13,7 @@ import {
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 
@@ -41,10 +41,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 		handleSubmit(value);
 	};
 
-	const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
-		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
+		if ((form.getFieldValue('validTill') < form.getFieldValue('validFrom'))) {
 			form.setFieldsValue({
 				validTill: null,
 			});
@@ -60,6 +59,10 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
 		}
 	};
+
+	useEffect(() => {
+		form.resetFields();
+	}, [initialValue]);
 
 	return (
 		<Form
