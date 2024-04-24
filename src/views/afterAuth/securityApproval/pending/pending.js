@@ -168,7 +168,7 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 				<div className="pending--img_container">
 					<div className="pending--box_container">
 						<img src={rowData?.customerDocuments[0]?.documentUrl} alt="passport" className="pending--passport" />
-						<CustomTypography color="#909296">Passport: Kenya</CustomTypography>
+						<CustomTypography color="#909296">{rowData?.customerDocuments[0]?.type}: {rowData?.name}</CustomTypography>
 					</div>
 					<div className="pending--box_container">
 						<img src={rowData?.image} alt="biometric" className="pending--biometric" />

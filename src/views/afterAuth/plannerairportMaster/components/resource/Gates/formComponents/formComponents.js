@@ -140,6 +140,7 @@ const FormComponent = ({
 							label="Bus Gate"
 							disabled={isReadOnly}
 							checked={isChecked}
+							type="custom"
 							onChange={handleCheckboxChange}
 						/>
 					</div>

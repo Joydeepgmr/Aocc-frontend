@@ -223,6 +223,7 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
 					name="validTill"
+					className="custom_date"
 					disabledFor='past'
 					format="MM-DD-YYYY"
 					disabled={isReadOnly} />

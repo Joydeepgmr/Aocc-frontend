@@ -389,11 +389,11 @@ const DailySchedule = ({ tab }) => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
 			<SocketEventListener
 				refetch={refetch}
 				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
 			/>
+		{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> :
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>
@@ -430,7 +430,7 @@ const DailySchedule = ({ tab }) => {
 						/>
 					</div>
 				</div>
-			</div>
+			</div>}
 
 			{/* modals */}
 			<ModalComponent

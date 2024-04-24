@@ -103,7 +103,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						placeholder={!isReadOnly && 'Filled Text'}
 						className="custom_input"
 						disabled={isReadOnly}
-						min={3}
 						max={3}
 					/>
 					<InputField
