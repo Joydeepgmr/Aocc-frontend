@@ -10,7 +10,7 @@ const NumericField = ({otpLength = 3, name, label, disabled, value, onChange, cl
             <CustomTypography type="text" fontSize={16} fontWeight="400" color="black">
 				{label}
 			</CustomTypography>
-            <InputOTP length={otpLength} disabled={disabled ? disabled : false} className="otp_field" value={value} name={name} onChange={onChange} className="otp_field" />
+            <InputOTP length={otpLength} disabled={disabled ? disabled : false} value={value} name={name} onChange={onChange} className="otp_field" />
         </div>
     )
 }

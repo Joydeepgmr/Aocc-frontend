@@ -59,11 +59,39 @@ const FlightSchedule = () => {
 	};
 	const columns = useMemo(() => {
 		return [
+			{
+				title: '2L',
+				dataIndex: 'iataCode',
+				key: 'iataCode',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: '3L',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
 			{ title: 'FLNR', dataIndex: 'flightNumber', key: 'flightNumber', render: (text) => text ?? '-' },
 			{
 				title: 'STS',
 				dataIndex: 'flightType',
 				key: 'flightType',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: 'REG',
+				dataIndex: 'registration',
+				key: 'registration',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
+			{
+				title: 'CSGN',
+				dataIndex: 'callSign',
+				key: 'callSign',
 				align: 'center',
 				render: (text) => text ?? '-',
 			},
@@ -103,27 +131,6 @@ const FlightSchedule = () => {
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
-				title: '2L',
-				dataIndex: 'iataCode',
-				key: 'iataCode',
-				align: 'center',
-				render: (text) => text ?? '-',
-			},
-			{
-				title: '3L',
-				dataIndex: 'icaoCode',
-				key: 'icaoCode',
-				align: 'center',
-				render: (text) => text ?? '-',
-			},
-			{
-				title: 'RWY',
-				dataIndex: 'rny',
-				key: 'rny',
-				align: 'center',
-				render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-',
-			},
-			{
 				title: 'EOB',
 				dataIndex: 'eob',
 				key: 'eob',
@@ -159,18 +166,11 @@ const FlightSchedule = () => {
 				render: (_, record) => record?.resourceAllocation?.baggageBelt?.name ?? '-',
 			},
 			{
-				title: 'REG',
-				dataIndex: 'registration',
-				key: 'registration',
+				title: 'RWY',
+				dataIndex: 'rny',
+				key: 'rny',
 				align: 'center',
-				render: (text) => text ?? '-',
-			},
-			{
-				title: 'CSGN',
-				dataIndex: 'callSign',
-				key: 'callSign',
-				align: 'center',
-				render: (text) => text ?? '-',
+				render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-',
 			},
 			{ title: 'REM', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
 			tab == 'arrival'

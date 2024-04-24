@@ -15,6 +15,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
+	const [resetCodes, setResetCodes] = useState(false);
 	const onError = ({ response: { data: { message } } }) => toast.error(message);
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
@@ -29,6 +30,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 
 	function closeAddModal() {
 		initial.resetFields();
+		setResetCodes(true);
 		setAirportModal(defaultModalParams)
 	};
 
@@ -141,7 +143,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				className="custom_modal"
 			>
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
-					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData }} />
+					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }}/>
 					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent

@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 
@@ -21,8 +21,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			data: { message },
 		},
 	}) => toast.error(message);
-
-	const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
@@ -54,6 +52,12 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	const onFinishHandler = (value) => {
 		handleSubmit(value);
 	};
+
+	useEffect(() => {
+		form.resetFields();
+	}, [initialValue]);
+
+
 	return (
 		<Form
 			form={form}

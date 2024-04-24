@@ -19,7 +19,7 @@ import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 
 const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData, loading }) => {
-	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
+	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' };
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
@@ -82,22 +82,23 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 
 	function getFormValues(data) {
 		return {
-			name: data.name,
-			twoLetterCode: data.twoLetterCode,
-			threeLetterCode: data.threeLetterCode,
-			country: data.country,
-			globalAirport: data.globalAirport ?? data?.homeAirport?.id,
-			terminal: data.terminal,
-			airlineType: data.airlineType,
-			remark: data.remark,
-			paymentMode: data.paymentMode,
-			address: data.address,
-			phoneNumber: data.phoneNumber,
-			validFrom: data.validFrom && dayjs(data.validFrom),
-			validTill: data.validTill && dayjs(data.validTill),
+			name: data?.name,
+			twoLetterCode: data?.twoLetterCode,
+			threeLetterCode: data?.threeLetterCode,
+			country: data?.country,
+			globalAirport: data?.globalAirport ?? data?.homeAirport?.id,
+			terminal: data?.terminal,
+			airlineType: data?.airlineType,
+			remark: data?.remark,
+			paymentMode: data?.paymentMode,
+			address: data?.address,
+			phoneNumber: data?.phoneNumber,
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
 		};
 	}
 	function onFinishHandler(values) {
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		if (!values.phoneNumber) {
@@ -105,6 +106,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 		}
 
 		if (airlineRegistrationModal.type === 'edit') {
+			const id = airlineRegistrationModal.data.id;
 			delete values.twoLetterCode;
 			delete values.threeLetterCode;
 			delete values.validFrom

@@ -53,7 +53,7 @@ export const Login = () => {
 				navigate(Pathname.DASHBOARD);
 				break;
 			case userType.SECURITY_OFFICER:
-					navigate(Pathname.SECURITY_OFFICER);
+				navigate(Pathname.SECURITY_OFFICER);
 				break;
 
 			case userType.CDM:
@@ -107,6 +107,7 @@ export const Login = () => {
 										label="Email"
 										name="email"
 										required
+										isArticle={false}
 										placeholder="Enter your email"
 										className="custom_input"
 									/>
@@ -114,6 +115,7 @@ export const Login = () => {
 										label="Password"
 										name="password"
 										type="password"
+										isArticle={false}
 										required
 										placeholder="Enter your password"
 										className="custom_input"

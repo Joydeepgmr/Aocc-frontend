@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import NumericField from '../numericField/numericField';
 import './licenseSetupForm.scss';
 
-const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
+const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }) => {
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
 	const SelectAirportData = useMemo(() => {
@@ -21,9 +21,9 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
 
 	const handleAirportChange = (selectedAirport) => {
 		const selectedAirportData = airportDropdownData.find((airport) => airport.id === selectedAirport);
-		const iataValue = selectedAirportData.iataCode.split('');
-		const icaoValue = selectedAirportData.icaoCode.split('');
 		if (selectedAirportData) {
+			const iataValue = selectedAirportData.iataCode.split('');
+			const icaoValue = selectedAirportData.icaoCode.split('');
 			setIataCode(iataValue);
 			setIcaoCode(icaoValue);
 		} else {
@@ -31,6 +31,15 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData }) => {
 			setIcaoCode([]);
 		}
 	};
+
+	useEffect(() => {
+		if (resetCodes) {
+			setIataCode([]);
+			setIcaoCode([]);
+			setResetCodes(false);
+		}
+	}, [resetCodes]);
+
 	return (
 		<div className="airport_setup_form_container">
 			<div className="airport_setup_form_inputfields">
