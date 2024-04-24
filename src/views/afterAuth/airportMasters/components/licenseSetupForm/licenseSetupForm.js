@@ -110,7 +110,13 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTill" required format="MM-DD-YYYY" />
+				<Date
+					label="Valid To"
+					placeholder="Select valid to date"
+					className="custom_date"
+					name="validTill"
+					required
+					format="MM-DD-YYYY" />
 			</div>
 		</div>
 	);

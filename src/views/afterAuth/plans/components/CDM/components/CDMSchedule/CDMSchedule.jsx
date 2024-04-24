@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import { useQueryClient } from 'react-query';
 import editIcon from '../../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../../components/button/button';
@@ -18,6 +19,9 @@ import {
 	usePostSeasonalPlans,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
+import { useAirlineDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useNatureCodeDropdown } from '../../../../../../../services/planairportmaster/resources/naturecode/naturecode';
+import { useAircraftDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
 import { ConvertIstToUtc, ConvertToDateTime, ConvertUtcToIst } from '../../../../../../../utils';
 import FormComponent from '../../../formComponent/formComponent';
 import Arrival from '../arrival/arrival';
@@ -36,6 +40,11 @@ const DailySchedule = ({ tab }) => {
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [form] = Form.useForm();
+
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
+	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
+	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -80,6 +89,8 @@ const DailySchedule = ({ tab }) => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -88,6 +99,8 @@ const DailySchedule = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const handleChange = (key) => {
@@ -309,19 +322,19 @@ const DailySchedule = ({ tab }) => {
 		},
 		index === '1'
 			? {
-					title: 'STA',
-					dataIndex: 'STA',
-					key: 'STA',
-					align: 'center',
-					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
-				}
+				title: 'STA',
+				dataIndex: 'STA',
+				key: 'STA',
+				align: 'center',
+				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+			}
 			: {
-					title: 'STD',
-					dataIndex: 'STD',
-					key: 'STD',
-					align: 'center',
-					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
-				},
+				title: 'STD',
+				dataIndex: 'STD',
+				key: 'STD',
+				align: 'center',
+				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+			},
 		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
@@ -443,10 +456,13 @@ const DailySchedule = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						key={Math.random() * 100}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -465,11 +481,15 @@ const DailySchedule = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>

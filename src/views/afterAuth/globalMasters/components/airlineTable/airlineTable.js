@@ -256,7 +256,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 								<ButtonComponent
 									title={airlineRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
-									className="custom_button_cancel"
+									className="custom_button_save"
 									isSubmit={true}
 								/>
 							</div>
