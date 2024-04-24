@@ -102,7 +102,7 @@ const ResourceAllocation = () => {
 					start: CombineUtcDateAndIstTime(item?.startTime.split('T')[0], item?.startTime.split('T')[1]),
 					end: CombineUtcDateAndIstTime(item?.endTime.split('T')[0], item?.endTime.split('T')[1]),
 					group: item?.resourceId?.id,
-					content: '',
+					content: item?.flight?.callSign,
 					className,
 					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.status}</div>`,
 				};

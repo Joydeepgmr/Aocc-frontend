@@ -115,3 +115,8 @@ export const CDM_GET_ARRIVAL_DEPARTURE = '/cdmOps/';
 export const UPDATE_CDM_DATA = '/cdmOps';
 export const CDM_GET_TURN_AROUND = '/cdmOps/turnaround';
 export const UPDATE_CDM_TURN_AROUND = '/cdmOps/turnaround';
+
+
+/*-------------------------Vendor----------------------------------*/
+export const VENDOR = '/vendor'
+export const GET_VENDOR ='/vendor/paginated'

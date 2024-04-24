@@ -13,4 +13,5 @@ export let Pathname = {
 	SECURITY_OFFICER: '/security-officer',
 	404: '/404',
 	CDM: '/cdm',
+	VENDOR: '/vendor',
 };

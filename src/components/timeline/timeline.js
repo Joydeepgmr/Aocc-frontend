@@ -27,7 +27,7 @@ const TimelineDesign = (props) => {
 		itemsAlwaysDraggable: {
 			item: true,
 		},
-		maxMinorChars: 10,
+		maxMinorChars: 15,
 		format: {
 			minorLabels: {
 				minute: 'h:mma',

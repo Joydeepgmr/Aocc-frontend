@@ -17,6 +17,7 @@ import Components from '../views/beforeAuth/components';
 import Login from '../views/beforeAuth/login/login';
 import SecurityApproval from "../views/afterAuth/securityApproval/securityApproval";
 import CDM from '../views/afterAuth/cdm/cdm';
+import Vendor from '../views/afterAuth/Vendor/Vendor';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +63,7 @@ export default function Router() {
 						{ path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
 						{ path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
 						{ path: Pathname.CDM, element: <RouteHOC element={<CDM />} /> },
+						
 					],
 				},
 				{
@@ -77,6 +79,17 @@ export default function Router() {
                     ),
                     children: [
                         { path: Pathname.SECURITY_OFFICER, element: <RouteHOC element={<SecurityApproval />} /> },
+                    ],
+                },
+				{
+                    path: '',
+                    element: (
+                        <Suspense fallback={<Loader />}>
+                            <PrivateOutlet />
+                        </Suspense>
+                    ),
+                    children: [
+                        { path: Pathname.VENDOR, element: <RouteHOC element={<Vendor />} /> },
                     ],
                 },
 			],

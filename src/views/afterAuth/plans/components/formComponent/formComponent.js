@@ -239,6 +239,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							name="toh"
 							label="Towing to Hanger"
 							checked={tohChecked}
+							type="custom"
 							onChange={handleCheckboxChange}
 						/>
 					</div>

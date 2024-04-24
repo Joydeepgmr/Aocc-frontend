@@ -409,8 +409,8 @@ const Seasonal = ({ tab }) => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading || isDownloading} />
 			<SocketEventListener refetch={getSeasonalPlanRefetch} apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`} />
+			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? <PageLoader loading={true} /> : 
 			<div className="main_TableContainer">
 				<div className="top_container">
 					<div>
@@ -449,7 +449,7 @@ const Seasonal = ({ tab }) => {
 						/>
 					</div>
 				</div>
-			</div>
+			</div>}
 
 			{/* modals */}
 			<ModalComponent

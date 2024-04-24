@@ -5,7 +5,6 @@ import * as userType from '../../utils/roles';
 
 export const roleBasedNav = (role = 'Planner') => {
 	let navItems = [];
-
 	if (role === userType.IT_ADMIN) {
 		navItems = [
 			{
@@ -57,6 +56,14 @@ export const roleBasedNav = (role = 'Planner') => {
 					key: '0',
 					label: 'Approval',
 					children: Pathname.SECURITY_OFFICER,
+				},]
+		}
+		else if (role === userType.VENDOR) {
+			navItems = [
+				{
+					key: '0',
+					label: '',
+					children: Pathname.VENDOR,
 				},]
 		}
 	
