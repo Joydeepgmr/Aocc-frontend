@@ -7,6 +7,7 @@ export const useGetAllTimelineData = (type, timeFormat, props) => {
 		queryKey: ['get-all-timeline-data', type, timeFormat],
 		queryFn: async () => await Get(`${GET_ALL_TIMELINE_DATA}?type=${type}&frame=${timeFormat}`),
 		...props,
+		enabled : !!type && !!timeFormat
 	});
 
 	const { data, error, isSuccess } = response;
@@ -25,6 +26,7 @@ export const useGetTimelineGroupData = (type, timeFormat, props) => {
 		queryKey: ['get-timeline-group-data', type, timeFormat],
 		queryFn: async () => await Get(`${GET_TIMELINE_GROUP_DATA}?type=${type}&frame=${timeFormat}`),
 		...props,
+		enabled : !!type && !!timeFormat
 	});
 
 	const { data, error, isSuccess } = response;
