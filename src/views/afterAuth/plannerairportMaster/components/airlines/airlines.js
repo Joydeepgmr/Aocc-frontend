@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Common_table from '../../common_wrapper/common_table/common_table';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
-
+import { Form } from 'antd';
 import {
 	useDeletePlannerAirline,
 	useGetAllPlannerAirline,
 	usePostPlannerAirline,
 	useUpdatePlannerAirline,
+	useUploadCSVPlannerAirline,
 } from '../../../../../services';
 import ButtonComponent from '../../../../../components/button/button';
 import Delete from '../../../../../assets/Delete.svg';
@@ -20,6 +21,10 @@ import toast from 'react-hot-toast';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
+import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_PLANNER_AIRLINE } from '../../../../../api';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -29,6 +34,8 @@ const Airlines = () => {
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
+	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [form] = Form.useForm();
 
 	const getAirlineHandler = {
 		onSuccess: (data) => handleGetAirlineSuccess(data),
@@ -47,6 +54,11 @@ const Airlines = () => {
 	const editAirlineHandler = {
 		onSuccess: (data) => handleEditAirlineSuccess(data),
 		onError: (error) => handleEditAirlineError(error),
+	};
+
+	const uploadCsvHandler = {
+		onSuccess: (data) => handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
 	};
 
 	const handleGetAirlineSuccess = (data) => {
@@ -95,11 +107,23 @@ const Airlines = () => {
 		toast.error(error?.response?.data?.message);
 	};
 
+	const handleUploadCsvSuccess = () => {
+		toast.success('CSV Uploaded Successfully');
+		queryClient.invalidateQueries('get-all-planner-airline');
+		setIsCsvModalOpen(false);
+	};
+
+	const handleUploadCsvError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
 	const {
 		data: fetchedPlannerAirline,
 		isLoading: isPlannerAirlineLoading,
+		isFetching: isPlannerAirlineFetching,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getPlannerAirlineRefetch
 	} = useGetAllPlannerAirline(getAirlineHandler);
 
 	const { mutate: onDeleteAirline, isLoading: isDeleteAirlineLoading } =
@@ -110,6 +134,21 @@ const Airlines = () => {
 		rowData?.id,
 		editAirlineHandler
 	);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { mutate: onUploadCSV } = useUploadCSVPlannerAirline(uploadCsvHandler);
+
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError });
+
+	//DOWNLOAD
+	const handleDownloadCSV = () => {
+		refetch();
+	};
 
 	const handleDeleteAirline = () => {
 		onDeleteAirline(rowData?.id);
@@ -141,9 +180,19 @@ const Airlines = () => {
 		onUpdateAirline(data);
 	};
 
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
+	};
+
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -178,44 +227,55 @@ const Airlines = () => {
 			),
 		},
 		{
-			title: 'Airline Name',
+			title: 'AL',
 			dataIndex: 'name',
 			key: 'name',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Airline Code',
+			title: '2L',
 			dataIndex: 'twoLetterCode',
 			key: 'twoLetterCode',
 			render: (twoLetterCode) => twoLetterCode ?? '-',
+			align: 'center',
 		},
 		{
-			title: 'ATC Code',
+			title: '3L',
 			dataIndex: 'threeLetterCode',
 			key: 'threeLetterCode',
 			render: (threeLetterCode) => threeLetterCode ?? '-',
+			align: 'center',
+		},
+		// {
+		// 	title: '3L',
+		// 	dataIndex: 'homeAirport',
+		// 	key: 'homeAirport',
+		// 	render: (homeAirport) => homeAirport?.iataCode ?? '-',
+		// 	align: 'center',
+		// },
+		// {
+		// 	title: '4L',
+		// 	dataIndex: 'homeAirport',
+		// 	key: 'homeAirport',
+		// 	render: (homeAirport) => homeAirport?.icaoCode ?? '-',
+		// 	align: 'center',
+		// },
+		{
+			title: 'CNTRY',
+			dataIndex: 'country',
+			key: 'country',
+			render: (country) => country ?? '-',
+			align: 'center',
 		},
 		{
-			title: 'IATA Code',
-			dataIndex: 'homeAirport',
-			key: 'homeAirport',
-			render: (homeAirport) => homeAirport?.iataCode ?? '-',
-		},
-		{
-			title: 'ICAO Code',
-			dataIndex: 'homeAirport',
-			key: 'homeAirport',
-			render: (homeAirport) => homeAirport?.icaoCode ?? '-',
-		},
-		{ title: 'Country', dataIndex: 'country', key: 'country', render: (country) => country ?? '-' },
-		{
-			title: 'Home Airport',
+			title: 'HOPO',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.name ?? '-',
+			align: 'center',
 		},
 		{
-			title: '',
+			title: 'View Details',
 			dataIndex: 'viewdetails',
 			key: 'viewdetails',
 			render: (text, record) => (
@@ -230,20 +290,24 @@ const Airlines = () => {
 					}}
 					title="View Details"
 					type="text"
+					style={{ margin: 'auto' }}
 				/>
 			),
+			align: 'center',
 		},
 	];
 
 	return (
 		<>
-			{isPlannerAirlineLoading && (
+			<SocketEventListener refetch={getPlannerAirlineRefetch} apiName={`${GET_PLANNER_AIRLINE}`} />
+			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
 				<PageLoader
 					loading={
 						isPlannerAirlineLoading ||
 						isAddAirlineLoading ||
 						isDeleteAirlineLoading ||
-						isUpdateAirlineLoading
+						isUpdateAirlineLoading ||
+						isPlannerAirlineFetching
 					}
 				/>
 			)}
@@ -253,16 +317,24 @@ const Airlines = () => {
 					columns={columns}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
-					loading={isPlannerAirlineLoading}
+					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
 					title={'Airlines'}
 					openModal={() => setIsAddModalOpen(true)}
+					openCSVModal={() => setIsCsvModalOpen(true)}
+					type="airline"
+					downloadCSV={handleDownloadCSV}
+					title1="New Airline"
 				/>
 			) : (
 				<Common_Card
-					title1="Create"
-					title2={'Import Global Reference'}
+					title1="New Airline"
+					title2={'Upload CSV'}
+					title3="Download CSV Template"
 					btnCondition={false}
 					openModal={() => setIsAddModalOpen(true)}
+					openCSVModal={() => setIsCsvModalOpen(true)}
+					downloadCSV={handleDownloadCSV}
+					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
 				/>
 			)}
 
@@ -270,6 +342,7 @@ const Airlines = () => {
 				isOpen={openDeleteModal}
 				onClose={() => {
 					setOpenDeleteModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				onSave={handleDeleteAirline}
@@ -280,20 +353,23 @@ const Airlines = () => {
 				isModalOpen={openEditModal}
 				closeModal={() => {
 					setOpenEditModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Edit your airline"
 				width="80vw"
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					type={'edit'}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={Math.random() * 100}
+					key={airlineData?.length}
 					isLoading={isUpdateAirlineLoading}
 					handleSubmit={handleUpdateAirline}
 				/>
@@ -302,27 +378,33 @@ const Airlines = () => {
 				isModalOpen={detailModal}
 				closeModal={() => {
 					setDetailModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
-				title="Setup your airline"
+				title="Airline"
 				width="80vw"
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					isReadOnly={true}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={Math.random() * 100}
+					key={airlineData?.length}
 				/>
 			</ModalComponent>
 
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
 				width="80vw"
-				closeModal={() => setIsAddModalOpen(false)}
+				closeModal={() => {
+					setIsAddModalOpen(false);
+					form.resetFields();
+				}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Setup your airline
@@ -332,13 +414,22 @@ const Airlines = () => {
 			>
 				<div className={`modal_content`}>
 					<FormComponent
-						key={Math.random() * 100}
+						form={form}
 						isLoading={isAddAirlineLoading}
-						closeModal={() => setIsAddModalOpen(false)}
+						closeModal={() => {
+							setIsAddModalOpen(false);
+							form.resetFields();
+						}}
 						handleSubmit={handleAddAirline}
 					/>
 				</div>
 			</ModalComponent>
+			<UploadCsvModal
+				isModalOpen={isCsvModalOpen}
+				width="72rem"
+				closeModal={() => setIsCsvModalOpen(false)}
+				handleUpload={handleUpload}
+			/>
 		</>
 	);
 };

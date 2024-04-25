@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
@@ -12,12 +12,33 @@ import toast from 'react-hot-toast';
 import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import dayjs from 'dayjs';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading }) => {
+const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
+	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
+	const [currentValidFrom, setCurrentValidFrom] = useState('');
+
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
+
+	const handleValidFrom = (dateString) => {
+		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+		}
+		if (dateString === null) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+			setIsValidFrom(false);
+			setCurrentValidFrom(null);
+		} else {
+			setIsValidFrom(true);
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
+		}
+	};
 
 	const { data: countryDropdownData } = useCountriesDropdown({ onError });
 
@@ -32,8 +53,19 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 		handleSubmit(value);
 	};
 
+	useEffect(() => {
+		form.resetFields();
+	}, [initialValue]);
+
+
 	return (
-		<Form layout="vertical" onFinish={onFinishHandler} initialValues={initialValue} key={initialValue?.id}>
+		<Form
+			form={form}
+			layout="vertical"
+			onFinish={onFinishHandler}
+			initialValues={initialValue}
+			key={initialValue?.id}
+		>
 			<div className="airline_form_container">
 				<div className="airline_form_inputfields">
 					<InputField
@@ -75,7 +107,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						placeholder={!isReadOnly && 'Filled Text'}
 						className="custom_input"
 						disabled={isReadOnly}
-						min={3}
 						max={3}
 					/>
 					<InputField
@@ -127,6 +158,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						label="Phone"
 						name="phoneNumber"
 						max={20}
+						min={10}
+						pattern='^[0-9]+$'
 						placeholder={!isReadOnly && 'Enter your Phone No.'}
 						className="custom_input"
 						disabled={isReadOnly}
@@ -141,21 +174,29 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						name="validFrom"
 						className="custom_date"
 						format="MM-DD-YYYY"
-						disabledFor="future"
 						disabled={isReadOnly || isNotEditable}
 						required
 						defaultValue={initialValue?.validFrom ? dayjs(initialValue?.validFrom) : undefined}
+						onChange={handleValidFrom}
 					/>
 					<Date
 						label="Valid To"
 						placeholder={!isReadOnly && 'Select valid to date'}
 						name="validTill"
 						format="MM-DD-YYYY"
-						disabled={isReadOnly}
 						className="custom_date"
 						defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
+						disabled={isReadOnly || !isValidFrom}
+						isDisabledDate={true}
+						disabledDate={(current) => {
+							let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+							return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+						}}
 					/>
 				</div>
+			</div>
+
+			<div className="airline_form_inputfields">
 				{!isReadOnly && (
 					<>
 						<Divider />
@@ -168,7 +209,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 								disabled={isLoading}
 							/>
 							<ButtonComponent
-								title={'save'}
+								title={isNotEditable ? 'Update' : 'Save'} 
 								type="filledText"
 								className="custom_button_save"
 								isSubmit={true}

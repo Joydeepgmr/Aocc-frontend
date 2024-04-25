@@ -1,0 +1,16 @@
+@import '../../../styles/sass/mixins';
+@import '../../../styles/sass/variables';
+
+.tabs{
+    &--box{
+        @include flex(stretch, center, column);
+        padding: 5rem 2rem 0rem 3rem;
+        gap: 2rem;
+    }
+    &--custom_tab{
+        border: 1px solid $gray_300;
+        border-radius: 1.6rem;
+        padding: 2.4rem;
+        gap: 4rem;
+    }
+}

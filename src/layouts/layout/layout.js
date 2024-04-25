@@ -6,11 +6,9 @@ import TopNav from '../topNav/topNav';
 
 const Layout = (props) => {
 	const { data, isLoading, mutate: getUserDetails } = useGetUserDetails();
-    useEffect(() => {
-     getUserDetails();
-    }, []);
-    // const data = {role:{name:'Planner'}}
-    // const isLoading=false
+	useEffect(() => {
+		getUserDetails();
+	}, []);
 	return (
 		<>
 			{isLoading ?

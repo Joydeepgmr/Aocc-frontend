@@ -18,8 +18,8 @@ import {
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 
-const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData,loading }) => {
-	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' }; // type could be 'new' | 'view' | 'edit'
+const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData, loading }) => {
+	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' };
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
@@ -82,25 +82,31 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 
 	function getFormValues(data) {
 		return {
-			name: data.name,
-			twoLetterCode: data.twoLetterCode,
-			threeLetterCode: data.threeLetterCode,
-			country: data.country,
-			globalAirport: data.globalAirport ?? data?.homeAirport?.id,
-			terminal: data.terminal,
-			airlineType: data.airlineType,
-			remark: data.remark,
-			paymentMode: data.paymentMode,
-			address: data.address,
-			phoneNumber: data.phoneNumber,
-			validFrom: data.validFrom && dayjs(data.validFrom),
-			validTill: data.validTill && dayjs(data.validTill),
+			name: data?.name,
+			twoLetterCode: data?.twoLetterCode,
+			threeLetterCode: data?.threeLetterCode,
+			country: data?.country,
+			globalAirport: data?.globalAirport ?? data?.homeAirport?.id,
+			terminal: data?.terminal,
+			airlineType: data?.airlineType,
+			remark: data?.remark,
+			paymentMode: data?.paymentMode,
+			address: data?.address,
+			phoneNumber: data?.phoneNumber,
+			validFrom: data?.validFrom && dayjs(data?.validFrom),
+			validTill: data?.validTill && dayjs(data?.validTill),
 		};
 	}
 	function onFinishHandler(values) {
+		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
+		if (!values.phoneNumber) {
+			delete values.phoneNumber;
+		}
+
 		if (airlineRegistrationModal.type === 'edit') {
+			const id = airlineRegistrationModal.data.id;
 			delete values.twoLetterCode;
 			delete values.threeLetterCode;
 			delete values.validFrom
@@ -158,43 +164,46 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 				),
 			},
 			{
-				title: 'Airline Name',
+				title: 'AL',
 				dataIndex: 'name',
 				key: 'name',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'IATA Code',
-				dataIndex: 'iataCode',
-				key: 'iataCode',
-				align:'center',
-				render: (text, record) => record?.homeAirport?.iataCode || '-',
+				title: '2L',
+				dataIndex: 'twoLetterCode',
+				key: 'twoLetterCode',
+				align: 'center',
+				render: (text) => text || '-',
 			},
 			{
-				title: 'ICAO Code',
-				dataIndex: 'icaoCode',
-				key: 'icaoCode',
-				align:'center',
-				render: (text, record) => record?.homeAirport?.iataCode || '-',
+				title: '3L',
+				dataIndex: 'threeLetterCode',
+				key: 'threeLetterCode',
+				align: 'center',
+				render: (text) => text || '-',
 			},
 			{
-				title: 'Country',
+				title: 'CNTRY',
 				dataIndex: 'country',
 				key: 'country',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Home Airport',
+				title: 'HOPO',
 				dataIndex: 'homeAirport',
 				key: 'homeAirport',
+				align: 'center',
 				render: (text) => text?.name || '-',
 			},
-			{
-				title: 'Terminal',
-				dataIndex: 'terminal',
-				key: 'timeChange',
-				render: (text) => text || '-',
-			},
+			// {
+			// 	title: 'Terminal',
+			// 	dataIndex: 'terminal',
+			// 	key: 'timeChange',
+			// 	align: 'center',
+			// 	render: (text) => text || '-',
+			// },
 			{
 				title: 'View Details',
 				key: 'viewDetails',
@@ -203,12 +212,13 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
-						type="text"
+						type="text" 
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		],
@@ -246,7 +256,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 								<ButtonComponent
 									title={airlineRegistrationModal.type === 'edit' ? 'Update' : 'Save'}
 									type="filledText"
-									className="custom_button_cancel"
+									className="custom_button_save"
 									isSubmit={true}
 								/>
 							</div>
@@ -260,7 +270,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
 							Airlines
 						</CustomTypography>
-						<TableComponent {...{ data: airlineData, columns, fetchData, pagination,loading }} />
+						<TableComponent {...{ data: airlineData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
 

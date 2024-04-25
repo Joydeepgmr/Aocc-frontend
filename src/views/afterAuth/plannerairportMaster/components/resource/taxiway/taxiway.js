@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
@@ -14,7 +15,9 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import {useRunwayDropdown} from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_TAXIWAY } from '../../../../../../api';
 import './taxiway.scss';
 
 const Taxiway = () => {
@@ -27,6 +30,7 @@ const Taxiway = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const { data: runwayDropdownData = [] } = useRunwayDropdown();
+	const [form] = Form.useForm();
 
 	const getTaxiwayHandler = {
 		onSuccess: (data) => handleGetTaxiwaySuccess(data),
@@ -46,7 +50,14 @@ const Taxiway = () => {
 	const handleGetTaxiwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchTaxiway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetTaxiway(getTaxiwayHandler);
+	const {
+		data: fetchTaxiway,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getTaxiwayRefetch
+	} = useGetTaxiway(getTaxiwayHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -54,15 +65,20 @@ const Taxiway = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 
@@ -72,7 +88,7 @@ const Taxiway = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -96,14 +112,16 @@ const Taxiway = () => {
 
 	const { mutate: postTaxiway, isLoading: isPostLoading } = usePostTaxiway(addTaxiwayHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postTaxiway(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false)
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -184,28 +202,69 @@ const Taxiway = () => {
 			),
 		},
 		{
-			title: 'Taxiway Name',
+			title: 'TWY',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Connected to Runway',
+			title: 'RWY',
 			dataIndex: 'runway',
 			key: 'runway',
+			align: 'center',
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'Reason',
+			title: 'REASON',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
-			title: 'Availability',
+			title: 'STS',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'O';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'O';
+				} else {
+					return 'I';
+				}
+			},
+		},
+		{
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'A';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'U/A';
+				} else {
+					return 'A';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -213,6 +272,7 @@ const Taxiway = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
@@ -253,15 +313,15 @@ const Taxiway = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getTaxiwayRefetch} apiName={GET_TAXIWAY} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTaxiway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData = {runwayDropdownData} key={Math.random() * 100}/>}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -279,53 +339,56 @@ const Taxiway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Taxiway
 							</CustomTypography>
-							<TableComponent data={taxiwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={taxiwayData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
 
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="120rem"
-						closeModal={closeModal}
-						title={'Add Taxiway'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								runwayDropdownData = {runwayDropdownData}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '':'Edit'} Taxiway`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								runwayDropdownData = {runwayDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Taxiway'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						runwayDropdownData={runwayDropdownData}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Taxiway`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						runwayDropdownData={runwayDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

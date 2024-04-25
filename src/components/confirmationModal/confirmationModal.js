@@ -5,7 +5,7 @@ import ButtonComponent from '../button/button';
 
 const confirmationModal = ({
 	isOpen = true,
-	title = 'Are You Sure ?',
+	title = 'Are You Sure?',
 	content = 'you want to delete this',
 	buttonTitle1 = 'Cancel',
 	buttonTitle2 = 'Delete',

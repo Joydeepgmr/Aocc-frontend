@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Common_Card from '../../common_wrapper/common_card.js/common_card';
 import Common_table from '../../common_wrapper/common_table/common_table';
-import './aircraft.scss';
+import { Form } from 'antd';
 import FormComponent from './formComponent/formComponent';
 import {
 	useDeletePlannerAircraft,
@@ -20,6 +20,10 @@ import dayjs from 'dayjs';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
+import './aircraft.scss';
+
 
 const Aircrafts = () => {
 	const queryClient = useQueryClient();
@@ -29,6 +33,7 @@ const Aircrafts = () => {
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
+	const [form] = Form.useForm();
 
 	const getAircraftHandler = {
 		onSuccess: (data) => handleGetAircraftSuccess(data),
@@ -97,8 +102,10 @@ const Aircrafts = () => {
 	const {
 		data: fetchedPlannerAircraft,
 		isLoading: isPlannerAircraftLoading,
+		isFetching: isPlannerAircraftFetching,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getPlannerAircraftRefetch
 	} = useGetAllPlannerAircraft(getAircraftHandler);
 
 	const { mutate: onDeleteAircraft, isLoading: isDeleteAircraftLoading } =
@@ -147,7 +154,7 @@ const Aircrafts = () => {
 
 	const columns = [
 		{
-			title: '',
+			title: 'Actions',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -184,41 +191,52 @@ const Aircrafts = () => {
 			),
 		},
 		{
-			title: 'Registration',
+			title: 'A/C REG',
 			dataIndex: 'registration',
 			key: 'registration',
 			render: (registration) => registration ?? '-',
+			align: 'center',
 		},
-		{ title: 'Internal', dataIndex: 'internal', key: 'internal', render: (internal) => internal ?? '-' },
+		// {
+		// 	title: 'INTERNAL',
+		// 	dataIndex: 'internal',
+		// 	key: 'internal',
+		// 	render: (internal) => internal ?? '-',
+		// 	align: 'center',
+		// },
 		{
-			title: 'IATA Code',
+			title: '3L',
 			dataIndex: 'iataCode',
 			key: 'iataCode',
 			render: (iataCode) => iataCode ?? '-',
+			align: 'center',
 		},
 		{
-			title: 'ICAO Code',
+			title: '4L',
 			dataIndex: 'icaoCode',
 			key: 'icaoCode',
 			render: (icaoCode) => icaoCode ?? '-',
+			align: 'center',
 		},
 		{
-			title: 'Home Airport',
+			title: 'HOPO',
 			dataIndex: 'airportId',
 			key: 'airportId',
 			render: (airportId) => airportId?.name ?? '-',
+			align: 'center',
 		},
 		{
-			title: 'Nationality',
+			title: 'NATIONALITY',
 			dataIndex: 'nationality',
 			key: 'nationality',
 			render: (nationality) => nationality ?? '-',
+			align: 'center',
 		},
-		{ title: 'Type of Use', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-' },
+		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
 		{
-			title: '',
-			dataIndex: 'viewdetails',
-			key: 'viewdetails',
+			title: 'View Details',
+			dataIndex: 'viewDetails',
+			key: 'viewDetails',
 			render: (text, record) => (
 				<ButtonComponent
 					onClick={() => {
@@ -232,20 +250,24 @@ const Aircrafts = () => {
 					}}
 					title="View Details"
 					type="text"
+					style={{ margin: 'auto' }}
 				/>
 			),
+			align: 'center',
 		},
 	];
 
 	return (
 		<>
-			{isPlannerAircraftLoading && (
+			<SocketEventListener refetch={getPlannerAircraftRefetch} apiName={`${GET_PLANNER_AIRCRAFT}`} />
+			{(isPlannerAircraftLoading || isPlannerAircraftFetching) && (
 				<PageLoader
 					loading={
 						isPlannerAircraftLoading ||
 						isAddAircraftLoading ||
 						isDeleteAircraftLoading ||
-						isUpdateAircraftLoading
+						isUpdateAircraftLoading ||
+						isPlannerAircraftFetching
 					}
 				/>
 			)}
@@ -255,16 +277,18 @@ const Aircrafts = () => {
 					data={aircraftData}
 					fetchData={fetchNextPage}
 					pagination={hasNextPage}
-					loading={isPlannerAircraftLoading}
+					loading={isPlannerAircraftLoading || isPlannerAircraftFetching}
 					title={'Aircraft Registration'}
 					openModal={() => setIsAddModalOpen(true)}
+					type="aircraft"
+					title1="New Aircraft Registration"
 				/>
 			) : (
 				<Common_Card
-					title1="Create"
-					title2={'Import Global Reference'}
+					title1="New Aircraft Registration"
 					btnCondition={false}
 					openModal={() => setIsAddModalOpen(true)}
+					loading={isPlannerAircraftFetching || isPlannerAircraftLoading}
 				/>
 			)}
 
@@ -272,6 +296,7 @@ const Aircrafts = () => {
 				isOpen={openDeleteModal}
 				onClose={() => {
 					setOpenDeleteModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				onSave={handleDeleteAircraft}
@@ -282,6 +307,7 @@ const Aircrafts = () => {
 				isModalOpen={openEditModal}
 				closeModal={() => {
 					setOpenEditModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Setup aircraft registration"
@@ -289,12 +315,13 @@ const Aircrafts = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					type={'edit'}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
-					key={Math.random() * 100}
 					initialValue={rowData}
 					handleSubmit={handleUpdateAircraft}
 					isLoading={isUpdateAircraftLoading}
@@ -304,6 +331,7 @@ const Aircrafts = () => {
 				isModalOpen={detailModal}
 				closeModal={() => {
 					setDetailModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Setup aircraft registration"
@@ -311,12 +339,13 @@ const Aircrafts = () => {
 				className="custom_modal"
 			>
 				<FormComponent
+					form={form}
 					isReadOnly={true}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
-					key={Math.random() * 100}
 					initialValue={rowData}
 				/>
 			</ModalComponent>
@@ -324,7 +353,11 @@ const Aircrafts = () => {
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
 				width="80vw"
-				closeModal={() => setIsAddModalOpen(false)}
+				closeModal={() => {
+						setIsAddModalOpen(false);
+						form.resetFields();
+						setRowData({});
+					}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Setup aircraft registration
@@ -334,8 +367,12 @@ const Aircrafts = () => {
 			>
 				<div className={`modal_content`}>
 					<FormComponent
-						key={Math.random() * 100}
-						closeModal={() => setIsAddModalOpen(false)}
+						form={form}
+						closeModal={() => {
+							setIsAddModalOpen(false);
+							form.resetFields();
+							setRowData({});
+						}}
 						handleSubmit={handleAddAircraft}
 						isLoading={isAddAircraftLoading}
 					/>

@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
+import { useQueryClient } from 'react-query';
+import editIcon from '../../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../../components/button/button';
-import ModalComponent from '../../../../../../../components/modal/modal';
-import FormComponent from '../../../formComponent/formComponent';
-import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
-import TopHeader from '../../../../../../../components/topHeader/topHeader';
-import Filter from '../../../../../../../assets/Filter.svg';
-import InputField from '../../../../../../../components/input/field/field';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../../../components/dropdownButton/dropdownButton';
+import InputField from '../../../../../../../components/input/field/field';
+import ModalComponent from '../../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../../components/pageLoader/pageLoader';
-import Arrival from '../arrival/arrival';
-import Departure from '../departure/departure';
-import editIcon from '../../../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../../../utils';
+import TopHeader from '../../../../../../../components/topHeader/topHeader';
+import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useEditSeasonalPlanArrival,
+	useEditSeasonalPlanDeparture,
 	useGetSeasonalPlans,
 	usePostSeasonalPlans,
-	useEditSeasonalPlanDeparture,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
+import { useAirlineDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useNatureCodeDropdown } from '../../../../../../../services/planairportmaster/resources/naturecode/naturecode';
+import { useAircraftDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
+import { ConvertIstToUtc, ConvertToDateTime, ConvertUtcToIst } from '../../../../../../../utils';
+import FormComponent from '../../../formComponent/formComponent';
+import Arrival from '../arrival/arrival';
+import Departure from '../departure/departure';
 
 import './CDMSchedule.scss';
-import ButtonComponent from '../../../../../../../components/button/button';
+import SocketEventListener from '../../../../../../../socket/listner/socketListner';
+import { GET_SEASONAL_PLANS } from '../../../../../../../api';
 
 const DailySchedule = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -33,10 +37,14 @@ const DailySchedule = ({ tab }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [form] = Form.useForm();
+
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
+	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
+	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -61,12 +69,9 @@ const DailySchedule = ({ tab }) => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
-
-	useEffect(() => {
-		console.log(isFetchLoading, 'loadingg');
-	}, [isFetchLoading]);
-	console.log(fetchedSeasonalPlans, hasNextPage, fetchNextPage, 'fetched');
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -78,12 +83,11 @@ const DailySchedule = ({ tab }) => {
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
 	};
-	const openMapModal = (data) => {
-		setMapModalOpen({ isOpen: true, data });
-	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -92,9 +96,8 @@ const DailySchedule = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-	};
-	const closeMapModal = () => {
-		setMapModalOpen({ isOpen: null, data: null });
+		setRowData({});
+		form.resetFields();
 	};
 
 	const handleChange = (key) => {
@@ -125,7 +128,6 @@ const DailySchedule = ({ tab }) => {
 	};
 
 	const handleAddSeasonalError = (error) => {
-		console.log(error);
 		toast.error(error?.response?.data?.message);
 	};
 	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
@@ -158,7 +160,6 @@ const DailySchedule = ({ tab }) => {
 			...record,
 			date: record?.PDATE ? dayjs(record?.PDATE) : '',
 		};
-		console.log(record, 'record');
 		setRowData(record);
 		openEditModal();
 	};
@@ -217,6 +218,8 @@ const DailySchedule = ({ tab }) => {
 		// },
 	];
 
+	console.log(index, flightType);
+
 	const operations = (
 		<div>
 			<DropdownButton
@@ -249,79 +252,84 @@ const DailySchedule = ({ tab }) => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-
-			console.log(file[0].originFileObj, file, formData, 'data'); // Ensure that the data is present
-
 			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
 	};
-
-	const base64Img = '';
 	const columns = [
 		{
-			title: 'Flight No.',
+			title: '2L',
+			dataIndex: 'iataCode',
+			key: 'iataCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: '3L',
+			dataIndex: 'icaoCode',
+			key: 'icaoCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
+			align: 'center',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
-			title: 'Date',
+			title: 'FLDT',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
-			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+			align: 'center',
+			render: (DATE) => ConvertToDateTime(DATE, 'YYYY-MM-DD') ?? '-',
 		},
 		{
-			title: 'Call Sign',
+			title: 'CSGN',
 			dataIndex: 'callSign',
 			key: 'callSign',
+			align: 'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: 'Nature Code',
+			title: 'NAT',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
+			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
+		{
+			title: 'REG',
+			dataIndex: 'registration',
+			key: 'registration',
+			align: 'center',
+			render: (registration) => registration ?? '-',
+		},
+		{
+			title: flightType == 'arrival' ? 'ORG' : 'DES',
+			dataIndex: 'origin',
+			key: 'origin',
+			align: 'center',
+			render: (origin) => origin ?? '-',
+		},
 		index === '1'
 			? {
 					title: 'STA',
 					dataIndex: 'STA',
 					key: 'STA',
+					align: 'center',
 					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
 				}
 			: {
 					title: 'STD',
 					dataIndex: 'STD',
 					key: 'STD',
+					align: 'center',
 					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 				},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => pos ?? '-' },
-		{
-			title: 'REG No.',
-			dataIndex: 'registration',
-			key: 'registration',
-			render: (registration) => registration ?? '-',
-		},
-		{
-			title: 'Map',
-			key: 'map',
-			render: (
-				text,
-				record // Use the render function to customize the content of the cell
-			) => (
-				<ButtonComponent
-					title="View map"
-					type="text"
-					className="view_map_button"
-					onClick={() => {
-						openMapModal(record);
-					}}
-				></ButtonComponent>
-			),
-		},
+		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -389,23 +397,20 @@ const DailySchedule = ({ tab }) => {
 
 	return (
 		<>
-			<ModalComponent
-				isModalOpen={mapModalOpen?.isOpen}
-				width="60rem"
-				closeModal={closeMapModal}
-				title={`Flight ${mapModalOpen?.data?.FLIGHTNO}`}
-				className="view_img_modal"
-			>
-				<img src={base64Img} alt="base64Img" className="map_img" />
-			</ModalComponent>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			<div className="main_TableContainer">
-				<div className="top_container">
-					<div>
-						<TopHeader heading="Daily Flight Schedule" />
-					</div>
-					<div className="icon_container">
-						{/* <Button
+			<SocketEventListener
+				refetch={refetch}
+				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
+			/>
+			{isFetchLoading || isEditLoading || isPostLoading ? (
+				<PageLoader loading={true} />
+			) : (
+				<div className="main_TableContainer">
+					<div className="top_container">
+						<div>
+							<TopHeader heading="Daily Flight Schedule" />
+						</div>
+						<div className="icon_container">
+							{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -414,28 +419,29 @@ const DailySchedule = ({ tab }) => {
 							icon={Filter}
 							alt="arrow icon"
 						/> */}
-						<InputField
-							label="search"
-							name="search"
-							placeholder="Search"
-							className="custom_inputField"
-							warning="Required field"
-							type="search"
-						/>
+							<InputField
+								label="search"
+								name="search"
+								placeholder="Search"
+								className="custom_inputField"
+								warning="Required field"
+								type="search"
+							/>
+						</div>
+					</div>
+					<div className="table_container">
+						<div>
+							<CustomTabs
+								defaultActiveKey={index}
+								items={tabItems}
+								onChange={handleChange}
+								type="simple"
+								extraContent={operations}
+							/>
+						</div>
 					</div>
 				</div>
-				<div className="table_container">
-					<div>
-						<CustomTabs
-							defaultActiveKey="1"
-							items={tabItems}
-							onChange={handleChange}
-							type="simple"
-							extraContent={operations}
-						/>
-					</div>
-				</div>
-			</div>
+			)}
 
 			{/* modals */}
 			<ModalComponent
@@ -447,10 +453,13 @@ const DailySchedule = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						key={Math.random() * 100}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -469,11 +478,15 @@ const DailySchedule = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>

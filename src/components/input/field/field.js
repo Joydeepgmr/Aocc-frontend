@@ -11,6 +11,7 @@ const InputField = ({
 	required,
 	warning,
 	pattern,
+	patternWarning,
 	type,
 	disabled,
 	className = '',
@@ -22,6 +23,7 @@ const InputField = ({
 	min,
 	max,
 	defaultValue,
+	isArticle = true,
 }) => {
 	const numberPattern = /^[0-9]*$/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -157,6 +159,33 @@ const InputField = ({
 						))}
 					</div>
 				</Form.Item>
+			) : type === 'time' ? (
+				<Form.Item
+					label={renderLabel()}
+					name={name}
+					className={`${className} input_form_item`}
+					rules={[
+						{
+							required: required,
+							message: warning ? warning : 'This field is required.',
+						},
+						{
+							pattern: pattern,
+							message: patternWarning ?? 'Enter the valid format',
+						},
+						{ validator: validator ?? validateRange },
+					]}
+				><Input
+						placeholder={placeholder}
+						className={'input_field'}
+						disabled={disabled ? disabled : false}
+						suffix={suffixText && <span>{suffixText}</span>}
+						status={status}
+						defaultValue={defaultValue}
+						type='time'
+						format="HH:mm"
+						{...rest}
+					/></Form.Item>
 			) : (
 				<Form.Item
 					label={type !== 'search' ? renderLabel() : null}
@@ -170,14 +199,14 @@ const InputField = ({
 						},
 						{
 							pattern: pattern,
-							message: 'Enter the valid format',
+							message: patternWarning ?? 'Enter the valid format',
 						},
 						{ validator: validator ?? validateRange },
 					]}
 				>
 					<Input
 						placeholder={placeholder}
-						className={`input_field`}
+						className={`${type === 'search' ? 'input_field_search' : 'input_field'} ${isArticle && 'article-input'}`}
 						disabled={disabled ? disabled : false}
 						prefix={type === 'search' ? <SearchOutlined /> : null}
 						suffix={suffixText && <span>{suffixText}</span>}

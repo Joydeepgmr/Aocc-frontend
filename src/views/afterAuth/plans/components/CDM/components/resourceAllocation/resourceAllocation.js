@@ -15,6 +15,8 @@ import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
 import dayjs from 'dayjs';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import SocketEventListener from '../../../../../../../socket/listner/socketListner';
+import { GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA } from '../../../../../../../api';
 
 const ResourceAllocation = () => {
 	const queryClient = useQueryClient();
@@ -68,9 +70,15 @@ const ResourceAllocation = () => {
 		}
 	};
 
-	const color = ['#02A0FC', '#FFD43B', '#2B8A3E', '#a83c32', '#a86132', '#a8a832', '#6fa832', '#32a89a'];
-	const { data: fetchedTimelineData } = useGetAllTimelineData(tabValue, selectedTimeValue?.slice(0, 2));
-	const { data: fetchedGroupData } = useGetTimelineGroupData(tabValue, selectedTimeValue?.slice(0, 2));
+	const color = ['#02A0FC', '#FFD43B', '#3eb556', '#FA5252'];
+	const { data: fetchedTimelineData, refetch: refetchTimelineData } = useGetAllTimelineData(
+		tabValue,
+		selectedTimeValue?.slice(0, 2)
+	);
+	const { data: fetchedGroupData, refetch: refetchTimelineGroupData } = useGetTimelineGroupData(
+		tabValue,
+		selectedTimeValue?.slice(0, 2)
+	);
 	const { mutate: updateResource } = useUpdateResourceAllocation(updateResourceHandler);
 
 	const handleResourceMove = (data) => {
@@ -100,9 +108,9 @@ const ResourceAllocation = () => {
 					start: CombineUtcDateAndIstTime(item?.startTime.split('T')[0], item?.startTime.split('T')[1]),
 					end: CombineUtcDateAndIstTime(item?.endTime.split('T')[0], item?.endTime.split('T')[1]),
 					group: item?.resourceId?.id,
-					content: 'Airline 3',
+					content: item?.flight?.callSign,
 					className,
-					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.resourceId?.status}</div>`,
+					title: `<div>Flight Number: ${item?.flight?.FLIGHTNO} <br/><br/>Aircraft Type: ${item?.flight?.AIRLINE}<br/><br/>Status: ${item?.status}</div>`,
 				};
 			});
 
@@ -128,6 +136,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -137,6 +146,7 @@ const ResourceAllocation = () => {
 							label={timelineLabel}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -160,6 +170,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -169,6 +180,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -192,6 +204,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -201,6 +214,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -224,6 +238,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -233,6 +248,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -256,6 +272,7 @@ const ResourceAllocation = () => {
 								editable={isEditable}
 								label={timelineLabel}
 								handleMove={handleResourceMove}
+								time={selectedTimeValue?.slice(0, 2)}
 							/>
 						</div>
 					) : (
@@ -265,6 +282,7 @@ const ResourceAllocation = () => {
 							groups={timelineGroups}
 							editable={isEditable}
 							handleMove={handleResourceMove}
+							time={selectedTimeValue?.slice(0, 2)}
 						/>
 					)}
 				</div>
@@ -295,6 +313,14 @@ const ResourceAllocation = () => {
 
 	return (
 		<div className={`resourceAllocation--Container ${fullScreen && 'resourceAllocation--FullScreen'}`} ref={divRef}>
+			<SocketEventListener
+				refetch={refetchTimelineData}
+				apiName={`${GET_ALL_TIMELINE_DATA}?type=${tabValue}&frame=${selectedTimeValue?.slice(0, 2)}`}
+			/>
+			<SocketEventListener
+				refetch={refetchTimelineGroupData}
+				apiName={`${GET_TIMELINE_GROUP_DATA}?type=${tabValue}&frame=${selectedTimeValue?.slice(0, 2)}`}
+			/>
 			<TopHeader
 				heading="Resource Management"
 				subHeading="Access information regarding resource allocation for flights"

@@ -21,6 +21,7 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 				<InputField
 					label="Identifier"
 					name="identifier"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the identifier name"}
 					className="custom_input"
 					max={32}
@@ -30,6 +31,8 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 				<InputField
 					label="IATA Code"
 					name="iataCode"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					placeholder={!isReadOnly && "Enter the IATA Code"}
 					className="custom_input"
 					min={3}
@@ -41,6 +44,7 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 					label="Model"
 					name="model"
 					max={32}
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the model name"}
 					className="custom_input"
 					required
@@ -59,6 +63,8 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					min={3}
 					max={4}
 					placeholder={!isReadOnly && "Enter the ICAO Code"}
@@ -68,6 +74,8 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 				<InputField
 					label="ICAO Code Modified"
 					name="icaoCodeModified"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					min={3}
 					max={4}
 					placeholder={!isReadOnly && "Enter the ICAO code modified"}
@@ -79,6 +87,7 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 				<InputField
 					label="A/C Family"
 					name="family"
+					pattern='^(?!\s).*$'
 					max={32}
 					placeholder={!isReadOnly && "Enter the aircraft family"}
 					className="custom_input"
@@ -214,6 +223,7 @@ const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
 					name="validTill"
+					className="custom_date"
 					disabledFor='past'
 					format="MM-DD-YYYY"
 					disabled={isReadOnly} />

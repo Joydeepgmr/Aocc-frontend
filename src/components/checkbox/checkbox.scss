@@ -1,8 +1,23 @@
 @import '../../styles/sass/utils';
+@import '../../styles/sass/variables';
 @import '../../styles/sass/mixins';
  
 .checkbox_group{
     @include flex(center, start, row) 
 }
 
+.custom-checkbox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid $gray_400;
+    border-radius: 1.2rem;
+    padding: 1.6rem;
+  }
+  
+  .custom-checkbox:hover {
+    border: 1px solid $blue_100;
+  }
 

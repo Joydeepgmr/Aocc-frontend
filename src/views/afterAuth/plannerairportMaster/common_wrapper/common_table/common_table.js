@@ -6,30 +6,61 @@ import ButtonComponent from '../../../../../components/button/button';
 
 import './common_table.scss';
 
-const Common_table = ({ data, columns, loading, fetchData, pagination, title, openModal }) => {
+const Common_table = ({
+	data,
+	columns,
+	loading,
+	fetchData,
+	pagination,
+	title,
+	openModal,
+	openCSVModal,
+	type,
+	downloadCSV,
+	title1 = 'Create',
+}) => {
 	const handleDropdownChange = (value) => {
 		// Add this line
-		if (value === 'Create') {
+		if (value === title1) {
 			openModal();
 		}
 
-		if (value === 'ImportGlobalReference') {
+		if (value === 'UploadCSV') {
+			openCSVModal();
+		}
+		if (value === 'downloadCSVTemplate') {
+			downloadCSV();
 		}
 	};
-	const items = [
-		{
-			key: '1',
-			label: 'Create',
-			value: 'Create',
-			children: '',
-		},
-		{
-			key: '2',
-			label: 'Import Global Reference',
-			value: 'ImportGlobalReference',
-			children: '',
-		},
-	];
+	const items =
+		type === 'aircraft'
+			? [
+					{
+						key: '1',
+						label: title1,
+						value: title1,
+						children: '',
+					},
+				]
+			: [
+					{
+						key: '1',
+						label: title1,
+						value: title1,
+						children: '',
+					},
+					{
+						key: '2',
+						label: 'Upload CSV',
+						value: 'UploadCSV',
+						children: '',
+					},
+					{
+						key: '3',
+						label: 'Download CSV Template',
+						value: 'downloadCSVTemplate',
+					},
+				];
 	return (
 		<div className="airport_master_details">
 			<div className="custom_dropdown_style">

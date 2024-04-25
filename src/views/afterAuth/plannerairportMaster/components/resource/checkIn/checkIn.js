@@ -1,38 +1,41 @@
-import React, { useState } from 'react';
-import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import {
+	useDeleteCheckin,
 	useEditCheckin,
 	useGetCheckIn,
 	usePostCheckIn,
-	useDeleteCheckin,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import FormComponent from './formComponents/formComponents';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_CHECKIN_COUNTER } from '../../../../../../api';
 import './checkIn.scss';
 
 const CheckIn = () => {
-    const queryClient = useQueryClient();
-    const [checkinData, setCheckinData] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [rowData, setRowData] = useState(null);
-    const [isReadOnly, setIsReadOnly] = useState(false);
-    const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const queryClient = useQueryClient();
+	const [checkinData, setCheckinData] = useState([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const [isReadOnly, setIsReadOnly] = useState(false);
+	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
-
+	const [form] = Form.useForm();
 	const getCheckinHandler = {
 		onSuccess: (data) => handleGetCheckinSuccess(data),
 		onError: (error) => handleGetCheckinError(error),
@@ -53,9 +56,11 @@ const CheckIn = () => {
 	};
 	const {
 		data: fetchCheckIn,
+		isFetching,
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getCheckInRefetch
 	} = useGetCheckIn(getCheckinHandler);
 
 	const openModal = () => {
@@ -63,7 +68,10 @@ const CheckIn = () => {
 	};
 
 	const closeModal = () => {
+		form.resetFields();
+		setRowData({});
 		setIsModalOpen(false);
+		setIsEditModalOpen(false);
 	};
 
 	const openEditModal = () => {
@@ -71,8 +79,11 @@ const CheckIn = () => {
 	};
 
 	const closeEditModal = () => {
+		console.log("under close modal edit");
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -81,7 +92,7 @@ const CheckIn = () => {
 	};
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 	};
 
@@ -104,16 +115,21 @@ const CheckIn = () => {
 
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postCheckIn(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT
@@ -125,10 +141,10 @@ const CheckIn = () => {
 	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
 
 	const handleEditCheckinSuccess = (data) => {
-		closeEditModal();
-		setCheckinData([]);
-		toast.success(data?.message);
 		queryClient.invalidateQueries('get-check-in');
+		setCheckinData([]);
+		closeEditModal();
+		toast.success(data?.message);
 	};
 
 	const handleEditCheckinError = (error) => {
@@ -139,7 +155,7 @@ const CheckIn = () => {
 		record = {
 			...record,
 			validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
-			validTill: record?.validTo ? dayjs(record?.validTo) : '',
+			validTill: record?.validTill ? dayjs(record?.validTill) : '',
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
 			terminalId: record?.terminal?.id,
@@ -196,40 +212,76 @@ const CheckIn = () => {
 			),
 		},
 		{
-			title: 'Counter Name',
+			title: 'CNTR',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (counterName) => counterName ?? '-',
 		},
 		{
-			title: 'Group',
+			title: 'GRP',
 			dataIndex: 'group',
 			key: 'group',
+			align: 'center',
 			render: (group) => group ?? '-',
 		},
 		{
-			title: 'Terminal',
+			title: 'TERM',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
-			title: 'Row',
+			title: 'ROW',
 			dataIndex: 'row',
 			key: 'row',
+			align: 'center',
 			render: (row) => row ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
-			render: (status) => status ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'O';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'O';
+				} else {
+					return 'I';
+				}
+			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'A';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'U/A';
+				} else {
+					return 'A';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -237,6 +289,7 @@ const CheckIn = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record);
@@ -249,23 +302,23 @@ const CheckIn = () => {
 		},
 	];
 
-    const dropdownItems = [
-        {
-            label: 'Add Checkin Counter',
-            value: 'create',
-            key: '0',
-        },
-        // {
-        //     label: 'Upload CSV',
-        //     value: 'uploadCSV',
-        //     key: '1',
-        // },
-        // {
-        //     label: 'Download CSV Template',
-        //     value: 'downloadCSVTemplate',
-        //     key: '2',
-        // },
-    ];
+	const dropdownItems = [
+		{
+			label: 'Add Check-in Counter',
+			value: 'create',
+			key: '0',
+		},
+		// {
+		//     label: 'Upload CSV',
+		//     value: 'uploadCSV',
+		//     key: '1',
+		// },
+		// {
+		//     label: 'Download CSV Template',
+		//     value: 'downloadCSVTemplate',
+		//     key: '2',
+		// },
+	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
@@ -274,11 +327,10 @@ const CheckIn = () => {
 			openCsvModal();
 		}
 	};
-
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getCheckInRefetch} apiName={GET_CHECKIN_COUNTER} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -289,8 +341,7 @@ const CheckIn = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							key={Math.random() * 100}
-                            terminalDropdownData = {terminalDropdownData}
+							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 					openModal={openModal}
@@ -313,55 +364,59 @@ const CheckIn = () => {
 							<TableComponent
 								data={checkinData}
 								columns={columns}
+								loading={isFetching}
 								fetchData={fetchNextPage}
 								pagination={hasNextPage}
 							/>
 						</div>
 					</div>
-					</>)}
+				</>)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="120rem"
-						closeModal={closeModal}
-						title={'Add Checkin Counters'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="120rem"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-                                terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Check-in Counters'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						initialValues={rowData}
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						terminalDropdownData={terminalDropdownData}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

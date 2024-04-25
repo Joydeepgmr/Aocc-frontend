@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from "react-query";
-import { GET_FLIGHT_SCHEDULE } from "../../../api/endpoints";
-import { Post } from "../../HttpServices/HttpServices";
+import { useInfiniteQuery, useMutation } from "react-query";
+import { GET_FLIGHT_SCHEDULE, GET_VIEW_MAP } from "../../../api/endpoints";
+import { Get, Post } from "../../HttpServices/HttpServices";
 
 export const useGetFlightScheduled = ({ tab, ...rest }) => {
     const response = useInfiniteQuery({
@@ -15,4 +15,14 @@ export const useGetFlightScheduled = ({ tab, ...rest }) => {
         ...rest,
     });
     return { ...response }
+}
+export const useGetViewMap = (props) => {
+    const response = useMutation({
+        mutationKey: ['get-view-map'],
+        mutationFn: async (id) => {
+            return await Get(`${GET_VIEW_MAP}/${id}`)
+        },
+        ...props,
+    })
+    return response;
 }

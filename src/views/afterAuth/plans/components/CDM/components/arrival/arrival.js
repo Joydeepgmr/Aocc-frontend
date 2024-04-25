@@ -11,7 +11,7 @@ const Arrival = ({ data, columns }) => {
     return (
         <div className="main">
             <div>
-                <TableComponent columns={columns} data={data} onChange={handleTableChange} />
+                <TableComponent columns={columns} data={data} onChange={handleTableChange} isColored/>
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../../components/button/button';
@@ -16,6 +17,8 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_PARKING_STAND } from '../../../../../../api';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -26,6 +29,7 @@ const ParkingStand = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const { data: gateDropdownData = [] } = useGateDropdown();
 	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
@@ -48,13 +52,22 @@ const ParkingStand = () => {
 	const handleGetParkingStandError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchParking, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetParkingStand(getParkingStandHandler);
+	const {
+		data: fetchParking,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getParkingStandRefetch
+	} = useGetParkingStand(getParkingStandHandler);
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -62,8 +75,10 @@ const ParkingStand = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -72,7 +87,7 @@ const ParkingStand = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -96,13 +111,15 @@ const ParkingStand = () => {
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postParkingStand(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -128,7 +145,7 @@ const ParkingStand = () => {
 		record = {
 			...record,
 			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
+			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : "",
 			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : "",
 		}
@@ -183,50 +200,88 @@ const ParkingStand = () => {
 			),
 		},
 		{
-			title: 'Stand Name',
+			title: 'POS',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (standName) => standName ?? '-',
 		},
 		{
-			title: 'Airport',
+			title: 'AIRPORT',
 			dataIndex: 'airport',
 			key: 'airport',
+			align: 'center',
 			render: (airport) => airport?.name ?? '-',
 		},
 		{
-			title: 'Connected to Gate',
+			title: 'GAT',
 			dataIndex: 'gate',
 			key: 'gate',
+			align: 'center',
 			render: (gate) => gate?.name ?? '-',
 		},
 		{
-			title: 'Connected to Taxiway',
+			title: 'TWY',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
+			align: 'center',
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
-			render: (status) => status ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'O';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'O';
+				} else {
+					return 'I';
+				}
+			},
 		},
 		{
-			title: 'Availability',
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'A';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'U/A';
+				} else {
+					return 'A';
+				}
+			},
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)
-					}}
+					<Button
+						style={{ margin: 'auto' }}
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
 						title="View Details"
 						type="text" />
 				</>
@@ -262,8 +317,8 @@ const ParkingStand = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchParking?.pages[0]?.data?.length) ? (
+		<SocketEventListener refetch={getParkingStandRefetch} apiName={GET_PARKING_STAND} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -273,9 +328,8 @@ const ParkingStand = () => {
 					formComponent={<FormComponent
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
-						gateDropdownData = {gateDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
 					/>}
 					openModal={openModal}
 				/>
@@ -294,55 +348,58 @@ const ParkingStand = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Parking Stands
 							</CustomTypography>
-							<TableComponent data={parkingData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={parkingData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
-					)}
+				</>
+			)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="80%"
-						closeModal={closeModal}
-						title={'Add Parking Stands'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-								gateDropdownData = {gateDropdownData}
-								taxiwayDropdownData = {taxiwayDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="80%"
-					closeModal={closeEditModal}
-					title={`${isReadOnly ? '':'Edit'} Parking Stands`}
-					className="custom_modal"
+
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Parking Stands'}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
-						handleSaveButton={handleEditSave}
+						form={form}
+						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
-						gateDropdownData = {gateDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Parking Stands`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						gateDropdownData={gateDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
 			/>
 		</>
 	);

@@ -165,47 +165,50 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				),
 			},
 			{
-				title: 'Identifier',
+				title: 'IDENTIFIER',
 				dataIndex: 'identifier',
 				key: 'identifier',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'IATA Code',
+				title: '3L',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Model',
+				title: 'MODEL',
 				dataIndex: 'model',
 				key: 'model',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Airline',
+				title: 'AL',
 				dataIndex: 'globalAirline',
 				key: 'globalAirline',
+				align: 'center',
 				render: (text) => text?.name || '-',
 			},
 			{
-				title: 'ICAO Code',
+				title: '4L',
 				dataIndex: 'icaoCode',
 				key: 'icaoCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'A/C Family',
+				title: 'A/C FAMILY',
 				dataIndex: 'family',
 				key: 'family',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'A/C Body Type',
+				title: 'A/C BODY TYPE',
 				dataIndex: 'bodyType',
 				key: 'bodyType',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -216,6 +219,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 					record
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {

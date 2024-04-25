@@ -8,8 +8,7 @@ import ButtonComponent from '../../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { Pathname } from '../../../pathname';
 import { useGetUserDetails, useLoginUser } from '../../../services/userLoginServices/LoginServices';
-import * as userType from "../../../utils/roles";
-
+import * as userType from '../../../utils/roles';
 import './login.scss';
 import toast from 'react-hot-toast';
 import PageLoader from '../../../components/pageLoader/pageLoader';
@@ -22,13 +21,17 @@ export const Login = () => {
 	const navigate = useNavigate();
 	const loginApiProps = {
 		onSuccess: ({ data }) => {
-			localStorage.setItem('_tid', data?.accessToken)
-			localStorage.setItem('name', data?.name)
-			localStorage.setItem('email', data?.email)
+			localStorage.setItem('_tid', data?.accessToken);
+			localStorage.setItem('name', data?.roleName);
+			localStorage.setItem('email', data?.email);
 			roleRedirectFlow(data.roleName);
 		},
-		onError: ({ response: { data: { message } } }) => toast.error(message)
-	}
+		onError: ({
+			response: {
+				data: { message },
+			},
+		}) => toast.error(message),
+	};
 	const { mutate: loginUser } = useLoginUser(loginApiProps);
 	const { data, isLoading, mutate: getUserDetails } = useGetUserDetails();
 	const handleChangeLoginPageImage = () => {
@@ -44,23 +47,33 @@ export const Login = () => {
 				navigate(Pathname.DASHBOARD);
 				break;
 			case userType.VENDOR:
-				navigate(Pathname.DASHBOARD);
+				navigate(Pathname.VENDOR);
 				break;
 			case userType.ACCESS_MANAGER:
 				navigate(Pathname.DASHBOARD);
+				break;
+			case userType.SECURITY_OFFICER:
+				navigate(Pathname.SECURITY_OFFICER);
+				break;
+			case userType.CDM:
+				navigate(Pathname.CDM);
+				break;
+			case userType.FIDS:
+				navigate(Pathname.FIDS_DASHBOARD);
 				break;
 			default:
 				navigate(Pathname[404]);
 				break;
 		}
-	}
+	};
+
 	const onFinishHandler = (values) => {
 		loginUser(values);
 	};
 
 	useEffect(() => {
 		if (localStorage.getItem('_tid')) {
-			console.log(localStorage.getItem('_tid'))
+			console.log(localStorage.getItem('_tid'));
 			getUserDetails();
 		}
 	}, []);
@@ -73,10 +86,12 @@ export const Login = () => {
 				navigate(allNavItem[0].children);
 			}
 		}
-	}, [data])
+	}, [data]);
 
-	return (
-		isLoading ? <PageLoader loading={isLoading} /> : <div className="login_page">
+	return isLoading ? (
+		<PageLoader loading={isLoading} />
+	) : (
+		<div className="login_page">
 			<div className="login_container">
 				<div className="login_content_container">
 					<div className="gmr_logo">
@@ -89,11 +104,12 @@ export const Login = () => {
 						</div>
 						<div className="login_input_fields">
 							<Form form={form} layout="vertical" onFinish={onFinishHandler}>
-								<div className='login_form_fields'>
+								<div className="login_form_fields">
 									<InputField
 										label="Email"
 										name="email"
 										required
+										isArticle={false}
 										placeholder="Enter your email"
 										className="custom_input"
 									/>
@@ -101,6 +117,7 @@ export const Login = () => {
 										label="Password"
 										name="password"
 										type="password"
+										isArticle={false}
 										required
 										placeholder="Enter your password"
 										className="custom_input"
@@ -113,7 +130,9 @@ export const Login = () => {
 									className="submit_button"
 									type="filledText"
 								/>
-								<p className="contact-admin">Need help? <a className='admin-link'>Contact admin</a></p>
+								<p className="contact-admin">
+									Need help? <a className="admin-link">Contact admin</a>
+								</p>
 							</Form>
 						</div>
 					</div>

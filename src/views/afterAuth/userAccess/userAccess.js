@@ -1,97 +1,180 @@
-import React, { useState } from 'react';
-import ButtonComponent from '../../../components/button/button';
-import downArrow from '../../../assets/logo/down-arrow.svg';
-import ModalComponent from '../../../components/modal/modal';
-import InputField from '../../../components/input/field/field';
 import { Divider, Form } from 'antd';
-import CustomSelect from '../../../components/select/select';
-import { SelectData, columns, dummyData } from './userAccessData';
+import React, { useMemo, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import ButtonComponent from '../../../components/button/button';
+import CustomTabs from '../../../components/customTabs/customTabs';
 import Date from '../../../components/datapicker/datepicker';
-import TopHeader from '../../../components/topHeader/topHeader';
-import CustomTypography from '../../../components/typographyComponent/typographyComponent';
+import DropdownButton from '../../../components/dropdownButton/dropdownButton';
+import InputField from '../../../components/input/field/field';
+import ModalComponent from '../../../components/modal/modal';
+import PageLoader from '../../../components/pageLoader/pageLoader';
+import CustomSelect from '../../../components/select/select';
 import TableComponent from '../../../components/table/table';
-
+import TopHeader from '../../../components/topHeader/topHeader';
+import { useAirlineDropdown } from '../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { usePostAccessManagement } from '../../../services/accessManagement/accessManagement';
 import './userAccess.scss';
+import { columns, dummyData, userAccessType } from './userAccessData';
 
 const UserAccess = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const openAddUserModal = () => {
-		setIsModalOpen(true);
+	const [tab, setTab] = useState('planner');
+	const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, type: null });
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const accessManagementApiProps = {
+		onSuccess: ({ data, message }) => {
+			toast.success(message);
+			closeAddUserModal();
+		},
+		onError,
+	}
+	const { mutate: postAccessManagement, isLoading } = usePostAccessManagement({ ...accessManagementApiProps });
+	const { data: airlineDropdownData = [] } = useAirlineDropdown({ onError });
+	const [form] = Form.useForm();
+	const SelectedAirlineData = useMemo(() => {
+		return airlineDropdownData.map((data) => {
+			return { label: data.name, value: data.id }
+		})
+	}, [airlineDropdownData]);
+	const dropdownItems = [
+		{
+			label: 'New Planner',
+			value: 'planner',
+			key: '0',
+		},
+		{
+			label: 'New Vendor',
+			value: 'vendor',
+			key: '1',
+		},
+	];
+	const handleDropdownItemClick = (value) => {
+		if (value === 'planner') {
+			openAddUserModal('planner');
+		} else if (value === 'vendor') {
+			openAddUserModal('vendor');
+		}
 	};
-
+	const openAddUserModal = (type) => {
+		setIsModalOpen({ isOpen: true, type });
+	};
 	const closeAddUserModal = () => {
-		setIsModalOpen(false);
+		form.resetFields();
+		setIsModalOpen({ isOpen: false, type: null });
 	};
-
-	const onFinishHanlder = (values) => {
+	const onFinishHandler = (values) => {
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
-		console.log('onFinishHanlder', values);
-		closeAddUserModal();
+		postAccessManagement({ type: isModalOpen?.type, values });
 	};
+	const operations = (
+		<div className='add_access_button'>
+			<ButtonComponent
+				title="Add Access"
+				type="filledText"
+				className="custom_button_save"
+				onClick={() => openAddUserModal(tab == 'planner' ? 'planner' : 'vendor')}
+			/>
+		</div>
+	);
+	const handleTabChange = (key) => {
+		if (key == '1') {
+			setTab('planner');
+		} else {
+			setTab('vendor');
+		}
+	};
+	const items = [
+		{
+			key: '1',
+			label: 'Planner',
+			children: (
+				<>
+					<TableComponent data={dummyData} columns={columns} />
+				</>
+			),
+		},
+		{
+			key: '2',
+			label: 'Vendor',
+			children: (
+				<>
+					<TableComponent data={dummyData} columns={columns} />
+				</>
+			),
+		},
+	];
 
 	return (
-		<div className="user_access_container">
-			<div className="user_access_content">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black" lineheight="3.36rem">
-					Manage User Access
-				</CustomTypography>
-				<CustomTypography type="paragraph" fontSize={14} fontWeight="400" color="#909296" lineheight="3.36rem">
-					Overview of access management for airport operating system
-				</CustomTypography>
-				<div className="user_add_button">
-					<div className="down_arrow_button">
-						<ButtonComponent
-							title="Add"
-							type="filledText"
-							className="custom_button_add"
-							onClick={openAddUserModal}
-						/>
-						<img src={downArrow} className="down_arrow" />
-					</div>
-					<div className="user_add_dropdown">
-						<p>Add Planner Access</p>
-						<div className="line"></div>
-						<p>Add Vendor Access</p>
-					</div>
-				</div>
-			</div>
-			<ModalComponent isModalOpen={isModalOpen} closeModal={closeAddUserModal} title="Add User" width="87.2rem">
-				<Form layout="vertical" onFinish={onFinishHanlder}>
+		<>
+			<PageLoader isLoading={isLoading} />
+			<ModalComponent isModalOpen={isModalOpen?.isOpen} closeModal={closeAddUserModal} title={`Add ${isModalOpen?.type}`} width="87.2rem">
+				<Form layout="vertical" form={form} onFinish={onFinishHandler}>
 					<div className="user_add_form">
 						<div className="user_input_fields">
 							<InputField
 								label="User Name"
-								name="userName"
+								name="name"
 								placeholder="Enter the user name"
 								required
 								warning="Required field"
 								className="custom_input"
 							/>
 							<InputField
-								label="User Type"
-								name="userType"
-								placeholder="Enter the user type"
+								label="User Email"
+								name="email"
+								placeholder="Enter the user email"
+								required
+								warning="Required field"
 								className="custom_input"
 							/>
+							{isModalOpen?.type == 'planner' &&
+								<CustomSelect
+									SelectData={userAccessType}
+									placeholder="Select the access type"
+									required
+									warning="Required field"
+									label="User Type"
+									name='plannerType'
+								/>
+							}
 						</div>
-						<div>
-							<CustomSelect
-								SelectData={SelectData}
-								placeholder="Select the access type"
-								label="Access Type"
-							/>
-						</div>
+						{isModalOpen?.type == 'vendor' &&
+							<div className="user_input_fields">
+								<CustomSelect
+									SelectData={SelectedAirlineData}
+									label="Airline"
+									name="airline"
+									multiple
+									placeholder="Select Airline"
+									required
+									warning="Required field"
+									className="custom_input"
+								/>
+								<InputField
+									label="Required Access Ids"
+									name="accessId"
+									placeholder="Enter the access id"
+									required
+									warning="Required field"
+									className="custom_input"
+								/>
+							</div>
+						}
 						<Divider />
 						<div className="user_input_fields">
 							<Date
 								label="Valid From"
 								placeholder="Select Date"
 								name="validFrom"
+								required
 								className="custom_date"
 								format="MM-DD-YYYY"
 							/>
-							<Date label="Valid To" placeholder="Select Date" name="validTo" format="MM-DD-YYYY" />
+							<Date label="Valid To" placeholder="Select Date" name="validTill" format="MM-DD-YYYY" />
 						</div>
 						<div className="custom_buttons">
 							<ButtonComponent
@@ -110,26 +193,33 @@ const UserAccess = () => {
 					</div>
 				</Form>
 			</ModalComponent>
-			<div className="user-access-table-container">
-				<TopHeader
-					heading="Manage User Access"
-					subHeading="Overview of access management for airport access management"
-				/>
-
-				<div className="down_arrow_button">
-					<ButtonComponent
-						title="Add"
-						type="filledText"
-						className="custom_button_add"
-						onClick={openAddUserModal}
-					/>
-					<img src={downArrow} className="down_arrow" />
-				</div>
+			<div className="user_access_container">
+				{dummyData?.length
+					? <>
+						<div className="user-access-table-container">
+							<TopHeader
+								heading="Manage User Access"
+								subHeading="Overview of access management for airport access management"
+							/>
+						</div>
+						<div className="access-table">
+							<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} type="simple"
+								extraContent={operations} />
+						</div>
+					</>
+					: <div className="user_access_content">
+						<TopHeader
+							heading="Manage User Access"
+							subHeading="Overview of access management for airport access management"
+						/>
+						<div className="user_add_button">
+							<div className="down_arrow_button">
+								<DropdownButton dropdownItems={dropdownItems} onChange={handleDropdownItemClick} buttonText="Add Access" />
+							</div>
+						</div>
+					</div>}
 			</div>
-			<div className="table_container">
-				<TableComponent data={dummyData} columns={columns} />
-			</div>
-		</div>
+		</>
 	);
 };
 

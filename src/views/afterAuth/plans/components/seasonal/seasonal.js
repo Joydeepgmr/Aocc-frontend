@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../components/button/button';
@@ -15,7 +16,10 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc } from '../../../../../utils';
+import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
+import { useAircraftDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
+import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import {
 	useEditSeasonalPlanArrival,
 	useGetSeasonalPlans,
@@ -24,7 +28,8 @@ import {
 	useUploadCSV,
 	useDownloadCSV,
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
-
+import SocketEventListener from '../../../../../socket/listner/socketListner';
+import { GET_SEASONAL_PLANS } from '../../../../../api';
 import './seasonal.scss';
 
 const Seasonal = ({ tab }) => {
@@ -36,6 +41,11 @@ const Seasonal = ({ tab }) => {
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [form] = Form.useForm();
+
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
+	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
+	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -55,11 +65,18 @@ const Seasonal = ({ tab }) => {
 	const handleGetSeasonalError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
+	const handleChange = (key) => {
+		setIndex(key);
+		key === '1' && setFlightType('arrival');
+		key === '2' && setFlightType('departure');
+	};
+
 	const {
 		data: fetchedSeasonalPlans,
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch: getSeasonalPlanRefetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
 
 	const openModal = () => {
@@ -76,6 +93,8 @@ const Seasonal = ({ tab }) => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -84,12 +103,8 @@ const Seasonal = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
-	};
-
-	const handleChange = (key) => {
-		setIndex(key);
-		key === '1' && setFlightType('arrival');
-		key === '2' && setFlightType('departure');
+		setRowData({});
+		form.resetFields();
 	};
 
 	const handleDropdownItemClick = (value) => {
@@ -140,6 +155,7 @@ const Seasonal = ({ tab }) => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT
@@ -217,19 +233,19 @@ const Seasonal = ({ tab }) => {
 			/>
 		</div>
 	);
+	const uploadCsvHandler = {
+		onSuccess: (data) => handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
+	};
 
 	const handleUploadCsvSuccess = () => {
+		toast.success('CSV Uploaded Successfully');
 		queryClient.invalidateQueries('get-seasonal-plans');
 		closeCsvModal();
 	};
 
-	const handleUploadCsvError = () => {
-		toast.error('Invalid File Type');
-	};
-
-	const uploadCsvHandler = {
-		onSuccess: () => handleUploadCsvSuccess(),
-		onError: () => handleUploadCsvError(),
+	const handleUploadCsvError = (error) => {
+		toast.error(error?.response?.data?.message);
 	};
 
 	const { mutate: onUploadCSV } = useUploadCSV(uploadCsvHandler);
@@ -251,7 +267,7 @@ const Seasonal = ({ tab }) => {
 		},
 	}) => toast.error(message);
 
-	const { refetch, isLoading: isDownloading } = useDownloadCSV({ onError });
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('planner-sample-file', { onError });
 
 	//DOWNLOAD
 	const handleDownloadCSV = () => {
@@ -260,50 +276,77 @@ const Seasonal = ({ tab }) => {
 
 	const columns = [
 		{
-			title: 'Flight No.',
+			title: '2L',
+			dataIndex: 'iataCode',
+			key: 'iataCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: '3L',
+			dataIndex: 'icaoCode',
+			key: 'icaoCode',
+			align: 'center',
+			render: (text) => text ?? '-',
+		},
+		{
+			title: 'FLNR',
 			dataIndex: 'FLIGHTNO',
 			key: 'FLIGHTNO',
+			align: 'center',
 			render: (FLIGHTNO) => FLIGHTNO ?? '-',
 		},
 		{
-			title: 'Date',
+			title: 'FLDT',
 			dataIndex: 'PDATE',
 			key: 'PDATE',
-			render: (PDATE) => (PDATE !== null ? ConvertUtcToIst(PDATE) : '-'),
+			align: 'center',
+			render: (DATE) => ConvertToDateTime(DATE, 'YYYY-MM-DD') ?? '-',
 		},
 		{
-			title: 'Call Sign',
+			title: 'CSGN',
 			dataIndex: 'callSign',
 			key: 'callSign',
+			align: 'center',
 			render: (callSign) => callSign ?? '-',
 		},
 		{
-			title: 'Nature Code',
+			title: 'NAT',
 			dataIndex: 'natureCode',
 			key: 'natureCode',
+			align: 'center',
 			render: (natureCode) => natureCode ?? '-',
 		},
-		{ title: 'ORG', dataIndex: 'origin', key: 'origin', render: (origin) => origin ?? '-' },
+		{
+			title: 'REG',
+			dataIndex: 'registration',
+			key: 'registration',
+			align: 'center',
+			render: (registration) => registration ?? '-',
+		},
+		{
+			title: flightType == 'arrival' ? 'ORG' : 'DES',
+			dataIndex: 'origin',
+			key: 'origin',
+			align: 'center',
+			render: (origin) => origin ?? '-',
+		},
 		index === '1'
 			? {
 					title: 'STA',
 					dataIndex: 'STA',
 					key: 'STA',
+					align: 'center',
 					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
 				}
 			: {
 					title: 'STD',
 					dataIndex: 'STD',
 					key: 'STD',
+					align: 'center',
 					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 				},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', render: (pos) => pos ?? '-' },
-		{
-			title: 'REG No.',
-			dataIndex: 'registration',
-			key: 'registration',
-			render: (registration) => registration ?? '-',
-		},
+		// { title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -371,16 +414,22 @@ const Seasonal = ({ tab }) => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading || isDownloading} />
-			<div className="main_TableContainer">
-				<div className="top_container">
-					<div>
-						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-							Flight Schedule Planning
-						</CustomTypography>
-					</div>
-					<div className="icon_container">
-						{/* <Button
+			<SocketEventListener
+				refetch={getSeasonalPlanRefetch}
+				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
+			/>
+			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? (
+				<PageLoader loading={true} />
+			) : (
+				<div className="main_TableContainer">
+					<div className="top_container">
+						<div>
+							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+								Flight Schedule Planning
+							</CustomTypography>
+						</div>
+						<div className="icon_container">
+							{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -389,20 +438,19 @@ const Seasonal = ({ tab }) => {
 							icon={Filter}
 							alt="arrow icon"
 						/> */}
-						<InputField
-							label="search"
-							name="search"
-							placeholder="Search"
-							className="custom_inputField"
-							warning="Required field"
-							type="search"
-						/>
+							<InputField
+								label="search"
+								name="search"
+								placeholder="Search"
+								className="custom_inputField"
+								warning="Required field"
+								type="search"
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="table_container">
-					<div>
+					<div className="table_container">
 						<CustomTabs
-							defaultActiveKey="1"
+							defaultActiveKey={index}
 							items={tabItems}
 							onChange={handleChange}
 							type="simple"
@@ -410,7 +458,7 @@ const Seasonal = ({ tab }) => {
 						/>
 					</div>
 				</div>
-			</div>
+			)}
 
 			{/* modals */}
 			<ModalComponent
@@ -422,10 +470,13 @@ const Seasonal = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						key={Math.random() * 100}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -444,11 +495,15 @@ const Seasonal = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>

@@ -8,40 +8,24 @@ import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/telexMessage';
 import './style.scss';
+import SocketEventListener from '../../../../socket/listner/socketListner';
+import { GET_TELEX_MESSAGE } from '../../../../api';
 
-const ParsedMessageComponent = ({ message = '', maxLength = 30 }) => {
-	const [showFull, setShowFull] = useState(false);
-	const handleToggle = () => {
-		setShowFull(!showFull);
-	};
+const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 	return (
-		<>
-			{typeof message === 'string' && (
-				<div>
-					{message.length <= maxLength ? (
-						<p>{message}</p>
-					) : (
-						<p>
-							{showFull ? message : `${message.slice(0, maxLength)}...`}
-							{!showFull ? (
-								<a onClick={handleToggle} className="read_more_button">
-									Read more
-								</a>
-							) : (
-								<a onClick={handleToggle} className="read_less_button">
-									Read less
-								</a>
-							)}
-						</p>
-					)}
+		<div className="telex_parsed_message">
+			{Object.entries(data).map(([key, value]) => (
+				<div key={key} className="telex_parsed_message_container">
+					<span className="message_key">{key}: </span>
+					<span className="message_value">{value}</span>
 				</div>
-			)}
-		</>
+			))}
+		</div>
 	);
 };
 
 function TelexMessage() {
-	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, data: null });
 	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
 	const onSuccess = (data) => {
@@ -53,15 +37,23 @@ function TelexMessage() {
 			setTelexMessageData([...newData]);
 		}
 	};
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
-	const { data, isFetching, fetchNextPage, hasNextPage } = useGetTelexMessage({ filter,onSuccess,onError });
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data, isFetching, fetchNextPage, hasNextPage, refetch } = useGetTelexMessage({
+		filter,
+		onSuccess,
+		onError,
+	});
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openDeleteModal = (id) => {
-		setDeleteModal({ isOpen: true, id: id });
+		setDeleteModal({ isOpen: true, data: id });
 	};
 	const closeDeleteModal = () => {
-		setDeleteModal({ isOpen: false, id: null });
+		setDeleteModal({ isOpen: false, data: null });
 	};
 	const handleDelete = () => {
 		closeDeleteModal();
@@ -81,44 +73,49 @@ function TelexMessage() {
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'Flight',
+				title: 'FLNR',
 				dataIndex: 'flightNumber',
 				key: 'flightNumber',
 			},
 			{
-				title: 'Flight Type',
+				title: 'TYPE',
 				dataIndex: 'flightType',
 				key: 'flightType',
+				align: 'center',
 			},
 			{
-				title: 'Call sign',
-				dataIndex: 'callSign',
-				key: 'callSign',
-			},
-			{
-				title: 'Updates',
+				title: 'UPD',
 				children: [
 					{
-						title: 'Message origin',
+						title: 'ORG',
 						dataIndex: 'messageOrigin',
 						key: 'messageOrigin',
+						align: 'center',
 					},
 					{
-						title: 'Raw Message',
+						title: 'RAW',
 						dataIndex: 'originalMessage',
 						key: 'originalMessage',
+						align: 'left',
+						render: (text) => {
+							if (text) {
+								const textArray = text.split(/\n|\\n/);
+								return (
+									<div>
+										{textArray.map((part) => (
+											<div>{part}</div>
+										))}
+									</div>
+								);
+							}
+							return '-';
+						},
 					},
 					{
-						title: 'Parsed Message',
+						title: 'PD',
 						dataIndex: 'parsedMessage',
 						key: 'parsedMessage',
-						render: (text) => <ParsedMessageComponent message={text} maxLength={45} />,
-					},
-					{
-						title: 'Milestones achieved',
-						dataIndex: 'milestonesAchieved',
-						key: 'milestonesAchieved',
-						render: (text, record) => <a href={`/details/${record.key}`}>View Details</a>,
+						render: (text) => text && <ParsedMessageComponent data={text} maxLength={45} />,
 					},
 				],
 			},
@@ -130,12 +127,13 @@ function TelexMessage() {
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="Acknowledge"
 						type="text"
 						onClick={() => {
 							openDeleteModal(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		];
@@ -207,9 +205,10 @@ function TelexMessage() {
 				isOpen={deleteModal.isOpen}
 				onClose={closeDeleteModal}
 				onSave={handleDelete}
-				content={`You want to Acknowledge flight ${deleteModal?.id?.flight}`}
+				content={`You want to Acknowledge flight ${deleteModal?.data?.flightNumber}`}
 				buttonTitle2="Acknowledge"
 			/>
+			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
 			<div className="body-container">
 				<div className="top-bar">
 					<CustomTypography

@@ -9,7 +9,7 @@ const CDM = () => {
 		{
 			key: '1',
 			label: 'Flight Schedule',
-			children: <CDMSchedule tab = {"dailyOps"}/>,
+			children: <CDMSchedule tab={'dailyOps'} />,
 		},
 		{
 			key: '2',

@@ -29,6 +29,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Registration"
 					name="registration"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					placeholder={!isReadOnly && "Enter the airport name"}
 					min={6}
 					max={6}
@@ -39,6 +41,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Internal"
 					name="internal"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					min={3}
 					max={3}
 					placeholder={!isReadOnly && "Enter the internal"}
@@ -48,6 +52,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="IATA Code"
 					name="iataCode"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					min={3}
 					max={3}
 					placeholder={!isReadOnly && "Enter the IATA code"}
@@ -60,6 +66,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
+					pattern='^(?!\s).*\S(?<!\s)$'
+					patternWarning='Space not allowed'
 					min={4}
 					max={4}
 					placeholder={!isReadOnly && "Enter the ICAO code"}
@@ -107,8 +115,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Cockpit Crew"
 					name="cockpitCrew"
-					// type='number'
-					max={3}
+					max={999}
+					type='number'
 					placeholder={!isReadOnly && "Enter the cockpit crew"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -116,8 +124,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Cabin crew"
 					name="cabinCrew"
-					// type='number'
-					max={3}
+					max={999}
+					type='number'
 					placeholder={!isReadOnly && "Enter the cabin crew"}
 					className="custom_input"
 					disabled={isReadOnly}
@@ -177,6 +185,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 					label="MOW"
 					name="mow"
 					max={32}
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the MOW"}
 					className="custom_input"
 					suffixText="t"
@@ -188,6 +197,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Annex"
 					name="annex"
+					pattern='^(?!\s).*$'
 					max={32}
 					placeholder={!isReadOnly && "Enter the annex"}
 					className="custom_input"
@@ -197,6 +207,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Main Deck"
 					name="mainDeck"
+					pattern='^(?!\s).*$'
 					max={32}
 					placeholder={!isReadOnly && "Enter the main deck"}
 					className="custom_input"
@@ -214,6 +225,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 				<InputField
 					label="Owner Name"
 					name="ownerName"
+					pattern='^(?!\s).*$'
 					max={32}
 					placeholder={!isReadOnly && "Enter the owner name"}
 					className="custom_input"
@@ -223,15 +235,16 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 					SelectData={SelectCountryData}
 					label="Country"
 					name="country"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the country name"}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
-				<InputField label="Address" max={32} name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
+				<InputField label="Address" pattern='^(?!\s).*$' max={32} name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
 					disabled={isReadOnly} />
-				<InputField label="Remarks" max={32} name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
+				<InputField label="Remarks" pattern='^(?!\s).*$' max={32} name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
 					disabled={isReadOnly} />
 			</div>
 			<Divider />
@@ -250,6 +263,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircr
 					label="Valid To"
 					placeholder={!isReadOnly && "Select valid to date"}
 					name="validTill"
+					className="custom_date"
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>

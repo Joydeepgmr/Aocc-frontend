@@ -1,5 +1,17 @@
 import { useGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
+export const userAccessType = [
+	{
+		id: '1',
+		label: 'Planner',
+		value: 'Planner',
+	},
+	{
+		id: '2',
+		label: 'Daily Ops',
+		value: 'daily Ops',
+	},
+];
 export const SelectData = [
 	{
 		id: '1',
@@ -172,6 +184,19 @@ export const columns = [
 	{ title: 'Access Validity', dataIndex: 'accessValidity', key: '4' },
 	{ title: 'Access Provider', dataIndex: 'accessProvider', key: '5' },
 	{ title: 'Created On', dataIndex: 'createdOn', key: '6' },
+];
+
+export const SelectFlightType = [
+	{
+		id: '1',
+		label: 'International',
+		value: 'INTERNATIONAL',
+	},
+	{
+		id: '2',
+		label: 'National',
+		value: 'NATIONAL',
+	},
 ];
 
 // const { data: fetchedGlobalAircraftType } = useGlobalAircraftType();

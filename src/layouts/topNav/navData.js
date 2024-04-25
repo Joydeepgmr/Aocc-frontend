@@ -1,12 +1,10 @@
 import { Pathname } from '../../pathname';
-import * as userType from "../../utils/roles";
-
+import * as userType from '../../utils/roles';
 
 // const role = localStorage.getItem('role');
 
 export const roleBasedNav = (role = 'Planner') => {
 	let navItems = [];
-
 	if (role === userType.IT_ADMIN) {
 		navItems = [
 			{
@@ -24,20 +22,63 @@ export const roleBasedNav = (role = 'Planner') => {
 		navItems = [
 			{
 				key: '0',
-				label: 'Dashboard',
-				children: Pathname.DASHBOARD,
-			},
-			{
-				key: '1',
-				label: 'Plans',
-				children: Pathname.PLAN,
-			},
-			{
-				key: '2',
 				label: 'Airport Masters',
 				children: Pathname.PLANAIRPORTMASTER,
 			},
+			{
+				key: '1',
+				label: 'Daily Ops',
+				children: Pathname.DASHBOARD,
+			},
+			{
+				key: '2',
+				label: 'Planning',
+				children: Pathname.PLAN,
+			},
+			{
+				key: '3',
+				label: 'CDM',
+				children: Pathname.CDM,
+			},
+		];
+	} else if (role === userType.CDM) {
+		navItems = [
+			{
+				key: '0',
+				label: 'CDM',
+				children: Pathname.CDM,
+			},
+		];
+	} else if (role === userType.SECURITY_OFFICER) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Approval',
+				children: Pathname.SECURITY_OFFICER,
+			},
+		];
+	} else if (role === userType.VENDOR) {
+		navItems = [
+			{
+				key: '0',
+				label: '',
+				children: Pathname.VENDOR,
+			},
+		];
+	} else if (role === userType.FIDS) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Dashboard',
+				children: Pathname.FIDS_DASHBOARD,
+			},
+			{
+				key: '1',
+				label: 'Resources',
+				children: Pathname.FIDS_RESOURCES,
+			},
 		];
 	}
+
 	return navItems;
 };

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
@@ -15,10 +16,12 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditBaggageBelt, useGetBaggageBelt, useDeleteBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
 import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_BAGGAGE_BELT } from '../../../../../../api';
 import './baggagebelt.scss';
 
-const BaggageBelt = () => {
 
+const BaggageBelt = () => {
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [baggageBeltData, setBaggageBeltData] = useState([]);
@@ -27,6 +30,7 @@ const BaggageBelt = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const { data: terminalDropdownData = [] } = useTerminalDropdown();
+	const [form] = Form.useForm();
 
 	const getBaggageBeltHandler = {
 		onSuccess: (data) => handleGetBaggageBeltSuccess(data),
@@ -46,13 +50,22 @@ const BaggageBelt = () => {
 	const handleGetBaggageBeltError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchBaggageBelt, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetBaggageBelt(getBaggageBeltHandler);
+	const {
+		data: fetchBaggageBelt,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getBaggageBeltRefetch
+	} = useGetBaggageBelt(getBaggageBeltHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
+		form.resetFields();
+		setRowData({});
 		setIsModalOpen(false);
 	};
 
@@ -61,7 +74,9 @@ const BaggageBelt = () => {
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
+		form.resetFields();
 		setIsReadOnly(false);
 	};
 
@@ -71,7 +86,7 @@ const BaggageBelt = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -96,15 +111,22 @@ const BaggageBelt = () => {
 
 	const { mutate: postBaggageBelt, isLoading: isPostLoading } = usePostBaggageBelt(addBaggageBeltHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value["name"] = value?.name.toString();
+		value['phoneNumber'] = value?.phoneNumber?.toString();
+		if (!value.phoneNumber) {
+			delete value.phoneNumber;
+		}
 		value && postBaggageBelt(value);
-	};
+	}, []);
+
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
-		setIsReadOnly(false)
+		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -185,28 +207,69 @@ const BaggageBelt = () => {
 			),
 		},
 		{
-			title: 'Belt Name',
+			title: 'BELT',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Terminal',
+			title: 'TERM',
 			dataIndex: 'terminal',
 			key: 'terminal',
+			align: 'center',
 			render: (terminal) => terminal?.name ?? '-',
 		},
 		{
-			title: 'Reason',
+			title: 'REASON',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
-			title: 'Availability',
+			title: 'STS',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'O';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'O';
+				} else {
+					return 'I';
+				}
+			},
+		},
+		{
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'A';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'U/A';
+				} else {
+					return 'A';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -214,12 +277,14 @@ const BaggageBelt = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
 						title="View Details"
-						type="text" />
+						type="text"
+					/>
 				</>
 			),
 		},
@@ -252,15 +317,23 @@ const BaggageBelt = () => {
 	};
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getBaggageBeltRefetch} apiName={GET_BAGGAGE_BELT} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
-					Heading={'Add belts'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} terminalDropdownData = {terminalDropdownData} key={Math.random() * 100}/>}
+					Heading={'Add Belts'}
+					formComponent={
+						<FormComponent
+							form={form}
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							terminalDropdownData={terminalDropdownData}
+						/>
+					}
+
 					openModal={openModal}
 				/>
 			) : (
@@ -278,52 +351,54 @@ const BaggageBelt = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Baggage Belt
 							</CustomTypography>
-							<TableComponent data={baggageBeltData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={baggageBeltData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="120rem"
-						closeModal={closeModal}
-						title={'Add Baggage Belt'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								terminalDropdownData = {terminalDropdownData}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly ? '' : 'Edit'} baggage belt`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-								terminalDropdownData = {terminalDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Baggage Belt'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
+						terminalDropdownData={terminalDropdownData}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Baggage Belt`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						terminalDropdownData={terminalDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

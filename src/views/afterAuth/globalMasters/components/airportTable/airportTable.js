@@ -15,7 +15,7 @@ import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
 
 
-const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
+const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading,timezoneDropdown,countryDropdownData }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -88,7 +88,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			abbreviatedName3: data?.abbreviatedName3,
 			abbreviatedName4: data?.abbreviatedName4,
 			airportType: data?.airportType,
-			countryCode: data?.countryCode,
+			country: data?.country,
 			standardFlightTime: data?.standardFlightTime,
 			timeChange: data?.timeChange,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
@@ -99,19 +99,18 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	function onFinishHandler(values) {
 		values = getFormValues(values);
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
-		values.validTo = values?.validTo && dayjs(values?.validTo).format('YYYY-MM-DD');
+		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 
 		if (airportModal.type === 'edit') {
 			const id = airportModal.data.id;
-			values.countryCode = values?.countryCode;
 			values.standardFlightTime = values?.standardFlightTime;
-			delete values.iataCode
-			delete values.validFrom
+			delete values.iataCode;
+			delete values.icaoCode;
+			delete values.validFrom;
 			patchAirport({ values, id });
 		} else {
 			values.iataCode = values?.iataCode?.join('');
 			values.icaoCode = values?.icaoCode?.join('');
-			values.countryCode = values?.countryCode?.join('');
 			postAirport(values);
 		}
 	};
@@ -173,35 +172,37 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				render: (text) => text || '-',
 			},
 			{
-				title: 'IATA Code',
+				title: '3L',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Airport Type',
+				title: 'TYPE',
 				dataIndex: 'airportType',
 				key: 'airportType',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Country Code',
-				dataIndex: 'countryCode',
-				key: 'countryCode',
+				title: 'CNTRY',
+				dataIndex: 'country',
+				key: 'country',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Standard Flight Time',
+				title: 'SFT',
 				dataIndex: 'standardFlightTime',
 				key: 'standardFlightTime',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
-				title: 'Time Change',
+				title: 'TIME ZONE',
 				dataIndex: 'timeChange',
 				key: 'timeChange',
+				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
@@ -212,12 +213,13 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					record // Use the render function to customize the content of the cell
 				) => (
 					<ButtonComponent
+						style={{ margin: 'auto' }}
 						title="View Details"
 						type="text"
 						onClick={() => {
 							handleDetails(record);
 						}}
-					></ButtonComponent>
+					/>
 				),
 			},
 		];
@@ -235,7 +237,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
+					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} timezoneDropdown={timezoneDropdown} countryDropdownData={countryDropdownData} />
 					{airportModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

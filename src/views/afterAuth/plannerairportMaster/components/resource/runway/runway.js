@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
@@ -14,6 +15,8 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditRunway, useGetRunway, usePostRunway, useDeleteRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_RUNWAY } from '../../../../../../api';
 import './runway.scss';
 
 const Runway = () => {
@@ -25,6 +28,7 @@ const Runway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const getRunwayHandler = {
 		onSuccess: (data) => handleGetRunwaySuccess(data),
@@ -44,7 +48,14 @@ const Runway = () => {
 	const handleGetRunwayError = (error) => {
 		toast.error(error?.response?.data?.message);
 	}
-	const { data: fetchRunway, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetRunway(getRunwayHandler);
+	const {
+		data: fetchRunway,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getRunwayRefetch
+	} = useGetRunway(getRunwayHandler);
 
 
 	const openModal = () => {
@@ -53,15 +64,20 @@ const Runway = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 
@@ -71,7 +87,7 @@ const Runway = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -95,14 +111,16 @@ const Runway = () => {
 
 	const { mutate: postRunway, isLoading: isPostLoading } = usePostRunway(addRunwayHandler);
 
-	const handleSaveButton = (value) => {
+	const handleSaveButton = useCallback((value) => {
 		value && postRunway(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		setIsReadOnly(false)
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -183,28 +201,69 @@ const Runway = () => {
 			),
 		},
 		{
-			title: 'Runway Name',
+			title: 'RWY',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'Type',
+			title: 'TYP',
 			dataIndex: 'status',
 			key: 'status',
+			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
-			title: 'Reason',
+			title: 'REASON',
 			dataIndex: 'reason',
 			key: 'reason',
+			align: 'center',
 			render: (reason) => reason ?? '-',
 		},
 		{
-			title: 'Availability',
+			title: 'STS',
+			dataIndex: 'status',
+			key: 'status',
+			align: 'center',
+			render: (text, record) => {
+				const { validFrom, validTill } = record;
+				const currentDate = dayjs();
+
+				if (!validFrom || !validTill) {
+					return 'O';
+				}
+				if (
+					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
+					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+				) {
+					return 'O';
+				} else {
+					return 'I';
+				}
+			},
+		},
+		{
+			title: 'AVAIL',
 			dataIndex: 'availability',
 			key: 'availability',
-			render: (availability) => availability ?? '-',
+			align: 'center',
+			render: (text, record) => {
+				const { unavailableFrom, unavailableTo } = record;
+				const currentDate = dayjs();
+
+				if (!unavailableFrom || !unavailableTo) {
+					return 'A';
+				}
+				if (
+					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
+					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+				) {
+					return 'U/A';
+				} else {
+					return 'A';
+				}
+			},
 		},
 		{
 			title: 'View Details',
@@ -212,6 +271,7 @@ const Runway = () => {
 			render: (record) => (
 				<>
 					<Button
+						style={{ margin: 'auto' }}
 						onClick={() => {
 							setIsReadOnly(true);
 							handleEdit(record)
@@ -242,15 +302,20 @@ const Runway = () => {
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchRunway?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getRunwayRefetch} apiName={GET_RUNWAY} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} key={Math.random() * 100} />}
+					formComponent={
+						<FormComponent
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+						/>
+					}
 					openModal={openModal}
 				/>
 			) : (
@@ -268,50 +333,53 @@ const Runway = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Runway
 							</CustomTypography>
-							<TableComponent data={runwayData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+							<TableComponent data={runwayData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="120rem"
-						closeModal={closeModal}
-						title={'Add Runway'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-							/>
-						</div>
-					</ModalComponent>
 
-					<ModalComponent
-						isModalOpen={isEditModalOpen}
-						width="80%"
-						closeModal={closeEditModal}
-						title={`${isReadOnly? '' : 'Edit'} Runway`}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleEditSave}
-								handleButtonClose={handleCloseButton}
-								isEdit={true}
-								initialValues={rowData}
-								isReadOnly={isReadOnly}
-							/>
-						</div>
-					</ModalComponent>
-					<ConfirmationModal
-						isOpen={isDeleteConfirm}
-						onClose={closeDeleteModal}
-						onSave={handleDelete}
-						content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Runway'}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleSaveButton}
+						handleButtonClose={handleCloseButton}
 					/>
+				</div>
+			</ModalComponent>
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Runway`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
+			/>
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -14,7 +14,10 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
-import {useAirlineDropdown} from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
+import { useAirlineDropdown } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_DELAY_CODE } from '../../../../../../api';
+import { Form } from 'antd';
 import './delaycode.scss';
 
 const DelayCode = () => {
@@ -25,6 +28,7 @@ const DelayCode = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
 	const { data: airlineDropdownData = [] } = useAirlineDropdown();
 	const getDelayCodeHandler = {
@@ -37,7 +41,7 @@ const DelayCode = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setDelayCodeData([...newData]);
 		}
 	};
@@ -45,23 +49,35 @@ const DelayCode = () => {
 	const handleGetDelayCodeError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchDelayCode, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetDelayCode(getDelayCodeHandler);
-	console.log(fetchDelayCode,"delaycode");
+	const {
+		data: fetchDelayCode,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getDelayCodeRefetch
+	} = useGetDelayCode(getDelayCodeHandler);
+	console.log(fetchDelayCode, "delaycode");
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -70,7 +86,7 @@ const DelayCode = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -93,14 +109,16 @@ const DelayCode = () => {
 	};
 
 	const { mutate: postDelayCode, isLoading: isPostLoading } = usePostDelayCode(addDelayCodeHandler);
-	
-	const handleSaveButton = (value) => {
+
+	const handleSaveButton = useCallback((value) => {
 		value && postDelayCode(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -109,8 +127,8 @@ const DelayCode = () => {
 		onError: (error) => handleEditDelayCodeError(error),
 	};
 
-	const {mutate: editDelayCode, isLoading: isEditLoading} = useEditDelayCode(rowData?.id,editDelayCodeHandler)
-	
+	const { mutate: editDelayCode, isLoading: isEditLoading } = useEditDelayCode(rowData?.id, editDelayCodeHandler)
+
 	const handleEditDelayCodeSuccess = (data) => {
 		closeEditModal();
 		setDelayCodeData([]);
@@ -123,11 +141,10 @@ const DelayCode = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
+			validTill: record?.validTill ? dayjs(record?.validTill) : "",
 		}
 		setRowData(record);
 		openEditModal();
@@ -153,9 +170,9 @@ const DelayCode = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteDelayCode} = useDeleteDelayCode(deleteDelayCodeHandler);
+	const { mutate: deleteDelayCode } = useDeleteDelayCode(deleteDelayCodeHandler);
 	const handleDelete = () => {
-		deleteDelayCode(rowData.id);	
+		deleteDelayCode(rowData.id);
 	}
 
 	const columns = [
@@ -180,38 +197,38 @@ const DelayCode = () => {
 			),
 		},
 		{
-			title: 'Delay Code',
+			title: 'DEL',
 			dataIndex: 'delayCode',
 			key: 'delayCode',
+			align: 'center',
 			render: (delayCode) => delayCode ?? '-',
 		},
 		{
-			title: 'Group',
+			title: 'GRP',
 			dataIndex: 'group',
 			key: 'group',
+			align: 'center',
 			render: (group) => group ?? '-',
 		},
 		{
-			title: 'Airline',
+			title: 'AL',
 			dataIndex: 'airline',
 			key: 'airline',
+			align: 'center',
 			render: (airline) => airline?.name ?? '-',
-		},
-		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
-			render: (status) => status ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+					<Button
+						style={{ margin: 'auto' }}
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -220,7 +237,7 @@ const DelayCode = () => {
 
 	const dropdownItems = [
 		{
-			label: 'Create',
+			label: 'Add Delay Code',
 			value: 'create',
 			key: '0',
 		},
@@ -232,12 +249,12 @@ const DelayCode = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchDelayCode?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getDelayCodeRefetch} apiName={GET_DELAY_CODE} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchDelayCode?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -245,10 +262,10 @@ const DelayCode = () => {
 					btnCondition={true}
 					Heading={'DelayCode'}
 					formComponent={<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						airlineDropdownData = {airlineDropdownData}
-						key={Math.random() * 100}
+						airlineDropdownData={airlineDropdownData}
 					/>}
 					openModal={openModal}
 				/>
@@ -267,54 +284,57 @@ const DelayCode = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Delay Code
 							</CustomTypography>
-							<TableComponent data={delayCodeData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={delayCodeData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
 
 					{/* modals */}
 				</>
 			)}
+
+
 			<ModalComponent
 				isModalOpen={isModalOpen}
-				width="50%"
+				width="80%"
 				closeModal={closeModal}
-				title={'DelayCode'}
+				title={' Add Delay Code'}
 				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
-						airlineDropdownData = {airlineDropdownData}
+						airlineDropdownData={airlineDropdownData}
 					/>
 				</div>
 			</ModalComponent>
-			
-		<ModalComponent
-			isModalOpen={isEditModalOpen}
-			width="50%"
-			closeModal={closeEditModal}
-			title={`${isReadOnly? '': 'Edit'} Delay Code`}
-			className="custom_modal"
-	>
-		<div className="modal_content">
-			<FormComponent
-				handleSaveButton={handleEditSave}
-				handleButtonClose={handleCloseButton}
-				isEdit = {true}
-				initialValues={rowData}
-				isReadOnly = {isReadOnly}
-				airlineDropdownData = {airlineDropdownData}
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Delay Code`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						airlineDropdownData={airlineDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.delayCode}?`}
 			/>
-		</div>
-	</ModalComponent>
-	<ConfirmationModal 
-	isOpen={isDeleteConfirm} 
-	onClose={closeDeleteModal} 
-	onSave={handleDelete} 
-	content={`You want to delete ${rowData?.delayCode}?`}
-	/>
 		</>
 	);
 };

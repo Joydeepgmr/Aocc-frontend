@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import { Form } from 'antd';
 import Button from '../../../../../../components/button/button';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
@@ -17,7 +18,10 @@ import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } f
 import { useStandDropdown } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { GET_TERMINAL } from '../../../../../../api';
 import './terminals.scss';
+
 
 const Terminal = () => {
 	const queryClient = useQueryClient();
@@ -27,8 +31,9 @@ const Terminal = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [form] = Form.useForm();
 
-	const { data: standDropdownData = [],isSuccess: isGetStandDropdownSuccess } = useStandDropdown();
+	const { data: standDropdownData = [], isSuccess: isGetStandDropdownSuccess } = useStandDropdown();
 	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
 	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 
@@ -42,7 +47,7 @@ const Terminal = () => {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-		
+
 			setTerminalData([...newData]);
 		}
 	};
@@ -50,23 +55,35 @@ const Terminal = () => {
 	const handleGetTerminalError = (error) => {
 		toast.error(error?.message);
 	}
-	const { data: fetchTerminal, isLoading: isFetchLoading,  hasNextPage, fetchNextPage } = useGetTerminal(getTerminalHandler);
+	const {
+		data: fetchTerminal,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+		refetch: getTerminalRefetch
+	} = useGetTerminal(getTerminalHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
+		setRowData({});
 		setIsModalOpen(false);
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
 		setIsEditModalOpen(true);
+		form.resetFields();
 	};
 
 	const closeEditModal = () => {
+		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
+		form.resetFields();
 	};
 
 	const openDeleteModal = (record) => {
@@ -75,7 +92,7 @@ const Terminal = () => {
 	}
 
 	const closeDeleteModal = () => {
-		setRowData(null);
+		setRowData({});
 		setIsDeleteConfirm(false);
 
 	}
@@ -98,14 +115,16 @@ const Terminal = () => {
 	};
 
 	const { mutate: postTerminal, isLoading: isPostLoading } = usePostTerminal(addTerminalHandler);
-	
-	const handleSaveButton = (value) => {
+
+	const handleSaveButton = useCallback((value) => {
 		value && postTerminal(value);
-	};
+	}, []);
 
 	const handleCloseButton = () => {
+		setRowData({});
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT 
@@ -114,8 +133,8 @@ const Terminal = () => {
 		onError: (error) => handleEditTerminalError(error),
 	};
 
-	const {mutate: editTerminal, isLoading: isEditLoading} = useEditTerminal(rowData?.id,editTerminalHandler)
-	
+	const { mutate: editTerminal, isLoading: isEditLoading } = useEditTerminal(rowData?.id, editTerminalHandler)
+
 	const handleEditTerminalSuccess = (data) => {
 		closeEditModal();
 		setTerminalData([]);
@@ -128,11 +147,10 @@ const Terminal = () => {
 	}
 
 	const handleEdit = (record) => {
-		record = {...record,
-			validFrom : record?.validFrom ? dayjs(record?.validFrom): "",
-			validTill: record?.validTo ? dayjs(record?.validTo) : "",
-			unavailableFrom: record?.unavailableFrom ?  dayjs(record?.unavailableFrom) : "",
-			unavailableTo:record?.unavailableTo ? dayjs(record?.unavailableTo)  : "",
+		record = {
+			...record,
+			validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+			validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 		}
 		setRowData(record);
 		openEditModal();
@@ -158,9 +176,9 @@ const Terminal = () => {
 		toast.error(error?.response?.data?.message)
 	}
 
-	const {mutate: deleteTerminal} = useDeleteTerminal(deleteTerminalHandler);
+	const { mutate: deleteTerminal } = useDeleteTerminal(deleteTerminalHandler);
 	const handleDelete = () => {
-		deleteTerminal(rowData.id);	
+		deleteTerminal(rowData.id);
 	}
 
 	const columns = [
@@ -185,50 +203,45 @@ const Terminal = () => {
 			),
 		},
 		{
-			title: 'Terminal Name',
+			title: 'TERM',
 			dataIndex: 'name',
 			key: 'name',
+			align: 'center',
 			render: (terminalName) => terminalName ?? '-',
 		},
 		{
-			title: 'Connected to Taxiway',
+			title: 'TWY',
 			dataIndex: 'taxiway',
 			key: 'taxiway',
+			align: 'center',
 			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
-			title: 'Connected to Stands',
+			title: 'POS',
 			dataIndex: 'parkingStand',
 			key: 'parkingStand',
+			align: 'center',
 			render: (stand) => stand?.name ?? '-',
 		},
 		{
-			title: 'Connected to Runway',
+			title: 'RWY',
 			dataIndex: 'runway',
 			key: 'runway',
+			align: 'center',
 			render: (runway) => runway?.name ?? '-',
-		},
-		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
-			render: (status) => status ?? '-',
-		},
-		{
-			title: 'Availability',
-			dataIndex: 'availability',
-			key: 'availability',
-			render: (availability) => availability ?? '-',
 		},
 		{
 			title: 'View Details',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
-					<Button onClick={() => {
-						setIsReadOnly(true);
-						handleEdit(record)}} 
-						title="View Details" 
+					<Button
+						style={{ margin: 'auto' }}
+						onClick={() => {
+							setIsReadOnly(true);
+							handleEdit(record)
+						}}
+						title="View Details"
 						type="text" />
 				</>
 			),
@@ -259,12 +272,12 @@ const Terminal = () => {
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
-	};	
+	};
 
 	return (
 		<>
-			<PageLoader loading={isFetchLoading || isEditLoading || isPostLoading} />
-			{!Boolean(fetchTerminal?.pages[0]?.data?.length) ? (
+			<SocketEventListener refetch={getTerminalRefetch} apiName={GET_TERMINAL} />
+			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTerminal?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					// title2={'Import Global Reference'}
@@ -272,13 +285,13 @@ const Terminal = () => {
 					btnCondition={true}
 					Heading={'Add Terminal'}
 					formComponent={<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						key={Math.random() * 100}
-						standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
-						runwayDropdownData = {runwayDropdownData}
-						
+						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
+						runwayDropdownData={runwayDropdownData}
+
 					/>}
 					openModal={openModal}
 				/>
@@ -297,59 +310,62 @@ const Terminal = () => {
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Terminals
 							</CustomTypography>
-							<TableComponent data={terminalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage}/>
+							<TableComponent data={terminalData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-					</>
+				</>
 			)}
 
-					{/* modals */}
-					<ModalComponent
-						isModalOpen={isModalOpen}
-						width="50%"
-						closeModal={closeModal}
-						title={'Add Terminal'}
-						className="custom_modal"
-					>
-						<div className="modal_content">
-							<FormComponent
-								handleSaveButton={handleSaveButton}
-								handleButtonClose={handleCloseButton}
-								key={Math.random() * 100}
-								standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-								taxiwayDropdownData = {taxiwayDropdownData}
-								runwayDropdownData = {runwayDropdownData}
-							/>
-						</div>
-					</ModalComponent>
-					
-				<ModalComponent
-					isModalOpen={isEditModalOpen}
-					width="50%"
-					closeModal={closeEditModal}
-					title={`${isReadOnly ? '' : 'Edit'} Terminal`}
-					className="custom_modal"
+
+
+			{/* modals */}
+			<ModalComponent
+				isModalOpen={isModalOpen}
+				width="80%"
+				closeModal={closeModal}
+				title={'Add Terminal'}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
-						handleSaveButton={handleEditSave}
+						form={form}
+						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						isEdit = {true}
-						initialValues={rowData}
-						isReadOnly = {isReadOnly}
-						standDropdownData = {isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData = {taxiwayDropdownData}
-						runwayDropdownData = {runwayDropdownData}
+						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
+						runwayDropdownData={runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
-			<ConfirmationModal 
-			isOpen={isDeleteConfirm} 
-			onClose={closeDeleteModal} 
-			onSave={handleDelete} 
-			content={`You want to delete ${rowData?.name}?`}
+
+			<ModalComponent
+				isModalOpen={isEditModalOpen}
+				width="80%"
+				closeModal={closeEditModal}
+				title={`${isReadOnly ? '' : 'Edit'} Terminal`}
+				className="custom_modal"
+			>
+				<div className="modal_content">
+					<FormComponent
+						form={form}
+						handleSaveButton={handleEditSave}
+						handleButtonClose={handleCloseButton}
+						isEdit={true}
+						initialValues={rowData}
+						isReadOnly={isReadOnly}
+						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
+						taxiwayDropdownData={taxiwayDropdownData}
+						runwayDropdownData={runwayDropdownData}
+					/>
+				</div>
+			</ModalComponent>
+			<ConfirmationModal
+				isOpen={isDeleteConfirm}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content={`You want to delete ${rowData?.name}?`}
 			/>
-				
+
 		</>
 	);
 };
