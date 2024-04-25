@@ -14,4 +14,6 @@ export let Pathname = {
 	404: '/404',
 	CDM: '/cdm',
 	VENDOR: '/vendor',
+	FIDS_DASHBOARD : '/fids-dashboard',
+	FIDS_RESOURCES : '/fids-resources'
 };

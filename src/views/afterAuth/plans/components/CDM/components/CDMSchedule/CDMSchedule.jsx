@@ -71,10 +71,7 @@ const DailySchedule = ({ tab }) => {
 		fetchNextPage,
 		refetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
-	useEffect(() => {
-		console.log(isFetchLoading, 'loadingg');
-	}, [isFetchLoading]);
-	console.log(fetchedSeasonalPlans, hasNextPage, fetchNextPage, 'fetched');
+	
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -131,7 +128,6 @@ const DailySchedule = ({ tab }) => {
 	};
 
 	const handleAddSeasonalError = (error) => {
-		console.log(error);
 		toast.error(error?.response?.data?.message);
 	};
 	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
@@ -164,7 +160,6 @@ const DailySchedule = ({ tab }) => {
 			...record,
 			date: record?.PDATE ? dayjs(record?.PDATE) : '',
 		};
-		console.log(record, 'record');
 		setRowData(record);
 		openEditModal();
 	};
@@ -223,6 +218,8 @@ const DailySchedule = ({ tab }) => {
 		// },
 	];
 
+	console.log(index, flightType);
+
 	const operations = (
 		<div>
 			<DropdownButton
@@ -255,9 +252,6 @@ const DailySchedule = ({ tab }) => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-
-			console.log(file[0].originFileObj, file, formData, 'data'); // Ensure that the data is present
-
 			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
@@ -322,19 +316,19 @@ const DailySchedule = ({ tab }) => {
 		},
 		index === '1'
 			? {
-				title: 'STA',
-				dataIndex: 'STA',
-				key: 'STA',
-				align: 'center',
-				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
-			}
+					title: 'STA',
+					dataIndex: 'STA',
+					key: 'STA',
+					align: 'center',
+					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+				}
 			: {
-				title: 'STD',
-				dataIndex: 'STD',
-				key: 'STD',
-				align: 'center',
-				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
-			},
+					title: 'STD',
+					dataIndex: 'STD',
+					key: 'STD',
+					align: 'center',
+					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+				},
 		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
@@ -407,14 +401,16 @@ const DailySchedule = ({ tab }) => {
 				refetch={refetch}
 				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
 			/>
-		{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> :
-			<div className="main_TableContainer">
-				<div className="top_container">
-					<div>
-						<TopHeader heading="Daily Flight Schedule" />
-					</div>
-					<div className="icon_container">
-						{/* <Button
+			{isFetchLoading || isEditLoading || isPostLoading ? (
+				<PageLoader loading={true} />
+			) : (
+				<div className="main_TableContainer">
+					<div className="top_container">
+						<div>
+							<TopHeader heading="Daily Flight Schedule" />
+						</div>
+						<div className="icon_container">
+							{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -423,28 +419,29 @@ const DailySchedule = ({ tab }) => {
 							icon={Filter}
 							alt="arrow icon"
 						/> */}
-						<InputField
-							label="search"
-							name="search"
-							placeholder="Search"
-							className="custom_inputField"
-							warning="Required field"
-							type="search"
-						/>
+							<InputField
+								label="search"
+								name="search"
+								placeholder="Search"
+								className="custom_inputField"
+								warning="Required field"
+								type="search"
+							/>
+						</div>
+					</div>
+					<div className="table_container">
+						<div>
+							<CustomTabs
+								defaultActiveKey={index}
+								items={tabItems}
+								onChange={handleChange}
+								type="simple"
+								extraContent={operations}
+							/>
+						</div>
 					</div>
 				</div>
-				<div className="table_container">
-					<div>
-						<CustomTabs
-							defaultActiveKey="1"
-							items={tabItems}
-							onChange={handleChange}
-							type="simple"
-							extraContent={operations}
-						/>
-					</div>
-				</div>
-			</div>}
+			)}
 
 			{/* modals */}
 			<ModalComponent
