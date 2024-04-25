@@ -49,23 +49,44 @@ export const roleBasedNav = (role = 'Planner') => {
 				children: Pathname.CDM,
 			},
 		];
+	} else if (role === userType.SECURITY_OFFICER) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Approval',
+				children: Pathname.SECURITY_OFFICER,
+			},
+		];
+	} else if (role === userType.SECURITY_OFFICER) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Approval',
+				children: Pathname.SECURITY_OFFICER,
+			},
+		];
+	} else if (role === userType.VENDOR) {
+		navItems = [
+			{
+				key: '0',
+				label: '',
+				children: Pathname.VENDOR,
+			},
+		];
+	} else if (role === userType.FIDS) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Dashboard',
+				children: Pathname.FIDS_DASHBOARD,
+			},
+			{
+				key: '1',
+				label: 'Resources',
+				children: Pathname.FIDS_RESOURCES,
+			},
+		];
 	}
-		else if (role === userType.SECURITY_OFFICER) {
-			navItems = [
-				{
-					key: '0',
-					label: 'Approval',
-					children: Pathname.SECURITY_OFFICER,
-				},]
-		}
-		else if (role === userType.VENDOR) {
-			navItems = [
-				{
-					key: '0',
-					label: '',
-					children: Pathname.VENDOR,
-				},]
-		}
-	
+
 	return navItems;
 };

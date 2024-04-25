@@ -30,31 +30,7 @@
 	&--4Airline {
 		.vis-item-overflow {
 			border-radius: 1rem;
-			background: #a83c32;
-		}
-	}
-	&--5Airline {
-		.vis-item-overflow {
-			border-radius: 1rem;
-			background: #a86132;
-		}
-	}
-	&--6Airline {
-		.vis-item-overflow {
-			border-radius: 1rem;
-			background: #a8a832;
-		}
-	}
-	&--7Airline {
-		.vis-item-overflow {
-			border-radius: 1rem;
-			background: #6fa832;
-		}
-	}
-	&--8Airline {
-		.vis-item-overflow {
-			border-radius: 1rem;
-			background: #32a89a;
+			background: $red_100;
 		}
 	}
 	&--LabelContainer {
