@@ -186,6 +186,19 @@ export const columns = [
 	{ title: 'Created On', dataIndex: 'createdOn', key: '6' },
 ];
 
+export const SelectFlightType = [
+	{
+		id: '1',
+		label: 'International',
+		value: 'INTERNATIONAL',
+	},
+	{
+		id: '2',
+		label: 'National',
+		value: 'NATIONAL',
+	},
+];
+
 // const { data: fetchedGlobalAircraftType } = useGlobalAircraftType();
 // export const SelectAircraftType = fetchedGlobalAircraftType ? fetchedGlobalAircraftType.map((item, index) => ({
 // 	id: index.toString(),

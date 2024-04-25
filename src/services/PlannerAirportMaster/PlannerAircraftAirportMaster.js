@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
 import {
 	DELETE_PLANNER_AIRCRAFT,
 	GET_PLANNER_AIRCRAFT,
@@ -66,4 +66,14 @@ export const useUpdatePlannerAircraft = (id, props) => {
 	const statusMessage = isSuccess ? data?.message : data?.error;
 
 	return { ...response, data, message: statusMessage };
+};
+
+export const useAircraftDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-aircraft-dropdown'],
+		queryFn: async () => await Post(`${GET_PLANNER_AIRCRAFT}?bulk=true`),
+		...props,
+	});
+	const data = response?.data?.data ?? [];
+	return { ...response, data };
 };

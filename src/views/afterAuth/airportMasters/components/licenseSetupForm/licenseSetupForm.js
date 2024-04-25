@@ -4,10 +4,17 @@ import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import NumericField from '../numericField/numericField';
 import './licenseSetupForm.scss';
+import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 
 const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }) => {
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
+	// for image
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewImage, setPreviewImage] = useState('');
+	const [previewTitle, setPreviewTitle] = useState('');
+	const [fileList, setFileList] = useState([]);
+
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }
@@ -52,6 +59,31 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 					className="custom_input"
 					onChange={handleAirportChange}
 				/>
+				<InputField
+					label="Email Address"
+					name="email"
+					pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+					placeholder="Enter the Email Address"
+					className="custom_input"
+					required
+				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
+				<div className='image-input'>
+					<ImageUpload
+						{...{
+							label: 'Airport Logo',
+							previewOpen,
+							setPreviewOpen,
+							previewImage,
+							setPreviewImage,
+							previewTitle,
+							setPreviewTitle,
+							fileList,
+							setFileList,
+						}}
+					/>
+				</div>
 				<NumericField
 					otpLength={3}
 					label="IATA Code"
@@ -70,8 +102,6 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 					onChange={setIcaoCode}
 					disabled
 				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Abbreviated Name"
 					name="abbreviatedName"
@@ -80,18 +110,10 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 					className="custom_input"
 					disabled={true}
 				/>
-				<InputField
-					label="Email Address"
-					name="email"
-					pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-					placeholder="Enter the Email Address"
-					className="custom_input"
-					required
-				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
-				<InputField label="City" pattern='^(?!\s).*$' name="city" placeholder="Enter the city name" className="custom_input" />
 
+			</div>
+			<div className="airport_setup_form_inputfields" style={{ marginTop: '1rem' }}>
+				<InputField label="City" pattern='^(?!\s).*$' name="city" placeholder="Enter the city name" className="custom_input" />
 				<CustomSelect
 					SelectData={SelectCountryData}
 					label="Country"
@@ -110,7 +132,13 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 					format="MM-DD-YYYY"
 					required
 				/>
-				<Date label="Valid To" placeholder="Select valid to date" name="validTill" required format="MM-DD-YYYY" />
+				<Date
+					label="Valid To"
+					placeholder="Select valid to date"
+					className="custom_date"
+					name="validTill"
+					required
+					format="MM-DD-YYYY" />
 			</div>
 		</div>
 	);

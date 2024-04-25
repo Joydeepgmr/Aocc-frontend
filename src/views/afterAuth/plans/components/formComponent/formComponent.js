@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, memo } from 'react';
 import { Divider, Form } from 'antd';
 import dayjs from 'dayjs';
 import InputField from '../../../../../components/input/field/field';
@@ -7,18 +7,42 @@ import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import WeeklySelect from '../../../../../components/weeklySelect/weeklySelect';
 import Date from '../../../../../components/datapicker/datepicker';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-
+import CustomSelect from '../../../../../components/select/select';
+import { SelectFlightType } from '../../../userAccess/userAccessData';
 import './formComponent.scss';
 
-const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValues, isEdit }) => {
+
+const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit, airlineDropdownData, natureCodeDropdownData, aircraftDropdownData }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [isDate, setIsDate] = useState(false);
 	const [isStart, setIsStart] = useState(false);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
 	const [weekDays, setWeekDays] = useState([]);
-	const [form] = Form.useForm();
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+	isEdit && (initialValues['airlineId'] = initialValues?.airline?.id);
+	isEdit && (initialValues['natureCodeId'] = initialValues?.natureCode?.id);
+	isEdit && (initialValues['aircraftId'] = initialValues?.aircraft?.id);
+
+	const SelectAirlineData = useMemo(() => {
+		return airlineDropdownData?.map((data) => {
+			return { label: data?.twoLetterCode, value: data?.id };
+		});
+	}, [airlineDropdownData]);
+
+	const SelectNatureCodeData = useMemo(() => {
+		return natureCodeDropdownData?.map((data) => {
+			return { label: data?.natureCode, value: data?.id };
+		});
+	}, [natureCodeDropdownData]);
+
+	const SelectAircraftData = useMemo(() => {
+		console.log(aircraftDropdownData, 'aircraftdataaaaa');
+		return aircraftDropdownData?.map((data) => {
+			return { label: data?.registration, value: data?.id };
+		});
+	}, [aircraftDropdownData]);
 
 	const handleCheckboxChange = () => {
 		setTohChecked(!tohChecked);
@@ -81,6 +105,7 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	};
 
 	const onFinish = (values) => {
+		console.log(values, 'valueeee');
 		values['toh'] = tohChecked;
 		const { days, ...otherValues } = values;
 		handleSaveButton(otherValues);
@@ -92,7 +117,10 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	};
 
 	useEffect(() => {
-		form.setFieldsValue(initialValues);
+		form.resetFields();
+		if (initialValues) {
+			form.setFieldsValue(initialValues);
+		}
 	}, [form, initialValues]);
 
 	useEffect(() => {
@@ -104,11 +132,24 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinish}>
 				<div className="seasonal_form_container">
 					<div className="seasonal_form_inputfields">
+						<CustomSelect
+							SelectData={SelectAirlineData}
+							label="Airline"
+							required
+							name="airlineId"
+							placeholder={'Select Airline'}
+							className="select"
+						/>
 						<InputField
 							label="Flight Number"
 							name="FLIGHTNO"
+							pattern='^[0-9]+$'
+							required
+							min={2}
+							max={5}
 							placeholder="Enter the airport name"
 							className="custom_input"
+							patternWarning={"Please enter only numbers"}
 						/>
 						<Date
 							label="Date"
@@ -119,30 +160,48 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							onChange={handleDateChange}
 							required={!startDate || !endDate}
 						/>
-						<InputField
+						{/* <InputField
 							label="Call Sign"
 							name="callSign"
 							placeholder="Filled Text"
 							className="custom_input"
-						/>
+						/> */}
 					</div>
 					<div className="seasonal_form_inputfields">
-						<InputField
+						<CustomSelect
+							SelectData={SelectNatureCodeData}
 							label="Nature Code"
-							name="natureCode"
-							placeholder="D/I/F/D"
-							className="custom_input"
+							name="natureCodeId"
+							required
+							placeholder={'Select Nature Code'}
+							className="select"
 						/>
-						<InputField
-							label="Origin Airport"
-							name="origin"
-							placeholder="Filled Text"
-							className="custom_input"
-						/>
+						{type == 1 ? (
+							<InputField
+								label="Origin Airport"
+								name="origin"
+								placeholder="Filled Text"
+								pattern='^[a-zA-Z]+$'
+								required
+								max={3}
+								className="custom_input"
+							/>
+						) : (
+							<InputField
+								label="Destination Airport"
+								name="destination"
+								max={3}
+								required
+								placeholder="Filled Text"
+								pattern='^[a-zA-Z]+$'
+								className="custom_input"
+							/>
+						)}
 						{type == 1 ? (
 							<InputField
 								label="STA"
 								name="STA"
+								type='time'
 								placeholder="Filled Text"
 								required
 								className="custom_input"
@@ -151,6 +210,7 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 							<InputField
 								label="STD"
 								name="STD"
+								type='time'
 								placeholder="Filled Text"
 								required
 								className="custom_input"
@@ -158,13 +218,23 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 						)}
 					</div>
 					<div className="seasonal_form_inputfields">
-						<InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input" />
-						<InputField
-							label="Registration"
-							name="registration"
-							placeholder="Filled Text"
-							className="custom_input"
+						{/* <InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input" /> */}
+						<CustomSelect
+							SelectData={SelectAircraftData}
+							label="Aircraft"
+							name="AircraftId"
+							required
+							placeholder={'Select Aircraft'}
+							className="select"
 						/>
+						<CustomSelect
+						SelectData={SelectFlightType}
+						placeholder={'Types of Flight'}
+						className="custom_input"
+						required
+						label="Flight Type"
+						name="flightType"
+					/>
 						<CheckBoxField
 							name="toh"
 							label="Towing to Hanger"
@@ -311,4 +381,4 @@ const FormComponent = ({ handleButtonClose, handleSaveButton, type, initialValue
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

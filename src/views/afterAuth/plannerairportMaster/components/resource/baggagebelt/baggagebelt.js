@@ -237,15 +237,15 @@ const BaggageBelt = () => {
 				const currentDate = dayjs();
 
 				if (!validFrom || !validTill) {
-					return 'Active';
+					return 'O';
 				}
 				if (
 					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
 					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
 				) {
-					return 'Active';
+					return 'O';
 				} else {
-					return 'Inactive';
+					return 'I';
 				}
 			},
 		},

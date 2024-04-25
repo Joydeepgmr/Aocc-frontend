@@ -1,4 +1,4 @@
-import { useMutation, useInfiniteQuery } from 'react-query';
+import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
 import { NATURE_CODE,GET_NATURE_CODE } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
@@ -44,3 +44,13 @@ export const useDeleteNatureCode = (props) => {
 	});
 	return response;
 };
+
+export const useNatureCodeDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-nature-code-dropdown'],
+		queryFn: async () => await Post(`${GET_NATURE_CODE}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

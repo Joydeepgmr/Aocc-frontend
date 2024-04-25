@@ -19,7 +19,7 @@ function Milestone() {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data.milestoneList || []);
 			}, []);
-			setMilestoneData([...newData]);
+			setMilestoneData([...newData, ...newData, ...newData]);
 			if (!labels.length && data?.pages?.length) {
 				const labels = data?.pages[0].data.milestones.map((milestoneObj) => {
 					const [key] = Object.keys(milestoneObj);
