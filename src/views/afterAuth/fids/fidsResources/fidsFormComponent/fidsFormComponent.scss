@@ -1,0 +1,35 @@
+@import '../../../../../styles/sass/mixins';
+@import '../../../../../styles/sass/variables';
+@import '../../../../../styles/sass/utils';
+
+.fids_resources_form_container {
+	padding: 2rem 0rem 2.4rem 0rem;
+	box-sizing: content-box;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	.fids_resources_inputfields {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2.4rem;
+		.ant-row {
+			display: flex;
+			flex-flow: column;
+		}
+		.ant-form-item-label {
+			text-align: start;
+		}
+		.input_form_item {
+			&.custom_input {
+				width: calc(33% - 2.4rem);
+			}
+		}
+		.select {
+			width: calc(33% - 2.4rem);
+		}
+		.custom_date {
+			width: calc(33% - 2.4rem);
+		}
+	}
+}

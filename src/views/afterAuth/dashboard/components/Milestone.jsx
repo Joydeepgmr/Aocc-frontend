@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { GET_MILESTONE_DATA } from '../../../../api';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import InputField from '../../../../components/input/field/field';
@@ -9,11 +9,14 @@ import SocketEventListener from '../../../../socket/listner/socketListner';
 import MilestoneChart from './MilestoneChart';
 import { toast } from 'react-hot-toast';
 import './style.scss';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
 	const [milestoneData, setMilestoneData] = useState([]);
 	const [labels, setLabels] = useState([]);
+	const divRef = useRef(null);
+	const [fullScreen, setFullScreen] = useState(false);
 	const onSuccess = (data) => {
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
@@ -52,6 +55,30 @@ function Milestone() {
 		setMilestoneData([]);
 		setLabels([]);
 	};
+	const toggleFullscreen = () => {
+		setFullScreen(!fullScreen);
+		if (document.fullscreenElement === null) {
+			if (divRef.current?.requestFullscreen) {
+				divRef.current.requestFullscreen();
+			} else if (divRef.current?.mozRequestFullScreen) {
+				divRef.current.mozRequestFullScreen();
+			} else if (divRef.current?.webkitRequestFullscreen) {
+				divRef.current.webkitRequestFullscreen();
+			} else if (divRef.current?.msRequestFullscreen) {
+				divRef.current.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document?.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document?.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document?.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+		}
+	};
 	const items = [
 		{
 			key: '1',
@@ -59,7 +86,11 @@ function Milestone() {
 			children: (
 				<>
 					<PageLoader loading={isFetching} />
-					<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
+					<MilestoneChart
+						fullScreen={fullScreen}
+						data={milestoneData}
+						{...{ hasNextPage, fetchNextPage, type, labels }}
+					/>
 				</>
 			),
 		},
@@ -69,7 +100,11 @@ function Milestone() {
 			children: (
 				<>
 					<PageLoader loading={isFetching} />
-					<MilestoneChart data={milestoneData} {...{ hasNextPage, fetchNextPage, type, labels }} />
+					<MilestoneChart
+						fullScreen={fullScreen}
+						data={milestoneData}
+						{...{ hasNextPage, fetchNextPage, type, labels }}
+					/>
 				</>
 			),
 		},
@@ -77,8 +112,8 @@ function Milestone() {
 	return (
 		<>
 			<SocketEventListener refetch={refetch} apiName={`${GET_MILESTONE_DATA}?flightType=${type}`} />
-			<div className="body-container">
-				<div className="top-bar">
+			<div className={`body-container ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
+				<div className={`top-bar`}>
 					<CustomTypography
 						type="title"
 						fontSize={24}
@@ -86,7 +121,15 @@ function Milestone() {
 						color="black"
 						children={'Milestones'}
 					/>
-					<div className="filter-section">
+					<div className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
+						{fullScreen ? (
+							<FullscreenExitOutlined
+								className="fullScreen--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+						) : (
+							<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
+						)}
 						<InputField
 							label="Airport Name"
 							name="search"
