@@ -6,15 +6,9 @@ import NumericField from '../numericField/numericField';
 import './licenseSetupForm.scss';
 import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 
-const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }) => {
+const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes, fileList, setFileList }) => {
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
-	// for image
-	const [previewOpen, setPreviewOpen] = useState(false);
-	const [previewImage, setPreviewImage] = useState('');
-	const [previewTitle, setPreviewTitle] = useState('');
-	const [fileList, setFileList] = useState([]);
-
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }
@@ -62,6 +56,7 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 				<InputField
 					label="Email Address"
 					name="email"
+					isArticle={false}
 					pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 					placeholder="Enter the Email Address"
 					className="custom_input"
@@ -69,21 +64,14 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<div className='image-input'>
-					<ImageUpload
-						{...{
-							label: 'Airport Logo',
-							previewOpen,
-							setPreviewOpen,
-							previewImage,
-							setPreviewImage,
-							previewTitle,
-							setPreviewTitle,
-							fileList,
-							setFileList,
-						}}
-					/>
-				</div>
+				<ImageUpload
+					{...{
+						label: 'Airport Logo',
+						fileList,
+						setFileList,
+						required: true,
+					}}
+				/>
 				<NumericField
 					otpLength={3}
 					label="IATA Code"
@@ -112,7 +100,7 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 				/>
 
 			</div>
-			<div className="airport_setup_form_inputfields" style={{ marginTop: '1rem' }}>
+			<div className="airport_setup_form_inputfields">
 				<InputField label="City" pattern='^(?!\s).*$' name="city" placeholder="Enter the city name" className="custom_input" />
 				<CustomSelect
 					SelectData={SelectCountryData}

@@ -126,6 +126,7 @@ const UserAccess = () => {
 							<InputField
 								label="User Email"
 								name="email"
+								isArticle={false}
 								placeholder="Enter the user email"
 								required
 								warning="Required field"
