@@ -57,8 +57,16 @@ const FlightSchedule = () => {
 	const closeMapModal = () => {
 		setMapModalOpen({ isOpen: null, data: null });
 	};
+	const handleViewMap = (record) => {
+		if (record.isMap) {
+			getViewMap(record.flight);
+		} else {
+			toast.dismiss();
+			toast.error('Map is not available once aircraft is in radar range');
+		}
+	};
 	const columns = useMemo(() => {
-		return [
+		let column = [
 			{
 				title: '2L',
 				dataIndex: 'iataCode',
@@ -138,7 +146,7 @@ const FlightSchedule = () => {
 				render: (text) => ConvertToDateTime(text, 'HH:mm') ?? '-',
 			},
 			{
-				title: 'ONBL',
+				title: tab === 'arrival' ? 'ONB' : 'OFB',
 				dataIndex: 'onBlock',
 				key: 'onBlock',
 				align: 'center',
@@ -173,28 +181,25 @@ const FlightSchedule = () => {
 				render: (_, record) => record?.resourceAllocation?.runway?.name ?? '-',
 			},
 			{ title: 'REM', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
-			tab == 'arrival'
-				? {
-						title: 'Map',
-						key: 'map',
-						render: (
-							text,
-							record // Use the render function to customize the content of the cell
-						) => (
-							<ButtonComponent
-								disabled={record?.isMap}
-								title="View map"
-								style={{ margin: 'auto' }}
-								type="text"
-								className="view_map_button"
-								onClick={() => {
-									getViewMap(record?.flight);
-								}}
-							/>
-						),
-					}
-				: {},
 		];
+		if (tab === 'arrival') {
+			column.push({
+				title: 'Map',
+				key: 'map',
+				render: (text, record) => (
+					<ButtonComponent
+						title="View map"
+						style={{ margin: 'auto', fontSize: '1.3rem', width: '8rem' }}
+						type="text"
+						className="view_map_button"
+						onClick={() => {
+							handleViewMap(record);
+						}}
+					/>
+				),
+			});
+		}
+		return column;
 	}, [FlightScheduleData]);
 	const handleTabChange = (key) => {
 		if (key == '1') {
@@ -209,7 +214,7 @@ const FlightSchedule = () => {
 			key: '1',
 			label: 'Arrival',
 			children: (
-				<>
+				<div className="daily-ops-table">
 					<TableComponent
 						columns={columns}
 						data={FlightScheduleData}
@@ -218,14 +223,14 @@ const FlightSchedule = () => {
 						pagination={hasNextPage}
 						isColored
 					/>
-				</>
+				</div>
 			),
 		},
 		{
 			key: '2',
 			label: 'Departure',
 			children: (
-				<>
+				<div className="daily-ops-table">
 					<TableComponent
 						columns={columns}
 						data={FlightScheduleData}
@@ -234,7 +239,7 @@ const FlightSchedule = () => {
 						pagination={hasNextPage}
 						isColored
 					/>
-				</>
+				</div>
 			),
 		},
 	];

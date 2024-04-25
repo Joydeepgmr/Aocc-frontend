@@ -11,7 +11,7 @@
     height: 6.8rem;
     width: 100%;
     @include flex(center, space-between, row); 
-    padding: 0px 4rem;
+    padding: 0px 2rem;
     .nav_left_section{
         @include flex(center,space-between, row); 
         width: 50%;

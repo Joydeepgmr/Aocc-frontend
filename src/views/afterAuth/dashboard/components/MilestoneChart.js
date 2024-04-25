@@ -1,11 +1,13 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { ConvertToDateTime, ConvertUtcToIst } from '../../../../utils';
+import { ConvertToDateTime } from '../../../../utils';
 import './style.scss';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [] }) => {
     console.log("labels are ", labels)
     const containerRef = useRef(null);
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const milestoneList = useMemo(() => {
         return data.map((list) => {
             let currentMilestone = list.progress * labels.length + 100;
@@ -59,7 +61,10 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                 height: 350,
                 animations: {
                     enabled: false
-                }
+                },
+                toolbar: {
+                    show: false,
+                },
             },
             plotOptions: {
                 bar: {
@@ -139,17 +144,21 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
     return (
         <div
             ref={containerRef}
-            className="chart-container"
-            style={{ maxHeight: 600, overflowY: 'scroll' }}
+            className={`chart-container ${isFullScreen && 'full-screen'}`}
             onScroll={handleScroll}
         >
+            <div className='full-screen-button' >
+                {isFullScreen
+                    ? <FullscreenExitOutlined style={{ cursor: 'pointer' }} onClick={() => setIsFullScreen(false)} />
+                    : <FullscreenOutlined style={{ cursor: 'pointer' }} onClick={() => setIsFullScreen(true)} />
+                }
+            </div>
             <ReactApexChart
                 options={chartOptions.options}
                 series={chartOptions.series}
                 type="bar"
-                height={50 * data?.length}
-                style={{ paddingTop: '5rem' }}
-                className="chart-container"
+                height={60 * data?.length}
+                style={{ paddingTop: '1rem' }}
             />
         </div>
         // <div style={{ maxHeight: 400, overflowY: 'auto', backgroundColor: 'black' }}>
