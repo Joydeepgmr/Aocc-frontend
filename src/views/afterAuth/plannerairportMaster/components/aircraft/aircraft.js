@@ -232,11 +232,11 @@ const Aircrafts = () => {
 			render: (nationality) => nationality ?? '-',
 			align: 'center',
 		},
-		{ title: 'TYPE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
+		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
 		{
 			title: 'View Details',
-			dataIndex: 'viewdetails',
-			key: 'viewdetails',
+			dataIndex: 'viewDetails',
+			key: 'viewDetails',
 			render: (text, record) => (
 				<ButtonComponent
 					onClick={() => {

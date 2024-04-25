@@ -22,18 +22,18 @@ export const roleBasedNav = (role = 'Planner') => {
 		navItems = [
 			{
 				key: '0',
-				label: 'Dashboard',
-				children: Pathname.DASHBOARD,
+				label: 'Airport Masters',
+				children: Pathname.PLANAIRPORTMASTER,
 			},
 			{
 				key: '1',
-				label: 'Plans',
-				children: Pathname.PLAN,
+				label: 'Daily Ops',
+				children: Pathname.DASHBOARD,
 			},
 			{
 				key: '2',
-				label: 'Airport Masters',
-				children: Pathname.PLANAIRPORTMASTER,
+				label: 'Planning',
+				children: Pathname.PLAN,
 			},
 			{
 				key: '3',
@@ -47,14 +47,6 @@ export const roleBasedNav = (role = 'Planner') => {
 				key: '0',
 				label: 'CDM',
 				children: Pathname.CDM,
-			},
-		];
-	} else if (role === userType.SECURITY_OFFICER) {
-		navItems = [
-			{
-				key: '0',
-				label: 'Approval',
-				children: Pathname.SECURITY_OFFICER,
 			},
 		];
 	} else if (role === userType.SECURITY_OFFICER) {

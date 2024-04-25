@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import Button from '../../../../../components/button/button';
@@ -15,6 +16,9 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
+import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
+import { useAircraftDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
 import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import {
 	useEditSeasonalPlanArrival,
@@ -24,10 +28,10 @@ import {
 	useUploadCSV,
 	useDownloadCSV,
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
-
-import './seasonal.scss';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
+import './seasonal.scss';
+
 
 const Seasonal = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -38,6 +42,11 @@ const Seasonal = ({ tab }) => {
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [form] = Form.useForm();
+
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
+	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
+	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -79,6 +88,8 @@ const Seasonal = ({ tab }) => {
 
 	const closeModal = () => {
 		setIsModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const openEditModal = () => {
@@ -87,6 +98,8 @@ const Seasonal = ({ tab }) => {
 
 	const closeEditModal = () => {
 		setIsEditModalOpen(false);
+		setRowData({});
+		form.resetFields();
 	};
 
 	const handleChange = (key) => {
@@ -143,6 +156,7 @@ const Seasonal = ({ tab }) => {
 	const handleCloseButton = () => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
+		form.resetFields();
 	};
 
 	//EDIT
@@ -327,7 +341,7 @@ const Seasonal = ({ tab }) => {
 				align: 'center',
 				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
 			},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
+		// { title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -447,10 +461,13 @@ const Seasonal = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						key={Math.random() * 100}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -469,11 +486,15 @@ const Seasonal = ({ tab }) => {
 			>
 				<div className="modal_content">
 					<FormComponent
+						form={form}
 						handleSaveButton={handleEditSave}
 						handleButtonClose={handleCloseButton}
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
+						airlineDropdownData={airlineDropdownData}
+						natureCodeDropdownData={natureCodeDropdownData}
+						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
