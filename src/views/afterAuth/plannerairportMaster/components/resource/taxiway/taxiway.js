@@ -15,7 +15,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTaxiway, useGetTaxiway, usePostTaxiway, useDeleteTaxiway } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_TAXIWAY } from '../../../../../../api';
 import './taxiway.scss';
@@ -29,7 +28,6 @@ const Taxiway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 	const [form] = Form.useForm();
 
 	const getTaxiwayHandler = {
@@ -321,7 +319,7 @@ const Taxiway = () => {
 					// title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Taxiway '}
-					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} runwayDropdownData={runwayDropdownData} />}
+					formComponent={<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />}
 					openModal={openModal}
 				/>
 			) : (
@@ -359,7 +357,6 @@ const Taxiway = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						runwayDropdownData={runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -379,7 +376,6 @@ const Taxiway = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						runwayDropdownData={runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>

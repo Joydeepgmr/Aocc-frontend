@@ -15,9 +15,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import { useStandDropdown } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
-import { useRunwayDropdown } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_TERMINAL } from '../../../../../../api';
 import './terminals.scss';
@@ -32,10 +29,6 @@ const Terminal = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const [form] = Form.useForm();
-
-	const { data: standDropdownData = [], isSuccess: isGetStandDropdownSuccess } = useStandDropdown();
-	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
-	const { data: runwayDropdownData = [] } = useRunwayDropdown();
 
 	const getTerminalHandler = {
 		onSuccess: (data) => handleGetTerminalSuccess(data),
@@ -288,9 +281,6 @@ const Terminal = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
-						runwayDropdownData={runwayDropdownData}
 
 					/>}
 					openModal={openModal}
@@ -331,9 +321,6 @@ const Terminal = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
-						runwayDropdownData={runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -353,9 +340,6 @@ const Terminal = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						standDropdownData={isGetStandDropdownSuccess && standDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
-						runwayDropdownData={runwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>

@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState, memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import { useTerminalDropdown } from '../../../../../../../services/planairportmaster/resources/terminal/terminal';
 import './formComponents.scss';
 
 const FormComponent = ({
@@ -15,8 +17,7 @@ const FormComponent = ({
 	handleButtonClose,
 	initialValues,
 	isEdit,
-	isReadOnly,
-	terminalDropdownData,
+	isReadOnly
 }) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
@@ -26,6 +27,14 @@ const FormComponent = ({
 	isEdit && (initialValues['terminal'] = initialValues?.terminal?.id);
 
 	const [isChecked, setIsChecked] = useState(false);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: terminalDropdownData } = useTerminalDropdown({ onError });
 
 	const handleCheckboxChange = () => {
 		setIsChecked(!isChecked);
