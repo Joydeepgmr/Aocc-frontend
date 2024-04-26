@@ -372,8 +372,6 @@ const CheckIn = () => {
 					</div>
 				</>)}
 
-
-			{/* modals */}
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				width="80%"

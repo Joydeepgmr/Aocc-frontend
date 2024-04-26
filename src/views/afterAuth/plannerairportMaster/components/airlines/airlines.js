@@ -369,7 +369,6 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={airlineData?.length}
 					isLoading={isUpdateAirlineLoading}
 					handleSubmit={handleUpdateAirline}
 				/>
@@ -394,7 +393,6 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={airlineData?.length}
 				/>
 			</ModalComponent>
 
@@ -403,6 +401,7 @@ const Airlines = () => {
 				width="80vw"
 				closeModal={() => {
 					setIsAddModalOpen(false);
+					setRowData({});
 					form.resetFields();
 				}}
 				title={
@@ -418,6 +417,7 @@ const Airlines = () => {
 						isLoading={isAddAirlineLoading}
 						closeModal={() => {
 							setIsAddModalOpen(false);
+							setRowData({});
 							form.resetFields();
 						}}
 						handleSubmit={handleAddAirline}
