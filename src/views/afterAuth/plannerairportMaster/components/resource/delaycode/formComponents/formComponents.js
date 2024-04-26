@@ -6,6 +6,8 @@ import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import { useAirlineDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import toast from 'react-hot-toast';
 import './formComponents.scss';
 
 const FormComponent = ({
@@ -14,13 +16,20 @@ const FormComponent = ({
 	handleButtonClose,
 	initialValues,
 	isEdit,
-	isReadOnly,
-	airlineDropdownData,
+	isReadOnly
 }) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	isEdit && (initialValues['airlineId'] = initialValues?.airline?.id);
 	
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: airlineDropdownData } = useAirlineDropdown({ onError });
+
 	const SelectAirlineData = useMemo(() => {
 		return airlineDropdownData?.map((data) => {
 			return { label: data.name, value: data.id };

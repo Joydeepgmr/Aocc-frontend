@@ -20,7 +20,6 @@ import {
 	useEditGate,
 	useDeleteGate,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
-import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_GATE } from '../../../../../../api';
 import './Gates.scss';
@@ -34,7 +33,6 @@ const Gates = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const [form] = Form.useForm();
-	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 
 	const getGateHandler = {
 		onSuccess: (data) => handleGetGateSuccess(data),
@@ -338,7 +336,6 @@ const Gates = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 					openModal={openModal}
@@ -379,7 +376,6 @@ const Gates = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -399,7 +395,6 @@ const Gates = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>

@@ -4,7 +4,6 @@ import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import CustomSelect from '../../../../../../components/select/select';
 import { SelectTypeOfUse } from '../../../../userAccess/userAccessData';
-import './formComponent.scss';
 import ButtonComponent from '../../../../../../components/button/button';
 import {
 	useCountriesDropdown,
@@ -12,6 +11,7 @@ import {
 } from '../../../../../../services/globalMasters/globalMaster';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
+import './formComponent.scss';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);

@@ -18,7 +18,6 @@ import {
 	useGetCheckIn,
 	usePostCheckIn,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
-import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
@@ -33,9 +32,8 @@ const CheckIn = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-
-	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 	const [form] = Form.useForm();
+
 	const getCheckinHandler = {
 		onSuccess: (data) => handleGetCheckinSuccess(data),
 		onError: (error) => handleGetCheckinError(error),
@@ -341,7 +339,6 @@ const CheckIn = () => {
 						<FormComponent
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 					openModal={openModal}
@@ -385,7 +382,6 @@ const CheckIn = () => {
 						initialValues={rowData}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -405,7 +401,6 @@ const CheckIn = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>

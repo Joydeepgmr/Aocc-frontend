@@ -15,8 +15,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import { useGateDropdown } from '../../../../../../services/planairportmaster/resources/gates/gates';
-import { useTaxiwayDropdown } from '../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_PARKING_STAND } from '../../../../../../api';
 import './parkingstand.scss';
@@ -30,9 +28,6 @@ const ParkingStand = () => {
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const [form] = Form.useForm();
-
-	const { data: gateDropdownData = [] } = useGateDropdown();
-	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown();
 
 	const getParkingStandHandler = {
 		onSuccess: (data) => handleGetParkingStandSuccess(data),
@@ -328,8 +323,6 @@ const ParkingStand = () => {
 					formComponent={<FormComponent
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						gateDropdownData={gateDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
 					/>}
 					openModal={openModal}
 				/>
@@ -369,8 +362,6 @@ const ParkingStand = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						gateDropdownData={gateDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -390,8 +381,6 @@ const ParkingStand = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						gateDropdownData={gateDropdownData}
-						taxiwayDropdownData={taxiwayDropdownData}
 					/>
 				</div>
 			</ModalComponent>
