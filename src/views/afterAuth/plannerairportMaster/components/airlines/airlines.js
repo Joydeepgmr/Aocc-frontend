@@ -300,18 +300,7 @@ const Airlines = () => {
 	return (
 		<>
 			<SocketEventListener refetch={getPlannerAirlineRefetch} apiName={`${GET_PLANNER_AIRLINE}`} />
-			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
-				<PageLoader
-					loading={
-						isPlannerAirlineLoading ||
-						isAddAirlineLoading ||
-						isDeleteAirlineLoading ||
-						isUpdateAirlineLoading ||
-						isPlannerAirlineFetching
-					}
-				/>
-			)}
-			{Boolean(airlineData?.length) ? (
+			{isPlannerAirlineLoading || isAddAirlineLoading || isDeleteAirlineLoading || isUpdateAirlineLoading || isPlannerAirlineFetching ? <PageLoader loading={true} /> : Boolean(airlineData?.length) ? (
 				<Common_table
 					data={airlineData}
 					columns={columns}
