@@ -116,7 +116,12 @@ export const UPDATE_CDM_DATA = '/cdmOps';
 export const CDM_GET_TURN_AROUND = '/cdmOps/turnaround';
 export const UPDATE_CDM_TURN_AROUND = '/cdmOps/turnaround';
 
-
 /*-------------------------Vendor----------------------------------*/
-export const VENDOR = '/vendor'
-export const GET_VENDOR ='/vendor/paginated'
+export const VENDOR = '/vendor';
+export const GET_VENDOR = '/vendor/paginated';
+
+/*------------------------- Resource FIDS ----------------------------------*/
+export const GET_FIDS_RESOURCES = '/screen/paginated';
+export const POST_FIDS_RESOURCES = '/screen';
+export const DELETE_FIDS_RESOURCES = '/screen';
+export const UPDATE_FIDS_RESOURCES = '/screen';

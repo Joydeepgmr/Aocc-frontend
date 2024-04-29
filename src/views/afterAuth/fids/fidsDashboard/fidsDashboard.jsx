@@ -8,22 +8,22 @@ import './fidsDashboard.scss';
 const FidsDashboard = () => {
 	const data = [
 		{
-			eobt3: 'EOBT - 3hours',
+			logo: 'Airport Logo',
 		},
 		{
-			eobt2: 'EOBT - 2hours',
+			flight_number: 'Flight Number',
 		},
 		{
-			atot: 'ATOT',
+			eta: 'ETA',
 		},
 		{
-			lru: 'Local Radar Update',
+			sta: 'STA',
 		},
 		{
-			finalApproach: 'Final Approach',
+			checkin_in: 'Check In Counter',
 		},
 		{
-			aldt: 'Landing - ALDT',
+			terminal: 'Terminal',
 		},
 	];
 	const columns = data?.map((item) => ({
