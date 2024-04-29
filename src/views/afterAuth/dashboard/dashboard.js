@@ -9,6 +9,7 @@ import Milestone from './components/Milestone';
 import ProgressionCard from './components/ProgressionCard';
 import TelexMessage from './components/TelexMessage';
 import './dashboard.scss';
+import Alerts from './components/Alerts';
 
 export const Dashboard = () => {
 	const handleChange = () => {
@@ -55,10 +56,6 @@ export const Dashboard = () => {
 
 	return (
 		<div className='container-div'>
-				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
-				<div className='main-container'>
-					<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-				</div>
 			<div className='widgets-container'>
 				<div className='airport-info'>
 					<ProgressionCard cardTitle="On Time Performer" airlineData={airlineData} />
@@ -72,9 +69,13 @@ export const Dashboard = () => {
 					<GraphCard cardTitle="Runway Utilization" />
 					<GraphCard cardTitle="CO2 Emission" />
 				</div>
-				<div className='airport-alerts'>
-
+				<div className='airport-info'>
+					<Alerts />
 				</div>
+			</div>
+			<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
+			<div className='main-container'>
+				<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
 			</div>
 		</div>
 	);

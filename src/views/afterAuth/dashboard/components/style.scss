@@ -34,7 +34,7 @@
 }
 
 .progress-card {
-	width: 31.4rem;
+	width: 100%;
 	height: auto;
 	padding: 0 !important;
 	border-radius: 1.6rem;
@@ -62,7 +62,7 @@
 
 .progress-status-body {
 	display: flex;
-	// justify-content: space-between;
+	justify-content: center;
 	margin-top: 0.8rem;
 	margin-bottom: 0.8rem;
 	gap: 1.6rem;
@@ -76,8 +76,12 @@
 .progress-status-item {
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: nowrap;
 	width: 100%;
 	gap: 1.6rem;
+	// .airline-name{
+	// white-space: ;
+	// }
 }
 
 .view-details {
@@ -212,5 +216,41 @@
 	&--FullScreenFilter {
 		position: absolute;
 		right: 6rem;
+	}
+}
+
+.alert-body {
+	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.alert-status-body {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 1.3rem;
+	.alert-status {
+		width: auto !important;
+		background-color: $red_100;
+		color: white;
+	}
+}
+.alert-button-body {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	.alert-conflict {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		font-weight: 600;
+		.conflict-type {
+			font-size: 1.6rem;
+		}
+		.conflict-flight {
+			font-size: 1.2rem;
+		}
 	}
 }
