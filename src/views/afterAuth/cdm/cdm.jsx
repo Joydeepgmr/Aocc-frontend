@@ -563,7 +563,13 @@ const CDM = () => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: (
+			children: !(
+				isPlannerCdmLoading ||
+				isUpdateCDMLoading ||
+				isUpdateCDMTurnAroundLoading ||
+				isPlannerCdmTurnAroundLoading ||
+				isPlannerCdmTurnAroundFetching
+			) && (
 				<TableComponent
 					columns={columns}
 					data={cdmData}
@@ -578,7 +584,13 @@ const CDM = () => {
 		{
 			key: '2',
 			label: 'Departure',
-			children: (
+			children: !(
+				isPlannerCdmLoading ||
+				isUpdateCDMLoading ||
+				isUpdateCDMTurnAroundLoading ||
+				isPlannerCdmTurnAroundLoading ||
+				isPlannerCdmTurnAroundFetching
+			) && (
 				<TableComponent
 					columns={columns}
 					data={cdmData}
@@ -593,7 +605,13 @@ const CDM = () => {
 		{
 			key: '3',
 			label: 'Turn Around',
-			children: (
+			children: !(
+				isPlannerCdmLoading ||
+				isUpdateCDMLoading ||
+				isUpdateCDMTurnAroundLoading ||
+				isPlannerCdmTurnAroundLoading ||
+				isPlannerCdmTurnAroundFetching
+			) && (
 				<TableComponent
 					columns={columns}
 					data={cdmData}
@@ -649,13 +667,17 @@ const CDM = () => {
 				{(isUpdateCDMLoading ||
 					isPlannerCdmLoading ||
 					isPlannerCdmFetching ||
-					isUpdateCDMTurnAroundLoading) && (
+					isUpdateCDMTurnAroundLoading ||
+					isPlannerCdmTurnAroundLoading ||
+					isPlannerCdmTurnAroundFetching) && (
 					<PageLoader
 						loading={
 							isUpdateCDMLoading ||
 							isPlannerCdmLoading ||
 							isPlannerCdmFetching ||
-							isUpdateCDMTurnAroundLoading
+							isUpdateCDMTurnAroundLoading ||
+							isPlannerCdmTurnAroundLoading ||
+							isPlannerCdmTurnAroundFetching
 						}
 					/>
 				)}
