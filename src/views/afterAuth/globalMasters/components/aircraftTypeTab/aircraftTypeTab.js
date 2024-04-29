@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import {
 	useGetGlobalAircraftType,
-	useGlobalAirlineDropdown,
 	useUploadCSVGlobalAircraftType,
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftTypeTable from '../aircraftTypeTable/aircraftTypeTable';
@@ -21,7 +20,7 @@ const AircraftTypeTab = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data: airlineDropdownData = [] } = useGlobalAirlineDropdown({ onError });
+
 	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getAircraftTypeRefetch } = useGetGlobalAircraftType({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 	const uploadCsvHandler = {
@@ -69,7 +68,6 @@ const AircraftTypeTab = () => {
 						setCreateProps={setCreateProps}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
-						airlineDropdownData={airlineDropdownData}
 						loading={isFetching}
 					/>
 				}

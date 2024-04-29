@@ -204,19 +204,6 @@ const Airlines = () => {
 				<div className="custom-button">
 					<ButtonComponent
 						type={'iconWithBorder'}
-						icon={Delete}
-						onClick={() => {
-							setOpenDeleteModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-							});
-						}}
-						id="delete_button"
-					></ButtonComponent>
-					<ButtonComponent
-						type={'iconWithBorder'}
 						icon={Edit}
 						onClick={() => {
 							setOpenEditModal(true);
@@ -227,6 +214,19 @@ const Airlines = () => {
 							});
 						}}
 						id="edit_button"
+					></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Delete}
+						onClick={() => {
+							setOpenDeleteModal(true);
+							setRowData({
+								...record,
+								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+							});
+						}}
+						id="delete_button"
 					></ButtonComponent>
 				</div>
 			),

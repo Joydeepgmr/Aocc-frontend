@@ -5,11 +5,22 @@ import InputField from '../../../../../components/input/field/field';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomSelect from '../../../../../components/select/select';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import { useGlobalAirport, useGlobalCountries } from '../../../../../services/globalMasters/globalMaster';
 import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAccessData';
+import { useCountriesDropdown } from '../../../../../services'; 
+import { useGlobalAirportDropdown } from '../../../../../services';
 import './airlineForm.scss';
 
-const AirlineForm = ({ isReadOnly, type, airportDropdownData, countryDropdownData }) => {
+const AirlineForm = ({ isReadOnly, type }) => {
+	
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
+	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
+	
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }

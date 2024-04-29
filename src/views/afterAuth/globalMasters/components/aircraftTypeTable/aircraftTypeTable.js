@@ -14,7 +14,7 @@ import { useDeleteGlobalAircraftType, usePatchGlobalAircraftType, usePostGlobalA
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
 
-const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, airlineDropdownData, loading }) => {
+const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' };// type could be 'new' | 'view' | 'edit'
 	const [aircraftTypeModal, setAircraftTypeModal] = useState(defaultModalParams);
 	const [aircraftTypeData, setAircraftTypeData] = useState([]);
@@ -243,7 +243,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} type={aircraftTypeModal.type} airlineDropdownData={airlineDropdownData} />
+					<AircraftTypeForm isReadOnly={aircraftTypeModal.type === 'view'} type={aircraftTypeModal.type} />
 					{aircraftTypeModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

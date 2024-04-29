@@ -16,7 +16,7 @@ import {
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, aircraftTypeDropdownData, countryDropdownData, loading }) => {
+const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, aircraftTypeDropdownData, loading }) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [aircraftRegistrationData, setAircraftRegistrationData] = useState([]);
@@ -254,7 +254,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				className="custom_modal"
 			>
 				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
-					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} type={aircraftRegistrationModal.type} {...{ airportDropdownData, aircraftTypeDropdownData, countryDropdownData }} />
+					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} type={aircraftRegistrationModal.type} {...{aircraftTypeDropdownData }} />
 					{aircraftRegistrationModal.type !== 'view' &&
 						<>
 							<Divider />
