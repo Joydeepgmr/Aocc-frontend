@@ -4,8 +4,8 @@ import { localStorageKey } from '../keys';
 let retryCount = 0;
 
 export const axiosInstance = Axios.create({
-	// baseURL: process.env.baseURL
-	baseURL: 'https://w2lk19wq-5554.inc1.devtunnels.ms/frms/api/v1',
+	baseURL: process.env.baseURL,
+	// baseURL: 'https://w2lk19wq-5554.inc1.devtunnels.ms/frms/api/v1',
 });
 
 console.log(process.env.baseURL, 'base url');
