@@ -81,7 +81,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						warning="Required field"
 						required
 						className="custom_input"
-						pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
+						// pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 						max="16"
 						disabled={isReadOnly || isEdit}
 					/>

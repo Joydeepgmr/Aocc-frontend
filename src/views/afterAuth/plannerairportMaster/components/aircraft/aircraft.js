@@ -82,6 +82,7 @@ const Aircrafts = () => {
 		queryClient.invalidateQueries('get-all-planner-aircraft');
 		toast.success(data?.message);
 		setRowData({});
+		form.resetFields();
 		setIsAddModalOpen(false);
 	};
 

@@ -1,9 +1,10 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload, message } from 'antd';
+import { Modal, Upload, message, Form } from 'antd';
 import React, { useState } from 'react';
 import { UPLOAD_AIRLINE_IMAGE } from '../../api/endpoints';
 import { localStorageKey } from '../../keys';
 import './imageUpload.scss';
+import toast from 'react-hot-toast';
 const acceptedImages = [
     'png',
     'jpg',
@@ -27,15 +28,19 @@ const ImageUpload = ({
     multiple,
     isUserImage,
     label,
+    isDefault,
     defaultFileList,
-    showRemoveIcon = true,
+    showRemoveIcon,
     showUploadButton = true,
     isCircle = false,
+    disabled,
     required,
     isMultipleForm,
     isDetailPage,
     length = 1,
+    name,
 }) => {
+    const { Item } = Form;
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewTitle, setPreviewTitle] = useState('');
     const [previewImage, setPreviewImage] = useState('');
@@ -83,7 +88,11 @@ const ImageUpload = ({
         return isLt1M;
     };
     const handleChange = ({ file, fileList: newFileList }) => {
-        if (file?.response) {
+        if(file?.error){
+            setFileList([]);
+            toast.error(file?.response?.message);
+        }
+        else if (file?.response) {
             const updatedFileList = [...fileList];
             const fileObj = {
                 url: file?.response?.data?.upload,
@@ -96,39 +105,23 @@ const ImageUpload = ({
             setFileList(newFileList);
         }
     };
-    // useEffect(() => {
-    //     if (!isMultipleForm) {
-    //         let defaultFiles = [];
-    //         if (defaultFileList?.length) {
-    //             defaultFiles = defaultFileList?.map((file) => {
-    //                 if (file?.url) {
-    //                     if (!file?.type) {
-    //                         const type = getExtensionFromUrl(file?.url);
-    //                         return { ...file, type };
-    //                     }
-    //                     return file;
-    //                 } else {
-    //                     return {
-    //                         url: file,
-    //                         name: getFileNameFromUrl(file),
-    //                         type: getExtensionFromUrl(file),
-    //                     };
-    //                 }
-    //             });
-    //             setFileList(defaultFiles);
-    //         } else {
-    //             setFileList([]);
-    //         }
-    //     }
-    // }, [defaultFileList]);
-    // const { token } = getAdminInfo();
     return (
         <>
             <div className='image-upload-container'>
-                {label && <div className='image-title'>{required && <span className='image-required'>*</span>}{label}</div>}
-                <div>
                     {showUploadButton &&
+                        <Item
+                        label={label}
+                        name={name}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'This field is required',
+                          },
+                        ]}
+                      >
                         <Upload
+                        name={name}
+                        disabled={disabled}
                             style={{ height: '10rem' }}
                             listType={isCircle ? 'picture-circle' : 'picture-card'}
                             fileList={fileList}
@@ -140,7 +133,8 @@ const ImageUpload = ({
                             }}
                             onChange={handleChange}
                             showUploadList={{
-                                showRemoveIcon: showRemoveIcon ? showUploadButton : false,
+                                showRemoveIcon: !isDefault,
+                                // showRemoveIcon: showRemoveIcon ? showUploadButton: false,
                             }}
                             beforeUpload={beforeUpload}
                             multiple={multiple ? true : false}
@@ -151,6 +145,7 @@ const ImageUpload = ({
                                 ? null
                                 : uploadButton}
                         </Upload>
+                        </Item>
                     }
                     {!fileList?.length &&
                         isDetailPage &&
@@ -162,7 +157,7 @@ const ImageUpload = ({
                     ) : (
                         ''
                     )}
-                </div>
+                
             </div>
 
             <Modal

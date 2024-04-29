@@ -11,16 +11,54 @@ import ButtonComponent from '../../../../../../components/button/button';
 import toast from 'react-hot-toast';
 import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import dayjs from 'dayjs';
+import ImageUpload from '../../../../../../components/imageUpload/imageUpload';
+import { useGetAirlineImage } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
-const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
+const FormComponent = ({
+	isReadOnly,
+	type,
+	closeModal,
+	initialValue,
+	handleSubmit,
+	isLoading,
+	form,
+	fileList,
+	setFileList,
+	isUploadDisable,
+	setIsUploadDisable,
+}) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
-
+	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
+
+	const watchOtp = Form?.useWatch('threeLetterCode', form);
+	const getAirlineImageHandler = {
+		onSuccess: (data) => {
+			if (data?.data?.value) {
+				setFileList([{ url: data?.data?.value }]);
+				form.setFieldsValue({
+					url: data?.data?.value,
+				});
+				setIsDefault(true);
+			} else {
+				setFileList([]);
+			}
+			setIsUploadDisable(false);
+		},
+		onError: (error) => {
+			setIsDefault(false);
+		},
+	};
+
+	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineImage(
+		Array.isArray(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
+		getAirlineImageHandler
+	);
 
 	const handleValidFrom = (dateString) => {
 		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
@@ -50,6 +88,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	const isNotEditable = type === 'edit';
 
 	const onFinishHandler = (value) => {
+		!isDefault && (value.url = fileList?.[0]?.url);
 		handleSubmit(value);
 	};
 
@@ -58,16 +97,25 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 		if (initialValue) {
 			form.setFieldsValue(initialValue);
 		}
+		if (initialValue) {
+			form.setFieldsValue(initialValue);
+		}
 	}, [initialValue]);
 
+	useEffect(() => {
+		if (Array.isArray(watchOtp) ? watchOtp?.join('')?.length < 3 : watchOtp?.length < 3) {
+			setFileList([]);
+			setIsDefault(false);
+			setIsUploadDisable(true);
+			form.setFieldsValue({
+				url: null,
+			})
+		}
+	}, [watchOtp]);
 
 	return (
 		<div key={initialValue?.id}>
-			<Form
-				form={form}
-				layout="vertical"
-				onFinish={onFinishHandler}
-			>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="airline_form_container">
 					<div className="airline_form_inputfields">
 						<InputField
@@ -77,7 +125,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							placeholder={!isReadOnly && 'Enter the airline name'}
 							className="custom_input"
 							disabled={isReadOnly}
-							// required
+							required
 						/>
 						<OtpField
 							otpLength={2}
@@ -93,6 +141,19 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							disabled={isReadOnly || isNotEditable}
 							required
 						/>
+						{type !== 'edit' && !isReadOnly && (
+								<ImageUpload 
+									{...{
+										fileList,
+										setFileList,
+										isDefault: isDefault,
+										isCircle: true,
+										disabled: isUploadDisable,
+										name:"url",
+										label:"Airline logo"
+									}}
+								/>
+						)}
 					</div>
 					<div className="airline_form_inputfields">
 						<CustomSelect
@@ -161,7 +222,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							name="phoneNumber"
 							max={20}
 							min={10}
-							pattern='^[0-9]+$'
+							pattern="^[0-9]+$"
 							placeholder={!isReadOnly && 'Enter your Phone No.'}
 							className="custom_input"
 							disabled={isReadOnly}
@@ -207,7 +268,11 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 									title="Cancel"
 									type="filledText"
 									className="custom_button_cancel"
-									onClick={closeModal}
+									onClick={() => {
+										setFileList([]);
+										setIsUploadDisable(true);
+										closeModal();
+									}}
 									disabled={isLoading}
 								/>
 								<ButtonComponent
