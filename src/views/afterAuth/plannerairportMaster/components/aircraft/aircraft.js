@@ -260,18 +260,7 @@ const Aircrafts = () => {
 	return (
 		<>
 			<SocketEventListener refetch={getPlannerAircraftRefetch} apiName={`${GET_PLANNER_AIRCRAFT}`} />
-			{(isPlannerAircraftLoading || isPlannerAircraftFetching) && (
-				<PageLoader
-					loading={
-						isPlannerAircraftLoading ||
-						isAddAircraftLoading ||
-						isDeleteAircraftLoading ||
-						isUpdateAircraftLoading ||
-						isPlannerAircraftFetching
-					}
-				/>
-			)}
-			{Boolean(aircraftData?.length) ? (
+			{isPlannerAircraftLoading || isAddAircraftLoading || isDeleteAircraftLoading || isUpdateAircraftLoading || isPlannerAircraftFetching ? <PageLoader loading={true} /> : Boolean(aircraftData?.length) ? (
 				<Common_table
 					columns={columns}
 					data={aircraftData}

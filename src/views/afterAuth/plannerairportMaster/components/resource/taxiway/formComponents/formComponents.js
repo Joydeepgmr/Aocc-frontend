@@ -5,10 +5,12 @@ import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import { useRunwayDropdown } from '../../../../../../../services/planairportmaster/resources/runway/runway';
+import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, runwayDropdownData }) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState("");
@@ -16,6 +18,14 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	const [isUnavailableFrom, setIsUnavailableFrom] = useState(false);
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: runwayDropdownData } = useRunwayDropdown({ onError });
 
 	const SelectRunwayData = useMemo(() => {
 		return runwayDropdownData.map((data) => {
