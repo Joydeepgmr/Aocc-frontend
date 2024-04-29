@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import {
-	useCountriesDropdown,
 	useGetGlobalAirline,
-	useGlobalAirportDropdown,
 	useUploadCSVGlobalAirline,
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineTable from '../airlineTable/airlineTable';
@@ -22,8 +20,7 @@ const AirlineTab = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
-	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
-	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
+	
 	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getGlobalAirlineRefetch } = useGetGlobalAirline({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onUpload, onDownload });
 
@@ -71,7 +68,7 @@ const AirlineTab = () => {
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
 						loading={isFetching}
-						{...{ createProps, setCreateProps, countryDropdownData, airportDropdownData }}
+						{...{ createProps, setCreateProps }}
 					/>
 				}
 				data={data?.pages}

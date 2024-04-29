@@ -1,27 +1,38 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import NumericField from '../numericField/numericField';
-import './licenseSetupForm.scss';
 import ImageUpload from '../../../../../components/imageUpload/imageUpload';
+import { useGlobalAirportDropdown, useCountriesDropdown } from '../../../../../services';
+import './licenseSetupForm.scss';
 
-const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }) => {
+const LicenseSetupForm = ({ resetCodes, setResetCodes }) => {
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
-	// for image
+
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
 	const [fileList, setFileList] = useState([]);
 
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
+	const { data: countryDropdownData } = useCountriesDropdown({ onError });
+
 	const SelectAirportData = useMemo(() => {
-		return airportDropdownData.map((data) => {
+		return airportDropdownData?.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }
 		})
 	}, [airportDropdownData]);
 	const SelectCountryData = useMemo(() => {
-		return countryDropdownData.map((data) => {
+		return countryDropdownData?.map((data) => {
 			return { label: data.name, value: data.name, id: data.name }
 		})
 	}, [countryDropdownData]);
