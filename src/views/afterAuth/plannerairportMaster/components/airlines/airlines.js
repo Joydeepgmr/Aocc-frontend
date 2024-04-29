@@ -35,6 +35,8 @@ const Airlines = () => {
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [isUploadDisable, setIsUploadDisable] = useState(true);
+	const [fileList, setFileList] = useState([]);
 	const [form] = Form.useForm();
 
 	const getAirlineHandler = {
@@ -89,8 +91,11 @@ const Airlines = () => {
 	const handleAddAirlineSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-airline');
 		toast.success(data?.message);
+		form.resetFields();
 		setRowData({});
 		setIsAddModalOpen(false);
+		setFileList([]);
+		setIsUploadDisable(true);
 	};
 
 	const handleAddAirlineError = (error) => {
@@ -387,8 +392,9 @@ const Airlines = () => {
 
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
-				width="80vw"
 				closeModal={() => {
+					setFileList([])
+					setIsUploadDisable(true)
 					setIsAddModalOpen(false);
 					setRowData({});
 					form.resetFields();
@@ -410,6 +416,10 @@ const Airlines = () => {
 							form.resetFields();
 						}}
 						handleSubmit={handleAddAirline}
+						fileList={fileList}
+						setFileList={setFileList}
+						isUploadDisable={isUploadDisable}
+						setIsUploadDisable={setIsUploadDisable}
 					/>
 				</div>
 			</ModalComponent>

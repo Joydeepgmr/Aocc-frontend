@@ -4,6 +4,7 @@
     font-weight: 600;
     font-size: 2.4rem;
      width: 100%;
+     @include disableScroll;
     .ant-modal-content {
         max-height: 80vh;
         overflow: scroll;

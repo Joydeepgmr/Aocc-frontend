@@ -1,13 +1,10 @@
-import { PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Modal, Upload, message } from 'antd';
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import './imageUpload.scss'
-// import {
-//     getAdminInfo,
-//     getExtensionFromUrl,
-//     getFileNameFromUrl,
-// } from 'utils/UtilsIndex';
+import { PlusOutlined } from '@ant-design/icons';
+import { Modal, Upload, message, Form } from 'antd';
+import React, { useState } from 'react';
+import { UPLOAD_AIRLINE_IMAGE } from '../../api/endpoints';
+import { localStorageKey } from '../../keys';
+import './imageUpload.scss';
+import toast from 'react-hot-toast';
 const acceptedImages = [
     'png',
     'jpg',
@@ -26,33 +23,32 @@ const getBase64 = (file) =>
     });
 
 const ImageUpload = ({
-    previewOpen,
-    setPreviewOpen,
-    previewImage,
-    setPreviewImage,
-    previewTitle,
-    setPreviewTitle,
     fileList,
     setFileList,
     multiple,
     isUserImage,
     label,
+    isDefault,
     defaultFileList,
-    showRemoveIcon = true,
+    showRemoveIcon,
     showUploadButton = true,
+    isCircle = false,
+    disabled,
+    required,
     isMultipleForm,
     isDetailPage,
     length = 1,
+    name,
 }) => {
-    const dispatch = useDispatch();
+    const { Item } = Form;
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewTitle, setPreviewTitle] = useState('');
+    const [previewImage, setPreviewImage] = useState('');
+    const token = localStorage.getItem(localStorageKey.AUTH_TOKEN);
     const handleCancel = () => setPreviewOpen(false);
     const onRemoveFile = async (file) => {
-        const url = file?.url;
-        // if (url) {
-        //     await dispatch(removeFileReducer({ url }));
-        //     const newFileList = fileList.filter((item) => item?.uid !== file?.uid);
-        //     setFileList(newFileList);
-        // }
+        const newFileList = fileList.filter((item) => item?.uid !== file?.uid);
+        setFileList(newFileList);
     };
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -92,64 +88,53 @@ const ImageUpload = ({
         return isLt1M;
     };
     const handleChange = ({ file, fileList: newFileList }) => {
-        if (file?.response?.data?.length) {
-            const updatedFIleList = [...fileList];
+        if(file?.error){
+            setFileList([]);
+            toast.error(file?.response?.message);
+        }
+        else if (file?.response) {
+            const updatedFileList = [...fileList];
             const fileObj = {
-                url: file?.response?.data?.[0]?.location,
-                name: file?.response?.data?.[0]?.originalName,
-                type: file?.response?.data?.[0]?.contentType,
+                url: file?.response?.data?.upload,
+                name: file?.name,
             };
-            updatedFIleList[fileList?.length - 1] = fileObj;
-            setFileList(updatedFIleList);
-        } else {
+            updatedFileList[fileList?.length - 1] = fileObj;
+            setFileList(updatedFileList);
+        }
+        else {
             setFileList(newFileList);
         }
     };
-    // useEffect(() => {
-    //     if (!isMultipleForm) {
-    //         let defaultFiles = [];
-    //         if (defaultFileList?.length) {
-    //             defaultFiles = defaultFileList?.map((file) => {
-    //                 if (file?.url) {
-    //                     if (!file?.type) {
-    //                         const type = getExtensionFromUrl(file?.url);
-    //                         return { ...file, type };
-    //                     }
-    //                     return file;
-    //                 } else {
-    //                     return {
-    //                         url: file,
-    //                         name: getFileNameFromUrl(file),
-    //                         type: getExtensionFromUrl(file),
-    //                     };
-    //                 }
-    //             });
-    //             setFileList(defaultFiles);
-    //         } else {
-    //             setFileList([]);
-    //         }
-    //     }
-    // }, [defaultFileList]);
-    // const { token } = getAdminInfo();
     return (
         <>
             <div className='image-upload-container'>
-                {label && <div>{label}</div>}
-                <div>
                     {showUploadButton &&
+                        <Item
+                        label={label}
+                        name={name}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'This field is required',
+                          },
+                        ]}
+                      >
                         <Upload
-                            style={{height:'10rem'}}
-                            listType='picture-card'
+                        name={name}
+                        disabled={disabled}
+                            style={{ height: '10rem' }}
+                            listType={isCircle ? 'picture-circle' : 'picture-card'}
                             fileList={fileList}
                             accept="image/png, image/jpg, image/jpeg, image/webp, image/svg, image/svg+xml"
-                            action={process.env.baseURL + "/files/upload-file"}
-                            // headers={{
-                            //     'access-control-allow-origin': '*',
-                            //     authorization: `Bearer ${token}`,
-                            // }}
+                            action={process.env.baseURL + UPLOAD_AIRLINE_IMAGE}
+                            headers={{
+                                'access-control-allow-origin': '*',
+                                Authorization: `Bearer ${token}`,
+                            }}
                             onChange={handleChange}
                             showUploadList={{
-                                showRemoveIcon: showRemoveIcon ? showUploadButton : false,
+                                showRemoveIcon: !isDefault,
+                                // showRemoveIcon: showRemoveIcon ? showUploadButton: false,
                             }}
                             beforeUpload={beforeUpload}
                             multiple={multiple ? true : false}
@@ -160,6 +145,7 @@ const ImageUpload = ({
                                 ? null
                                 : uploadButton}
                         </Upload>
+                        </Item>
                     }
                     {!fileList?.length &&
                         isDetailPage &&
@@ -171,7 +157,7 @@ const ImageUpload = ({
                     ) : (
                         ''
                     )}
-                </div>
+                
             </div>
 
             <Modal
