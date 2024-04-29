@@ -54,7 +54,7 @@ const DailySchedule = ({ tab }) => {
 	const handleGetSeasonalSuccess = (data) => {
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
-				return acc.concat(page.data?.flightSchedule || []);
+				return acc.concat(page.data || []);
 			}, []);
 
 			setSeasonalData([...newData]);
@@ -71,7 +71,7 @@ const DailySchedule = ({ tab }) => {
 		fetchNextPage,
 		refetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
-	
+
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -260,31 +260,31 @@ const DailySchedule = ({ tab }) => {
 	const columns = [
 		{
 			title: '2L',
-			dataIndex: 'iataCode',
-			key: 'iataCode',
+			dataIndex: 'airline',
+			key: 'airline',
 			align: 'center',
-			render: (text) => text ?? '-',
+			render: (airline) => airline?.twoLetterCode ?? '-',
 		},
 		{
 			title: '3L',
-			dataIndex: 'icaoCode',
-			key: 'icaoCode',
+			dataIndex: 'airline',
+			key: 'airline',
 			align: 'center',
-			render: (text) => text ?? '-',
+			render: (airline) => airline?.threeLetterCode ?? '-',
 		},
 		{
 			title: 'FLNR',
-			dataIndex: 'FLIGHTNO',
-			key: 'FLIGHTNO',
+			dataIndex: 'flightNo',
+			key: 'flightNo',
 			align: 'center',
-			render: (FLIGHTNO) => FLIGHTNO ?? '-',
+			render: (flightNo) => flightNo ?? '-',
 		},
 		{
 			title: 'FLDT',
-			dataIndex: 'PDATE',
-			key: 'PDATE',
+			dataIndex: 'date',
+			key: 'date',
 			align: 'center',
-			render: (DATE) => ConvertToDateTime(DATE, 'YYYY-MM-DD') ?? '-',
+			render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
 		},
 		{
 			title: 'CSGN',
@@ -298,14 +298,14 @@ const DailySchedule = ({ tab }) => {
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
-			render: (natureCode) => natureCode ?? '-',
+			render: (natureCode) => natureCode?.natureCode ?? '-',
 		},
 		{
 			title: 'REG',
-			dataIndex: 'registration',
-			key: 'registration',
+			dataIndex: 'aircraft',
+			key: 'aircraft',
 			align: 'center',
-			render: (registration) => registration ?? '-',
+			render: (aircraft) => aircraft?.registration ?? '-',
 		},
 		{
 			title: flightType == 'arrival' ? 'ORG' : 'DES',
@@ -317,19 +317,18 @@ const DailySchedule = ({ tab }) => {
 		index === '1'
 			? {
 					title: 'STA',
-					dataIndex: 'STA',
-					key: 'STA',
+					dataIndex: 'sta',
+					key: 'sta',
 					align: 'center',
-					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+					render: (sta) => sta ?? '-',
 				}
 			: {
 					title: 'STD',
-					dataIndex: 'STD',
-					key: 'STD',
+					dataIndex: 'std',
+					key: 'std',
 					align: 'center',
-					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+					render: (std) => std ?? '-',
 				},
-		{ title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
 			key: 'actions',
@@ -378,7 +377,7 @@ const DailySchedule = ({ tab }) => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
+			children: Boolean(seasonalData?.length) ? (
 				<Arrival data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()
@@ -387,7 +386,7 @@ const DailySchedule = ({ tab }) => {
 		{
 			key: '2',
 			label: 'Departure',
-			children: Boolean(fetchedSeasonalPlans?.pages[0]?.data?.flightSchedule?.length) ? (
+			children: Boolean(seasonalData?.length) ? (
 				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()

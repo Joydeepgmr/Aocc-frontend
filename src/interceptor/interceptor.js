@@ -4,11 +4,11 @@ import { localStorageKey } from '../keys';
 let retryCount = 0;
 
 export const axiosInstance = Axios.create({
-	baseURL: process.env.baseURL
-	// baseURL: "https://zqfb5jkt-5554.inc1.devtunnels.ms/frms/api/v1",
+	baseURL: process.env.baseURL,
+	// baseURL: 'https://w2lk19wq-5554.inc1.devtunnels.ms/frms/api/v1',
 });
 
-console.log(process.env.baseURL, "base url");
+console.log(process.env.baseURL, 'base url');
 
 axiosInstance.interceptors.request.use(
 	async (config) => {
@@ -20,7 +20,12 @@ axiosInstance.interceptors.request.use(
 		}
 
 		// Remove keys with null values from the request payload
-		if (config.method.toUpperCase() !== 'GET' && config.data && typeof config.data === 'object' && !config?.url?.includes("bulk")) {
+		if (
+			config.method.toUpperCase() !== 'GET' &&
+			config.data &&
+			typeof config.data === 'object' &&
+			!config?.url?.includes('bulk')
+		) {
 			config.data = removeNullValues(config.data);
 		}
 
@@ -52,7 +57,7 @@ axiosInstance.interceptors.response.use(
 const removeNullValues = (obj) => {
 	const newObj = {};
 	for (const key in obj) {
-		if (obj[key] !== null && obj[key] !== "" && obj[key] !== undefined) {
+		if (obj[key] !== null && obj[key] !== '' && obj[key] !== undefined) {
 			newObj[key] = obj[key];
 		}
 	}
