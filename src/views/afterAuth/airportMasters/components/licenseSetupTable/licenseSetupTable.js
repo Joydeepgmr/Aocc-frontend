@@ -11,7 +11,7 @@ import { usePostLicenseAirport } from '../../../../../services/airportMasters/ai
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 
-const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData, loading }) => {
+const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -143,7 +143,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				className="custom_modal"
 			>
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
-					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData, resetCodes, setResetCodes }}/>
+					<LicenseSetupForm {...{ resetCodes, setResetCodes }}/>
 					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent
