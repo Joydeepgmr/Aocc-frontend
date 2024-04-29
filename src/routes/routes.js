@@ -15,9 +15,11 @@ import Plans from '../views/afterAuth/plans/plans';
 import UserAccess from '../views/afterAuth/userAccess/userAccess';
 import Components from '../views/beforeAuth/components';
 import Login from '../views/beforeAuth/login/login';
-import SecurityApproval from "../views/afterAuth/securityApproval/securityApproval";
+import SecurityApproval from '../views/afterAuth/securityApproval/securityApproval';
 import CDM from '../views/afterAuth/cdm/cdm';
 import Vendor from '../views/afterAuth/Vendor/Vendor';
+import FidsDashboard from '../views/afterAuth/fids/fidsDashboard/fidsDashboard';
+import FidsResources from '../views/afterAuth/fids/fidsResources/fidsResources';
 
 // ----------------------------------------------------------------------
 
@@ -63,35 +65,48 @@ export default function Router() {
 						{ path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
 						{ path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
 						{ path: Pathname.CDM, element: <RouteHOC element={<CDM />} /> },
-						
 					],
 				},
 				{
 					path: '*',
 					element: <NotFound replace />,
 				},
-                {
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.SECURITY_OFFICER, element: <RouteHOC element={<SecurityApproval />} /> },
-                    ],
-                },
 				{
-                    path: '',
-                    element: (
-                        <Suspense fallback={<Loader />}>
-                            <PrivateOutlet />
-                        </Suspense>
-                    ),
-                    children: [
-                        { path: Pathname.VENDOR, element: <RouteHOC element={<Vendor />} /> },
-                    ],
-                },
+					path: '',
+					element: (
+						<Suspense fallback={<Loader />}>
+							<PrivateOutlet />
+						</Suspense>
+					),
+					children: [
+						{ path: Pathname.SECURITY_OFFICER, element: <RouteHOC element={<SecurityApproval />} /> },
+					],
+				},
+				{
+					path: '',
+					element: (
+						<Suspense fallback={<Loader />}>
+							<PrivateOutlet />
+						</Suspense>
+					),
+					children: [{ path: Pathname.VENDOR, element: <RouteHOC element={<Vendor />} /> }],
+				},
+				{
+					path: '',
+					element: (
+						<Suspense fallback={<Loader />}>
+							<PrivateOutlet />
+						</Suspense>
+					),
+					children: [
+						{
+							path: Pathname.FIDS_DASHBOARD,
+							element: <RouteHOC element={<FidsDashboard />} />,
+							index: true,
+						},
+						{ path: Pathname.FIDS_RESOURCES, element: <RouteHOC element={<FidsResources />} /> },
+					],
+				},
 			],
 		},
 	]);

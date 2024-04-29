@@ -24,6 +24,7 @@ import {
 } from './cdm/cdmServices';
 
 import { useDummyApi } from './dummyApi/dummyApi';
+import { useBaggageBeltDropdown, useCheckInDropdown, useTerminalDropdown } from './fids/fidsResources';
 
 import {
 	useGlobalAirport,
@@ -100,4 +101,7 @@ export {
 	useUpdateCdmTypes,
 	useUpdateCdmTurnAround,
 	useGetAllCdmTurnAround,
+	useBaggageBeltDropdown,
+	useCheckInDropdown,
+	useTerminalDropdown,
 };

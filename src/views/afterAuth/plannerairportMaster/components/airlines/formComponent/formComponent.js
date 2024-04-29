@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, memo } from 'react';
 import Date from '../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
@@ -88,6 +88,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 
 	useEffect(() => {
 		form.resetFields();
+		if (initialValue) {
+			form.setFieldsValue(initialValue);
+		}
 		if (initialValue) {
 			form.setFieldsValue(initialValue);
 		}
@@ -210,7 +213,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							name="phoneNumber"
 							max={20}
 							min={10}
-							pattern="^[0-9]+$"
+							pattern='^[0-9]+$'
 							placeholder={!isReadOnly && 'Enter your Phone No.'}
 							className="custom_input"
 							disabled={isReadOnly}
@@ -275,4 +278,4 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 	);
 };
 
-export default FormComponent;
+export default memo(FormComponent);

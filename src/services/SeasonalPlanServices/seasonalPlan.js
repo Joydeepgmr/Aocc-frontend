@@ -5,7 +5,7 @@ import {
 	EDIT_SEASONAL_PLANS_DEPARTURE,
 	GET_SEASONAL_PLANS,
 	POST_SEASONAL_PLANS,
-	UPLOAD_CSV_BULK
+	UPLOAD_CSV_BULK,
 } from '../../api';
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
 import { Get, Patch, Post } from '../HttpServices/HttpServices';

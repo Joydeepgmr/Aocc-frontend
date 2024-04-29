@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState,memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
@@ -8,6 +9,8 @@ import CustomSelect from '../../../../../../../components/select/select';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import { useGateDropdown } from '../../../../../../../services/planairportmaster/resources/gates/gates';
+import { useTaxiwayDropdown } from '../../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import './formComponents.scss';
 
 const FormComponent = ({
@@ -17,8 +20,6 @@ const FormComponent = ({
 	initialValues,
 	isEdit,
 	isReadOnly,
-	gateDropdownData,
-	taxiwayDropdownData,
 }) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
@@ -27,6 +28,15 @@ const FormComponent = ({
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState('');
 	isEdit && (initialValues['gate'] = initialValues?.gate?.id);
 	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: gateDropdownData} = useGateDropdown({ onError });
+	const { data: taxiwayDropdownData } = useTaxiwayDropdown({ onError });
 
 	const SelectGateData = useMemo(() => {
 		return gateDropdownData.map((data) => {

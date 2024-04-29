@@ -32,7 +32,6 @@ import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
 import './seasonal.scss';
 
-
 const Seasonal = ({ tab }) => {
 	const queryClient = useQueryClient();
 	const [seasonalData, setSeasonalData] = useState([]);
@@ -66,12 +65,18 @@ const Seasonal = ({ tab }) => {
 	const handleGetSeasonalError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
+	const handleChange = (key) => {
+		setIndex(key);
+		key === '1' && setFlightType('arrival');
+		key === '2' && setFlightType('departure');
+	};
+
 	const {
 		data: fetchedSeasonalPlans,
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
-		refetch: getSeasonalPlanRefetch
+		refetch: getSeasonalPlanRefetch,
 	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
 
 	const openModal = () => {
@@ -100,12 +105,6 @@ const Seasonal = ({ tab }) => {
 		setIsEditModalOpen(false);
 		setRowData({});
 		form.resetFields();
-	};
-
-	const handleChange = (key) => {
-		setIndex(key);
-		key === '1' && setFlightType('arrival');
-		key === '2' && setFlightType('departure');
 	};
 
 	const handleDropdownItemClick = (value) => {
@@ -325,22 +324,28 @@ const Seasonal = ({ tab }) => {
 			align: 'center',
 			render: (registration) => registration ?? '-',
 		},
-		{ title: flightType == 'arrival' ? 'ORG' : 'DES', dataIndex: 'origin', key: 'origin', align: 'center', render: (origin) => origin ?? '-' },
+		{
+			title: flightType == 'arrival' ? 'ORG' : 'DES',
+			dataIndex: 'origin',
+			key: 'origin',
+			align: 'center',
+			render: (origin) => origin ?? '-',
+		},
 		index === '1'
 			? {
-				title: 'STA',
-				dataIndex: 'STA',
-				key: 'STA',
-				align: 'center',
-				render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
-			}
+					title: 'STA',
+					dataIndex: 'STA',
+					key: 'STA',
+					align: 'center',
+					render: (STA) => (STA !== null ? STA?.split('T')[1].slice(0, 5) : '-'),
+				}
 			: {
-				title: 'STD',
-				dataIndex: 'STD',
-				key: 'STD',
-				align: 'center',
-				render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
-			},
+					title: 'STD',
+					dataIndex: 'STD',
+					key: 'STD',
+					align: 'center',
+					render: (STD) => (STD !== null ? STD?.split('T')[1].slice(0, 5) : '-'),
+				},
 		// { title: 'POS', dataIndex: 'pos', key: 'pos', align: 'center', render: (pos) => pos ?? '-' },
 		{
 			title: 'Actions',
@@ -409,17 +414,22 @@ const Seasonal = ({ tab }) => {
 
 	return (
 		<>
-			<SocketEventListener refetch={getSeasonalPlanRefetch} apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`} />
-			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? <PageLoader loading={true} /> : 
-			<div className="main_TableContainer">
-				<div className="top_container">
-					<div>
-						<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-							Flight Schedule Planning
-						</CustomTypography>
-					</div>
-					<div className="icon_container">
-						{/* <Button
+			<SocketEventListener
+				refetch={getSeasonalPlanRefetch}
+				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
+			/>
+			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? (
+				<PageLoader loading={true} />
+			) : (
+				<div className="main_TableContainer">
+					<div className="top_container">
+						<div>
+							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+								Flight Schedule Planning
+							</CustomTypography>
+						</div>
+						<div className="icon_container">
+							{/* <Button
 							onClick={() => {
 								alert('Filter Icon');
 							}}
@@ -428,20 +438,19 @@ const Seasonal = ({ tab }) => {
 							icon={Filter}
 							alt="arrow icon"
 						/> */}
-						<InputField
-							label="search"
-							name="search"
-							placeholder="Search"
-							className="custom_inputField"
-							warning="Required field"
-							type="search"
-						/>
+							<InputField
+								label="search"
+								name="search"
+								placeholder="Search"
+								className="custom_inputField"
+								warning="Required field"
+								type="search"
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="table_container">
-					<div>
+					<div className="table_container">
 						<CustomTabs
-							defaultActiveKey="1"
+							defaultActiveKey={index}
 							items={tabItems}
 							onChange={handleChange}
 							type="simple"
@@ -449,7 +458,7 @@ const Seasonal = ({ tab }) => {
 						/>
 					</div>
 				</div>
-			</div>}
+			)}
 
 			{/* modals */}
 			<ModalComponent

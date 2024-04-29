@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import * as userType from "../../utils/roles";
+import * as userType from '../../utils/roles';
 import gmrLogo from '../../assets/logo/gmr-logo.png';
 import temperatureLogo from '../../assets/logo/sun.svg';
 import windLogo from '../../assets/logo/wind.svg';
@@ -9,7 +9,6 @@ import user from '../../assets/logo/user.png';
 import line from '../../assets/logo/line.svg';
 import { roleBasedNav } from './navData';
 import './topNav.scss';
-
 
 const TopNav = ({ data }) => {
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
@@ -66,22 +65,24 @@ const TopNav = ({ data }) => {
 					</div>
 				</div>
 				<div className="nav_right_section">
-				{data?.role?.name !== userType.SECURITY_OFFICER && data?.role?.name !== userType.VENDOR && <div className="weather_details">
-						<div className="temperature_details">
-							<img src={temperatureLogo} />
-							<div>
-								<div>Sunny</div>
-								<div>19*C</div>
+					{(data?.role?.name === userType.PLANNER || data?.role?.name === userType.CDM) && (
+						<div className="weather_details">
+							<div className="temperature_details">
+								<img src={temperatureLogo} />
+								<div>
+									<div>Sunny</div>
+									<div>19*C</div>
+								</div>
+							</div>
+							<div className="wind_details">
+								<img src={windLogo} />
+								<div>
+									<div>Wind Speed</div>
+									<div>85*3.7 kts</div>
+								</div>
 							</div>
 						</div>
-						<div className="wind_details">
-							<img src={windLogo} />
-							<div>
-								<div>Wind Speed</div>
-								<div>85*3.7 kts</div>
-							</div>
-						</div>
-					</div>}
+					)}
 					<div className="vertical_separation">
 						<img src={line}></img>
 					</div>
@@ -103,12 +104,14 @@ const TopNav = ({ data }) => {
 			</div>
 			{isSettingCardOpen && (
 				<>
-				<div className="setting_card--BackDrop" onClick={() => setIsSettingCardOpen(false)}></div>
-				<div className="setting_card">
-					{localStorage.getItem('name') === 'Planner' && <p onClick={manageAccessHandler}>Manage Access</p>}
-					<div className="line"></div>
-					<p onClick={logoutHandler}>Logout</p>
-				</div>
+					<div className="setting_card--BackDrop" onClick={() => setIsSettingCardOpen(false)}></div>
+					<div className="setting_card">
+						{localStorage.getItem('name') === 'Planner' && (
+							<p onClick={manageAccessHandler}>Manage Access</p>
+						)}
+						<div className="line"></div>
+						<p onClick={logoutHandler}>Logout</p>
+					</div>
 				</>
 			)}
 		</>
