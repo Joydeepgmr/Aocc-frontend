@@ -11,8 +11,17 @@ import CustomSelect from '../../../../../components/select/select';
 import { SelectFlightType } from '../../../userAccess/userAccessData';
 import './formComponent.scss';
 
-
-const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit, airlineDropdownData, natureCodeDropdownData, aircraftDropdownData }) => {
+const FormComponent = ({
+	form,
+	handleButtonClose,
+	handleSaveButton,
+	type,
+	initialValues,
+	isEdit,
+	airlineDropdownData,
+	natureCodeDropdownData,
+	aircraftDropdownData,
+}) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [isDate, setIsDate] = useState(false);
 	const [isStart, setIsStart] = useState(false);
@@ -142,14 +151,14 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						/>
 						<InputField
 							label="Flight Number"
-							name="FLIGHTNO"
-							pattern='^[0-9]+$'
+							name="flightNo"
+							pattern="^[0-9]+$"
 							required
 							min={2}
 							max={5}
 							placeholder="Enter the airport name"
 							className="custom_input"
-							patternWarning={"Please enter only numbers"}
+							patternWarning={'Please enter only numbers'}
 						/>
 						<Date
 							label="Date"
@@ -160,12 +169,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							onChange={handleDateChange}
 							required={!startDate || !endDate}
 						/>
-						{/* <InputField
-							label="Call Sign"
-							name="callSign"
-							placeholder="Filled Text"
-							className="custom_input"
-						/> */}
 					</div>
 					<div className="seasonal_form_inputfields">
 						<CustomSelect
@@ -176,65 +179,54 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							placeholder={'Select Nature Code'}
 							className="select"
 						/>
-						{type == 1 ? (
-							<InputField
-								label="Origin Airport"
-								name="origin"
-								placeholder="Filled Text"
-								pattern='^[a-zA-Z]+$'
-								required
-								max={3}
-								className="custom_input"
-							/>
-						) : (
-							<InputField
-								label="Destination Airport"
-								name="destination"
-								max={3}
-								required
-								placeholder="Filled Text"
-								pattern='^[a-zA-Z]+$'
-								className="custom_input"
-							/>
-						)}
+
+						<InputField
+							label={type == 1 ? 'Origin Airport' : 'Destination Airport'}
+							name="origin"
+							max={3}
+							required
+							placeholder="Filled Text"
+							pattern="^[a-zA-Z]+$"
+							className="custom_input"
+						/>
+
 						{type == 1 ? (
 							<InputField
 								label="STA"
-								name="STA"
-								type='time'
+								name="sta"
+								type="time"
 								placeholder="Filled Text"
-								required
+								required={type == 1}
 								className="custom_input"
 							/>
 						) : (
 							<InputField
 								label="STD"
-								name="STD"
-								type='time'
+								name="std"
+								type="time"
 								placeholder="Filled Text"
-								required
+								required={type != 1}
 								className="custom_input"
 							/>
 						)}
 					</div>
 					<div className="seasonal_form_inputfields">
-						{/* <InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input" /> */}
 						<CustomSelect
 							SelectData={SelectAircraftData}
 							label="Aircraft"
-							name="AircraftId"
+							name="aircraftId"
 							required
 							placeholder={'Select Aircraft'}
 							className="select"
 						/>
 						<CustomSelect
-						SelectData={SelectFlightType}
-						placeholder={'Types of Flight'}
-						className="custom_input"
-						required
-						label="Flight Type"
-						name="flightType"
-					/>
+							SelectData={SelectFlightType}
+							placeholder={'Types of Flight'}
+							className="custom_input"
+							required
+							label="Flight Type"
+							name="type"
+						/>
 						<CheckBoxField
 							name="toh"
 							label="Towing to Hanger"
@@ -249,6 +241,8 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							name="duration"
 							placeholder="Filled text"
 							className="custom_input"
+							pattern="^[0-9]+$"
+							patternWarning={'Please enter only numbers'}
 						/>
 					</div>
 
@@ -275,12 +269,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								<InputField
 									label="Call Sign"
 									name="callSign"
-									placeholder="Filled Text"
-									className="custom_input"
-								/>
-								<InputField
-									label="Nature Code"
-									name="natureCode"
 									placeholder="Filled Text"
 									className="custom_input"
 								/>

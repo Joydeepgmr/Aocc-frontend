@@ -103,7 +103,7 @@ export const SelectTypeOfUse = [
 	{ id: 3, label: 'Cargo', value: 'cargo' },
 	{ id: 4, label: 'Personal', value: 'personal' },
 	{ id: 5, label: 'Single', value: 'single' },
-]
+];
 export const SelectAcBodyType = [
 	{ id: 1, label: 'Wide-Body', value: 'wide body' },
 	{ id: 2, label: 'Commuter', value: 'commuter' },
@@ -111,12 +111,12 @@ export const SelectAcBodyType = [
 	{ id: 4, label: 'Airbus', value: 'airbus' },
 	{ id: 4, label: 'Airplane', value: 'airplane' },
 	{ id: 4, label: 'Jets', value: 'jets' },
-	{ id: 4, label: 'Piston', value: 'piston' }
-]
+	{ id: 4, label: 'Piston', value: 'piston' },
+];
 export const SelectEngineType = [
 	{ id: 1, label: 'Jet', value: 'jet' },
-	{ id: 2, label: 'Turbopop', value: 'turbopop' }
-]
+	{ id: 2, label: 'Turbopop', value: 'turbopop' },
+];
 export const TerminalData = [
 	{
 		id: '1',
@@ -136,8 +136,8 @@ export const TerminalData = [
 ];
 export const AirlineTypeData = [
 	{ id: '1', label: 'Domestic', value: 'domestic' },
-	{ id: '1', label: 'International', value: 'international' }
-]
+	{ id: '1', label: 'International', value: 'international' },
+];
 export const dummyData = [
 	{
 		key: '1',
@@ -190,12 +190,12 @@ export const SelectFlightType = [
 	{
 		id: '1',
 		label: 'International',
-		value: 'INTERNATIONAL',
+		value: 'international',
 	},
 	{
 		id: '2',
-		label: 'National',
-		value: 'NATIONAL',
+		label: 'Domestic',
+		value: 'domestic',
 	},
 ];
 
