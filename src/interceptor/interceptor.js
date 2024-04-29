@@ -20,12 +20,7 @@ axiosInstance.interceptors.request.use(
 		}
 
 		// Remove keys with null values from the request payload
-		if (
-			config.method.toUpperCase() !== 'GET' &&
-			config.data &&
-			typeof config.data === 'object' &&
-			!config?.url?.includes('bulk')
-		) {
+		if (config.method.toUpperCase() !== 'GET' && config.data && typeof config.data === 'object' && !config?.url?.includes("bulk") && !config?.url?.includes("upload")) {
 			config.data = removeNullValues(config.data);
 		}
 

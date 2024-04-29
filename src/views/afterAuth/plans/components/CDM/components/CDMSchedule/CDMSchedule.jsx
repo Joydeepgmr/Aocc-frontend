@@ -133,17 +133,18 @@ const DailySchedule = ({ tab }) => {
 	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
 	const handleSaveButton = (value) => {
 		const data = {
-			FLIGHTNO: value.FLIGHTNO,
-			START: ConvertIstToUtc(value.start ?? value.date),
-			END: ConvertIstToUtc(value.end ?? value.date),
-			callSign: value.callSign,
-			natureCode: value.natureCode,
-			origin: value.origin,
-			STA: value.STA,
-			STD: value.STD,
-			pos: value.pos,
-			registration: value.registration,
-			FREQUENCY: value.weeklySelect ?? [value.date.day()],
+			flightNo: value.flightNo,
+			start: ConvertIstToUtc(value.start ?? value.date)?.split('T')[0],
+			end: ConvertIstToUtc(value.end ?? value.date)?.split('T')[0],
+			airline: value?.airlineId,
+			natureCode: value?.natureCodeId,
+			sector: value.origin,
+			sta: value.sta,
+			std: value.std,
+			duration: value.duration,
+			aircraftId: value?.aircraftId,
+			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			type: value?.type,
 		};
 
 		data && postSeasonalPlans(data);
@@ -158,7 +159,7 @@ const DailySchedule = ({ tab }) => {
 	const handleEdit = (record) => {
 		record = {
 			...record,
-			date: record?.PDATE ? dayjs(record?.PDATE) : '',
+			date: record?.date ? dayjs(record?.date) : '',
 		};
 		setRowData(record);
 		openEditModal();
@@ -187,14 +188,18 @@ const DailySchedule = ({ tab }) => {
 	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler);
 	const handleEditSave = (value) => {
 		const data = {
-			FLIGHTNO: value.FLIGHTNO,
-			callSign: value.callSign,
-			natureCode: value.natureCode,
-			origin: value.origin,
-			STA: value.STA,
-			STD: value.STD,
-			pos: value.pos,
-			registration: value.registration,
+			flightNo: value.flightNo,
+			start: ConvertIstToUtc(value.start ?? value.date)?.split('T')[0],
+			end: ConvertIstToUtc(value.end ?? value.date)?.split('T')[0],
+			airline: value?.airlineId,
+			natureCode: value?.natureCodeId,
+			sector: value.origin,
+			sta: value.sta,
+			std: value.std,
+			duration: value.duration,
+			aircraftId: value?.aircraftId,
+			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			type: value?.type,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
 		index === '2' && editSeasonalPlanDeparture(data);

@@ -129,22 +129,21 @@ const Seasonal = ({ tab }) => {
 	};
 	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
 	const handleSaveButton = (value) => {
-		console.log(value, 'valueeeeeee');
 		const data = {
 			flightNo: value.flightNo,
-			start: ConvertIstToUtc(value.start ?? value.date),
-			end: ConvertIstToUtc(value.end ?? value.date),
+			start: ConvertIstToUtc(value.start ?? value.date)?.split('T')[0],
+			end: ConvertIstToUtc(value.end ?? value.date)?.split('T')[0],
 			airline: value?.airlineId,
 			natureCode: value?.natureCodeId,
-			sctor: value.origin,
+			sector: value?.origin,
 			sta: value.sta,
 			std: value.std,
 			duration: value.duration,
-			registration: value?.aircraft?.registration,
+			aircraftId: value?.aircraftId,
 			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			type: value?.type,
 		};
-		console.log(data, 'dataaaa');
-		// data && postSeasonalPlans(data);
+		data && postSeasonalPlans(data);
 	};
 
 	const handleCloseButton = () => {
@@ -158,7 +157,7 @@ const Seasonal = ({ tab }) => {
 	const handleEdit = (record) => {
 		record = {
 			...record,
-			date: record?.PDATE ? dayjs(record?.PDATE) : '',
+			date: record?.date ? dayjs(record?.date) : '',
 		};
 		setRowData(record);
 		openEditModal();
@@ -187,14 +186,18 @@ const Seasonal = ({ tab }) => {
 	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler);
 	const handleEditSave = (value) => {
 		const data = {
-			FLIGHTNO: value.flightNo,
-			callSign: value.callSign,
-			natureCode: value?.natureCode?.natureCode,
-			SCTOR: value.origin,
-			STA: value.sta,
-			STD: value.std,
-			PDATE: ConvertIstToUtc(value.date),
-			registration: value?.aircraft?.registration,
+			flightNo: value.flightNo,
+			start: ConvertIstToUtc(value.start ?? value.date)?.split('T')[0],
+			end: ConvertIstToUtc(value.end ?? value.date)?.split('T')[0],
+			airline: value?.airlineId,
+			natureCode: value?.natureCodeId,
+			sector: value.origin,
+			sta: value.sta,
+			std: value.std,
+			duration: value.duration,
+			aircraftId: value?.aircraftId,
+			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			type: value?.type,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
 		index === '2' && editSeasonalPlanDeparture(data);
@@ -312,7 +315,7 @@ const Seasonal = ({ tab }) => {
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
-			render: (natureCode) => natureCode?.natureCode?? '-',
+			render: (natureCode) => natureCode?.natureCode ?? '-',
 		},
 		{
 			title: 'REG',
