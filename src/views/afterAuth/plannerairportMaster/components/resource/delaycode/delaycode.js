@@ -14,7 +14,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
-import { useAirlineDropdown } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster'
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_DELAY_CODE } from '../../../../../../api';
 import { Form } from 'antd';
@@ -30,7 +29,6 @@ const DelayCode = () => {
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 	const [form] = Form.useForm();
 
-	const { data: airlineDropdownData = [] } = useAirlineDropdown();
 	const getDelayCodeHandler = {
 		onSuccess: (data) => handleGetDelayCodeSuccess(data),
 		onError: (error) => handleGetDelayCodeError(error),
@@ -265,7 +263,6 @@ const DelayCode = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						airlineDropdownData={airlineDropdownData}
 					/>}
 					openModal={openModal}
 				/>
@@ -305,7 +302,6 @@ const DelayCode = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						airlineDropdownData={airlineDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -325,7 +321,6 @@ const DelayCode = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						airlineDropdownData={airlineDropdownData}
 					/>
 				</div>
 			</ModalComponent>

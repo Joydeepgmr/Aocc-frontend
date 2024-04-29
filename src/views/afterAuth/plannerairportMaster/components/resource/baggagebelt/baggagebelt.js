@@ -15,7 +15,6 @@ import ConfirmationModal from '../../../../../../components/confirmationModal/co
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
 import { useEditBaggageBelt, useGetBaggageBelt, useDeleteBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
-import { useTerminalDropdown } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_BAGGAGE_BELT } from '../../../../../../api';
 import './baggagebelt.scss';
@@ -29,7 +28,6 @@ const BaggageBelt = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const { data: terminalDropdownData = [] } = useTerminalDropdown();
 	const [form] = Form.useForm();
 
 	const getBaggageBeltHandler = {
@@ -330,7 +328,6 @@ const BaggageBelt = () => {
 							form={form}
 							handleSaveButton={handleSaveButton}
 							handleButtonClose={handleCloseButton}
-							terminalDropdownData={terminalDropdownData}
 						/>
 					}
 
@@ -369,7 +366,6 @@ const BaggageBelt = () => {
 						form={form}
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>
@@ -389,7 +385,6 @@ const BaggageBelt = () => {
 						isEdit={true}
 						initialValues={rowData}
 						isReadOnly={isReadOnly}
-						terminalDropdownData={terminalDropdownData}
 					/>
 				</div>
 			</ModalComponent>

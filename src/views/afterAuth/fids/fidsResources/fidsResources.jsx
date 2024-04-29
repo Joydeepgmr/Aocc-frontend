@@ -6,7 +6,7 @@ import Delete from '../../../../assets/Delete.svg';
 import Edit from '../../../../assets/Edit.svg';
 import ButtonComponent from '../../../../components/button/button';
 import dayjs from 'dayjs';
-import './FidsResources.scss';
+import './fidsResources.scss';
 import { Form } from 'antd';
 import DropdownButton from '../../../../components/dropdownButton/dropdownButton';
 import ConfirmationModal from '../../../../components/confirmationModal/confirmationModal';

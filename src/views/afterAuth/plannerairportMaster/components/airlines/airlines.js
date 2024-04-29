@@ -300,18 +300,7 @@ const Airlines = () => {
 	return (
 		<>
 			<SocketEventListener refetch={getPlannerAirlineRefetch} apiName={`${GET_PLANNER_AIRLINE}`} />
-			{(isPlannerAirlineLoading || isPlannerAirlineFetching) && (
-				<PageLoader
-					loading={
-						isPlannerAirlineLoading ||
-						isAddAirlineLoading ||
-						isDeleteAirlineLoading ||
-						isUpdateAirlineLoading ||
-						isPlannerAirlineFetching
-					}
-				/>
-			)}
-			{Boolean(airlineData?.length) ? (
+			{isPlannerAirlineLoading || isAddAirlineLoading || isDeleteAirlineLoading || isUpdateAirlineLoading || isPlannerAirlineFetching ? <PageLoader loading={true} /> : Boolean(airlineData?.length) ? (
 				<Common_table
 					data={airlineData}
 					columns={columns}
@@ -369,7 +358,6 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={airlineData?.length}
 					isLoading={isUpdateAirlineLoading}
 					handleSubmit={handleUpdateAirline}
 				/>
@@ -394,7 +382,6 @@ const Airlines = () => {
 						setRowData({});
 					}}
 					initialValue={rowData}
-					key={airlineData?.length}
 				/>
 			</ModalComponent>
 
@@ -403,6 +390,7 @@ const Airlines = () => {
 				width="80vw"
 				closeModal={() => {
 					setIsAddModalOpen(false);
+					setRowData({});
 					form.resetFields();
 				}}
 				title={
@@ -418,6 +406,7 @@ const Airlines = () => {
 						isLoading={isAddAirlineLoading}
 						closeModal={() => {
 							setIsAddModalOpen(false);
+							setRowData({});
 							form.resetFields();
 						}}
 						handleSubmit={handleAddAirline}

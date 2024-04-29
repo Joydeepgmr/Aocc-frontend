@@ -4,12 +4,12 @@ import CustomTypography from '../../../components/typographyComponent/typography
 import Button from '../../../components/button/button';
 import TableComponent from '../../../components/table/table';
 import Modal from '../../../components/modal/modal';
-import { useGetVendor,useUpdateStatus } from '../../../services/Vendor/Vendor';
+import { useGetVendor, useUpdateStatus } from '../../../services/Vendor/vendor';
 import './Vendor.scss';
 
 const Vendor = () => {
 	const [rowData, setRowData] = useState({});
-	const [vendorData, setVendorData] = useState([])
+	const [vendorData, setVendorData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const openModal = (record) => {
@@ -39,8 +39,14 @@ const Vendor = () => {
 
 	const handleGetVendorError = (error) => {
 		toast.error(error?.message);
-	}
-	const { data: fetchVendor, isFetching, isLoading: isFetchLoading, hasNextPage, fetchNextPage } = useGetVendor(getVendorHandler);
+	};
+	const {
+		data: fetchVendor,
+		isFetching,
+		isLoading: isFetchLoading,
+		hasNextPage,
+		fetchNextPage,
+	} = useGetVendor(getVendorHandler);
 
 	console.log(fetchVendor);
 
@@ -49,20 +55,20 @@ const Vendor = () => {
 		onError: (error) => handleStatusError(error),
 	};
 
-	const { mutate: updateStatus, isLoading: isStatusLoading } = useUpdateStatus(rowData?.id, statusHandler)
+	const { mutate: updateStatus, isLoading: isStatusLoading } = useUpdateStatus(rowData?.id, statusHandler);
 
 	const handleStatusSuccess = (data) => {
 		closeModal();
 		setVendorData([]);
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-vendor');
-	}
+	};
 
 	const handleStatusError = (error) => {
-		toast.error(error?.response?.data?.message)
-	}
+		toast.error(error?.response?.data?.message);
+	};
 	const handleProgress = () => {
-		updateStatus({task: rowData?.task});
+		updateStatus({ task: rowData?.task });
 	};
 
 	const rows = [
@@ -118,7 +124,7 @@ const Vendor = () => {
 			key: 'status',
 			render: (record) => (
 				<Button
-					style={{ padding: 'auto', margin: "auto", width: "10rem" }}
+					style={{ padding: 'auto', margin: 'auto', width: '10rem' }}
 					className={`vendor--${record.status}`}
 					onClick={() => openModal(record)}
 					type="filledText"
@@ -142,7 +148,13 @@ const Vendor = () => {
 				</CustomTypography>
 			</div>
 			<div className="vendor--table">
-				<TableComponent data={rows} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage}/>
+				<TableComponent
+					data={rows}
+					columns={columns}
+					loading={isFetching}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
 			</div>
 
 			<Modal

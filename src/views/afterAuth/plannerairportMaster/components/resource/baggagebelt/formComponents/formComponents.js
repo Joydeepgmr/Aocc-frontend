@@ -5,10 +5,12 @@ import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import { useTerminalDropdown } from '../../../../../../../services/planairportmaster/resources/terminal/terminal';
+import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import './formComponents.scss';
 
-const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, terminalDropdownData }) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState("");
@@ -17,13 +19,19 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	const [currentUnavailableFrom, setCurrentUnavailableFrom] = useState("");
 	isEdit && (initialValues['terminalId'] = initialValues?.terminal?.name);
 
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: terminalDropdownData} = useTerminalDropdown({ onError });
+
 	const SelectTerminalData = useMemo(() => {
 		return terminalDropdownData.map((data) => {
 			return { label: data.name, value: data.id };
 		});
 	}, [terminalDropdownData]);
-
-	// const [form] = Form.useForm();
 
 	const handleValidFrom = (dateString) => {
 		form.setFieldsValue({

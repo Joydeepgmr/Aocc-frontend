@@ -1,16 +1,30 @@
 import React, { useEffect, useMemo, memo } from 'react';
 import { Form, Divider } from 'antd';
+import toast from 'react-hot-toast';
 import CustomSelect from '../../../../../../../components/select/select';
 import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
+import { useStandDropdown } from '../../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
+import { useTaxiwayDropdown } from '../../../../../../../services/planairportmaster/resources/taxiway/taxiway';
+import { useRunwayDropdown } from '../../../../../../../services/planairportmaster/resources/runway/runway';
 import './formComponents.scss';
 import { ConvertIstToUtc } from '../../../../../../../utils';
 
-const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly, standDropdownData, taxiwayDropdownData, runwayDropdownData }) => {
+const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
 	isEdit && (initialValues['taxiway'] = initialValues?.taxiway?.id);
 	isEdit && (initialValues['runway'] = initialValues?.runway?.id);
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: standDropdownData } = useStandDropdown({ onError });
+	const { data: taxiwayDropdownData = [] } = useTaxiwayDropdown({ onError });
+	const { data: runwayDropdownData = [] } = useRunwayDropdown({ onError });
 
 	const SelectStandData = useMemo(() => {
 		return standDropdownData?.map((data) => {
