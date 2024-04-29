@@ -31,6 +31,7 @@ import {
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
 import './seasonal.scss';
+import aircraft from '../../../plannerairportMaster/components/aircraft/aircraft';
 
 const Seasonal = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -135,21 +136,22 @@ const Seasonal = ({ tab }) => {
 	};
 	const { mutate: postSeasonalPlans, isLoading: isPostLoading } = usePostSeasonalPlans(addseasonalHandler);
 	const handleSaveButton = (value) => {
+		console.log(value, 'valueeeeeee');
 		const data = {
-			FLIGHTNO: value.FLIGHTNO,
-			START: ConvertIstToUtc(value.start ?? value.date),
-			END: ConvertIstToUtc(value.end ?? value.date),
-			callSign: value.callSign,
-			natureCode: value.natureCode,
-			origin: value.origin,
-			STA: value.STA,
-			STD: value.STD,
-			pos: value.pos,
-			registration: value.registration,
-			FREQUENCY: value.weeklySelect ?? [value.date.day()],
+			flightNo: value.flightNo,
+			start: ConvertIstToUtc(value.start ?? value.date),
+			end: ConvertIstToUtc(value.end ?? value.date),
+			airline: value?.airlineId,
+			natureCode: value?.natureCodeId,
+			sctor: value.origin,
+			sta: value.sta,
+			std: value.std,
+			duration: value.duration,
+			registration: value?.aircraft?.registration,
+			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
 		};
-
-		data && postSeasonalPlans(data);
+		console.log(data, 'dataaaa');
+		// data && postSeasonalPlans(data);
 	};
 
 	const handleCloseButton = () => {
@@ -191,15 +193,14 @@ const Seasonal = ({ tab }) => {
 	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler);
 	const handleEditSave = (value) => {
 		const data = {
-			FLIGHTNO: value.FLIGHTNO,
+			FLIGHTNO: value.flightNo,
 			callSign: value.callSign,
-			natureCode: value.natureCode,
-			origin: value.origin,
-			STA: value.STA,
-			STD: value.STD,
-			pos: value.pos,
+			natureCode: value?.natureCode?.natureCode,
+			SCTOR: value.origin,
+			STA: value.sta,
+			STD: value.std,
 			PDATE: ConvertIstToUtc(value.date),
-			registration: value.registration,
+			registration: value?.aircraft?.registration,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
 		index === '2' && editSeasonalPlanDeparture(data);
@@ -317,7 +318,7 @@ const Seasonal = ({ tab }) => {
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
-			render: (natureCode) => natureCode?.natureCode ?? '-',
+			render: (natureCode) => natureCode?.natureCode?? '-',
 		},
 		{
 			title: 'REG',

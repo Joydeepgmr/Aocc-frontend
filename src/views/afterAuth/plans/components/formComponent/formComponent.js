@@ -142,7 +142,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						/>
 						<InputField
 							label="Flight Number"
-							name="FLIGHTNO"
+							name="flightNo"
 							pattern='^[0-9]+$'
 							required
 							min={2}
@@ -200,7 +200,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						{type == 1 ? (
 							<InputField
 								label="STA"
-								name="STA"
+								name="sta"
 								type='time'
 								placeholder="Filled Text"
 								required
@@ -209,7 +209,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						) : (
 							<InputField
 								label="STD"
-								name="STD"
+								name="std"
 								type='time'
 								placeholder="Filled Text"
 								required
@@ -218,7 +218,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						)}
 					</div>
 					<div className="seasonal_form_inputfields">
-						{/* <InputField label="POS" name="pos" placeholder="Filled Text" className="custom_input" /> */}
 						<CustomSelect
 							SelectData={SelectAircraftData}
 							label="Aircraft"
@@ -275,12 +274,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								<InputField
 									label="Call Sign"
 									name="callSign"
-									placeholder="Filled Text"
-									className="custom_input"
-								/>
-								<InputField
-									label="Nature Code"
-									name="natureCode"
 									placeholder="Filled Text"
 									className="custom_input"
 								/>
