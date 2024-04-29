@@ -1,21 +1,23 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import NumericField from '../numericField/numericField';
-import './licenseSetupForm.scss';
 import ImageUpload from '../../../../../components/imageUpload/imageUpload';
+import { useGlobalAirportDropdown, useCountriesDropdown } from '../../../../../services';
+import './licenseSetupForm.scss';
 
 const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes, setResetCodes, fileList, setFileList }) => {
 	const [iataCode, setIataCode] = useState([]);
 	const [icaoCode, setIcaoCode] = useState([]);
 	const SelectAirportData = useMemo(() => {
-		return airportDropdownData.map((data) => {
+		return airportDropdownData?.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }
 		})
 	}, [airportDropdownData]);
 	const SelectCountryData = useMemo(() => {
-		return countryDropdownData.map((data) => {
+		return countryDropdownData?.map((data) => {
 			return { label: data.name, value: data.name, id: data.name }
 		})
 	}, [countryDropdownData]);

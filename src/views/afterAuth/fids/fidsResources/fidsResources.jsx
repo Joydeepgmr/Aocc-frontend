@@ -14,16 +14,137 @@ import FidsFormComponent from './fidsFormComponent/fidsFormComponent';
 import UploadCsvModal from '../../../../components/uploadCsvModal/uploadCsvModal';
 import ModalComponent from '../../../../components/modal/modal';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import {
+	useDeleteFidsResource,
+	useGetAllFidsResources,
+	usePostFidsResource,
+	useUpdateFidsResource,
+} from '../../../../services';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { ConvertIstToUtc } from '../../../../utils';
+import PageLoader from '../../../../components/pageLoader/pageLoader';
 
 const FidsResources = () => {
+	const queryClient = useQueryClient();
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+	const [resourceData, setResourceData] = useState([]);
 
 	const [form] = Form.useForm();
+	const addResourceHandler = {
+		onSuccess: (data) => handleAddResourceSuccess(data),
+		onError: (error) => handleAddResourceError(error),
+	};
+
+	const getResourceHandler = {
+		onSuccess: (data) => handleGetResourceSuccess(data),
+		onError: (error) => handleGetResourceError(error),
+	};
+	const deleteResourceHandler = {
+		onSuccess: (data) => handleDeleteResourceSuccess(data),
+		onError: (error) => handleDeleteResourceError(error),
+	};
+
+	const updateResourceHandler = {
+		onSuccess: (data) => handleUpdateResourceSuccess(data),
+		onError: (error) => handleUpdateResourceError(error),
+	};
+
+	const {
+		isLoading: isResourceLoading,
+		isFetching: isResourceFetching,
+		hasNextPage,
+		fetchNextPage,
+	} = useGetAllFidsResources(getResourceHandler);
+
+	const { mutate: onDeleteResource, isLoading: isDeleteResourceLoading } =
+		useDeleteFidsResource(deleteResourceHandler);
+
+	const { mutate: onAddResource, isLoading: isAddResourceLoading } = usePostFidsResource(addResourceHandler);
+	const { mutate: onUpdateResource, isLoading: isUpdateResourceLoading } = useUpdateFidsResource(
+		rowData?.id,
+		updateResourceHandler
+	);
+
+	const handleDeleteResourceSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-fids-resources');
+		toast.success(data?.message);
+		setRowData({});
+		setOpenDeleteModal(false);
+	};
+
+	const handleDeleteResourceError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const handleGetResourceSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data?.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setResourceData([...newData]);
+		}
+	};
+
+	const handleGetResourceError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const handleAddResourceSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-fids-resources');
+		toast.success(data?.message);
+		setRowData({});
+		setIsAddModalOpen(false);
+		form.resetFields();
+	};
+
+	const handleAddResourceError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const handleUpdateResourceSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-fids-resources');
+		toast.success(data?.message);
+		setRowData({});
+		setOpenEditModal(false);
+		form.resetFields();
+	};
+
+	const handleUpdateResourceError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+
+	const handleAddResource = (value) => {
+		const data = {
+			...value,
+			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
+			validFrom: value?.validFrom ? ConvertIstToUtc(value?.validFrom) : undefined,
+			unavailableTo: value?.unavailableTo ? ConvertIstToUtc(value?.unavailableTo) : undefined,
+			unavailableFrom: value?.unavailableFrom ? ConvertIstToUtc(value?.unavailableFrom) : undefined,
+		};
+		onAddResource(data);
+	};
+
+	const handleUpdateResource = (value) => {
+		const data = {
+			...value,
+			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
+			validFrom: value?.validFrom ? ConvertIstToUtc(value?.validFrom) : undefined,
+			unavailableTo: value?.unavailableTo ? ConvertIstToUtc(value?.unavailableTo) : undefined,
+			unavailableFrom: value?.unavailableFrom ? ConvertIstToUtc(value?.unavailableFrom) : undefined,
+		};
+		onUpdateResource(data);
+	};
+
+	const handleDeleteResource = () => {
+		onDeleteResource(rowData?.id);
+	};
 
 	const columns = [
 		{
@@ -41,6 +162,8 @@ const FidsResources = () => {
 								...record,
 								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
 								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+								unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
+								unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
 							});
 						}}
 						id="delete_button"
@@ -54,6 +177,8 @@ const FidsResources = () => {
 								...record,
 								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
 								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+								unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
+								unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
 							});
 						}}
 						id="edit_button"
@@ -63,24 +188,24 @@ const FidsResources = () => {
 		},
 		{
 			title: 'Screen Name',
-			dataIndex: 'name',
-			key: 'name',
+			dataIndex: 'screenName',
+			key: 'screenName',
 			align: 'center',
-			render: (name) => name ?? '-',
+			render: (screenName) => screenName ?? '-',
 		},
 		{
 			title: 'Resource Type',
-			dataIndex: 'type',
-			key: 'type',
+			dataIndex: 'resourceType',
+			key: 'resourceType',
 			align: 'center',
-			render: (type) => type ?? '-',
+			render: (resourceType) => resourceType ?? '-',
 		},
 		{
 			title: 'Resource',
-			dataIndex: 'resource',
-			key: 'resource',
-			align: 'center',
-			render: (resource) => resource ?? '-',
+			dataIndex: 'resourceName',
+			key: 'resourceName',
+			align: 'resourceName',
+			render: (resourceName) => resourceName ?? '-',
 		},
 		{
 			title: 'Status',
@@ -91,10 +216,10 @@ const FidsResources = () => {
 		},
 		{
 			title: 'Mac',
-			dataIndex: 'mac',
-			key: 'mac',
+			dataIndex: 'MacAddress',
+			key: 'MacAddress',
 			align: 'center',
-			render: (mac) => mac ?? '-',
+			render: (MacAddress) => MacAddress ?? '-',
 		},
 		{
 			title: 'Height',
@@ -122,6 +247,8 @@ const FidsResources = () => {
 							...record,
 							validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
 							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+							unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
+							unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
 						});
 					}}
 					title="View Details"
@@ -132,9 +259,7 @@ const FidsResources = () => {
 			align: 'center',
 		},
 	];
-	const data = [{ name: 'wewe' }];
 	const handleDropdownChange = (value) => {
-		// Add this line
 		if (value === 'NewResource') {
 			setIsAddModalOpen(true);
 		}
@@ -167,9 +292,14 @@ const FidsResources = () => {
 
 	return (
 		<>
+			{(isResourceLoading || isResourceFetching || isUpdateResourceLoading || isAddResourceLoading) && (
+				<PageLoader
+					loading={isResourceLoading || isResourceFetching || isUpdateResourceLoading || isAddResourceLoading}
+				/>
+			)}
 			<div className="FidsResources--Container">
 				<TopHeader heading="Resources">
-					{Boolean(data?.length) && (
+					{Boolean(resourceData?.length) && (
 						<DropdownButton
 							buttonText={'Create'}
 							className="custom_dropdown"
@@ -178,41 +308,44 @@ const FidsResources = () => {
 						/>
 					)}
 				</TopHeader>
-				{Boolean(data?.length) ? (
+				{Boolean(resourceData?.length) ? (
 					<TableComponent
 						columns={columns}
-						data={data}
-						// loading={loading}
-						// fetchData={fetchData}
-						// pagination={pagination}
+						data={resourceData}
+						loading={isResourceLoading || isResourceFetching}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
 					/>
 				) : (
 					<div className="FidsResources--EmptyContainer">
-						{/* {!loading && ( */}
-						<Button
-							title={'Create'}
-							id="btn"
-							type="filledText"
-							isSubmit="submit"
-							onClick={() => setIsAddModalOpen(true)}
-						/>
-						<Button
-							id="btn"
-							title={'Upload Csv'}
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							onClick={() => setIsCsvModalOpen(true)}
-						/>
+						{!(isResourceLoading || isResourceFetching) && (
+							<>
+								<Button
+									title={'Create'}
+									id="btn"
+									type="filledText"
+									isSubmit="submit"
+									onClick={() => setIsAddModalOpen(true)}
+								/>
+								<Button
+									id="btn"
+									title={'Upload Csv'}
+									className="custom_svgButton"
+									type="filledText"
+									isSubmit="submit"
+									onClick={() => setIsCsvModalOpen(true)}
+								/>
 
-						<Button
-							id="btn"
-							title={'Download CSV'}
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							// onClick={downloadCSV}
-						/>
+								<Button
+									id="btn"
+									title={'Download CSV'}
+									className="custom_svgButton"
+									type="filledText"
+									isSubmit="submit"
+									// onClick={downloadCSV}
+								/>
+							</>
+						)}
 					</div>
 				)}
 			</div>
@@ -220,17 +353,19 @@ const FidsResources = () => {
 				isOpen={openDeleteModal}
 				onClose={() => {
 					setOpenDeleteModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
-				// onSave={handleDeleteAirline}
-				// isLoading={isDeleteAirlineLoading}
-				content={`You want to delete this ${rowData?.name} record`}
+				onSave={handleDeleteResource}
+				isLoading={isDeleteResourceLoading}
+				content={`You want to delete this ${rowData?.screenName} record`}
 			/>
 			<ModalComponent
 				form={form}
 				isModalOpen={openEditModal}
 				closeModal={() => {
 					setOpenEditModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
 				title="Edit your resource"
@@ -242,20 +377,22 @@ const FidsResources = () => {
 					type={'edit'}
 					closeModal={() => {
 						setOpenEditModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
-					// isLoading={isUpdateAirlineLoading}
-					// handleSubmit={handleUpdateAirline}
+					isLoading={isUpdateResourceLoading}
+					handleSubmit={handleUpdateResource}
 				/>
 			</ModalComponent>
 			<ModalComponent
 				isModalOpen={detailModal}
 				closeModal={() => {
 					setDetailModal(false);
+					form.resetFields();
 					setRowData({});
 				}}
-				title="Airline"
+				title="Resource"
 				width="80vw"
 				className="custom_modal"
 			>
@@ -263,7 +400,8 @@ const FidsResources = () => {
 					form={form}
 					isReadOnly={true}
 					closeModal={() => {
-						setOpenEditModal(false);
+						setDetailModal(false);
+						form.resetFields();
 						setRowData({});
 					}}
 					initialValue={rowData}
@@ -273,7 +411,11 @@ const FidsResources = () => {
 			<ModalComponent
 				isModalOpen={isAddModalOpen}
 				width="80vw"
-				closeModal={() => setIsAddModalOpen(false)}
+				closeModal={() => {
+					setRowData({});
+					form.resetFields();
+					setIsAddModalOpen(false);
+				}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Add Resource
@@ -283,9 +425,13 @@ const FidsResources = () => {
 			>
 				<FidsFormComponent
 					form={form}
-					// isLoading={isAddAirlineLoading}
-					closeModal={() => setIsAddModalOpen(false)}
-					// handleSubmit={handleAddAirline}
+					isLoading={isAddResourceLoading}
+					closeModal={() => {
+						setIsAddModalOpen(false);
+						form.resetFields();
+						setRowData({});
+					}}
+					handleSubmit={handleAddResource}
 				/>
 			</ModalComponent>
 			<UploadCsvModal

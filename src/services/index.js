@@ -24,7 +24,15 @@ import {
 } from './cdm/cdmServices';
 
 import { useDummyApi } from './dummyApi/dummyApi';
-import { useBaggageBeltDropdown, useCheckInDropdown, useTerminalDropdown } from './fids/fidsResources';
+import {
+	usePostFidsResource,
+	useBaggageBeltDropdown,
+	useCheckInDropdown,
+	useUpdateFidsResource,
+	useTerminalDropdown,
+	useGetAllFidsResources,
+	useDeleteFidsResource,
+} from './fids/fidsResources';
 
 import {
 	useGlobalAirport,
@@ -104,4 +112,8 @@ export {
 	useBaggageBeltDropdown,
 	useCheckInDropdown,
 	useTerminalDropdown,
+	usePostFidsResource,
+	useGetAllFidsResources,
+	useDeleteFidsResource,
+	useUpdateFidsResource,
 };

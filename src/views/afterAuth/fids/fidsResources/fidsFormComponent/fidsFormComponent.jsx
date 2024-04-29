@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
-	const watch = Form.useWatch('resource_type', form);
+	const watch = Form.useWatch('resourceType', form);
 
 	const onError = ({
 		response: {
@@ -27,19 +27,28 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 	});
 
 	const SelectCheckInData = useMemo(() => {
-		return checkInDropdownData?.map((data) => {
-			return { label: data.name, value: data.name, id: data.name };
-		});
+		return (
+			checkInDropdownData &&
+			checkInDropdownData?.map((data) => {
+				return { label: data?.name, value: data?.id, id: data?.id };
+			})
+		);
 	}, [checkInDropdownData]);
 	const SelectTerminalData = useMemo(() => {
-		return terminalDropdownData?.map((data) => {
-			return { label: data.name, value: data.name, id: data.name };
-		});
+		return (
+			terminalDropdownData &&
+			terminalDropdownData?.map((data) => {
+				return { label: data?.name, value: data?.id, id: data?.id };
+			})
+		);
 	}, [terminalDropdownData]);
 	const SelectBaggageBeltData = useMemo(() => {
-		return baggageBeltDropdownData?.map((data) => {
-			return { label: data.name, value: data.name, id: data.name };
-		});
+		return (
+			baggageBeltDropdownData &&
+			baggageBeltDropdownData?.map((data) => {
+				return { label: data?.name, value: data?.id, id: data?.id };
+			})
+		);
 	}, [baggageBeltDropdownData]);
 
 	const handleValidFrom = (dateString) => {
@@ -90,7 +99,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 				<div className="fids_resources_inputfields">
 					<InputField
 						label="Screen Name"
-						name="name"
+						name="screenName"
 						max={32}
 						placeholder={!isReadOnly && 'Enter the Screen name'}
 						className="custom_input"
@@ -104,10 +113,11 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 							{ label: 'Baggage Belt', value: 'baggage_belt' },
 						]}
 						label="Resource Type"
-						name="resource_type"
+						name="resourceType"
 						placeholder={!isReadOnly && 'Resource Type'}
 						className="custom_input"
 						disabled={isReadOnly}
+						required
 					/>
 					<CustomSelect
 						SelectData={
@@ -120,32 +130,35 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 										: []
 						}
 						label="Resource"
-						name="resource"
+						name="resourceId"
 						placeholder={!isReadOnly && 'Resource'}
 						className="custom_input"
 						disabled={isReadOnly || !Boolean(watch)}
+						required
 					/>
 				</div>
 
 				<div className="fids_resources_inputfields">
 					<CustomSelect
 						SelectData={[
-							{ label: 'Active', value: 'active' },
-							{ label: 'InActive', value: 'inactive' },
+							{ label: 'Active', value: 'Active' },
+							{ label: 'InActive', value: 'Inactive' },
 						]}
 						label="Status"
 						name="status"
 						placeholder={!isReadOnly && 'Status'}
 						className="custom_input"
 						disabled={isReadOnly}
+						required={true}
 					/>
 					<InputField
 						label="MAC address"
-						name="mac"
+						name="MacAddress"
 						max={32}
 						placeholder={!isReadOnly && 'MAC address'}
 						className="custom_input"
 						disabled={isReadOnly}
+						required={true}
 					/>
 				</div>
 				<div className="fids_resources_inputfields">
@@ -159,6 +172,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						className="custom_input"
 						suffixText="cm"
 						disabled={isReadOnly}
+						required={true}
 					/>
 					<InputField
 						label="Width"
@@ -170,6 +184,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						className="custom_input"
 						suffixText="cm"
 						disabled={isReadOnly}
+						required={true}
 					/>
 				</div>
 				<Divider />
@@ -181,14 +196,21 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						className="custom_date"
 						format="MM-DD-YYYY"
 						disabled={isReadOnly || isNotEditable}
-						required
 					/>
 					<Date
 						label="Unavailable To"
 						placeholder={!isReadOnly && 'Select valid to date'}
-						name="unavailableTill"
+						name="unavailableTo"
 						format="MM-DD-YYYY"
 						className="custom_date"
+					/>
+					<InputField
+						label="Reason"
+						name="reason"
+						max={32}
+						placeholder={!isReadOnly && 'Enter the Reason'}
+						className="custom_input"
+						disabled={isReadOnly}
 					/>
 				</div>
 				<div className="fids_resources_inputfields">

@@ -1,23 +1,37 @@
 import React, { useMemo } from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
+import toast from 'react-hot-toast';
 import Date from '../../../../../components/datapicker/datepicker';
-import './airportForm.scss';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
+import { useTimezoneDropdown, useCountriesDropdown } from '../../../../../services/globalMasters/globalMaster';
+import './airportForm.scss';
 
-const AirportForm = ({ isReadOnly, type, timezoneDropdown = [], countryDropdownData = [] }) => {
+const AirportForm = ({ isReadOnly, type }) => {
+	
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+
+	const { data: countryDropdownData} = useCountriesDropdown({ onError });
+	const { data: timezoneDropdown} = useTimezoneDropdown({ onError });
+	
 	const SelectCountryData = useMemo(() => {
-		return countryDropdownData.map((data) => {
-			return { label: data.name, value: data.name, id: data.name }
+		return countryDropdownData?.map((data) => {
+			return { label: data.name, value: data.name, id: data.name };
 		})
-	}, [countryDropdownData])
+	}, [countryDropdownData]);
+
 	const SelectedTimeZone = useMemo(() => {
-		return timezoneDropdown.map((data) => {
-			return { label: data, value: data, id: data }
+		return  timezoneDropdown?.url?.map((data) => {
+			return { label: data, value: data, id: data };
 		})
-	}, [timezoneDropdown])
+	}, [timezoneDropdown]);
+
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="airport_setup_form_container">

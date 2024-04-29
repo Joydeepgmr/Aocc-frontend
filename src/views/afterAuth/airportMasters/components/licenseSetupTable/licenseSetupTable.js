@@ -10,8 +10,9 @@ import TableComponent from '../../../../../components/table/table';
 import { usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
+import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../../../services';
 
-const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, airportDropdownData, countryDropdownData, loading }) => {
+const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
@@ -27,6 +28,8 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		},
 		onError
 	}
+	const { data: airportDropdownData } = useGlobalAirportDropdown();
+	const { data: countryDropdownData } = useCountriesDropdown();
 	const { mutate: postAirportLicense, isLoading: isCreateNewLoading } = usePostLicenseAirport(postApiProps);
 	const [initial] = Form.useForm();
 

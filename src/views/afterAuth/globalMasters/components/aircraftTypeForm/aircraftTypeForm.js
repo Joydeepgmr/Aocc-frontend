@@ -1,14 +1,24 @@
 import { Divider } from 'antd';
 import React, { useMemo } from 'react';
+import toast from 'react-hot-toast';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAccessData';
+import { useGlobalAirlineDropdown } from '../../../../../services';
 import './aircraftTypeForm.scss';
 
-const AircraftTypeForm = ({ isReadOnly, type, airlineDropdownData }) => {
+const AircraftTypeForm = ({ isReadOnly, type }) => {
+	
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
+	const { data: airlineDropdownData = [] } = useGlobalAirlineDropdown({ onError });
+
 	const SelectedAirlineData = useMemo(() => {
 		return airlineDropdownData.map((data) => {
 			return { label: data.name, value: data.id }

@@ -239,8 +239,6 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					<AirlineForm
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}
-						airportDropdownData={airportDropdownData}
-						countryDropdownData={countryDropdownData}
 					/>
 					{airlineRegistrationModal.type !== 'view' && (
 						<>
