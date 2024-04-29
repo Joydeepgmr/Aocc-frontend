@@ -46,7 +46,7 @@ const DonutChart = ({ cardTitle }) => {
               series={series}
               type="donut"
               // width={250}
-              height={178}
+              height={115}
             />
           </div>
         </div>

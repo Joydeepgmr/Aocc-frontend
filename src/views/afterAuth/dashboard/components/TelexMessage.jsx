@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ButtonComponent from '../../../../components/button/button';
 import ConfirmationModal from '../../../../components/confirmationModal/confirmationModal';
 import CustomTabs from '../../../../components/customTabs/customTabs';
@@ -10,6 +10,8 @@ import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/
 import './style.scss';
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import { GET_TELEX_MESSAGE } from '../../../../api';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import Widgets from './Widgets';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 	return (
@@ -28,6 +30,8 @@ function TelexMessage() {
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, data: null });
 	const [filter, setFilter] = useState({ type: ['mvt'] });
 	const [telexMessageData, setTelexMessageData] = useState([]);
+	const [fullScreen, setFullScreen] = useState(false);
+	const divRef = useRef();
 	const onSuccess = (data) => {
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
@@ -49,6 +53,30 @@ function TelexMessage() {
 	});
 	const [form] = Form.useForm();
 	const watchFlightNo = Form.useWatch('flightNo', form);
+	const toggleFullscreen = () => {
+		setFullScreen(!fullScreen);
+		if (document.fullscreenElement === null) {
+			if (divRef.current?.requestFullscreen) {
+				divRef.current.requestFullscreen();
+			} else if (divRef.current?.mozRequestFullScreen) {
+				divRef.current.mozRequestFullScreen();
+			} else if (divRef.current?.webkitRequestFullscreen) {
+				divRef.current.webkitRequestFullscreen();
+			} else if (divRef.current?.msRequestFullscreen) {
+				divRef.current.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document?.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document?.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document?.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+		}
+	};
 	const openDeleteModal = (id) => {
 		setDeleteModal({ isOpen: true, data: id });
 	};
@@ -209,7 +237,8 @@ function TelexMessage() {
 				buttonTitle2="Acknowledge"
 			/>
 			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
-			<div className="body-container">
+			<Widgets />
+			<div className={`body-container ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
 				<div className="top-bar">
 					<CustomTypography
 						type="title"
@@ -227,7 +256,15 @@ function TelexMessage() {
 						alt="bell icon"
 						className={'filter-btn'}
 					/> */}
-						<Form form={form}>
+						<Form form={form} className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
+							{fullScreen ? (
+								<FullscreenExitOutlined
+									className="fullScreen--FullScreenExitIcon"
+									onClick={toggleFullscreen}
+								/>
+							) : (
+								<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
+							)}
 							<InputField
 								label="Flight number"
 								name="flightNo"

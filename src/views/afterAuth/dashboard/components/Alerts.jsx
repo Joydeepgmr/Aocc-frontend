@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Alerts = () => {
 	const navigate = useNavigate();
 	const handleAcknowledge = () => {
-		navigate('/plans?tab=3');
+		navigate('/plans', { state: { tab: '3' } });
 	};
 	return (
 		<Card className="progress-card">

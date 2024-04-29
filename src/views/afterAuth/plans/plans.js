@@ -9,10 +9,7 @@ import { addArrival } from './redux/planReducer';
 import { useLocation } from 'react-router-dom';
 
 const Plans = () => {
-	const { search, state } = useLocation();
-	console.log('statre is ', state);
-	const param = new URLSearchParams(search).get('tab');
-	console.log("params are ", param)
+	const { state } = useLocation();
 	const [index, setIndex] = useState('1');
 	const [tab, setTab] = useState('seasonal');
 	const planTabItems = [
@@ -46,7 +43,7 @@ const Plans = () => {
 					subHeading="Data for seasonal and daily operations of aircrafts."
 				/>
 				<CustomTabs
-					defaultActiveKey={param ?? index}
+					defaultActiveKey={state?.tab ?? index}
 					items={planTabItems}
 					onChange={handleChange}
 					type="card"
