@@ -2,11 +2,12 @@ import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import {
 	BULK_IMPORT_PLANNER_AIRLINE,
 	DELETE_PLANNER_AIRLINE,
+	GET_AIRLINE_IMAGE,
 	GET_PLANNER_AIRLINE,
 	POST_PLANNER_AIRLINE,
 	UPDATE_PLANNER_AIRLINE,
 } from '../../api';
-import { Delete, Patch, Post } from '../HttpServices/HttpServices';
+import { Delete, Patch, Post, Get } from '../HttpServices/HttpServices';
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
 
 export const useGetAllPlannerAirline = (props) => {
@@ -97,4 +98,15 @@ export const useUploadCSVPlannerAirline = (props) => {
 	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
 
 	return { ...response, data: data?.data, message: statusMessage };
+};
+
+export const useGetAirlineImage = (icao,props) => {
+	const response = useQuery({
+		queryKey: ['get-airline-image', icao],
+		queryFn: async () => await Get(`${GET_AIRLINE_IMAGE}?icao=${icao}`),
+		enabled: !!icao,
+		...props,
+	});
+
+	return response;
 };

@@ -10,11 +10,14 @@ import TableComponent from '../../../../../components/table/table';
 import { usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
+import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../../../services';
 
 const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
+	// for image
+	const [fileList, setFileList] = useState([]);
 	const [resetCodes, setResetCodes] = useState(false);
 	const onError = ({ response: { data: { message } } }) => toast.error(message);
 	const postApiProps = {
@@ -25,6 +28,8 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		},
 		onError
 	}
+	const { data: airportDropdownData } = useGlobalAirportDropdown();
+	const { data: countryDropdownData } = useCountriesDropdown();
 	const { mutate: postAirportLicense, isLoading: isCreateNewLoading } = usePostLicenseAirport(postApiProps);
 	const [initial] = Form.useForm();
 
@@ -48,7 +53,13 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		}
 	}
 	const onFinishHandler = (values) => {
+		if (!fileList?.length) {
+			toast.dismiss();
+			toast.error('Airport logo is required');
+			return;
+		}
 		values = getFormValues(values);
+		values.url = fileList?.[0]?.url;
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
 		values.iataCode = values?.threeCode?.join('');
@@ -143,7 +154,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				className="custom_modal"
 			>
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
-					<LicenseSetupForm {...{ resetCodes, setResetCodes }}/>
+					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData, resetCodes, setResetCodes, fileList, setFileList }} />
 					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent

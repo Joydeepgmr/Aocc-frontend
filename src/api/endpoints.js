@@ -42,7 +42,6 @@ export const GET_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/pagin
 export const POST_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const PATCH_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const DELETE_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
-export const POST_BULK_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/upload/';
 
 export const GET_GLOBAL_AIRLINE = '/global-airline/paginated/';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';
@@ -92,6 +91,8 @@ export const POST_PLANNER_AIRLINE = '/planner-airline';
 export const DELETE_PLANNER_AIRLINE = '/planner-airline';
 export const UPDATE_PLANNER_AIRLINE = '/planner-airline';
 export const BULK_IMPORT_PLANNER_AIRLINE = '/planner-airline/bulk';
+export const GET_AIRLINE_IMAGE = '/system-constant/check-image-airline';
+export const UPLOAD_AIRLINE_IMAGE = '/system-constant/upload';
 
 /*--------------------------Manage Access ---------------------*/
 
@@ -117,8 +118,11 @@ export const CDM_GET_TURN_AROUND = '/cdmOps/turnaround';
 export const UPDATE_CDM_TURN_AROUND = '/cdmOps/turnaround';
 
 /*-------------------------Vendor----------------------------------*/
-export const VENDOR = '/vendor';
-export const GET_VENDOR = '/vendor/paginated';
+export const VENDOR = '/vendor'
+export const GET_VENDOR = '/vendor/paginated'
+
+/*-------------------------Upload Image----------------------------------*/
+export const UPLOAD_AIRLINE_IMAGE = '/system-constant/upload';
 
 /*------------------------- Resource FIDS ----------------------------------*/
 export const GET_FIDS_RESOURCES = '/screen/paginated';

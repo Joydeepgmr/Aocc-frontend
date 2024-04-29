@@ -30,14 +30,14 @@ const UserAccess = () => {
 			closeAddUserModal();
 		},
 		onError,
-	}
+	};
 	const { mutate: postAccessManagement, isLoading } = usePostAccessManagement({ ...accessManagementApiProps });
 	const { data: airlineDropdownData = [] } = useAirlineDropdown({ onError });
 	const [form] = Form.useForm();
 	const SelectedAirlineData = useMemo(() => {
 		return airlineDropdownData.map((data) => {
-			return { label: data.name, value: data.id }
-		})
+			return { label: data.name, value: data.id };
+		});
 	}, [airlineDropdownData]);
 	const dropdownItems = [
 		{
@@ -71,7 +71,7 @@ const UserAccess = () => {
 		postAccessManagement({ type: isModalOpen?.type, values });
 	};
 	const operations = (
-		<div className='add_access_button'>
+		<div className="add_access_button">
 			<ButtonComponent
 				title="Add Access"
 				type="filledText"
@@ -111,10 +111,14 @@ const UserAccess = () => {
 	return (
 		<>
 			<PageLoader isLoading={isLoading} />
-			<ModalComponent isModalOpen={isModalOpen?.isOpen} closeModal={closeAddUserModal} title={`Add ${isModalOpen?.type}`} width="87.2rem">
+			<ModalComponent
+				isModalOpen={isModalOpen?.isOpen}
+				closeModal={closeAddUserModal}
+				title={`Add ${isModalOpen?.type}`}
+			>
 				<Form layout="vertical" form={form} onFinish={onFinishHandler}>
-					<div className="user_add_form">
-						<div className="user_input_fields">
+					<div className="user_form_container">
+						<div className="user_form_inputfields">
 							<InputField
 								label="User Name"
 								name="name"
@@ -126,24 +130,26 @@ const UserAccess = () => {
 							<InputField
 								label="User Email"
 								name="email"
+								isArticle={false}
 								placeholder="Enter the user email"
 								required
 								warning="Required field"
 								className="custom_input"
 							/>
-							{isModalOpen?.type == 'planner' &&
+							{isModalOpen?.type == 'planner' && (
 								<CustomSelect
 									SelectData={userAccessType}
 									placeholder="Select the access type"
 									required
 									warning="Required field"
 									label="User Type"
-									name='plannerType'
+									name="plannerType"
+									className="select"
 								/>
-							}
+							)}
 						</div>
-						{isModalOpen?.type == 'vendor' &&
-							<div className="user_input_fields">
+						{isModalOpen?.type == 'vendor' && (
+							<div className="user_form_inputfields">
 								<CustomSelect
 									SelectData={SelectedAirlineData}
 									label="Airline"
@@ -152,7 +158,7 @@ const UserAccess = () => {
 									placeholder="Select Airline"
 									required
 									warning="Required field"
-									className="custom_input"
+									className="select"
 								/>
 								<InputField
 									label="Required Access Ids"
@@ -163,9 +169,9 @@ const UserAccess = () => {
 									className="custom_input"
 								/>
 							</div>
-						}
+						)}
 						<Divider />
-						<div className="user_input_fields">
+						<div className="user_form_inputfields">
 							<Date
 								label="Valid From"
 								placeholder="Select Date"
@@ -174,9 +180,18 @@ const UserAccess = () => {
 								className="custom_date"
 								format="MM-DD-YYYY"
 							/>
-							<Date label="Valid To" placeholder="Select Date" name="validTill" format="MM-DD-YYYY" />
+							<Date
+								label="Valid To"
+								placeholder="Select Date"
+								name="validTill"
+								format="MM-DD-YYYY"
+								className="custom_date"
+							/>
 						</div>
-						<div className="custom_buttons">
+					</div>
+					<Divider />
+					<div className="user_form_inputfields">
+						<div className="form_bottomButton">
 							<ButtonComponent
 								title="Cancel"
 								type="filledText"
@@ -194,8 +209,8 @@ const UserAccess = () => {
 				</Form>
 			</ModalComponent>
 			<div className="user_access_container">
-				{dummyData?.length
-					? <>
+				{dummyData?.length ? (
+					<>
 						<div className="user-access-table-container">
 							<TopHeader
 								heading="Manage User Access"
@@ -203,21 +218,32 @@ const UserAccess = () => {
 							/>
 						</div>
 						<div className="access-table">
-							<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} type="simple"
-								extraContent={operations} />
+							<CustomTabs
+								defaultActiveKey="1"
+								items={items}
+								onChange={handleTabChange}
+								type="simple"
+								extraContent={operations}
+							/>
 						</div>
 					</>
-					: <div className="user_access_content">
+				) : (
+					<div className="user_access_content">
 						<TopHeader
 							heading="Manage User Access"
 							subHeading="Overview of access management for airport access management"
 						/>
 						<div className="user_add_button">
 							<div className="down_arrow_button">
-								<DropdownButton dropdownItems={dropdownItems} onChange={handleDropdownItemClick} buttonText="Add Access" />
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									onChange={handleDropdownItemClick}
+									buttonText="Add Access"
+								/>
 							</div>
 						</div>
-					</div>}
+					</div>
+				)}
 			</div>
 		</>
 	);
