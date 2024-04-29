@@ -5,7 +5,7 @@ let retryCount = 0;
 
 export const axiosInstance = Axios.create({
 	baseURL: process.env.baseURL
-	// baseURL: "https://zqfb5jkt-5554.inc1.devtunnels.ms/frms/api/v1",
+	// baseURL: "https://m9jh2lcg-5554.inc1.devtunnels.ms/frms/api/v1",
 });
 
 console.log(process.env.baseURL, "base url");
@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
 		}
 
 		// Remove keys with null values from the request payload
-		if (config.method.toUpperCase() !== 'GET' && config.data && typeof config.data === 'object' && !config?.url?.includes("bulk")) {
+		if (config.method.toUpperCase() !== 'GET' && config.data && typeof config.data === 'object' && !config?.url?.includes("bulk") && !config?.url?.includes("upload")) {
 			config.data = removeNullValues(config.data);
 		}
 

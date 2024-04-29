@@ -44,7 +44,7 @@ export const Login = () => {
 				navigate(Pathname.GLOBALMASTERS);
 				break;
 			case userType.PLANNER:
-				navigate(Pathname.DASHBOARD);
+				navigate(Pathname.PLANAIRPORTMASTER);
 				break;
 			case userType.VENDOR:
 				navigate(Pathname.VENDOR);

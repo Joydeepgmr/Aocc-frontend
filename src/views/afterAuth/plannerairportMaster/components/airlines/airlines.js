@@ -403,6 +403,7 @@ const Airlines = () => {
 				width="80vw"
 				closeModal={() => {
 					setIsAddModalOpen(false);
+					setRowData({});
 					form.resetFields();
 				}}
 				title={
@@ -418,6 +419,7 @@ const Airlines = () => {
 						isLoading={isAddAirlineLoading}
 						closeModal={() => {
 							setIsAddModalOpen(false);
+							setRowData({});
 							form.resetFields();
 						}}
 						handleSubmit={handleAddAirline}
