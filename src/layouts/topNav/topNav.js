@@ -8,6 +8,7 @@ import setting from '../../assets/logo/setting.svg';
 import user from '../../assets/logo/user.png';
 import line from '../../assets/logo/line.svg';
 import { roleBasedNav } from './navData';
+import { Pathname } from '../../pathname';
 import './topNav.scss';
 
 const TopNav = ({ data }) => {
@@ -26,12 +27,12 @@ const TopNav = ({ data }) => {
 
 	const logoutHandler = () => {
 		localStorage.clear();
-		navigate('/login');
+		navigate(Pathname.LOGIN);
 	};
 
 	const manageAccessHandler = () => {
 		setIsSettingCardOpen(!isSettingCardOpen);
-		navigate('/user-access');
+		navigate(Pathname.USERACCESS);
 	};
 	useEffect(() => {
 		const role = data?.role?.name;

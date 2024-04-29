@@ -9,7 +9,7 @@ const ModalComponent = ({ isModalOpen, children, width, closeModal, title, class
 			closable={true}
 			className={`modal ${className}`}
 			width={width ? width : '80%'}
-			height={height ?? '80%'}
+			height={height ?? 'auto'}
 			centered
 			footer={null}
 			onCancel={closeModal}
