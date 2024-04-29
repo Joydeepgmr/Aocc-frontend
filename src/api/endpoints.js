@@ -118,8 +118,11 @@ export const CDM_GET_TURN_AROUND = '/cdmOps/turnaround';
 export const UPDATE_CDM_TURN_AROUND = '/cdmOps/turnaround';
 
 /*-------------------------Vendor----------------------------------*/
-export const VENDOR = '/vendor';
-export const GET_VENDOR = '/vendor/paginated';
+export const VENDOR = '/vendor'
+export const GET_VENDOR = '/vendor/paginated'
+
+/*-------------------------Upload Image----------------------------------*/
+export const UPLOAD_AIRLINE_IMAGE = '/system-constant/upload';
 
 /*------------------------- Resource FIDS ----------------------------------*/
 export const GET_FIDS_RESOURCES = '/screen/paginated';

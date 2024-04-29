@@ -10,6 +10,7 @@ import MilestoneChart from './MilestoneChart';
 import { toast } from 'react-hot-toast';
 import './style.scss';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import Widgets from './Widgets';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
@@ -112,6 +113,7 @@ function Milestone() {
 	return (
 		<>
 			<SocketEventListener refetch={refetch} apiName={`${GET_MILESTONE_DATA}?flightType=${type}`} />
+			<Widgets />
 			<div className={`body-container ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
 				<div className={`top-bar`}>
 					<CustomTypography

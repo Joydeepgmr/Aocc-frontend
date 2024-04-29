@@ -19,11 +19,23 @@
 
 .widgets-container {
 	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	flex-wrap: wrap;
 	gap: 2rem;
+	width: 100%;
 }
 
 .airport-info {
+	width: 23.5%;
 	display: flex;
 	flex-direction: column;
 	gap: 1.6rem;
+}
+
+.airport-alerts {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	height: 100%;
 }

@@ -13,6 +13,7 @@ import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashb
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import { ConvertToDateTime } from '../../../../utils';
 import './style.scss';
+import Widgets from './Widgets';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
@@ -256,6 +257,7 @@ const FlightSchedule = () => {
 			>
 				<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
 			</ModalComponent>
+			<Widgets />
 			<div className="body-container">
 				<div className="top-bar">
 					<CustomTypography
