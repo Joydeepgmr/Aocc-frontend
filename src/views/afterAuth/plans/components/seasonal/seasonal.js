@@ -16,9 +16,6 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import editIcon from '../../../../../assets/logo/edit.svg';
-import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
-import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
-import { useAircraftDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
 import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import {
 	useEditSeasonalPlanArrival,
@@ -31,7 +28,6 @@ import {
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
 import './seasonal.scss';
-import aircraft from '../../../plannerairportMaster/components/aircraft/aircraft';
 
 const Seasonal = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -43,10 +39,6 @@ const Seasonal = ({ tab }) => {
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
-
-	const { data: airlineDropdownData = [] } = useAirlineDropdown();
-	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
-	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -127,6 +119,7 @@ const Seasonal = ({ tab }) => {
 	const handleAddSeasonalSuccess = (data) => {
 		setSeasonalData([]);
 		closeModal();
+		form.resetFields();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-seasonal-plans');
 	};
@@ -158,6 +151,7 @@ const Seasonal = ({ tab }) => {
 		setIsModalOpen(false);
 		setIsEditModalOpen(false);
 		form.resetFields();
+		setRowData({});
 	};
 
 	//EDIT
@@ -463,6 +457,7 @@ const Seasonal = ({ tab }) => {
 			)}
 
 			{/* modals */}
+			{isModalOpen &&
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				width="80%"
@@ -476,12 +471,10 @@ const Seasonal = ({ tab }) => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						airlineDropdownData={airlineDropdownData}
-						natureCodeDropdownData={natureCodeDropdownData}
-						aircraftDropdownData={aircraftDropdownData}
+						initialValues={false}
 					/>
 				</div>
-			</ModalComponent>
+			</ModalComponent>}
 			<UploadCsvModal
 				isModalOpen={isCsvModalOpen}
 				width="72rem"
@@ -503,9 +496,6 @@ const Seasonal = ({ tab }) => {
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
-						airlineDropdownData={airlineDropdownData}
-						natureCodeDropdownData={natureCodeDropdownData}
-						aircraftDropdownData={aircraftDropdownData}
 					/>
 				</div>
 			</ModalComponent>
