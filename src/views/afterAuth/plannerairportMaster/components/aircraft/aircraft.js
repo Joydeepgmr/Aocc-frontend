@@ -161,20 +161,6 @@ const Aircrafts = () => {
 				<div className="custom-button">
 					<ButtonComponent
 						type={'iconWithBorder'}
-						icon={Delete}
-						id="delete_button"
-						onClick={() => {
-							setOpenDeleteModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-								aircraft_id: record?.globalAircraftType?.identifier,
-							});
-						}}
-					></ButtonComponent>
-					<ButtonComponent
-						type={'iconWithBorder'}
 						icon={Edit}
 						onClick={() => {
 							setOpenEditModal(true);
@@ -186,6 +172,20 @@ const Aircrafts = () => {
 							});
 						}}
 						id="edit_button"
+					></ButtonComponent>
+					<ButtonComponent
+						type={'iconWithBorder'}
+						icon={Delete}
+						id="delete_button"
+						onClick={() => {
+							setOpenDeleteModal(true);
+							setRowData({
+								...record,
+								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+								aircraft_id: record?.globalAircraftType?.identifier,
+							});
+						}}
 					></ButtonComponent>
 				</div>
 			),
@@ -343,10 +343,10 @@ const Aircrafts = () => {
 				isModalOpen={isAddModalOpen}
 				width="80vw"
 				closeModal={() => {
-						setIsAddModalOpen(false);
-						form.resetFields();
-						setRowData({});
-					}}
+					setIsAddModalOpen(false);
+					form.resetFields();
+					setRowData({});
+				}}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 						Setup aircraft registration

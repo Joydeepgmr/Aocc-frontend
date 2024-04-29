@@ -15,12 +15,14 @@ import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
 
 
-const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading,timezoneDropdown,countryDropdownData }) => {
+const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
 	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const [form] = Form.useForm();
+	
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
@@ -237,7 +239,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AirportForm isReadOnly={airportModal.type === 'view'} type={airportModal.type} timezoneDropdown={timezoneDropdown} countryDropdownData={countryDropdownData} />
+					<AirportForm form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && <>
 						<Divider />
 						<div className="custom_buttons">

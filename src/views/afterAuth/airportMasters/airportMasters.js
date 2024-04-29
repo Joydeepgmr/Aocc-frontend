@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import TopHeader from '../../../components/topHeader/topHeader';
-import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../services';
 import { useGetLicenseData } from '../../../services/airportMasters/airportMasters';
 import CreateWrapper from '../globalMasters/components/createWrapper/createWrapper';
 import LicenseSetupTable from './components/licenseSetupTable/licenseSetupTable';
@@ -16,8 +15,6 @@ const AirportMasters = () => {
 		},
 	}) => toast.error(message);
 	const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch: getAirportMastersRefetch } = useGetLicenseData({ onError });
-	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
-	const { data: countryDropdownData } = useCountriesDropdown({ onError });
 	const [createProps, setCreateProps] = useState({ new: false, onDownload });
 
 	function onDownload() { }
@@ -42,8 +39,6 @@ const AirportMasters = () => {
 								setCreateProps={setCreateProps}
 								fetchData={fetchNextPage}
 								pagination={{ isMore: hasNextPage }}
-								airportDropdownData={airportDropdownData}
-								countryDropdownData={countryDropdownData}
 								loading={isFetching}
 							/>
 						}

@@ -4,22 +4,27 @@ import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectTypeOfUse } from '../../../userAccess/userAccessData';
+import { useGlobalAirportDropdown, useCountriesDropdown } from '../../../../../services';
 import './aircraftRegistrationForm.scss';
 
-const AircraftRegistrationForm = ({ isReadOnly, type, airportDropdownData, aircraftTypeDropdownData, countryDropdownData }) => {
+const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }) => {
 	const isNotEditable = type === 'edit';
+	const onError = ({ response: { data: { message } } }) => toast.error(message);
+    const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
+    const { data: countryDropdownData } = useCountriesDropdown({ onError });
+	
 	const SelectAircraftData = useMemo(() => {
-		return aircraftTypeDropdownData.map((data) => {
+		return aircraftTypeDropdownData?.map((data) => {
 			return { label: data.identifier, value: data.id, id: data.id }
 		})
 	}, [aircraftTypeDropdownData])
 	const SelectAirportData = useMemo(() => {
-		return airportDropdownData.map((data) => {
+		return airportDropdownData?.map((data) => {
 			return { label: data.name, value: data.id, id: data.id }
 		})
 	}, [airportDropdownData])
 	const SelectCountryData = useMemo(() => {
-		return countryDropdownData.map((data) => {
+		return countryDropdownData?.map((data) => {
 			return { label: data.name, value: data.name, id: data.name }
 		})
 	}, [countryDropdownData])
