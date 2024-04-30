@@ -10,8 +10,10 @@ import line from '../../assets/logo/line.svg';
 import { roleBasedNav } from './navData';
 import { Pathname } from '../../pathname';
 import './topNav.scss';
+import { useQueryClient } from 'react-query';
 
 const TopNav = ({ data }) => {
+	const queryClient = useQueryClient();
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const [navItems, setNavItems] = useState([]);
 	const navigate = useNavigate();
@@ -26,6 +28,7 @@ const TopNav = ({ data }) => {
 	};
 
 	const logoutHandler = () => {
+		queryClient.clear();
 		localStorage.clear();
 		navigate(Pathname.LOGIN);
 	};
