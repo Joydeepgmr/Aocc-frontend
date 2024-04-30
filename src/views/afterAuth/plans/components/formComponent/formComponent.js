@@ -9,19 +9,13 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectFlightType } from '../../../userAccess/userAccessData';
+import { useAircraftDropdown  } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
+import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
 import './formComponent.scss';
 
-const FormComponent = ({
-	form,
-	handleButtonClose,
-	handleSaveButton,
-	type,
-	initialValues,
-	isEdit,
-	airlineDropdownData,
-	natureCodeDropdownData,
-	aircraftDropdownData,
-}) => {
+
+const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [isDate, setIsDate] = useState(false);
 	const [isStart, setIsStart] = useState(false);
@@ -33,6 +27,10 @@ const FormComponent = ({
 	isEdit && (initialValues['airlineId'] = initialValues?.airline?.id);
 	isEdit && (initialValues['natureCodeId'] = initialValues?.natureCode?.id);
 	isEdit && (initialValues['aircraftId'] = initialValues?.aircraft?.id);
+
+	const { data: airlineDropdownData = [] } = useAirlineDropdown();
+	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
+	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const SelectAirlineData = useMemo(() => {
 		return airlineDropdownData?.map((data) => {
@@ -125,16 +123,21 @@ const FormComponent = ({
 		form.setFieldValue('weeklySelect', newSelectedDays);
 	};
 
+
 	useEffect(() => {
-		form.resetFields();
+
 		if (initialValues) {
 			form.setFieldsValue(initialValues);
 		}
-	}, [form, initialValues]);
+	}, [initialValues]);
 
 	useEffect(() => {
 		calculateDays();
 	}, [startDate, endDate, weekDays]);
+
+	useEffect(()=>{
+		return form.resetFields();
+	},[])
 
 	return (
 		<div key={initialValues?.id}>
