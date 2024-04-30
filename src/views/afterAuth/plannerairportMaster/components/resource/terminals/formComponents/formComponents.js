@@ -8,8 +8,8 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import { useStandDropdown } from '../../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useTaxiwayDropdown } from '../../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../../services/planairportmaster/resources/runway/runway';
-import './formComponents.scss';
 import { ConvertIstToUtc } from '../../../../../../../utils';
+import './formComponents.scss';
 
 const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	isEdit && (initialValues['parkingStand'] = initialValues?.parkingStand?.id);
@@ -81,7 +81,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						warning="Required field"
 						required
 						className="custom_input"
-						// pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 						max="16"
 						disabled={isReadOnly || isEdit}
 					/>
