@@ -76,6 +76,12 @@ const TableComponent = ({
 					style={{
 						margin: 0,
 					}}
+					rules={[
+						{
+							pattern: /^\S/,
+							message: 'First character cannot be blank.',
+						},
+					]}
 					name={dataIndex}
 				>
 					{inputType === 'time' ? (

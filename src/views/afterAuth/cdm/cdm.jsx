@@ -137,7 +137,7 @@ const CDM = () => {
 			aobt: item?.values?.aobt ? `${formattedTime(item?.values?.aobt)}` : null,
 			tsat: item?.values?.tsat ? `${formattedTime(item?.values?.tsat)}` : null,
 			atot: item?.values?.atot ? `${formattedTime(item?.values?.atot)}` : null,
-			remark: item?.remark ?? null,
+			remark: item?.values?.remark ?? null,
 		};
 		const hasNonNullValue = Object.values(data).some((value) => value !== null);
 		activeTab === '3' ? hasNonNullValue && onUpdateCDMTurnAround(data) : hasNonNullValue && onUpdateCDM(data);
