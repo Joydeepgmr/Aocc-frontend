@@ -254,40 +254,40 @@ const ResourceAllocation = () => {
 				</div>
 			),
 		},
-		{
-			key: '5',
-			label: 'Taxiways',
-			children: (
-				<div>
-					{fullScreen ? (
-						<div className={'resourceAllocation--FullScreen'}>
-							<FullscreenExitOutlined
-								className="resourceAllocation--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
-							<TimelineDesign
-								height="50vh"
-								items={timelineItems}
-								groups={timelineGroups}
-								editable={isEditable}
-								label={timelineLabel}
-								handleMove={handleResourceMove}
-								time={selectedTimeValue?.slice(0, 2)}
-							/>
-						</div>
-					) : (
-						<TimelineDesign
-							items={timelineItems}
-							label={timelineLabel}
-							groups={timelineGroups}
-							editable={isEditable}
-							handleMove={handleResourceMove}
-							time={selectedTimeValue?.slice(0, 2)}
-						/>
-					)}
-				</div>
-			),
-		},
+		// {
+		// 	key: '5',
+		// 	label: 'Taxiways',
+		// 	children: (
+		// 		<div>
+		// 			{fullScreen ? (
+		// 				<div className={'resourceAllocation--FullScreen'}>
+		// 					<FullscreenExitOutlined
+		// 						className="resourceAllocation--FullScreenExitIcon"
+		// 						onClick={toggleFullscreen}
+		// 					/>
+		// 					<TimelineDesign
+		// 						height="50vh"
+		// 						items={timelineItems}
+		// 						groups={timelineGroups}
+		// 						editable={isEditable}
+		// 						label={timelineLabel}
+		// 						handleMove={handleResourceMove}
+		// 						time={selectedTimeValue?.slice(0, 2)}
+		// 					/>
+		// 				</div>
+		// 			) : (
+		// 				<TimelineDesign
+		// 					items={timelineItems}
+		// 					label={timelineLabel}
+		// 					groups={timelineGroups}
+		// 					editable={isEditable}
+		// 					handleMove={handleResourceMove}
+		// 					time={selectedTimeValue?.slice(0, 2)}
+		// 				/>
+		// 			)}
+		// 		</div>
+		// 	),
+		// },
 	];
 
 	const handleChange = (key) => {

@@ -9,13 +9,12 @@ import Date from '../../../../../components/datapicker/datepicker';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import CustomSelect from '../../../../../components/select/select';
 import { SelectFlightType } from '../../../userAccess/userAccessData';
-import { useAircraftDropdown  } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
+import { useAircraftDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
 import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
 import './formComponent.scss';
 
-
-const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit }) => {
+const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit, isDaily }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [isDate, setIsDate] = useState(false);
 	const [isStart, setIsStart] = useState(false);
@@ -123,9 +122,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 		form.setFieldValue('weeklySelect', newSelectedDays);
 	};
 
-
 	useEffect(() => {
-
 		if (initialValues) {
 			form.setFieldsValue(initialValues);
 		}
@@ -135,9 +132,12 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 		calculateDays();
 	}, [startDate, endDate, weekDays]);
 
-	useEffect(()=>{
-		return form.resetFields();
-	},[])
+	useEffect(() => {
+		form.resetFields();
+		const currentDate = dayjs();
+		const formattedDate = currentDate.format('YYYY-MM-DD');
+		isDaily && formattedDate && form.setFieldValue('date', dayjs(formattedDate));
+	}, []);
 
 	return (
 		<div key={initialValues?.id}>
@@ -170,6 +170,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							className="custom_date"
 							disabledFor="past"
 							onChange={handleDateChange}
+							disabled={isDaily}
 							required={!startDate || !endDate}
 						/>
 					</div>
@@ -295,7 +296,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						</div>
 					)}
 
-					{!isEdit && !isDate && (
+					{!isEdit && !isDate && !isDaily && (
 						<div>
 							<CustomTypography
 								type="text"

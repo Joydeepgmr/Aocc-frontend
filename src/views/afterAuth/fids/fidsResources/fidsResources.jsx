@@ -187,49 +187,49 @@ const FidsResources = () => {
 			),
 		},
 		{
-			title: 'Screen Name',
+			title: 'SCRN',
 			dataIndex: 'screenName',
 			key: 'screenName',
 			align: 'center',
 			render: (screenName) => screenName ?? '-',
 		},
 		{
-			title: 'Resource Type',
+			title: 'RES TYPE',
 			dataIndex: 'resourceType',
 			key: 'resourceType',
 			align: 'center',
 			render: (resourceType) => resourceType ?? '-',
 		},
 		{
-			title: 'Resource',
+			title: 'RES',
 			dataIndex: 'resourceName',
 			key: 'resourceName',
 			align: 'resourceName',
 			render: (resourceName) => resourceName ?? '-',
 		},
 		{
-			title: 'Status',
+			title: 'STS',
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',
 			render: (status) => status ?? '-',
 		},
 		{
-			title: 'Mac',
+			title: 'MAC',
 			dataIndex: 'MacAddress',
 			key: 'MacAddress',
 			align: 'center',
 			render: (MacAddress) => MacAddress ?? '-',
 		},
 		{
-			title: 'Height',
+			title: 'HEIGHT',
 			dataIndex: 'height',
 			key: 'height',
 			align: 'center',
 			render: (height) => height ?? '-',
 		},
 		{
-			title: 'Width',
+			title: 'WIDTH',
 			dataIndex: 'width',
 			key: 'width',
 			align: 'center',
@@ -277,17 +277,17 @@ const FidsResources = () => {
 			value: 'NewResource',
 			children: '',
 		},
-		{
-			key: '2',
-			label: 'Upload CSV',
-			value: 'UploadCSV',
-			children: '',
-		},
-		{
-			key: '3',
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-		},
+		// {
+		// 	key: '2',
+		// 	label: 'Upload CSV',
+		// 	value: 'UploadCSV',
+		// 	children: '',
+		// },
+		// {
+		// 	key: '3',
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// },
 	];
 
 	return (
@@ -327,7 +327,7 @@ const FidsResources = () => {
 									isSubmit="submit"
 									onClick={() => setIsAddModalOpen(true)}
 								/>
-								<Button
+								{/* <Button
 									id="btn"
 									title={'Upload Csv'}
 									className="custom_svgButton"
@@ -343,7 +343,7 @@ const FidsResources = () => {
 									type="filledText"
 									isSubmit="submit"
 									// onClick={downloadCSV}
-								/>
+								/> */}
 							</>
 						)}
 					</div>

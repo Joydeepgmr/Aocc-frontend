@@ -4,19 +4,23 @@ import './modal.scss';
 
 const ModalComponent = ({ isModalOpen, children, width, closeModal, title, className, height }) => {
 	return (
-		<Modal
-			open={isModalOpen}
-			closable={true}
-			className={`modal ${className}`}
-			width={width ? width : '80%'}
-			height={height ?? 'auto'}
-			centered
-			footer={null}
-			onCancel={closeModal}
-			title={title}
-		>
-			{children}
-		</Modal>
+		<>
+			{isModalOpen && (
+				<Modal
+					open={isModalOpen}
+					closable={true}
+					className={`modal ${className}`}
+					width={width ? width : '80%'}
+					height={height ?? 'auto'}
+					centered
+					footer={null}
+					onCancel={closeModal}
+					title={title}
+				>
+					{children}
+				</Modal>
+			)}
+		</>
 	);
 };
 
