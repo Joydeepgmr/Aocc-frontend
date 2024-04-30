@@ -1,11 +1,11 @@
 import { useMutation, useInfiniteQuery } from 'react-query';
-import { VENDOR,GET_VENDOR } from '../../api';
-import { Post, Patch } from '../HttpServices/HttpServices';
+import { VENDOR,UPDATE_DONE } from '../../api';
+import { Post, Patch, Get } from '../HttpServices/HttpServices';
 
 export const useGetVendor = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-vendor'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_VENDOR}`,{pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Get(`${VENDOR}`,{pagination}),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
 			return false;
@@ -16,10 +16,20 @@ export const useGetVendor = (props) => {
 	return response;
 };
 
-export const useUpdateStatus = (id,props) => {
+export const useUpdateStatusDone = (props) => {
 	const response = useMutation({
-		mutationKey: ['update-status'],
-		mutationFn: async (data) => await Patch(`${VENDOR}/${id}`, data),
+		mutationKey: ['update-status-done'],
+		mutationFn: async (data) => await Patch(`${UPDATE_DONE}`, data),
+		...props,
+	});
+
+	return response;
+};
+
+export const useUpdateStatusInProgress = (props) => {
+	const response = useMutation({
+		mutationKey: ['update-status-in-progress'],
+		mutationFn: async (data) => await Post(`${VENDOR}`, data),
 		...props,
 	});
 

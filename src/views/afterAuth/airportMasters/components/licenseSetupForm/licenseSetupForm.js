@@ -71,7 +71,7 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 						label: 'Airport Logo',
 						fileList,
 						setFileList,
-						required: true,
+						name: "url"
 					}}
 				/>
 				<NumericField
