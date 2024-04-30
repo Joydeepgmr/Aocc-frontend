@@ -1,54 +1,112 @@
-import { Divider } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import { Divider, Form } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../components/input/field/field';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomSelect from '../../../../../components/select/select';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAccessData';
-import { useCountriesDropdown } from '../../../../../services'; 
+import { useCountriesDropdown } from '../../../../../services';
 import { useGlobalAirportDropdown } from '../../../../../services';
 import './airlineForm.scss';
+import ImageUpload from '../../../../../components/imageUpload/imageUpload';
+import { useGetAirlineImage } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
-const AirlineForm = ({ isReadOnly, type }) => {
-	
+const AirlineForm = ({ isReadOnly, type, form }) => {
+	const [fileList, setFileList] = useState([]);
+	const [isUploadDisable, setIsUploadDisable] = useState(true);
+	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
 
+	const watchOtp = Form?.useWatch('threeLetterCode', form);
+	const getAirlineImageHandler = {
+		onSuccess: (data) => {
+			if (data?.data?.value) {
+				setFileList([{ url: data?.data?.value }]);
+				// form.setFieldsValue({
+				// 	url: data?.data?.value,
+				// });
+				setIsDefault(true);
+			} else {
+				setFileList([]);
+			}
+			setIsUploadDisable(false);
+		},
+		onError: (error) => {
+			setIsDefault(false);
+		},
+	};
+
+	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineImage(
+		Array.isArray(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
+		getAirlineImageHandler
+	);
+
 	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
 	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
-	
+
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
-			return { label: data.name, value: data.id, id: data.id }
-		})
+			return { label: data.name, value: data.id, id: data.id };
+		});
 	}, [airportDropdownData]);
 	const SelectCountryData = useMemo(() => {
 		return countryDropdownData.map((data) => {
-			return { label: data.name, value: data.name, id: data.name }
-		})
-	}, [countryDropdownData])
+			return { label: data.name, value: data.name, id: data.name };
+		});
+	}, [countryDropdownData]);
 	const isNotEditable = type === 'edit';
+
+	useEffect(() => {
+		if (Array.isArray(watchOtp) ? watchOtp?.join('')?.length < 3 : watchOtp?.length < 3) {
+			setFileList([]);
+			setIsDefault(false);
+			setIsUploadDisable(true);
+		}
+	}, [watchOtp]);
 	return (
 		<div className="airline_setup_form_container">
 			<div className="airline_setup_form_inputfields">
 				<InputField
 					label="Airline Name"
 					name="name"
-					pattern='^(?!\s).*$'
+					pattern="^(?!\s).*$"
 					max={32}
 					placeholder={!isReadOnly && 'Enter the airline name'}
 					className="custom_input"
 					disabled={isReadOnly}
 					required
 				/>
-				<OtpField otpLength={2} label="Two Letter Code" name="twoLetterCode" disabled={isReadOnly || isNotEditable} required
+				<OtpField
+					otpLength={2}
+					label="Two Letter Code"
+					name="twoLetterCode"
+					disabled={isReadOnly || isNotEditable}
+					required
 				/>
-				<OtpField otpLength={3} label="Three Letter Code" name="threeLetterCode" disabled={isReadOnly || isNotEditable} required
+				<OtpField
+					otpLength={3}
+					label="Three Letter Code"
+					name="threeLetterCode"
+					disabled={isReadOnly || isNotEditable}
+					required
 				/>
+				{type !== 'edit' && !isReadOnly && (
+					<ImageUpload
+						{...{
+							fileList,
+							setFileList,
+							isDefault: isDefault,
+							disabled: isUploadDisable,
+							name: 'url',
+							label: 'Airline logo',
+						}}
+					/>
+				)}
 			</div>
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect
@@ -80,7 +138,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Remark"
 					name="remark"
-					pattern='^(?!\s).*$'
+					pattern="^(?!\s).*$"
 					max={32}
 					placeholder={!isReadOnly && 'Remark'}
 					className="custom_input"
@@ -116,7 +174,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Address 1"
 					name="address"
-					pattern='^(?!\s).*$'
+					pattern="^(?!\s).*$"
 					max={32}
 					placeholder={!isReadOnly && 'Address'}
 					className="custom_input"
@@ -125,7 +183,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="Phone"
 					name="phoneNumber"
-					pattern='^\d+$'
+					pattern="^\d+$"
 					min={10}
 					max={20}
 					placeholder={!isReadOnly && 'Enter your Phone No.'}
@@ -142,7 +200,7 @@ const AirlineForm = ({ isReadOnly, type }) => {
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
-					disabledFor='future'
+					disabledFor="future"
 					disabled={isReadOnly || isNotEditable}
 					required
 				/>
