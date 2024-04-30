@@ -3,7 +3,6 @@ import TopHeader from '../../../components/topHeader/topHeader';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import './cdm.scss';
 import TableComponent from '../../../components/table/table';
-import { CombineUtcDateAndIstTime, ConvertUtcToIst, SplitTimeFromDateAndTime } from '../../../utils';
 import CustomSelect from '../../../components/select/select';
 import {
 	useGetAllCdmArrivalDeparture,
@@ -658,13 +657,12 @@ const CDM = () => {
 		<>
 			<div className="container-style">
 				<TopHeader
-					className="header-box"
 					heading={'CDM'}
 					subHeading={'Overview of Arrival , Departure , and Turn Around '}
 					searchBox={false}
 					condition={false}
 				/>
-				<div className="tabs">
+				<div className="cdm--Container">
 					<CustomTabs
 						defaultActiveKey="1"
 						items={items}
