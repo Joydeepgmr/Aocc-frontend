@@ -2,12 +2,11 @@
 @import '../../../styles/sass/utils';
 @import '../../../styles/sass/mixins';
 
-
-.airport_masters_container{
-    padding: 4rem;
-    overflow-y: auto;
-    // height: 63.2rem;
-    box-sizing: content-box;
-    @include flex(stretch, flex-start, column);
-    gap: 2.4rem;
+.airport_masters_container {
+	padding: 2.4rem 2rem 1.5rem 2rem;
+	overflow-y: auto;
+	// height: 63.2rem;
+	box-sizing: content-box;
+	@include flex(stretch, flex-start, column);
+	gap: 2.4rem;
 }

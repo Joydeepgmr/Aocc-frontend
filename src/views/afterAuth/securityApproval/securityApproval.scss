@@ -4,7 +4,7 @@
 .tabs{
     &--box{
         @include flex(stretch, center, column);
-        padding: 5rem 2rem 0rem 3rem;
+        padding: 2.4rem 2rem 1.5rem 2rem;
         gap: 2rem;
     }
     &--custom_tab{
