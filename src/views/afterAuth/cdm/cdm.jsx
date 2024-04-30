@@ -62,15 +62,15 @@ const CDM = () => {
 			const newData = data?.pages.reduce((acc, page) => {
 				const modifiedPageData = page.data.map((item) => ({
 					...item,
-					eobt3: item?.eobt3 ? SplitTimeFromDateAndTime(item?.eobt3) : null,
-					eldt: item?.eldt ? SplitTimeFromDateAndTime(item?.eldt) : null,
-					aldt: item?.aldt ? SplitTimeFromDateAndTime(item?.aldt) : null,
-					eibt: item?.eibt ? SplitTimeFromDateAndTime(item?.eibt) : null,
-					aibt: item?.aibt ? SplitTimeFromDateAndTime(item?.aibt) : null,
-					tobt: item?.tobt ? SplitTimeFromDateAndTime(item?.tobt) : null,
-					aobt: item?.aobt ? SplitTimeFromDateAndTime(item?.aobt) : null,
-					tsat: item?.tsat ? SplitTimeFromDateAndTime(item?.tsat) : null,
-					atot: item?.atot ? SplitTimeFromDateAndTime(item?.atot) : null,
+					eobt3: item?.eobt3 ?? null,
+					eldt: item?.eldt ?? null,
+					aldt: item?.aldt ?? null,
+					eibt: item?.eibt ?? null,
+					aibt: item?.aibt ?? null,
+					tobt: item?.tobt ?? null,
+					aobt: item?.aobt ?? null,
+					tsat: item?.tsat ?? null,
+					atot: item?.atot ?? null,
 				}));
 				return acc.concat(modifiedPageData);
 			}, []);
@@ -115,31 +115,28 @@ const CDM = () => {
 	const formattedTime = (data) => {
 		const timeRegex = /^\d{2}:\d{2}$/;
 		if (timeRegex.test(data)) {
-			return `${data}:00`;
+			return `${data}`;
 		} else {
 			return new Date(data).toLocaleTimeString('en-US', {
 				hour12: false,
 				hour: '2-digit',
 				minute: '2-digit',
-				second: '2-digit',
 			});
 		}
 	};
 
 	const handleEditTable = (item) => {
 		setRowData(item);
-		const currentDate = new Date();
-
 		const data = {
-			eobt3: item?.eobt3 ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eobt3)}` : null,
-			eldt: item?.eldt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eldt)}` : null,
-			aldt: item?.aldt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aldt)}` : null,
-			eibt: item?.eibt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.eibt)}` : null,
-			aibt: item?.aibt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aibt)}` : null,
-			tobt: item?.tobt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.tobt)}` : null,
-			aobt: item?.aobt ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.aobt)}` : null,
-			tsat: item?.tsat ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.tsat)}` : null,
-			atot: item?.atot ? `${currentDate.toISOString().slice(0, 10)} ${formattedTime(item?.atot)}` : null,
+			eobt3: item?.eobt3 ? `${formattedTime(item?.eobt3)}` : null,
+			eldt: item?.eldt ? `${formattedTime(item?.eldt)}` : null,
+			aldt: item?.aldt ? `${formattedTime(item?.aldt)}` : null,
+			eibt: item?.eibt ? `${formattedTime(item?.eibt)}` : null,
+			aibt: item?.aibt ? `${formattedTime(item?.aibt)}` : null,
+			tobt: item?.tobt ? `${formattedTime(item?.tobt)}` : null,
+			aobt: item?.aobt ? `${formattedTime(item?.aobt)}` : null,
+			tsat: item?.tsat ? `${formattedTime(item?.tsat)}` : null,
+			atot: item?.atot ? `${formattedTime(item?.atot)}` : null,
 			remark: item?.remark ?? null,
 		};
 		activeTab === '3' ? onUpdateCDMTurnAround(data) : onUpdateCDM(data);
@@ -193,7 +190,7 @@ const CDM = () => {
 						title: 'FLDT',
 						dataIndex: 'date',
 						key: 'date',
-						render: (date) => (date ? ConvertUtcToIst(date) : '-'),
+						render: (date) => date ?? '-',
 						align: 'center',
 					},
 
@@ -307,7 +304,7 @@ const CDM = () => {
 							title: 'FLDT',
 							dataIndex: 'date',
 							key: 'date',
-							render: (date) => (date ? ConvertUtcToIst(date) : '-'),
+							render: (date) => (date ? date : '-'),
 							align: 'center',
 						},
 
@@ -574,7 +571,13 @@ const CDM = () => {
 					columns={columns}
 					data={cdmData}
 					handleEdit={handleEditTable}
-					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					loading={
+						isPlannerCdmLoading ||
+						isUpdateCDMLoading ||
+						isUpdateCDMTurnAroundLoading ||
+						isPlannerCdmTurnAroundLoading ||
+						isPlannerCdmTurnAroundFetching
+					}
 					fetchData={isPlannerCdmFetchNextPage}
 					pagination={isPlannerCdmHasNextPage}
 					isColored
@@ -595,7 +598,13 @@ const CDM = () => {
 					columns={columns}
 					data={cdmData}
 					handleEdit={handleEditTable}
-					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					loading={
+						isPlannerCdmLoading ||
+						isUpdateCDMLoading ||
+						isUpdateCDMTurnAroundLoading ||
+						isPlannerCdmTurnAroundLoading ||
+						isPlannerCdmTurnAroundFetching
+					}
 					fetchData={isPlannerCdmFetchNextPage}
 					pagination={isPlannerCdmHasNextPage}
 					isColored
@@ -616,7 +625,13 @@ const CDM = () => {
 					columns={columns}
 					data={cdmData}
 					handleEdit={handleEditTable}
-					loading={isPlannerCdmLoading || isUpdateCDMLoading || isUpdateCDMTurnAroundLoading}
+					loading={
+						isPlannerCdmLoading ||
+						isUpdateCDMLoading ||
+						isUpdateCDMTurnAroundLoading ||
+						isPlannerCdmTurnAroundLoading ||
+						isPlannerCdmTurnAroundFetching
+					}
 					fetchData={isPlannerCdmFetchNextPage}
 					pagination={isPlannerCdmHasNextPage}
 					isColored
