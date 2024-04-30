@@ -143,7 +143,6 @@ const DailySchedule = ({ tab }) => {
 			std: value.std,
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
-			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
 			type: value?.type,
 		};
 
@@ -198,7 +197,6 @@ const DailySchedule = ({ tab }) => {
 			std: value.std,
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
-			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
 			type: value?.type,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
@@ -464,6 +462,7 @@ const DailySchedule = ({ tab }) => {
 						airlineDropdownData={airlineDropdownData}
 						natureCodeDropdownData={natureCodeDropdownData}
 						aircraftDropdownData={aircraftDropdownData}
+						isDaily={true}
 					/>
 				</div>
 			</ModalComponent>
@@ -491,6 +490,7 @@ const DailySchedule = ({ tab }) => {
 						airlineDropdownData={airlineDropdownData}
 						natureCodeDropdownData={natureCodeDropdownData}
 						aircraftDropdownData={aircraftDropdownData}
+						isDaily={true}
 					/>
 				</div>
 			</ModalComponent>
