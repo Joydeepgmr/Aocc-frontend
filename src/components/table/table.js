@@ -51,7 +51,6 @@ const TableComponent = ({
 			}
 		}, [editing]);
 		const toggleEdit = () => {
-			console.log('hreee');
 			setEditing(!editing);
 			form.setFieldsValue({
 				[dataIndex]: record[dataIndex],
@@ -63,7 +62,7 @@ const TableComponent = ({
 				toggleEdit();
 				handleSave({
 					...record,
-					...values,
+					values,
 				});
 			} catch (errInfo) {
 				console.log('Save failed:', errInfo);
@@ -95,14 +94,7 @@ const TableComponent = ({
 	};
 
 	const handleSave = (row) => {
-		const newData = [...data];
-		const index = newData.findIndex((item) => row.key === item.key);
-		const item = newData[index];
-		newData.splice(index, 1, {
-			...item,
-			...row,
-		});
-		handleEdit && handleEdit(row, newData);
+		handleEdit && handleEdit(row);
 	};
 	const components = {
 		body: {
@@ -133,7 +125,7 @@ const TableComponent = ({
 		return newCol;
 	};
 
-     const TableColumns = columns.map(defaultColumns);
+	const TableColumns = columns.map(defaultColumns);
 
 	return (
 		<>
