@@ -26,6 +26,7 @@ const InputField = ({
 	isArticle = true,
 }) => {
 	const numberPattern = /^[0-9]*$/;
+	const Regex_CheckSpace = /^\S/;
 	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	const inputs = [];
 	const [codeValue, setCodeValue] = useState('');
@@ -95,6 +96,10 @@ const InputField = ({
 							message: warning ? warning : 'This field is required.',
 						},
 						{
+							pattern: Regex_CheckSpace,
+							message: 'First character cannot be blank.',
+						},
+						{
 							pattern: type === 'number' ? numberPattern : null,
 							message: type === 'number' ? 'Please enter only numbers' : 'Enter the valid format',
 						},
@@ -119,6 +124,10 @@ const InputField = ({
 						{
 							required: required,
 							message: warning ? warning : 'This field is required.',
+						},
+						{
+							pattern: Regex_CheckSpace,
+							message: 'First character cannot be blank.',
 						},
 						{
 							pattern: pattern ?? passwordPattern,
@@ -147,6 +156,10 @@ const InputField = ({
 							message: warning ? warning : 'This field is required.',
 						},
 						{
+							pattern: Regex_CheckSpace,
+							message: 'First character cannot be blank.',
+						},
+						{
 							pattern: numberPattern,
 							message: 'Please enter only numbers',
 						},
@@ -170,22 +183,28 @@ const InputField = ({
 							message: warning ? warning : 'This field is required.',
 						},
 						{
+							pattern: Regex_CheckSpace,
+							message: 'First character cannot be blank.',
+						},
+						{
 							pattern: pattern,
 							message: patternWarning ?? 'Enter the valid format',
 						},
 						{ validator: validator ?? validateRange },
 					]}
-				><Input
+				>
+					<Input
 						placeholder={placeholder}
 						className={'input_field'}
 						disabled={disabled ? disabled : false}
 						suffix={suffixText && <span>{suffixText}</span>}
 						status={status}
 						defaultValue={defaultValue}
-						type='time'
+						type="time"
 						format="HH:mm"
 						{...rest}
-					/></Form.Item>
+					/>
+				</Form.Item>
 			) : (
 				<Form.Item
 					label={type !== 'search' ? renderLabel() : null}
@@ -196,6 +215,10 @@ const InputField = ({
 						{
 							required: required,
 							message: warning ? warning : 'This field is required.',
+						},
+						{
+							pattern: Regex_CheckSpace,
+							message: 'First character cannot be blank.',
 						},
 						{
 							pattern: pattern,

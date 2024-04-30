@@ -128,18 +128,19 @@ const CDM = () => {
 	const handleEditTable = (item) => {
 		setRowData(item);
 		const data = {
-			eobt3: item?.eobt3 ? `${formattedTime(item?.eobt3)}` : null,
-			eldt: item?.eldt ? `${formattedTime(item?.eldt)}` : null,
-			aldt: item?.aldt ? `${formattedTime(item?.aldt)}` : null,
-			eibt: item?.eibt ? `${formattedTime(item?.eibt)}` : null,
-			aibt: item?.aibt ? `${formattedTime(item?.aibt)}` : null,
-			tobt: item?.tobt ? `${formattedTime(item?.tobt)}` : null,
-			aobt: item?.aobt ? `${formattedTime(item?.aobt)}` : null,
-			tsat: item?.tsat ? `${formattedTime(item?.tsat)}` : null,
-			atot: item?.atot ? `${formattedTime(item?.atot)}` : null,
-			remark: item?.remark ?? null,
+			eobt3: item?.values?.eobt3 ? `${formattedTime(item?.values?.eobt3)}` : null,
+			eldt: item?.values?.eldt ? `${formattedTime(item?.values?.eldt)}` : null,
+			aldt: item?.values?.aldt ? `${formattedTime(item?.values?.aldt)}` : null,
+			eibt: item?.values?.eibt ? `${formattedTime(item?.values?.eibt)}` : null,
+			aibt: item?.values?.aibt ? `${formattedTime(item?.values?.aibt)}` : null,
+			tobt: item?.values?.tobt ? `${formattedTime(item?.values?.tobt)}` : null,
+			aobt: item?.values?.aobt ? `${formattedTime(item?.values?.aobt)}` : null,
+			tsat: item?.values?.tsat ? `${formattedTime(item?.values?.tsat)}` : null,
+			atot: item?.values?.atot ? `${formattedTime(item?.values?.atot)}` : null,
+			remark: item?.values?.remark ?? null,
 		};
-		activeTab === '3' ? onUpdateCDMTurnAround(data) : onUpdateCDM(data);
+		const hasNonNullValue = Object.values(data).some((value) => value !== null);
+		activeTab === '3' ? hasNonNullValue && onUpdateCDMTurnAround(data) : hasNonNullValue && onUpdateCDM(data);
 	};
 	const columns =
 		activeTab === '1'

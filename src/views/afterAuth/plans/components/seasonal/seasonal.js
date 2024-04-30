@@ -140,7 +140,7 @@ const Seasonal = ({ tab }) => {
 			std: value.std,
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
-			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			frequency: Boolean(value?.weeklySelect?.length) ? value?.weeklySelect : [value?.date?.day()],
 			type: value?.type,
 		};
 		data && postSeasonalPlans(data);
@@ -196,7 +196,7 @@ const Seasonal = ({ tab }) => {
 			std: value.std,
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
-			frequency: value.seasonalPlan?.frequency ?? [value.date.day()],
+			// frequency: Boolean(value?.weeklySelect?.length) ? value?.weeklySelect : [value?.date?.day()],
 			type: value?.type,
 		};
 		index === '1' && editSeasonalPlanArrival(data);
@@ -460,24 +460,25 @@ const Seasonal = ({ tab }) => {
 			)}
 
 			{/* modals */}
-			{isModalOpen &&
-			<ModalComponent
-				isModalOpen={isModalOpen}
-				width="80%"
-				closeModal={closeModal}
-				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						form={form}
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-						type={index}
-						initialValues={false}
-					/>
-				</div>
-			</ModalComponent>}
+			{isModalOpen && (
+				<ModalComponent
+					isModalOpen={isModalOpen}
+					width="80%"
+					closeModal={closeModal}
+					title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
+					className="custom_modal"
+				>
+					<div className="modal_content">
+						<FormComponent
+							form={form}
+							handleSaveButton={handleSaveButton}
+							handleButtonClose={handleCloseButton}
+							type={index}
+							initialValues={false}
+						/>
+					</div>
+				</ModalComponent>
+			)}
 			<UploadCsvModal
 				isModalOpen={isCsvModalOpen}
 				width="72rem"
