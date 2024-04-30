@@ -37,6 +37,7 @@ const FormComponent = ({
 	}) => toast.error(message);
 
 	const watchOtp = Form?.useWatch('threeLetterCode', form);
+	const watchURL = Form?.useWatch('url', form);
 	const getAirlineImageHandler = {
 		onSuccess: (data) => {
 			if (data?.data?.value) {
@@ -112,6 +113,14 @@ const FormComponent = ({
 			})
 		}
 	}, [watchOtp]);
+
+	useEffect(() => {
+		if(!form.getFieldValue('url')?.file?.response?.success){
+			form.setFieldsValue({
+				url: null
+			})
+		}
+	}, [watchURL])
 
 	return (
 		<div key={initialValue?.id}>

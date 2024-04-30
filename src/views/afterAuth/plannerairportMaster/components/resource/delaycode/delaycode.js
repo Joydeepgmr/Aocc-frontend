@@ -55,7 +55,6 @@ const DelayCode = () => {
 		fetchNextPage,
 		refetch: getDelayCodeRefetch
 	} = useGetDelayCode(getDelayCodeHandler);
-	console.log(fetchDelayCode, "delaycode");
 	const openModal = () => {
 		setIsModalOpen(true);
 	};

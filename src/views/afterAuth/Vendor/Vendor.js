@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import Button from '../../../components/button/button';
 import TableComponent from '../../../components/table/table';
 import Modal from '../../../components/modal/modal';
-import { useGetVendor, useUpdateStatus } from '../../../services/Vendor/vendor';
+import { useGetVendor, useUpdateStatusDone, useUpdateStatusInProgress } from '../../../services/Vendor/vendor';
 import './Vendor.scss';
 
 const Vendor = () => {
+	const queryClient = useQueryClient();
 	const [rowData, setRowData] = useState({});
 	const [vendorData, setVendorData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const openModal = (record) => {
-		console.log(record, 'status');
 		setRowData(record);
 		setIsModalOpen(true);
 	};
@@ -48,15 +49,13 @@ const Vendor = () => {
 		fetchNextPage,
 	} = useGetVendor(getVendorHandler);
 
-	console.log(fetchVendor);
-
 	const statusHandler = {
 		onSuccess: (data) => handleStatusSuccess(data),
 		onError: (error) => handleStatusError(error),
 	};
 
-	const { mutate: updateStatus, isLoading: isStatusLoading } = useUpdateStatus(rowData?.id, statusHandler);
-
+	const { mutate: updateStatusDone, isLoading: isStatusDoneLoading } = useUpdateStatusDone(statusHandler);
+	const { mutate: updateStatusInProgress, isLoading: isStatusInProgressLoading } = useUpdateStatusInProgress(statusHandler);
 	const handleStatusSuccess = (data) => {
 		closeModal();
 		setVendorData([]);
@@ -68,49 +67,29 @@ const Vendor = () => {
 		toast.error(error?.response?.data?.message);
 	};
 	const handleProgress = () => {
-		updateStatus({ task: rowData?.task });
+		if(rowData?.status === "in-progress"){
+			updateStatusDone({ 
+				flightId: rowData?.id,
+				airlineId: rowData?.airline,
+				taskType: rowData?.task,
+			});
+		}
+		else if(rowData?.status === "pending"){
+			updateStatusInProgress({ 	
+				flightId: rowData?.id,
+				airlineId: rowData?.airlineId,
+				taskType: rowData?.task,
+			});
+		}
 	};
 
-	const rows = [
-		{
-			id: '123435345',
-			task: 'Fueling',
-			flight: 'AI 812',
-			status: 'pending',
-		},
-		{
-			task: 'Catering',
-			flight: 'AI 812',
-			status: 'in-progress',
-		},
-		{
-			task: 'Cleaning',
-			flight: '6E 1234',
-			status: 'completed',
-		},
-		{
-			task: 'Fueling',
-			flight: '6E 1234',
-			status: 'pending',
-		},
-		{
-			task: 'Catering',
-			flight: '6E 1234',
-			status: 'pending',
-		},
-		{
-			task: 'Cleaning',
-			flight: '6E 1234',
-			status: 'pending',
-		},
-	];
 	const columns = [
 		{
 			title: 'Flight',
-			dataIndex: 'flight',
-			key: 'flight',
+			dataIndex: 'callSign',
+			key: 'callSign',
 			align: 'center',
-			render: (flight) => flight ?? '-',
+			render: (callSign) => callSign ?? '-',
 		},
 		{
 			title: 'Tasks',
@@ -149,7 +128,7 @@ const Vendor = () => {
 			</div>
 			<div className="vendor--table">
 				<TableComponent
-					data={rows}
+					data={fetchVendor?.pages[0]}
 					columns={columns}
 					loading={isFetching}
 					fetchData={fetchNextPage}
@@ -165,13 +144,14 @@ const Vendor = () => {
 				title={rowData.status === 'pending' ? 'Start Task?' : 'Stop Task?'}
 			>
 				<div className="vendor--button-container">
-					<Button title="Cancel" type="filledText" id="btn" className="vendor--cancel" onClick={closeModal} />
+					<Button title="Cancel" type="filledText" id="btn" className="vendor--cancel" onClick={closeModal} disabled={isStatusDoneLoading || isStatusInProgressLoading}/>
 					<Button
 						title={rowData.status === 'pending' ? 'Start' : 'Stop'}
 						className={`vendor--${rowData.status}`}
 						type="filledText"
 						id="btn"
 						onClick={handleProgress}
+						disabled={isStatusDoneLoading || isStatusInProgressLoading}
 					/>
 				</div>
 			</Modal>
