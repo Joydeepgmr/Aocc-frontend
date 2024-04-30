@@ -430,6 +430,7 @@ const Seasonal = ({ tab }) => {
 				<PageLoader loading={true} />
 			) : (
 				<div className="main_TableContainer">
+					<div className="seasonal_container--tableContainer">
 					<div className="top_container">
 						<div>
 							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
@@ -455,6 +456,7 @@ const Seasonal = ({ tab }) => {
 							type="simple"
 							extraContent={operations}
 						/>
+					</div>
 					</div>
 				</div>
 			)}

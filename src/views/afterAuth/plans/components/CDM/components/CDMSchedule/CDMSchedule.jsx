@@ -407,6 +407,7 @@ const DailySchedule = ({ tab }) => {
 				<PageLoader loading={true} />
 			) : (
 				<div className="main_TableContainer">
+					<div className="daily_schedule_container--tableContainer">
 					<div className="top_container">
 						<div>
 							<TopHeader heading="Daily Flight Schedule" />
@@ -440,6 +441,7 @@ const DailySchedule = ({ tab }) => {
 								type="simple"
 								extraContent={operations}
 							/>
+						</div>
 						</div>
 					</div>
 				</div>

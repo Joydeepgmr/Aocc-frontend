@@ -13,6 +13,17 @@
 	height: 50vh;
 }
 
+.daily_schedule_container{
+	&--tableContainer{
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+		padding: 0.8rem 2.4rem 1.6rem;
+		border: 0.1rem solid $gray_300;
+		border-radius: 1.2rem;
+		margin-bottom: 1.5rem;
+	}
+}
 // .modal_content {
 // 	position: relative;
 // 	@include flex(center, center, column);
