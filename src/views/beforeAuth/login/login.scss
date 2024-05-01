@@ -1,148 +1,142 @@
 @import '../../../styles/sass/utils';
 @import '../../../styles/sass/variables';
 
-
 .login_page {
-    @extend .flex-row;
-    width: 100%;
-    height: 100vh;
+	@extend .flex-row;
+	width: 100%;
+	height: 100vh;
 }
 
 .login_container {
-    width: 41%;
-    @extend .flex-row;
+	width: 41%;
+	@extend .flex-row;
 }
 
-.login_content_container{
-    width: 100%;
-    .gmr_logo{
-        width: 6.645rem;
-        height: 2.4rem;
-    }
-    @extend .flex-col;
-    .login_welcome_heading{
-        text-align: center;
-        h1{
-            font-weight: 400;
-            font-size: 4.8rem;
-            line-height: 5.6rem;
-            text-align: center;
-        }
-        p{
-            font-size: 1.4rem;
-            line-height: 1.757rem;
-            font-weight: 400;
-            color: $dark_400;
+.login_content_container {
+	width: 100%;
+	.gmr_logo {
+		width: 6.645rem;
+		height: 2.4rem;
+	}
+	@extend .flex-col;
+	.login_welcome_heading {
+		text-align: center;
+		h1 {
+			font-weight: 400;
+			font-size: 4.8rem;
+			line-height: 5.6rem;
+			text-align: center;
+		}
+		p {
+			font-size: 1.4rem;
+			line-height: 1.757rem;
+			font-weight: 400;
+			color: $dark_400;
+		}
+	}
 
-        }
-    }
-   
-    gap: 5.6rem;
-    .content_wrapper{
-            @extend .flex-col;
-            gap: 5.6rem;
-            width: 74%;
-        .login_input_fields{
-                width: 100%;
-                .contact-admin{
-                    text-align: center;
-                    margin-top: 1rem;
-                    .admin-link:hover {
-                        color: $button_hoverColor;
-                    }
-                }
-        }
-    }
+	gap: 5.6rem;
+	.content_wrapper {
+		@extend .flex-col;
+		gap: 5.6rem;
+		width: 74%;
+		.login_input_fields {
+			width: 100%;
+			.contact-admin {
+				text-align: center;
+				margin-top: 1rem;
+				.admin-link:hover {
+					color: $button_hoverColor;
+				}
+			}
+		}
+	}
 }
 
-.submit_button{
-    background-color: $button_color;
-    height: 4.4rem;
-    color: white;
-    width: 100%;
-    padding: 1.4rem 1.6rem;
-    @extend .flex-row;
-    border-radius: 1.2rem;
+.submit_button {
+	background-color: $button_color;
+	height: 4.4rem;
+	color: white;
+	width: 100%;
+	padding: 1.4rem 1.6rem;
+	@extend .flex-row;
+	border-radius: 1.2rem;
 }
 
-.image_container{
-    height: 100vh;
-    width:59%;
-    .login_image{
-        height: 100%;
-        width: 100%;
-        background-size: 100%; /* Stretch image to cover full width */
-        background-position: center;
-        object-fit: cover;
-    }
-    .change_login_page_image{
-        position: absolute;
-        top: 91%;
-        left: 43%;
-        color: #FFFFFF;
-        font-family: poppins;
-        font-weight: 400;
-        font-size: 1.4rem;
-        line-height: 2.2rem;
-    }
+.image_container {
+	height: 100vh;
+	width: 59%;
+	.login_image {
+		height: 100%;
+		width: 100%;
+		background-size: 100%; /* Stretch image to cover full width */
+		background-position: center;
+		object-fit: cover;
+	}
+	.change_login_page_image {
+		position: absolute;
+		top: 91%;
+		left: 43%;
+		color: #ffffff;
+		font-family: poppins;
+		font-weight: 400;
+		font-size: 1.4rem;
+		line-height: 2.2rem;
+	}
 }
 
 @media screen and (max-width: 768px) {
-    .login_page {
-        @extend .flex-row;
-        flex-direction: column-reverse;
-    }
-    .image_container {
-        width: 100%;
-        .login_image{
+	.login_page {
+		@extend .flex-row;
+		flex-direction: column-reverse;
+	}
+	.image_container {
+		width: 100%;
+		.login_image {
+			height: 61%;
+		}
+		.change_login_page_image {
+			display: none;
+		}
+	}
+	.login_content_container {
+		width: 100vw;
+		.content_wrapper {
+			border: 1px solid $gray_300;
+			width: 91%;
+			border-radius: 0.8rem;
+			padding: 1.6rem;
+			position: absolute;
+			background-color: white;
+			top: 36%;
+			.login_welcome_heading {
+				h1 {
+					font-size: 2.4rem;
+					line-height: 2.65rem;
+				}
+				p {
+					font-size: 1rem;
+					line-height: 1.255rem;
+				}
+			}
+		}
 
-            height: 61%;
-        }
-         .change_login_page_image{
-        display: none;
-    }
-    }
-    .login_content_container{
-        width: 100vw;
-        .content_wrapper{
-            border: 1px solid $gray_300;
-            width: 91%;
-            border-radius: 0.8rem;
-            padding: 1.6rem;
-            position: absolute;
-            background-color: white;
-            top: 36%;
-            .login_welcome_heading{
-                h1{
-                    font-size: 2.4rem;
-                    line-height: 2.65rem;
-                }
-                p{
-                    font-size: 1rem;
-                    line-height: 1.255rem;
-                }
-            }
-            
-    }
-
-    .gmr_logo{
-        position: relative;
-        bottom: 2rem;
-    }
-
+		.gmr_logo {
+			position: relative;
+			bottom: 2rem;
+		}
+	}
 }
 
-   
-    
+.input_form_item {
+	&.custom_input {
+		width: 100%;
+	}
 }
 
-.input_form_item{
-    &.custom_input  {
-        width: 100%;
-    }
+.login_form_fields {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin-bottom: 2rem;
 }
-
-.login_form_fields{
-    margin-bottom: 2rem;
-}
-    
