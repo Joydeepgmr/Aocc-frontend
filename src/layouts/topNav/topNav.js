@@ -11,9 +11,12 @@ import { roleBasedNav } from './navData';
 import { Pathname } from '../../pathname';
 import './topNav.scss';
 import { useQueryClient } from 'react-query';
+import { localStorageKey } from '../../keys';
+import CustomTypography from '../../components/typographyComponent/typographyComponent';
 
 const TopNav = ({ data }) => {
 	const queryClient = useQueryClient();
+	const logo = localStorage.getItem(localStorageKey.LOGO);
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
 	const [navItems, setNavItems] = useState([]);
 	const navigate = useNavigate();
@@ -57,7 +60,16 @@ const TopNav = ({ data }) => {
 			<div className="nav_container">
 				<div className="nav_left_section">
 					<div className="gmr_logo">
-						<img src={gmrLogo} alt="GMR Logo" />
+						{logo ? (
+							<>
+								<img src={logo} alt="GMR Logo" />
+								<CustomTypography type="text" fontSize="0.8rem">
+									powered by GMR
+								</CustomTypography>
+							</>
+						) : (
+							<img src={gmrLogo} alt="GMR Logo" />
+						)}
 					</div>
 					<div className="tabs_container">
 						{navItems.map((menu) => (
