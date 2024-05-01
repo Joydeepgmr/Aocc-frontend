@@ -15,7 +15,7 @@ const ProgressionCard = ({ cardTitle, airlineData }) => {
 						<div className="card-title">
 							<CustomTypography
 								type="title"
-								fontSize={12}
+								fontSize={16}
 								fontWeight="600"
 								color="black"
 								children={cardTitle}

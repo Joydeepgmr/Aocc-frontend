@@ -14,7 +14,7 @@ const Alerts = () => {
 	return (
 		<Card className="progress-alert">
 			<div className="alert-body">
-				<CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="Alerts" />
+				<CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" />
 				<div className="alert-status-body">
 					<Chip text="critical" className="alert-status" />
 					<div>12:00 UTC</div>

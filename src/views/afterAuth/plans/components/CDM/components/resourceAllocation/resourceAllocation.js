@@ -136,7 +136,7 @@ const ResourceAllocation = () => {
 					group: item?.resourceId?.id,
 					content: `${item?.flight?.sta ?? item?.flight?.std} ${item?.flight?.callSign}`,
 					className,
-					title: `<div>${item?.flight?.sta ? `STA: ${item?.flight?.sta}` : `STD: ${item?.flight?.std}`} <br/><br/>Airline: ${item?.flight?.airline?.twoLetterCode}<br/><br/>Flight Number: ${item?.flight?.flightNo}</div>`,
+					title: `<div>${item?.flight?.sta ? `STA: ${item?.flight?.sta}` : `STD: ${item?.flight?.std}`} <br/>Aircraft: ${item?.flight?.aircraft?.twoLetterCode}<br/>Flight Number: ${item?.flight?.flightNo}</div>`,
 				};
 			});
 
