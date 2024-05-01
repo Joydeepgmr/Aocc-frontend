@@ -1,5 +1,5 @@
 import { Divider } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import CheckBoxField from '../../../../../components/checkbox/checkbox';
 import Date from '../../../../../components/datapicker/datepicker';
@@ -10,8 +10,7 @@ import { SelectAcBodyType, SelectEngineType } from '../../../userAccess/userAcce
 import { useGlobalAirlineDropdown } from '../../../../../services';
 import './aircraftTypeForm.scss';
 
-const AircraftTypeForm = ({ isReadOnly, type }) => {
-	
+const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 	const onError = ({
 		response: {
 			data: { message },
@@ -21,18 +20,23 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 
 	const SelectedAirlineData = useMemo(() => {
 		return airlineDropdownData.map((data) => {
-			return { label: data.name, value: data.id }
-		})
+			return { label: data.name, value: data.id };
+		});
 	}, [airlineDropdownData]);
-	const isNotEditable = type === 'edit'
+
+	const handleCheckChange = () => {
+		form.setFieldValue('isUsingDockingSystem', !isCheck);
+		setIsCheck(!isCheck);
+	};
+	const isNotEditable = type === 'edit';
 	return (
 		<div className="aircraft_type_form_container">
 			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Identifier"
 					name="identifier"
-					pattern='^(?!\s).*$'
-					placeholder={!isReadOnly && "Enter the identifier name"}
+					pattern="^(?!\s).*$"
+					placeholder={!isReadOnly && 'Enter the identifier name'}
 					className="custom_input"
 					max={32}
 					required
@@ -41,9 +45,9 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="IATA Code"
 					name="iataCode"
-					pattern='^(?!\s).*\S(?<!\s)$'
-					patternWarning='Space not allowed'
-					placeholder={!isReadOnly && "Enter the IATA Code"}
+					pattern="^(?!\s).*\S(?<!\s)$"
+					patternWarning="Space not allowed"
+					placeholder={!isReadOnly && 'Enter the IATA Code'}
 					className="custom_input"
 					min={3}
 					max={3}
@@ -54,8 +58,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Model"
 					name="model"
 					max={32}
-					pattern='^(?!\s).*$'
-					placeholder={!isReadOnly && "Enter the model name"}
+					pattern="^(?!\s).*$"
+					placeholder={!isReadOnly && 'Enter the model name'}
 					className="custom_input"
 					required
 					disabled={isReadOnly || isNotEditable}
@@ -66,29 +70,29 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					SelectData={SelectedAirlineData}
 					label="Airline"
 					name="globalAirlineId"
-					placeholder={!isReadOnly && "Enter the airline name"}
+					placeholder={!isReadOnly && 'Enter the airline name'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
-					pattern='^(?!\s).*\S(?<!\s)$'
-					patternWarning='Space not allowed'
+					pattern="^(?!\s).*\S(?<!\s)$"
+					patternWarning="Space not allowed"
 					min={3}
 					max={4}
-					placeholder={!isReadOnly && "Enter the ICAO Code"}
+					placeholder={!isReadOnly && 'Enter the ICAO Code'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="ICAO Code Modified"
 					name="icaoCodeModified"
-					pattern='^(?!\s).*\S(?<!\s)$'
-					patternWarning='Space not allowed'
+					pattern="^(?!\s).*\S(?<!\s)$"
+					patternWarning="Space not allowed"
 					min={3}
 					max={4}
-					placeholder={!isReadOnly && "Enter the ICAO code modified"}
+					placeholder={!isReadOnly && 'Enter the ICAO code modified'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -97,9 +101,9 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 				<InputField
 					label="A/C Family"
 					name="family"
-					pattern='^(?!\s).*$'
+					pattern="^(?!\s).*$"
 					max={32}
-					placeholder={!isReadOnly && "Enter the aircraft family"}
+					placeholder={!isReadOnly && 'Enter the aircraft family'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -107,7 +111,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					SelectData={SelectAcBodyType}
 					label="A/C Body Type"
 					name="bodyType"
-					placeholder={!isReadOnly && "Enter the Aircraft Body Type"}
+					placeholder={!isReadOnly && 'Enter the Aircraft Body Type'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -115,10 +119,10 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Minimum Ground Time"
 					name="minGroundTime"
 					max={999}
-					placeholder={!isReadOnly && "Enter the minimum ground time"}
-					type='number'
+					placeholder={!isReadOnly && 'Enter the minimum ground time'}
+					type="number"
 					className="custom_input"
-					suffixText="minutes"
+					suffixText="min"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -127,30 +131,30 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Wingspan"
 					name="wingspan"
 					max={999}
-					placeholder={!isReadOnly && "Enter the wingspan"}
-					type='number'
+					placeholder={!isReadOnly && 'Enter the wingspan'}
+					type="number"
 					className="custom_input"
-					suffixText="meters"
+					suffixText="m"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Length"
 					name="length"
 					max={999}
-					placeholder={!isReadOnly && "Enter the length"}
-					type='number'
+					placeholder={!isReadOnly && 'Enter the length'}
+					type="number"
 					className="custom_input"
-					suffixText="meters"
+					suffixText="m"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="Height"
 					name="height"
 					max={999}
-					placeholder={!isReadOnly && "Enter the Height"}
-					type='number'
+					placeholder={!isReadOnly && 'Enter the Height'}
+					type="number"
 					className="custom_input"
-					suffixText="meters"
+					suffixText="m"
 					disabled={isReadOnly}
 				/>
 			</div>
@@ -159,7 +163,7 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					SelectData={SelectEngineType}
 					label="Engine Type"
 					name="engineType"
-					placeholder={!isReadOnly && "Enter the engine type"}
+					placeholder={!isReadOnly && 'Enter the engine type'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -167,20 +171,26 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Number of Engines"
 					name="engineCount"
 					max={999}
-					type='number'
-					placeholder={!isReadOnly && "Enter the number of engines"}
+					type="number"
+					placeholder={!isReadOnly && 'Enter the number of engines'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
 				<CheckBoxField
 					name="isUsingDockingSystem"
 					disabled={isReadOnly}
+					checked={isCheck}
 					label="Don't use docking system"
-					title="Single Checkbox"
+					type="custom"
+					onChange={handleCheckChange}
 				/>
 			</div>
 			<Divider />
-			<div className='customTypo'><CustomTypography type="title" fontSize={14} fontWeight="600" color='#5C5F66'>Seats</CustomTypography></div>
+			<div className="customTypo">
+				<CustomTypography type="title" fontSize={14} fontWeight="600" color="#5C5F66">
+					Seats
+				</CustomTypography>
+			</div>
 			<div className="aircraft_type_form_inputfields">
 				{/* <InputField
 					label="Total Seats"
@@ -194,8 +204,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="First Class"
 					name="firstClassSeats"
 					max={999}
-					type='number'
-					placeholder={!isReadOnly && "Enter the first class seats"}
+					type="number"
+					placeholder={!isReadOnly && 'Enter the first class seats'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -203,8 +213,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Business Class"
 					name="businessClassSeats"
 					max={999}
-					type='number'
-					placeholder={!isReadOnly && "Enter the business class seats"}
+					type="number"
+					placeholder={!isReadOnly && 'Enter the business class seats'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -212,8 +222,8 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 					label="Economy Class"
 					name="economyClassSeats"
 					max={999}
-					type='number'
-					placeholder={!isReadOnly && "Enter the economy class seats"}
+					type="number"
+					placeholder={!isReadOnly && 'Enter the economy class seats'}
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
@@ -221,22 +231,23 @@ const AircraftTypeForm = ({ isReadOnly, type }) => {
 			<div className="aircraft_type_form_inputfields">
 				<Date
 					label="Valid From"
-					placeholder={!isReadOnly && "Select valid from date"}
+					placeholder={!isReadOnly && 'Select valid from date'}
 					name="validFrom"
 					className="custom_date"
 					format="MM-DD-YYYY"
-					disabledFor='future'
+					disabledFor="future"
 					required
 					disabled={isReadOnly || isNotEditable}
 				/>
 				<Date
 					label="Valid To"
-					placeholder={!isReadOnly && "Select valid to date"}
+					placeholder={!isReadOnly && 'Select valid to date'}
 					name="validTill"
 					className="custom_date"
-					disabledFor='past'
+					disabledFor="past"
 					format="MM-DD-YYYY"
-					disabled={isReadOnly} />
+					disabled={isReadOnly}
+				/>
 			</div>
 		</div>
 	);
