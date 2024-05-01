@@ -19,9 +19,6 @@ import {
 	usePostSeasonalPlans,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
-import { useAirlineDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
-import { useNatureCodeDropdown } from '../../../../../../../services/planairportmaster/resources/naturecode/naturecode';
-import { useAircraftDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
 import { ConvertIstToUtc, ConvertToDateTime, ConvertUtcToIst } from '../../../../../../../utils';
 import FormComponent from '../../../formComponent/formComponent';
 import Arrival from '../arrival/arrival';
@@ -41,10 +38,6 @@ const DailySchedule = ({ tab }) => {
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
-
-	const { data: airlineDropdownData = [] } = useAirlineDropdown();
-	const { data: aircraftDropdownData = [] } = useAircraftDropdown();
-	const { data: natureCodeDropdownData = [] } = useNatureCodeDropdown();
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -461,9 +454,6 @@ const DailySchedule = ({ tab }) => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleCloseButton}
 						type={index}
-						airlineDropdownData={airlineDropdownData}
-						natureCodeDropdownData={natureCodeDropdownData}
-						aircraftDropdownData={aircraftDropdownData}
 						isDaily={true}
 					/>
 				</div>
@@ -489,9 +479,6 @@ const DailySchedule = ({ tab }) => {
 						type={index}
 						initialValues={rowData}
 						isEdit={true}
-						airlineDropdownData={airlineDropdownData}
-						natureCodeDropdownData={natureCodeDropdownData}
-						aircraftDropdownData={aircraftDropdownData}
 						isDaily={true}
 					/>
 				</div>
