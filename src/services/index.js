@@ -14,6 +14,7 @@ import {
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
+	useRunRuleEngine,
 	useUpdateResourceAllocation,
 } from './ResourceAllocationServices/ResourceAllocationServices';
 import {
@@ -116,4 +117,5 @@ export {
 	useGetAllFidsResources,
 	useDeleteFidsResource,
 	useUpdateFidsResource,
+	useRunRuleEngine,
 };

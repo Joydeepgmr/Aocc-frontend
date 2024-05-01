@@ -11,9 +11,8 @@ import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import SocketEventListener from '../../../../socket/listner/socketListner';
-import { ConvertToDateTime } from '../../../../utils';
 import './style.scss';
-import Widgets from './Widgets';
+import Alerts from './Alerts';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
@@ -257,29 +256,31 @@ const FlightSchedule = () => {
 			>
 				<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
 			</ModalComponent>
-			<Widgets />
-			<div className="body-container">
-				<div className="top-bar">
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight={600}
-						color="black"
-						children={'Flight Schedule'}
-					/>
-					<Form form={form}>
-						<InputField
-							label="Flight number"
-							name="flightNo"
-							placeholder="Flight number"
-							warning="Required field"
-							type="search"
+			<div className="critical-grid">
+				<div className="body-containers">
+					<div className="top-bar">
+						<CustomTypography
+							type="title"
+							fontSize={24}
+							fontWeight={600}
+							color="black"
+							children={'Flight Schedule'}
 						/>
-					</Form>
+						<Form form={form}>
+							<InputField
+								label="Flight number"
+								name="flightNo"
+								placeholder="Flight number"
+								warning="Required field"
+								type="search"
+							/>
+						</Form>
+					</div>
+					<div className="flights-table">
+						<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
+					</div>
 				</div>
-				<div className="flights-table">
-					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
-				</div>
+				<Alerts />
 			</div>
 		</>
 	);

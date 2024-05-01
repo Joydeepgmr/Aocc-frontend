@@ -35,11 +35,11 @@ const Resources = () => {
 			label: 'Runway',
 			children: <Runway />,
 		},
-		{
-			key: '5',
-			label: 'Taxiway',
-			children: <Taxiway />,
-		},
+		// {
+		// 	key: '5',
+		// 	label: 'Taxiway',
+		// 	children: <Taxiway />,
+		// },
 		{
 			key: '6',
 			label: 'Baggage Belt',

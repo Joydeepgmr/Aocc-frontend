@@ -40,6 +40,11 @@ export const roleBasedNav = (role = 'Planner') => {
 				label: 'CDM',
 				children: Pathname.CDM,
 			},
+			{
+				key: '4',
+				label: 'Dashboard',
+				children: Pathname.DASHBOARD_CHARTS,
+			},
 		];
 	} else if (role === userType.CDM) {
 		navItems = [
