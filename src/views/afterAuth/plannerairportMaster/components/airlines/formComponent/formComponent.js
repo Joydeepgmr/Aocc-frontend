@@ -115,7 +115,7 @@ const FormComponent = ({
 	}, [watchOtp]);
 
 	useEffect(() => {
-		if(!form.getFieldValue('url')?.file?.response?.success){
+		if(!isDefault && !form.getFieldValue('url')?.file?.response?.success){
 			form.setFieldsValue({
 				url: null
 			})
@@ -156,7 +156,6 @@ const FormComponent = ({
 										fileList,
 										setFileList,
 										isDefault: isDefault,
-										isCircle: true,
 										disabled: isUploadDisable,
 										name:"url",
 										label:"Airline logo"

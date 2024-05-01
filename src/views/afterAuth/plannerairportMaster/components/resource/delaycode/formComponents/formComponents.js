@@ -10,18 +10,11 @@ import { useAirlineDropdown } from '../../../../../../../services/PlannerAirport
 import toast from 'react-hot-toast';
 import './formComponents.scss';
 
-const FormComponent = ({
-	form,
-	handleSaveButton,
-	handleButtonClose,
-	initialValues,
-	isEdit,
-	isReadOnly
-}) => {
+const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	isEdit && (initialValues['airlineId'] = initialValues?.airline?.id);
-	
+
 	const onError = ({
 		response: {
 			data: { message },
@@ -49,7 +42,6 @@ const FormComponent = ({
 		}
 	};
 
-
 	const onFinishHandler = (values) => {
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
@@ -58,10 +50,11 @@ const FormComponent = ({
 			}
 		});
 
-		changedValues = {...changedValues,
-			validFrom : changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom): undefined,
+		changedValues = {
+			...changedValues,
+			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
-		}
+		};
 
 		handleSaveButton(changedValues);
 	};
@@ -107,8 +100,9 @@ const FormComponent = ({
 						label="Airline"
 						placeholder={'Select Airline'}
 						name="airlineId"
-						disabled={isReadOnly}
+						disabled={isReadOnly || isEdit}
 						className="select"
+						required
 					/>
 				</div>
 
@@ -130,10 +124,10 @@ const FormComponent = ({
 						className="custom_date"
 						disabled={isReadOnly || !isValidFrom}
 						isDisabledDate={true}
-							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
-								return current && current < dayjs(prevDate, 'YYYY-MM-DD');
-							}}
+						disabledDate={(current) => {
+							let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+							return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+						}}
 					/>
 				</div>
 			</div>

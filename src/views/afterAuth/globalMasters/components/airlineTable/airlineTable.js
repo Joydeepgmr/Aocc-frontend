@@ -60,7 +60,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 		onError
 	}
 	const { mutate: deleteAirline, isLoading: isDeleteLoading } = useDeleteGlobalAirline(deleteApiProps);
-	const [initial] = Form.useForm();
+	const [initial, form] = Form.useForm();
 
 	function handleDetails(data) {
 		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
@@ -239,6 +239,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					<AirlineForm
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}
+						form={form}
 					/>
 					{airlineRegistrationModal.type !== 'view' && (
 						<>

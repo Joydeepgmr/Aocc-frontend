@@ -1,5 +1,5 @@
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
 .ant-upload-wrapper.ant-upload-picture-card-wrapper
-	.ant-upload.ant-upload-select, .ant-upload-wrapper.ant-upload-picture-card-wrapper
 	.ant-upload-list.ant-upload-list-picture-card
 	.ant-upload-list-item-container {
 	height: 7rem;
@@ -8,8 +8,7 @@
 	background-color: white;
 	font-weight: 400;
 }
-.ant-upload-wrapper.ant-upload-picture-circle-wrapper
-.ant-upload.ant-upload-select {
+.ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
 	height: 7.5rem;
 	width: 7.5rem;
 	font-size: 10px;
@@ -23,5 +22,8 @@
 		display: flex;
 		align-items: center;
 	}
-	
+}
+
+.image-form {
+	margin-bottom: 0rem;
 }

@@ -51,21 +51,17 @@ const CheckBoxField = ({
 					</Checkbox.Group>
 				</Form.Item>
 			) : type === 'custom' ? (
-				<Form.Item name={name} valuePropName="checked" {...rest} onChange={onChange} label={label}>
-					<div className="custom-checkbox" onClick={onChange}>
-						<input
-							type="checkbox"
-							checked={checked}
-							onChange={onChange}
-							disabled={disabled}
-							style={{ display: 'none' }}
-						/>
+				<Form.Item name={name} valuePropName="checked" {...rest} label={label}>
+					<div
+						className={disabled ? 'custom-checkbox custom-disabled' : `custom-checkbox `}
+						onClick={() => !disabled && onChange()}
+					>
 						{checked ? <img src={Vector} alt="" /> : <img src={Check} alt="" />}
 					</div>
 				</Form.Item>
 			) : (
 				<Form.Item name={name} valuePropName="checked" {...rest} onChange={onChange}>
-						<Checkbox disabled={disabled}>{label}</Checkbox>
+					<Checkbox disabled={disabled}>{label}</Checkbox>
 				</Form.Item>
 			)}
 		</>
