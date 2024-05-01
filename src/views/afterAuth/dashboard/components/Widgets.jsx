@@ -20,22 +20,13 @@ const Widgets = () => {
 		},
 	];
 	return (
-		<div className="widgets-container">
-			<div className="airport-info">
-				<ProgressionCard cardTitle="On Time Performer" airlineData={airlineData} />
-				<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
-			</div>
-			<div className="airport-info">
-				<GraphCard cardTitle="Air Traffic Movement" />
-				<GraphCard cardTitle="Number of flights on Ground" />
-			</div>
-			<div className="airport-info">
-				<GraphCard cardTitle="Runway Utilization" />
-				<GraphCard cardTitle="CO2 Emission" />
-			</div>
-			<div className="airport-info">
-				<Alerts />
-			</div>
+		<div className="widgets-containers">
+			<ProgressionCard cardTitle="On Time Performer" airlineData={airlineData} />
+			<GraphCard cardTitle="Air Traffic Movement" />
+			<GraphCard cardTitle="Number of flights on Ground" />
+			<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
+			<GraphCard cardTitle="Runway Utilization" />
+			<GraphCard cardTitle="CO2 Emission" />
 		</div>
 	);
 };

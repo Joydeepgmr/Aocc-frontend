@@ -36,21 +36,6 @@ export const Dashboard = () => {
 		},
 	]
 
-	const airlineData = [
-		{
-			name: "Airline 1",
-			percent: 80
-		},
-		{
-			name: "Airline 2",
-			percent: 60
-		},
-		{
-			name: "Airline 3",
-			percent: 50
-		},
-	]
-
 	return (
 		<div className='container-div'>
 			<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />

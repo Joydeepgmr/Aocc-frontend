@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Timeline from 'react-visjs-timeline';
 import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
@@ -10,14 +10,14 @@ const TimelineDesign = (props) => {
 		orientation: 'top',
 		width: '100%',
 		align: 'center',
-		minHeight : height,
+		minHeight: height,
 		maxHeight: height,
-		groupHeightMode : "auto",
+		groupHeightMode: 'auto',
 		autoResize: true,
 		stack: true,
 		showMajorLabels: false,
 		showCurrentTime: true,
-		verticalScroll : true,
+		verticalScroll: true,
 		editable: {
 			remove: false,
 			updateGroup: editable,

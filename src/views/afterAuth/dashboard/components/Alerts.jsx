@@ -12,7 +12,7 @@ const Alerts = () => {
 		navigate('/plans', { state: { tab: '3' } });
 	};
 	return (
-		<Card className="progress-card">
+		<Card className="progress-alert">
 			<div className="alert-body">
 				<CustomTypography type="title" fontSize={12} fontWeight="600" color="black" children="Alerts" />
 				<div className="alert-status-body">

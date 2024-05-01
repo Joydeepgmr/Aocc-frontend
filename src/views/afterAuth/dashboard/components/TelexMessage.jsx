@@ -11,15 +11,34 @@ import './style.scss';
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import { GET_TELEX_MESSAGE } from '../../../../api';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Widgets from './Widgets';
+import Alerts from './Alerts';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
+	console.log(data);
+
+	const formatNestedData = (data) => {
+		if (Array.isArray(data)) {
+			return data.map(formatNestedData).join(', ');
+		} else if (typeof data === 'object' && data !== null) {
+			return Object.entries(data)
+				.map(([key, value]) => {
+					if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+						return `${key}: { ${formatNestedData(value)} }`;
+					}
+					return `${key}: ${value}`;
+				})
+				.join(', ');
+		} else {
+			return data;
+		}
+	};
+
 	return (
 		<div className="telex_parsed_message">
 			{Object.entries(data).map(([key, value]) => (
 				<div key={key} className="telex_parsed_message_container">
 					<span className="message_key">{key}: </span>
-					<span className="message_value">{value}</span>
+					<span className="message_value">{formatNestedData(value)}</span>
 				</div>
 			))}
 		</div>
@@ -37,7 +56,7 @@ function TelexMessage() {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-
+			console.log([...newData]);
 			setTelexMessageData([...newData]);
 		}
 	};
@@ -237,18 +256,18 @@ function TelexMessage() {
 				buttonTitle2="Acknowledge"
 			/>
 			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
-			<Widgets />
-			<div className={`body-container ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
-				<div className="top-bar">
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight="600"
-						color="black"
-						children={'Flight Schedule'}
-					/>
-					<div className="filter-section">
-						{/* <Button
+			<div className="critical-grid">
+				<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
+					<div className="top-bar">
+						<CustomTypography
+							type="title"
+							fontSize={24}
+							fontWeight="600"
+							color="black"
+							children={'Flight Schedule'}
+						/>
+						<div className="filter-section">
+							{/* <Button
 						onClick={() => {
 							alert('Icon Button');
 						}}
@@ -256,28 +275,44 @@ function TelexMessage() {
 						alt="bell icon"
 						className={'filter-btn'}
 					/> */}
-						<Form form={form} className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
-							{fullScreen ? (
-								<FullscreenExitOutlined
-									className="fullScreen--FullScreenExitIcon"
-									onClick={toggleFullscreen}
-								/>
-							) : (
-								<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
-							)}
-							<InputField
-								label="Flight number"
-								name="flightNo"
-								placeholder="Flight number"
-								warning="Required field"
-								type="search"
-							/>
-						</Form>
+							<Form
+								form={form}
+								className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}
+							>
+								{fullScreen ? (
+									<FullscreenExitOutlined
+										className="fullScreen--FullScreenExitIcon"
+										onClick={toggleFullscreen}
+									/>
+								) : (
+									<FullscreenOutlined
+										onClick={toggleFullscreen}
+										className="fullScreen--FullScreenIcon"
+									/>
+								)}
+							</Form>
+						</div>
+					</div>
+					<div className="flights-table">
+						<CustomTabs
+							defaultActiveKey="1"
+							items={items}
+							onChange={handleTabChange}
+							extraContent={
+								<div style={{ marginBottom: '1rem' }}>
+									<InputField
+										label="Flight number"
+										name="flightNo"
+										placeholder="Flight number"
+										warning="Required field"
+										type="search"
+									/>
+								</div>
+							}
+						/>
 					</div>
 				</div>
-				<div className="flights-table">
-					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
-				</div>
+				<Alerts />
 			</div>
 		</>
 	);

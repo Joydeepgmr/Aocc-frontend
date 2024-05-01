@@ -9,6 +9,7 @@ import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
+	useRunRuleEngine,
 	useUpdateResourceAllocation,
 } from '../../../../../../../services';
 import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
@@ -45,6 +46,11 @@ const ResourceAllocation = () => {
 		toast.error(error?.response?.data?.message);
 	};
 
+	const runRuleEngineHandler = {
+		onSuccess: (data) => handleRunRuleEngineSuccess(data),
+		onError: (error) => handleRunRuleEngineError(error),
+	};
+
 	const toggleFullscreen = () => {
 		setFullScreen(!fullScreen);
 		if (document.fullscreenElement === null) {
@@ -70,7 +76,6 @@ const ResourceAllocation = () => {
 		}
 	};
 
-	const color = ['#02A0FC', '#FFD43B', '#3eb556', '#FA5252'];
 	const { data: fetchedTimelineData, refetch: refetchTimelineData } = useGetAllTimelineData(
 		tabValue,
 		selectedTimeValue?.slice(0, 2)
@@ -80,6 +85,18 @@ const ResourceAllocation = () => {
 		selectedTimeValue?.slice(0, 2)
 	);
 	const { mutate: updateResource } = useUpdateResourceAllocation(updateResourceHandler);
+
+	const { refetch: refetchRunRuleEngine } = useRunRuleEngine(runRuleEngineHandler);
+
+	const handleRunRuleEngineSuccess = (data) => {
+		queryClient.invalidateQueries('get-all-timeline-data');
+		toast.success('Allocated Successfully');
+	};
+
+	const handleRunRuleEngineError = (error) => {
+		queryClient.invalidateQueries('get-all-timeline-data');
+		toast.error(error?.response?.data?.message);
+	};
 
 	const handleResourceMove = (data) => {
 		const item = {
@@ -91,26 +108,35 @@ const ResourceAllocation = () => {
 		updateResource(item);
 	};
 
-	const timelineLabel =
-		fetchedGroupData &&
-		fetchedGroupData?.airlines?.map((item, i) => ({ id: i, label: item?.airline, color: color[i] }));
+	const timelineLabel = [
+		{ id: 1, label: 'Domestic Flights', color: '#02A0FC' },
+		{ id: 2, label: 'International Flights', color: '#FFD43B' },
+		{ id: 3, label: 'On Ground Flights', color: '#3eb556' },
+		{ id: 4, label: 'Conflict Flights', color: '#FA5252' },
+	];
+
 	const timelineItems =
 		fetchedGroupData &&
 		fetchedTimelineData &&
 		fetchedTimelineData
 			?.filter((item) => item?.status === 'occupied')
 			?.map((item) => {
-				const airlineIndex = timelineLabel.findIndex((labelItem) => labelItem.label === item?.flight?.AIRLINE);
-				const className = airlineIndex !== -1 ? `timeline--${airlineIndex + 1}Airline` : '';
+				const className = item?.isConflict
+					? `timeline--4Airline`
+					: item?.flight?.type === 'domestic'
+						? `timeline--1Airline`
+						: item?.flight?.type === 'international'
+							? `timeline--2Airline`
+							: `timeline--3Airline`;
 
 				return {
 					id: item?.id,
-					start: CombineUtcDateAndIstTime(item?.startTime.split('T')[0], item?.startTime.split('T')[1]),
-					end: CombineUtcDateAndIstTime(item?.endTime.split('T')[0], item?.endTime.split('T')[1]),
+					start: CombineUtcDateAndIstTime(item?.startTime.split(' ')[0], item?.startTime.split(' ')[1]),
+					end: CombineUtcDateAndIstTime(item?.endTime.split(' ')[0], item?.endTime.split(' ')[1]),
 					group: item?.resourceId?.id,
-					content: `${item?.flight?.eta} ${item?.flight?.callSign}`,
+					content: `${item?.flight?.sta ?? item?.flight?.std} ${item?.flight?.callSign}`,
 					className,
-					title: `<div>ETA: ${item?.flight?.eta} <br/><br/>Aircraft: ${item?.flight?.AIRLINE}<br/><br/>Flight Number: ${item?.flight?.FLIGHTNO}</div>`,
+					title: `<div>${item?.flight?.sta ? `STA: ${item?.flight?.sta}` : `STD: ${item?.flight?.std}`} <br/><br/>Airline: ${item?.flight?.airline?.twoLetterCode}<br/><br/>Flight Number: ${item?.flight?.flightNo}</div>`,
 				};
 			});
 
@@ -340,6 +366,7 @@ const ResourceAllocation = () => {
 							className={'resourceAllocation--Button'}
 							type="filledText"
 							isSubmit="submit"
+							onClick={() => refetchRunRuleEngine()}
 						/>
 						<Button
 							id="btn"
