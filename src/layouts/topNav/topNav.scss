@@ -2,30 +2,31 @@
 @import '../../styles/sass/utils';
 @import '../../styles/sass/mixins';
 
-
-.nav_container{
-    background-color: $gray_100;
-    position: sticky;
-    top: 0px;
-    z-index: 1;
-    height: 6.8rem;
-    width: 100%;
-    @include flex(center, space-between, row); 
-    padding: 0px 2rem;
-    .nav_left_section{
-        @include flex(center,space-between, row); 
-        width: 50%;
-        // gap: 8rem;
-        .gmr_logo{
-            height: 3.2rem;
-            width: 8.8rem;
-            img{
-                display: block;
-                height: 100%;
-                width: 100%;
-            }    
-        
-        }
+.nav_container {
+	background-color: $gray_100;
+	position: sticky;
+	top: 0px;
+	z-index: 1;
+	height: 6.8rem;
+	width: 100%;
+	@include flex(center, space-between, row);
+	padding: 0px 2rem;
+	.nav_left_section {
+		@include flex(center, space-between, row);
+		width: 50%;
+		// gap: 8rem;
+		.gmr_logo {
+			height: 3.2rem;
+			width: 8.8rem;
+			img {
+				display: block;
+				height: 100%;
+				width: 100%;
+			}
+			.custom-font {
+				white-space: nowrap !important;
+			}
+		}
 
 		.tabs_container {
 			@include flex(center, start, row);

@@ -24,6 +24,7 @@ export const Login = () => {
 			localStorage.setItem('_tid', data?.accessToken);
 			localStorage.setItem('name', data?.roleName);
 			localStorage.setItem('email', data?.email);
+			data?.airportImage && localStorage.setItem('logo', data?.airportImage);
 			roleRedirectFlow(data.roleName);
 		},
 		onError: ({
