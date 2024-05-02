@@ -85,7 +85,9 @@ const LicenseSetupForm = ({
 				<ImageUpload
 					{...{
 						label: 'Airport Logo',
+						isCircle: true,
 						fileList,
+						required: true,
 						setFileList,
 						name: 'file',
 					}}

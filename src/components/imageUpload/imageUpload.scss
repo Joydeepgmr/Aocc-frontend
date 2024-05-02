@@ -3,12 +3,15 @@
 	.ant-upload-list.ant-upload-list-picture-card
 	.ant-upload-list-item-container {
 	height: 7rem;
-	width: 9rem;
+	width: 10rem;
 	margin: 0%;
 	background-color: white;
 	font-weight: 400;
 }
-.ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+.ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select,
+.ant-upload-wrapper.ant-upload-picture-circle-wrapper
+	.ant-upload-list.ant-upload-list-picture-circle
+	.ant-upload-list-item-container {
 	height: 7.5rem;
 	width: 7.5rem;
 	font-size: 10px;

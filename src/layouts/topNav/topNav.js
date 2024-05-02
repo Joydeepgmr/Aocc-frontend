@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import * as userType from '../../utils/roles';
-import gmrLogo from '../../assets/logo/gmr-logo.png';
-import temperatureLogo from '../../assets/logo/sun.svg';
-import windLogo from '../../assets/logo/wind.svg';
-import setting from '../../assets/logo/setting.svg';
-import user from '../../assets/logo/user.png';
-import line from '../../assets/logo/line.svg';
-import { roleBasedNav } from './navData';
-import { Pathname } from '../../pathname';
-import './topNav.scss';
 import { useQueryClient } from 'react-query';
-import { localStorageKey } from '../../keys';
+import { useLocation, useNavigate } from 'react-router-dom';
+import gmrLogo from '../../assets/logo/gmr-logo.png';
+import line from '../../assets/logo/line.svg';
+import setting from '../../assets/logo/setting.svg';
+import temperatureLogo from '../../assets/logo/sun.svg';
+import user from '../../assets/logo/user.png';
+import windLogo from '../../assets/logo/wind.svg';
 import CustomTypography from '../../components/typographyComponent/typographyComponent';
+import { localStorageKey } from '../../keys';
+import { Pathname } from '../../pathname';
+import * as userType from '../../utils/roles';
+import { roleBasedNav } from './navData';
+import './topNav.scss';
 
 const TopNav = ({ data }) => {
 	const queryClient = useQueryClient();

@@ -1,11 +1,11 @@
-import { useMutation, useInfiniteQuery } from 'react-query';
-import { CHECKIN_COUNTER,GET_CHECKIN_COUNTER } from '../../../../api';
+import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
+import { CHECKIN_COUNTER, GET_CHECKIN_COUNTER } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetCheckIn = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-check-in'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`,{pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
 			return false;
@@ -26,7 +26,7 @@ export const usePostCheckIn = (props) => {
 	return response;
 };
 
-export const useEditCheckin = (id,props) => {
+export const useEditCheckin = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-checkin'],
 		mutationFn: async (data) => await Patch(`${CHECKIN_COUNTER}/${id}`, data),
@@ -44,3 +44,13 @@ export const useDeleteCheckin = (props) => {
 	});
 	return response;
 };
+
+export const useCheckInDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-check-in-dropdown'],
+		queryFn: async () => await Post(`${GET_CHECKIN_COUNTER}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

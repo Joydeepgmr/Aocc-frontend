@@ -89,9 +89,12 @@ const FormComponent = ({
 	const isNotEditable = type === 'edit';
 
 	const onFinishHandler = (value) => {
-		!isDefault && (value.url = fileList[0]?.url);
-		value.file = '';
-		handleSubmit(value);
+		!isDefault && (value.url = fileList?.[0]?.url);
+		if (value?.url) {
+			handleSubmit(value);
+		} else {
+			toast.error('airline logo is required');
+		}
 	};
 
 	useEffect(() => {

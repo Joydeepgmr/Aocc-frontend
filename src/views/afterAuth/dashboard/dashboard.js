@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import TopHeader from '../../../components/topHeader/topHeader';
 import "../../../styles/sass/_utils.scss";
@@ -9,6 +10,7 @@ import TelexMessage from './components/TelexMessage';
 import './dashboard.scss';
 
 export const Dashboard = () => {
+	const { state } = useLocation();
 	const handleChange = () => {
 		console.log('Tab switch');
 	};
@@ -38,9 +40,11 @@ export const Dashboard = () => {
 
 	return (
 		<div className='container-div'>
-			<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
+			<div className='container-head'>
+				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
+			</div>
 			<div className='main-container'>
-				<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+				<CustomTabs defaultActiveKey={state?.tab ?? '1'} items={items} onChange={handleChange} />
 			</div>
 		</div>
 	);
