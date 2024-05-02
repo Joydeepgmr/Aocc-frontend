@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Empty, Form, Input } from 'antd';
+import { Table, Empty, Form, Input, Select } from 'antd';
 import './table.scss';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -8,7 +8,7 @@ const TableComponent = ({
 	columns,
 	data = [],
 	loading = false,
-	onChange = () => {},
+	onChange = () => { },
 	tableTitle = '',
 	emptyText = 'No data available',
 	fetchData,
@@ -86,9 +86,10 @@ const TableComponent = ({
 				>
 					{inputType === 'time' ? (
 						<Input type="time" ref={inputRef} format="HH:mm" onPressEnter={save} onBlur={save} />
-					) : (
-						<Input ref={inputRef} onPressEnter={save} onBlur={save} />
-					)}
+					) : inputType === 'dropdown' ? <Select ref={inputRef} onPressEnter={save} onBlur={save} options={editable?.options ?? []} />
+						: (
+							<Input ref={inputRef} onPressEnter={save} onBlur={save}  />
+						)}
 				</Form.Item>
 			) : (
 				<div className="editable-cell-value-wrap" onClick={toggleEdit}>
