@@ -90,7 +90,11 @@ const FormComponent = ({
 
 	const onFinishHandler = (value) => {
 		!isDefault && (value.url = fileList?.[0]?.url);
-		handleSubmit(value);
+		if (value?.url) {
+			handleSubmit(value);
+		} else {
+			toast.error('airline logo is required');
+		}
 	};
 
 	useEffect(() => {
@@ -115,7 +119,7 @@ const FormComponent = ({
 	}, [watchOtp]);
 
 	useEffect(() => {
-		if(!isDefault && !form.getFieldValue('url')?.file?.response?.success){
+		if (!isDefault && !form.getFieldValue('url')?.file?.response?.success) {
 			form.setFieldsValue({
 				url: null
 			})
@@ -151,16 +155,16 @@ const FormComponent = ({
 							required
 						/>
 						{type !== 'edit' && !isReadOnly && (
-								<ImageUpload 
-									{...{
-										fileList,
-										setFileList,
-										isDefault: isDefault,
-										disabled: isUploadDisable,
-										name:"url",
-										label:"Airline logo"
-									}}
-								/>
+							<ImageUpload
+								{...{
+									fileList,
+									setFileList,
+									isDefault: isDefault,
+									disabled: isUploadDisable,
+									name: "url",
+									label: "Airline logo"
+								}}
+							/>
 						)}
 					</div>
 					<div className="airline_form_inputfields">

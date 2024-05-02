@@ -46,9 +46,9 @@ const ImageUpload = ({
 		if (!file.url && !file.preview) {
 			file.preview = await getBase64(file.originFileObj);
 		}
-		setPreviewImage(file.url || file.preview);
+		setPreviewImage(file.url ?? file.preview);
 		setPreviewOpen(true);
-		setPreviewTitle(file?.name || file?.url?.substring?.(file?.url?.lastIndexOf?.('/') + 1));
+		setPreviewTitle(file?.name ?? file?.url?.substring?.(file?.url?.lastIndexOf?.('/') + 1));
 	};
 	const uploadButton = (
 		<div style={{ pointerEvents: showUploadButton ? '' : 'none' }}>
@@ -66,7 +66,7 @@ const ImageUpload = ({
 		let fileType = file?.type?.split?.('/');
 		fileType = fileType?.[fileType?.length - 1];
 		if (!acceptedImages?.includes?.(fileType)) {
-			message.error(`File format is not accepted please upload (pdf, png, jpg, jpeg, svg, webp, jfif) only`);
+			toast.error(`File format is not accepted please upload (pdf, png, jpg, jpeg, svg, webp, jfif) only`);
 			return false;
 		}
 		const isLt1M = file.size / 1024 / 1024 < 3;
@@ -101,15 +101,13 @@ const ImageUpload = ({
 						name={name}
 						rules={[
 							{
-								required: true,
+								required: required,
 								message: 'This field is required',
 							},
 						]}
 					>
 						<Upload
-							name={name}
 							disabled={disabled}
-							style={{ height: '10rem' }}
 							listType={isCircle ? 'picture-circle' : 'picture-card'}
 							fileList={fileList}
 							accept="image/png, image/jpg, image/jpeg, image/webp, image/svg, image/svg+xml"
@@ -121,14 +119,15 @@ const ImageUpload = ({
 							onChange={handleChange}
 							showUploadList={{
 								showRemoveIcon: !isDefault,
-								// showRemoveIcon: showRemoveIcon ? showUploadButton: false,
 							}}
 							beforeUpload={beforeUpload}
 							multiple={multiple ? true : false}
 							onRemove={(e) => onRemoveFile(e)}
 							onPreview={handlePreview}
 						>
-							{fileList?.length >= length || !showUploadButton ? null : uploadButton}
+							{fileList?.length >= length || !showUploadButton
+								? null
+								: uploadButton}
 						</Upload>
 					</Item>
 				)}
@@ -144,7 +143,6 @@ const ImageUpload = ({
 			<Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
 				<img
 					alt="Not Found"
-					fetchpriority="high"
 					style={{
 						width: '100%',
 					}}
@@ -156,3 +154,4 @@ const ImageUpload = ({
 };
 
 export default React.memo(ImageUpload);
+

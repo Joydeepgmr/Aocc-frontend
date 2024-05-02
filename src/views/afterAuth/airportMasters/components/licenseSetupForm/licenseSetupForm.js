@@ -69,7 +69,9 @@ const LicenseSetupForm = ({ airportDropdownData, countryDropdownData, resetCodes
 				<ImageUpload
 					{...{
 						label: 'Airport Logo',
+						isCircle: true,
 						fileList,
+						required: true,
 						setFileList,
 						name: "url"
 					}}
