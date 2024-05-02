@@ -20,6 +20,7 @@ import CDM from '../views/afterAuth/cdm/cdm';
 import Vendor from '../views/afterAuth/Vendor/Vendor';
 import FidsDashboard from '../views/afterAuth/fids/fidsDashboard/fidsDashboard';
 import FidsResources from '../views/afterAuth/fids/fidsResources/fidsResources';
+import DashboardCharts from '../views/afterAuth/dashboardCharts/dashboardCharts';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ export default function Router() {
 						{ path: Pathname.USERACCESS, element: <RouteHOC element={<UserAccess />} /> },
 						{ path: Pathname.PLAN, element: <RouteHOC element={<Plans />} /> },
 						{ path: Pathname.CDM, element: <RouteHOC element={<CDM />} /> },
+						{ path: Pathname.DASHBOARD_CHARTS, element: <RouteHOC element={<DashboardCharts />} /> },
 					],
 				},
 				{

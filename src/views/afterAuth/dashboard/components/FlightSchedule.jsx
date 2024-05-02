@@ -10,14 +10,22 @@ import PageLoader from '../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
+import { useRunwayDropdown } from '../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../socket/listner/socketListner';
-import { ConvertToDateTime } from '../../../../utils';
+import Alerts from './Alerts';
 import './style.scss';
-import Widgets from './Widgets';
+
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
 	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
+	const { data: runwayDropdownData = [] } = useRunwayDropdown({ onError });
+
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 
 	const getFlightScheduleApiProps = {
 		tab,
@@ -54,7 +62,6 @@ const FlightSchedule = () => {
 	};
 	const { mutate: getViewMap, isLoading: isMapLoading } = useGetViewMap({ ...getMapViewApiProps });
 	const [form] = Form.useForm();
-	console.log('modal data is ', mapModalOpen);
 	const closeMapModal = () => {
 		setMapModalOpen({ isOpen: null, data: null });
 	};
@@ -66,6 +73,7 @@ const FlightSchedule = () => {
 			toast.error('Map is not available once aircraft is in radar range');
 		}
 	};
+
 	const columns = useMemo(() => {
 		let column = [
 			{
@@ -181,7 +189,13 @@ const FlightSchedule = () => {
 				align: 'center',
 				render: (runwayName) => runwayName ?? '-',
 			},
-			{ title: 'REM', dataIndex: 'remarks', key: 'remarks', align: 'center', render: (text) => text ?? '-' },
+			{
+				title: 'REM',
+				dataIndex: 'remarks',
+				key: 'remarks',
+				align: 'center',
+				render: (text) => text ?? '-',
+			},
 		];
 		if (tab === 'arrival') {
 			column.push({
@@ -257,29 +271,31 @@ const FlightSchedule = () => {
 			>
 				<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
 			</ModalComponent>
-			<Widgets />
-			<div className="body-container">
-				<div className="top-bar">
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight={600}
-						color="black"
-						children={'Flight Schedule'}
-					/>
-					<Form form={form}>
-						<InputField
-							label="Flight number"
-							name="flightNo"
-							placeholder="Flight number"
-							warning="Required field"
-							type="search"
+			<div className="critical-grid">
+				<div className="body-containers">
+					<div className="top-bar">
+						<CustomTypography
+							type="title"
+							fontSize={24}
+							fontWeight={600}
+							color="black"
+							children={'Flight Schedule'}
 						/>
-					</Form>
+						<Form form={form}>
+							<InputField
+								label="Flight number"
+								name="flightNo"
+								placeholder="Flight number"
+								warning="Required field"
+								type="search"
+							/>
+						</Form>
+					</div>
+					<div className="flights-table">
+						<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
+					</div>
 				</div>
-				<div className="flights-table">
-					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
-				</div>
+				<Alerts />
 			</div>
 		</>
 	);

@@ -3,8 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ConvertToDateTime } from '../../../../utils';
 import './style.scss';
 
-const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [], fullScreen=false }) => {
-	console.log('labels are ', labels);
+const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = [], fullScreen = false }) => {
 	const containerRef = useRef(null);
 	const milestoneList = useMemo(() => {
 		return data.map((list) => {
@@ -31,7 +30,6 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 		});
 	}, [data]);
 	const getDataLabel = (value) => {
-		console.log('value is ', value);
 		value = parseFloat((value - 100) / labels.length).toFixed(2);
 		const blockSize = parseFloat(100 / labels.length).toFixed(2);
 		const index = Math.ceil(value / blockSize);
@@ -96,7 +94,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 			tooltip: {
 				custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 					const data = w.config.series[seriesIndex].data[dataPointIndex];
-					console.log('data and goal', data);
+
 					return `<div class="tooltip_container">
                             <p class="header">  ${data?.x}  </p>
                             <div class="tooltip_heading">

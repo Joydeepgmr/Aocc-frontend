@@ -44,7 +44,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 	}, [natureCodeDropdownData]);
 
 	const SelectAircraftData = useMemo(() => {
-		console.log(aircraftDropdownData, 'aircraftdataaaaa');
 		return aircraftDropdownData?.map((data) => {
 			return { label: data?.registration, value: data?.id };
 		});
