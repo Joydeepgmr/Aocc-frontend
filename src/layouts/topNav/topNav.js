@@ -47,10 +47,14 @@ const TopNav = ({ data }) => {
 			const selectedNavItem = allNavItem.find((data) => data.children === pathname);
 			console.log('selected nav item', selectedNavItem);
 			if (!selectedNavItem) {
-				navigate('/404', { previousRoute: pathname });
+				if (pathname === Pathname.USERACCESS && role === userType.PLANNER) {
+					navigate(Pathname?.USERACCESS);
+				} else {
+					navigate('/404', { previousRoute: pathname });
+				}
 			} else {
 				setNavItems([...allNavItem]);
-				navigate(selectedNavItem.children);
+				navigate(selectedNavItem?.children);
 			}
 		}
 	}, [data]);
