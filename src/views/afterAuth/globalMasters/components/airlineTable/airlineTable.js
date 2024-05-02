@@ -13,25 +13,38 @@ import CustomTypography from '../../../../../components/typographyComponent/typo
 import {
 	useDeleteGlobalAirline,
 	usePatchGlobalAirline,
-	usePostGlobalAirline
+	usePostGlobalAirline,
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
 import './airlineTable.scss';
 
-const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination, airportDropdownData, countryDropdownData, loading }) => {
+const AirlineTable = ({
+	createProps,
+	setCreateProps,
+	data,
+	fetchData,
+	pagination,
+	airportDropdownData,
+	countryDropdownData,
+	loading,
+}) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' };
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			setAirlineData((oldData) => [data, ...oldData]);
 			closeAddModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: postGlobalAirLineRegistration, isLoading: isCreateNewLoading } = usePostGlobalAirline(postApiProps);
 	const patchApiProps = {
 		onSuccess: ({ message, data }) => {
@@ -41,41 +54,41 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					return data;
 				}
 				return elm;
-			})
+			});
 			setAirlineData([...updatedData]);
 			closeAddModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: patchAirline, isLoading: isEditLoading } = usePatchGlobalAirline(patchApiProps);
 	const deleteApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			const updatedData = airlineData.filter((elm) => {
 				return elm.id !== deleteModal.id;
-			})
+			});
 			setAirlineData([...updatedData]);
 			closeDeleteModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: deleteAirline, isLoading: isDeleteLoading } = useDeleteGlobalAirline(deleteApiProps);
-	const [initial, form] = Form.useForm();
+	const [initial] = Form.useForm();
 
 	function handleDetails(data) {
 		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
-	};
+	}
 	function handleEdit(data) {
 		setAirlineRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update airline registration' });
-	};
+	}
 	function handleDelete() {
 		deleteAirline(deleteModal.id);
-	};
+	}
 
 	function closeAddModal() {
 		setAirlineRegistrationModal(defaultModalParams);
 		initial.resetFields();
-	};
+	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
 	}
@@ -109,7 +122,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 			const id = airlineRegistrationModal.data.id;
 			delete values.twoLetterCode;
 			delete values.threeLetterCode;
-			delete values.validFrom
+			delete values.validFrom;
 			values.id = airlineRegistrationModal.data.id;
 			patchAirline(values);
 		} else {
@@ -117,7 +130,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 			values.threeLetterCode = values.threeLetterCode.join('');
 			postGlobalAirLineRegistration(values);
 		}
-	};
+	}
 
 	useEffect(() => {
 		const { data } = airlineRegistrationModal;
@@ -214,7 +227,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					<ButtonComponent
 						style={{ margin: 'auto' }}
 						title="View Details"
-						type="text" 
+						type="text"
 						onClick={() => {
 							handleDetails(record);
 						}}
@@ -227,7 +240,12 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 	return (
 		<>
 			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
-			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
+			<ConfirmationModal
+				isOpen={deleteModal.isOpen}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content="You want to delete this record"
+			/>
 			<ModalComponent
 				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
@@ -239,7 +257,7 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 					<AirlineForm
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}
-						form={form}
+						form={initial}
 					/>
 					{airlineRegistrationModal.type !== 'view' && (
 						<>
@@ -272,7 +290,6 @@ const AirlineTable = ({ createProps, setCreateProps, data, fetchData, pagination
 						<TableComponent {...{ data: airlineData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>
-
 			</div>
 		</>
 	);
