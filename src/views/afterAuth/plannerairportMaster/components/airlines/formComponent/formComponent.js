@@ -37,7 +37,7 @@ const FormComponent = ({
 	}) => toast.error(message);
 
 	const watchOtp = Form?.useWatch('threeLetterCode', form);
-	const watchURL = Form?.useWatch('file', form);
+	// const watchURL = Form?.useWatch('file', form);
 	const getAirlineImageHandler = {
 		onSuccess: (data) => {
 			if (data?.data?.value) {
@@ -89,12 +89,9 @@ const FormComponent = ({
 	const isNotEditable = type === 'edit';
 
 	const onFinishHandler = (value) => {
-		!isDefault && (value.url = fileList?.[0]?.url);
-		if (value?.url) {
-			handleSubmit(value);
-		} else {
-			toast.error('airline logo is required');
-		}
+		!isDefault && (value.url = fileList[0]?.url);
+		value.file = '';
+		handleSubmit(value);
 	};
 
 	useEffect(() => {
@@ -163,6 +160,7 @@ const FormComponent = ({
 									disabled: isUploadDisable,
 									name: 'file',
 									label: 'Airline logo',
+									required: true,
 								}}
 							/>
 						)}
