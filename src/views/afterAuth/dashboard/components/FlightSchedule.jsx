@@ -53,7 +53,6 @@ const FlightSchedule = () => {
 	};
 	const { mutate: getViewMap, isLoading: isMapLoading } = useGetViewMap({ ...getMapViewApiProps });
 	const [form] = Form.useForm();
-	console.log('modal data is ', mapModalOpen);
 	const closeMapModal = () => {
 		setMapModalOpen({ isOpen: null, data: null });
 	};

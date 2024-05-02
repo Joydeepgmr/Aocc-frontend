@@ -10,9 +10,7 @@ const socketUrl = process.env.baseURL.split('/').slice(0, 3).join('/');
 const socket = io(socketUrl, { reconnectionAttempts: 20 });
 export function App() {
 	const token = localStorage.getItem('_tid');
-	console.log('What is token here:', token);
 	const userRole = localStorage.getItem('role');
-	console.log('what is the role in app.jsx', userRole);
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
