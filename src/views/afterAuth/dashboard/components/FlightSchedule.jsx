@@ -27,12 +27,6 @@ const FlightSchedule = () => {
 		},
 	}) => toast.error(message);
 
-	const SelectRunwayData = useMemo(() => {
-		return runwayDropdownData?.map((data) => {
-			return { label: data.name, value: data.id };
-		});
-	}, [runwayDropdownData]);
-
 	const getFlightScheduleApiProps = {
 		tab,
 		onSuccess: (data) => {
@@ -78,21 +72,6 @@ const FlightSchedule = () => {
 			toast.dismiss();
 			toast.error('Map is not available once aircraft is in radar range');
 		}
-	};
-
-	const handleEditTable = (item) => {
-		console.log(item, 'itemsss');
-		// setRowData(item);
-		// const data = {
-		// 	eta: item?.values?.eta ? `${formattedTime(item?.values?.eta)}` : null,
-		// 	etd: item?.values?.etd ? `${formattedTime(item?.values?.etd)}` : null,
-		// 	tmo: item?.values?.tmo ? `${formattedTime(item?.values?.tmo)}` : null,
-		// 	ata: item?.values?.ata ? `${formattedTime(item?.values?.ata)}` : null,
-		// 	atd: item?.values?.atd ? `${formattedTime(item?.values?.atd)}` : null,
-		// 	eob: item?.values?.eob ? `${formattedTime(item?.values?.eob)}` : null,
-		// 	remark: item?.values?.remark ?? null,
-		// };
-		// const hasNonNullValue = Object.values(data).some((value) => value !== null);
 	};
 
 	const columns = useMemo(() => {
@@ -153,7 +132,6 @@ const FlightSchedule = () => {
 				key: tab == 'arrival' ? 'eta' : 'etd',
 				align: 'center',
 				render: (text) => text ?? '-',
-				editable: { type: 'time' },
 			},
 			{
 				title: 'TMO',
@@ -161,7 +139,6 @@ const FlightSchedule = () => {
 				key: 'tmo',
 				align: 'center',
 				render: (text) => text ?? '-',
-				editable: { type: 'time' },
 			},
 			{
 				title: tab == 'arrival' ? 'ATA' : 'ATD',
@@ -169,7 +146,6 @@ const FlightSchedule = () => {
 				key: 'ata',
 				align: 'center',
 				render: (text) => text ?? '-',
-				editable: { type: 'time' },
 			},
 			{
 				title: 'EOB',
@@ -177,7 +153,6 @@ const FlightSchedule = () => {
 				key: 'eob',
 				align: 'center',
 				render: (text) => text ?? '-',
-				editable: { type: 'time' },
 			},
 			{
 				title: tab === 'arrival' ? 'ONB' : 'OFB',
@@ -185,7 +160,6 @@ const FlightSchedule = () => {
 				key: 'onBlock',
 				align: 'center',
 				render: (text) => text ?? '-',
-				editable: { type: 'time' },
 			},
 			{
 				title: 'POS',
@@ -214,40 +188,13 @@ const FlightSchedule = () => {
 				key: 'runwayName',
 				align: 'center',
 				render: (runwayName) => runwayName ?? '-',
-				editable: { type: 'dropdown', options: SelectRunwayData }
 			},
 			{
 				title: 'REM',
 				dataIndex: 'remarks',
 				key: 'remarks',
 				align: 'center',
-				render: (text) => text ?? '-'
-			},
-			{
-				title: 'Status',
-				key: 'status',
-				render: (
-					text,
-					record
-				) => (
-					<div className="action_buttons">
-						<ButtonComponent
-							// onClick={() => handleEdit(record)}
-
-							type="filledText"
-							title='UTW'
-							id='btn'
-							className='custom_svgButton'
-						/>
-						<ButtonComponent
-							// onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="filledText"
-							title='MLS'
-							id='btn'
-							className='custom_svgButton'
-						/>
-					</div>
-				),
+				render: (text) => text ?? '-',
 			},
 		];
 		if (tab === 'arrival') {
@@ -289,7 +236,6 @@ const FlightSchedule = () => {
 						loading={isFetching}
 						fetchData={fetchNextPage}
 						pagination={hasNextPage}
-						handleEdit={handleEditTable}
 						isColored
 					/>
 				</div>
