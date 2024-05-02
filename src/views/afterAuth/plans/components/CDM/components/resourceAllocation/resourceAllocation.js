@@ -379,6 +379,7 @@ const ResourceAllocation = () => {
 							type="filledText"
 							isSubmit="submit"
 							onClick={() => setIsEditable(!isEditable)}
+							disabled={!Boolean(timelineItems?.length)}
 						/>
 						<CustomSelect
 							SelectData={SelectTime}
