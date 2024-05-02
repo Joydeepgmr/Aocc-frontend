@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import TopHeader from '../../../components/topHeader/topHeader';
 import "../../../styles/sass/_utils.scss";
@@ -7,8 +8,6 @@ import FlightSchedule from './components/FlightSchedule';
 import Milestone from './components/Milestone';
 import TelexMessage from './components/TelexMessage';
 import './dashboard.scss';
-import Alerts from './components/Alerts';
-import { useLocation } from 'react-router-dom';
 
 export const Dashboard = () => {
 	const { state } = useLocation();
@@ -43,7 +42,6 @@ export const Dashboard = () => {
 		<div className='container-div'>
 			<div className='container-head'>
 				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
-				<Alerts />
 			</div>
 			<div className='main-container'>
 				<CustomTabs defaultActiveKey={state?.tab ?? '1'} items={items} onChange={handleChange} />

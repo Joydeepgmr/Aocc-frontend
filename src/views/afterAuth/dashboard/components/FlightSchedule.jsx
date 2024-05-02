@@ -10,7 +10,6 @@ import PageLoader from '../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
-import { useRunwayDropdown } from '../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import './style.scss';
 import { useStandDropdown } from '../../../../services/planairportmaster/resources/parkingstand/parkingstand';
