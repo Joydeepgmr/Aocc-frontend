@@ -19,15 +19,19 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	// for image
 	const [fileList, setFileList] = useState([]);
 	const [resetCodes, setResetCodes] = useState(false);
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			setAirportData((oldData) => [data, ...oldData]);
 			closeAddModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { data: airportDropdownData } = useGlobalAirportDropdown();
 	const { data: countryDropdownData } = useCountriesDropdown();
 	const { mutate: postAirportLicense, isLoading: isCreateNewLoading } = usePostLicenseAirport(postApiProps);
@@ -36,8 +40,8 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	function closeAddModal() {
 		initial.resetFields();
 		setResetCodes(true);
-		setAirportModal(defaultModalParams)
-	};
+		setAirportModal(defaultModalParams);
+	}
 
 	function getFormValues(data = {}) {
 		return {
@@ -50,15 +54,11 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 			country: data?.country,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
-		}
+		};
 	}
 	const onFinishHandler = (values) => {
-		if (!fileList?.length) {
-			toast.dismiss();
-			toast.error('Airport logo is required');
-			return;
-		}
 		values = getFormValues(values);
+		values.file = '';
 		values.url = fileList?.[0]?.url;
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
@@ -68,7 +68,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	};
 
 	useEffect(() => {
-		const { data } = airportModal
+		const { data } = airportModal;
 		if (data) {
 			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
@@ -79,7 +79,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 			setAirportModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new]);
 	useEffect(() => {
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
@@ -154,7 +154,17 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				className="custom_modal"
 			>
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
-					<LicenseSetupForm {...{ airportDropdownData, countryDropdownData, resetCodes, setResetCodes, fileList, setFileList }} />
+					<LicenseSetupForm
+						{...{
+							airportDropdownData,
+							countryDropdownData,
+							resetCodes,
+							setResetCodes,
+							fileList,
+							setFileList,
+							initial,
+						}}
+					/>
 					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent
