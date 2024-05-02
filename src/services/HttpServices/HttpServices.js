@@ -1,5 +1,4 @@
-import { axiosInstance } from "../../interceptor/interceptor";
-
+import { axiosInstance } from '../../interceptor/interceptor';
 
 export const Get = async (url, config) => {
 	const response = await axiosInstance.get(url, config);

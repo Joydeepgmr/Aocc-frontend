@@ -37,13 +37,13 @@ const FormComponent = ({
 	}) => toast.error(message);
 
 	const watchOtp = Form?.useWatch('threeLetterCode', form);
-	const watchURL = Form?.useWatch('url', form);
+	const watchURL = Form?.useWatch('file', form);
 	const getAirlineImageHandler = {
 		onSuccess: (data) => {
 			if (data?.data?.value) {
 				setFileList([{ url: data?.data?.value }]);
 				form.setFieldsValue({
-					url: data?.data?.value,
+					file: data?.data?.value,
 				});
 				setIsDefault(true);
 			} else {
@@ -113,18 +113,18 @@ const FormComponent = ({
 			setIsDefault(false);
 			setIsUploadDisable(true);
 			form.setFieldsValue({
-				url: null,
-			})
+				file: null,
+			});
 		}
 	}, [watchOtp]);
 
 	useEffect(() => {
-		if (!isDefault && !form.getFieldValue('url')?.file?.response?.success) {
+		if (!Boolean(fileList?.length)) {
 			form.setFieldsValue({
-				url: null
-			})
+				file: null,
+			});
 		}
-	}, [watchURL])
+	}, [fileList]);
 
 	return (
 		<div key={initialValue?.id}>
@@ -161,8 +161,8 @@ const FormComponent = ({
 									setFileList,
 									isDefault: isDefault,
 									disabled: isUploadDisable,
-									name: "url",
-									label: "Airline logo"
+									name: 'file',
+									label: 'Airline logo',
 								}}
 							/>
 						)}

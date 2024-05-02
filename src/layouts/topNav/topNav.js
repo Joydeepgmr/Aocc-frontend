@@ -45,10 +45,10 @@ const TopNav = ({ data }) => {
 		if (role) {
 			const allNavItem = roleBasedNav(role);
 			const selectedNavItem = allNavItem.find((data) => data.children === pathname);
-			console.log('selected nav item', selectedNavItem);
 			if (!selectedNavItem) {
 				if (pathname === Pathname.USERACCESS && role === userType.PLANNER) {
 					navigate(Pathname?.USERACCESS);
+					setNavItems([...allNavItem]);
 				} else {
 					navigate('/404', { previousRoute: pathname });
 				}

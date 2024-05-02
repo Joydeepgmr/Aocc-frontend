@@ -102,7 +102,8 @@ const AirlineForm = ({ isReadOnly, type, form }) => {
 							setFileList,
 							isDefault: isDefault,
 							required: true,
-							name: 'url',
+							name: 'file',
+							disabled: isUploadDisable,
 							label: 'Airline logo',
 						}}
 					/>

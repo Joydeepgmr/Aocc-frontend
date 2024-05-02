@@ -12,7 +12,9 @@
 	padding: 0.8rem 2.4rem 1.6rem 2.4rem;
 	margin-bottom: 1.5rem;
 }
+
 .body-containers {
+	width: 100%;
 	width: 100%;
 	border: 1px solid $gray_300;
 	border-radius: 2.1rem;
@@ -50,11 +52,16 @@
 	padding: 0 !important;
 	border-radius: 1.6rem 1.6rem 0 0;
 }
+
 .progress-alert {
+	border: 1px solid $gray_300;
 	width: 30%;
 	height: auto;
-	padding: 0 !important;
-	border-radius: 1.6rem;
+	border-radius: 2.1rem;
+	margin-bottom: 1.5rem;
+	padding: 0.8rem 2.4rem 1.6rem 2.4rem;
+	max-height: 80vh;
+	overflow: auto;
 }
 
 .ant-card-body {
@@ -98,6 +105,7 @@
 	gap: 2rem;
 	margin-bottom: 2rem;
 }
+
 .widgets-info {
 	width: 100%;
 	// display: flex;
@@ -111,6 +119,7 @@
 	flex-wrap: nowrap;
 	width: 100%;
 	gap: 0.6rem;
+
 	.airline-name {
 		width: 20%;
 		font-size: 12px;
@@ -132,6 +141,7 @@
 .read_more_button {
 	color: $blue;
 }
+
 .read_less_button {
 	padding-left: 1rem;
 	color: $blue;
@@ -147,15 +157,18 @@
 	max-height: 15rem;
 	overflow-y: auto;
 }
+
 .telex_parsed_message_container {
 	width: 90%;
 	margin: auto;
 	display: flex;
 	justify-content: space-between;
+
 	.message_key {
 		display: flex;
 		justify-content: end;
 	}
+
 	.message_value {
 		display: flex;
 		justify-content: start;
@@ -169,44 +182,54 @@
 	overflow: visible !important;
 	gap: 0.6rem;
 	padding: 0.5rem 1rem;
+
 	.header {
 		font-weight: 600;
 		font-size: 1.5rem;
 	}
+
 	.tooltip_heading {
 		display: flex;
 		gap: 1.3rem;
 	}
+
 	.goal_heading {
 		display: flex;
 		justify-content: space-between;
 		gap: 1.3rem;
+
 		.goal_name {
 			width: auto;
 			// text-transform: capitalize;
 		}
+
 		.goal_achieved {
 			display: flex;
 			gap: 1rem;
 		}
 	}
+
 	.tooltip_value {
 		font-weight: 600;
 	}
+
 	.milestone_container {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+
 		.milestone_header {
 			font-weight: 600;
 			font-size: 1.3rem;
 		}
 	}
 }
+
 .chart-container {
 	overflow-y: auto;
 	max-height: 40rem;
 }
+
 .chart-container.full-screen {
 	overflow-y: auto;
 	max-height: 75vh;
@@ -222,10 +245,11 @@
 }
 
 .daily-ops-table {
-	.ant-table-thead > tr > th {
+	.ant-table-thead>tr>th {
 		font-size: 1.3rem;
 	}
-	.ant-table-tbody > tr > td {
+
+	.ant-table-tbody>tr>td {
 		padding: 6px 6px !important;
 		font-size: 1.3rem;
 	}
@@ -236,6 +260,7 @@
 		cursor: pointer;
 		font-size: 2.5rem;
 	}
+
 	&--FullScreen {
 		background-color: white;
 		width: 100vw;
@@ -243,10 +268,12 @@
 		padding: 6rem;
 		position: relative;
 	}
+
 	&--FullScreenExitIcon {
 		cursor: pointer;
 		font-size: 2.5rem;
 	}
+
 	&--FullScreenFilter {
 		position: absolute;
 		right: 6rem;
@@ -254,10 +281,12 @@
 }
 
 .alert-body {
-	padding: 0.75rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
+	margin: 2rem 0;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid $gray_300;
 }
 
 .alert-status-body {
@@ -265,29 +294,43 @@
 	justify-content: space-between;
 	align-items: center;
 	font-size: 1.3rem;
+
 	.alert-status {
 		width: auto !important;
 		background-color: $red_100;
 		color: white;
 	}
+	.alert-warning {
+		width: auto !important;
+		background-color: $yellow_100;
+		color: white;
+	}
 }
+
 .alert-button-body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
 	.alert-conflict {
 		display: flex;
 		flex-direction: column;
 		gap: 0.3rem;
 		font-weight: 600;
+
 		.conflict-type {
 			font-size: 1.6rem;
 		}
+		.conflict-type::first-letter {
+			text-transform: uppercase;
+		}
+
 		.conflict-flight {
 			font-size: 1.2rem;
 		}
 	}
 }
+
 .apexcharts-active {
 	margin-top: 5rem;
 }
@@ -297,3 +340,4 @@
 	gap: 2rem;
 	justify-content: space-between;
 }
+

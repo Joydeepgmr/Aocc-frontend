@@ -96,6 +96,7 @@ export const GET_AIRLINE_IMAGE = '/system-constant/check-image-airline';
 
 /*--------------------------Manage Access ---------------------*/
 
+export const GET_MANAGE_ACCESS = '/access-management/paginated';
 export const POST_MANAGE_ACCESS = '/access-management';
 
 /*--------------------------IT Admin Bulk import ---------------------*/
@@ -129,3 +130,7 @@ export const GET_FIDS_RESOURCES = '/screen/paginated';
 export const POST_FIDS_RESOURCES = '/screen';
 export const DELETE_FIDS_RESOURCES = '/screen';
 export const UPDATE_FIDS_RESOURCES = '/screen';
+
+/*------------------------- Notification ----------------------------------*/
+export const GET_ALL_NOTIFICATION = '/notification/paginated';
+export const UPDATE_NOTIFICATION = '/notification';

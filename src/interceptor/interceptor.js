@@ -8,8 +8,6 @@ export const axiosInstance = Axios.create({
 	// baseURL: 'https://w2lk19wq-5554.inc1.devtunnels.ms/frms/api/v1',
 });
 
-console.log(process.env.baseURL, 'base url');
-
 axiosInstance.interceptors.request.use(
 	async (config) => {
 		const token = localStorage.getItem(localStorageKey.AUTH_TOKEN);

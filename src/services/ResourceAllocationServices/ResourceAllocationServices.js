@@ -71,9 +71,6 @@ export const useRunRuleEngine = (props) => {
 	const { data, error, isSuccess } = response;
 
 	const statusMessage = isSuccess ? data?.message : error?.message;
-
-	console.log(data, statusMessage, response, 'sucess');
-
 	return {
 		...response,
 		data: data,

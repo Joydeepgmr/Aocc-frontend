@@ -64,6 +64,7 @@ import {
 	useUploadCSVGlobalAirline,
 	useUploadCSVGlobalAirport,
 } from './globalMasters/globalMaster';
+import { useGetAllNotification, useUpdateNotification } from './notification/notificationServices';
 
 export {
 	useDummyApi,
@@ -118,4 +119,6 @@ export {
 	useDeleteFidsResource,
 	useUpdateFidsResource,
 	useRunRuleEngine,
+	useGetAllNotification,
+	useUpdateNotification,
 };

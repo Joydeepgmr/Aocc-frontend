@@ -256,6 +256,7 @@ function TelexMessage() {
 				buttonTitle2="Acknowledge"
 			/>
 			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
+
 			<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
 				<div className="top-bar">
 					<CustomTypography
