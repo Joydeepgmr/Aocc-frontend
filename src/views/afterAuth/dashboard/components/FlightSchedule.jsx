@@ -238,14 +238,14 @@ const FlightSchedule = () => {
 							type="filledText"
 							title='UTW'
 							id='btn'
-							className='custom_svgButton'
+							className='custom_statusButton'
 						/>
 						<ButtonComponent
 							// onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
 							type="filledText"
 							title='MLS'
 							id='btn'
-							className='custom_svgButton'
+							className='custom_statusButton'
 						/>
 					</div>
 				),
