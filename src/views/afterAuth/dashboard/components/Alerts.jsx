@@ -14,10 +14,10 @@ const Alerts = () => {
 	return (
 		<Card className="progress-alert">
 			<div className="alert-body">
-				<CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" />
 				<div className="alert-status-body">
+					<CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" />
 					<Chip text="critical" className="alert-status" />
-					<div>12:00 UTC</div>
+					{/* <div>12:00 UTC</div> */}
 				</div>
 				<div className="alert-button-body">
 					<div className="alert-conflict">

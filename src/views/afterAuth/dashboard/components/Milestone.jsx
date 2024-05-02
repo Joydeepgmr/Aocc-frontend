@@ -1,4 +1,6 @@
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import React, { useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { GET_MILESTONE_DATA } from '../../../../api';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import InputField from '../../../../components/input/field/field';
@@ -7,11 +9,7 @@ import CustomTypography from '../../../../components/typographyComponent/typogra
 import { useGetMileStoneData } from '../../../../services/dashboard/milestones/milestones';
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import MilestoneChart from './MilestoneChart';
-import { toast } from 'react-hot-toast';
 import './style.scss';
-import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Widgets from './Widgets';
-import Alerts from './Alerts';
 
 function Milestone() {
 	const [type, setType] = useState('arrival');
@@ -24,7 +22,7 @@ function Milestone() {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data.milestoneList || []);
 			}, []);
-			setMilestoneData([...newData, ...newData, ...newData]);
+			setMilestoneData([...newData]);
 			if (!labels.length && data?.pages?.length) {
 				const labels = data?.pages[0].data.milestones.map((milestoneObj) => {
 					const [key] = Object.keys(milestoneObj);
@@ -114,47 +112,44 @@ function Milestone() {
 	return (
 		<>
 			<SocketEventListener refetch={refetch} apiName={`${GET_MILESTONE_DATA}?flightType=${type}`} />
-			<div className="critical-grid">
-				<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
-					<div className={`top-bar`}>
-						<CustomTypography
-							type="title"
-							fontSize={24}
-							fontWeight="600"
-							color="black"
-							children={'Milestones'}
-						/>
-						<div className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
-							{fullScreen ? (
-								<FullscreenExitOutlined
-									className="fullScreen--FullScreenExitIcon"
-									onClick={toggleFullscreen}
-								/>
-							) : (
-								<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
-							)}
-						</div>
-					</div>
-					<div className="flights-table">
-						<CustomTabs
-							defaultActiveKey="1"
-							items={items}
-							onChange={handleTabChange}
-							extraContent={
-								<div style={{ marginBottom: '1rem' }}>
-									<InputField
-										label="Airport Name"
-										name="search"
-										placeholder="Search"
-										warning="Required field"
-										type="search"
-									/>
-								</div>
-							}
-						/>
+			<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
+				<div className={`top-bar`}>
+					<CustomTypography
+						type="title"
+						fontSize={24}
+						fontWeight="600"
+						color="black"
+						children={'Milestones'}
+					/>
+					<div className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
+						{fullScreen ? (
+							<FullscreenExitOutlined
+								className="fullScreen--FullScreenExitIcon"
+								onClick={toggleFullscreen}
+							/>
+						) : (
+							<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
+						)}
 					</div>
 				</div>
-				<Alerts />
+				<div className="flights-table">
+					<CustomTabs
+						defaultActiveKey="1"
+						items={items}
+						onChange={handleTabChange}
+						extraContent={
+							<div style={{ marginBottom: '1rem' }}>
+								<InputField
+									label="Airport Name"
+									name="search"
+									placeholder="Search"
+									warning="Required field"
+									type="search"
+								/>
+							</div>
+						}
+					/>
+				</div>
 			</div>
 		</>
 	);

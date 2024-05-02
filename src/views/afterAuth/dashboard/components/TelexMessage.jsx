@@ -256,18 +256,17 @@ function TelexMessage() {
 				buttonTitle2="Acknowledge"
 			/>
 			<SocketEventListener refetch={refetch} apiName={`${GET_TELEX_MESSAGE}`} />
-			<div className="critical-grid">
-				<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
-					<div className="top-bar">
-						<CustomTypography
-							type="title"
-							fontSize={24}
-							fontWeight="600"
-							color="black"
-							children={'Flight Schedule'}
-						/>
-						<div className="filter-section">
-							{/* <Button
+			<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
+				<div className="top-bar">
+					<CustomTypography
+						type="title"
+						fontSize={24}
+						fontWeight="600"
+						color="black"
+						children={'Flight Schedule'}
+					/>
+					<div className="filter-section">
+						{/* <Button
 						onClick={() => {
 							alert('Icon Button');
 						}}
@@ -275,44 +274,36 @@ function TelexMessage() {
 						alt="bell icon"
 						className={'filter-btn'}
 					/> */}
-							<Form
-								form={form}
-								className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}
-							>
-								{fullScreen ? (
-									<FullscreenExitOutlined
-										className="fullScreen--FullScreenExitIcon"
-										onClick={toggleFullscreen}
-									/>
-								) : (
-									<FullscreenOutlined
-										onClick={toggleFullscreen}
-										className="fullScreen--FullScreenIcon"
-									/>
-								)}
-							</Form>
-						</div>
-					</div>
-					<div className="flights-table">
-						<CustomTabs
-							defaultActiveKey="1"
-							items={items}
-							onChange={handleTabChange}
-							extraContent={
-								<div style={{ marginBottom: '1rem' }}>
-									<InputField
-										label="Flight number"
-										name="flightNo"
-										placeholder="Flight number"
-										warning="Required field"
-										type="search"
-									/>
-								</div>
-							}
-						/>
+						<Form form={form} className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
+							{fullScreen ? (
+								<FullscreenExitOutlined
+									className="fullScreen--FullScreenExitIcon"
+									onClick={toggleFullscreen}
+								/>
+							) : (
+								<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
+							)}
+						</Form>
 					</div>
 				</div>
-				<Alerts />
+				<div className="flights-table">
+					<CustomTabs
+						defaultActiveKey="1"
+						items={items}
+						onChange={handleTabChange}
+						extraContent={
+							<div style={{ marginBottom: '1rem' }}>
+								<InputField
+									label="Flight number"
+									name="flightNo"
+									placeholder="Flight number"
+									warning="Required field"
+									type="search"
+								/>
+							</div>
+						}
+					/>
+				</div>
 			</div>
 		</>
 	);

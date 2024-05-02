@@ -1,4 +1,4 @@
-import { useMutation, useInfiniteQuery, useQueryClient } from 'react-query';
+import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
 import { GET_BAGGAGE_BELT, BAGGAGE_BELT } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
@@ -68,3 +68,13 @@ export const useDeleteBaggageBelt = (props) => {
 
 	return { ...response, data: data?.data, message: statusMessage };
 };
+
+export const useBaggageBeltDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['get-baggage-belt-dropdown'],
+		queryFn: async () => await Post(`${GET_BAGGAGE_BELT}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
+}

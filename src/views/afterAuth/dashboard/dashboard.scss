@@ -7,8 +7,12 @@
 	flex-direction: column;
 	width: 100%;
 	padding: 0rem 2rem;
-	gap: 2.4rem;
 	margin-top: 2.4rem;
+}
+.container-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
 }
 
 .title-div {

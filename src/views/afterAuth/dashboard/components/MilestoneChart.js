@@ -104,16 +104,16 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
                             <div class="milestone_container">
                                 <span class="milestone_header">  Milestone achieved  </span>
                                 ${data.goals
-									.map((goal) => {
-										return `<div class="goal_heading">
+							.map((goal) => {
+								return `<div class="goal_heading">
                                             <span class='goal_name'>  ${goal?.name} </span>
                                             <div class='goal_achieved'>
                                             <span class="tooltip_value">  Time:  </span>
                                             <span class="tooltip_value">  ${goal?.time}  </span>
                                             </div>
                                             </div>`;
-									})
-									.join('')}
+							})
+							.join('')}
                             </div>
                         </div>`;
 				},
@@ -143,7 +143,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 				options={chartOptions.options}
 				series={chartOptions.series}
 				type="bar"
-				height={60 * data?.length}
+				height={80 * data?.length}
 				style={{ paddingTop: '1rem' }}
 			/>
 		</div>

@@ -6,7 +6,12 @@ import './style.scss';
 import Performance from '../../../../assets/performance.svg';
 import Airplane_1 from '../../../../assets/Airline_1.svg';
 import RightArrow from '../../../../assets/RightArrow.svg';
+import { useNavigate } from 'react-router-dom';
 const ProgressionCard = ({ cardTitle, airlineData }) => {
+	const navigate = useNavigate();
+	const navigateTOMilestone = () => {
+		navigate('/dashboard', { state: { tab: '2' } });
+	};
 	return (
 		<>
 			<Card className="progress-card">
@@ -35,7 +40,7 @@ const ProgressionCard = ({ cardTitle, airlineData }) => {
 							);
 						})}
 					</div>
-					<div className="view-details">
+					<div className="view-details" onClick={navigateTOMilestone}>
 						<CustomTypography
 							type="title"
 							fontSize={12}

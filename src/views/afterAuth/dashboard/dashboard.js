@@ -7,8 +7,11 @@ import FlightSchedule from './components/FlightSchedule';
 import Milestone from './components/Milestone';
 import TelexMessage from './components/TelexMessage';
 import './dashboard.scss';
+import Alerts from './components/Alerts';
+import { useLocation } from 'react-router-dom';
 
 export const Dashboard = () => {
+	const { state } = useLocation();
 	const handleChange = () => {
 		console.log('Tab switch');
 	};
@@ -38,9 +41,12 @@ export const Dashboard = () => {
 
 	return (
 		<div className='container-div'>
-			<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
+			<div className='container-head'>
+				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
+				<Alerts />
+			</div>
 			<div className='main-container'>
-				<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
+				<CustomTabs defaultActiveKey={state?.tab ?? '1'} items={items} onChange={handleChange} />
 			</div>
 		</div>
 	);
