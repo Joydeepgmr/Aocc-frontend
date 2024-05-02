@@ -202,6 +202,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type == 1}
 								className="custom_input"
+								disabled={isEdit}
 							/>
 						) : (
 							<InputField
@@ -211,6 +212,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type != 1}
 								className="custom_input"
+								disabled={isEdit}
 							/>
 						)}
 					</div>
