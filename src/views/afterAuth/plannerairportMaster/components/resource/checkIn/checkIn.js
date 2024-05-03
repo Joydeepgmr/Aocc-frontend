@@ -22,8 +22,8 @@ import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_CHECKIN_COUNTER } from '../../../../../../api';
-import './checkIn.scss';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import './checkIn.scss';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -359,6 +359,7 @@ const CheckIn = () => {
 						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />
 					}
 					openModal={openModal}
+					openCSVModal={()=> setOpenCSVModal(true)}
 				/>
 			) : (
 				<>
@@ -372,9 +373,9 @@ const CheckIn = () => {
 							/>
 						</div>
 						<div className="check-in--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
-							</CustomTypography>
+							</CustomTypography> */}
 							<TableComponent
 								data={checkinData}
 								columns={columns}

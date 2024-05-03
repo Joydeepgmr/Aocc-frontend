@@ -17,6 +17,7 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_PARKING_STAND } from '../../../../../../api';
+import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -27,6 +28,7 @@ const ParkingStand = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
 
 	const getParkingStandHandler = {
@@ -173,6 +175,17 @@ const ParkingStand = () => {
 		deleteParkingStand(rowData.id);
 	}
 
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			console.log(file);
+			// onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
+	};
+
 	const columns = [
 		{
 			title: 'Actions',
@@ -290,23 +303,23 @@ const ParkingStand = () => {
 			value: 'create',
 			key: '0',
 		},
-		// {
-		// 	label: 'Upload CSV',
-		// 	value: 'uploadCSV',
-		// 	key: '1',
-		// },
-		// {
-		// 	label: 'Download CSV Template',
-		// 	value: 'downloadCSVTemplate',
-		// 	key: '2',
-		// },
+		{
+			label: 'Upload CSV',
+			value: 'uploadCSV',
+			key: '1',
+		},
+		{
+			label: 'Download CSV Template',
+			value: 'downloadCSVTemplate',
+			key: '2',
+		},
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			openCsvModal();
+			setOpenCSVModal(true);
 		}
 	};
 
@@ -316,8 +329,8 @@ const ParkingStand = () => {
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					// title2={'Import Global Reference'}
-					// title3={'Download CSV Template'}
+					title2={'Upload CSV'}
+					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Parking Stands'}
 					formComponent={<FormComponent
@@ -325,6 +338,7 @@ const ParkingStand = () => {
 						handleButtonClose={handleCloseButton}
 					/>}
 					openModal={openModal}
+					openCSVModal={()=> setOpenCSVModal(true)}
 				/>
 			) : (
 				<>
@@ -338,9 +352,9 @@ const ParkingStand = () => {
 							/>
 						</div>
 						<div className="parking-stand--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Parking Stands
-							</CustomTypography>
+							</CustomTypography> */}
 							<TableComponent data={parkingData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
@@ -389,6 +403,12 @@ const ParkingStand = () => {
 				onClose={closeDeleteModal}
 				onSave={handleDelete}
 				content={`You want to delete ${rowData?.name}?`}
+			/>
+			<UploadCsvModal
+				isModalOpen={openCSVModal}
+				width="72rem"
+				closeModal={() => setOpenCSVModal(false)}
+				handleUpload={handleUpload}
 			/>
 		</>
 	);

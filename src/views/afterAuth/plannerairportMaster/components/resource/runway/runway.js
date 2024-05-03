@@ -17,6 +17,7 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditRunway, useGetRunway, usePostRunway, useDeleteRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_RUNWAY } from '../../../../../../api';
+import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import './runway.scss';
 
 const Runway = () => {
@@ -28,6 +29,7 @@ const Runway = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
 
 	const getRunwayHandler = {
@@ -179,6 +181,17 @@ const Runway = () => {
 		deleteRunway(rowData.id);
 	}
 
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			console.log(file);
+			// onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
+	};
+
 	const columns = [
 		{
 			title: 'Actions',
@@ -289,13 +302,23 @@ const Runway = () => {
 			value: 'addNewRunway',
 			key: '0',
 		},
+		{
+			label: 'Upload CSV',
+			value: 'uploadCSV',
+			key: '1',
+		},
+		{
+			label: 'Download CSV Template',
+			value: 'downloadCSVTemplate',
+			key: '2',
+		},
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'addNewRunway') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			openCsvModal();
+			setOpenCSVModal(true);
 		}
 	};
 
@@ -306,8 +329,8 @@ const Runway = () => {
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchRunway?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					// title2={'Import Global Reference'}
-					// title3={'Download CSV Template'}
+					title2={'Upload CSV'}
+					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Runway'}
 					formComponent={
@@ -317,6 +340,7 @@ const Runway = () => {
 						/>
 					}
 					openModal={openModal}
+					openCSVModal={()=> setOpenCSVModal(true)}
 				/>
 			) : (
 				<>
@@ -330,9 +354,9 @@ const Runway = () => {
 							/>
 						</div>
 						<div className="runway--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Runway
-							</CustomTypography>
+							</CustomTypography> */}
 							<TableComponent data={runwayData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
@@ -379,6 +403,12 @@ const Runway = () => {
 				onClose={closeDeleteModal}
 				onSave={handleDelete}
 				content={`You want to delete ${rowData?.name}?`}
+			/>
+			<UploadCsvModal
+				isModalOpen={openCSVModal}
+				width="72rem"
+				closeModal={() => setOpenCSVModal(false)}
+				handleUpload={handleUpload}
 			/>
 		</>
 	);
