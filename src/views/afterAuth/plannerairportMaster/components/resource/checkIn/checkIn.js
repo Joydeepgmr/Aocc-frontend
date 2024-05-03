@@ -23,6 +23,7 @@ import FormComponent from './formComponents/formComponents';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_CHECKIN_COUNTER } from '../../../../../../api';
 import './checkIn.scss';
+import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -32,6 +33,7 @@ const CheckIn = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
 
 	const getCheckinHandler = {
@@ -58,7 +60,7 @@ const CheckIn = () => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
-		refetch: getCheckInRefetch
+		refetch: getCheckInRefetch,
 	} = useGetCheckIn(getCheckinHandler);
 
 	const openModal = () => {
@@ -77,7 +79,7 @@ const CheckIn = () => {
 	};
 
 	const closeEditModal = () => {
-		console.log("under close modal edit");
+		console.log('under close modal edit');
 		setRowData({});
 		setIsEditModalOpen(false);
 		setIsReadOnly(false);
@@ -188,6 +190,17 @@ const CheckIn = () => {
 		deleteCheckin(rowData.id);
 	};
 
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			console.log(file);
+			// onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
+	};
+
 	const columns = [
 		{
 			title: 'Actions',
@@ -250,8 +263,10 @@ const CheckIn = () => {
 					return 'O';
 				}
 				if (
-					(validFrom && (currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day'))) &&
-					(validTill && (currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day')))
+					validFrom &&
+					(currentDate.isSame(validFrom, 'day') || currentDate.isAfter(validFrom, 'day')) &&
+					validTill &&
+					(currentDate.isSame(validTill, 'day') || currentDate.isBefore(validTill, 'day'))
 				) {
 					return 'O';
 				} else {
@@ -272,8 +287,10 @@ const CheckIn = () => {
 					return 'A';
 				}
 				if (
-					(unavailableFrom && (currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day'))) &&
-					(unavailableTo && (currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day')))
+					unavailableFrom &&
+					(currentDate.isSame(unavailableFrom, 'day') || currentDate.isAfter(unavailableFrom, 'day')) &&
+					unavailableTo &&
+					(currentDate.isSame(unavailableTo, 'day') || currentDate.isBefore(unavailableTo, 'day'))
 				) {
 					return 'U/A';
 				} else {
@@ -306,40 +323,40 @@ const CheckIn = () => {
 			value: 'create',
 			key: '0',
 		},
-		// {
-		//     label: 'Upload CSV',
-		//     value: 'uploadCSV',
-		//     key: '1',
-		// },
-		// {
-		//     label: 'Download CSV Template',
-		//     value: 'downloadCSVTemplate',
-		//     key: '2',
-		// },
+		{
+			label: 'Upload CSV',
+			value: 'uploadCSV',
+			key: '1',
+		},
+		{
+			label: 'Download CSV Template',
+			value: 'downloadCSVTemplate',
+			key: '2',
+		},
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			openCsvModal();
+			setOpenCSVModal(true);
+		} else {
 		}
 	};
 	return (
 		<>
 			<SocketEventListener refetch={getCheckInRefetch} apiName={GET_CHECKIN_COUNTER} />
-			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
+			{isFetchLoading || isEditLoading || isPostLoading ? (
+				<PageLoader loading={true} />
+			) : !Boolean(fetchCheckIn?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					// title2={'Import Global Reference'}
-					// title3={'Download CSV Template'}
+					title2={'Upload CSV'}
+					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Check-in Counters'}
 					formComponent={
-						<FormComponent
-							handleSaveButton={handleSaveButton}
-							handleButtonClose={handleCloseButton}
-						/>
+						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />
 					}
 					openModal={openModal}
 				/>
@@ -367,7 +384,8 @@ const CheckIn = () => {
 							/>
 						</div>
 					</div>
-				</>)}
+				</>
+			)}
 
 			<ModalComponent
 				isModalOpen={isModalOpen}
@@ -409,6 +427,12 @@ const CheckIn = () => {
 				onClose={closeDeleteModal}
 				onSave={handleDelete}
 				content={`You want to delete ${rowData?.name}?`}
+			/>
+			<UploadCsvModal
+				isModalOpen={openCSVModal}
+				width="72rem"
+				closeModal={() => setOpenCSVModal(false)}
+				handleUpload={handleUpload}
 			/>
 		</>
 	);
