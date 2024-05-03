@@ -112,7 +112,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinishHandler}>
+			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className='baggageBelt_form_container'>
 					<div className="baggageBelt_form_inputFields">
 						<InputField
