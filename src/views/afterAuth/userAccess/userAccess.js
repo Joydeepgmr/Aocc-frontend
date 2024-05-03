@@ -22,7 +22,7 @@ import './userAccess.scss';
 
 const UserAccess = () => {
 	const [tab, setTab] = useState('planner');
-	const [vendorAccessData, setVendorAccessData] = useState([]);
+	const [userAccessData, setUserAccessData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, type: null });
 
 	const userAccessType = [
@@ -48,7 +48,7 @@ const UserAccess = () => {
 				return acc.concat(page.data || []);
 			}, []);
 
-			setVendorAccessData([...newData]);
+			setUserAccessData([...newData]);
 		}
 	};
 
@@ -72,8 +72,6 @@ const UserAccess = () => {
 		fetchNextPage: fetchPlannerNextPage,
 		refetch: refetchPlanner,
 	} = useGetPlannerAccess(getVendorAccessHandler);
-
-	console.log(vendorAccessData, tab, 'dataa');
 
 	const onError = ({
 		response: {
@@ -185,18 +183,6 @@ const UserAccess = () => {
 		},
 	];
 
-	const dropdownItems = [
-		{
-			label: 'New Planner',
-			value: 'planner',
-			key: '0',
-		},
-		{
-			label: 'New Vendor',
-			value: 'vendor',
-			key: '1',
-		},
-	];
 	const openAddUserModal = (type) => {
 		setIsModalOpen({ isOpen: true, type });
 	};
@@ -241,15 +227,16 @@ const UserAccess = () => {
 			</>
 		);
 	};
+
 	const items = [
 		{
 			key: '1',
 			label: 'Planner',
 			children: (
 				<>
-					{Boolean(vendorAccessData?.length) ? (
+					{Boolean(userAccessData?.length) ? (
 						<TableComponent
-							data={vendorAccessData}
+							data={userAccessData}
 							columns={columns}
 							loading={isFetchingPlanner}
 							fetchData={fetchPlannerNextPage}
@@ -266,10 +253,10 @@ const UserAccess = () => {
 			label: 'Vendor',
 			children: (
 				<>
-					{Boolean(vendorAccessData?.length) ? (
+					{Boolean(userAccessData?.length) ? (
 						<div className="user_access_table">
 							<TableComponent
-								data={vendorAccessData}
+								data={userAccessData}
 								columns={columns}
 								loading={isFetchingVendor}
 								fetchData={fetchVendorNextPage}
@@ -399,7 +386,7 @@ const UserAccess = () => {
 						items={items}
 						onChange={handleTabChange}
 						type="simple"
-						extraContent={operations}
+						extraContent={Boolean(userAccessData?.length) && operations}
 					/>
 				</div>
 			</div>

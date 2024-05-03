@@ -1,17 +1,5 @@
 import { useGlobalAircraftType } from '../../../services/globalMasters/globalMaster';
 
-export const userAccessType = [
-	{
-		id: '1',
-		label: 'Planner',
-		value: 'Planner',
-	},
-	{
-		id: '2',
-		label: 'Daily Ops',
-		value: 'daily Ops',
-	},
-];
 export const SelectData = [
 	{
 		id: '1',
@@ -177,15 +165,6 @@ export const dummyData = [
 	},
 ];
 
-export const columns = [
-	{ title: 'User Name', dataIndex: 'userName', key: '1' },
-	{ title: 'Access Type', dataIndex: 'accessType', key: '2' },
-	{ title: 'User Type', dataIndex: 'userType', key: '3' },
-	{ title: 'Access Validity', dataIndex: 'accessValidity', key: '4' },
-	{ title: 'Access Provider', dataIndex: 'accessProvider', key: '5' },
-	{ title: 'Created On', dataIndex: 'createdOn', key: '6' },
-];
-
 export const SelectFlightType = [
 	{
 		id: '1',
@@ -198,10 +177,3 @@ export const SelectFlightType = [
 		value: 'domestic',
 	},
 ];
-
-// const { data: fetchedGlobalAircraftType } = useGlobalAircraftType();
-// export const SelectAircraftType = fetchedGlobalAircraftType ? fetchedGlobalAircraftType.map((item, index) => ({
-// 	id: index.toString(),
-// 	label: item.label,
-// 	value: item.value,
-//   })) : [];
