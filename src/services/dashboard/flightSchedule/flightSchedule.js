@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "react-query";
-import { GET_FLIGHT_SCHEDULE, GET_VIEW_MAP } from "../../../api/endpoints";
-import { Get, Post } from "../../HttpServices/HttpServices";
+import { EDIT_FLIGHT_SCHEDULE, GET_FLIGHT_SCHEDULE, GET_MILESTONE_DATA, GET_VIEW_MAP } from "../../../api/endpoints";
+import { Get, Patch, Post } from "../../HttpServices/HttpServices";
 
 export const useGetFlightScheduled = ({ tab, ...rest }) => {
     const response = useInfiniteQuery({
@@ -16,6 +16,24 @@ export const useGetFlightScheduled = ({ tab, ...rest }) => {
     });
     return { ...response }
 }
+
+export const useEditFlightSchedule = (props) => {
+    return useMutation({
+        mutationKey: ['edit-flight-schedule'],
+        mutationFn: async ({ id, data }) => { console.log("the data is ", id, data); return await Patch(`${EDIT_FLIGHT_SCHEDULE}/${id}`, data) },
+        ...props
+    })
+}
+
+export const useGetFlightMileStone = (props) => {
+    const response = useMutation({
+        mutationKey: ['get-flight-milestone-data'],
+        mutationFn: async ({ id, type }) => await Post(`${GET_MILESTONE_DATA}?flightType=${type}&flightId=${id}`),
+        ...props,
+    });
+    return { ...response }
+}
+
 export const useGetViewMap = (props) => {
     const response = useMutation({
         mutationKey: ['get-view-map'],
