@@ -11,9 +11,6 @@ import NatureCode from './naturecode/naturecode';
 import Terminal from './terminals/terminals';
 
 const Resources = () => {
-	const handleChange = () => {
-		console.log('Tab switch');
-	};
 	const items = [
 		{
 			key: '1',
@@ -43,12 +40,12 @@ const Resources = () => {
 		{
 			key: '6',
 			label: 'Baggage Belt',
-			children: <BaggageBelt/>,
+			children: <BaggageBelt />,
 		},
 		{
 			key: '7',
 			label: 'Delay Code',
-			children: <DelayCode/>,
+			children: <DelayCode />,
 		},
 		{
 			key: '8',
@@ -58,14 +55,10 @@ const Resources = () => {
 		{
 			key: '9',
 			label: 'Terminals',
-			children: <Terminal/>,
+			children: <Terminal />,
 		},
 	];
-	return (
-		<div className="">
-			<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} />
-		</div>
-	);
+	return <CustomTabs defaultActiveKey="1" items={items} />;
 };
 
 export default Resources;

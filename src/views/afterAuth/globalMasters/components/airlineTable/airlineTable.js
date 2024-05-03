@@ -181,6 +181,7 @@ const AirlineTable = ({
 				dataIndex: 'name',
 				key: 'name',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: '2L',

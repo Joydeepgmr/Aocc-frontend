@@ -175,6 +175,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				dataIndex: 'identifier',
 				key: 'identifier',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: '3L',
@@ -188,6 +189,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				dataIndex: 'model',
 				key: 'model',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: 'AL',
