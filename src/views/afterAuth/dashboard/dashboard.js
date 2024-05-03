@@ -80,8 +80,8 @@ export const Dashboard = () => {
 				</div>
 			</div>
 		</div> */}
-			{/* <FidsScreen/> */}
-			<AirlineFids />
+			<FidsScreen/>
+			{/* <AirlineFids /> */}
 		</>
 	);
 };

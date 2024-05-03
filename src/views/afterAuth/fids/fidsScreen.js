@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './fidsScreen.scss';
 
 const FidsScreen = () => {
@@ -120,19 +120,16 @@ const FidsScreen = () => {
                 setFonts({ columnFont, dataFont, dataHeight, dateTimeFont, letterSpace })
             }
         };
-        console.log("this re renders")
         calculateNumVisibleRows();
     }, []);
     useEffect(() => {
-        let intervalId;
+    let intervalId = setInterval(() => {
+        handleRotateClick();
+    }, 5000);
+    return () => {
         clearInterval(intervalId);
-        intervalId = setInterval(() => {
-            handleRotateClick();
-        }, 5000);
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, [dataToShow]);
+    };
+}, []);
     return (
         <>
             <div className='fids-container'>
