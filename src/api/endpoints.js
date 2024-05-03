@@ -53,6 +53,7 @@ export const GET_COUNTRY_DATA = '/country/';
 
 /*--------------------------planner Dashboard ---------------------*/
 export const GET_FLIGHT_SCHEDULE = '/flight-track/paginated';
+export const EDIT_FLIGHT_SCHEDULE = '/milestone'
 export const GET_VIEW_MAP = '/flight-track';
 export const GET_MILESTONE_DATA = '/milestone/paginated';
 export const GET_TELEX_MESSAGE = '/telex/paginated';
