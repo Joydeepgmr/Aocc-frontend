@@ -10,16 +10,16 @@ import { useTimezoneDropdown, useCountriesDropdown } from '../../../../../servic
 import './airportForm.scss';
 
 const AirportForm = ({ isReadOnly, type }) => {
-	
+
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
 
-	const { data: countryDropdownData} = useCountriesDropdown({ onError });
-	const { data: timezoneDropdown} = useTimezoneDropdown({ onError });
-	
+	const { data: countryDropdownData } = useCountriesDropdown({ onError });
+	const { data: timezoneDropdown } = useTimezoneDropdown({ onError });
+
 	const SelectCountryData = useMemo(() => {
 		return countryDropdownData?.map((data) => {
 			return { label: data.name, value: data.name, id: data.name };
@@ -27,7 +27,7 @@ const AirportForm = ({ isReadOnly, type }) => {
 	}, [countryDropdownData]);
 
 	const SelectedTimeZone = useMemo(() => {
-		return  timezoneDropdown?.url?.map((data) => {
+		return timezoneDropdown?.url?.map((data) => {
 			return { label: data, value: data, id: data };
 		})
 	}, [timezoneDropdown]);
@@ -120,9 +120,33 @@ const AirportForm = ({ isReadOnly, type }) => {
 					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && "Enter the standard flight time"}
 					className="custom_input"
-					suffixText="minutes"
+					suffixText="min"
 					disabled={isReadOnly}
 					type='number'
+				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
+				<InputField
+					label="Latitude"
+					name="latitude"
+					type='text'
+					pattern='^-?[0-9]{1,3}(?:\.[0-9]{1,10})?$'
+					patternWarning="Please enter the valid latitude"
+					placeholder={!isReadOnly && "Enter the latitude"}
+					className="custom_input"
+					disabled={isReadOnly}
+					required
+				/>
+				<InputField
+					label="Longitude"
+					name="longitude"
+					pattern='^-?[0-9]{1,3}(?:\.[0-9]{1,10})?$'
+					type='text'
+					patternWarning="Please enter the valid longitude"
+					placeholder={!isReadOnly && "Enter the longitude"}
+					className="custom_input"
+					disabled={isReadOnly}
+					required
 				/>
 			</div>
 			<Divider />
