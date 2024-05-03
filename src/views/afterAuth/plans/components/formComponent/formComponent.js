@@ -44,7 +44,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 	}, [natureCodeDropdownData]);
 
 	const SelectAircraftData = useMemo(() => {
-		console.log(aircraftDropdownData, 'aircraftdataaaaa');
 		return aircraftDropdownData?.map((data) => {
 			return { label: data?.registration, value: data?.id };
 		});
@@ -202,6 +201,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type == 1}
 								className="custom_input"
+								disabled={isEdit}
 							/>
 						) : (
 							<InputField
@@ -211,6 +211,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type != 1}
 								className="custom_input"
+								disabled={isEdit}
 							/>
 						)}
 					</div>

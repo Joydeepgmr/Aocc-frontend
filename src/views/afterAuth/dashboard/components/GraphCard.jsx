@@ -5,8 +5,13 @@ import { Card } from 'antd';
 import './style.scss';
 import Performance from '../../../../assets/performance.svg';
 import RightArrow from '../../../../assets/RightArrow.svg';
+import { useNavigate } from 'react-router-dom';
 
 const DonutChart = ({ cardTitle }) => {
+	const navigate = useNavigate();
+	const navigateTOMilestone = () => {
+		navigate('/dashboard', { state: { tab: '2' } });
+	};
 	const options = {
 		chart: {
 			type: 'donut',
@@ -56,7 +61,7 @@ const DonutChart = ({ cardTitle }) => {
 						/>
 					</div>
 				</div>
-				<div className="view-details">
+				<div className="view-details" onClick={navigateTOMilestone}>
 					<CustomTypography
 						type="title"
 						fontSize={12}

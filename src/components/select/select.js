@@ -12,7 +12,7 @@ const CustomSelect = ({
 	disabled,
 	onChange,
 	multiple,
-    defaultValue,
+	defaultValue,
 	...rest
 }) => {
 	const renderLabel = () => {
