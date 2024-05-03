@@ -97,6 +97,7 @@ export const GET_AIRLINE_IMAGE = '/system-constant/check-image-airline';
 /*--------------------------Manage Access ---------------------*/
 
 export const GET_MANAGE_ACCESS = '/access-management/paginated';
+export const GET_MANAGE_ACCESS_PLANNER = '/access-management/paginated-planner';
 export const POST_MANAGE_ACCESS = '/access-management';
 
 /*--------------------------IT Admin Bulk import ---------------------*/
