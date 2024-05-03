@@ -331,7 +331,7 @@ const BaggageBelt = () => {
 			<SocketEventListener refetch={getBaggageBeltRefetch} apiName={GET_BAGGAGE_BELT} />
 			{isFetchLoading || isEditLoading || isPostLoading ? (
 			<PageLoader loading={true} />
-			): Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
+			): !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Upload CSV'}
