@@ -236,6 +236,7 @@ const Airlines = () => {
 			dataIndex: 'name',
 			key: 'name',
 			render: (name) => name ?? '-',
+			align: 'center',
 		},
 		{
 			title: '2L',
