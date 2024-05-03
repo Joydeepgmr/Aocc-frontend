@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
-import Input from '../../../../components/input/field/field';
 import Button from '../../../../components/button/button';
 import checkIcon from '../../../../assets/WhiteCheck.svg';
 import crossIcon from '../../../../assets/X.svg';
@@ -12,7 +11,7 @@ import { useStatusUser } from '../../../../services/securityApproval/securityApp
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './pending.scss';
 
-const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
+const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
@@ -20,12 +19,12 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 	const openModal = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
-	}
+	};
 
 	const closeModal = () => {
 		setRowData(null);
 		setIsModalOpen(false);
-	}
+	};
 
 	//approve or reject
 	const handleStatusSuccess = (data) => {
@@ -44,10 +43,10 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 		onSuccess: (data) => handleStatusSuccess(data),
 		onError: (error) => handleStatusError(error),
 	};
-	const { mutate: postUser, isLoading: isPostLoading } = useStatusUser(rowData?.id,statusHandler);
+	const { mutate: postUser, isLoading: isPostLoading } = useStatusUser(rowData?.id, statusHandler);
 	const handleStatus = (status) => {
 		postUser(status);
-	}
+	};
 
 	const columns = [
 		{
@@ -55,8 +54,8 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			render: (time) => {
-				const {value, unit} = getNearestTimeDifference(time);
-				return <div>{`${value} ${unit}`} ago</div>
+				const { value, unit } = getNearestTimeDifference(time);
+				return <div>{`${value} ${unit}`} ago</div>;
 			},
 			align: 'center',
 		},
@@ -123,18 +122,18 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 			render: (record) => (
 				<div className="pending--action_buttons">
 					<Button
-						onClick={()=>{
+						onClick={() => {
 							setRowData(record);
-							rowData && handleStatus({status: "approved"});
+							rowData && handleStatus({ status: 'approved' });
 						}}
 						type="iconWithBorder"
 						icon={checkIcon}
 						className="pending--approve_button"
 					/>
 					<Button
-						onClick={()=>{
+						onClick={() => {
 							setRowData(record);
-							rowData && handleStatus({status:"rejected"});
+							rowData && handleStatus({ status: 'rejected' });
 						}}
 						type="iconWithBorder"
 						icon={crossIcon}
@@ -148,34 +147,40 @@ const Pending = ({data, hasNextPage, fetchNextPage, loading}) => {
 	return (
 		<>
 			<div className="pending">
-				<div className="pending--top_container">
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Pending Request
-					</CustomTypography>
-					<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
-				</div>
-				<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage}/>
+				<Table
+					data={data}
+					columns={columns}
+					loading={loading}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
 			</div>
 			{/*Preview Modal */}
 			<Modal
 				isModalOpen={isModalOpen}
 				width="auto"
 				height="auto"
-				closeModal = {closeModal}
+				closeModal={closeModal}
 				title="Preview"
 				className="pending--custom_modal"
 			>
 				<div className="pending--img_container">
 					<div className="pending--box_container">
-						<img src={rowData?.customerDocuments[0]?.documentUrl} alt="passport" className="pending--passport" />
-						<CustomTypography color="#909296">{rowData?.customerDocuments[0]?.type}: {rowData?.name}</CustomTypography>
+						<img
+							src={rowData?.customerDocuments[0]?.documentUrl}
+							alt="passport"
+							className="pending--passport"
+						/>
+						<CustomTypography color="#909296">
+							{rowData?.customerDocuments[0]?.type}: {rowData?.name}
+						</CustomTypography>
 					</div>
 					<div className="pending--box_container">
 						<img src={rowData?.image} alt="biometric" className="pending--biometric" />
 						<CustomTypography color="#909296">Biometric Image</CustomTypography>
 					</div>
 				</div>
-				<div className='pending--footer'>{rowData?.matchPercentage}%</div>
+				<div className="pending--footer">{rowData?.matchPercentage}%</div>
 			</Modal>
 		</>
 	);

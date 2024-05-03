@@ -73,18 +73,13 @@ const Common_table = ({
 			</div>
 
 			<div className="custom_table">
-				<div className="details_table">
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						{title}
-					</CustomTypography>
-					<TableComponent
-						columns={columns}
-						data={data}
-						loading={loading}
-						fetchData={fetchData}
-						pagination={pagination}
-					/>
-				</div>
+				<TableComponent
+					columns={columns}
+					data={data}
+					loading={loading}
+					fetchData={fetchData}
+					pagination={pagination}
+				/>
 			</div>
 		</div>
 	);

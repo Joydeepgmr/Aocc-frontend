@@ -152,24 +152,31 @@ const CDM = () => {
 						align: 'center',
 					},
 					{
-						title: '4L',
-						dataIndex: 'icao_code',
-						key: 'icao_code',
-						render: (icao_code) => icao_code ?? '-',
-						align: 'center',
-					},
-					{
-						title: '3L',
-						dataIndex: 'iata_code',
-						key: 'iata_code',
+						title: '2L',
+						dataIndex: 'airlineIataCode',
+						key: 'airlineIataCode',
 						render: (iata_code) => iata_code ?? '-',
 						align: 'center',
 					},
 					{
+						title: '3L',
+						dataIndex: 'airlineIcaoCode',
+						key: 'airlineIcaoCode',
+						render: (icao_code) => icao_code ?? '-',
+						align: 'center',
+					},
+					{
+						title: 'C/S',
+						dataIndex: 'callSign',
+						key: 'callSign',
+						render: (callSign) => callSign ?? '-',
+						align: 'center',
+					},
+					{
 						title: 'A/C TYPE',
-						dataIndex: 'aircraft',
-						key: 'aircraft',
-						render: (aircraft) => aircraft ?? '-',
+						dataIndex: 'aircraftType',
+						key: 'aircraftType',
+						render: (aircraftType) => aircraftType ?? '-',
 						align: 'center',
 					},
 					{
@@ -266,23 +273,30 @@ const CDM = () => {
 							align: 'center',
 						},
 						{
-							title: '4L',
-							dataIndex: 'icao_code',
-							key: 'icao_code',
-							render: (icao_code) => icao_code ?? '-',
-							align: 'center',
-						},
-						{
-							title: '3L',
-							dataIndex: 'iata_code',
-							key: 'iata_code',
+							title: '2L',
+							dataIndex: 'airlineIataCode',
+							key: 'airlineIataCode',
 							render: (iata_code) => iata_code ?? '-',
 							align: 'center',
 						},
 						{
+							title: '3L',
+							dataIndex: 'airlineIcaoCode',
+							key: 'airlineIcaoCode',
+							render: (icao_code) => icao_code ?? '-',
+							align: 'center',
+						},
+						{
+							title: 'C/S',
+							dataIndex: 'callSign',
+							key: 'callSign',
+							render: (callSign) => callSign ?? '-',
+							align: 'center',
+						},
+						{
 							title: 'A/C TYPE',
-							dataIndex: 'aircraft',
-							key: 'aircraft',
+							dataIndex: 'aircraftType',
+							key: 'aircraftType',
 							render: (aircraft) => aircraft ?? '-',
 							align: 'center',
 						},
@@ -295,7 +309,7 @@ const CDM = () => {
 						},
 						{
 							title: 'DES',
-							dataIndex: 'desination',
+							dataIndex: 'destination',
 							key: 'destination',
 							render: (destination) => destination ?? '-',
 							align: 'center',
@@ -385,8 +399,8 @@ const CDM = () => {
 								},
 								{
 									title: 'A/C TYPE',
-									dataIndex: 'aircraft',
-									key: 'aircraft',
+									dataIndex: 'aircraftType',
+									key: 'aircraftType',
 									render: (aircraft) => aircraft ?? '-',
 									align: 'center',
 								},
@@ -395,6 +409,20 @@ const CDM = () => {
 									dataIndex: 'stand',
 									key: 'stand',
 									render: (stand) => stand ?? '-',
+									align: 'center',
+								},
+								{
+									title: '2L',
+									dataIndex: 'airlineIataCode',
+									key: 'airlineIataCode',
+									render: (iataArrival) => iataArrival ?? '-',
+									align: 'center',
+								},
+								{
+									title: '3L',
+									dataIndex: 'airlineIcaoCode',
+									key: 'airlineIcaoCode',
+									render: (icaoArrival) => icaoArrival ?? '-',
 									align: 'center',
 								},
 							],
@@ -411,17 +439,10 @@ const CDM = () => {
 									align: 'center',
 								},
 								{
-									title: '4L',
-									dataIndex: 'iataArrival',
-									key: 'iataArrival',
-									render: (iataArrival) => iataArrival ?? '-',
-									align: 'center',
-								},
-								{
-									title: '3L',
-									dataIndex: 'icaoArrival',
-									key: 'icaoArrival',
-									render: (icaoArrival) => icaoArrival ?? '-',
+									title: 'C/S',
+									dataIndex: 'arrivalCallSign',
+									key: 'arrivalCallSign',
+									render: (callSign) => callSign ?? '-',
 									align: 'center',
 								},
 								{
@@ -485,17 +506,10 @@ const CDM = () => {
 									align: 'center',
 								},
 								{
-									title: '4L',
-									dataIndex: 'iataDeparture',
-									key: 'iataDeparture',
-									render: (iataDeparture) => iataDeparture ?? '-',
-									align: 'center',
-								},
-								{
-									title: '3L',
-									dataIndex: 'icaoDeparture',
-									key: 'icaoDeparture',
-									render: (icaoDeparture) => icaoDeparture ?? '-',
+									title: 'C/S',
+									dataIndex: 'departureCallSign',
+									key: 'departureCallSign',
+									render: (callSign) => callSign ?? '-',
 									align: 'center',
 								},
 								{
@@ -669,12 +683,14 @@ const CDM = () => {
 						type="simple"
 						onChange={handleTabChange}
 						extraContent={
-							<CustomSelect
-								SelectData={SelectTime}
-								placeholder={'Select Format'}
-								onChange={handleTimeValueChange}
-								value={selectedTimeValue}
-							/>
+							<div style={{ margin: '1rem 0' }}>
+								<CustomSelect
+									SelectData={SelectTime}
+									placeholder={'Select Format'}
+									onChange={handleTimeValueChange}
+									value={selectedTimeValue}
+								/>
+							</div>
 						}
 					/>
 				</div>

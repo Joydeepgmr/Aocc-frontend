@@ -113,32 +113,13 @@ function Milestone() {
 		<>
 			<SocketEventListener refetch={refetch} apiName={`${GET_MILESTONE_DATA}?flightType=${type}`} />
 			<div className={`body-containers ${fullScreen && 'fullScreen--FullScreen'}`} ref={divRef}>
-				<div className={`top-bar`}>
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight="600"
-						color="black"
-						children={'Milestones'}
-					/>
-					<div className={`filter-section ${fullScreen && 'fullScreen--FullScreenFilter'}`}>
-						{fullScreen ? (
-							<FullscreenExitOutlined
-								className="fullScreen--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
-						) : (
-							<FullscreenOutlined onClick={toggleFullscreen} className="fullScreen--FullScreenIcon" />
-						)}
-					</div>
-				</div>
 				<div className="flights-table">
 					<CustomTabs
 						defaultActiveKey="1"
 						items={items}
 						onChange={handleTabChange}
 						extraContent={
-							<div style={{ marginBottom: '1rem' }}>
+							<div style={{ marginBottom: '1rem' }} className="top-bar">
 								<InputField
 									label="Airport Name"
 									name="search"
@@ -146,6 +127,17 @@ function Milestone() {
 									warning="Required field"
 									type="search"
 								/>
+								{fullScreen ? (
+									<FullscreenExitOutlined
+										className="fullScreen--FullScreenExitIcon"
+										onClick={toggleFullscreen}
+									/>
+								) : (
+									<FullscreenOutlined
+										onClick={toggleFullscreen}
+										className="fullScreen--FullScreenIcon"
+									/>
+								)}
 							</div>
 						}
 					/>

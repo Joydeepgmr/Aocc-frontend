@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Divider, Form } from 'antd';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { GET_FLIGHT_SCHEDULE } from '../../../../api';
@@ -8,11 +8,11 @@ import InputField from '../../../../components/input/field/field';
 import ModalComponent from '../../../../components/modal/modal';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../components/table/table';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import {
 	useEditFlightSchedule,
 	useGetFlightMileStone,
 	useGetFlightScheduled,
+	useGetUtw,
 	useGetViewMap,
 } from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import SocketEventListener from '../../../../socket/listner/socketListner';
@@ -23,11 +23,13 @@ import { useRunwayDropdown } from '../../../../services/planairportmaster/resour
 import { useBaggageBeltDropdown } from '../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
 import { useCheckInDropdown } from '../../../../services/planairportmaster/resources/checkin/checkin';
 import MilestoneChart from './MilestoneChart';
+import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
 	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [milestoneModal, setMilestoneModal] = useState({ isOpen: false, data: { labels: [], milestoneList: [] } });
+	const [utwModal, setUtwModal] = useState(false);
 	const getFlightScheduleApiProps = {
 		tab,
 		onSuccess: (data) => {
@@ -85,7 +87,6 @@ const FlightSchedule = () => {
 	const { mutate: getMilestoneData, isLoading: isMilestoneLoading } = useGetFlightMileStone(getMilestoneApiProps);
 	const editFlightScheduleApiProps = {
 		onSuccess: ({ message, data: items }) => {
-			console.log('data is ', items);
 			toast.success(message);
 			const updatedFlightData = FlightScheduleData.map((data) => {
 				if (data.flightId === items.flightId) {
@@ -107,6 +108,7 @@ const FlightSchedule = () => {
 	const { data: runwayData } = useRunwayDropdown();
 	const { data: beltData } = useBaggageBeltDropdown();
 	const { data: checkInData } = useCheckInDropdown();
+	const { mutate: getUtw, data: getUtwData, isLoading: isUtwLoading } = useGetUtw();
 	const posDropdownData = useMemo(() => {
 		return posData?.map((data) => ({ value: data.id, label: data.name }));
 	}, [posData]);
@@ -141,10 +143,10 @@ const FlightSchedule = () => {
 		getMilestoneData({ id: record.flightId, type: tab });
 	};
 	const handleEditTable = (items) => {
-		editFlightData({ id: items.flightId, data: items.values });
+		const hasNonNullValue = Object.values(items?.values).some((value) => value !== null);
+		hasNonNullValue && editFlightData({ id: items.flightId, data: items.values });
 	};
 	const columns = useMemo(() => {
-		console.log('under column', posDropdownData);
 		let column = [
 			{
 				title: '2L',
@@ -316,8 +318,17 @@ const FlightSchedule = () => {
 				title: 'MLST',
 				key: 'milestone',
 				render: (_, record) => (
-					<div>
-						{/* vendor milestone here */}
+					<div className="top-bar">
+						<ButtonComponent
+							title="Utw"
+							style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
+							type="text"
+							className="view_map_button"
+							onClick={() => {
+								setUtwModal(true);
+								getUtw(record?.flightId);
+							}}
+						/>
 						<ButtonComponent
 							title="Mlst"
 							style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
@@ -425,28 +436,91 @@ const FlightSchedule = () => {
 				{/* <img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" /> */}
 			</ModalComponent>
 			<div className="body-containers">
-				<div className="top-bar">
-					<CustomTypography
-						type="title"
-						fontSize={24}
-						fontWeight={600}
-						color="black"
-						children={'Flight Schedule'}
-					/>
-					<Form form={form}>
-						<InputField
-							label="Flight number"
-							name="flightNo"
-							placeholder="Flight number"
-							warning="Required field"
-							type="search"
-						/>
-					</Form>
-				</div>
 				<div className="flights-table">
-					<CustomTabs defaultActiveKey="1" items={items} onChange={handleTabChange} />
+					<CustomTabs
+						defaultActiveKey="1"
+						items={items}
+						onChange={handleTabChange}
+						extraContent={
+							<div style={{ margin: '1rem 0' }}>
+								<Form form={form}>
+									<InputField
+										label="Flight number"
+										name="flightNo"
+										placeholder="Flight number"
+										warning="Required field"
+										type="search"
+									/>
+								</Form>
+							</div>
+						}
+					/>
 				</div>
 			</div>
+			{console.log(getUtwData?.data[0], 'datttaa')}
+			<ModalComponent
+				isModalOpen={utwModal}
+				width="55rem"
+				closeModal={() => setUtwModal(false)}
+				title="Under the wing milestone"
+			>
+				{isUtwLoading && <PageLoader loading={isUtwLoading} />}
+				<Divider />
+				<div className="utw--Container">
+					<div className="utw--DataContainer">
+						<CustomTypography>Milestone </CustomTypography>
+						<CustomTypography> Start</CustomTypography>
+						<CustomTypography> End</CustomTypography>
+					</div>
+					<div className="utw--DataContainer">
+						<CustomTypography fontWeight={400} fontSize="14px">
+							Catering
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.cateringStartAt ?? '-'}
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.cateringEndAt ?? '-'}
+						</CustomTypography>
+					</div>
+
+					<div className="utw--DataContainer">
+						<CustomTypography fontWeight={400} fontSize="14px">
+							Fueling
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.fuelingStartAt ?? '-'}
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.fuelingEndAt ?? '-'}
+						</CustomTypography>
+					</div>
+					<div className="utw--DataContainer">
+						<CustomTypography fontWeight={400} fontSize="14px">
+							Baggage {tab === 'arrival' ? 'unloading' : 'loading'}
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadStartAt ?? '-')}
+							{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadStartAt ?? '-')}
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadEndAt ?? '-')}
+							{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadEndAt ?? '-')}
+						</CustomTypography>
+					</div>
+					<div className="utw--DataContainer">
+						<CustomTypography fontWeight={400} fontSize="14px">
+							Cleaning
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.cleaningStartAt ?? '-'}
+						</CustomTypography>
+						<CustomTypography fontWeight={400} fontSize="14px">
+							{getUtwData?.data[0]?.cleaningStopAt ?? '-'}
+						</CustomTypography>
+					</div>
+				</div>
+			</ModalComponent>
 		</>
 	);
 };

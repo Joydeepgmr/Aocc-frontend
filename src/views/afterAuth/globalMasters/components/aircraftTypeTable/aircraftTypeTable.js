@@ -284,9 +284,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 			<div>
 				<div className="create_wrapper_table aircraftType">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Aircraft Type
-						</CustomTypography>
 						<TableComponent {...{ data: aircraftTypeData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>

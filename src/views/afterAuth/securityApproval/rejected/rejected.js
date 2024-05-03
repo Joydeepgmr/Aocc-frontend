@@ -1,6 +1,4 @@
 import React from 'react';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
-import Input from '../../../../components/input/field/field';
 import Table from '../../../../components/table/table';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './rejected.scss';
@@ -84,12 +82,6 @@ const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
 
 	return (
 		<div className="rejected">
-			<div className="rejected--top_container">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-					Rejected
-				</CustomTypography>
-				<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
-			</div>
 			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />
 		</div>
 	);
