@@ -39,6 +39,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 
 	function closeAddModal() {
 		initial.resetFields();
+		setFileList([]);
 		setResetCodes(true);
 		setAirportModal(defaultModalParams);
 	}
@@ -171,7 +172,10 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 							title="Cancel"
 							type="filledText"
 							className="custom_button_cancel"
-							onClick={closeAddModal}
+							onClick={() => {
+								setFileList([]);
+								closeAddModal();
+							}}
 						/>
 						<ButtonComponent
 							title="Save"
