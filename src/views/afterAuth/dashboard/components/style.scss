@@ -341,3 +341,9 @@
 	justify-content: space-between;
 }
 
+.button {
+    &.button.custom_statusButton {
+        color: $black;
+        background-color: $gray_500;
+    }
+}

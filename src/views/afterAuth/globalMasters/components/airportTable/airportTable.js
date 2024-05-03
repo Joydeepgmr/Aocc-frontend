@@ -93,6 +93,8 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			country: data?.country,
 			standardFlightTime: data?.standardFlightTime,
 			timeChange: data?.timeChange,
+			latitude: data?.latitude,
+			longitude: data?.longitude,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
 		}
