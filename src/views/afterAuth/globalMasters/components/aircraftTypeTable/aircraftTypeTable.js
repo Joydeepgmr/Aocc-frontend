@@ -175,6 +175,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				dataIndex: 'identifier',
 				key: 'identifier',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: '3L',
@@ -188,6 +189,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				dataIndex: 'model',
 				key: 'model',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: 'AL',
@@ -282,9 +284,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 			<div>
 				<div className="create_wrapper_table aircraftType">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Aircraft Type
-						</CustomTypography>
 						<TableComponent {...{ data: aircraftTypeData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>

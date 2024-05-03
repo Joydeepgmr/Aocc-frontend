@@ -10,27 +10,34 @@ import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import { useDeleteGlobalAirport, usePatchGlobalAirport, usePostGlobalAirport } from "../../../../../services/globalMasters/globalMaster";
+import {
+	useDeleteGlobalAirport,
+	usePatchGlobalAirport,
+	usePostGlobalAirport,
+} from '../../../../../services/globalMasters/globalMaster';
 import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
-
 
 const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
-	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 	const [form] = Form.useForm();
-	
+
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			setAirportData((oldData) => [data, ...oldData]);
 			closeAddModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: postAirport, isLoading: isCreateNewLoading } = usePostGlobalAirport(postApiProps);
 	const patchApiProps = {
 		onSuccess: ({ message, data }) => {
@@ -40,42 +47,42 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					return data;
 				}
 				return elm;
-			})
+			});
 			setAirportData([...updatedData]);
 			closeAddModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: patchAirport, isLoading: isEditLoading } = usePatchGlobalAirport(patchApiProps);
 	const deleteApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			const updatedData = airportData.filter((elm) => {
 				return elm.id !== deleteModal.id;
-			})
+			});
 			setAirportData([...updatedData]);
 			setAirportModal(defaultModalParams);
 			closeDeleteModal();
 		},
-		onError
-	}
+		onError,
+	};
 	const { mutate: deleteAirport, isLoading: isDeleteLoading } = useDeleteGlobalAirport(deleteApiProps);
 	const [initial] = Form.useForm();
 
 	function handleDetails(data) {
 		setAirportModal({ isOpen: true, type: 'view', data, title: 'Your Airport' });
-	};
+	}
 	function handleEdit(data) {
 		setAirportModal({ isOpen: true, type: 'edit', data, title: 'Update your airport' });
-	};
+	}
 	function handleDelete() {
 		deleteAirport(deleteModal.id);
-	};
+	}
 
 	function closeAddModal() {
 		initial.resetFields();
-		setAirportModal(defaultModalParams)
-	};
+		setAirportModal(defaultModalParams);
+	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
 	}
@@ -93,9 +100,11 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			country: data?.country,
 			standardFlightTime: data?.standardFlightTime,
 			timeChange: data?.timeChange,
+			latitude: data?.latitude,
+			longitude: data?.longitude,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
-		}
+		};
 	}
 
 	function onFinishHandler(values) {
@@ -115,11 +124,10 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			values.icaoCode = values?.icaoCode?.join('');
 			postAirport(values);
 		}
-	};
-
+	}
 
 	useEffect(() => {
-		const { data } = airportModal
+		const { data } = airportModal;
 		if (data) {
 			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
@@ -131,7 +139,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			setAirportModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new]);
 
 	useEffect(() => {
 		if (data?.pages) {
@@ -147,10 +155,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			{
 				title: 'Actions',
 				key: 'actions',
-				render: (
-					text,
-					record
-				) => (
+				render: (text, record) => (
 					<div className="action_buttons">
 						<ButtonComponent
 							onClick={() => handleEdit(record)}
@@ -172,6 +177,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				dataIndex: 'name',
 				key: 'name',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: '3L',
@@ -185,6 +191,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				dataIndex: 'airportType',
 				key: 'airportType',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: 'CNTRY',
@@ -225,12 +232,17 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				),
 			},
 		];
-	}, [airportData])
+	}, [airportData]);
 
 	return (
 		<>
 			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
-			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
+			<ConfirmationModal
+				isOpen={deleteModal.isOpen}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content="You want to delete this record"
+			/>
 			<ModalComponent
 				isModalOpen={airportModal?.isOpen}
 				closeModal={closeAddModal}
@@ -240,31 +252,30 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
 					<AirportForm form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
-					{airportModal.type !== 'view' && <>
-						<Divider />
-						<div className="custom_buttons">
-							<ButtonComponent
-								title="Cancel"
-								type="filledText"
-								className="custom_button_cancel"
-								onClick={closeAddModal}
-							/>
-							<ButtonComponent
-								title={airportModal.type === 'edit' ? 'Update' : 'Save'}
-								type="filledText"
-								className="custom_button_save"
-								isSubmit={true}
-							/>
-						</div>
-					</>}
+					{airportModal.type !== 'view' && (
+						<>
+							<Divider />
+							<div className="custom_buttons">
+								<ButtonComponent
+									title="Cancel"
+									type="filledText"
+									className="custom_button_cancel"
+									onClick={closeAddModal}
+								/>
+								<ButtonComponent
+									title={airportModal.type === 'edit' ? 'Update' : 'Save'}
+									type="filledText"
+									className="custom_button_save"
+									isSubmit={true}
+								/>
+							</div>
+						</>
+					)}
 				</Form>
 			</ModalComponent>
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Airports
-						</CustomTypography>
 						<TableComponent {...{ data: airportData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>

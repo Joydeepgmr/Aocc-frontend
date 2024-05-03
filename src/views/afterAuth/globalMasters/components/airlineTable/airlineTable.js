@@ -181,6 +181,7 @@ const AirlineTable = ({
 				dataIndex: 'name',
 				key: 'name',
 				render: (text) => text || '-',
+				align: 'center',
 			},
 			{
 				title: '2L',
@@ -284,9 +285,6 @@ const AirlineTable = ({
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Airlines
-						</CustomTypography>
 						<TableComponent {...{ data: airlineData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>

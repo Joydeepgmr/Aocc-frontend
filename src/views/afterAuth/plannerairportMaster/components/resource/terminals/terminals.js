@@ -17,6 +17,7 @@ import CustomTypography from '../../../../../../components/typographyComponent/t
 import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import { GET_TERMINAL } from '../../../../../../api';
+import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import './terminals.scss';
 
 
@@ -28,6 +29,7 @@ const Terminal = () => {
 	const [rowData, setRowData] = useState(null);
 	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
 
 	const getTerminalHandler = {
@@ -174,6 +176,18 @@ const Terminal = () => {
 		deleteTerminal(rowData.id);
 	}
 
+	const handleUpload = (file) => {
+		if (file && file.length > 0) {
+			const formData = new FormData();
+			formData.append('file', file[0].originFileObj);
+			console.log(file);
+			setOpenCSVModal(false);
+			// onUploadCSV(formData);
+		} else {
+			console.error('No file provided for upload.');
+		}
+	};
+
 	const columns = [
 		{
 			title: 'Actions',
@@ -247,23 +261,23 @@ const Terminal = () => {
 			value: 'create',
 			key: '0',
 		},
-		// {
-		// 	label: 'Upload CSV',
-		// 	value: 'uploadCSV',
-		// 	key: '1',
-		// },
-		// {
-		// 	label: 'Download CSV Template',
-		// 	value: 'downloadCSVTemplate',
-		// 	key: '2',
-		// },
+		{
+			label: 'Upload CSV',
+			value: 'uploadCSV',
+			key: '1',
+		},
+		{
+			label: 'Download CSV Template',
+			value: 'downloadCSVTemplate',
+			key: '2',
+		},
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			openCsvModal();
+			setOpenCSVModal(true);
 		}
 	};
 
@@ -273,8 +287,8 @@ const Terminal = () => {
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchTerminal?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
-					// title2={'Import Global Reference'}
-					// title3={'Download CSV Template'}
+					title2={'Upload CSV'}
+					title3={'Download CSV Template'}
 					btnCondition={true}
 					Heading={'Add Terminal'}
 					formComponent={<FormComponent
@@ -284,6 +298,7 @@ const Terminal = () => {
 
 					/>}
 					openModal={openModal}
+					openCSVModal={()=> setOpenCSVModal(true)}
 				/>
 			) : (
 				<>
@@ -297,9 +312,9 @@ const Terminal = () => {
 							/>
 						</div>
 						<div className="terminal--tableContainer">
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Terminals
-							</CustomTypography>
+							</CustomTypography> */}
 							<TableComponent data={terminalData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
@@ -349,7 +364,12 @@ const Terminal = () => {
 				onSave={handleDelete}
 				content={`You want to delete ${rowData?.name}?`}
 			/>
-
+			<UploadCsvModal
+				isModalOpen={openCSVModal}
+				width="72rem"
+				closeModal={() => setOpenCSVModal(false)}
+				handleUpload={handleUpload}
+			/>
 		</>
 	);
 };

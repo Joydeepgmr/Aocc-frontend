@@ -24,7 +24,7 @@ const Common_Card = ({ title1, title2, title3, openModal, openCSVModal, download
 					{title3 && (
 						<Button
 							id="btn"
-							title={title2}
+							title={title3}
 							className="custom_svgButton"
 							type="filledText"
 							isSubmit="submit"
