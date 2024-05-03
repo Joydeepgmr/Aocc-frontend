@@ -337,8 +337,8 @@ const FlightSchedule = () => {
 				key: 'map',
 				render: (text, record) => (
 					<ButtonComponent
-						title="View map"
-						style={{ margin: 'auto', fontSize: '1.3rem', width: '8rem' }}
+						title="Map"
+						style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
 						type="text"
 						className="view_map_button"
 						onClick={() => {
