@@ -9,7 +9,12 @@ import ModalComponent from '../../../../components/modal/modal';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../components/table/table';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
-import { useGetFlightScheduled, useGetViewMap } from '../../../../services/dashboard/flightSchedule/flightSchedule';
+import {
+	useEditFlightSchedule,
+	useGetFlightMileStone,
+	useGetFlightScheduled,
+	useGetViewMap,
+} from '../../../../services/dashboard/flightSchedule/flightSchedule';
 import SocketEventListener from '../../../../socket/listner/socketListner';
 import './style.scss';
 import { useStandDropdown } from '../../../../services/planairportmaster/resources/parkingstand/parkingstand';
@@ -57,6 +62,46 @@ const FlightSchedule = () => {
 		}) => toast.error(message),
 	};
 	const { mutate: getViewMap, isLoading: isMapLoading } = useGetViewMap({ ...getMapViewApiProps });
+	const getMilestoneApiProps = {
+		onSuccess: ({ data }) => {
+			console.log('data is ', data);
+			const labels = data.milestones.map((milestoneObj) => {
+				const [key] = Object.keys(milestoneObj);
+				const value = milestoneObj[key];
+				return { key: key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`), value };
+			});
+			console.log('labels are', labels);
+			setMilestoneModal({ isOpen: true, milestoneList: data.milestoneList, labels });
+			if (data?.isMap) {
+				setMapModalOpen({ isOpen: true, base64Img: `data:image/png;base64,${data.map}` });
+			}
+		},
+		onError: ({
+			response: {
+				data: { message },
+			},
+		}) => toast.error(message),
+	};
+	const { mutate: getMilestoneData, isLoading: isMilestoneLoading } = useGetFlightMileStone(getMilestoneApiProps);
+	const editFlightScheduleApiProps = {
+		onSuccess: ({ message, data: items }) => {
+			console.log('data is ', items);
+			toast.success(message);
+			const updatedFlightData = FlightScheduleData.map((data) => {
+				if (data.flightId === items.flightId) {
+					return { ...data, ...items };
+				}
+				return data;
+			});
+			setFlightScheduleData(updatedFlightData);
+		},
+		onError: ({
+			response: {
+				data: { message },
+			},
+		}) => toast.error(message),
+	};
+	const { mutate: editFlightData, isLoading: isUpdateLoading } = useEditFlightSchedule(editFlightScheduleApiProps);
 	const { data: posData } = useStandDropdown();
 	const { data: gateData } = useGateDropdown();
 	const { data: runwayData } = useRunwayDropdown();
@@ -93,72 +138,10 @@ const FlightSchedule = () => {
 		}
 	};
 	const handleViewMilestone = (record) => {
-		const milestoneList = [
-			{
-				id: 'ba9b9041-799d-45bb-af13-6c7373999149',
-				eobt3: null,
-				eobt2: null,
-				atotOutstation: null,
-				lru: null,
-				finalApproach: null,
-				aldt: null,
-				aibt: null,
-				atld: null,
-				acgt: null,
-				tobt: null,
-				tsat: null,
-				boardingStarted: null,
-				ardt: null,
-				asrt: null,
-				asat: null,
-				aobt: null,
-				atot: null,
-				eibt: null,
-				eldt: '11:30',
-				currentStatus: null,
-				flight: {
-					id: '1fec8591-ead7-4205-a7b1-ec3b85c099b0',
-					flightNo: '915',
-					callSign: 'AI915',
-					airline: {
-						id: '68a3e357-cf22-40e8-aa90-4c5956824aa5',
-						twoLetterCode: 'AI',
-						threeLetterCode: 'AIC',
-					},
-				},
-				progress: '0.00',
-			},
-		];
-		const dataLabels = [
-			{
-				eobt3: 'EOBT - 3hours',
-			},
-			{
-				eobt2: 'EOBT - 2hours',
-			},
-			{
-				atot: 'ATOT',
-			},
-			{
-				lru: 'Local Radar Update',
-			},
-			{
-				finalApproach: 'Final Approach',
-			},
-			{
-				aldt: 'Landing - ALDT',
-			},
-		];
-		const labels = dataLabels.map((milestoneObj) => {
-			const [key] = Object.keys(milestoneObj);
-			const value = milestoneObj[key];
-			return { key: key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`), value };
-		});
-		console.log('labels are', labels);
-		setMilestoneModal({ isOpen: true, milestoneList, labels });
+		getMilestoneData({ id: record.flightId, type: tab });
 	};
 	const handleEditTable = (items) => {
-		console.log('items are ', items);
+		editFlightData({ id: items.flightId, data: items.values });
 	};
 	const columns = useMemo(() => {
 		console.log('under column', posDropdownData);
@@ -330,18 +313,21 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
-				title: 'Milestone',
+				title: 'MLST',
 				key: 'milestone',
 				render: (_, record) => (
-					<ButtonComponent
-						title="View milestone"
-						style={{ margin: 'auto', fontSize: '1.3rem', width: '10rem' }}
-						type="text"
-						className="view_map_button"
-						onClick={() => {
-							handleViewMilestone(record);
-						}}
-					/>
+					<div>
+						{/* vendor milestone here */}
+						<ButtonComponent
+							title="Mlst"
+							style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
+							type="text"
+							className="view_map_button"
+							onClick={() => {
+								handleViewMilestone(record);
+							}}
+						/>
+					</div>
 				),
 			},
 		];
@@ -351,8 +337,8 @@ const FlightSchedule = () => {
 				key: 'map',
 				render: (text, record) => (
 					<ButtonComponent
-						title="View map"
-						style={{ margin: 'auto', fontSize: '1.3rem', width: '8rem' }}
+						title="Map"
+						style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
 						type="text"
 						className="view_map_button"
 						onClick={() => {
@@ -417,7 +403,7 @@ const FlightSchedule = () => {
 	];
 	return (
 		<>
-			<PageLoader loading={isMapLoading} message="It may take sometime..." />
+			<PageLoader loading={isMapLoading || isUpdateLoading} message="It may take sometime..." />
 			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE}?flightType=${tab}`} />
 			<ModalComponent
 				isModalOpen={mapModalOpen?.isOpen}
