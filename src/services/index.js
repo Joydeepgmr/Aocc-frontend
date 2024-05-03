@@ -23,6 +23,7 @@ import {
 	useUpdateCdmTurnAround,
 	useUpdateCdmTypes,
 } from './cdm/cdmServices';
+import { useGetUtw } from './dashboard/flightSchedule/flightSchedule';
 
 import { useDummyApi } from './dummyApi/dummyApi';
 import {
@@ -121,4 +122,5 @@ export {
 	useRunRuleEngine,
 	useGetAllNotification,
 	useUpdateNotification,
+	useGetUtw,
 };

@@ -73,15 +73,13 @@ const Common_table = ({
 			</div>
 
 			<div className="custom_table">
-				<div className="details_table">
-					<TableComponent
-						columns={columns}
-						data={data}
-						loading={loading}
-						fetchData={fetchData}
-						pagination={pagination}
-					/>
-				</div>
+				<TableComponent
+					columns={columns}
+					data={data}
+					loading={loading}
+					fetchData={fetchData}
+					pagination={pagination}
+				/>
 			</div>
 		</div>
 	);
