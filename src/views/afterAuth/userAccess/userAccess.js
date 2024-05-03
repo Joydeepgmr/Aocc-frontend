@@ -1,24 +1,78 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import ButtonComponent from '../../../components/button/button';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import Date from '../../../components/datapicker/datepicker';
-import DropdownButton from '../../../components/dropdownButton/dropdownButton';
 import InputField from '../../../components/input/field/field';
+import Button from '../../../components/button/button';
 import ModalComponent from '../../../components/modal/modal';
 import PageLoader from '../../../components/pageLoader/pageLoader';
 import CustomSelect from '../../../components/select/select';
 import TableComponent from '../../../components/table/table';
 import TopHeader from '../../../components/topHeader/topHeader';
 import { useAirlineDropdown } from '../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
-import { usePostAccessManagement } from '../../../services/accessManagement/accessManagement';
+import {
+	useGetPlannerAccess,
+	useGetVendorAccess,
+	usePostAccessManagement,
+} from '../../../services/accessManagement/accessManagement';
+import { ConvertToDateTime } from '../../../utils';
 import './userAccess.scss';
-import { columns, dummyData, userAccessType } from './userAccessData';
 
 const UserAccess = () => {
 	const [tab, setTab] = useState('planner');
+	const [userAccessData, setUserAccessData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, type: null });
+
+	const userAccessType = [
+		{
+			id: '1',
+			label: 'Planner',
+			value: 'Planner',
+		},
+		{
+			id: '2',
+			label: 'Daily Ops',
+			value: 'daily Ops',
+		},
+	];
+	const getVendorAccessHandler = {
+		onSuccess: (data) => handleGetVendorAccessSuccess(data),
+		onError: (error) => handleGetVendorAccessError(error),
+	};
+
+	const handleGetVendorAccessSuccess = (data) => {
+		if (data?.pages) {
+			const newData = data.pages.reduce((acc, page) => {
+				return acc.concat(page.data || []);
+			}, []);
+
+			setUserAccessData([...newData]);
+		}
+	};
+
+	const handleGetVendorAccessError = (error) => {
+		toast.error(error?.message);
+	};
+	const {
+		data: fetchVendorAccess,
+		isFetching: isFetchingVendor,
+		isLoading: isFetchLoading,
+		hasNextPage: hasVendorNextPage,
+		fetchNextPage: fetchVendorNextPage,
+		refetch: refetchVendor,
+	} = useGetVendorAccess(getVendorAccessHandler);
+
+	const {
+		data: fetchPlannerAccess,
+		isFetching: isFetchingPlanner,
+		isLoading: isFetchPlannerLoading,
+		hasNextPage: hasPlannerNextPage,
+		fetchNextPage: fetchPlannerNextPage,
+		refetch: refetchPlanner,
+	} = useGetPlannerAccess(getVendorAccessHandler);
+
 	const onError = ({
 		response: {
 			data: { message },
@@ -26,8 +80,13 @@ const UserAccess = () => {
 	}) => toast.error(message);
 	const accessManagementApiProps = {
 		onSuccess: ({ data, message }) => {
-			toast.success(message);
 			closeAddUserModal();
+			toast.success(message);
+			if (tab === 'planner') {
+				refetchPlanner();
+			} else {
+				refetchVendor();
+			}
 		},
 		onError,
 	};
@@ -39,25 +98,91 @@ const UserAccess = () => {
 			return { label: data.name, value: data.id };
 		});
 	}, [airlineDropdownData]);
-	const dropdownItems = [
+	const SelectedVendorTasks = [
 		{
-			label: 'New Planner',
-			value: 'planner',
-			key: '0',
+			id: '1',
+			label: 'Cleaning',
+			value: 'cleaning',
 		},
 		{
-			label: 'New Vendor',
-			value: 'vendor',
-			key: '1',
+			id: '2',
+			label: 'Refueling',
+			value: 'refueling',
+		},
+		{
+			id: '3',
+			label: 'Catering',
+			value: 'catering',
+		},
+		{
+			id: '4',
+			label: 'Baggage Loading',
+			value: 'baggage-loading',
 		},
 	];
-	const handleDropdownItemClick = (value) => {
-		if (value === 'planner') {
-			openAddUserModal('planner');
-		} else if (value === 'vendor') {
-			openAddUserModal('vendor');
+
+	useEffect(() => {
+		if (tab === 'vendor') {
+			refetchVendor();
 		}
-	};
+		if (tab === 'planner') {
+			refetchPlanner();
+		}
+	}, [tab]);
+
+	const columns = [
+		{
+			title: 'User Name',
+			dataIndex: tab === 'planner' ? 'userName' : 'vendorName',
+			key: 'name',
+			render: (name) => name ?? '-',
+			align: 'center',
+		},
+		{
+			title: 'Email Address',
+			dataIndex: tab === 'planner' ? 'userEmail' : 'vendorEmail',
+			key: 'email',
+			render: (email) => email ?? '-',
+			align: 'center',
+		},
+		tab === 'planner'
+			? {
+					title: 'User Type',
+					dataIndex: 'userType',
+					key: 'userType',
+					render: (userType) => userType ?? '-',
+				}
+			: {
+					title: 'Vendor Type',
+					dataIndex: 'vendorTasks',
+					key: 'vendorTasks',
+					render: (tasks) => (tasks ? tasks?.map((task) => task).join(', ') : '-'),
+					align: 'center',
+				},
+
+		{
+			title: 'Access Validity',
+			dataIndex: 'accessValidity',
+			key: 'accessValidity',
+			render: (validity) => ConvertToDateTime(validity, 'YYYY-MM-DD') ?? '-',
+			align: 'center',
+		},
+		{
+			title: 'Access Provider',
+			dataIndex: 'accessProvider',
+			key: 'accessProvider',
+			render: (provider) => provider ?? '-',
+			align: 'center',
+		},
+		{
+			title: 'Created On',
+			dataIndex: 'createdOn',
+			key: 'createdOn',
+			render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
+			align: 'center',
+		},
+	];
+
 	const openAddUserModal = (type) => {
 		setIsModalOpen({ isOpen: true, type });
 	};
@@ -67,7 +192,7 @@ const UserAccess = () => {
 	};
 	const onFinishHandler = (values) => {
 		values.validFrom = values?.validFrom?.toISOString();
-		values.validTo = values?.validTo?.toISOString();
+		values.validTill = values?.validTill?.toISOString();
 		postAccessManagement({ type: isModalOpen?.type, values });
 	};
 	const operations = (
@@ -87,13 +212,39 @@ const UserAccess = () => {
 			setTab('vendor');
 		}
 	};
+	const noDataHandler = () => {
+		return (
+			<>
+				<div className="user_access_empty">
+					<Button
+						title="Create"
+						id="btn"
+						type="filledText"
+						isSubmit="submit"
+						onClick={() => openAddUserModal(tab == 'planner' ? 'planner' : 'vendor')}
+					/>
+				</div>
+			</>
+		);
+	};
+
 	const items = [
 		{
 			key: '1',
 			label: 'Planner',
 			children: (
 				<>
-					<TableComponent data={dummyData} columns={columns} />
+					{Boolean(userAccessData?.length) ? (
+						<TableComponent
+							data={userAccessData}
+							columns={columns}
+							loading={isFetchingPlanner}
+							fetchData={fetchPlannerNextPage}
+							pagination={hasPlannerNextPage}
+						/>
+					) : (
+						noDataHandler()
+					)}
 				</>
 			),
 		},
@@ -102,7 +253,19 @@ const UserAccess = () => {
 			label: 'Vendor',
 			children: (
 				<>
-					<TableComponent data={dummyData} columns={columns} />
+					{Boolean(userAccessData?.length) ? (
+						<div className="user_access_table">
+							<TableComponent
+								data={userAccessData}
+								columns={columns}
+								loading={isFetchingVendor}
+								fetchData={fetchVendorNextPage}
+								pagination={hasVendorNextPage}
+							/>
+						</div>
+					) : (
+						noDataHandler()
+					)}
 				</>
 			),
 		},
@@ -160,13 +323,15 @@ const UserAccess = () => {
 									warning="Required field"
 									className="select"
 								/>
-								<InputField
-									label="Required Access Ids"
-									name="accessId"
-									placeholder="Enter the access id"
+								<CustomSelect
+									SelectData={SelectedVendorTasks}
+									label="Vendor Type"
+									name="taskList"
+									multiple
+									placeholder="Select Tasks"
 									required
 									warning="Required field"
-									className="custom_input"
+									className="select"
 								/>
 							</div>
 						)}
@@ -209,41 +374,21 @@ const UserAccess = () => {
 				</Form>
 			</ModalComponent>
 			<div className="user_access_container">
-				{dummyData?.length ? (
-					<>
-						<div className="user-access-table-container">
-							<TopHeader
-								heading="Manage User Access"
-								subHeading="Overview of access management for airport access management"
-							/>
-						</div>
-						<div className="access-table">
-							<CustomTabs
-								defaultActiveKey="1"
-								items={items}
-								onChange={handleTabChange}
-								type="simple"
-								extraContent={operations}
-							/>
-						</div>
-					</>
-				) : (
-					<div className="user_access_content">
-						<TopHeader
-							heading="Manage User Access"
-							subHeading="Overview of access management for airport access management"
-						/>
-						<div className="user_add_button">
-							<div className="down_arrow_button">
-								<DropdownButton
-									dropdownItems={dropdownItems}
-									onChange={handleDropdownItemClick}
-									buttonText="Add Access"
-								/>
-							</div>
-						</div>
-					</div>
-				)}
+				<div className="user-access-table-container">
+					<TopHeader
+						heading="Manage User Access"
+						subHeading="Overview of access management for airport access management"
+					/>
+				</div>
+				<div className="access-table">
+					<CustomTabs
+						defaultActiveKey="1"
+						items={items}
+						onChange={handleTabChange}
+						type="simple"
+						extraContent={Boolean(userAccessData?.length) && operations}
+					/>
+				</div>
 			</div>
 		</>
 	);

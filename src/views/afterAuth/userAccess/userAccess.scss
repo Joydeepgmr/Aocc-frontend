@@ -113,37 +113,50 @@
 }
 
 .user_form_container {
-    padding: 2rem 0rem 2.4rem 0rem;
-    box-sizing: content-box;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
- 
-    .user_form_inputfields {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2.4rem;
-        .ant-row {
-            display: flex;
-            flex-flow: column;
-        }
-        .ant-form-item-label {
-            text-align: start;
-        }
-        .input_form_item {
-            &.custom_input {
-                width: calc(33% - 2.4rem);
-            }
-        }
-        .select {
-            width: calc(33% - 2.4rem);
-        }
-        .custom_date {
-            width: calc(33% - 2.4rem);
-        }
-    }
+	padding: 2rem 0rem 2.4rem 0rem;
+	box-sizing: content-box;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	.user_form_inputfields {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2.4rem;
+		.ant-row {
+			display: flex;
+			flex-flow: column;
+		}
+		.ant-form-item-label {
+			text-align: start;
+		}
+		.input_form_item {
+			&.custom_input {
+				width: calc(33% - 2.4rem);
+			}
+		}
+		.select {
+			width: calc(33% - 2.4rem);
+		}
+		.custom_date {
+			width: calc(33% - 2.4rem);
+		}
+	}
 }
 
 .add_access_button {
 	padding-bottom: 1rem;
+}
+
+.user_access_empty {
+	@include flex(center, center, row);
+	height: 50vh;
+	border: 1px solid $gray_300;
+	border-radius: 1.2rem;
+}
+
+.user_access_table {
+	border: 1px solid $gray_300;
+	border-radius: 1.2rem;
+	padding: 2rem;
 }
