@@ -276,9 +276,6 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Airports
-						</CustomTypography>
 						<TableComponent {...{ data: airportData, columns, fetchData, pagination, loading }} />
 					</div>
 				</div>

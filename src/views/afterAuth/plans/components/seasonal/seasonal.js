@@ -222,7 +222,16 @@ const Seasonal = ({ tab }) => {
 	];
 
 	const operations = (
-		<div>
+		<div style={{ margin: '1rem 0', display: 'flex', gap: '1rem' }}>
+			<InputField
+				label="search"
+				name="search"
+				placeholder="Search"
+				className="custom_inputField"
+				warning="Required field"
+				type="search"
+			/>
+
 			<DropdownButton
 				dropdownItems={dropdownItems}
 				buttonText="Actions"
@@ -373,29 +382,25 @@ const Seasonal = ({ tab }) => {
 
 	const noDataHandler = () => {
 		return (
-			<>
-				<div className="main_buttonContainer">
-					<div className="seasonal_container">
-						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-						<Button
-							id="btn"
-							title="Upload CSV"
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							onClick={openCsvModal}
-						/>
-						<Button
-							id="btn"
-							title="Download CSV Template"
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							onClick={openCsvModal}
-						/>
-					</div>
-				</div>
-			</>
+			<div className="seasonal_container">
+				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
+				<Button
+					id="btn"
+					title="Upload CSV"
+					className="custom_svgButton"
+					type="filledText"
+					isSubmit="submit"
+					onClick={openCsvModal}
+				/>
+				<Button
+					id="btn"
+					title="Download CSV Template"
+					className="custom_svgButton"
+					type="filledText"
+					isSubmit="submit"
+					onClick={openCsvModal}
+				/>
+			</div>
 		);
 	};
 
@@ -429,35 +434,14 @@ const Seasonal = ({ tab }) => {
 			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? (
 				<PageLoader loading={true} />
 			) : (
-				<div className="main_TableContainer">
-					<div className="seasonal_container--tableContainer">
-					<div className="top_container">
-						<div>
-							<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-								Flight Schedule Planning
-							</CustomTypography>
-						</div>
-						<div className="icon_container">
-							<InputField
-								label="search"
-								name="search"
-								placeholder="Search"
-								className="custom_inputField"
-								warning="Required field"
-								type="search"
-							/>
-						</div>
-					</div>
-					<div className="table_container">
-						<CustomTabs
-							defaultActiveKey={index}
-							items={tabItems}
-							onChange={handleChange}
-							type="simple"
-							extraContent={operations}
-						/>
-					</div>
-					</div>
+				<div className="seasonal_container--tableContainer">
+					<CustomTabs
+						defaultActiveKey={index}
+						items={tabItems}
+						onChange={handleChange}
+						type="simple"
+						extraContent={operations}
+					/>
 				</div>
 			)}
 

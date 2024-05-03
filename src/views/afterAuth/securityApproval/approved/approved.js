@@ -1,6 +1,4 @@
 import React from 'react';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
-import Input from '../../../../components/input/field/field';
 import Table from '../../../../components/table/table';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './approved.scss';
@@ -12,8 +10,8 @@ const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			render: (time) => {
-				const {value, unit} = getNearestTimeDifference(time);
-				return <div>{`${value} ${unit}`} ago</div>
+				const { value, unit } = getNearestTimeDifference(time);
+				return <div>{`${value} ${unit}`} ago</div>;
 			},
 			align: 'center',
 		},
@@ -84,13 +82,7 @@ const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 
 	return (
 		<div className="approved">
-			<div className="approved--top_container">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-					Approved
-				</CustomTypography>
-				<Input label="search" name="search" placeholder="Search" warning="Required field" type="search" />
-			</div>
-			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage}/>
+			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />
 		</div>
 	);
 };

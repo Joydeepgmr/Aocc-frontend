@@ -11,26 +11,41 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
-	usePostGlobalAircraftRegistration, usePatchGlobalAircraftRegistration, useDeleteGlobalAircraftRegistration
+	usePostGlobalAircraftRegistration,
+	usePatchGlobalAircraftRegistration,
+	useDeleteGlobalAircraftRegistration,
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
 
-const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchData, pagination, aircraftTypeDropdownData, loading }) => {
+const AircraftRegistrationTable = ({
+	createProps,
+	setCreateProps,
+	data,
+	fetchData,
+	pagination,
+	aircraftTypeDropdownData,
+	loading,
+}) => {
 	let defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup aircraft registration' }; // type could be 'new' | 'view' | 'edit'
 	const [aircraftRegistrationModal, setAircraftRegistrationModal] = useState(defaultModalParams);
 	const [aircraftRegistrationData, setAircraftRegistrationData] = useState([]);
-	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null })
-	const onError = ({ response: { data: { message } } }) => toast.error(message);
+	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const onError = ({
+		response: {
+			data: { message },
+		},
+	}) => toast.error(message);
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			setAircraftRegistrationData((oldData) => [data, ...oldData]);
 			closeAddModal();
 		},
-		onError
-	}
-	const { mutate: postAircraftRegistration, isLoading: isCreateNewLoading } = usePostGlobalAircraftRegistration(postApiProps);
+		onError,
+	};
+	const { mutate: postAircraftRegistration, isLoading: isCreateNewLoading } =
+		usePostGlobalAircraftRegistration(postApiProps);
 	const patchApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
@@ -39,49 +54,51 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 					return data;
 				}
 				return elm;
-			})
+			});
 			setAircraftRegistrationData([...updatedData]);
 			closeAddModal();
 		},
-		onError
-	}
-	const { mutate: patchAircraftRegistration, isLoading: isEditLoading } = usePatchGlobalAircraftRegistration(patchApiProps);
+		onError,
+	};
+	const { mutate: patchAircraftRegistration, isLoading: isEditLoading } =
+		usePatchGlobalAircraftRegistration(patchApiProps);
 	const deleteApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
 			const updatedData = aircraftRegistrationData.filter((elm) => {
 				return elm.id !== deleteModal.id;
-			})
+			});
 			setAircraftRegistrationData([...updatedData]);
 			closeDeleteModal();
 		},
-		onError
-	}
-	const { mutate: deleteAircraftRegistration, isLoading: isDeleteLoading } = useDeleteGlobalAircraftRegistration(deleteApiProps);
+		onError,
+	};
+	const { mutate: deleteAircraftRegistration, isLoading: isDeleteLoading } =
+		useDeleteGlobalAircraftRegistration(deleteApiProps);
 	const [initial] = Form.useForm();
 	const aircraftIdWatch = Form.useWatch('aircraft_id', initial);
 
 	function handleDetails(data) {
 		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
-	};
+	}
 	function handleEdit(data) {
 		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
-	};
+	}
 	function handleDelete() {
 		deleteAircraftRegistration(deleteModal.id);
-	};
+	}
 
 	function closeAddModal() {
 		initial.resetFields();
 		setAircraftRegistrationModal(defaultModalParams);
-	};
+	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
 	}
 
 	function getFormValues(data) {
-		console.log('data?.airportId ', data?.airportId)
-		console.log('data?.globalAirportId ', data?.globalAirportId)
+		console.log('data?.airportId ', data?.airportId);
+		console.log('data?.globalAirportId ', data?.globalAirportId);
 		return {
 			registration: data?.registration,
 			internal: data?.internal,
@@ -129,20 +146,20 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 			values.id = aircraftRegistrationModal.data.id;
 			patchAircraftRegistration(values);
 		}
-	};
+	}
 
 	useEffect(() => {
 		if (aircraftIdWatch) {
 			if (aircraftRegistrationModal?.data?.globalAircraftType) {
 				const { length, height, wingspan, totalSeats } = aircraftRegistrationModal?.data?.globalAircraftType;
-				initial.setFieldsValue({ length, height, wingspan, totalSeats })
+				initial.setFieldsValue({ length, height, wingspan, totalSeats });
 			} else if (aircraftTypeDropdownData?.length) {
 				const selectedAircraft = aircraftTypeDropdownData.filter(({ id }) => id === aircraftIdWatch)?.[0];
 				const { length, height, wingspan, totalSeats } = selectedAircraft;
-				initial.setFieldsValue({ length, height, wingspan, totalSeats })
+				initial.setFieldsValue({ length, height, wingspan, totalSeats });
 			}
 		}
-	}, [aircraftIdWatch])
+	}, [aircraftIdWatch]);
 	useEffect(() => {
 		const { data } = aircraftRegistrationModal;
 		if (data) {
@@ -155,7 +172,7 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 			setAircraftRegistrationModal({ ...defaultModalParams, isOpen: true });
 			setCreateProps({ ...createProps, new: false });
 		}
-	}, [createProps.new])
+	}, [createProps.new]);
 	useEffect(() => {
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
@@ -245,7 +262,12 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 	return (
 		<>
 			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
-			<ConfirmationModal isOpen={deleteModal.isOpen} onClose={closeDeleteModal} onSave={handleDelete} content='You want to delete this record' />
+			<ConfirmationModal
+				isOpen={deleteModal.isOpen}
+				onClose={closeDeleteModal}
+				onSave={handleDelete}
+				content="You want to delete this record"
+			/>
 			<ModalComponent
 				isModalOpen={aircraftRegistrationModal.isOpen}
 				closeModal={closeAddModal}
@@ -253,9 +275,13 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 				width="80%"
 				className="custom_modal"
 			>
-				<Form layout="vertical" form={initial} onFinish={onFinishHandler} >
-					<AircraftRegistrationForm isReadOnly={aircraftRegistrationModal.type === 'view'} type={aircraftRegistrationModal.type} {...{aircraftTypeDropdownData }} />
-					{aircraftRegistrationModal.type !== 'view' &&
+				<Form layout="vertical" form={initial} onFinish={onFinishHandler}>
+					<AircraftRegistrationForm
+						isReadOnly={aircraftRegistrationModal.type === 'view'}
+						type={aircraftRegistrationModal.type}
+						{...{ aircraftTypeDropdownData }}
+					/>
+					{aircraftRegistrationModal.type !== 'view' && (
 						<>
 							<Divider />
 							<div className="custom_buttons">
@@ -273,18 +299,16 @@ const AircraftRegistrationTable = ({ createProps, setCreateProps, data, fetchDat
 								/>
 							</div>
 						</>
-					}
+					)}
 				</Form>
 			</ModalComponent>
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">
-						<CustomTypography type="title" fontSize="2.4rem" fontWeight="600">
-							Aircraft Registrations
-						</CustomTypography>
-						<TableComponent {...{ data: aircraftRegistrationData, columns, fetchData, pagination, loading }} />
+						<TableComponent
+							{...{ data: aircraftRegistrationData, columns, fetchData, pagination, loading }}
+						/>
 					</div>
-
 				</div>
 			</div>
 		</>

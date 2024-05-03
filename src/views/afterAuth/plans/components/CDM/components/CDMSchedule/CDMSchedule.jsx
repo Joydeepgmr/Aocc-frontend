@@ -217,7 +217,16 @@ const DailySchedule = ({ tab }) => {
 	console.log(index, flightType);
 
 	const operations = (
-		<div>
+		<div style={{ margin: '1rem 0', display: 'flex', gap: '1rem' }}>
+			<InputField
+				label="search"
+				name="search"
+				placeholder="Search"
+				className="custom_inputField"
+				warning="Required field"
+				type="search"
+			/>
+
 			<DropdownButton
 				dropdownItems={dropdownItems}
 				buttonText="Actions"
@@ -343,11 +352,9 @@ const DailySchedule = ({ tab }) => {
 
 	const noDataHandler = () => {
 		return (
-			<>
-				<div className="main_buttonContainer">
-					<div className="seasonal_container">
-						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-						{/* <Button
+			<div className="seasonal_container">
+				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
+				{/* <Button
 							id="btn"
 							title="Upload CSV"
 							className="custom_svgButton"
@@ -363,9 +370,7 @@ const DailySchedule = ({ tab }) => {
 							isSubmit="submit"
 							onClick={openCsvModal}
 						/> */}
-					</div>
-				</div>
-			</>
+			</div>
 		);
 	};
 
@@ -399,44 +404,14 @@ const DailySchedule = ({ tab }) => {
 			{isFetchLoading || isEditLoading || isPostLoading ? (
 				<PageLoader loading={true} />
 			) : (
-				<div className="main_TableContainer">
-					<div className="daily_schedule_container--tableContainer">
-					<div className="top_container">
-						<div>
-							<TopHeader heading="Daily Flight Schedule" />
-						</div>
-						<div className="icon_container">
-							{/* <Button
-							onClick={() => {
-								alert('Filter Icon');
-							}}
-							type="iconWithBorder"
-							className={'custom_filter'}
-							icon={Filter}
-							alt="arrow icon"
-						/> */}
-							<InputField
-								label="search"
-								name="search"
-								placeholder="Search"
-								className="custom_inputField"
-								warning="Required field"
-								type="search"
-							/>
-						</div>
-					</div>
-					<div className="table_container">
-						<div>
-							<CustomTabs
-								defaultActiveKey={index}
-								items={tabItems}
-								onChange={handleChange}
-								type="simple"
-								extraContent={operations}
-							/>
-						</div>
-						</div>
-					</div>
+				<div className="daily_schedule_container--tableContainer">
+					<CustomTabs
+						defaultActiveKey={index}
+						items={tabItems}
+						onChange={handleChange}
+						type="simple"
+						extraContent={operations}
+					/>
 				</div>
 			)}
 

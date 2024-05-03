@@ -24,11 +24,15 @@
 	padding: 0.8rem 2.4rem 1.6rem 2.4rem;
 	margin-bottom: 1.5rem;
 }
+.main-container{
+	margin-top: 2rem;
+}
 
 .top-bar {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	gap: 1rem;
 }
 
 .filter-section {
