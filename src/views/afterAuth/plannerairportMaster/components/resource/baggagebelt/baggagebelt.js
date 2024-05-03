@@ -190,6 +190,7 @@ const BaggageBelt = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file, 'files data');
+			setOpenCSVModal(false);
 		} else {
 			console.error('No file provided for upload.');
 		}
@@ -330,7 +331,7 @@ const BaggageBelt = () => {
 			<SocketEventListener refetch={getBaggageBeltRefetch} apiName={GET_BAGGAGE_BELT} />
 			{isFetchLoading || isEditLoading || isPostLoading ? (
 			<PageLoader loading={true} />
-			): !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
+			): Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Upload CSV'}

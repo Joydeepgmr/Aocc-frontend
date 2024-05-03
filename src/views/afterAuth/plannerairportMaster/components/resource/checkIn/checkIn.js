@@ -195,6 +195,7 @@ const CheckIn = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file);
+			setOpenCSVModal(false);
 			// onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');

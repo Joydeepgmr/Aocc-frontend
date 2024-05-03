@@ -184,6 +184,7 @@ const Gates = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file, 'files data');
+			setOpenCSVModal(false);
 		} else {
 			console.error('No file provided for upload.');
 		}
