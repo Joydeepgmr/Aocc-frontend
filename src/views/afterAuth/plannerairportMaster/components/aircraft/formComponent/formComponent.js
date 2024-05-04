@@ -105,8 +105,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							required
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="ICAO Code"
 							name="icaoCode"
@@ -116,6 +114,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly || isNotEditable}
 						/>
+					</div>
+					<div className="airport_form_inputfields">
 						<CustomSelect
 							SelectData={SelectAircraftData}
 							placeholder={!isReadOnly && 'Aircraft Type'}
@@ -134,8 +134,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							label="Type of Use"
 							name="usage"
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<CustomSelect
 							SelectData={SelectCountryData}
 							label="Nationality"
@@ -144,8 +142,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="Cockpit Crew"
 							name="cockpitCrew"
@@ -155,6 +151,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
+					</div>
+					<div className="airport_form_inputfields">
 						<InputField
 							label="Cabin crew"
 							name="cabinCrew"
@@ -164,8 +162,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="No. of Seats"
 							name="totalSeats"
@@ -175,8 +171,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							disabled={true}
 							defaultValue={initialValue?.globalAircraftType?.totalSeats}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="Height"
 							name="height"
@@ -197,6 +191,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							disabled={true}
 							defaultValue={initialValue?.globalAircraftType?.length}
 						/>
+					</div>
+					<div className="airport_form_inputfields">
 						<InputField
 							label="Wingspan"
 							name="wingspan"
@@ -207,8 +203,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							disabled={true}
 							defaultValue={initialValue?.globalAircraftType?.wingspan}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="MTOW"
 							name="mtow"
@@ -229,8 +223,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							required
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="airport_form_inputfields">
 						<InputField
 							label="Annex"
 							name="annex"
@@ -240,6 +232,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							required
 							disabled={isReadOnly}
 						/>
+					</div>
+					<div className="airport_form_inputfields">
 						<InputField
 							label="Main Deck"
 							name="mainDeck"
@@ -248,9 +242,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<Divider />
-					<div className="airport_form_inputfields">
 						<InputField
 							label="Owner Name"
 							name="ownerName"
@@ -264,6 +255,14 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							label="Country"
 							name="country"
 							placeholder={!isReadOnly && 'Enter the country name'}
+							className="custom_input"
+							disabled={isReadOnly}
+						/>
+						<InputField
+							label="Address"
+							max={32}
+							name="address"
+							placeholder={!isReadOnly && 'Enter the address'}
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
@@ -285,9 +284,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<Divider />
-					<div className="airport_form_inputfields">
 						<Date
 							label="Valid From"
 							placeholder={!isReadOnly && 'Select valid from date'}

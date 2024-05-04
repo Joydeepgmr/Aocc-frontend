@@ -1,8 +1,10 @@
-import { Empty, Form, Input, Select, Table } from 'antd';
+import { Empty, Form, Input, Select, Table, TimePicker } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './table.scss';
+import dayjs from 'dayjs';
+import { isOpera } from 'react-device-detect';
 
 const TableComponent = ({
 	columns,
@@ -56,6 +58,16 @@ const TableComponent = ({
 				[dataIndex]: record[dataIndex],
 			});
 		};
+		const handleTimeChange = (name, value) => {
+			if (value) {
+				toggleEdit();
+				handleSave({
+					...record,
+					values: { [name]: value },
+				});
+			}
+			console.log("value is ", value)
+		}
 		const save = async () => {
 			try {
 				const values = await form.validateFields();
@@ -72,34 +84,33 @@ const TableComponent = ({
 		if (editable) {
 			const inputType = editable.type || 'text';
 			childNode = editing ? (
-				<Form.Item
-					style={{
-						margin: 0,
-					}}
-					rules={[
-						{
-							pattern: /^\S/,
-							message: 'First character cannot be blank.',
-						},
-					]}
-					name={dataIndex}
-				>
-					{inputType === 'time' ? (
-						<Input type="time" ref={inputRef} format="HH:mm" onPressEnter={save} onBlur={save} />
-					) : inputType === 'select' ?
-						<Select
-							options={editable?.dropdownData ?? []}
-							ref={inputRef}
-							style={{ width: '15rem' }}
-							autoFocus={true}
-							onPressEnter={save}
-							onChange={save}
-							placeholder='Select a value'
-							onBlur={save}
-						/> : (
-							<Input ref={inputRef} onPressEnter={save} onBlur={save} />
-						)}
-				</Form.Item>
+				inputType === 'time' ? <TimePicker style={{ width: '8rem' }} onOpenChange={(isOpen) => isOpen === false && toggleEdit(isOpen)} allowClear={false} defaultValue={record[dataIndex] && dayjs(record[dataIndex], 'HH:mm')} autoFocus={true} format='HH:mm' onChange={(_, value) => handleTimeChange(dataIndex, value)} /> :
+					<Form.Item
+						style={{
+							margin: 0,
+						}}
+						rules={[
+							{
+								pattern: /^\S/,
+								message: 'First character cannot be blank.',
+							},
+						]}
+						name={dataIndex}
+					>
+						{inputType === 'select' ?
+							<Select
+								options={editable?.dropdownData ?? []}
+								ref={inputRef}
+								style={{ width: '15rem' }}
+								autoFocus={true}
+								onPressEnter={save}
+								onChange={save}
+								placeholder='Select a value'
+								onBlur={toggleEdit}
+							/> : (
+								<Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+							)}
+					</Form.Item>
 			) : (
 				<div className="editable-cell-value-wrap" onClick={toggleEdit}>
 					{children}

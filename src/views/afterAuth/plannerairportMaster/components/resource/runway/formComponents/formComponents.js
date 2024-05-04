@@ -1,13 +1,12 @@
-import React, { useState, useEffect, memo } from 'react';
-import { Form, Divider } from 'antd';
-import toast from 'react-hot-toast';
-import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
-import InputField from '../../../../../../../components/input/field/field';
+import { Divider, Form } from 'antd';
+import dayjs from 'dayjs';
+import React, { memo, useEffect, useState } from 'react';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
+import InputField from '../../../../../../../components/input/field/field';
 import CustomRadioGroup from '../../../../../../../components/radioButton/radioButton';
+import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
 import { ConvertIstToUtc } from '../../../../../../../utils';
-import dayjs from 'dayjs';
 import './formComponents.scss';
 
 
@@ -111,25 +110,25 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 							max="16"
 						/>
-					</div>
-					<Divider />
-					<div className="runway_form_inputFields">
-						<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
-							Runway Type
-						</CustomTypography>
-					</div>
-					<div className="runway_form_inputFields">
-						<CustomRadioGroup
-							name="status"
-							options={[
-								{ label: 'Take-off', value: 'take-off' },
-								{ label: 'Landing', value: 'landing' },
-							]}
-							disabled={isReadOnly}
-						/>
+						<div>
+							<div className="runway_form_inputFields">
+								<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
+									Runway Type
+								</CustomTypography>
+							</div>
+							<div className="runway_form_inputFields_radio">
+								<CustomRadioGroup
+									name="status"
+									options={[
+										{ label: 'Take-off', value: 'take-off' },
+										{ label: 'Landing', value: 'landing' },
+									]}
+									disabled={isReadOnly}
+								/>
 
+							</div>
+						</div>
 					</div>
-					<Divider />
 					<div className="runway_form_inputFields">
 						<InputField
 							label="Reason, if unavailable"
@@ -175,7 +174,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							}}
 						/>
 					</div>
-					<Divider />
 					<div className="runway_form_inputFields">
 						<Date
 							label="Valid From"

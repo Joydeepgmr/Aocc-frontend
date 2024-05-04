@@ -25,7 +25,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 		},
 	}) => toast.error(message);
 
-	const { data: terminalDropdownData} = useTerminalDropdown({ onError });
+	const { data: terminalDropdownData } = useTerminalDropdown({ onError });
 
 	const SelectTerminalData = useMemo(() => {
 		return terminalDropdownData.map((data) => {
@@ -140,8 +140,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							title="Please enter only numbers."
 							max="15"
 						/>
-					</div>
-					<div className="baggageBelt_form_inputFields">
 						<CustomSelect
 							SelectData={SelectTerminalData}
 							name="terminalId"
@@ -205,7 +203,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 							}}
 						/>
 					</div>
-					<Divider />
 					<div className="baggageBelt_form_inputFields">
 						<Date
 							label="Valid From"

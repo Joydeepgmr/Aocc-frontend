@@ -1,23 +1,22 @@
-import React, { useCallback, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import dayjs from 'dayjs';
-import toast from 'react-hot-toast';
 import { Form } from 'antd';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_TERMINAL } from '../../../../../../api';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import { useEditTerminal, useGetTerminal, usePostTerminal, useDeleteTerminal } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
-import SocketEventListener from '../../../../../../socket/listner/socketListner';
-import { GET_TERMINAL } from '../../../../../../api';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import { useDeleteTerminal, useEditTerminal, useGetTerminal, usePostTerminal } from '../../../../../../services/planairportmaster/resources/terminal/terminal';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import FormComponent from './formComponents/formComponents';
 import './terminals.scss';
 
 
@@ -217,13 +216,6 @@ const Terminal = () => {
 			render: (terminalName) => terminalName ?? '-',
 		},
 		{
-			title: 'TWY',
-			dataIndex: 'taxiway',
-			key: 'taxiway',
-			align: 'center',
-			render: (taxiway) => taxiway?.name ?? '-',
-		},
-		{
 			title: 'POS',
 			dataIndex: 'parkingStand',
 			key: 'parkingStand',
@@ -298,7 +290,7 @@ const Terminal = () => {
 
 					/>}
 					openModal={openModal}
-					openCSVModal={()=> setOpenCSVModal(true)}
+					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
 				<>

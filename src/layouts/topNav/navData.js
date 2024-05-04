@@ -42,7 +42,7 @@ export const roleBasedNav = (role = 'Planner') => {
 			},
 			{
 				key: '4',
-				label: "Ops Kpi",
+				label: "KPI",
 				children: Pathname.DASHBOARD_CHARTS,
 			},
 		];

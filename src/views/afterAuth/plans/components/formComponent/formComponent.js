@@ -172,8 +172,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							disabled={isDaily}
 							required={!startDate || !endDate}
 						/>
-					</div>
-					<div className="seasonal_form_inputfields">
 						<CustomSelect
 							SelectData={SelectNatureCodeData}
 							label="Nature Code"
@@ -182,7 +180,8 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							placeholder={'Select Nature Code'}
 							className="select"
 						/>
-
+					</div>
+					<div className="seasonal_form_inputfields">
 						<InputField
 							label={type == 1 ? 'Origin Airport' : 'Destination Airport'}
 							name="origin"
@@ -214,8 +213,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								disabled={isEdit}
 							/>
 						)}
-					</div>
-					<div className="seasonal_form_inputfields">
 						<CustomSelect
 							SelectData={SelectAircraftData}
 							label="Aircraft"
@@ -223,14 +220,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							required
 							placeholder={'Select Aircraft'}
 							className="select"
-						/>
-						<CustomSelect
-							SelectData={SelectFlightType}
-							placeholder={'Types of Flight'}
-							className="custom_input"
-							required
-							label="Flight Type"
-							name="type"
 						/>
 						<CheckBoxField
 							name="toh"
@@ -241,6 +230,14 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						/>
 					</div>
 					<div className="seasonal_form_inputfields">
+						<CustomSelect
+							SelectData={SelectFlightType}
+							placeholder={'Types of Flight'}
+							className="custom_input"
+							required
+							label="Flight Type"
+							name="type"
+						/>
 						<InputField
 							label="Duration"
 							name="duration"
@@ -249,10 +246,18 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							pattern="^[0-9]+$"
 							patternWarning={'Please enter only numbers'}
 						/>
+						{!isEdit && !isDate && !isDaily ?
+							<WeeklySelect
+								name="weeklySelect"
+								label="Set Flight Recurrence"
+								days={days}
+								onChange={handleDaysChange}
+								value={initialValues?.weeklySelect}
+								className="select"
+								required={Boolean(startDate) && Boolean(endDate)}
+							/> : null
+						}
 					</div>
-
-					<Divider />
-
 					{tohChecked && (
 						<div>
 							<CustomTypography
@@ -277,9 +282,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									placeholder="Filled Text"
 									className="custom_input"
 								/>
-							</div>
-
-							<div className="seasonal_form_inputfields">
 								<InputField
 									label="Registration"
 									name="registration"
@@ -308,7 +310,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							>
 								Flight Recurrence
 							</CustomTypography>
-							<div className="seasonal_form_inputfields">
+							<div className="seasonal_form_inputfields_date">
 								<Date
 									label="Absolute Period"
 									name="start"
@@ -338,20 +340,8 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									disabled
 									type="number"
 								/>
-							</div>
-
-							<div className="seasonal_form_inputfields">
 								<Date label="Relative Period" placeholder="From" className="custom_date" />
 								<Date label="" placeholder="To" className="custom_date" />
-								<WeeklySelect
-									name="weeklySelect"
-									label="Set Flight Recurrence"
-									days={days}
-									onChange={handleDaysChange}
-									value={initialValues?.weeklySelect}
-									className="select"
-									required={Boolean(startDate) && Boolean(endDate)}
-								/>
 							</div>
 							<Divider />
 						</div>

@@ -85,16 +85,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						disabled={isReadOnly || isEdit}
 					/>
 					<CustomSelect
-						SelectData={SelectTaxiwayData}
-						label="Connected to Taxiway"
-						placeholder={'Select Taxiway'}
-						name="taxiway"
-						disabled={isReadOnly}
-						className="select"
-					/>
-				</div>
-				<div className="terminal_form_inputfields">
-					<CustomSelect
 						SelectData={SelectStandData}
 						label="Connected to Stands"
 						placeholder={'Select Stand'}
@@ -112,7 +102,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						className="select"
 					/>
 				</div>
-
 				<Divider />
 				<div className="terminal_form_inputfields">
 					<Date
