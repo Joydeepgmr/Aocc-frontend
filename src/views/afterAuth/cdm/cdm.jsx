@@ -670,12 +670,6 @@ const CDM = () => {
 	return (
 		<>
 			<div className="container-style">
-				<TopHeader
-					heading={'CDM'}
-					subHeading={'Overview of Arrival , Departure , and Turn Around '}
-					searchBox={false}
-					condition={false}
-				/>
 				<div className="cdm--Container">
 					<CustomTabs
 						defaultActiveKey="1"

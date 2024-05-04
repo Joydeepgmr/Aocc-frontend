@@ -1,6 +1,7 @@
 import React from 'react';
 import './button.scss';
 import { Button } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, icon, alt, ...rest }) => {
 	let buttonContent;
@@ -15,9 +16,17 @@ const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, 
 			buttonContent = title;
 			buttonTypeClass = 'textButton';
 			break;
-		case 'iconWithBorder':
-			buttonContent = <img src={icon} alt={alt} />;
+		case 'iconWithBorderEdit':
+			buttonContent = <EditOutlined />;
 			buttonTypeClass = 'iconBorderButton';
+			break;
+		case 'iconWithBorderDelete':
+			buttonContent = <DeleteOutlined />;
+			buttonTypeClass = 'iconBorderButton';
+			break;
+		case 'iconWithBorder':
+			buttonContent = <DeleteOutlined />;
+			buttonTypeClass = <img src={icon} alt={alt} />;
 			break;
 		default:
 			buttonContent = <img src={icon} alt={alt} />;

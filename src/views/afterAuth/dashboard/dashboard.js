@@ -40,9 +40,6 @@ export const Dashboard = () => {
 
 	return (
 		<div className='container-div'>
-			{/* <div className='container-head'>
-				<TopHeader heading='Flight Information' subHeading='Access information regarding your airlines and track milestones.' />
-			</div> */}
 			<div className='main-container'>
 				<CustomTabs defaultActiveKey={state?.tab ?? '1'} items={items} onChange={handleChange} type='card' />
 			</div>

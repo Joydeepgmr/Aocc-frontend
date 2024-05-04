@@ -84,7 +84,7 @@ const TableComponent = ({
 		if (editable) {
 			const inputType = editable.type || 'text';
 			childNode = editing ? (
-				inputType === 'time' ? <TimePicker style={{ width: '8rem' }} onOpenChange={(isOpen) => isOpen === false && toggleEdit(isOpen)} allowClear={false} defaultValue={record[dataIndex] && dayjs(record[dataIndex], 'HH:mm')} autoFocus={true} format='HH:mm' onChange={(_, value) => handleTimeChange(dataIndex, value)} /> :
+				inputType === 'time' ? <TimePicker style={{ width: '8rem', height: '4rem' }} onOpenChange={(isOpen) => isOpen === false && toggleEdit(isOpen)} allowClear={false} defaultValue={record[dataIndex] && dayjs(record[dataIndex], 'HH:mm')} autoFocus={true} format='HH:mm' onChange={(_, value) => handleTimeChange(dataIndex, value)} /> :
 					<Form.Item
 						style={{
 							margin: 0,
@@ -172,7 +172,7 @@ const TableComponent = ({
 							emptyText: <Empty description={emptyText} />,
 						}}
 						pagination={false}
-						className={`${isColored && 'color_table'}`}
+						className={`${'color_table'}`}
 						components={components}
 						{...rest}
 					/>

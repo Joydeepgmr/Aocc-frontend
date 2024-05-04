@@ -194,13 +194,13 @@ const ParkingStand = () => {
 				<div className="action_buttons">
 					<Button
 						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
+						type="iconWithBorderEdit"
 						icon={editIcon}
 						className="custom_icon_buttons"
 					/>
 					<Button
 						onClick={() => openDeleteModal(record)}
-						type="iconWithBorder"
+						type="iconWithBorderDelete"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
 					/>

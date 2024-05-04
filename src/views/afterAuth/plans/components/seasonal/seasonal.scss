@@ -11,7 +11,7 @@
 	@include flex(center, center, row);
 	gap: 1rem;
 	height: 50vh;
-	&--tableContainer{
+	&--tableContainer {
 		display: flex;
 		flex-direction: column;
 		gap: 0.8rem;
@@ -89,9 +89,11 @@
 }
 
 .custom_dropdownButton {
-	margin-bottom: 1rem;
-	height: 4.4rem;
-	width: 12.6rem;
+	height: auto;
+	width: auto;
+	padding: 0.5rem;
+	font-size: 12px;
+	border-radius: 0.5rem;
 
 	&.custom_dropdownButton:hover {
 		color: $white;

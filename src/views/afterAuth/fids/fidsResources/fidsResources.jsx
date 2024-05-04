@@ -154,7 +154,7 @@ const FidsResources = () => {
 			render: (text, record) => (
 				<div className="custom-button">
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderDelete'}
 						icon={Delete}
 						onClick={() => {
 							setOpenDeleteModal(true);

@@ -203,7 +203,7 @@ const Airlines = () => {
 			render: (text, record) => (
 				<div className="custom-button">
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderEdit'}
 						icon={Edit}
 						onClick={() => {
 							setOpenEditModal(true);
@@ -213,10 +213,10 @@ const Airlines = () => {
 								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 							});
 						}}
-						id="edit_button"
+						// id="edit_button"
 					></ButtonComponent>
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderDelete'}
 						icon={Delete}
 						onClick={() => {
 							setOpenDeleteModal(true);
@@ -226,7 +226,7 @@ const Airlines = () => {
 								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 							});
 						}}
-						id="delete_button"
+						// id="delete_button"
 					></ButtonComponent>
 				</div>
 			),

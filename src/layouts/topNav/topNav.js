@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -5,8 +6,6 @@ import gmrLogo from '../../assets/logo/gmr-logo.png';
 import line from '../../assets/logo/line.svg';
 import setting from '../../assets/logo/setting.svg';
 import temperatureLogo from '../../assets/logo/sun.svg';
-import user from '../../assets/logo/user.png';
-import windLogo from '../../assets/logo/wind.svg';
 import CustomTypography from '../../components/typographyComponent/typographyComponent';
 import { localStorageKey } from '../../keys';
 import { Pathname } from '../../pathname';
@@ -95,13 +94,13 @@ const TopNav = ({ data }) => {
 									<div>19*C</div>
 								</div>
 							</div>
-							<div className="wind_details">
+							{/* <div className="wind_details">
 								<img src={windLogo} />
 								<div>
 									<div>Wind Speed</div>
 									<div>85*3.7 kts</div>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					)}
 					<div className="vertical_separation">
@@ -116,7 +115,8 @@ const TopNav = ({ data }) => {
 						</div>
 					</div>
 					<div className="user_info">
-						<img src={user} />
+						{/* <img src={user} /> */}
+						<UserOutlined className='user_avatar' />
 						<div className="user_details">
 							<p>{localStorage.getItem('name')}</p>
 							<p>{localStorage.getItem('email')}</p>
