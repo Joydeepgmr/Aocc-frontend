@@ -83,84 +83,98 @@ const Alerts = () => {
 		<>
 			<div className="bell-container" onClick={showDrawer}>
 				<BellOutlined className="bell-icon" />
-				{dataCount && <div className="alert-count">{dataCount}</div>}
+				{Boolean(dataCount) && !isGetAllNotificationLoading && (
+					<div className="alert-count">{dataCount > 9 ? '9+' : dataCount}</div>
+				)}
 			</div>
 			<Drawer title="Alerts" onClose={onClose} open={open}>
-				{notificationData?.length ? (
-					<div id="progress-alert">
-						<InfiniteScroll
-							dataLength={notificationData?.length}
-							next={!isGetAllNotificationLoading && fetchNextPageNotification}
-							hasMore={hasNextPageNotification}
-							scrollableTarget="progress-alert"
-							className="infinite-scroll"
-						>
-							{/* <CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" /> */}
-							{notificationData &&
-								notificationData?.map((data) => {
-									const type =
-										data?.conflictType === 'gate'
-											? 'gate'
-											: data?.conflictType === 'belt'
-												? 'baggageBelt'
-												: data?.conflictType === 'stand'
-													? 'parkingStand'
-													: 'check-in-counter';
-									return (
-										<Card className="progress-alert">
-											<div className="alert-body">
-												<div className="alert-status-body">
-													<Chip
-														text={data?.type === 'conflict' ? 'Critical' : 'Attention'}
-														className={
-															data?.type === 'conflict' ? 'alert-status' : 'alert-warning'
-														}
-													/>
-													<div>{data?.flight?.sta ?? data?.flight?.std}</div>
-												</div>
-												<div className="alert-button-body">
-													<div className="alert-conflict">
-														<div className="conflict-type">
-															{data?.conflictType} {data[type]?.name}{' '}
-															{data?.type === 'conflict' ? 'Conflict' : 'Remark'}
+				{open && (
+					<>
+						{notificationData?.length ? (
+							<div id="progress" className="progress-container">
+								<InfiniteScroll
+									dataLength={notificationData?.length}
+									next={!isGetAllNotificationLoading && fetchNextPageNotification}
+									hasMore={hasNextPageNotification}
+									scrollableTarget="progress"
+									className="infinite-scroll"
+								>
+									{/* <CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" /> */}
+									{notificationData &&
+										notificationData?.map((data) => {
+											const type =
+												data?.conflictType === 'gate'
+													? 'gate'
+													: data?.conflictType === 'belt'
+														? 'baggageBelt'
+														: data?.conflictType === 'stand'
+															? 'parkingStand'
+															: 'check-in-counter';
+											return (
+												<Card className="progress-alert">
+													<div className="alert-body">
+														<div className="alert-status-body">
+															<Chip
+																text={
+																	data?.type === 'conflict' ? 'Critical' : 'Attention'
+																}
+																className={
+																	data?.type === 'conflict'
+																		? 'alert-status'
+																		: 'alert-warning'
+																}
+															/>
+															<div>{data?.flight?.sta ?? data?.flight?.std}</div>
 														</div>
-														<div className="conflict-flight">{data?.flight?.callSign}</div>
+														<div className="alert-button-body">
+															<div className="alert-conflict">
+																<div className="conflict-type">
+																	{data?.conflictType} {data[type]?.name}{' '}
+																	{data?.type === 'conflict' ? 'Conflict' : 'Remark'}
+																</div>
+																<div className="conflict-flight">
+																	{data?.flight?.callSign}
+																</div>
+															</div>
+															<ButtonComponent
+																onClick={() => handleAcknowledge(data)}
+																title={`${data?.status === 'resolved' ? 'Resolved' : data?.status === 'acknowledged' ? 'Mark as resolved' : 'Acknowledge'}`}
+																type="filledText"
+																disabled={data?.status === 'resolved'}
+																className={
+																	data?.status === 'resolved'
+																		? 'custom_svgButton'
+																		: ''
+																}
+															/>
+														</div>
+														{data?.status !== 'pending' && (
+															<div className="conflict-flight">
+																{data?.status === 'resolved'
+																	? `Resolved by ${data?.resolvedBy?.email}`
+																	: data?.status === 'acknowledged'
+																		? `Acknowledged by ${data?.acknowledgedBy?.email}`
+																		: ''}
+															</div>
+														)}
 													</div>
-													<ButtonComponent
-														onClick={() => handleAcknowledge(data)}
-														title={`${data?.status === 'resolved' ? 'Resolved' : data?.status === 'acknowledged' ? 'Mark as resolved' : 'Acknowledge'}`}
-														type="filledText"
-														disabled={data?.status === 'resolved'}
-														className={
-															data?.status === 'resolved' ? 'custom_svgButton' : ''
-														}
-													/>
-												</div>
-												{data?.status !== 'pending' && (
-													<div className="conflict-flight">
-														{data?.status === 'resolved'
-															? `Resolved by ${data?.resolvedBy?.email}`
-															: data?.status === 'acknowledged'
-																? `Acknowledged by ${data?.acknowledgedBy?.email}`
-																: ''}
-													</div>
-												)}
-											</div>
-										</Card>
-									);
-								})}
-						</InfiniteScroll>
-					</div>
-				) : (
-					<div>
-						<CustomTypography
-							type="title"
-							fontSize={16}
-							fontWeight="600"
-							color="black"
-							children="No Alerts"
-						/>
-					</div>
+												</Card>
+											);
+										})}
+								</InfiniteScroll>
+							</div>
+						) : (
+							<div>
+								<CustomTypography
+									type="title"
+									fontSize={16}
+									fontWeight="600"
+									color="black"
+									children="No Alerts"
+								/>
+							</div>
+						)}
+					</>
 				)}
 			</Drawer>
 		</>

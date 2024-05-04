@@ -483,7 +483,7 @@ const FlightSchedule = () => {
 							{getUtwData?.data[0]?.cateringStartAt ?? '-'}
 						</CustomTypography>
 						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.cateringEndAt ?? '-'}
+							{getUtwData?.data[0]?.cateringStopAt ?? '-'}
 						</CustomTypography>
 					</div>
 
@@ -495,7 +495,7 @@ const FlightSchedule = () => {
 							{getUtwData?.data[0]?.fuelingStartAt ?? '-'}
 						</CustomTypography>
 						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.fuelingEndAt ?? '-'}
+							{getUtwData?.data[0]?.fuelingStopAt ?? '-'}
 						</CustomTypography>
 					</div>
 					<div className="utw--DataContainer">
