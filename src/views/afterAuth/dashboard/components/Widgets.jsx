@@ -1,9 +1,7 @@
 import React from 'react';
-import './style.scss';
-import Alerts from './Alerts';
-import ProgressionCard from './ProgressionCard';
 import GraphCard from './GraphCard';
-import { useNavigate } from 'react-router-dom';
+import ProgressionCard from './ProgressionCard';
+import './style.scss';
 
 const Widgets = () => {
 	const airlineData = [

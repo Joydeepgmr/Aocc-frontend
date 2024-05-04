@@ -88,13 +88,14 @@ const FlightSchedule = () => {
 	const editFlightScheduleApiProps = {
 		onSuccess: ({ message, data: items }) => {
 			toast.success(message);
-			const updatedFlightData = FlightScheduleData.map((data) => {
-				if (data.flightId === items.flightId) {
-					return { ...data, ...items };
-				}
-				return data;
-			});
-			setFlightScheduleData(updatedFlightData);
+			refetch();
+			// const updatedFlightData = FlightScheduleData.map((data) => {
+			// 	if (data.flightId === items.flightId) {
+			// 		return { ...data, ...items };
+			// 	}
+			// 	return data;
+			// });
+			// setFlightScheduleData(updatedFlightData);
 		},
 		onError: ({
 			response: {
@@ -133,7 +134,7 @@ const FlightSchedule = () => {
 	};
 	const handleViewMap = (record) => {
 		if (record.isMap) {
-			getViewMap(record.flight);
+			getViewMap(record.flightId);
 		} else {
 			toast.dismiss();
 			toast.error('Map is not available once aircraft is in radar range');
@@ -297,14 +298,14 @@ const FlightSchedule = () => {
 					},
 			{
 				title: 'RWY',
-				dataIndex: 'runwayName',
-				key: 'runwayName',
+				dataIndex: 'runwayId',
+				key: 'runwayId',
 				align: 'center',
 				editable: {
 					type: 'select',
 					dropdownData: runwayDropdownData,
 				},
-				render: (runwayName) => runwayName ?? '-',
+				render: (_, record) => record?.runwayName ?? '-',
 			},
 			{
 				title: 'REM',
@@ -317,13 +318,13 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
-				title: 'MLST',
+				title: 'Details',
 				key: 'milestone',
 				render: (_, record) => (
 					<div className="top-bar">
 						<ButtonComponent
-							title="Utw"
-							style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
+							title="Status"
+							style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
 							type="text"
 							className="view_map_button"
 							onClick={() => {
@@ -332,8 +333,8 @@ const FlightSchedule = () => {
 							}}
 						/>
 						<ButtonComponent
-							title="Mlst"
-							style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
+							title="Milestone"
+							style={{ margin: 'auto', fontSize: '1.3rem', width: '7rem' }}
 							type="text"
 							className="view_map_button"
 							onClick={() => {
@@ -346,11 +347,11 @@ const FlightSchedule = () => {
 		];
 		if (tab === 'arrival') {
 			column.push({
-				title: 'Map',
-				key: 'map',
+				title: 'Radar',
+				key: 'Track',
 				render: (text, record) => (
 					<ButtonComponent
-						title="Map"
+						title="Track"
 						style={{ margin: 'auto', fontSize: '1.3rem', width: '4rem' }}
 						type="text"
 						className="view_map_button"

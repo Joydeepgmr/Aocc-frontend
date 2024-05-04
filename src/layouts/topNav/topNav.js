@@ -11,6 +11,7 @@ import CustomTypography from '../../components/typographyComponent/typographyCom
 import { localStorageKey } from '../../keys';
 import { Pathname } from '../../pathname';
 import * as userType from '../../utils/roles';
+import Alerts from '../alerts/Alerts';
 import { roleBasedNav } from './navData';
 import './topNav.scss';
 
@@ -108,10 +109,11 @@ const TopNav = ({ data }) => {
 					</div>
 					<div className="setting_bell">
 						<img src={setting} onClick={toggleSettingCard} />
-						{/* <div>
-						<img src={bell} />
-						<img src={ellipse} className="ellipse" />
-					</div> */}
+						<div>
+							<Alerts />
+							{/* <img src={bell} />
+							<img src={ellipse} className="ellipse" /> */}
+						</div>
 					</div>
 					<div className="user_info">
 						<img src={user} />

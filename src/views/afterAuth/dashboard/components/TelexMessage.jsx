@@ -1,17 +1,15 @@
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import { Form } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { GET_TELEX_MESSAGE } from '../../../../api';
 import ButtonComponent from '../../../../components/button/button';
 import ConfirmationModal from '../../../../components/confirmationModal/confirmationModal';
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import InputField from '../../../../components/input/field/field';
 import TableComponent from '../../../../components/table/table';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import { useGetTelexMessage } from '../../../../services/dashboard/telexMessage/telexMessage';
-import './style.scss';
 import SocketEventListener from '../../../../socket/listner/socketListner';
-import { GET_TELEX_MESSAGE } from '../../../../api';
-import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Alerts from './Alerts';
+import './style.scss';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
 	console.log(data);
