@@ -143,7 +143,9 @@ const FlightSchedule = () => {
 		getMilestoneData({ id: record.flightId, type: tab });
 	};
 	const handleEditTable = (items) => {
-		const hasNonNullValue = Object.values(items?.values).some((value) => value !== null);
+		const hasNonNullValue = Object.values(items?.values).some(
+			(value) => value !== null && value !== undefined && value !== ''
+		);
 		hasNonNullValue && editFlightData({ id: items.flightId, data: items.values });
 	};
 	const columns = useMemo(() => {
