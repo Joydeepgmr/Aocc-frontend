@@ -112,7 +112,7 @@ const ResourceAllocation = () => {
 		{ id: 1, label: 'Domestic Flights', color: '#02A0FC' },
 		{ id: 2, label: 'International Flights', color: '#FFD43B' },
 		{ id: 3, label: 'On Ground Flights', color: '#3eb556' },
-		{ id: 4, label: 'Conflict Flights', color: '#FA5252' },
+		{ id: 4, label: 'Conflict Flights', color: '#f76262' },
 	];
 
 	const timelineItems =
