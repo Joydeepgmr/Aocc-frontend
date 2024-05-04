@@ -13,7 +13,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 				const markObj = {
 					name: labels[i]?.value,
 					value: (i + 1) * 100,
-					time: list[labels[i]?.key] ? ConvertToDateTime(list[labels[i]?.key], 'HH:mm') : '-',
+					time: list[labels[i]?.key] ?? '-',
 					strokeWidth: 15,
 					strokeHeight: 0,
 					strokeLineCap: 'round',
