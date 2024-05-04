@@ -160,34 +160,33 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						disabled={isReadOnly}
 						required={true}
 					/>
+					<div className="fids_resources_inputfields">
+						<InputField
+							label="Height"
+							name="height"
+							type="number"
+							min={100}
+							max={999}
+							placeholder={!isReadOnly && 'Enter the Height'}
+							className="custom_number_input"
+							suffixText="cm"
+							disabled={isReadOnly}
+							required={true}
+						/>
+						<InputField
+							label="Width"
+							name="width"
+							type="number"
+							min={100}
+							max={999}
+							placeholder={!isReadOnly && 'Enter the Width'}
+							className="custom_number_input"
+							suffixText="cm"
+							disabled={isReadOnly}
+							required={true}
+						/>
+					</div>
 				</div>
-				<div className="fids_resources_inputfields">
-					<InputField
-						label="Height"
-						name="height"
-						type="number"
-						min={100}
-						max={999}
-						placeholder={!isReadOnly && 'Enter the Height'}
-						className="custom_input"
-						suffixText="cm"
-						disabled={isReadOnly}
-						required={true}
-					/>
-					<InputField
-						label="Width"
-						name="width"
-						type="number"
-						min={100}
-						max={999}
-						placeholder={!isReadOnly && 'Enter the Height'}
-						className="custom_input"
-						suffixText="cm"
-						disabled={isReadOnly}
-						required={true}
-					/>
-				</div>
-				<Divider />
 				<div className="fids_resources_inputfields">
 					<Date
 						label="Unavailable From"
