@@ -128,20 +128,74 @@ const ResourceAllocation = () => {
 						: item?.flight?.type === 'international'
 							? `timeline--2Airline`
 							: `timeline--3Airline`;
+				const sequence = (flight) => {
+					if (flight) {
+						switch (flight?.flight?.flightType) {
+							case 'arrival':
+								if (flight?.onBlock) return flight?.onBlock;
+								if (flight?.eob) return flight?.eob;
+								if (flight?.ata) return flight?.ata;
+								if (flight?.tmo) return flight?.tmo;
+								if (flight?.eta) return flight?.eta;
+								if (flight?.flight?.sta) return flight?.flight?.sta;
+								break;
+							case 'departure':
+								if (flight?.offBlock) return flight?.offBlock;
+								if (flight?.eob) return flight?.eob;
+								if (flight?.atd) return flight?.atd;
+								if (flight?.tmo) return flight?.tmo;
+								if (flight?.etd) return flight?.etd;
+								if (flight?.flight?.std) return flight?.flight?.std;
+								break;
+							default:
+								return null;
+						}
+					}
+					return null; // Default value if conditions not met or flight object is invalid
+				};
+				const name = (flight) => {
+					if (flight) {
+						switch (flight?.flight?.flightType) {
+							case 'arrival':
+								if (flight?.onBlock) return 'ONB';
+								if (flight?.eob) return 'EOB';
+								if (flight?.ata) return 'ATA';
+								if (flight?.tmo) return 'TMO';
+								if (flight?.eta) return 'ETA';
+								if (flight?.flight?.sta) return 'STA';
+								break;
+							case 'departure':
+								if (flight?.offBlock) return 'OFB';
+								if (flight?.eob) return 'EOB';
+								if (flight?.atd) return 'ATD';
+								if (flight?.tmo) return 'TMO';
+								if (flight?.etd) return 'ETD';
+								if (flight?.flight?.std) return 'STD';
+								break;
+							default:
+								return null;
+						}
+					}
+					return null; // Default value if conditions not met or flight object is invalid
+				};
 
 				return {
 					id: item?.id,
 					start: CombineUtcDateAndIstTime(item?.startTime.split(' ')[0], item?.startTime.split(' ')[1]),
 					end: CombineUtcDateAndIstTime(item?.endTime.split(' ')[0], item?.endTime.split(' ')[1]),
 					group: item?.resourceId?.id,
-					content: `${item?.flight?.sta ?? item?.flight?.std} ${item?.flight?.callSign}`,
+					content: `${sequence(item) ?? ''} ${item?.flight?.callSign}`,
 					className,
-					title: `<div>${item?.flight?.sta ? `STA: ${item?.flight?.sta}` : `STD: ${item?.flight?.std}`} <br/>Aircraft: ${item?.flight?.aircraft?.twoLetterCode}<br/>Flight Number: ${item?.flight?.flightNo}</div>`,
+					title: `<div>${name(item) ?? ''} ${sequence(item) ?? ''} <br/>Aircraft: ${item?.flight?.aircraft?.registration}<br/>Flight Number: ${item?.flight?.flightNo}</div>`,
 				};
 			});
 
 	const timelineGroups =
-		fetchedGroupData && fetchedGroupData?.resourceData?.map((item) => ({ id: item?.id, content: item?.name }));
+		fetchedGroupData &&
+		fetchedGroupData?.resourceData?.map((item) => ({
+			id: item?.id,
+			content: `${item?.name} ${item?.terminal?.name ?? ''}`,
+		}));
 
 	const items = [
 		{
