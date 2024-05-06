@@ -459,7 +459,6 @@ const FlightSchedule = () => {
 					/>
 				</div>
 			</div>
-			{console.log(getUtwData?.data[0], 'datttaa')}
 			<ModalComponent isModalOpen={utwModal} width="55rem" closeModal={() => setUtwModal(false)}>
 				{isUtwLoading && <PageLoader loading={isUtwLoading} />}
 
