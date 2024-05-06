@@ -7,6 +7,12 @@
 	box-sizing: content-box;
 	display: flex;
 	flex-direction: column;
+	.fids_resources {
+		display: flex;
+		justify-content: space-between;
+		gap: 2.4rem;
+		width: calc(33% - 2.4rem);
+	}
 
 	.fids_resources_inputfields {
 		display: flex;
@@ -30,8 +36,8 @@
 		.custom_date {
 			width: calc(33% - 2.4rem);
 		}
-		.custom_number_input {
-			width: calc(50% - 2.4rem);
+		.ant-form-item{
+			margin-bottom: 1rem;
 		}
 	}
 }

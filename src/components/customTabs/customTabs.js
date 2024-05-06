@@ -39,7 +39,7 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 				return {
 					key: id,
 					label: item.label,
-					children: item.children,
+					children: item.children,	
 					//   icon: <Icon />,
 				};
 			})}
