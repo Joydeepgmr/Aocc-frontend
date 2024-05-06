@@ -205,10 +205,6 @@ const ResourceAllocation = () => {
 				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
-							<FullscreenExitOutlined
-								className="resourceAllocation--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
 							<TimelineDesign
 								height="50vh"
 								items={timelineItems}
@@ -239,10 +235,6 @@ const ResourceAllocation = () => {
 				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
-							<FullscreenExitOutlined
-								className="resourceAllocation--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
 							<TimelineDesign
 								height="50vh"
 								items={timelineItems}
@@ -273,10 +265,6 @@ const ResourceAllocation = () => {
 				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
-							<FullscreenExitOutlined
-								className="resourceAllocation--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
 							<TimelineDesign
 								height="50vh"
 								items={timelineItems}
@@ -307,10 +295,6 @@ const ResourceAllocation = () => {
 				<div>
 					{fullScreen ? (
 						<div className={'resourceAllocation--FullScreen'}>
-							<FullscreenExitOutlined
-								className="resourceAllocation--FullScreenExitIcon"
-								onClick={toggleFullscreen}
-							/>
 							<TimelineDesign
 								height="50vh"
 								items={timelineItems}
@@ -334,40 +318,6 @@ const ResourceAllocation = () => {
 				</div>
 			),
 		},
-		// {
-		// 	key: '5',
-		// 	label: 'Taxiways',
-		// 	children: (
-		// 		<div>
-		// 			{fullScreen ? (
-		// 				<div className={'resourceAllocation--FullScreen'}>
-		// 					<FullscreenExitOutlined
-		// 						className="resourceAllocation--FullScreenExitIcon"
-		// 						onClick={toggleFullscreen}
-		// 					/>
-		// 					<TimelineDesign
-		// 						height="50vh"
-		// 						items={timelineItems}
-		// 						groups={timelineGroups}
-		// 						editable={isEditable}
-		// 						label={timelineLabel}
-		// 						handleMove={handleResourceMove}
-		// 						time={selectedTimeValue?.slice(0, 2)}
-		// 					/>
-		// 				</div>
-		// 			) : (
-		// 				<TimelineDesign
-		// 					items={timelineItems}
-		// 					label={timelineLabel}
-		// 					groups={timelineGroups}
-		// 					editable={isEditable}
-		// 					handleMove={handleResourceMove}
-		// 					time={selectedTimeValue?.slice(0, 2)}
-		// 				/>
-		// 			)}
-		// 		</div>
-		// 	),
-		// },
 	];
 
 	const handleChange = (key) => {
@@ -435,7 +385,18 @@ const ResourceAllocation = () => {
 							onChange={handleTimeValueChange}
 							value={selectedTimeValue}
 						/>
-						<FullscreenOutlined onClick={toggleFullscreen} className="resourceAllocation--FullScreenIcon" />
+						{!fullScreen && (
+							<FullscreenOutlined
+								onClick={toggleFullscreen}
+								className="resourceAllocation--FullScreenIcon"
+							/>
+						)}
+						{fullScreen && (
+							<FullscreenExitOutlined
+								className="resourceAllocation--FullScreenIcon"
+								onClick={toggleFullscreen}
+							/>
+						)}
 					</div>
 				}
 			/>
