@@ -136,6 +136,7 @@ const FormComponent = ({
 							className="custom_input"
 							disabled={isReadOnly}
 							required
+							isArticle={false}
 						/>
 						<OtpField
 							otpLength={2}

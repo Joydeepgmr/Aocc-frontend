@@ -19,6 +19,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import { GET_NATURE_CODE } from '../../../../../../api';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import './naturecode.scss';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 
 const NatureCode = () => {
 	const queryClient = useQueryClient();
@@ -110,6 +111,8 @@ const NatureCode = () => {
 	const { mutate: postNatureCode, isLoading: isPostLoading } = usePostNatureCode(addNatureCodeHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.name = CapitaliseFirstLetter(value.name);
+		value.natureCode = CapitaliseFirstLetter(value.natureCode);
 		value && postNatureCode(value);
 	}, []);
 
@@ -150,6 +153,7 @@ const NatureCode = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.name = CapitaliseFirstLetter(value.name);
 		editNatureCode(value);
 	};
 
@@ -188,7 +192,7 @@ const NatureCode = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -222,7 +226,7 @@ const NatureCode = () => {
 			render: (name) => name ?? '-',
 		},
 		{
-			title: 'View Details',
+			title: 'DEATIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -232,7 +236,7 @@ const NatureCode = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text" />
 				</>
 			),

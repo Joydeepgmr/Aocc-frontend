@@ -17,6 +17,7 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
@@ -109,6 +110,11 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	function onFinishHandler(values) {
 		values = getFormValues(values);
+		values.name = values?.name ? CapitaliseFirstLetter(values.name) : undefined
+		values.abbreviatedName1 = values?.abbreviatedName1 ? CapitaliseFirstLetter(values.abbreviatedName1) : undefined
+		values.abbreviatedName2 = values?.abbreviatedName2 ? CapitaliseFirstLetter(values.abbreviatedName2) : undefined
+		values.abbreviatedName3 = values?.abbreviatedName3 ? CapitaliseFirstLetter(values.abbreviatedName3) : undefined
+		values.abbreviatedName4 = values?.abbreviatedName4 ? CapitaliseFirstLetter(values.abbreviatedName4) : undefined
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 
@@ -153,7 +159,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'Actions',
+				title: 'ACTIONS',
 				key: 'actions',
 				render: (text, record) => (
 					<div className="action_buttons">
@@ -173,7 +179,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				),
 			},
 			{
-				title: 'Name',
+				title: 'NAME',
 				dataIndex: 'name',
 				key: 'name',
 				render: (text) => text || '-',
@@ -215,7 +221,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				render: (text) => text || '-',
 			},
 			{
-				title: 'View Details',
+				title: 'DETAIL',
 				key: 'viewDetails',
 				render: (
 					text,
@@ -223,7 +229,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				) => (
 					<ButtonComponent
 						style={{ margin: 'auto' }}
-						title="View Details"
+						title="View"
 						type="text"
 						onClick={() => {
 							handleDetails(record);

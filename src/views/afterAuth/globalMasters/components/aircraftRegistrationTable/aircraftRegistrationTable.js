@@ -17,6 +17,7 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftRegistrationForm from '../aircraftRegistrationForm/aircraftRegistrationForm';
 import './aircraftRegistrationTable.scss';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const AircraftRegistrationTable = ({
 	createProps,
@@ -130,6 +131,11 @@ const AircraftRegistrationTable = ({
 
 	function onFinishHandler(values) {
 		values = getFormValues(values);
+		values.mainDeck = values?.mainDeck ? CapitaliseFirstLetter(values.mainDeck) : undefined;
+		values.remark = values?.remark ? CapitaliseFirstLetter(values.remark) : undefined;
+		values.annex = values?.annex ? CapitaliseFirstLetter(values.annex) : undefined;
+		values.ownerName = values?.ownerName ? CapitaliseFirstLetter(values.ownerName) : undefined;
+		values.address = values?.address ? CapitaliseFirstLetter(values.address) : undefined;
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		delete values.length;
@@ -185,7 +191,7 @@ const AircraftRegistrationTable = ({
 	const columns = useMemo(
 		() => [
 			{
-				title: 'Actions',
+				title: 'ACTIONS',
 				key: 'actions',
 				render: (text, record) => (
 					<div className="action_buttons">
@@ -240,7 +246,7 @@ const AircraftRegistrationTable = ({
 				render: (text) => text?.name || '-',
 			},
 			{
-				title: 'View Details',
+				title: 'DETAIL',
 				key: 'viewDetails',
 				render: (
 					text,
@@ -248,7 +254,7 @@ const AircraftRegistrationTable = ({
 				) => (
 					<ButtonComponent
 						style={{ margin: 'auto' }}
-						title="View Details"
+						title="View"
 						type="text"
 						onClick={() => {
 							handleDetails(record);

@@ -16,6 +16,7 @@ import {
 	usePostGlobalAirline,
 } from '../../../../../services/globalMasters/globalMaster';
 import AirlineForm from '../airlineForm/airlineForm';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 import './airlineTable.scss';
 
 const AirlineTable = ({
@@ -112,6 +113,9 @@ const AirlineTable = ({
 	}
 	function onFinishHandler(values) {
 		values = getFormValues(values);
+		values.name = values?.name ? CapitaliseFirstLetter(values.name) : undefined;
+		values.remark = values?.remark ? CapitaliseFirstLetter(values.remark) : undefined
+		values.address = values?.address ? CapitaliseFirstLetter(values.address) : undefined
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		if (!values.phoneNumber) {
@@ -157,7 +161,7 @@ const AirlineTable = ({
 	const columns = useMemo(
 		() => [
 			{
-				title: 'Actions',
+				title: 'ACTIONS',
 				key: 'actions',
 				render: (text, record) => (
 					<div className="action_buttons">
@@ -219,7 +223,7 @@ const AirlineTable = ({
 			// 	render: (text) => text || '-',
 			// },
 			{
-				title: 'View Details',
+				title: 'DETAIL',
 				key: 'viewDetails',
 				render: (
 					text,
@@ -227,7 +231,7 @@ const AirlineTable = ({
 				) => (
 					<ButtonComponent
 						style={{ margin: 'auto' }}
-						title="View Details"
+						title="View"
 						type="text"
 						onClick={() => {
 							handleDetails(record);

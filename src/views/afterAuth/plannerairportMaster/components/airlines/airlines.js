@@ -25,6 +25,7 @@ import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvMo
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_PLANNER_AIRLINE } from '../../../../../api';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -162,6 +163,9 @@ const Airlines = () => {
 	const handleAddAirline = (value) => {
 		const data = {
 			...value,
+			terminal: value?.terminal ? CapitaliseFirstLetter(value.terminal) : undefined,
+			remark: value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			address: value?.address ? CapitaliseFirstLetter(value.address) : undefined,
 			twoLetterCode: value.twoLetterCode.join(''),
 			threeLetterCode: value.threeLetterCode.join(''),
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
@@ -174,11 +178,11 @@ const Airlines = () => {
 		const data = {
 			name: value?.name,
 			country: value?.country,
-			remark: value?.remark,
-			terminal: value?.terminal,
+			terminal: value?.terminal ? CapitaliseFirstLetter(value.terminal) : undefined,
+			remark: value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			address: value?.address ? CapitaliseFirstLetter(value.address) : undefined,
 			airlineType: value?.airlineType,
 			paymentMode: value?.paymentMode,
-			address: value?.address,
 			phoneNumber: value?.phoneNumber,
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
 		};
@@ -197,7 +201,7 @@ const Airlines = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -281,7 +285,7 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			dataIndex: 'viewdetails',
 			key: 'viewdetails',
 			render: (text, record) => (
@@ -294,7 +298,7 @@ const Airlines = () => {
 							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
 						});
 					}}
-					title="View Details"
+					title="View"
 					type="text"
 					style={{ margin: 'auto' }}
 				/>

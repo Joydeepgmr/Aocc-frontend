@@ -113,6 +113,8 @@ const Taxiway = () => {
 	const { mutate: postTaxiway, isLoading: isPostLoading } = usePostTaxiway(addTaxiwayHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.name = CapitaliseFirstLetter(value.name);
+		value.reason = CapitaliseFirstLetter(value.reason);
 		value && postTaxiway(value);
 	}, []);
 
@@ -157,6 +159,7 @@ const Taxiway = () => {
 
 	const handleEditSave = (value) => {
 		value["id"] = rowData.id;
+		value.reason = CapitaliseFirstLetter(value.reason);
 		editTaxiway(value);
 	};
 
@@ -194,7 +197,7 @@ const Taxiway = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -279,7 +282,7 @@ const Taxiway = () => {
 			},
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -289,7 +292,7 @@ const Taxiway = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text" />
 				</>
 			),

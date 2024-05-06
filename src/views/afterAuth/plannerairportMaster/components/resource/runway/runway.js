@@ -18,6 +18,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import './runway.scss';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 
 const Runway = () => {
 
@@ -113,6 +114,8 @@ const Runway = () => {
 	const { mutate: postRunway, isLoading: isPostLoading } = usePostRunway(addRunwayHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.name = CapitaliseFirstLetter(value.name);
+		value.reason = CapitaliseFirstLetter(value.reason);
 		value && postRunway(value);
 	}, []);
 
@@ -157,6 +160,7 @@ const Runway = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.reason = CapitaliseFirstLetter(value.reason);
 		value && editRunway(value);
 	};
 
@@ -194,7 +198,7 @@ const Runway = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -279,7 +283,7 @@ const Runway = () => {
 			},
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -289,7 +293,7 @@ const Runway = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text" />
 				</>
 			),

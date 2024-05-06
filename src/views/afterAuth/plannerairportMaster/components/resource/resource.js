@@ -19,7 +19,7 @@ const Resources = () => {
 		},
 		{
 			key: '2',
-			label: 'Gates',
+			label: 'Gate',
 			children: <Gates />,
 		},
 		{
@@ -54,7 +54,7 @@ const Resources = () => {
 		},
 		{
 			key: '9',
-			label: 'Terminals',
+			label: 'Terminal',
 			children: <Terminal />,
 		},
 	];
