@@ -108,15 +108,15 @@ const TopNav = ({ data }) => {
 					</div>
 					<div className="setting_bell">
 						<img src={setting} onClick={toggleSettingCard} />
-						<div>
-							<Alerts />
-							{/* <img src={bell} />
-							<img src={ellipse} className="ellipse" /> */}
-						</div>
+						{data?.role?.name === userType.PLANNER && (
+							<div>
+								<Alerts />
+							</div>
+						)}
 					</div>
 					<div className="user_info">
 						{/* <img src={user} /> */}
-						<UserOutlined className='user_avatar' />
+						<UserOutlined className="user_avatar" />
 						<div className="user_details">
 							<p>{localStorage.getItem('name')}</p>
 							<p>{localStorage.getItem('email')}</p>

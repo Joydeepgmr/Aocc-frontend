@@ -6,7 +6,7 @@
 	color: $table_header_bg !important;
 	background-color: $table_header_text !important;
 	width: auto !important;
-	padding: 0.3rem!important;
+	padding: 0.3rem !important;
 	font-size: $table_body_fontSize !important;
 }
 .button {
@@ -49,7 +49,7 @@
 		width: 3.6rem;
 		height: 2rem;
 		border-radius: 0.5rem;
-		padding: 0.5rem !important;
+		padding: 0.5rem;
 		@include flex(center, center, row);
 	}
 
@@ -73,5 +73,13 @@
 
 	&.button.iconButton:hover {
 		border: 0.1rem solid $gray_700;
+	}
+}
+.ant-btn-default {
+	:hover {
+		color: $table_header_bg;
+	}
+	:active {
+		color: $table_header_bg;
 	}
 }

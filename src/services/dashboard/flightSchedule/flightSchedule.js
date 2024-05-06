@@ -23,7 +23,6 @@ export const useEditFlightSchedule = (props) => {
 	return useMutation({
 		mutationKey: ['edit-flight-schedule'],
 		mutationFn: async ({ id, data }) => {
-			console.log('the data is ', id, data);
 			return await Patch(`${EDIT_FLIGHT_SCHEDULE}/${id}`, data);
 		},
 		...props,

@@ -28,12 +28,11 @@ export const useGetAllCdmArrivalDeparture = (type, format, props) => {
 	};
 };
 
-export const useUpdateCdmTypes = (id, props) => {
+export const useUpdateCdmTypes = (props) => {
 	const response = useMutation({
-		mutationKey: ['update-cdm-types', id],
-		mutationFn: async (data) => await Patch(`${UPDATE_CDM_DATA}/${id}`, data),
+		mutationKey: ['update-cdm-types'],
+		mutationFn: async ({ id, data }) => await Patch(`${UPDATE_CDM_DATA}/${id}`, data),
 		...props,
-		enabled: !!id,
 	});
 
 	const { data, isSuccess } = response;
@@ -69,10 +68,10 @@ export const useGetAllCdmTurnAround = (format, props) => {
 	};
 };
 
-export const useUpdateCdmTurnAround = (arrivalId, departureId, props) => {
+export const useUpdateCdmTurnAround = (props) => {
 	const response = useMutation({
-		mutationKey: ['update-cdm-turn-around', arrivalId, departureId],
-		mutationFn: async (data) =>
+		mutationKey: ['update-cdm-turn-around'],
+		mutationFn: async ({ arrivalId, departureId, data }) =>
 			await Patch(`${UPDATE_CDM_TURN_AROUND}?arrivalId=${arrivalId}&departureId=${departureId}`, data),
 		...props,
 	});
