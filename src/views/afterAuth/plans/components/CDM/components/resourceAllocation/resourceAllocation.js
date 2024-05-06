@@ -347,12 +347,6 @@ const ResourceAllocation = () => {
 				refetch={refetchTimelineGroupData}
 				apiName={`${GET_TIMELINE_GROUP_DATA}?type=${tabValue}&frame=${selectedTimeValue?.slice(0, 2)}`}
 			/>
-			<TopHeader
-				heading="Resource Management"
-				subHeading="Access information regarding resource allocation for flights"
-			>
-				<FullscreenOutlined onClick={toggleFullscreen} className="resourceAllocation--FullScreenIcon" />
-			</TopHeader>
 
 			<CustomTabs
 				defaultActiveKey={activeTab}
@@ -387,6 +381,7 @@ const ResourceAllocation = () => {
 							onChange={handleTimeValueChange}
 							value={selectedTimeValue}
 						/>
+						<FullscreenOutlined onClick={toggleFullscreen} className="resourceAllocation--FullScreenIcon" />
 					</div>
 				}
 			/>

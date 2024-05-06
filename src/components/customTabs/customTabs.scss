@@ -36,3 +36,14 @@
 	color: $light_tab_text;
 	border-bottom: $light_tab_text;
 }
+.ant-tabs-tab {
+	:hover {
+		color: $light_tab_text;
+	}
+	:active {
+		color: $light_tab_text;
+	}
+}
+.ant-tabs .ant-tabs-tab:hover {
+	color: $light_tab_text;
+}

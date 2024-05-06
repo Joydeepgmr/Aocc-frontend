@@ -40,11 +40,8 @@ const CDM = () => {
 		refetch: isPlannerCdmTurnAroundRefetching,
 	} = useGetAllCdmTurnAround(selectedTimeValue?.slice(0, 2), getCdmHandler);
 
-	const { mutate: onUpdateCDMTurnAround, isLoading: isUpdateCDMTurnAroundLoading } = useUpdateCdmTurnAround(
-		rowData?.arrivalId,
-		rowData?.departureId,
-		editCDMHandler
-	);
+	const { mutate: onUpdateCDMTurnAround, isLoading: isUpdateCDMTurnAroundLoading } =
+		useUpdateCdmTurnAround(editCDMHandler);
 
 	const {
 		data: fetchedPlannerCdm,
@@ -54,7 +51,7 @@ const CDM = () => {
 		fetchNextPage: isPlannerCdmFetchNextPage,
 	} = useGetAllCdmArrivalDeparture(type, selectedTimeValue?.slice(0, 2), getCdmHandler);
 
-	const { mutate: onUpdateCDM, isLoading: isUpdateCDMLoading } = useUpdateCdmTypes(rowData?.id, editCDMHandler);
+	const { mutate: onUpdateCDM, isLoading: isUpdateCDMLoading } = useUpdateCdmTypes(editCDMHandler);
 
 	const handleGetCdmSuccess = (data) => {
 		if (data?.pages) {
@@ -139,7 +136,10 @@ const CDM = () => {
 			remark: item?.values?.remark ?? null,
 		};
 		const hasNonNullValue = Object.values(data).some((value) => value !== null);
-		activeTab === '3' ? hasNonNullValue && onUpdateCDMTurnAround(data) : hasNonNullValue && onUpdateCDM(data);
+		activeTab === '3'
+			? hasNonNullValue &&
+				onUpdateCDMTurnAround({ arrivalId: item?.arrivalId, departureId: item?.departureId, data: data })
+			: hasNonNullValue && onUpdateCDM({ id: item?.id, data: data });
 	};
 	const columns =
 		activeTab === '1'

@@ -35,10 +35,6 @@
 	margin-bottom: 1.5rem;
 }
 
-#btn {
-	padding: 2.2rem;
-}
-
 .custom_modal {
 	max-height: 85%;
 	overflow: auto;
@@ -91,9 +87,7 @@
 .custom_dropdownButton {
 	height: auto;
 	width: auto;
-	padding: 0.5rem;
-	font-size: 12px;
-	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
 
 	&.custom_dropdownButton:hover {
 		color: $white;
