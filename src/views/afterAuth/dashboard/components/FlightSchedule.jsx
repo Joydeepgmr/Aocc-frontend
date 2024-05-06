@@ -460,14 +460,9 @@ const FlightSchedule = () => {
 				</div>
 			</div>
 			{console.log(getUtwData?.data[0], 'datttaa')}
-			<ModalComponent
-				isModalOpen={utwModal}
-				width="55rem"
-				closeModal={() => setUtwModal(false)}
-				title="Under the wing milestone"
-			>
+			<ModalComponent isModalOpen={utwModal} width="55rem" closeModal={() => setUtwModal(false)}>
 				{isUtwLoading && <PageLoader loading={isUtwLoading} />}
-				<Divider />
+
 				<div className="utw--Container">
 					<div className="utw--DataContainer">
 						<CustomTypography>Milestone </CustomTypography>

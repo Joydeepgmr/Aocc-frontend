@@ -42,8 +42,10 @@
 	padding: 0.8rem 1.4rem 1.4rem 1.4rem;
 }
 .progress-container {
+	height: 80vh;
 	max-height: 80vh;
-	overflow: auto;
+	overflow: scroll;
+	background-color: red;
 }
 
 .alert-body {
