@@ -19,6 +19,7 @@ import { GET_DELAY_CODE } from '../../../../../../api';
 import { Form } from 'antd';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import './delaycode.scss';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 
 const DelayCode = () => {
 	const queryClient = useQueryClient();
@@ -110,6 +111,8 @@ const DelayCode = () => {
 	const { mutate: postDelayCode, isLoading: isPostLoading } = usePostDelayCode(addDelayCodeHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.delayCode = CapitaliseFirstLetter(value.delayCode);
+		value.group = CapitaliseFirstLetter(value.group);
 		value && postDelayCode(value);
 	}, []);
 
@@ -150,6 +153,7 @@ const DelayCode = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.group = CapitaliseFirstLetter(value.group);
 		editDelayCode(value);
 	};
 
@@ -188,7 +192,7 @@ const DelayCode = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -229,7 +233,7 @@ const DelayCode = () => {
 			render: (airline) => airline?.name ?? '-',
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -239,7 +243,7 @@ const DelayCode = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text" />
 				</>
 			),

@@ -18,6 +18,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './baggagebelt.scss';
 import FormComponent from './formComponents/formComponents';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 
 
 const BaggageBelt = () => {
@@ -116,6 +117,8 @@ const BaggageBelt = () => {
 		if (!value.phoneNumber) {
 			delete value.phoneNumber;
 		}
+		value.name = CapitaliseFirstLetter(value.name);
+		value.reason = CapitaliseFirstLetter(value.reason);
 		value && postBaggageBelt(value);
 	}, []);
 
@@ -160,6 +163,7 @@ const BaggageBelt = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.reason = CapitaliseFirstLetter(value.reason);
 		value["id"] = rowData.id;
 		editBaggageBelt(value);
 	};
@@ -197,7 +201,7 @@ const BaggageBelt = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -282,7 +286,7 @@ const BaggageBelt = () => {
 			},
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -292,7 +296,7 @@ const BaggageBelt = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text"
 					/>
 				</>

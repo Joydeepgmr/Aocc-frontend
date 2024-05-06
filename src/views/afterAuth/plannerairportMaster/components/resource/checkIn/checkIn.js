@@ -13,6 +13,7 @@ import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 import {
 	useDeleteCheckin,
 	useEditCheckin,
@@ -115,12 +116,16 @@ const CheckIn = () => {
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		console.log(value, 'groupppp');
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
 		if (!value.phoneNumber) {
 			delete value.phoneNumber;
 		}
+		value.name = CapitaliseFirstLetter(value.name);
+		value.reason = CapitaliseFirstLetter(value.reason);
+		value.group = CapitaliseFirstLetter(value.group);
 		value && postCheckIn(value);
 	}, []);
 
@@ -164,6 +169,8 @@ const CheckIn = () => {
 	};
 
 	const handleEditSave = (value) => {
+		value.reason = CapitaliseFirstLetter(value.reason);
+		value.group = CapitaliseFirstLetter(value.group);
 		value.row && (value['row'] = value?.row.toString());
 		editCheckin(value);
 	};
@@ -203,7 +210,7 @@ const CheckIn = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -299,7 +306,7 @@ const CheckIn = () => {
 			},
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -309,7 +316,7 @@ const CheckIn = () => {
 							setIsReadOnly(true);
 							handleEdit(record);
 						}}
-						title="View Details"
+						title="View"
 						type="text"
 					/>
 				</>

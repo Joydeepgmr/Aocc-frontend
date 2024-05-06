@@ -85,6 +85,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							required
 							disabled={isReadOnly}
+							isArticle={false}
 						/>
 						<InputField
 							label="Internal"
@@ -255,14 +256,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							label="Country"
 							name="country"
 							placeholder={!isReadOnly && 'Enter the country name'}
-							className="custom_input"
-							disabled={isReadOnly}
-						/>
-						<InputField
-							label="Address"
-							max={32}
-							name="address"
-							placeholder={!isReadOnly && 'Enter the address'}
 							className="custom_input"
 							disabled={isReadOnly}
 						/>

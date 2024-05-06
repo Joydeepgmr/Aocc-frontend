@@ -151,7 +151,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'Actions',
+				title: 'ACTIONS',
 				key: 'actions',
 				render: (text, record) => (
 					<div className="action_buttons">
@@ -220,12 +220,12 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				render: (text) => text || '-',
 			},
 			{
-				title: 'View Details',
+				title: 'DETAIL',
 				key: 'viewDetails',
 				render: (text, record) => (
 					<ButtonComponent
 						style={{ margin: 'auto' }}
-						title="View Details"
+						title="View"
 						type="text"
 						onClick={() => {
 							handleDetails(record);

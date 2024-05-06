@@ -11,6 +11,7 @@ import { usePostLicenseAirport } from '../../../../../services/airportMasters/ai
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../../../services';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'New Airport License' };
@@ -61,6 +62,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		values = getFormValues(values);
 		values.file = '';
 		values.url = fileList?.[0]?.url;
+		values.city = values?.city ? CapitaliseFirstLetter(values.city) : undefined;
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
 		values.iataCode = values?.threeCode?.join('');

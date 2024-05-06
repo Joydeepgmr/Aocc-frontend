@@ -18,6 +18,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import './terminals.scss';
+import CapitaliseFirstLetter from '../../../../../../utils/CapitaliseFirstLetter';
 
 
 const Terminal = () => {
@@ -111,8 +112,9 @@ const Terminal = () => {
 	const { mutate: postTerminal, isLoading: isPostLoading } = usePostTerminal(addTerminalHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.name = CapitaliseFirstLetter(value.name);
 		value && postTerminal(value);
-	}, []);
+	}, [postTerminal]);
 
 	const handleCloseButton = () => {
 		setRowData({});
@@ -189,7 +191,7 @@ const Terminal = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -230,7 +232,7 @@ const Terminal = () => {
 			render: (runway) => runway?.name ?? '-',
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -240,7 +242,7 @@ const Terminal = () => {
 							setIsReadOnly(true);
 							handleEdit(record)
 						}}
-						title="View Details"
+						title="View"
 						type="text" />
 				</>
 			),

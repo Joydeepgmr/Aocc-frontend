@@ -23,6 +23,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './Gates.scss';
 import FormComponent from './formComponents/formComponents';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 
 const Gates = () => {
 	const queryClient = useQueryClient();
@@ -103,6 +104,8 @@ const Gates = () => {
 	const { mutate: postGate, isLoading: isPostLoading } = usePostGate(addGateHandler);
 
 	const handleSaveButton = useCallback((value) => {
+		value.name = CapitaliseFirstLetter(value.name);
+		value.reasonIfUnavailable = CapitaliseFirstLetter(value.reasonIfUnavailable);
 		value && postGate(value);
 	}, []);
 
@@ -144,6 +147,7 @@ const Gates = () => {
 
 	const { mutate: editGate, isLoading: isEditLoading } = useEditGate(rowData?.id, editGateHandler);
 	const handleEditSave = (value) => {
+		value.reasonIfUnavailable = CapitaliseFirstLetter(value.reasonIfUnavailable);
 		editGate(value);
 	};
 
@@ -191,7 +195,7 @@ const Gates = () => {
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
@@ -290,7 +294,7 @@ const Gates = () => {
 			},
 		},
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			key: 'viewDetails',
 			render: (record) => (
 				<>
@@ -300,7 +304,7 @@ const Gates = () => {
 							setIsReadOnly(true);
 							handleEdit(record);
 						}}
-						title="View Details"
+						title="View"
 						type="text"
 					/>
 				</>

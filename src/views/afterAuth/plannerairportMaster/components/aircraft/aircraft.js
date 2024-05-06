@@ -23,6 +23,7 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
 import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
 import './aircraft.scss';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 
 const Aircrafts = () => {
@@ -125,6 +126,11 @@ const Aircrafts = () => {
 	const handleAddAircraft = (value) => {
 		const data = {
 			...value,
+			remark : value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			mainDeck : value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
+			annex : value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
+			address : value?.address ? CapitaliseFirstLetter(value.address) : undefined,
+			ownerName : value?.ownerName ?  CapitaliseFirstLetter(value.ownerName) : undefined,
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
 			validFrom: value?.validFrom ? ConvertIstToUtc(value?.validFrom) : undefined,
 		};
@@ -141,21 +147,21 @@ const Aircrafts = () => {
 			cabinCrew: value?.cabinCrew,
 			mtow: value?.mtow,
 			mow: value?.mow,
-			annex: value?.annex,
-			mainDeck: value?.mainDeck,
-			ownerName: value?.ownerName,
 			country: value?.country,
-			address: value?.address,
-			remark: value?.remark,
 			nationality: value?.nationality,
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
+			remark : value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			mainDeck : value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
+			annex : value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
+			address : value?.address ? CapitaliseFirstLetter(value.address) : undefined,
+			ownerName : value?.ownerName ?  CapitaliseFirstLetter(value.ownerName) : undefined,
 		};
 		onUpdateAircraft(data);
 	};
 
 	const columns = [
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			dataIndex: 'edit',
 			key: 'edit',
 			render: (text, record) => (
@@ -235,7 +241,7 @@ const Aircrafts = () => {
 		},
 		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
 		{
-			title: 'View Details',
+			title: 'DETAIL',
 			dataIndex: 'viewDetails',
 			key: 'viewDetails',
 			render: (text, record) => (
@@ -249,7 +255,7 @@ const Aircrafts = () => {
 							aircraft_id: record?.globalAircraftType?.identifier,
 						});
 					}}
-					title="View Details"
+					title="View"
 					type="text"
 					style={{ margin: 'auto' }}
 				/>
