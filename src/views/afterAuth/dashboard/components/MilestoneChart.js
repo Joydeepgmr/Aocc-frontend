@@ -14,7 +14,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 					name: labels[i]?.value,
 					value: (i + 1) * 100,
 					time: list[labels[i]?.key] ?? '-',
-					strokeWidth: 15,
+					strokeWidth: 11,
 					strokeHeight: 0,
 					strokeLineCap: 'round',
 					strokeColor: list[labels[i]?.key] ? '#2B8A3E' : '#FA5252',
@@ -67,7 +67,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 					borderRadius: 2,
 					horizontal: true,
 					barWidth: '15rem',
-					barHeight: '15rem',
+					barHeight: '9rem',
 					barSpacing: 14,
 					colors: {
 						backgroundBarColors: ['#F1F3F5'],
@@ -143,7 +143,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 				options={chartOptions.options}
 				series={chartOptions.series}
 				type="bar"
-				height={80 * data?.length}
+				height={70 * data?.length}
 				style={{ paddingTop: '1rem' }}
 			/>
 		</div>

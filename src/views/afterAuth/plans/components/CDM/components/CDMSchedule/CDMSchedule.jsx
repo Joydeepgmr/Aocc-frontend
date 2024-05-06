@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { Form } from 'antd';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import editIcon from '../../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../../components/button/button';
@@ -10,7 +10,6 @@ import DropdownButton from '../../../../../../../components/dropdownButton/dropd
 import InputField from '../../../../../../../components/input/field/field';
 import ModalComponent from '../../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../../components/pageLoader/pageLoader';
-import TopHeader from '../../../../../../../components/topHeader/topHeader';
 import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useEditSeasonalPlanArrival,
@@ -19,14 +18,14 @@ import {
 	usePostSeasonalPlans,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
-import { ConvertIstToUtc, ConvertToDateTime, ConvertUtcToIst } from '../../../../../../../utils';
+import { ConvertIstToUtc, ConvertToDateTime } from '../../../../../../../utils';
 import FormComponent from '../../../formComponent/formComponent';
 import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 
-import './CDMSchedule.scss';
-import SocketEventListener from '../../../../../../../socket/listner/socketListner';
 import { GET_SEASONAL_PLANS } from '../../../../../../../api';
+import SocketEventListener from '../../../../../../../socket/listner/socketListner';
+import './CDMSchedule.scss';
 
 const DailySchedule = ({ tab }) => {
 	const queryClient = useQueryClient();
@@ -341,7 +340,7 @@ const DailySchedule = ({ tab }) => {
 				<div className="action_buttons">
 					<Button
 						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
+						type="iconWithBorderEdit"
 						icon={editIcon}
 						className="custom_icon_buttons"
 					/>

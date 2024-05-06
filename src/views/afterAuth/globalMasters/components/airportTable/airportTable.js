@@ -159,13 +159,13 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					<div className="action_buttons">
 						<ButtonComponent
 							onClick={() => handleEdit(record)}
-							type="iconWithBorder"
+							type="iconWithBorderEdit"
 							icon={editIcon}
 							className="custom_icon_buttons"
 						/>
 						<ButtonComponent
 							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="iconWithBorder"
+							type="iconWithBorderDelete"
 							icon={deleteIcon}
 							className="custom_icon_buttons"
 						/>

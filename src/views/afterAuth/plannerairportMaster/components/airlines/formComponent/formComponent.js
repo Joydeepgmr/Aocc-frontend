@@ -190,8 +190,6 @@ const FormComponent = ({
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="airline_form_inputfields">
 						<CustomSelect
 							SelectData={AirlineTypeData}
 							label="Airline Type"
@@ -202,7 +200,6 @@ const FormComponent = ({
 							disabled={isReadOnly}
 						/>
 					</div>
-					<Divider />
 					<div className="airline_form_inputfields">
 						<CustomSelect
 							SelectData={SelectPaymentData}
@@ -211,14 +208,6 @@ const FormComponent = ({
 							name="paymentMode"
 							disabled={isReadOnly}
 						/>
-					</div>
-					<div className="customTypo">
-						<CustomTypography type="title" fontSize={14} fontWeight="600" color="#5C5F66">
-							Head Office
-						</CustomTypography>
-					</div>
-
-					<div className="airline_form_inputfields">
 						<InputField
 							label="Address 1"
 							name="address"
@@ -237,9 +226,7 @@ const FormComponent = ({
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-						{/* <InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" /> */}
 					</div>
-					<Divider />
 					<div className="airline_form_inputfields">
 						<Date
 							label="Valid From"
@@ -268,7 +255,6 @@ const FormComponent = ({
 						/>
 					</div>
 				</div>
-
 				<div className="airline_form_inputfields">
 					{!isReadOnly && (
 						<>

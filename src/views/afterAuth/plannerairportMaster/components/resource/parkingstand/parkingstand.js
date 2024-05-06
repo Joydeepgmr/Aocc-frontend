@@ -1,23 +1,22 @@
-import React, { useCallback, useState } from 'react';
-import { useQueryClient } from 'react-query';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import { useQueryClient } from 'react-query';
+import { GET_PARKING_STAND } from '../../../../../../api';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import { useEditParkingStand, useGetParkingStand, usePostParkingStand, useDeleteParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
-import SocketEventListener from '../../../../../../socket/listner/socketListner';
-import { GET_PARKING_STAND } from '../../../../../../api';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import { useDeleteParkingStand, useEditParkingStand, useGetParkingStand, usePostParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import FormComponent from './formComponents/formComponents';
 import './parkingstand.scss';
 
 const ParkingStand = () => {
@@ -195,13 +194,13 @@ const ParkingStand = () => {
 				<div className="action_buttons">
 					<Button
 						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
+						type="iconWithBorderEdit"
 						icon={editIcon}
 						className="custom_icon_buttons"
 					/>
 					<Button
 						onClick={() => openDeleteModal(record)}
-						type="iconWithBorder"
+						type="iconWithBorderDelete"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
 					/>
@@ -228,13 +227,6 @@ const ParkingStand = () => {
 			key: 'gate',
 			align: 'center',
 			render: (gate) => gate?.name ?? '-',
-		},
-		{
-			title: 'TWY',
-			dataIndex: 'taxiway',
-			key: 'taxiway',
-			align: 'center',
-			render: (taxiway) => taxiway?.name ?? '-',
 		},
 		{
 			title: 'STS',
@@ -326,7 +318,7 @@ const ParkingStand = () => {
 
 	return (
 		<>
-		<SocketEventListener refetch={getParkingStandRefetch} apiName={GET_PARKING_STAND} />
+			<SocketEventListener refetch={getParkingStandRefetch} apiName={GET_PARKING_STAND} />
 			{isFetchLoading || isEditLoading || isPostLoading ? <PageLoader loading={true} /> : !Boolean(fetchParking?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
@@ -339,7 +331,7 @@ const ParkingStand = () => {
 						handleButtonClose={handleCloseButton}
 					/>}
 					openModal={openModal}
-					openCSVModal={()=> setOpenCSVModal(true)}
+					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
 				<>

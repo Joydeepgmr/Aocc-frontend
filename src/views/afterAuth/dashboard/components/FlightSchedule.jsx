@@ -318,7 +318,7 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
-				title: 'Details',
+				title: 'DETAIL',
 				key: 'milestone',
 				render: (_, record) => (
 					<div className="top-bar">
@@ -347,7 +347,7 @@ const FlightSchedule = () => {
 		];
 		if (tab === 'arrival') {
 			column.push({
-				title: 'Radar',
+				title: 'RADAR',
 				key: 'Track',
 				render: (text, record) => (
 					<ButtonComponent
@@ -430,10 +430,9 @@ const FlightSchedule = () => {
 			</ModalComponent>
 			<ModalComponent
 				isModalOpen={milestoneModal?.isOpen}
-				width="100rem"
+				width="80rem"
 				closeModal={closeMilestoneModal}
-				title="Milestone view"
-				// className="view_img_modal"
+				className="view_milestone_modal"
 			>
 				<MilestoneChart type={tab} data={milestoneModal?.milestoneList} labels={milestoneModal?.labels} />
 				{/* <img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" /> */}

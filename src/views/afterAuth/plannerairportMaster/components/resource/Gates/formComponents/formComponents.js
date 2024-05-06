@@ -182,7 +182,6 @@ const FormComponent = ({
 							defaultValue={15}
 						/>
 					</div>
-					<Divider />
 					<div className="gate_form_inputfields">
 						<InputField
 							label="Reason, if unavailable"
@@ -257,19 +256,21 @@ const FormComponent = ({
 						/>
 					</div>
 				</div>
-				<Divider />
 				<div className="gate_form_inputfields">
 					{!isReadOnly && (
-						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-								onClick={handleButtonClose}
-							/>
-							<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
-						</div>
+						<>
+							<Divider />
+							<div className="form_bottomButton">
+								<Button
+									title="Cancel"
+									type="filledText"
+									id="btn"
+									className="custom_svgButton"
+									onClick={handleButtonClose}
+								/>
+								<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
+							</div>
+						</>
 					)}
 				</div>
 			</Form>

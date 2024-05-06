@@ -161,7 +161,7 @@ const Aircrafts = () => {
 			render: (text, record) => (
 				<div className="custom-button">
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderEdit'}
 						icon={Edit}
 						onClick={() => {
 							setOpenEditModal(true);
@@ -172,12 +172,12 @@ const Aircrafts = () => {
 								aircraft_id: record?.globalAircraftType?.identifier,
 							});
 						}}
-						id="edit_button"
+						// id="edit_button"
 					></ButtonComponent>
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderDelete'}
 						icon={Delete}
-						id="delete_button"
+						// id="delete_button"
 						onClick={() => {
 							setOpenDeleteModal(true);
 							setRowData({

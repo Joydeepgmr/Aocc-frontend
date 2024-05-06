@@ -35,6 +35,10 @@
 	gap: 1rem;
 }
 
+.view_milestone_modal.ant-modal .ant-modal-content {
+	padding: 0.5rem !important;
+}
+
 .filter-section {
 	display: flex;
 	flex-direction: row;

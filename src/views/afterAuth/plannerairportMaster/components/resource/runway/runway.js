@@ -1,23 +1,22 @@
-import React, { useCallback, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import toast from 'react-hot-toast';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import FormComponent from './formComponents/formComponents';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
+import React, { useCallback, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_RUNWAY } from '../../../../../../api';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
+import editIcon from '../../../../../../assets/logo/edit.svg';
+import Button from '../../../../../../components/button/button';
+import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
+import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
-import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
-import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import { useEditRunway, useGetRunway, usePostRunway, useDeleteRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
-import SocketEventListener from '../../../../../../socket/listner/socketListner';
-import { GET_RUNWAY } from '../../../../../../api';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import { useDeleteRunway, useEditRunway, useGetRunway, usePostRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import FormComponent from './formComponents/formComponents';
 import './runway.scss';
 
 const Runway = () => {
@@ -201,13 +200,13 @@ const Runway = () => {
 				<div className="action_buttons">
 					<Button
 						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
+						type="iconWithBorderEdit"
 						icon={editIcon}
 						className="custom_icon_buttons"
 					/>
 					<Button
 						onClick={() => openDeleteModal(record)}
-						type="iconWithBorder"
+						type="iconWithBorderDelete"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
 					/>

@@ -18,14 +18,14 @@
 	width: 37.333rem;
 	margin: 0;
 	.select_wrapper {
-		border-radius: 1.2rem !important;
+		border-radius: 1rem !important;
 		width: 100%;
-		height: 5rem;
+		height: 3rem;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		.ant-select-selector {
-			border-radius: 1.2rem !important;
+			border-radius: 1rem !important;
 		}
 	}
 }

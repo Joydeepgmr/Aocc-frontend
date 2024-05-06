@@ -145,6 +145,18 @@ const FormComponent = ({
 							className="custom_input"
 							max="32"
 						/>
+						<InputField
+							label="Phones"
+							name="phoneNumber"
+							placeholder={!isReadOnly && 'Filled Text'}
+							warning="Required field"
+							disabled={isReadOnly}
+							className="custom_input"
+							type='text'
+							pattern="^\d+$"
+							title="Please enter only numbers."
+							max="15"
+						/>
 					</div>
 
 					<div className="checkin_form_inputfields">
@@ -165,20 +177,7 @@ const FormComponent = ({
 							className="custom_input"
 							max={3}
 						/>
-						<InputField
-							label="Phones"
-							name="phoneNumber"
-							placeholder={!isReadOnly && 'Filled Text'}
-							warning="Required field"
-							disabled={isReadOnly}
-							className="custom_input"
-							type='text'
-							pattern="^\d+$"
-							title="Please enter only numbers."
-							max="15"
-						/>
 					</div>
-					<Divider />
 					<div className="checkin_form_inputfields">
 						<InputField
 							label="Reason, if unavailable"
@@ -206,7 +205,6 @@ const FormComponent = ({
 								);
 							}}
 						/>
-
 						<Date
 							label="Unavailable to"
 							name="unavailableTo"
@@ -225,8 +223,6 @@ const FormComponent = ({
 							}}
 						/>
 					</div>
-
-					<Divider />
 					<div className="checkin_form_inputfields">
 						<Date
 							label="Valid From"
@@ -254,25 +250,27 @@ const FormComponent = ({
 						/>
 					</div>
 				</div>
-				<Divider />
 				<div className="checkin_form_inputfields">
 					{!isReadOnly && (
-						<div className="form_bottomButton">
-							<Button
-								title="Cancel"
-								type="filledText"
-								id="btn"
-								className="custom_svgButton"
-								onClick={handleButtonClose}
-							/>
-							<Button
-								title={isEdit ? 'Edit' : 'Save'}
-								type="filledText"
-								id="btn"
-								isSubmit="submit"
-								disabled={isReadOnly}
-							/>
-						</div>
+						<>
+							<Divider />
+							<div className="form_bottomButton">
+								<Button
+									title="Cancel"
+									type="filledText"
+									id="btn"
+									className="custom_svgButton"
+									onClick={handleButtonClose}
+								/>
+								<Button
+									title={isEdit ? 'Edit' : 'Save'}
+									type="filledText"
+									id="btn"
+									isSubmit="submit"
+									disabled={isReadOnly}
+								/>
+							</div>
+						</>
 					)}
 				</div>
 			</Form>

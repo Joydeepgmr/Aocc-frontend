@@ -43,13 +43,6 @@ const PlannerAirportMaster = () => {
 	return (
 		<>
 			<div className="container-style">
-				<TopHeader
-					className="header-box"
-					heading={'Airport Reference Data'}
-					subHeading={'Overview of airport reference data'}
-					searchBox={false}
-					condition={false}
-				/>
 				<div className="tabs">
 					<CustomTabs defaultActiveKey="1" items={items} onChange={handleChange} type="card" />
 				</div>

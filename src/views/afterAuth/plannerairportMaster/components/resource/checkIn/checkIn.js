@@ -1,8 +1,9 @@
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { Form } from 'antd';
+import { GET_CHECKIN_COUNTER } from '../../../../../../api';
 import deleteIcon from '../../../../../../assets/logo/delete.svg';
 import editIcon from '../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../components/button/button';
@@ -11,19 +12,17 @@ import DropdownButton from '../../../../../../components/dropdownButton/dropdown
 import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
+import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useDeleteCheckin,
 	useEditCheckin,
 	useGetCheckIn,
 	usePostCheckIn,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import FormComponent from './formComponents/formComponents';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
-import { GET_CHECKIN_COUNTER } from '../../../../../../api';
-import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './checkIn.scss';
+import FormComponent from './formComponents/formComponents';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -210,13 +209,13 @@ const CheckIn = () => {
 				<div className="action_buttons">
 					<Button
 						onClick={() => handleEdit(record)}
-						type="iconWithBorder"
+						type="iconWithBorderEdit"
 						icon={editIcon}
 						className="custom_icon_buttons"
 					/>
 					<Button
 						onClick={() => openDeleteModal(record)}
-						type="iconWithBorder"
+						type="iconWithBorderDelete"
 						icon={deleteIcon}
 						className="custom_icon_buttons"
 					/>

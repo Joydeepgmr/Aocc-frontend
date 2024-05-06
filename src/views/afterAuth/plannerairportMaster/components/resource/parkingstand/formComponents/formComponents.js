@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState,memo } from 'react';
+import React, { useMemo, useEffect, useState, memo } from 'react';
 import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
@@ -35,7 +35,7 @@ const FormComponent = ({
 		},
 	}) => toast.error(message);
 
-	const { data: gateDropdownData} = useGateDropdown({ onError });
+	const { data: gateDropdownData } = useGateDropdown({ onError });
 	const { data: taxiwayDropdownData } = useTaxiwayDropdown({ onError });
 
 	const SelectGateData = useMemo(() => {
@@ -142,9 +142,6 @@ const FormComponent = ({
 						pattern="^(?!.*\s$)[A-Za-z0-9 ]+(?<!\s)$"
 						max="16"
 					/>
-				</div>
-
-				<div className="parking_form_inputfields">
 					<CustomSelect
 						SelectData={SelectGateData}
 						label="Connected to Gate"
@@ -153,14 +150,14 @@ const FormComponent = ({
 						disabled={isReadOnly}
 						className="select"
 					/>
-					<CustomSelect
+					{/* <CustomSelect
 						SelectData={SelectTaxiwayData}
 						label="Connected to Taxiway"
 						placeholder={'Select Taxiway'}
 						name="taxiway"
 						disabled={isReadOnly}
 						className="select"
-					/>
+					/> */}
 					<InputField
 						label="Default Allocation Duration"
 						name="defaultAllocationDuration"
@@ -173,8 +170,7 @@ const FormComponent = ({
 						defaultValue={15}
 					/>
 				</div>
-				<Divider />
-				<div className="parking_form_inputfields">
+				<div className="parking_form_inputfields" style={{ paddingTop: '1rem' }}>
 					<CustomTypography type="title" fontSize={16} fontWeight="600" color="#5C5F66">
 						Equipped with
 					</CustomTypography>
@@ -229,7 +225,6 @@ const FormComponent = ({
 						className="custom_input"
 					/>
 				</div>
-				<Divider />
 				<div className="parking_form_inputfields">
 					<InputField
 						label="Reason, if unavailable"
@@ -277,8 +272,6 @@ const FormComponent = ({
 						}}
 					/>
 				</div>
-
-				<Divider />
 				<div className="parking_form_inputfields">
 					<Date
 						label="Valid From"
@@ -306,19 +299,21 @@ const FormComponent = ({
 					/>
 				</div>
 			</div>
-			<Divider />
 			<div className="parking_form_inputfields">
 				{!isReadOnly && (
-					<div className="form_bottomButton">
-						<Button
-							title="Cancel"
-							type="filledText"
-							id="btn"
-							className="custom_svgButton"
-							onClick={handleButtonClose}
-						/>
-						<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
-					</div>
+					<>
+						<Divider />
+						<div className="form_bottomButton">
+							<Button
+								title="Cancel"
+								type="filledText"
+								id="btn"
+								className="custom_svgButton"
+								onClick={handleButtonClose}
+							/>
+							<Button title={isEdit ? 'Update' : 'Save'} type="filledText" id="btn" isSubmit="submit" />
+						</div>
+					</>
 				)}
 			</div>
 		</Form>

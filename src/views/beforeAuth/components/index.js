@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Cards from '../../../components/card/card';
 import InputField from '../../../components/input/field/field';
-import { Divider, Form } from 'antd';
+import { Divider, Form, TimePicker } from 'antd';
 import CustomSelect from '../../../components/select/select';
 import Date from '../../../components/datapicker/datepicker';
 import './index.scss';
@@ -23,6 +23,7 @@ import TopHeader from '../../../components/topHeader/topHeader';
 import OtpField from '../../../components/input/otp/otp';
 import TimelineDesign from '../../../components/timeline/timeline';
 import { useDummyApi } from '../../../services';
+import dayjs from 'dayjs';
 
 export const Components = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -454,6 +455,7 @@ export const Components = () => {
 				/>
 				<Divider />
 				<Date label="Date picker" placeholder="Date Picker" handleChange={handleChange} />
+				<TimePicker format={'HH:mm'} />
 				<Divider />
 				<div className="container">
 					<MultiSelectComponent
