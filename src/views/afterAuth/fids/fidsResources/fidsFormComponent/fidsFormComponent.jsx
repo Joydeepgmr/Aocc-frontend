@@ -160,7 +160,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						disabled={isReadOnly}
 						required={true}
 					/>
-					<div className="fids_resources_inputfields">
+					<div className="fids_resources">
 						<InputField
 							label="Height"
 							name="height"
