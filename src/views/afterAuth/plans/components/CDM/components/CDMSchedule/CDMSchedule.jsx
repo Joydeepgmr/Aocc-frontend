@@ -334,7 +334,7 @@ const DailySchedule = ({ tab }) => {
 					render: (std) => std ?? '-',
 				},
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">

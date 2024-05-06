@@ -365,7 +365,7 @@ const Seasonal = ({ tab }) => {
 					: '-',
 		},
 		{
-			title: 'Actions',
+			title: 'ACTIONS',
 			key: 'actions',
 			render: (text, record) => (
 				<div className="action_buttons">
