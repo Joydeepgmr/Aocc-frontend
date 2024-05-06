@@ -32,10 +32,18 @@
 		}
 	}
 }
-.ant-tabs-tab .ant-tabs-tab-active {
+.ant-tabs-tab.ant-tabs-tab-active {
 	color: $light_tab_text;
 	border-bottom: $light_tab_text;
 }
-.ant-tabs .ant-tabs-tab-btn {
-	color: black !important;
+.ant-tabs-tab {
+	:hover {
+		color: $light_tab_text;
+	}
+	:active {
+		color: $light_tab_text;
+	}
+}
+.ant-tabs .ant-tabs-tab:hover {
+	color: $light_tab_text;
 }
