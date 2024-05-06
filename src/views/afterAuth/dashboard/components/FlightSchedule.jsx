@@ -1,5 +1,5 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { GET_FLIGHT_SCHEDULE } from '../../../../api';
 import ButtonComponent from '../../../../components/button/button';
@@ -24,12 +24,15 @@ import { useBaggageBeltDropdown } from '../../../../services/planairportmaster/r
 import { useCheckInDropdown } from '../../../../services/planairportmaster/resources/checkin/checkin';
 import MilestoneChart from './MilestoneChart';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 const FlightSchedule = () => {
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
 	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [milestoneModal, setMilestoneModal] = useState({ isOpen: false, data: { labels: [], milestoneList: [] } });
 	const [utwModal, setUtwModal] = useState(false);
+	const divRef = useRef(null);
+	const [fullScreen, setFullScreen] = useState(false);
 	const getFlightScheduleApiProps = {
 		tab,
 		onSuccess: (data) => {
@@ -149,6 +152,32 @@ const FlightSchedule = () => {
 		);
 		hasNonNullValue && editFlightData({ id: items.flightId, data: items.values });
 	};
+
+	const toggleFullscreen = () => {
+		setFullScreen(!fullScreen);
+		if (document.fullscreenElement === null) {
+			if (divRef.current?.requestFullscreen) {
+				divRef.current.requestFullscreen();
+			} else if (divRef.current?.mozRequestFullScreen) {
+				divRef.current.mozRequestFullScreen();
+			} else if (divRef.current?.webkitRequestFullscreen) {
+				divRef.current.webkitRequestFullscreen();
+			} else if (divRef.current?.msRequestFullscreen) {
+				divRef.current.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document?.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document?.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document?.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+		}
+	};
+
 	const columns = useMemo(() => {
 		let column = [
 			{
@@ -419,32 +448,15 @@ const FlightSchedule = () => {
 		<>
 			<PageLoader loading={isMapLoading || isUpdateLoading} message="It may take sometime..." />
 			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE}?flightType=${tab}`} />
-			<ModalComponent
-				isModalOpen={mapModalOpen?.isOpen}
-				width="60rem"
-				closeModal={closeMapModal}
-				title="Map view"
-				className="view_img_modal"
-			>
-				<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
-			</ModalComponent>
-			<ModalComponent
-				isModalOpen={milestoneModal?.isOpen}
-				width="80rem"
-				closeModal={closeMilestoneModal}
-				className="view_milestone_modal"
-			>
-				<MilestoneChart type={tab} data={milestoneModal?.milestoneList} labels={milestoneModal?.labels} />
-				{/* <img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" /> */}
-			</ModalComponent>
-			<div className="body-containers">
+
+			<div ref={divRef} className={`body-containers ${fullScreen && 'fullScreen_flight_schedule--FullScreen'}`}>
 				<div className="flights-table">
 					<CustomTabs
 						defaultActiveKey="1"
 						items={items}
 						onChange={handleTabChange}
 						extraContent={
-							<div style={{ margin: '1rem 0' }}>
+							<div className="fullScreen_flight_schedule--Container">
 								<Form form={form}>
 									<InputField
 										label="Flight number"
@@ -454,69 +466,99 @@ const FlightSchedule = () => {
 										type="search"
 									/>
 								</Form>
+								{!fullScreen && (
+									<FullscreenOutlined
+										onClick={toggleFullscreen}
+										className="fullScreen_flight_schedule--FullScreenIcon"
+									/>
+								)}
+								{fullScreen && (
+									<FullscreenExitOutlined
+										className="fullScreen_flight_schedule--FullScreenIcon"
+										onClick={toggleFullscreen}
+									/>
+								)}
 							</div>
 						}
 					/>
 				</div>
+				<ModalComponent isModalOpen={utwModal} width="55rem" closeModal={() => setUtwModal(false)}>
+					{isUtwLoading && <PageLoader loading={isUtwLoading} />}
+
+					<div className="utw--Container">
+						<div className="utw--DataContainer">
+							<CustomTypography>Milestone </CustomTypography>
+							<CustomTypography> Start</CustomTypography>
+							<CustomTypography> End</CustomTypography>
+						</div>
+						<div className="utw--DataContainer">
+							<CustomTypography fontWeight={400} fontSize="14px">
+								Catering
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.cateringStartAt ?? '-'}
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.cateringStopAt ?? '-'}
+							</CustomTypography>
+						</div>
+
+						<div className="utw--DataContainer">
+							<CustomTypography fontWeight={400} fontSize="14px">
+								Fueling
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.fuelingStartAt ?? '-'}
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.fuelingStopAt ?? '-'}
+							</CustomTypography>
+						</div>
+						<div className="utw--DataContainer">
+							<CustomTypography fontWeight={400} fontSize="14px">
+								Baggage {tab === 'arrival' ? 'unloading' : 'loading'}
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadStartAt ?? '-')}
+								{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadStartAt ?? '-')}
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadEndAt ?? '-')}
+								{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadEndAt ?? '-')}
+							</CustomTypography>
+						</div>
+						<div className="utw--DataContainer">
+							<CustomTypography fontWeight={400} fontSize="14px">
+								Cleaning
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.cleaningStartAt ?? '-'}
+							</CustomTypography>
+							<CustomTypography fontWeight={400} fontSize="14px">
+								{getUtwData?.data[0]?.cleaningStopAt ?? '-'}
+							</CustomTypography>
+						</div>
+					</div>
+				</ModalComponent>
+				<ModalComponent
+					isModalOpen={milestoneModal?.isOpen}
+					width="80rem"
+					closeModal={closeMilestoneModal}
+					className="view_milestone_modal"
+				>
+					<MilestoneChart type={tab} data={milestoneModal?.milestoneList} labels={milestoneModal?.labels} />
+					{/* <img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" /> */}
+				</ModalComponent>
+				<ModalComponent
+					isModalOpen={mapModalOpen?.isOpen}
+					width="60rem"
+					closeModal={closeMapModal}
+					title="Map view"
+					className="view_img_modal"
+				>
+					<img src={mapModalOpen?.base64Img} alt="base64Img" className="map_img" />
+				</ModalComponent>
 			</div>
-			<ModalComponent isModalOpen={utwModal} width="55rem" closeModal={() => setUtwModal(false)}>
-				{isUtwLoading && <PageLoader loading={isUtwLoading} />}
-
-				<div className="utw--Container">
-					<div className="utw--DataContainer">
-						<CustomTypography>Milestone </CustomTypography>
-						<CustomTypography> Start</CustomTypography>
-						<CustomTypography> End</CustomTypography>
-					</div>
-					<div className="utw--DataContainer">
-						<CustomTypography fontWeight={400} fontSize="14px">
-							Catering
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.cateringStartAt ?? '-'}
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.cateringStopAt ?? '-'}
-						</CustomTypography>
-					</div>
-
-					<div className="utw--DataContainer">
-						<CustomTypography fontWeight={400} fontSize="14px">
-							Fueling
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.fuelingStartAt ?? '-'}
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.fuelingStopAt ?? '-'}
-						</CustomTypography>
-					</div>
-					<div className="utw--DataContainer">
-						<CustomTypography fontWeight={400} fontSize="14px">
-							Baggage {tab === 'arrival' ? 'unloading' : 'loading'}
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadStartAt ?? '-')}
-							{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadStartAt ?? '-')}
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadEndAt ?? '-')}
-							{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadEndAt ?? '-')}
-						</CustomTypography>
-					</div>
-					<div className="utw--DataContainer">
-						<CustomTypography fontWeight={400} fontSize="14px">
-							Cleaning
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.cleaningStartAt ?? '-'}
-						</CustomTypography>
-						<CustomTypography fontWeight={400} fontSize="14px">
-							{getUtwData?.data[0]?.cleaningStopAt ?? '-'}
-						</CustomTypography>
-					</div>
-				</div>
-			</ModalComponent>
 		</>
 	);
 };

@@ -369,3 +369,30 @@
 		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
+
+.fullScreen_flight_schedule {
+	&--FullScreenIcon {
+		cursor: pointer;
+		font-size: 2rem;
+	}
+	&--FullScreen {
+		background-color: white;
+		width: 100vw;
+		height: 100vh;
+		padding: 6rem;
+		position: relative;
+	}
+	&--FullScreenExitIcon {
+		cursor: pointer;
+		font-size: 2rem;
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
+	}
+	&--Container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+	}
+}
