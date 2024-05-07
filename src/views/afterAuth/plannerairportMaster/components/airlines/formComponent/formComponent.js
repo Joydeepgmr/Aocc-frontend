@@ -1,18 +1,17 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState, useEffect, memo } from 'react';
+import dayjs from 'dayjs';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
+import ButtonComponent from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
+import ImageUpload from '../../../../../../components/imageUpload/imageUpload';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
 import CustomSelect from '../../../../../../components/select/select';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
+import { useGetAirlineImage } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import { AirlineTypeData, SelectPaymentData } from '../../../../userAccess/userAccessData';
 import './formComponent.scss';
-import ButtonComponent from '../../../../../../components/button/button';
-import toast from 'react-hot-toast';
-import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
-import dayjs from 'dayjs';
-import ImageUpload from '../../../../../../components/imageUpload/imageUpload';
-import { useGetAirlineImage } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
 const FormComponent = ({
 	isReadOnly,

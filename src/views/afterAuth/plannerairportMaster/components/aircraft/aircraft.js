@@ -126,11 +126,11 @@ const Aircrafts = () => {
 	const handleAddAircraft = (value) => {
 		const data = {
 			...value,
-			remark : value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
-			mainDeck : value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
-			annex : value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
-			address : value?.address ? CapitaliseFirstLetter(value.address) : undefined,
-			ownerName : value?.ownerName ?  CapitaliseFirstLetter(value.ownerName) : undefined,
+			remark: value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			mainDeck: value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
+			annex: value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
+			address: value?.address ? CapitaliseFirstLetter(value.address) : undefined,
+			ownerName: value?.ownerName ? CapitaliseFirstLetter(value.ownerName) : undefined,
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
 			validFrom: value?.validFrom ? ConvertIstToUtc(value?.validFrom) : undefined,
 		};
@@ -147,14 +147,14 @@ const Aircrafts = () => {
 			cabinCrew: value?.cabinCrew,
 			mtow: value?.mtow,
 			mow: value?.mow,
-			country: value?.country,
+			country: value?.nationality,
 			nationality: value?.nationality,
 			validTill: value?.validTill ? ConvertIstToUtc(value?.validTill) : undefined,
-			remark : value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
-			mainDeck : value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
-			annex : value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
-			address : value?.address ? CapitaliseFirstLetter(value.address) : undefined,
-			ownerName : value?.ownerName ?  CapitaliseFirstLetter(value.ownerName) : undefined,
+			remark: value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
+			mainDeck: value?.mainDeck ? CapitaliseFirstLetter(value.mainDeck) : undefined,
+			annex: value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
+			address: value?.address ? CapitaliseFirstLetter(value.address) : undefined,
+			ownerName: value?.ownerName ? CapitaliseFirstLetter(value.ownerName) : undefined,
 		};
 		onUpdateAircraft(data);
 	};
@@ -178,7 +178,7 @@ const Aircrafts = () => {
 								aircraft_id: record?.globalAircraftType?.identifier,
 							});
 						}}
-						// id="edit_button"
+					// id="edit_button"
 					></ButtonComponent>
 					<ButtonComponent
 						type={'iconWithBorderDelete'}
