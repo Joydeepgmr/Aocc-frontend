@@ -165,7 +165,7 @@ function TelexMessage() {
 				],
 			},
 			{
-				title: 'Action',
+				title: 'ACTION',
 				key: 'action',
 				render: (
 					text,
