@@ -10,7 +10,7 @@ const TableComponent = ({
 	columns,
 	data = [],
 	loading = false,
-	onChange = () => { },
+	onChange = () => {},
 	tableTitle = '',
 	emptyText = 'No data available',
 	fetchData,
@@ -66,8 +66,8 @@ const TableComponent = ({
 					values: { [name]: value },
 				});
 			}
-			console.log("value is ", value)
-		}
+			console.log('value is ', value);
+		};
 		const save = async () => {
 			try {
 				const values = await form.validateFields();
@@ -84,7 +84,17 @@ const TableComponent = ({
 		if (editable) {
 			const inputType = editable.type || 'text';
 			childNode = editing ? (
-				inputType === 'time' ? <TimePicker style={{ width: '8rem', height: '4rem' }} onOpenChange={(isOpen) => isOpen === false && toggleEdit(isOpen)} allowClear={false} defaultValue={record[dataIndex] && dayjs(record[dataIndex], 'HH:mm')} autoFocus={true} format='HH:mm' onChange={(_, value) => handleTimeChange(dataIndex, value)} /> :
+				inputType === 'time' ? (
+					<TimePicker
+						style={{ width: '8rem', height: '4rem' }}
+						onOpenChange={(isOpen) => isOpen === false && toggleEdit(isOpen)}
+						allowClear={false}
+						defaultValue={record[dataIndex] && dayjs(record[dataIndex], 'HH:mm')}
+						autoFocus={true}
+						format="HH:mm"
+						onChange={(_, value) => handleTimeChange(dataIndex, value)}
+					/>
+				) : (
 					<Form.Item
 						style={{
 							margin: 0,
@@ -97,7 +107,7 @@ const TableComponent = ({
 						]}
 						name={dataIndex}
 					>
-						{inputType === 'select' ?
+						{inputType === 'select' ? (
 							<Select
 								options={editable?.dropdownData ?? []}
 								ref={inputRef}
@@ -105,12 +115,14 @@ const TableComponent = ({
 								autoFocus={true}
 								onPressEnter={save}
 								onChange={save}
-								placeholder='Select a value'
+								placeholder="Select a value"
 								onBlur={toggleEdit}
-							/> : (
-								<Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
-							)}
+							/>
+						) : (
+							<Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+						)}
 					</Form.Item>
+				)
 			) : (
 				<div className="editable-cell-value-wrap" onClick={toggleEdit}>
 					{children}

@@ -151,6 +151,8 @@ const DailySchedule = ({ tab }) => {
 		record = {
 			...record,
 			date: record?.date ? dayjs(record?.date) : '',
+			sta: record?.sta ? dayjs(record?.sta, 'HH:mm') : '',
+			std: record?.std ? dayjs(record?.std, 'HH:mm') : '',
 		};
 		setRowData(record);
 		openEditModal();
