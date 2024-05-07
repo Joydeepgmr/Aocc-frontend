@@ -26,12 +26,12 @@ import MilestoneChart from './MilestoneChart';
 import VendorMileStone from './VendorMileStone';
 import './style.scss';
 const FlightSchedule = () => {
+	const divRef = useRef(null);
 	const [tab, setTab] = useState('arrival');
 	const [FlightScheduleData, setFlightScheduleData] = useState([]);
 	const [mapModalOpen, setMapModalOpen] = useState({ isOpen: false, data: null });
 	const [milestoneModal, setMilestoneModal] = useState({ isOpen: false, data: { labels: [], milestoneList: [] } });
 	const [utwModal, setUtwModal] = useState(false);
-	const divRef = useRef(null);
 	const [fullScreen, setFullScreen] = useState(false);
 	const getFlightScheduleApiProps = {
 		tab,
