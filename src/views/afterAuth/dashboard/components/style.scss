@@ -364,9 +364,11 @@
 		gap: 1rem;
 	}
 	&--DataContainer {
-		display: grid;
+		width: 20rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 		gap: 1rem;
-		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
 
