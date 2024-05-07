@@ -2,10 +2,28 @@ import { Modal } from 'antd';
 import React from 'react';
 import './modal.scss';
 
-const ModalComponent = ({ isModalOpen, children, width, closeModal, title, className, height }) => {
+const ModalComponent = ({ isModalOpen, children, width = '80%', closeModal, title, className, height = 'auto' }) => {
 	return (
 		<>
 			{isModalOpen && (
+				<>
+					<div className="custom-modal-overlay">
+						<div className="backdrop" onClick={closeModal}></div>
+						<div className={`custom-modal ${className}`} style={{ width, height }}>
+							{title && (
+								<div className="custom-modal-header">
+									<h2>{title}</h2>
+									<button className="close-button" onClick={closeModal}>
+										X
+									</button>
+								</div>
+							)}
+							<div className="custom-modal-content">{children}</div>
+						</div>
+					</div>
+				</>
+			)}
+			{/* {isModalOpen && (
 				<Modal
 					open={isModalOpen}
 					closable={true}
@@ -19,7 +37,7 @@ const ModalComponent = ({ isModalOpen, children, width, closeModal, title, class
 				>
 					{children}
 				</Modal>
-			)}
+			)} */}
 		</>
 	);
 };
