@@ -1,72 +1,69 @@
+import { Steps } from 'antd';
 import React from 'react';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
-import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import './style.scss';
-import { Steps } from 'antd';
 
+const MileStoneSteps = ({ title, data, startKey, endKey }) => {
+	const startedAt = data?.[startKey];
+	const endAt = data?.[endKey];
+	return (
+		<div className="utw--DataContainer">
+			<span>{title}</span>
+			<div className="stepsContainer">
+				<div className="dotContainer">
+					{/*start dot */}
+					<div className={`${startedAt ? 'activeDot' : 'defaultDot'}`}></div>
+					{/* border */}
+					<div className={`${endAt ? 'activeBorder' : 'defaultBorder'}`}></div>
+					{/*end dot */}
+					<div className={`${endAt ? 'activeDot' : 'defaultDot'}`}></div>
+				</div>
+				<div className="timeContainer">
+					<div className={`${startedAt ? 'activeTime' : 'defaultTime'}`}>
+						<span>Start</span>
+						<span>{startedAt ?? '-:-'}</span>
+					</div>
+					<div className={`${endAt ? 'activeTime' : 'defaultTime'}`}>
+						<span>End</span>
+						<span>{endAt ?? '-:-'}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 const VendorMileStone = ({ isUtwLoading, getUtwData, tab }) => {
-	const customDot = (dot) => dot;
+	const customDot = (dot) => <div style={{ color: 'green' }}>{dot}</div>;
 	return (
 		<>
 			{isUtwLoading && <PageLoader loading={isUtwLoading} />}
 
 			<div className="utw--Container">
-				<div className="utw--DataContainer">
-					<CustomTypography>Milestone</CustomTypography>
-					<Steps
-						style={{ width: '20rem' }}
-						current={-1}
-						progressDot={customDot}
-						items={[
-							{
-								title: 'Start',
-								description: '10:35',
-							},
-							{
-								title: 'End',
-								description: '11:20',
-							},
-						]}
-					/>
-					{/* <CustomTypography> Start</CustomTypography>
-					<CustomTypography> End</CustomTypography> */}
-				</div>
-				<div className="utw--DataContainer">
-					<CustomTypography fontWeight={400} fontSize="14px">
-						Catering
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{getUtwData?.data[0]?.cateringStartAt ?? '-'}
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{getUtwData?.data[0]?.cateringStopAt ?? '-'}
-					</CustomTypography>
-				</div>
-
-				<div className="utw--DataContainer">
-					<CustomTypography fontWeight={400} fontSize="14px">
-						Fueling
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{getUtwData?.data[0]?.fuelingStartAt ?? '-'}
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{getUtwData?.data[0]?.fuelingStopAt ?? '-'}
-					</CustomTypography>
-				</div>
-				<div className="utw--DataContainer">
-					<CustomTypography fontWeight={400} fontSize="14px">
-						Baggage {tab === 'arrival' ? 'unloading' : 'loading'}
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadStartAt ?? '-')}
-						{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadStartAt ?? '-')}
-					</CustomTypography>
-					<CustomTypography fontWeight={400} fontSize="14px">
-						{tab === 'arrival' && (getUtwData?.data[0]?.baggageUnloadEndAt ?? '-')}
-						{tab === 'departure' && (getUtwData?.data[0]?.baggageLoadEndAt ?? '-')}
-					</CustomTypography>
-				</div>
+				<MileStoneSteps
+					title="Catering"
+					data={getUtwData?.data[0]}
+					startKey="cateringStartAt"
+					endKey="cateringStopAt"
+				/>
+				<MileStoneSteps
+					title="Fueling"
+					data={getUtwData?.data[0]}
+					startKey="fuelingStartAt"
+					endKey="fuelingStopAt"
+				/>
+				<MileStoneSteps
+					title={`Baggage ${tab === 'arrival' ? 'Unloading' : 'Loading'}`}
+					data={getUtwData?.data[0]}
+					startKey={tab === 'arrival' ? 'baggageUnloadStartAt' : 'baggageLoadStartAt'}
+					endKey={tab === 'arrival' ? 'baggageUnloadEndAt' : 'baggageLoadEndAt'}
+				/>
+				<MileStoneSteps
+					title="Cleaning"
+					data={getUtwData?.data[0]}
+					startKey="cleaningStartAt"
+					endKey="cleaningStopAt"
+				/>
+				{/* 
 				<div className="utw--DataContainer">
 					<CustomTypography fontWeight={400} fontSize="14px">
 						Cleaning
@@ -77,7 +74,7 @@ const VendorMileStone = ({ isUtwLoading, getUtwData, tab }) => {
 					<CustomTypography fontWeight={400} fontSize="14px">
 						{getUtwData?.data[0]?.cleaningStopAt ?? '-'}
 					</CustomTypography>
-				</div>
+				</div> */}
 			</div>
 		</>
 	);
