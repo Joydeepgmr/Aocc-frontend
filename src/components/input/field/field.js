@@ -1,8 +1,9 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Form, Input, InputNumber } from 'antd';
+import { Form, Input, InputNumber, TimePicker } from 'antd';
 import React, { useState } from 'react';
 
 import './field.scss';
+import dayjs from 'dayjs';
 
 const InputField = ({
 	label,
@@ -186,21 +187,15 @@ const InputField = ({
 							pattern: Regex_CheckSpace,
 							message: 'First character cannot be blank.',
 						},
-						{
-							pattern: pattern,
-							message: patternWarning ?? 'Enter the valid format',
-						},
 						{ validator: validator ?? validateRange },
 					]}
 				>
-					<Input
+					<TimePicker
 						placeholder={placeholder}
 						className={'input_field'}
 						disabled={disabled ? disabled : false}
-						suffix={suffixText && <span>{suffixText}</span>}
-						status={status}
-						defaultValue={defaultValue}
-						type="time"
+						allowClear={false}
+						autoFocus={true}
 						format="HH:mm"
 						{...rest}
 					/>
