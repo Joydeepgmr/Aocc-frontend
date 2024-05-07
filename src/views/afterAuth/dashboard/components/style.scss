@@ -360,15 +360,63 @@
 	&--Container {
 		margin: 2rem 0;
 		display: flex;
-		flex-direction: column;
-		gap: 1rem;
+		gap: 2rem;
 	}
 	&--DataContainer {
 		width: 20rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		gap: 1rem;
+		.stepsContainer {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+		.dotContainer {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0rem 1rem;
+			gap: 0.5rem;
+			.defaultDot {
+				border: 0.6rem solid $gray_500;
+				border-radius: 100%;
+				color: $gray_500;
+			}
+			.activeDot {
+				border: 0.6rem solid green;
+				border-radius: 100%;
+				color: green;
+			}
+			.defaultBorder {
+				flex: 1;
+				border: 0.2rem solid $gray_300;
+			}
+			.activeBorder {
+				flex: 1;
+				border: 0.2rem solid green;
+			}
+		}
+		.timeContainer {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			.defaultTime {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				opacity: 0.5;
+			}
+			.activeTime {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+		}
 	}
 }
 

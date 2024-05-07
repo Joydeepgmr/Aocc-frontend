@@ -449,7 +449,7 @@ const FlightSchedule = () => {
 			<PageLoader loading={isMapLoading || isUpdateLoading} message="It may take sometime..." />
 			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE}?flightType=${tab}`} />
 			<div ref={divRef} className={`body-containers ${fullScreen && 'fullScreen_flight_schedule--FullScreen'}`}>
-				<ModalComponent isModalOpen={utwModal} width="55rem" closeModal={() => setUtwModal(false)}>
+				<ModalComponent isModalOpen={utwModal} width="80rem" closeModal={() => setUtwModal(false)}>
 					<VendorMileStone isUtwLoading={isUtwLoading} getUtwData={getUtwData} tab={tab} />
 				</ModalComponent>
 				<ModalComponent

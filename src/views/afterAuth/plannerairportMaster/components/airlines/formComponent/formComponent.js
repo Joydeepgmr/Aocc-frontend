@@ -89,7 +89,9 @@ const FormComponent = ({
 	const isNotEditable = type === 'edit';
 
 	const onFinishHandler = (value) => {
-		!isDefault && (value.url = fileList[0]?.url);
+		if (!isDefault && type !== 'edit') {
+			value.url = fileList?.[0]?.url
+		}
 		value.file = '';
 		handleSubmit(value);
 	};
