@@ -90,14 +90,15 @@ const Alerts = () => {
 			<Drawer title="Alerts" onClose={onClose} open={open}>
 				{open && (
 					<>
-						{notificationData?.length ? (
-							<div id="progress" className="progress-container">
+						{Boolean(notificationData?.length) ? (
+							<div id="progressScroll" className="progress-container">
 								<InfiniteScroll
 									dataLength={notificationData?.length}
 									next={!isGetAllNotificationLoading && fetchNextPageNotification}
 									hasMore={hasNextPageNotification}
-									scrollableTarget="progress"
 									className="infinite-scroll"
+									scrollableTarget="progressScroll"
+									height={"80vh"}
 								>
 									{/* <CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" /> */}
 									{notificationData &&
