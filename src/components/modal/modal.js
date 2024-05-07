@@ -12,7 +12,7 @@ const ModalComponent = ({ isModalOpen, children, width = '80%', closeModal, titl
 						<div className={`custom-modal ${className}`} style={{ width, height }}>
 							{title && (
 								<div className="custom-modal-header">
-									<h2>{title}</h2>
+									<h4>{title}</h4>
 									<button className="close-button" onClick={closeModal}>
 										X
 									</button>
