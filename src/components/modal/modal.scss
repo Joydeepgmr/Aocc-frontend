@@ -1,13 +1,63 @@
 @import '../../styles/sass/mixins';
 
-.modal{
-    font-weight: 600;
-    font-size: 2.4rem;
-     width: 100%;
-     @include disableScroll;
-    .ant-modal-content {
-        max-height: 80vh;
-        overflow: scroll;
-        @include disableScroll;
-    }
+.modal {
+	font-weight: 600;
+	font-size: 2.4rem;
+	width: 100%;
+	@include disableScroll;
+	.ant-modal-content {
+		max-height: 80vh;
+		overflow: scroll;
+		@include disableScroll;
+	}
 }
+
+.backdrop {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.custom-modal {
+	background-color: white;
+	border-radius: 8px;
+	position: relative;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 2rem;
+	overflow: auto;
+}
+
+.custom-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.close-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+//   .custom-modal-content {
+//     /* Add additional styling for modal content */
+//   }
