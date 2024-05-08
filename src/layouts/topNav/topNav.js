@@ -66,10 +66,7 @@ const TopNav = ({ data }) => {
 					<div className="gmr_logo">
 						{logo ? (
 							<>
-								<img src={logo} alt="GMR Logo" />
-								<CustomTypography type="text" fontSize="0.8rem">
-									powered by GMR
-								</CustomTypography>
+								<img className='logo' src={logo} alt="GMR Logo" />
 							</>
 						) : (
 							<img src={gmrLogo} alt="GMR Logo" />

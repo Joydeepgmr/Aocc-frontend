@@ -1,5 +1,8 @@
 @import '../../styles/sass/variables';
 
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+	padding: 0.3rem 1rem !important;
+}
 .custom_tabs_card {
 	.ant-tabs-nav {
 		.ant-tabs-tab {

@@ -10,9 +10,9 @@ import './aircraftRegistrationForm.scss';
 const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }) => {
 	const isNotEditable = type === 'edit';
 	const onError = ({ response: { data: { message } } }) => toast.error(message);
-    const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
-    const { data: countryDropdownData } = useCountriesDropdown({ onError });
-	
+	const { data: airportDropdownData } = useGlobalAirportDropdown({ onError });
+	const { data: countryDropdownData } = useCountriesDropdown({ onError });
+
 	const SelectAircraftData = useMemo(() => {
 		return aircraftTypeDropdownData?.map((data) => {
 			return { label: data.identifier, value: data.id, id: data.id }
@@ -37,8 +37,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					pattern='^(?!\s).*\S(?<!\s)$'
 					patternWarning='Space not allowed'
 					placeholder={!isReadOnly && "Enter the airport name"}
-					min={6}
-					max={6}
+					min={5}
+					max={5}
 					className="custom_input"
 					required
 					disabled={isReadOnly}
@@ -75,6 +75,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					patternWarning='Space not allowed'
 					min={4}
 					max={4}
+					required
 					placeholder={!isReadOnly && "Enter the ICAO code"}
 					className="custom_input"
 					disabled={isReadOnly || isNotEditable}

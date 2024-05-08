@@ -130,6 +130,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 		const { data } = aircraftTypeModal;
 		setDockignSystemCheck(data?.isUsingDockingSystem);
 		if (data) {
+			console.log("data data is ", getFormValues(data));
 			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}
@@ -185,6 +186,13 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				render: (text) => text || '-',
 			},
 			{
+				title: '4L',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
 				title: 'MODEL',
 				dataIndex: 'model',
 				key: 'model',
@@ -197,13 +205,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				key: 'globalAirline',
 				align: 'center',
 				render: (text) => text?.name || '-',
-			},
-			{
-				title: '4L',
-				dataIndex: 'icaoCode',
-				key: 'icaoCode',
-				align: 'center',
-				render: (text) => text || '-',
 			},
 			{
 				title: 'A/C FAMILY',

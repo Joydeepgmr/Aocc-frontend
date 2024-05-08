@@ -129,16 +129,6 @@ const FormComponent = ({
 			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="airline_form_container">
 					<div className="airline_form_inputfields">
-						<InputField
-							label="Airline Name"
-							name="name"
-							max={32}
-							placeholder={!isReadOnly && 'Enter the airline name'}
-							className="custom_input"
-							disabled={isReadOnly}
-							required
-							isArticle={false}
-						/>
 						<OtpField
 							otpLength={2}
 							label="Two Letter Code"
@@ -152,6 +142,16 @@ const FormComponent = ({
 							name="threeLetterCode"
 							disabled={isReadOnly || isNotEditable}
 							required
+						/>
+						<InputField
+							label="Airline Name"
+							name="name"
+							max={32}
+							placeholder={!isReadOnly && 'Enter the airline name'}
+							className="custom_input"
+							disabled={isReadOnly}
+							required
+							isArticle={false}
 						/>
 						{type !== 'edit' && !isReadOnly && (
 							<ImageUpload

@@ -12,8 +12,7 @@ import './airlineForm.scss';
 import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 import { useGetAirlineImage } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
-const AirlineForm = ({ isReadOnly, type, form }) => {
-	const [fileList, setFileList] = useState([]);
+const AirlineForm = ({ isReadOnly, type, form,fileList,setFileList }) => {
 	const [isUploadDisable, setIsUploadDisable] = useState(true);
 	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
@@ -27,12 +26,15 @@ const AirlineForm = ({ isReadOnly, type, form }) => {
 		onSuccess: (data) => {
 			if (data?.data?.value) {
 				setFileList([{ url: data?.data?.value }]);
-				// form.setFieldsValue({
-				// 	url: data?.data?.value,
-				// });
+				form.setFieldsValue({
+					file: data?.data?.value,
+				});
 				setIsDefault(true);
 			} else {
 				setFileList([]);
+				form.setFieldsValue({
+					file: null,
+				});
 			}
 			setIsUploadDisable(false);
 		},

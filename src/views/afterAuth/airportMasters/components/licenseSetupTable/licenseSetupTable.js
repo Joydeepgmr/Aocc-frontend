@@ -61,7 +61,6 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 	const onFinishHandler = (values) => {
 		values = getFormValues(values);
 		values.file = '';
-		values.url = fileList?.[0]?.url;
 		values.city = values?.city ? CapitaliseFirstLetter(values.city) : undefined;
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
@@ -175,7 +174,6 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 							type="filledText"
 							className="custom_button_cancel"
 							onClick={() => {
-								setFileList([]);
 								closeAddModal();
 							}}
 						/>

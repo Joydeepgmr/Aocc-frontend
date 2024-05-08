@@ -59,7 +59,6 @@ const CustomSelect = ({
 					filterOption={filterOption}
 					{...rest}
 					defaultValue={defaultValue}
-					getPopupContainer={() => document.querySelector('.dropdown-children')}
 				>
 					{SelectData.map((option, index) => (
 						<Select.Option key={index} value={option.value}>
@@ -67,7 +66,6 @@ const CustomSelect = ({
 						</Select.Option>
 					))}
 				</Select>
-				<div className="dropdown-children"></div>
 			</Form.Item>
 		</>
 	);

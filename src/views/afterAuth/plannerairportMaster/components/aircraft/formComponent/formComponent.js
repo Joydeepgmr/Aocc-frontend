@@ -79,7 +79,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						<InputField
 							label="Registration"
 							name="registration"
-							placeholder={!isReadOnly && 'Enter the airport name'}
+							placeholder={!isReadOnly && 'Enter the Registration'}
 							min={4}
 							max={12}
 							className="custom_input"
@@ -104,7 +104,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							placeholder={!isReadOnly && 'Enter the IATA code'}
 							className="custom_input"
 							required
-							disabled={isReadOnly}
+							disabled={isReadOnly || isNotEditable}
 						/>
 						<InputField
 							label="ICAO Code"
@@ -113,6 +113,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							max={4}
 							placeholder={!isReadOnly && 'Enter the ICAO code'}
 							className="custom_input"
+							required
 							disabled={isReadOnly || isNotEditable}
 						/>
 					</div>
