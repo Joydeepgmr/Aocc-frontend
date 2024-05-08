@@ -1,6 +1,7 @@
 import { Modal } from 'antd';
 import React from 'react';
 import './modal.scss';
+import CustomTypography from '../typographyComponent/typographyComponent';
 
 const ModalComponent = ({ isModalOpen, children, width = '80%', closeModal, title, className, height = 'auto' }) => {
 	return (
@@ -12,7 +13,7 @@ const ModalComponent = ({ isModalOpen, children, width = '80%', closeModal, titl
 						<div className={`custom-modal ${className}`} style={{ width, height }}>
 							{title && (
 								<div className="custom-modal-header">
-									<h4>{title}</h4>
+									<CustomTypography>{title}</CustomTypography>
 									<button className="close-button" onClick={closeModal}>
 										X
 									</button>
