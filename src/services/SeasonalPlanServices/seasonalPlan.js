@@ -27,6 +27,23 @@ export const useGetSeasonalPlans = (flightType, tab, props) => {
 	return response;
 };
 
+export const useGetFlightSchedulePlans = (flightType, tab, { search }, props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-flight-schedule', flightType, search, tab],
+		queryFn: async ({ pageParam: pagination = {} }) =>
+			await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}${search ? `&searchQuery=${search}` : ''}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.data?.paginated?.isMore) {
+				return lastPage?.data?.paginated;
+			}
+			return false;
+		},
+		...props,
+	});
+
+	return response;
+};
+
 export const usePostSeasonalPlans = (props) => {
 	const response = useMutation({
 		mutationKey: ['post-seasonal-plans'],

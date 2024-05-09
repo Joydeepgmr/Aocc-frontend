@@ -17,14 +17,6 @@ const Date = ({
 	defaultValue,
 	onChange,
 }) => {
-	const renderLabel = () => {
-		return (
-			<>
-				{label}
-				{/* {required && <span style={{ color: 'red' }}> *</span>} */}
-			</>
-		);
-	};
 	const disablePastDates = (current) => {
 		let customDate = dayjs().format('YYYY-MM-DD');
 		return current && current < dayjs(customDate, 'YYYY-MM-DD');
@@ -35,7 +27,7 @@ const Date = ({
 	};
 	return (
 		<Form.Item
-			label={renderLabel()}
+			label={label ?? null}
 			name={name}
 			className={`${className} date_form_item`}
 			rules={[

@@ -12,11 +12,13 @@ import {
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import './formComponent.scss';
+import { useGetAircraftSyncData } from '../../../../../../services/PlannerAirportMaster/PlannerAircraftAirportMaster';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
-
+	const watchRegistration = Form.useWatch('registration', form);
 	const isNotEditable = type === 'edit';
 	const onError = ({
 		response: {
@@ -36,7 +38,20 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			return { label: data.name, value: data.name, id: data.name };
 		});
 	}, [countryDropdownData]);
-
+	const getAircraftSyncedData = {
+		onSuccess: (data) => {
+			if (data) {
+				data.validTill = data?.validTill ? dayjs(data?.validTill) : undefined;
+				data.validFrom = data?.validFrom ? dayjs(data?.validFrom) : undefined;
+				data.aircraft_id = data?.globalAircraftType?.id ?? null;
+				form.setFieldsValue(data);
+			}
+		},
+	};
+	const { isLoading: isSyncedDataLoading } = useGetAircraftSyncData(
+		watchRegistration?.length === 5 ? watchRegistration : '',
+		getAircraftSyncedData
+	);
 	const onFinishHandler = (value) => {
 		handleSubmit(value);
 	};
@@ -69,6 +84,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 
 	return (
 		<div key={initialValue?.id}>
+			<PageLoader isLoading={isSyncedDataLoading} />
 			<Form
 				form={form}
 				layout="vertical"
@@ -295,7 +311,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							name="validTill"
 							format="MM-DD-YYYY"
 							className="custom_date"
-							disabled={isReadOnly || !isValidFrom}
+							disabled={isReadOnly || isNotEditable}
 							defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
 							isDisabledDate={true}
 							disabledDate={(current) => {

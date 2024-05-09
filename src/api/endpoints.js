@@ -85,6 +85,7 @@ export const GET_PLANNER_AIRCRAFT = '/planner-aircraft/paginated';
 export const POST_PLANNER_AIRCRAFT = '/planner-aircraft/';
 export const DELETE_PLANNER_AIRCRAFT = '/planner-aircraft';
 export const UPDATE_PLANNER_AIRCRAFT = '/planner-aircraft';
+export const GET_AIRCRAFT_SYNC_DATA = '/global-aircraft-register/get-details?registration=';
 
 /*--------------------------planner airline master ---------------------*/
 
@@ -93,7 +94,7 @@ export const POST_PLANNER_AIRLINE = '/planner-airline';
 export const DELETE_PLANNER_AIRLINE = '/planner-airline';
 export const UPDATE_PLANNER_AIRLINE = '/planner-airline';
 export const BULK_IMPORT_PLANNER_AIRLINE = '/planner-airline/bulk';
-export const GET_AIRLINE_IMAGE = '/system-constant/check-image-airline';
+export const GET_AIRLINE_SYNC_DATA = '/global-airline/get-airline?threeLetterCode=';
 
 /*--------------------------Manage Access ---------------------*/
 

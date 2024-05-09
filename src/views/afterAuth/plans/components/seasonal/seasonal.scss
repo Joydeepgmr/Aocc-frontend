@@ -83,6 +83,12 @@
 .custom_inputField::placeholder {
 	color: $black;
 }
+.custom_inputField {
+	width: 20rem;
+}
+.custom_dateRange {
+	width: 25rem !important;
+}
 
 .custom_dropdownButton {
 	height: auto;

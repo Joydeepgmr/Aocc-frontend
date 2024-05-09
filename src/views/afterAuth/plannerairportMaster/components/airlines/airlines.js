@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Common_table from '../../common_wrapper/common_table/common_table';
-import Common_Card from '../../common_wrapper/common_card.js/common_card';
 import { Form } from 'antd';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_PLANNER_AIRLINE } from '../../../../../api';
+import Delete from '../../../../../assets/Delete.svg';
+import Edit from '../../../../../assets/Edit.svg';
+import ButtonComponent from '../../../../../components/button/button';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
+import ModalComponent from '../../../../../components/modal/modal';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
+import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useDeletePlannerAirline,
 	useGetAllPlannerAirline,
@@ -9,23 +19,13 @@ import {
 	useUpdatePlannerAirline,
 	useUploadCSVPlannerAirline,
 } from '../../../../../services';
-import ButtonComponent from '../../../../../components/button/button';
-import Delete from '../../../../../assets/Delete.svg';
-import Edit from '../../../../../assets/Edit.svg';
-import FormComponent from './formComponent/formComponent';
-import { useQueryClient } from 'react-query';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
-import ModalComponent from '../../../../../components/modal/modal';
-import dayjs from 'dayjs';
-import toast from 'react-hot-toast';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
-import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import { useDownloadCSV } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
-import { GET_PLANNER_AIRLINE } from '../../../../../api';
 import { CapitaliseFirstLetter } from '../../../../../utils';
+import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
+import Common_Card from '../../common_wrapper/common_card.js/common_card';
+import Common_table from '../../common_wrapper/common_table/common_table';
+import FormComponent from './formComponent/formComponent';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
@@ -36,7 +36,6 @@ const Airlines = () => {
 	const [detailModal, setDetailModal] = useState(false);
 	const [rowData, setRowData] = useState({});
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
-	const [isUploadDisable, setIsUploadDisable] = useState(true);
 	const [fileList, setFileList] = useState([]);
 	const [form] = Form.useForm();
 
@@ -96,7 +95,6 @@ const Airlines = () => {
 		setRowData({});
 		setIsAddModalOpen(false);
 		setFileList([]);
-		setIsUploadDisable(true);
 	};
 
 	const handleAddAirlineError = (error) => {
@@ -399,7 +397,6 @@ const Airlines = () => {
 				isModalOpen={isAddModalOpen}
 				closeModal={() => {
 					setFileList([])
-					setIsUploadDisable(true)
 					setIsAddModalOpen(false);
 					setRowData({});
 					form.resetFields();
@@ -423,8 +420,6 @@ const Airlines = () => {
 						handleSubmit={handleAddAirline}
 						fileList={fileList}
 						setFileList={setFileList}
-						isUploadDisable={isUploadDisable}
-						setIsUploadDisable={setIsUploadDisable}
 					/>
 				</div>
 			</ModalComponent>
