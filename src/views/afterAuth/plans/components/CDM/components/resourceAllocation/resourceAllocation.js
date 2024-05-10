@@ -1,23 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import TopHeader from '../../../../../../../components/topHeader/topHeader';
-import './resourceAllocation.scss';
-import CustomTabs from '../../../../../../../components/customTabs/customTabs';
-import TimelineDesign from '../../../../../../../components/timeline/timeline';
-import Button from '../../../../../../../components/button/button';
-import CustomSelect from '../../../../../../../components/select/select';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import React, { useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA } from '../../../../../../../api';
+import Button from '../../../../../../../components/button/button';
+import CustomTabs from '../../../../../../../components/customTabs/customTabs';
+import CustomSelect from '../../../../../../../components/select/select';
+import TimelineDesign from '../../../../../../../components/timeline/timeline';
 import {
 	useGetAllTimelineData,
 	useGetTimelineGroupData,
 	useRunRuleEngine,
 	useUpdateResourceAllocation,
 } from '../../../../../../../services';
-import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
-import dayjs from 'dayjs';
-import { useQueryClient } from 'react-query';
-import toast from 'react-hot-toast';
 import SocketEventListener from '../../../../../../../socket/listner/socketListner';
-import { GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA } from '../../../../../../../api';
+import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
+import './resourceAllocation.scss';
 
 const ResourceAllocation = () => {
 	const queryClient = useQueryClient();

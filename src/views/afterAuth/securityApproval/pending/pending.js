@@ -126,7 +126,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 							setRowData(record);
 							rowData && handleStatus({ status: 'approved' });
 						}}
-						type="iconWithBorder"
+						type="iconWithBorderCheck"
 						icon={checkIcon}
 						className="pending--approve_button"
 					/>
@@ -135,7 +135,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 							setRowData(record);
 							rowData && handleStatus({ status: 'rejected' });
 						}}
-						type="iconWithBorder"
+						type="iconWithBorderDelete"
 						icon={crossIcon}
 						className="pending--cross_button"
 					/>
@@ -176,7 +176,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 						</CustomTypography>
 					</div>
 					<div className="pending--box_container">
-						<img src={rowData?.image} alt="biometric" className="pending--biometric" />
+						<img src={rowData?.customerDocuments[0]?.userUrl} alt="biometric" className="pending--biometric" />
 						<CustomTypography color="#909296">Biometric Image</CustomTypography>
 					</div>
 				</div>

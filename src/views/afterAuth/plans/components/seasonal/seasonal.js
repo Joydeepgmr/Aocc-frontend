@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
@@ -8,10 +8,8 @@ import editIcon from '../../../../../assets/logo/edit.svg';
 import Button from '../../../../../components/button/button';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
-import InputField from '../../../../../components/input/field/field';
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import DateRange from '../../../../../components/rangePicker/rangePicker';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useDownloadCSV,
@@ -37,11 +35,7 @@ const Seasonal = ({ tab }) => {
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
-	const [filter, setFilter] = useState({ date: null, search: null })
 	const [form] = Form.useForm();
-	const [filterForm] = Form.useForm();
-	const searchedValue = Form.useWatch('search', filterForm);
-	const dateRangeValue = Form.useWatch('date', filterForm);
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
 		onError: (error) => handleGetSeasonalError(error),
@@ -226,29 +220,14 @@ const Seasonal = ({ tab }) => {
 	];
 
 	const operations = (
-		<Form form={filterForm} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-			<DateRange
-				name="date"
-				placeholder={["Flight From", 'Flight Till']}
-				className="custom_dateRange"
-				warning="Required field"
-			/>
-			<InputField
-				label="search"
-				name="search"
-				placeholder="Search"
-				className="custom_inputField"
-				warning="Required field"
-				type="search"
-			/>
-
+		<div>
 			<DropdownButton
 				dropdownItems={dropdownItems}
 				buttonText="Actions"
 				className="custom_dropdownButton"
 				onChange={handleDropdownItemClick}
 			/>
-		</Form>
+		</div>
 	);
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -314,13 +293,6 @@ const Seasonal = ({ tab }) => {
 			key: 'flightNo',
 			align: 'center',
 			render: (flightNo) => flightNo ?? '-',
-		},
-		{
-			title: 'FLDT',
-			dataIndex: 'date',
-			key: 'date',
-			align: 'center',
-			render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
 		},
 		{
 			title: 'CSGN',
@@ -434,34 +406,6 @@ const Seasonal = ({ tab }) => {
 			),
 		},
 	];
-	useEffect(() => {
-		if (dateRangeValue?.length) {
-			let [startDate, endDate] = dateRangeValue;
-			startDate = ConvertToDateTime(startDate);
-			endDate = ConvertToDateTime(endDate);
-			console.log("date filter is ", startDate, endDate)
-			setFilter({ ...filter, date: [startDate, endDate] });
-			setSeasonalData([])
-		} else {
-			setFilter({ ...filter, date: null });
-		}
-	}, [dateRangeValue])
-	useEffect(() => {
-		let debounceTimer;
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(() => {
-			if (searchedValue != undefined) {
-				if (searchedValue) {
-					setFilter({ ...filter, search: searchedValue });
-				} else {
-					setFilter({ ...filter, search: undefined });
-				}
-				console.log("search filter is ", searchedValue)
-				setSeasonalData([]);
-			}
-		}, 500);
-		return () => clearTimeout(debounceTimer);
-	}, [searchedValue])
 
 	return (
 		<>

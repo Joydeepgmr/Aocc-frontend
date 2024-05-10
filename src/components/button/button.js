@@ -1,7 +1,7 @@
 import React from 'react';
 import './button.scss';
 import { Button } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, icon, alt, ...rest }) => {
 	let buttonContent;
@@ -18,6 +18,10 @@ const ButtonComponent = ({ title, onClick, disabled, type, className, isSubmit, 
 			break;
 		case 'iconWithBorderEdit':
 			buttonContent = <EditOutlined />;
+			buttonTypeClass = 'iconBorderButton';
+			break;
+		case 'iconWithBorderCheck':
+			buttonContent = <CheckOutlined />;
 			buttonTypeClass = 'iconBorderButton';
 			break;
 		case 'iconWithBorderDelete':
