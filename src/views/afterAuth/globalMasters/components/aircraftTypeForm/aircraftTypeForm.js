@@ -28,6 +28,7 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 		form.setFieldValue('isUsingDockingSystem', !isCheck);
 		setIsCheck(!isCheck);
 	};
+	console.log(" data is SelectedAirlineData", SelectedAirlineData)
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="aircraft_type_form_container">
@@ -40,7 +41,7 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					className="custom_input"
 					max={32}
 					required
-					disabled={isReadOnly}
+					disabled={isReadOnly || isNotEditable}
 				/>
 				<InputField
 					label="IATA Code"
@@ -83,7 +84,8 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					max={4}
 					placeholder={!isReadOnly && 'Enter the ICAO Code'}
 					className="custom_input"
-					disabled={isReadOnly}
+					required
+					disabled={isReadOnly || isNotEditable}
 				/>
 				<InputField
 					label="ICAO Code Modified"

@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import editIcon from '../../../../../../../assets/logo/edit.svg';
@@ -14,7 +14,7 @@ import UploadCsvModal from '../../../../../../../components/uploadCsvModal/uploa
 import {
 	useEditSeasonalPlanArrival,
 	useEditSeasonalPlanDeparture,
-	useGetSeasonalPlans,
+	useGetFlightSchedulePlans,
 	usePostSeasonalPlans,
 	useUploadCSV,
 } from '../../../../../../../services/SeasonalPlanServices/seasonalPlan';
@@ -24,6 +24,7 @@ import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 
 import { GET_SEASONAL_PLANS } from '../../../../../../../api';
+import DateRange from '../../../../../../../components/rangePicker/rangePicker';
 import SocketEventListener from '../../../../../../../socket/listner/socketListner';
 import './CDMSchedule.scss';
 
@@ -33,10 +34,14 @@ const DailySchedule = ({ tab }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [filter, setFilter] = useState({ date: null, search: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
+	const [filterForm] = Form.useForm();
+	const searchedValue = Form.useWatch('search', filterForm);
+	const dateRangeValue = Form.useWatch('date', filterForm);
 
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
@@ -62,7 +67,7 @@ const DailySchedule = ({ tab }) => {
 		hasNextPage,
 		fetchNextPage,
 		refetch,
-	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
+	} = useGetFlightSchedulePlans(flightType, tab, filter, getSeasonalHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -218,7 +223,13 @@ const DailySchedule = ({ tab }) => {
 	console.log(index, flightType);
 
 	const operations = (
-		<div style={{ margin: '1rem 0', display: 'flex', gap: '1rem' }}>
+		<Form form={filterForm} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+			<DateRange
+				name="date"
+				placeholder={['Flight From', 'Flight Till']}
+				className="custom_dateRange"
+				warning="Required field"
+			/>
 			<InputField
 				label="search"
 				name="search"
@@ -234,7 +245,7 @@ const DailySchedule = ({ tab }) => {
 				className="custom_dropdownButton"
 				onChange={handleDropdownItemClick}
 			/>
-		</div>
+		</Form>
 	);
 
 	const handleUploadCsvSuccess = () => {
@@ -395,7 +406,34 @@ const DailySchedule = ({ tab }) => {
 			),
 		},
 	];
-
+	useEffect(() => {
+		if (dateRangeValue != undefined) {
+			if (dateRangeValue?.length) {
+				let [startDate, endDate] = dateRangeValue;
+				startDate = ConvertToDateTime(startDate);
+				endDate = ConvertToDateTime(endDate);
+				console.log('date filter is ', startDate, endDate);
+				setFilter({ ...filter, date: [startDate, endDate] });
+			} else {
+				setFilter({ ...filter, date: null });
+			}
+		}
+	}, [dateRangeValue]);
+	useEffect(() => {
+		let debounceTimer;
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			if (searchedValue != undefined) {
+				if (searchedValue) {
+					setFilter({ ...filter, search: searchedValue });
+				} else {
+					setFilter({ ...filter, search: undefined });
+				}
+				console.log('search filter is ', searchedValue);
+			}
+		}, 500);
+		return () => clearTimeout(debounceTimer);
+	}, [searchedValue]);
 	return (
 		<>
 			<SocketEventListener

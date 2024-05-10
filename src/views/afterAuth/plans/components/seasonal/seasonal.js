@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { useQueryClient } from 'react-query';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_SEASONAL_PLANS } from '../../../../../api';
+import editIcon from '../../../../../assets/logo/edit.svg';
 import Button from '../../../../../components/button/button';
-import ModalComponent from '../../../../../components/modal/modal';
-import FormComponent from '../formComponent/formComponent';
-import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import Filter from '../../../../../assets/Filter.svg';
-import InputField from '../../../../../components/input/field/field';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
+import InputField from '../../../../../components/input/field/field';
+import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import Arrival from './components/arrival/arrival';
-import Departure from './components/departure/departure';
-import editIcon from '../../../../../assets/logo/edit.svg';
-import { ConvertUtcToIst, ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
+import DateRange from '../../../../../components/rangePicker/rangePicker';
+import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
+	useDownloadCSV,
 	useEditSeasonalPlanArrival,
+	useEditSeasonalPlanDeparture,
 	useGetSeasonalPlans,
 	usePostSeasonalPlans,
-	useEditSeasonalPlanDeparture,
 	useUploadCSV,
-	useDownloadCSV,
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
-import { GET_SEASONAL_PLANS } from '../../../../../api';
+import { ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
+import FormComponent from '../formComponent/formComponent';
+import Arrival from './components/arrival/arrival';
+import Departure from './components/departure/departure';
 import './seasonal.scss';
 
 const Seasonal = ({ tab }) => {
@@ -38,8 +37,11 @@ const Seasonal = ({ tab }) => {
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
+	const [filter, setFilter] = useState({ date: null, search: null })
 	const [form] = Form.useForm();
-
+	const [filterForm] = Form.useForm();
+	const searchedValue = Form.useWatch('search', filterForm);
+	const dateRangeValue = Form.useWatch('date', filterForm);
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
 		onError: (error) => handleGetSeasonalError(error),
@@ -224,7 +226,13 @@ const Seasonal = ({ tab }) => {
 	];
 
 	const operations = (
-		<div style={{ margin: '1rem 0', display: 'flex', gap: '1rem' }}>
+		<Form form={filterForm} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+			<DateRange
+				name="date"
+				placeholder={["Flight From", 'Flight Till']}
+				className="custom_dateRange"
+				warning="Required field"
+			/>
 			<InputField
 				label="search"
 				name="search"
@@ -240,7 +248,7 @@ const Seasonal = ({ tab }) => {
 				className="custom_dropdownButton"
 				onChange={handleDropdownItemClick}
 			/>
-		</div>
+		</Form>
 	);
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -344,19 +352,19 @@ const Seasonal = ({ tab }) => {
 		},
 		index === '1'
 			? {
-					title: 'STA',
-					dataIndex: 'sta',
-					key: 'sta',
-					align: 'center',
-					render: (sta) => sta ?? '-',
-				}
+				title: 'STA',
+				dataIndex: 'sta',
+				key: 'sta',
+				align: 'center',
+				render: (sta) => sta ?? '-',
+			}
 			: {
-					title: 'STD',
-					dataIndex: 'std',
-					key: 'std',
-					align: 'center',
-					render: (std) => std ?? '-',
-				},
+				title: 'STD',
+				dataIndex: 'std',
+				key: 'std',
+				align: 'center',
+				render: (std) => std ?? '-',
+			},
 		{
 			title: 'FREQ',
 			dataIndex: 'seasonalPlan',
@@ -426,6 +434,34 @@ const Seasonal = ({ tab }) => {
 			),
 		},
 	];
+	useEffect(() => {
+		if (dateRangeValue?.length) {
+			let [startDate, endDate] = dateRangeValue;
+			startDate = ConvertToDateTime(startDate);
+			endDate = ConvertToDateTime(endDate);
+			console.log("date filter is ", startDate, endDate)
+			setFilter({ ...filter, date: [startDate, endDate] });
+			setSeasonalData([])
+		} else {
+			setFilter({ ...filter, date: null });
+		}
+	}, [dateRangeValue])
+	useEffect(() => {
+		let debounceTimer;
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			if (searchedValue != undefined) {
+				if (searchedValue) {
+					setFilter({ ...filter, search: searchedValue });
+				} else {
+					setFilter({ ...filter, search: undefined });
+				}
+				console.log("search filter is ", searchedValue)
+				setSeasonalData([]);
+			}
+		}, 500);
+		return () => clearTimeout(debounceTimer);
+	}, [searchedValue])
 
 	return (
 		<>

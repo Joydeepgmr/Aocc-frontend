@@ -1,11 +1,12 @@
 import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
 import {
 	DELETE_PLANNER_AIRCRAFT,
+	GET_AIRCRAFT_SYNC_DATA,
 	GET_PLANNER_AIRCRAFT,
 	POST_PLANNER_AIRCRAFT,
 	UPDATE_PLANNER_AIRCRAFT,
 } from '../../api';
-import { Delete, Patch, Post } from '../HttpServices/HttpServices';
+import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetAllPlannerAircraft = (props) => {
 	const response = useInfiniteQuery({
@@ -76,4 +77,15 @@ export const useAircraftDropdown = (props) => {
 	});
 	const data = response?.data?.data ?? [];
 	return { ...response, data };
+};
+
+export const useGetAircraftSyncData = (registrationNo, props) => {
+	const response = useQuery({
+		queryKey: ['get-aircraft-sync-data', registrationNo],
+		queryFn: async () => await Get(`${GET_AIRCRAFT_SYNC_DATA}${registrationNo}`),
+		enabled: !!registrationNo,
+		...props,
+	});
+
+	return response;
 };

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import InputField from '../../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
 import toast from 'react-hot-toast';
@@ -8,8 +8,9 @@ import { SelectData } from '../../../userAccess/userAccessData';
 import OtpField from '../../../../../components/input/otp/otp';
 import { useTimezoneDropdown, useCountriesDropdown } from '../../../../../services/globalMasters/globalMaster';
 import './airportForm.scss';
+import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 
-const AirportForm = ({ isReadOnly, type }) => {
+const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 
 	const onError = ({
 		response: {
@@ -43,11 +44,20 @@ const AirportForm = ({ isReadOnly, type }) => {
 					placeholder={!isReadOnly && "Enter the airport name"}
 					className="custom_input"
 					disabled={isReadOnly}
-					max={32}
+					max={30}
 					required
 				/>
 				<OtpField otpLength={3} label="IATA Code" pattern='^[a-zA-Z0-9]+$' required name="iataCode" disabled={isReadOnly || isNotEditable} />
 				<OtpField otpLength={4} label="ICAO Code" pattern='^[a-zA-Z0-9]+$' required name="icaoCode" disabled={isReadOnly || isNotEditable} />
+				<ImageUpload
+					{...{
+						fileList,
+						setFileList,
+						required: true,
+						name: 'file',
+						label: 'Airport logo',
+					}}
+				/>
 			</div>
 			<div className="airport_setup_form_inputfields">
 				<InputField

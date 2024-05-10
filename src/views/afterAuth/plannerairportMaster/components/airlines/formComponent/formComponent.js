@@ -1,18 +1,18 @@
 import { Divider, Form } from 'antd';
-import React, { useMemo, useState, useEffect, memo } from 'react';
+import dayjs from 'dayjs';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
+import ButtonComponent from '../../../../../../components/button/button';
 import Date from '../../../../../../components/datapicker/datepicker';
+import ImageUpload from '../../../../../../components/imageUpload/imageUpload';
 import InputField from '../../../../../../components/input/field/field';
 import OtpField from '../../../../../../components/input/otp/otp';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import CustomSelect from '../../../../../../components/select/select';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
+import { useGetAirlineSyncData } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
 import { AirlineTypeData, SelectPaymentData } from '../../../../userAccess/userAccessData';
 import './formComponent.scss';
-import ButtonComponent from '../../../../../../components/button/button';
-import toast from 'react-hot-toast';
-import { useCountriesDropdown } from '../../../../../../services/globalMasters/globalMaster';
-import dayjs from 'dayjs';
-import ImageUpload from '../../../../../../components/imageUpload/imageUpload';
-import { useGetAirlineImage } from '../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
 const FormComponent = ({
 	isReadOnly,
@@ -24,12 +24,11 @@ const FormComponent = ({
 	form,
 	fileList,
 	setFileList,
-	isUploadDisable,
-	setIsUploadDisable,
 }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const [isDefault, setIsDefault] = useState(false);
+	const [isUploadDisable, setIsUploadDisable] = useState(false);
 	const onError = ({
 		response: {
 			data: { message },
@@ -39,25 +38,30 @@ const FormComponent = ({
 	const watchOtp = Form?.useWatch('threeLetterCode', form);
 	// const watchURL = Form?.useWatch('file', form);
 	const getAirlineImageHandler = {
-		onSuccess: (data) => {
-			if (data?.data?.value) {
-				setFileList([{ url: data?.data?.value }]);
-				form.setFieldsValue({
-					file: data?.data?.value,
-				});
+		onSuccess: ({ airlineData = {}, airlineImage = '' }) => {
+			if (airlineData) {
+				delete airlineData.threeLetterCode;
+				delete airlineData.twoLetterCode;
+				airlineData.validTill = airlineData?.validTill ? dayjs(airlineData?.validTill) : undefined;
+				airlineData.validFrom = airlineData?.validFrom ? dayjs(airlineData?.validFrom) : undefined;
+				form.setFieldsValue({ ...airlineData, file: airlineImage });
+			}
+			if (airlineImage) {
+				setFileList([{ url: airlineImage }]);
 				setIsDefault(true);
+				setIsUploadDisable(false);
 			} else {
 				setFileList([]);
+				form.setFieldsValue({ file: '' });
 			}
-			setIsUploadDisable(false);
 		},
 		onError: (error) => {
 			setIsDefault(false);
 		},
 	};
 
-	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineImage(
-		Array.isArray(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
+	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineSyncData(
+		Array.isArray?.(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
 		getAirlineImageHandler
 	);
 
@@ -107,17 +111,6 @@ const FormComponent = ({
 	}, [initialValue]);
 
 	useEffect(() => {
-		if (Array.isArray(watchOtp) ? watchOtp?.join('')?.length < 3 : watchOtp?.length < 3) {
-			setFileList([]);
-			setIsDefault(false);
-			setIsUploadDisable(true);
-			form.setFieldsValue({
-				file: null,
-			});
-		}
-	}, [watchOtp]);
-
-	useEffect(() => {
 		if (!Boolean(fileList?.length)) {
 			form.setFieldsValue({
 				file: null,
@@ -127,19 +120,10 @@ const FormComponent = ({
 
 	return (
 		<div key={initialValue?.id}>
+			<PageLoader loading={isGetImageLoading} />
 			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="airline_form_container">
 					<div className="airline_form_inputfields">
-						<InputField
-							label="Airline Name"
-							name="name"
-							max={32}
-							placeholder={!isReadOnly && 'Enter the airline name'}
-							className="custom_input"
-							disabled={isReadOnly}
-							required
-							isArticle={false}
-						/>
 						<OtpField
 							otpLength={2}
 							label="Two Letter Code"
@@ -153,6 +137,16 @@ const FormComponent = ({
 							name="threeLetterCode"
 							disabled={isReadOnly || isNotEditable}
 							required
+						/>
+						<InputField
+							label="Airline Name"
+							name="name"
+							max={32}
+							placeholder={!isReadOnly && 'Enter the airline name'}
+							className="custom_input"
+							disabled={isReadOnly}
+							required
+							isArticle={false}
 						/>
 						{type !== 'edit' && !isReadOnly && (
 							<ImageUpload
@@ -249,7 +243,7 @@ const FormComponent = ({
 							format="MM-DD-YYYY"
 							className="custom_date"
 							defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
-							disabled={isReadOnly || !isValidFrom}
+							disabled={isReadOnly || isNotEditable}
 							isDisabledDate={true}
 							disabledDate={(current) => {
 								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');

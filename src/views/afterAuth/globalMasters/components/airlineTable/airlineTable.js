@@ -33,6 +33,7 @@ const AirlineTable = ({
 	const [airlineRegistrationModal, setAirlineRegistrationModal] = useState(defaultModalParams);
 	const [airlineData, setAirlineData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const [fileList, setFileList] = useState([]);
 	const onError = ({
 		response: {
 			data: { message },
@@ -41,6 +42,7 @@ const AirlineTable = ({
 	const postApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
+			setFileList([]);
 			setAirlineData((oldData) => [data, ...oldData]);
 			closeAddModal();
 		},
@@ -130,6 +132,7 @@ const AirlineTable = ({
 			values.id = airlineRegistrationModal.data.id;
 			patchAirline(values);
 		} else {
+			values.url = fileList[0]?.url ?? '';
 			values.twoLetterCode = values.twoLetterCode.join('');
 			values.threeLetterCode = values.threeLetterCode.join('');
 			postGlobalAirLineRegistration(values);
@@ -263,6 +266,8 @@ const AirlineTable = ({
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}
 						form={initial}
+						fileList={fileList}
+						setFileList={setFileList}
 					/>
 					{airlineRegistrationModal.type !== 'view' && (
 						<>

@@ -1,11 +1,9 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
+import React, { useEffect, useMemo, useState } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
+import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 import InputField from '../../../../../components/input/field/field';
 import CustomSelect from '../../../../../components/select/select';
 import NumericField from '../numericField/numericField';
-import ImageUpload from '../../../../../components/imageUpload/imageUpload';
-import { useGlobalAirportDropdown, useCountriesDropdown } from '../../../../../services';
 import './licenseSetupForm.scss';
 
 const LicenseSetupForm = ({
@@ -37,6 +35,9 @@ const LicenseSetupForm = ({
 			const icaoValue = selectedAirportData.icaoCode.split('');
 			setIataCode(iataValue);
 			setIcaoCode(icaoValue);
+			if (selectedAirportData?.url) {
+				setFileList([{ url: selectedAirportData?.url }])
+			}
 		} else {
 			setIataCode([]);
 			setIcaoCode([]);
@@ -50,14 +51,6 @@ const LicenseSetupForm = ({
 			setResetCodes(false);
 		}
 	}, [resetCodes]);
-
-	useEffect(() => {
-		if (!Boolean(fileList?.length)) {
-			initial.setFieldsValue({
-				file: null,
-			});
-		}
-	}, [fileList]);
 
 	return (
 		<div className="airport_setup_form_container">
@@ -80,18 +73,20 @@ const LicenseSetupForm = ({
 					className="custom_input"
 					required
 				/>
+				{fileList?.length ?
+					<ImageUpload
+						{...{
+							fileList,
+							setFileList,
+							isDefault: true,
+							isDisabled: true,
+							name: 'file',
+							label: 'Airport logo',
+						}}
+					/> : null
+				}
 			</div>
 			<div className="airport_setup_form_inputfields">
-				<ImageUpload
-					{...{
-						label: 'Airport Logo',
-						isCircle: true,
-						fileList,
-						required: true,
-						setFileList,
-						name: 'file',
-					}}
-				/>
 				<NumericField
 					otpLength={3}
 					label="IATA Code"

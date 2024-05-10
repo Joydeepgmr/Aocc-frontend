@@ -1,20 +1,18 @@
 import { Divider, Form } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import Date from '../../../../../components/datapicker/datepicker';
+import ImageUpload from '../../../../../components/imageUpload/imageUpload';
 import InputField from '../../../../../components/input/field/field';
 import OtpField from '../../../../../components/input/otp/otp';
 import CustomSelect from '../../../../../components/select/select';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
+import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../../../services';
+import { useGetAirlineSyncData } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAccessData';
-import { useCountriesDropdown } from '../../../../../services';
-import { useGlobalAirportDropdown } from '../../../../../services';
 import './airlineForm.scss';
-import ImageUpload from '../../../../../components/imageUpload/imageUpload';
-import { useGetAirlineImage } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
-const AirlineForm = ({ isReadOnly, type, form }) => {
-	const [fileList, setFileList] = useState([]);
-	const [isUploadDisable, setIsUploadDisable] = useState(true);
+const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
+	const [isUploadDisable, setIsUploadDisable] = useState(false);
 	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
 		response: {
@@ -24,24 +22,25 @@ const AirlineForm = ({ isReadOnly, type, form }) => {
 
 	const watchOtp = Form?.useWatch('threeLetterCode', form);
 	const getAirlineImageHandler = {
-		onSuccess: (data) => {
-			if (data?.data?.value) {
-				setFileList([{ url: data?.data?.value }]);
-				// form.setFieldsValue({
-				// 	url: data?.data?.value,
-				// });
+		onSuccess: ({ airlineImage = '' }) => {
+			if (airlineImage) {
+				setFileList([{ url: airlineImage }]);
+				form.setFieldsValue({
+					file: airlineImage,
+				});
 				setIsDefault(true);
+				setIsUploadDisable(true);
 			} else {
 				setFileList([]);
+				form.setFieldsValue({ file: null });
 			}
-			setIsUploadDisable(false);
 		},
 		onError: (error) => {
 			setIsDefault(false);
 		},
 	};
 
-	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineImage(
+	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineSyncData(
 		Array.isArray(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
 		getAirlineImageHandler
 	);

@@ -232,6 +232,13 @@ const AircraftRegistrationTable = ({
 				render: (text) => text || '-',
 			},
 			{
+				title: '4L',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
 				title: 'NAT',
 				dataIndex: 'nationality',
 				key: 'nationality',

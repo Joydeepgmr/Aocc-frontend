@@ -24,6 +24,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	const [airportModal, setAirportModal] = useState(defaultModalParams);
 	const [airportData, setAirportData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+	const [fileList, setFileList] = useState([]);
 	const onError = ({
 		response: {
 			data: { message },
@@ -82,6 +83,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	function closeAddModal() {
 		initial.resetFields();
+		setFileList([]);
 		setAirportModal(defaultModalParams);
 	}
 	function closeDeleteModal() {
@@ -93,6 +95,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			name: data?.name,
 			iataCode: data?.iataCode,
 			icaoCode: data?.icaoCode,
+			file: data?.url,
 			abbreviatedName1: data?.abbreviatedName1,
 			abbreviatedName2: data?.abbreviatedName2,
 			abbreviatedName3: data?.abbreviatedName3,
@@ -109,7 +112,12 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	}
 
 	function onFinishHandler(values) {
+		if (!fileList?.length) {
+			toast.error('Airport logo is required');
+			return;
+		}
 		values = getFormValues(values);
+		values.url = fileList[0]?.url ?? '';
 		values.name = values?.name ? CapitaliseFirstLetter(values.name) : undefined
 		values.abbreviatedName1 = values?.abbreviatedName1 ? CapitaliseFirstLetter(values.abbreviatedName1) : undefined
 		values.abbreviatedName2 = values?.abbreviatedName2 ? CapitaliseFirstLetter(values.abbreviatedName2) : undefined
@@ -131,10 +139,12 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			postAirport(values);
 		}
 	}
-
 	useEffect(() => {
 		const { data } = airportModal;
 		if (data) {
+			if (data?.url) {
+				setFileList([{ url: data.url }]);
+			}
 			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}
@@ -189,6 +199,13 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				title: '3L',
 				dataIndex: 'iataCode',
 				key: 'iataCode',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: '4L',
+				dataIndex: 'icaoCode',
+				key: 'icaoCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
@@ -257,7 +274,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				className="custom_modal"
 			>
 				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
-					<AirportForm form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
+					<AirportForm fileList={fileList} setFileList={setFileList} form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && (
 						<>
 							<Divider />
