@@ -20,7 +20,7 @@ const Plans = () => {
 		{
 			key: '2',
 			label: 'Flight Schedule',
-			children: <CDMSchedule tab={'dailyOps'} />,
+			children: <CDMSchedule tab={'seasonal'} />,
 		},
 		{
 			key: '3',

@@ -229,7 +229,7 @@ const Runway = () => {
 			dataIndex: 'status',
 			key: 'status',
 			align: 'center',
-			render: (status) => status ?? '-',
+			render: (status) => <div style={{ textTransform: 'capitalize' }}>{status ?? '-'}</div>,
 		},
 		{
 			title: 'REASON',
@@ -344,7 +344,7 @@ const Runway = () => {
 						/>
 					}
 					openModal={openModal}
-					openCSVModal={()=> setOpenCSVModal(true)}
+					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
 				<>
