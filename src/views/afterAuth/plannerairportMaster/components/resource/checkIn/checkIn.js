@@ -169,8 +169,8 @@ const CheckIn = () => {
 	};
 
 	const handleEditSave = (value) => {
-		value.reason = CapitaliseFirstLetter(value.reason);
-		value.group = CapitaliseFirstLetter(value.group);
+		value.reason = CapitaliseFirstLetter(value?.reason);
+		value.group = CapitaliseFirstLetter(value?.group);
 		value.row && (value['row'] = value?.row.toString());
 		editCheckin(value);
 	};
@@ -366,7 +366,7 @@ const CheckIn = () => {
 						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />
 					}
 					openModal={openModal}
-					openCSVModal={()=> setOpenCSVModal(true)}
+					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
 				<>

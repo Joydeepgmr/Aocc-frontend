@@ -120,13 +120,6 @@ function Milestone() {
 						onChange={handleTabChange}
 						extraContent={
 							<div style={{ marginBottom: '1rem' }} className="top-bar">
-								<InputField
-									label="Airport Name"
-									name="search"
-									placeholder="Search"
-									warning="Required field"
-									type="search"
-								/>
 								{fullScreen ? (
 									<FullscreenExitOutlined
 										className="fullScreen--FullScreenExitIcon"

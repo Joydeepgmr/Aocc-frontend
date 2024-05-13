@@ -1,5 +1,5 @@
 const CapitaliseFirstLetter = (value) => {
-	const finalValues = value?.charAt(0)?.toUpperCase() + value?.slice(1);
+	const finalValues = value ? value?.charAt(0)?.toUpperCase() + value?.slice(1) : null;
 	return finalValues;
 };
 

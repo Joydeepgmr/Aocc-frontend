@@ -2,7 +2,7 @@ import React from 'react';
 // import './arrival.scss';
 import TableComponent from '../../../../../../../components/table/table';
 
-const Arrival = ({ data, columns, fetchData, pagination }) => {
+const Arrival = ({ data, columns, fetchData, pagination, loading }) => {
 
     const handleTableChange = (pagination, filters, sorter) => {
         console.log('Table changed:', pagination, filters, sorter);
@@ -11,7 +11,7 @@ const Arrival = ({ data, columns, fetchData, pagination }) => {
     return (
         <div className="main">
             <div>
-                <TableComponent {...{ data, columns, fetchData, pagination, isColored: true }} />
+                <TableComponent {...{ data, columns, fetchData, pagination, loading, isColored: true }} />
             </div>
         </div>
     );

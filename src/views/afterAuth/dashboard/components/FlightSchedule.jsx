@@ -476,15 +476,6 @@ const FlightSchedule = () => {
 						onChange={handleTabChange}
 						extraContent={
 							<div className="fullScreen_flight_schedule--Container">
-								<Form form={form}>
-									<InputField
-										label="Flight number"
-										name="flightNo"
-										placeholder="Flight number"
-										warning="Required field"
-										type="search"
-									/>
-								</Form>
 								{!fullScreen && (
 									<FullscreenOutlined
 										onClick={toggleFullscreen}

@@ -391,7 +391,13 @@ const DailySchedule = ({ tab }) => {
 			key: '1',
 			label: 'Arrival',
 			children: Boolean(seasonalData?.length) ? (
-				<Arrival data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+				<Arrival
+					data={seasonalData}
+					columns={columns}
+					loading={isFetchLoading}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
 			) : (
 				noDataHandler()
 			),
@@ -400,25 +406,32 @@ const DailySchedule = ({ tab }) => {
 			key: '2',
 			label: 'Departure',
 			children: Boolean(seasonalData?.length) ? (
-				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
+				<Departure
+					data={seasonalData}
+					columns={columns}
+					loading={isFetchLoading}
+					fetchData={fetchNextPage}
+					pagination={hasNextPage}
+				/>
 			) : (
 				noDataHandler()
 			),
 		},
 	];
 	useEffect(() => {
-		if (dateRangeValue != undefined) {
+		if (dateRangeValue) {
 			if (dateRangeValue?.length) {
 				let [startDate, endDate] = dateRangeValue;
 				startDate = ConvertToDateTime(startDate);
 				endDate = ConvertToDateTime(endDate);
 				console.log('date filter is ', startDate, endDate);
 				setFilter({ ...filter, date: [startDate, endDate] });
-			} else {
-				setFilter({ ...filter, date: null });
 			}
+		} else {
+			setFilter({ ...filter, date: dateRangeValue });
 		}
 	}, [dateRangeValue]);
+	console.log('date filter is', filter);
 	useEffect(() => {
 		let debounceTimer;
 		clearTimeout(debounceTimer);
@@ -431,7 +444,7 @@ const DailySchedule = ({ tab }) => {
 				}
 				console.log('search filter is ', searchedValue);
 			}
-		}, 500);
+		}, 300);
 		return () => clearTimeout(debounceTimer);
 	}, [searchedValue]);
 	return (
@@ -441,18 +454,17 @@ const DailySchedule = ({ tab }) => {
 				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
 			/>
 			{isFetchLoading || isEditLoading || isPostLoading ? (
-				<PageLoader loading={true} />
-			) : (
-				<div className="daily_schedule_container--tableContainer">
-					<CustomTabs
-						defaultActiveKey={index}
-						items={tabItems}
-						onChange={handleChange}
-						type="simple"
-						extraContent={operations}
-					/>
-				</div>
-			)}
+				<PageLoader loading={!searchedValue && !dateRangeValue?.length && true} />
+			) : null}
+			<div className="daily_schedule_container--tableContainer">
+				<CustomTabs
+					defaultActiveKey={index}
+					items={tabItems}
+					onChange={handleChange}
+					type="simple"
+					extraContent={operations}
+				/>
+			</div>
 
 			{/* modals */}
 			<ModalComponent
