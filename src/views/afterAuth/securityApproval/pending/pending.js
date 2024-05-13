@@ -10,12 +10,14 @@ import Modal from '../../../../components/modal/modal';
 import { useStatusUser } from '../../../../services/securityApproval/securityApproval';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './pending.scss';
+import ConfirmationModal from '../../../../components/confirmationModal/confirmationModal';
 
 const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [rowData, setRowData] = useState(null);
-
+	const [openApproveModal, setOpenApproveModal] = useState(false);
+	const [openRejectModal, setOpenRejectModal] = useState(false);
 	const openModal = (data) => {
 		setRowData(data);
 		setIsModalOpen(true);
@@ -30,6 +32,8 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	const handleStatusSuccess = (data) => {
 		setRowData(null);
 		setIsModalOpen(false);
+		setOpenApproveModal(false);
+		setOpenRejectModal(false);
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-user');
 	};
@@ -124,7 +128,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 					<Button
 						onClick={() => {
 							setRowData(record);
-							rowData && handleStatus({ status: 'approved' });
+							setOpenApproveModal(true);
 						}}
 						type="iconWithBorderCheck"
 						icon={checkIcon}
@@ -133,7 +137,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 					<Button
 						onClick={() => {
 							setRowData(record);
-							rowData && handleStatus({ status: 'rejected' });
+							setOpenRejectModal(true);
 						}}
 						type="iconWithBorderDelete"
 						icon={crossIcon}
@@ -144,6 +148,12 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 		},
 	];
 
+	const handleApprove = () => {
+		handleStatus({ status: 'approved' })
+	}
+	const handleReject = () => {
+		handleStatus({ status: 'rejected' })
+	}
 	return (
 		<>
 			<div className="pending">
@@ -155,6 +165,16 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 					pagination={hasNextPage}
 				/>
 			</div>
+			{/* confirmation modal */}
+			<ConfirmationModal
+				isOpen={openApproveModal ? openApproveModal : openRejectModal}
+				onClose={() => {
+					openApproveModal ? setOpenApproveModal(false) : setOpenRejectModal(false);
+				}}
+				onSave={openApproveModal ? handleApprove : handleReject}
+				content={`You want to ${openApproveModal ? 'approve' : 'reject'} this request`}
+				buttonTitle2={openApproveModal ? 'Approve' : 'Reject'}
+			/>
 			{/*Preview Modal */}
 			<Modal
 				isModalOpen={isModalOpen}

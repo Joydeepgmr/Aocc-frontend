@@ -99,17 +99,6 @@ const SecurityApproval = () => {
 				onChange={handleChange}
 				type="simple"
 				className="tabs--custom_tab"
-				extraContent={
-					<div style={{ marginBottom: '2rem' }}>
-						<Input
-							label="search"
-							name="search"
-							placeholder="Search"
-							warning="Required field"
-							type="search"
-						/>
-					</div>
-				}
 			/>
 		</div>
 	);
