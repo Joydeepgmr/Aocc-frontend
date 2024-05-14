@@ -7,7 +7,9 @@ export const useGetGate = (props) => {
 		queryKey: ['get-gate'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GATE}`, {pagination}),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,

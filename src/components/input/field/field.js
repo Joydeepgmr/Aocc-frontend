@@ -3,7 +3,6 @@ import { Form, Input, InputNumber, TimePicker } from 'antd';
 import React, { useState } from 'react';
 
 import './field.scss';
-import dayjs from 'dayjs';
 
 const InputField = ({
 	label,
@@ -28,7 +27,7 @@ const InputField = ({
 }) => {
 	const numberPattern = /^[0-9]*$/;
 	const Regex_CheckSpace = /^\S/;
-	const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/;
 	const inputs = [];
 	const [codeValue, setCodeValue] = useState('');
 	const validateRange = (_, value) => {

@@ -10,17 +10,16 @@ import { addArrival } from './redux/planReducer';
 const Plans = () => {
 	const { state } = useLocation();
 	const [index, setIndex] = useState('1');
-	const [tab, setTab] = useState('seasonal');
 	const planTabItems = [
 		{
 			key: '1',
 			label: 'Seasonal',
-			children: <Seasonal action={addArrival} tab={tab} />,
+			children: <Seasonal action={addArrival} />,
 		},
 		{
 			key: '2',
 			label: 'Flight Schedule',
-			children: <CDMSchedule tab={'dailyOps'} />,
+			children: <CDMSchedule />,
 		},
 		{
 			key: '3',
@@ -31,8 +30,6 @@ const Plans = () => {
 
 	const handleChange = (key) => {
 		setIndex(key);
-		key === '1' && setTab('seasonal');
-		key === '2' && setTab('dailyOps');
 	};
 	return (
 		<>

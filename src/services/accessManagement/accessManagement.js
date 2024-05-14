@@ -7,8 +7,8 @@ export const useGetVendorAccess = (props) => {
 		queryKey: ['get-user-vendor'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) {
-				return lastPage?.data?.paginated;
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
 			}
 			return false;
 		},
@@ -24,8 +24,8 @@ export const useGetPlannerAccess = (props) => {
 		queryKey: ['get-user-planner'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS_PLANNER}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) {
-				return lastPage?.data?.paginated;
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
 			}
 			return false;
 		},

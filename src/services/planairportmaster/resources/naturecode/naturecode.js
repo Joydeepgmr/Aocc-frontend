@@ -7,7 +7,9 @@ export const useGetNatureCode = (props) => {
 		queryKey: ['get-nature-code'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_NATURE_CODE}`,{pagination}),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,

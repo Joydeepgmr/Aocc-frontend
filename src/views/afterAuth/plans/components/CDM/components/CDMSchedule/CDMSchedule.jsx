@@ -23,12 +23,12 @@ import FormComponent from '../../../formComponent/formComponent';
 import Arrival from '../arrival/arrival';
 import Departure from '../departure/departure';
 
-import { GET_SEASONAL_PLANS } from '../../../../../../../api';
+import { GET_FLIGHT_SCHEDULE_PLANS } from '../../../../../../../api';
 import DateRange from '../../../../../../../components/rangePicker/rangePicker';
 import SocketEventListener from '../../../../../../../socket/listner/socketListner';
 import './CDMSchedule.scss';
 
-const DailySchedule = ({ tab }) => {
+const DailySchedule = () => {
 	const queryClient = useQueryClient();
 	const [seasonalData, setSeasonalData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,11 +63,12 @@ const DailySchedule = ({ tab }) => {
 	};
 	const {
 		data: fetchedSeasonalPlans,
-		isLoading: isFetchLoading,
+		isFetching: isFetchLoading,
+		isLoading,
 		hasNextPage,
 		fetchNextPage,
 		refetch,
-	} = useGetFlightSchedulePlans(flightType, tab, filter, getSeasonalHandler);
+	} = useGetFlightSchedulePlans(flightType, filter, getSeasonalHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -385,7 +386,6 @@ const DailySchedule = ({ tab }) => {
 			</div>
 		);
 	};
-
 	const tabItems = [
 		{
 			key: '1',
@@ -449,11 +449,8 @@ const DailySchedule = ({ tab }) => {
 	}, [searchedValue]);
 	return (
 		<>
-			<SocketEventListener
-				refetch={refetch}
-				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
-			/>
-			{isFetchLoading || isEditLoading || isPostLoading ? (
+			<SocketEventListener refetch={refetch} apiName={`${GET_FLIGHT_SCHEDULE_PLANS}&flightType=${flightType}`} />
+			{isLoading || isEditLoading || isPostLoading ? (
 				<PageLoader loading={!searchedValue && !dateRangeValue?.length && true} />
 			) : null}
 			<div className="daily_schedule_container--tableContainer">

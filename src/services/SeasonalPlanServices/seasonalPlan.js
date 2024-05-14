@@ -3,6 +3,7 @@ import {
 	DOWNLOAD_CSV_TEMPLATE,
 	EDIT_SEASONAL_PLANS_ARRIVAL,
 	EDIT_SEASONAL_PLANS_DEPARTURE,
+	GET_FLIGHT_SCHEDULE_PLANS,
 	GET_SEASONAL_PLANS,
 	POST_SEASONAL_PLANS,
 	UPLOAD_CSV_BULK,
@@ -10,14 +11,14 @@ import {
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../utils';
 import { Get, Patch, Post } from '../HttpServices/HttpServices';
 
-export const useGetSeasonalPlans = (flightType, tab, props) => {
+export const useGetSeasonalPlans = (flightType, { search }, props) => {
 	const response = useInfiniteQuery({
-		queryKey: ['get-seasonal-plans', flightType, tab],
+		queryKey: ['get-seasonal-plans', search, flightType],
 		queryFn: async ({ pageParam: pagination = {} }) =>
-			await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`, { pagination }),
+			await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}${search ? `&searchQuery=${search}` : ''}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) {
-				return lastPage?.data?.paginated;
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
 			}
 			return false;
 		},
@@ -27,20 +28,19 @@ export const useGetSeasonalPlans = (flightType, tab, props) => {
 	return response;
 };
 
-export const useGetFlightSchedulePlans = (flightType, tab, { search, date }, props) => {
+export const useGetFlightSchedulePlans = (flightType, { search, date }, props) => {
 	const response = useInfiniteQuery({
-		queryKey: ['get-flight-schedule', flightType, tab, search, date],
+		queryKey: ['get-flight-schedule', flightType, search, date],
 		queryFn: async ({ pageParam: pagination = {} }) =>
-			await Post(`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}${search ? `&searchQuery=${search}` : ''}${date ? `&from=${date[0]}&to=${date[1]}` : ''}`, { pagination }),
+			await Post(`${GET_FLIGHT_SCHEDULE_PLANS}&flightType=${flightType}${search ? `&searchQuery=${search}` : ''}${date ? `&from=${date[0]}&to=${date[1]}` : ''}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) {
-				return lastPage?.data?.paginated;
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
 			}
 			return false;
 		},
 		...props,
 	});
-
 	return response;
 };
 

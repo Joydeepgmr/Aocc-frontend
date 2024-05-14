@@ -1,10 +1,9 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { GET_SEASONAL_PLANS } from '../../../../../api';
-import editIcon from '../../../../../assets/logo/edit.svg';
 import Button from '../../../../../components/button/button';
 import CustomTabs from '../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../components/dropdownButton/dropdownButton';
@@ -20,22 +19,25 @@ import {
 	useUploadCSV,
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
-import { ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
+import { ConvertIstToUtc } from '../../../../../utils';
 import FormComponent from '../formComponent/formComponent';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
 import './seasonal.scss';
-
-const Seasonal = ({ tab }) => {
+import InputField from '../../../../../components/input/field/field'
+const Seasonal = () => {
 	const queryClient = useQueryClient();
 	const [seasonalData, setSeasonalData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [filter, setFilter] = useState({ date: null, search: null });
 	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
+	const [filterForm] = Form.useForm();
+	const searchedValue = Form.useWatch('search', filterForm);
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
 		onError: (error) => handleGetSeasonalError(error),
@@ -62,11 +64,12 @@ const Seasonal = ({ tab }) => {
 
 	const {
 		data: fetchedSeasonalPlans,
-		isLoading: isFetchLoading,
+		isFetching: isFetchLoading,
+		isLoading,
 		hasNextPage,
 		fetchNextPage,
 		refetch: getSeasonalPlanRefetch,
-	} = useGetSeasonalPlans(flightType, tab, getSeasonalHandler);
+	} = useGetSeasonalPlans(flightType, filter, getSeasonalHandler);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -220,14 +223,22 @@ const Seasonal = ({ tab }) => {
 	];
 
 	const operations = (
-		<div>
+		<Form form={filterForm} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+			<InputField
+				label="search"
+				name="search"
+				placeholder="Search"
+				className="custom_inputField"
+				warning="Required field"
+				type="search"
+			/>
 			<DropdownButton
 				dropdownItems={dropdownItems}
 				buttonText="Actions"
 				className="custom_dropdownButton"
 				onChange={handleDropdownItemClick}
 			/>
-		</div>
+		</Form>
 	);
 	const uploadCsvHandler = {
 		onSuccess: (data) => handleUploadCsvSuccess(data),
@@ -275,24 +286,24 @@ const Seasonal = ({ tab }) => {
 	const columns = [
 		{
 			title: '2L',
-			dataIndex: 'airline',
-			key: 'airline',
+			dataIndex: 'twoLetterCode',
+			key: 'twoLetterCode',
 			align: 'center',
-			render: (airline) => airline?.twoLetterCode ?? '-',
+			render: (twoLetterCode) => twoLetterCode ?? '-',
 		},
 		{
 			title: '3L',
-			dataIndex: 'airline',
-			key: 'airline',
+			dataIndex: 'threeLetterCode',
+			key: 'threeLetterCode',
 			align: 'center',
-			render: (airline) => airline?.threeLetterCode ?? '-',
+			render: (threeLetterCode) => threeLetterCode ?? '-',
 		},
 		{
 			title: 'FLNR',
-			dataIndex: 'flightNo',
-			key: 'flightNo',
+			dataIndex: 'flightNumber',
+			key: 'flightNumber',
 			align: 'center',
-			render: (flightNo) => flightNo ?? '-',
+			render: (flightNumber) => flightNumber ?? '-',
 		},
 		{
 			title: 'CSGN',
@@ -303,17 +314,17 @@ const Seasonal = ({ tab }) => {
 		},
 		{
 			title: 'NAT',
-			dataIndex: 'natureCode',
-			key: 'natureCode',
+			dataIndex: 'code',
+			key: 'code',
 			align: 'center',
-			render: (natureCode) => natureCode?.natureCode ?? '-',
+			render: (code) => code ?? '-',
 		},
 		{
 			title: 'REG',
-			dataIndex: 'aircraft',
-			key: 'aircraft',
+			dataIndex: 'registration',
+			key: 'registration',
 			align: 'center',
-			render: (aircraft) => aircraft?.registration ?? '-',
+			render: (registration) => registration ?? '-',
 		},
 		{
 			title: flightType == 'arrival' ? 'ORG' : 'DES',
@@ -339,27 +350,27 @@ const Seasonal = ({ tab }) => {
 			},
 		{
 			title: 'FREQ',
-			dataIndex: 'seasonalPlan',
-			key: 'seasonalPlan',
-			render: (seasonalPlan) =>
-				seasonalPlan?.frequency
-					? seasonalPlan?.frequency?.map((dayIndex) => daysOfWeek[dayIndex]).join(', ')
+			dataIndex: 'frequency',
+			key: 'frequency',
+			render: (frequency) =>
+				frequency?.length
+					? frequency?.map((dayIndex) => daysOfWeek[dayIndex]).join(', ')
 					: '-',
 		},
-		{
-			title: 'ACTIONS',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
-					<Button
-						onClick={() => handleEdit(record)}
-						type="iconWithBorderEdit"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
+		// {
+		// 	title: 'ACTIONS',
+		// 	key: 'actions',
+		// 	render: (text, record) => (
+		// 		<div className="action_buttons">
+		// 			<Button
+		// 				onClick={() => handleEdit(record)}
+		// 				type="iconWithBorderEdit"
+		// 				icon={editIcon}
+		// 				className="custom_icon_buttons"
+		// 			/>
+		// 		</div>
+		// 	),
+		// },
 	];
 
 	const noDataHandler = () => {
@@ -407,13 +418,28 @@ const Seasonal = ({ tab }) => {
 		},
 	];
 
+	useEffect(() => {
+		let debounceTimer;
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			if (searchedValue != undefined) {
+				if (searchedValue) {
+					setFilter({ ...filter, search: searchedValue });
+				} else {
+					setFilter({ ...filter, search: undefined });
+				}
+				console.log('search filter is ', searchedValue);
+			}
+		}, 300);
+		return () => clearTimeout(debounceTimer);
+	}, [searchedValue]);
 	return (
 		<>
 			<SocketEventListener
 				refetch={getSeasonalPlanRefetch}
-				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}&tab=${tab}`}
+				apiName={`${GET_SEASONAL_PLANS}?flightType=${flightType}`}
 			/>
-			{isFetchLoading || isEditLoading || isPostLoading || isDownloading ? (
+			{isLoading || isEditLoading || isPostLoading || isDownloading ? (
 				<PageLoader loading={true} />
 			) : (
 				<div className="seasonal_container--tableContainer">

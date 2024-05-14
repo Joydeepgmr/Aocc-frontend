@@ -19,7 +19,8 @@ export const GET_LICENSE = '/airport-license/paginated/';
 export const GET_AIRPORT_NAME = '/global-airport/paginated';
 
 /*------------------ Seasonal Plans --------------------- */
-export const GET_SEASONAL_PLANS = '/seasonalPlan/getPlans';
+export const GET_SEASONAL_PLANS = '/seasonalPlan/seasonal-paginated';
+export const GET_FLIGHT_SCHEDULE_PLANS = '/seasonalPlan/getPlans?tab=seasonal';
 export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';

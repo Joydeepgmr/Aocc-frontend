@@ -7,7 +7,9 @@ export const useGetDelayCode = (props) => {
 		queryKey: ['get-delay-code'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_DELAY_CODE}`,{pagination}),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,
