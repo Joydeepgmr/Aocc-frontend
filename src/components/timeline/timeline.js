@@ -1,12 +1,13 @@
 import React from 'react';
 import Timeline from 'react-visjs-timeline';
-import './timeline.scss';
 import CustomTypography from '../typographyComponent/typographyComponent';
+import './timeline.scss';
 
 const TimelineDesign = (props) => {
 	const { items, groups, editable = true, height = '400px', label, handleMove, time } = props;
 
 	const options = {
+		// timeAxis: { scale: 'minute', step: 60 },
 		orientation: 'top',
 		width: '100%',
 		align: 'center',
@@ -15,9 +16,11 @@ const TimelineDesign = (props) => {
 		groupHeightMode: 'auto',
 		autoResize: true,
 		stack: true,
+		stackSubgroups: true,
 		showMajorLabels: false,
 		showCurrentTime: true,
 		verticalScroll: true,
+		zoomable: true,
 		editable: {
 			remove: false,
 			updateGroup: editable,
@@ -35,6 +38,7 @@ const TimelineDesign = (props) => {
 			},
 		},
 		margin: {
+			axis: 0,
 			item: 0,
 		},
 		format: {
@@ -61,13 +65,15 @@ const TimelineDesign = (props) => {
 				year: '',
 			},
 		},
-		zoomMax: time === '24' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 60 * 12,
+		zoomMax: time === '24' ? 1000 * 60 * 200 : 1000 * 60 * 200,
+		zoomMin: time === '24' ? 1000 * 60 * 100 : 1000 * 60 * 100,
 		onMove: (item) => handleMove(item),
-		min: new Date().setHours(new Date().getHours() - 4),
+		min: new Date().setHours(new Date().getHours() - 3),
 		max:
 			time === '12'
 				? new Date().setHours(new Date().getHours() + 12)
 				: new Date().setHours(new Date().getHours() + 24),
+		rollingMode: { offset: '0.2', follow: true },
 	};
 
 	return (

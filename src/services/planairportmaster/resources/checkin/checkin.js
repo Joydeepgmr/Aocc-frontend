@@ -7,7 +7,9 @@ export const useGetCheckIn = (props) => {
 		queryKey: ['get-check-in'],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_CHECKIN_COUNTER}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,

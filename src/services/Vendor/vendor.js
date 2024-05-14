@@ -1,13 +1,15 @@
 import { useMutation, useInfiniteQuery } from 'react-query';
-import { VENDOR,UPDATE_DONE } from '../../api';
+import { VENDOR, UPDATE_DONE } from '../../api';
 import { Post, Patch, Get } from '../HttpServices/HttpServices';
 
 export const useGetVendor = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-vendor'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Get(`${VENDOR}`,{pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Get(`${VENDOR}`, { pagination }),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,

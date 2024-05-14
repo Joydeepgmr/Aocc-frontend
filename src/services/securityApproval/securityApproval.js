@@ -7,7 +7,9 @@ export const useGetUser = (tab,props) => {
 		queryKey: ['get-user',tab],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_USER}?tab=${tab}`,{pagination}),
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.data?.paginated?.isMore) { return lastPage?.data?.paginated }
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
 			return false;
 		},
 		...props,
