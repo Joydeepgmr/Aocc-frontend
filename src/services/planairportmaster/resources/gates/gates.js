@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
-import { GATE, GET_GATE } from "../../../../api";
+import { GATE, GATE_UPLOAD_CSV, GET_GATE } from "../../../../api";
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetGate = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-gate'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GATE}`, {pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_GATE}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) {
 				return lastPage?.pagination;
@@ -28,7 +28,7 @@ export const usePostGate = (props) => {
 	return response;
 };
 
-export const useEditGate = (id,props) => {
+export const useEditGate = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-gate'],
 		mutationFn: async (data) => await Patch(`${GATE}/${id}`, data),
@@ -57,3 +57,22 @@ export const useGateDropdown = (props) => {
 	const data = response?.data?.data ?? []
 	return { ...response, data }
 }
+
+export const useUploadCSVGates = (props) => {
+	const response = useMutation({
+		queryKey: ['gate-upload-csv'],
+		mutationFn: async (data) => {
+			const resp = await Post(`${GATE_UPLOAD_CSV}`, data);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};

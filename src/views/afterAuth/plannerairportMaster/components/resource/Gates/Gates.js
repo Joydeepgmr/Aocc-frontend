@@ -18,12 +18,14 @@ import {
 	useEditGate,
 	useGetGate,
 	usePostGate,
+	useUploadCSVGates,
 } from '../../../../../../services/planairportmaster/resources/gates/gates';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './Gates.scss';
 import FormComponent from './formComponents/formComponents';
 import { CapitaliseFirstLetter } from '../../../../../../utils';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const Gates = () => {
 	const queryClient = useQueryClient();
@@ -62,6 +64,13 @@ const Gates = () => {
 		hasNextPage,
 		refetch: getGateRefetch
 	} = useGetGate(getGateHandler);
+
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError: (error) => handleGetGateError(error), });
+
+	//DOWNLOAD
+	const handleDownloadCSV = () => {
+		refetch();
+	};
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -166,6 +175,10 @@ const Gates = () => {
 		onSuccess: (data) => handleDeleteGateSuccess(data),
 		onError: (error) => handleDeleteGateError(error),
 	};
+	const uploadCsvHandler = {
+		onSuccess: (data) => handleUploadCsvSuccess(data),
+		onError: (error) => handleUploadCsvError(error),
+	};
 
 	const handleDeleteGateSuccess = (data) => {
 		queryClient.invalidateQueries('get-gate');
@@ -176,7 +189,16 @@ const Gates = () => {
 	const handleDeleteGateError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
+	const handleUploadCsvSuccess = () => {
+		toast.success('CSV Uploaded Successfully');
+		queryClient.invalidateQueries('get-gate');
+		setOpenCSVModal(false);
+	};
 
+	const handleUploadCsvError = (error) => {
+		toast.error(error?.response?.data?.message);
+	};
+	const { mutate: onUploadCSV } = useUploadCSVGates(uploadCsvHandler);
 	const { mutate: deleteGate, isLoading: isDeleteLoading } = useDeleteGate(deleteGateHandler);
 	const handleDelete = () => {
 		deleteGate(rowData.id);
@@ -187,7 +209,7 @@ const Gates = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file, 'files data');
-			setOpenCSVModal(false);
+			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
@@ -334,7 +356,9 @@ const Gates = () => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			setOpenCSVModal(true);
+			// setOpenCSVModal(true);
+		} else {
+			// handleDownloadCSV();
 		}
 	};
 

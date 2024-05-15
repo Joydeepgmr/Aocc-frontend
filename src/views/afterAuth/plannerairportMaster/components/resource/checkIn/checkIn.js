@@ -24,6 +24,7 @@ import SocketEventListener from '../../../../../../socket/listner/socketListner'
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './checkIn.scss';
 import FormComponent from './formComponents/formComponents';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
@@ -143,7 +144,7 @@ const CheckIn = () => {
 	};
 
 	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
-
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError: (error) => handleEditCheckinError(error), });
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
 		setCheckinData([]);
@@ -342,13 +343,18 @@ const CheckIn = () => {
 		},
 	];
 
+	//DOWNLOAD
+	const handleDownloadCSV = () => {
+		refetch();
+	};
+
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			setOpenCSVModal(true);
 		} else {
-			
+			handleDownloadCSV();
 		}
 	};
 	return (
