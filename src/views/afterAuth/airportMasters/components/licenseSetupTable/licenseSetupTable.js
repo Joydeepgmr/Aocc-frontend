@@ -7,7 +7,7 @@ import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
-import { usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
+import { usePatchLicenseAirport, usePostLicenseAirport } from '../../../../../services/airportMasters/airportMasters';
 import ConvertUtcToIst from '../../../../../utils/ConvertUtcToIst';
 import LicenseSetupForm from '../licenseSetupForm/licenseSetupForm';
 import { useCountriesDropdown, useGlobalAirportDropdown } from '../../../../../services';
@@ -33,9 +33,24 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		},
 		onError,
 	};
+	const patchApiProps = {
+		onSuccess: ({ message, data }) => {
+			toast.success(message);
+			const updatedData = airportData.map((elm) => {
+				if (elm.id === data.id) {
+					return data;
+				}
+				return elm;
+			});
+			setAirportData([...updatedData]);
+			closeAddModal();
+		},
+		onError,
+	};
 	const { data: airportDropdownData } = useGlobalAirportDropdown();
 	const { data: countryDropdownData } = useCountriesDropdown();
 	const { mutate: postAirportLicense, isLoading: isCreateNewLoading } = usePostLicenseAirport(postApiProps);
+	const { mutate: patchAirportLicense, isLoading: isEditLoading } = usePatchLicenseAirport(patchApiProps);
 	const [initial] = Form.useForm();
 
 	function closeAddModal() {
@@ -47,7 +62,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 
 	function getFormValues(data = {}) {
 		return {
-			airportId: data?.airportId,
+			airportId: data?.airportId ?? data?.globalAirport?.id,
 			iataCode: data?.threeCode,
 			icaoCode: data?.fourCode,
 			abbreviatedName: data?.abbreviatedName,
@@ -64,9 +79,19 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 		values.city = values?.city ? CapitaliseFirstLetter(values.city) : undefined;
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTill = values?.validTill?.toISOString();
-		values.iataCode = values?.threeCode?.join('');
-		values.icaoCode = values?.fourCode?.join('');
-		postAirportLicense(values);
+		if (airportModal?.type === 'edit') {
+			const id = airportModal.data?.id;
+			delete values.airportId;
+			delete values.validFrom;
+			if (airportModal?.data?.email === values.email) {
+				delete values.email;
+			}
+			patchAirportLicense({ id, values });
+		} else {
+			values.iataCode = values?.threeCode?.join('');
+			values.icaoCode = values?.fourCode?.join('');
+			postAirportLicense(values);
+		}
 	};
 
 	useEffect(() => {
@@ -141,6 +166,21 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				align: 'center',
 				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
 			},
+			{
+				title: 'ACTIONS',
+				dataIndex: 'edit',
+				key: 'edit',
+				render: (text, record) => (
+					<div className="custom-button">
+						<ButtonComponent
+							type={'iconWithBorderEdit'}
+							onClick={() => {
+								setAirportModal({ isOpen: true, type: 'edit', data: record, title: 'Edit Airport License' })
+							}}
+						></ButtonComponent>
+					</div>
+				),
+			},
 		],
 		[airportData]
 	);
@@ -158,6 +198,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 				<Form form={initial} layout="vertical" onFinish={onFinishHandler}>
 					<LicenseSetupForm
 						{...{
+							airportModal,
 							airportDropdownData,
 							countryDropdownData,
 							resetCodes,
@@ -178,7 +219,7 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 							}}
 						/>
 						<ButtonComponent
-							title="Save"
+							title={airportModal?.type === 'edit' ? 'Update' : "Save"}
 							type="filledText"
 							className="custom_button_save"
 							isSubmit="submit"

@@ -15,6 +15,7 @@ export const GET_ADMIN_DETAILS = '/user/userinfo';
 
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = '/airport-license';
+export const PATCH_LICENSE = '/airport-license'
 export const GET_LICENSE = '/airport-license/paginated/';
 export const GET_AIRPORT_NAME = '/global-airport/paginated';
 
