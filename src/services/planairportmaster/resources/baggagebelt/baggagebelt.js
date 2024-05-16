@@ -1,5 +1,5 @@
 import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
-import { GET_BAGGAGE_BELT, BAGGAGE_BELT } from '../../../../api';
+import { GET_BAGGAGE_BELT, BAGGAGE_BELT, UPLOAD_CSV_BULK_BELT } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 import { DownloadFileByUrl, GenerateDownloadUrl } from '../../../../utils';
 

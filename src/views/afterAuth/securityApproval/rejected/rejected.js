@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '../../../../components/button/button';
+import Modal from '../../../../components/modal/modal';
 import Table from '../../../../components/table/table';
+import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import getNearestTimeDifference from '../../../../utils/NearestTimeDifference';
 import './rejected.scss';
 
 const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [rowData, setRowData] = useState(null);
+	const openModal = (data) => {
+		setRowData(data);
+		setIsModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setRowData(null);
+		setIsModalOpen(false);
+	};
 	const columns = [
 		{
 			title: 'Time',
@@ -57,21 +71,21 @@ const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			},
 			align: 'center',
 		},
-		// {
-		// 	title: 'ID Match',
-		// 	key: 'idMatch',
-		// 	render: (record) => (
-		// 		<>
-		// 			<Button
-		// 				onClick={() => openModal(record)}
-		// 				title="Preview"
-		// 				type="filledText"
-		// 				className="pending--preview"
-		// 				style={{ margin: 'auto' }}
-		// 			/>
-		// 		</>
-		// 	),
-		// },
+		{
+			title: 'ID Match',
+			key: 'idMatch',
+			render: (record) => (
+				<>
+					<Button
+						onClick={() => openModal(record)}
+						title="Preview"
+						type="filledText"
+						className="pending--preview"
+						style={{ margin: 'auto' }}
+					/>
+				</>
+			),
+		},
 		{
 			title: '',
 			key: 'actions',
@@ -81,9 +95,38 @@ const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	];
 
 	return (
-		<div className="rejected">
-			<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />
-		</div>
+		<>
+			{/*Preview Modal */}
+			<Modal
+				isModalOpen={isModalOpen}
+				width="auto"
+				height="auto"
+				closeModal={closeModal}
+				title={<div>Preview ({rowData?.customerDocuments[0]?.isMatched ? 'Matched' : 'Not Matched'})</div>}
+				className="pending--custom_modal"
+			>
+				<div className="pending--img_container">
+					<div className="pending--box_container">
+						<img
+							src={rowData?.customerDocuments[0]?.documentUrl}
+							alt="passport"
+							className="pending--passport"
+						/>
+						<CustomTypography color="#909296">
+							{rowData?.customerDocuments[0]?.type}: {rowData?.name}
+						</CustomTypography>
+					</div>
+					<div className="pending--box_container">
+						<img src={rowData?.customerDocuments[0]?.userUrl} alt="biometric" className="pending--biometric" />
+						<CustomTypography color="#909296">Biometric Image</CustomTypography>
+					</div>
+				</div>
+				<div className="pending--footer">{rowData?.matchPercentage}%</div>
+			</Modal>
+			<div className="rejected">
+				<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />
+			</div>
+		</>
 	);
 };
 
