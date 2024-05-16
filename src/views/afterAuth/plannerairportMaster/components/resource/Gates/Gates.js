@@ -65,7 +65,7 @@ const Gates = () => {
 		refetch: getGateRefetch
 	} = useGetGate(getGateHandler);
 
-	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError: (error) => handleGetGateError(error), });
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('airport-gate', { onError: (error) => handleGetGateError(error), });
 
 	//DOWNLOAD
 	const handleDownloadCSV = () => {
@@ -356,9 +356,9 @@ const Gates = () => {
 		if (value === 'create') {
 			openModal();
 		} else if (value === 'uploadCSV') {
-			// setOpenCSVModal(true);
+			setOpenCSVModal(true);
 		} else {
-			// handleDownloadCSV();
+			handleDownloadCSV();
 		}
 	};
 

@@ -19,6 +19,7 @@ import {
 	useEditCheckin,
 	useGetCheckIn,
 	usePostCheckIn,
+	useUploadCSVCheckIn,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
@@ -144,7 +145,7 @@ const CheckIn = () => {
 	};
 
 	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
-	const { refetch, isLoading: isDownloading } = useDownloadCSV('global-airline', { onError: (error) => handleEditCheckinError(error), });
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('check-in', { onError: (error) => toast.error(error?.response?.data?.message) });
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
 		setCheckinData([]);
@@ -181,6 +182,14 @@ const CheckIn = () => {
 		onSuccess: (data) => handleDeleteCheckinSuccess(data),
 		onError: (error) => handleDeleteCheckinError(error),
 	};
+	const uploadCsvHandler = {
+		onSuccess: (data) => {
+			toast.success('CSV Uploaded Successfully');
+			queryClient.invalidateQueries('get-check-in');
+			setOpenCSVModal(false);
+		},
+		onError: (error) => toast.error(error?.response?.data?.message),
+	};
 
 	const handleDeleteCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
@@ -191,7 +200,7 @@ const CheckIn = () => {
 	const handleDeleteCheckinError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
-
+	const { mutate: onUploadCSV } = useUploadCSVCheckIn(uploadCsvHandler);
 	const { mutate: deleteCheckin } = useDeleteCheckin(deleteCheckinHandler);
 	const handleDelete = () => {
 		deleteCheckin(rowData.id);
@@ -202,8 +211,7 @@ const CheckIn = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file);
-			setOpenCSVModal(false);
-			// onUploadCSV(formData);
+			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}

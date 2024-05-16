@@ -1,11 +1,11 @@
 import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
-import { PARKING_STAND,GET_PARKING_STAND } from '../../../../api';
+import { PARKING_STAND, GET_PARKING_STAND, UPLOAD_CSV_BULK_PARKING_STAND } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetParkingStand = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-parking-stand'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_PARKING_STAND}`,{pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_PARKING_STAND}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) {
 				return lastPage?.pagination;
@@ -28,7 +28,7 @@ export const usePostParkingStand = (props) => {
 	return response;
 };
 
-export const useEditParkingStand = (id,props) => {
+export const useEditParkingStand = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-parking-stand'],
 		mutationFn: async (data) => await Patch(`${PARKING_STAND}/${id}`, data),
@@ -56,3 +56,22 @@ export const useStandDropdown = (props) => {
 	const data = response?.data?.data ?? []
 	return { ...response, data }
 }
+
+export const useUploadCSVParkingStand = (props) => {
+	const response = useMutation({
+		mutationKey: ['upload-csv-parking-stand'],
+		mutationFn: async (data) => {
+			const resp = await Post(`${UPLOAD_CSV_BULK_PARKING_STAND}`, data);
+			// const downloadUrl = GenerateDownloadUrl(resp);
+			// DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};

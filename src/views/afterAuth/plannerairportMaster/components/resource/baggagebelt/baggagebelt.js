@@ -193,7 +193,8 @@ const BaggageBelt = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file, 'files data');
-			setOpenCSVModal(false);
+			
+			// setOpenCSVModal(false);
 		} else {
 			console.error('No file provided for upload.');
 		}

@@ -13,12 +13,13 @@ import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
-import { useDeleteParkingStand, useEditParkingStand, useGetParkingStand, usePostParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
+import { useDeleteParkingStand, useEditParkingStand, useGetParkingStand, usePostParkingStand, useUploadCSVParkingStand } from '../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import './parkingstand.scss';
 import { CapitaliseFirstLetter } from '../../../../../../utils';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const ParkingStand = () => {
 	const queryClient = useQueryClient();
@@ -107,6 +108,7 @@ const ParkingStand = () => {
 	};
 
 	const { mutate: postParkingStand, isLoading: isPostLoading } = usePostParkingStand(addParkingStandHandler);
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('parking-stand', { onError: (error) => toast.error(error?.response?.data?.message) });
 
 	const handleSaveButton = useCallback((value) => {
 		value.name = CapitaliseFirstLetter(value.name);
@@ -162,6 +164,14 @@ const ParkingStand = () => {
 		onSuccess: (data) => handleDeleteParkingStandSuccess(data),
 		onError: (error) => handleDeleteParkingStandError(error),
 	};
+	const uploadCsvHandler = {
+		onSuccess: (data) => {
+			toast.success('CSV Uploaded Successfully');
+			queryClient.invalidateQueries('get-parking-stand');
+			setOpenCSVModal(false);
+		},
+		onError: (error) => toast.error(error?.response?.data?.message),
+	};
 
 	const handleDeleteParkingStandSuccess = (data) => {
 		queryClient.invalidateQueries('get-parking-stand');
@@ -174,6 +184,7 @@ const ParkingStand = () => {
 	}
 
 	const { mutate: deleteParkingStand } = useDeleteParkingStand(deleteParkingStandHandler);
+	const { mutate: onUploadCSV } = useUploadCSVParkingStand(uploadCsvHandler);
 	const handleDelete = () => {
 		deleteParkingStand(rowData.id);
 	}
@@ -183,11 +194,13 @@ const ParkingStand = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file);
-			setOpenCSVModal(false);
-			// onUploadCSV(formData);
+			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
+	};
+	const handleDownloadCSV = () => {
+		refetch();
 	};
 
 	const columns = [
@@ -317,6 +330,8 @@ const ParkingStand = () => {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			setOpenCSVModal(true);
+		} else {
+			handleDownloadCSV();
 		}
 	};
 

@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
-import { GET_RUNWAY, RUNWAY } from '../../../../api';
+import { GET_RUNWAY, RUNWAY, UPLOAD_CSV_BULK_RUNWAY } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
 
 export const useGetRunway = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-runway'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_RUNWAY}`, {pagination}),
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_RUNWAY}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) { return lastPage?.pagination }
 			return false;
@@ -32,7 +32,7 @@ export const usePostRunway = (props) => {
 	return { ...response, data, message: statusMessage };
 };
 
-export const useEditRunway= (id,props) => {
+export const useEditRunway = (id, props) => {
 	const response = useMutation({
 		mutationKey: ['edit-runway'],
 		mutationFn: (data) => Patch(`${RUNWAY}/${id}`, data),
@@ -63,11 +63,30 @@ export const useDeleteRunway = (props) => {
 
 
 export const useRunwayDropdown = (props) => {
-    const response = useQuery({
-        queryKey: ['get-runway-dropdown'],
-        queryFn: async () => await Post(`${GET_RUNWAY}?bulk=true`),
-        ...props,
-    })
-    const data = response?.data?.data ?? []
-    return { ...response, data }
+	const response = useQuery({
+		queryKey: ['get-runway-dropdown'],
+		queryFn: async () => await Post(`${GET_RUNWAY}?bulk=true`),
+		...props,
+	})
+	const data = response?.data?.data ?? []
+	return { ...response, data }
 }
+
+export const useUploadCSVRunway = (props) => {
+	const response = useMutation({
+		mutationKey: ['upload-csv-runway'],
+		mutationFn: async (data) => {
+			const resp = await Post(`${UPLOAD_CSV_BULK_RUNWAY}`, data);
+			// const downloadUrl = GenerateDownloadUrl(resp);
+			// DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};
