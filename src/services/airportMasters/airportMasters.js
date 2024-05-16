@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from 'react-query';
-import { GET_LICENSE, POST_LICENSE } from '../../api/endpoints';
-import { Post } from '../HttpServices/HttpServices';
+import { GET_LICENSE, PATCH_LICENSE, POST_LICENSE } from '../../api/endpoints';
+import { Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetLicenseData = (props) => {
 	const response = useInfiniteQuery({
@@ -19,6 +19,14 @@ export const usePostLicenseAirport = (props) => {
 	const response = useMutation({
 		mutationKey: ['add-license'],
 		mutationFn: async (props) => await Post(`${POST_LICENSE}`, props),
+		...props,
+	});
+	return { ...response };
+};
+export const usePatchLicenseAirport = (props) => {
+	const response = useMutation({
+		mutationKey: ['edit-license'],
+		mutationFn: async ({ id, values }) => await Patch(`${PATCH_LICENSE}/${id}`, values),
 		...props,
 	});
 	return { ...response };

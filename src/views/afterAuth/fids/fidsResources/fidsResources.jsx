@@ -169,7 +169,7 @@ const FidsResources = () => {
 						id="delete_button"
 					></ButtonComponent>
 					<ButtonComponent
-						type={'iconWithBorder'}
+						type={'iconWithBorderEdit'}
 						icon={Edit}
 						onClick={() => {
 							setOpenEditModal(true);

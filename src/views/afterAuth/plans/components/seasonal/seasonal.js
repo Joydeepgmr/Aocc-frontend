@@ -19,7 +19,7 @@ import {
 	useUploadCSV,
 } from '../../../../../services/SeasonalPlanServices/seasonalPlan';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
-import { ConvertIstToUtc } from '../../../../../utils';
+import { ConvertIstToUtc, ConvertToDateTime } from '../../../../../utils';
 import FormComponent from '../formComponent/formComponent';
 import Arrival from './components/arrival/arrival';
 import Departure from './components/departure/departure';
@@ -135,8 +135,8 @@ const Seasonal = () => {
 			airline: value?.airlineId,
 			natureCode: value?.natureCodeId,
 			sector: value?.origin,
-			sta: value.sta,
-			std: value.std,
+			sta: ConvertToDateTime(value.sta, 'HH:mm'),
+			std: ConvertToDateTime(value.std, 'HH:mm'),
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
 			frequency: Boolean(value?.weeklySelect?.length) ? value?.weeklySelect : [value?.date?.day()],

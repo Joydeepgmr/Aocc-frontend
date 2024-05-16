@@ -320,7 +320,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									onChange={handleStartDate}
 								/>
 								<Date
-									label=""
+									label=" "
 									name="end"
 									placeholder="To"
 									className="custom_date"
@@ -341,7 +341,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									type="number"
 								/>
 								<Date label="Relative Period" placeholder="From" className="custom_date" />
-								<Date label="" placeholder="To" className="custom_date" />
+								<Date label=" " placeholder="To" className="custom_date" />
 							</div>
 							<Divider />
 						</div>

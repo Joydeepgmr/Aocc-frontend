@@ -7,6 +7,7 @@ import NumericField from '../numericField/numericField';
 import './licenseSetupForm.scss';
 
 const LicenseSetupForm = ({
+	airportModal,
 	airportDropdownData,
 	countryDropdownData,
 	resetCodes,
@@ -63,6 +64,7 @@ const LicenseSetupForm = ({
 					SelectData={SelectAirportData}
 					className="custom_input"
 					onChange={handleAirportChange}
+					disabled={airportModal?.type === 'edit'}
 				/>
 				<InputField
 					label="Email Address"
@@ -86,34 +88,36 @@ const LicenseSetupForm = ({
 					/> : null
 				}
 			</div>
-			<div className="airport_setup_form_inputfields">
-				<NumericField
-					otpLength={3}
-					label="IATA Code"
-					required
-					name="iataCode"
-					value={iataCode}
-					onChange={setIataCode}
-					disabled
-				/>
-				<NumericField
-					otpLength={4}
-					label="ICAO Code"
-					required
-					name="icaoCode"
-					value={icaoCode}
-					onChange={setIcaoCode}
-					disabled
-				/>
-				<InputField
-					label="Abbreviated Name"
-					name="abbreviatedName"
-					pattern="^(?!\s).*$"
-					placeholder="Enter the abbreviated name "
-					className="custom_input"
-					disabled={true}
-				/>
-			</div>
+			{airportModal?.type !== 'edit' &&
+				<div className="airport_setup_form_inputfields">
+					<NumericField
+						otpLength={3}
+						label="IATA Code"
+						required
+						name="iataCode"
+						value={iataCode}
+						onChange={setIataCode}
+						disabled
+					/>
+					<NumericField
+						otpLength={4}
+						label="ICAO Code"
+						required
+						name="icaoCode"
+						value={icaoCode}
+						onChange={setIcaoCode}
+						disabled
+					/>
+					<InputField
+						label="Abbreviated Name"
+						name="abbreviatedName"
+						pattern="^(?!\s).*$"
+						placeholder="Enter the abbreviated name "
+						className="custom_input"
+						disabled={true}
+					/>
+				</div>
+			}
 			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="City"
@@ -139,6 +143,7 @@ const LicenseSetupForm = ({
 					disabledFor="future"
 					format="MM-DD-YYYY"
 					required
+					disabled={airportModal?.type === 'edit'}
 				/>
 				<Date
 					label="Valid To"
