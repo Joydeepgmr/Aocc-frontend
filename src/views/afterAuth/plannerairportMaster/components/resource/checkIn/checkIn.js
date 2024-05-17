@@ -169,7 +169,7 @@ const CheckIn = () => {
 		setRowData(record);
 		openEditModal();
 	};
-
+     
 	const handleEditSave = (value) => {
 		value.reason = CapitaliseFirstLetter(value?.reason);
 		value.group = CapitaliseFirstLetter(value?.group);
