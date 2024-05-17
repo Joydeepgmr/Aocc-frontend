@@ -19,12 +19,29 @@ import {
 } from '../../../services/accessManagement/accessManagement';
 import { ConvertToDateTime } from '../../../utils';
 import './userAccess.scss';
+import dayjs from 'dayjs';
 
 const UserAccess = () => {
+	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const [tab, setTab] = useState('planner');
 	const [userAccessData, setUserAccessData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, type: null });
 
+	const handleValidFrom = (dateString) => {
+		if ((form.getFieldValue('validTill') < form.getFieldValue('validFrom'))) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+		}
+		if (dateString === null) {
+			form.setFieldsValue({
+				validTill: null,
+			});
+			setCurrentValidFrom(null);
+		} else {
+			setCurrentValidFrom(dateString?.format('YYYY-MM-DD'));
+		}
+	};
 	const userAccessType = [
 		{
 			id: '1',
@@ -53,6 +70,7 @@ const UserAccess = () => {
 	};
 
 	const handleGetVendorAccessError = (error) => {
+		toast.dismiss();
 		toast.error(error?.message);
 	};
 	const {
@@ -77,7 +95,7 @@ const UserAccess = () => {
 		response: {
 			data: { message },
 		},
-	}) => toast.error(message);
+	}) => { toast.dismiss(); toast.error(message) };
 	const accessManagementApiProps = {
 		onSuccess: ({ data, message }) => {
 			closeAddUserModal();
@@ -147,18 +165,18 @@ const UserAccess = () => {
 		},
 		tab === 'planner'
 			? {
-					title: 'User Type',
-					dataIndex: 'userType',
-					key: 'userType',
-					render: (userType) => userType ?? '-',
-				}
+				title: 'User Type',
+				dataIndex: 'userType',
+				key: 'userType',
+				render: (userType) => userType ?? '-',
+			}
 			: {
-					title: 'Vendor Type',
-					dataIndex: 'vendorTasks',
-					key: 'vendorTasks',
-					render: (tasks) => (tasks ? tasks?.map((task) => task).join(', ') : '-'),
-					align: 'center',
-				},
+				title: 'Vendor Type',
+				dataIndex: 'vendorTasks',
+				key: 'vendorTasks',
+				render: (tasks) => (tasks ? tasks?.map((task) => task).join(', ') : '-'),
+				align: 'center',
+			},
 
 		{
 			title: 'Access Validity',
@@ -344,6 +362,7 @@ const UserAccess = () => {
 								required
 								className="custom_date"
 								format="MM-DD-YYYY"
+								onChange={handleValidFrom}
 							/>
 							<Date
 								label="Valid To"
@@ -351,6 +370,12 @@ const UserAccess = () => {
 								name="validTill"
 								format="MM-DD-YYYY"
 								className="custom_date"
+								disabled={!currentValidFrom}
+								isDisabledDate={true}
+								disabledDate={(current) => {
+									let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
+									return current && current < dayjs(prevDate, 'YYYY-MM-DD');
+								}}
 							/>
 						</div>
 					</div>

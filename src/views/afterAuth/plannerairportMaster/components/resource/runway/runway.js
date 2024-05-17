@@ -13,12 +13,13 @@ import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
-import { useDeleteRunway, useEditRunway, useGetRunway, usePostRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
+import { useDeleteRunway, useEditRunway, useGetRunway, usePostRunway, useUploadCSVRunway } from '../../../../../../services/planairportmaster/resources/runway/runway';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import FormComponent from './formComponents/formComponents';
 import './runway.scss';
 import { CapitaliseFirstLetter } from '../../../../../../utils';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const Runway = () => {
 
@@ -134,7 +135,7 @@ const Runway = () => {
 	};
 
 	const { mutate: editRunway, isLoading: isEditLoading } = useEditRunway(rowData?.id, editRunwayHandler)
-
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('runway', { onError: (error) => toast.error(error?.response?.data?.message) });
 	const handleEditRunwaySuccess = (data) => {
 		closeEditModal();
 		setRunwayData([]);
@@ -169,6 +170,14 @@ const Runway = () => {
 		onSuccess: (data) => handleDeleteRunwaySuccess(data),
 		onError: (error) => handleDeleteRunwayError(error),
 	};
+	const uploadCsvHandler = {
+		onSuccess: (data) => {
+			toast.success('CSV Uploaded Successfully');
+			queryClient.invalidateQueries('get-runway');
+			setOpenCSVModal(false);
+		},
+		onError: (error) => toast.error(error?.response?.data?.message),
+	};
 
 	const handleDeleteRunwaySuccess = (data) => {
 		queryClient.invalidateQueries('get-runway');
@@ -180,6 +189,7 @@ const Runway = () => {
 		toast.error(error?.response?.data?.message)
 	}
 	const { mutate: deleteRunway } = useDeleteRunway(deleteRunwayHandler);
+	const { mutate: onUploadCSV } = useUploadCSVRunway(uploadCsvHandler);
 	const handleDelete = () => {
 		deleteRunway(rowData.id);
 	}
@@ -189,12 +199,17 @@ const Runway = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file);
-			setOpenCSVModal(false);
-			// onUploadCSV(formData);
+			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
 	};
+
+	//DOWNLOAD
+	const handleDownloadCSV = () => {
+		refetch();
+	};
+
 
 	const columns = [
 		{
@@ -323,6 +338,8 @@ const Runway = () => {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			setOpenCSVModal(true);
+		} else {
+			handleDownloadCSV();
 		}
 	};
 

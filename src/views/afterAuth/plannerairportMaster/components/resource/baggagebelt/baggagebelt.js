@@ -13,12 +13,13 @@ import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
-import { useDeleteBaggageBelt, useEditBaggageBelt, useGetBaggageBelt, usePostBaggageBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
+import { useDeleteBaggageBelt, useEditBaggageBelt, useGetBaggageBelt, usePostBaggageBelt, useUploadCSVBelt } from '../../../../../../services/planairportmaster/resources/baggagebelt/baggagebelt';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './baggagebelt.scss';
 import FormComponent from './formComponents/formComponents';
 import { CapitaliseFirstLetter } from '../../../../../../utils';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 
 const BaggageBelt = () => {
@@ -136,9 +137,18 @@ const BaggageBelt = () => {
 		onSuccess: (data) => handleEditBaggageBeltSuccess(data),
 		onError: (error) => handleEditBaggageBeltError(error),
 	};
+	const uploadCsvHandler = {
+		onSuccess: (data) => {
+			toast.success('CSV Uploaded Successfully');
+			queryClient.invalidateQueries('get-baggage-belt');
+			setOpenCSVModal(false);
+		},
+		onError: (error) => toast.error(error?.response?.data?.message),
+	};
 
 	const { mutate: editBaggageBelt, isLoading: isEditLoading } = useEditBaggageBelt(editBaggageBeltHandler)
-
+	const { mutate: onUploadCSV } = useUploadCSVBelt(uploadCsvHandler);
+	const { refetch, isLoading: isDownloading } = useDownloadCSV('baggage-belt', { onError: (error) => toast.error(error?.response?.data?.message) });
 	const handleEditBaggageBeltSuccess = (data) => {
 		queryClient.invalidateQueries('get-baggage-belt');
 		setBaggageBeltData([]);
@@ -193,10 +203,13 @@ const BaggageBelt = () => {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
 			console.log(file, 'files data');
-			setOpenCSVModal(false);
+			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');
 		}
+	};
+	const handleDownloadCSV = () => {
+		refetch();
 	};
 
 	const columns = [
@@ -327,14 +340,16 @@ const BaggageBelt = () => {
 			openModal();
 		} else if (value === 'uploadCSV') {
 			setOpenCSVModal(true);
+		} else {
+			handleDownloadCSV();
 		}
 	};
 	return (
 		<>
 			<SocketEventListener refetch={getBaggageBeltRefetch} apiName={GET_BAGGAGE_BELT} />
 			{isFetchLoading || isEditLoading || isPostLoading ? (
-			<PageLoader loading={true} />
-			): !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
+				<PageLoader loading={true} />
+			) : !Boolean(fetchBaggageBelt?.pages[0]?.data?.length) ? (
 				<Common_Card
 					title1="Create"
 					title2={'Upload CSV'}
@@ -349,7 +364,7 @@ const BaggageBelt = () => {
 						/>
 					}
 					openModal={openModal}
-					openCSVModal={()=> setOpenCSVModal(true)}
+					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
 				<>

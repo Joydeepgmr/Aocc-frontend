@@ -26,7 +26,7 @@ export const POST_SEASONAL_PLANS = '/seasonalPlan/createPlan';
 export const EDIT_SEASONAL_PLANS_ARRIVAL = '/seasonalPlan/arrival';
 export const EDIT_SEASONAL_PLANS_DEPARTURE = 'seasonalPlan/departure';
 export const UPLOAD_CSV_BULK = '/seasonalPlan/bulkPlans';
-export const DOWNLOAD_CSV_TEMPLATE = '/system-constant/';
+export const DOWNLOAD_CSV_TEMPLATE = '/system-constant';
 
 /*------------- IT admin Global Master --------------*/
 export const GET_GLOBAL_AIRPORT = '/global-airport/paginated';
@@ -64,17 +64,21 @@ export const GET_TELEX_MESSAGE = '/telex/paginated';
 
 export const GET_CHECKIN_COUNTER = '/checkin-counter/paginated';
 export const CHECKIN_COUNTER = '/checkin-counter';
+export const UPLOAD_CSV_BULK_CHECKIN = '/checkin-counter/bulk';
 export const GET_GATE = '/gate/paginated';
 export const GATE_UPLOAD_CSV = '/gate/bulk'
 export const GATE = '/gate';
 export const GET_PARKING_STAND = '/parking-stand/paginated';
 export const PARKING_STAND = '/parking-stand';
+export const UPLOAD_CSV_BULK_PARKING_STAND = '/parking-stand/bulk';
 export const GET_TAXIWAY = '/taxiway/paginated';
 export const TAXIWAY = '/taxiway';
 export const GET_BAGGAGE_BELT = '/baggage-belt/paginated';
 export const BAGGAGE_BELT = '/baggage-belt';
+export const UPLOAD_CSV_BULK_BELT = '/baggage-belt/bulk';
 export const GET_RUNWAY = '/runway/paginated';
 export const RUNWAY = '/runway';
+export const UPLOAD_CSV_BULK_RUNWAY = '/runway/bulk';
 export const GET_TERMINAL = '/terminal/paginated';
 export const TERMINAL = '/terminal';
 export const GET_DELAY_CODE = '/delay-code/paginated';

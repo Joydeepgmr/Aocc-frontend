@@ -139,7 +139,6 @@ const Vendor = () => {
 			<Modal
 				isModalOpen={isModalOpen}
 				width="21rem"
-				height="8rem"
 				closeModal={closeModal}
 				title={rowData.status === 'pending' ? 'Start Task?' : 'Stop Task?'}
 			>

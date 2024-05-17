@@ -1,6 +1,7 @@
 import { useMutation, useInfiniteQuery, useQueryClient, useQuery } from 'react-query';
-import { GET_BAGGAGE_BELT, BAGGAGE_BELT } from '../../../../api';
+import { GET_BAGGAGE_BELT, BAGGAGE_BELT, UPLOAD_CSV_BULK_BELT } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../../../utils';
 
 export const useGetBaggageBelt = (props) => {
 	const response = useInfiniteQuery({
@@ -78,3 +79,22 @@ export const useBaggageBeltDropdown = (props) => {
 	const data = response?.data?.data ?? []
 	return { ...response, data }
 }
+
+export const useUploadCSVBelt = (props) => {
+	const response = useMutation({
+		mutationKey: ['belt-upload-csv'],
+		mutationFn: async (data) => {
+			const resp = await Post(`${UPLOAD_CSV_BULK_BELT}`, data);
+			// const downloadUrl = GenerateDownloadUrl(resp);
+			// DownloadFileByUrl(downloadUrl);
+			return resp;
+		},
+		...props,
+	});
+
+	const { data, error, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : error?.response?.data?.message;
+
+	return { ...response, data: data?.data, message: statusMessage };
+};
