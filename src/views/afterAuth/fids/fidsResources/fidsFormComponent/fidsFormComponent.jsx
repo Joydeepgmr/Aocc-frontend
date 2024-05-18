@@ -8,12 +8,20 @@ import dayjs from 'dayjs';
 import './fidsFormComponent.scss';
 import { useBaggageBeltDropdown, useCheckInDropdown, useTerminalDropdown } from '../../../../../services';
 import toast from 'react-hot-toast';
+import CustomRadioGroup from '../../../../../components/radioButton/radioButton';
 
 const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const watch = Form.useWatch('resourceType', form);
-
+	const checkInDisplay = [
+		{ label: 'With logo', value: 'logo' },
+		{ label: 'With Flights details', value: 'flight details' },
+	];
+	const terminalDisplay = [
+		{ label: 'Arrival Information', value: 'arrival' },
+		{ label: 'Departure Information', value: 'departure' },
+	];
 	const onError = ({
 		response: {
 			data: { message },
@@ -119,6 +127,17 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						disabled={isReadOnly}
 						required
 					/>
+					<CustomRadioGroup
+						options={watch === 'terminal' ? terminalDisplay : checkInDisplay}
+						label="Display Type"
+						name="displayType"
+						className="custom_input"
+						required
+						disabled={isReadOnly}
+					/>
+				</div>
+
+				<div className="fids_resources_inputfields">
 					<CustomSelect
 						SelectData={
 							watch === 'check_in'
@@ -136,21 +155,6 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						disabled={isReadOnly || !Boolean(watch)}
 						required
 					/>
-				</div>
-
-				<div className="fids_resources_inputfields">
-					<CustomSelect
-						SelectData={[
-							{ label: 'Active', value: 'Active' },
-							{ label: 'InActive', value: 'Inactive' },
-						]}
-						label="Status"
-						name="status"
-						placeholder={!isReadOnly && 'Status'}
-						className="custom_input"
-						disabled={isReadOnly}
-						required={true}
-					/>
 					<InputField
 						label="MAC address"
 						name="MacAddress"
@@ -167,11 +171,11 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 							type="number"
 							min={100}
 							max={999}
+							required
 							placeholder={!isReadOnly && 'Enter the Height'}
 							className="custom_number_input"
 							suffixText="cm"
 							disabled={isReadOnly}
-							required={true}
 						/>
 						<InputField
 							label="Width"
@@ -179,11 +183,11 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 							type="number"
 							min={100}
 							max={999}
+							required
 							placeholder={!isReadOnly && 'Enter the Width'}
 							className="custom_number_input"
 							suffixText="cm"
 							disabled={isReadOnly}
-							required={true}
 						/>
 					</div>
 				</div>
@@ -213,6 +217,18 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 					/>
 				</div>
 				<div className="fids_resources_inputfields">
+					<CustomSelect
+						SelectData={[
+							{ label: 'Active', value: 'Active' },
+							{ label: 'InActive', value: 'Inactive' },
+						]}
+						label="Status"
+						name="status"
+						placeholder={!isReadOnly && 'Status'}
+						className="custom_input"
+						disabled={isReadOnly}
+						required={true}
+					/>
 					<Date
 						label="Valid From"
 						placeholder={!isReadOnly && 'Select valid from date'}

@@ -77,7 +77,12 @@
 		}
 		.temperature_details {
 			@include flex(center, center, row);
+			object-fit: cover;
 			gap: 0.8rem;
+			img {
+				height: 3rem;
+				width: 3rem;
+			}
 			div {
 				@include flex(center, center, column);
 				gap: 0.7rem;

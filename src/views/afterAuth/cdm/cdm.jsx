@@ -13,6 +13,8 @@ import {
 import toast from 'react-hot-toast';
 import PageLoader from '../../../components/pageLoader/pageLoader';
 import { useQueryClient } from 'react-query';
+import ButtonComponent from '../../../components/button/button';
+import TelexDrawer from './TelexDrawer';
 
 const CDM = () => {
 	const queryClient = useQueryClient();
@@ -20,6 +22,7 @@ const CDM = () => {
 	const [type, setType] = useState('arrival');
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
 	const [cdmData, setCdmData] = useState([]);
+	const [telexModal, setTelexModal] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState({});
 
 	const getCdmHandler = {
@@ -119,6 +122,10 @@ const CDM = () => {
 				minute: '2-digit',
 			});
 		}
+	};
+
+	const closeTelexModal = () => {
+		setTelexModal({ isOpen: false, data: null });
 	};
 
 	const handleEditTable = (item) => {
@@ -262,6 +269,21 @@ const CDM = () => {
 						render: (link) => link ?? '-',
 						align: 'center',
 					},
+					{
+						title: 'TELEX',
+						key: 'view',
+						render: (text, record) => (
+							<ButtonComponent
+								title="MSG"
+								style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+								type="text"
+								className="view_map_button"
+								onClick={() => {
+									setTelexModal({ isOpen: true, data: null });
+								}}
+							/>
+						),
+					},
 				]
 			: activeTab === '2'
 				? [
@@ -384,6 +406,21 @@ const CDM = () => {
 							key: 'stand',
 							render: (stand) => stand ?? '-',
 							align: 'center',
+						},
+						{
+							title: 'TELEX',
+							key: 'view',
+							render: (text, record) => (
+								<ButtonComponent
+									title="MSG"
+									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+									type="text"
+									className="view_map_button"
+									onClick={() => {
+										setTelexModal({ isOpen: true, data: record?.parsedMessage });
+									}}
+								/>
+							),
 						},
 					]
 				: [
@@ -568,6 +605,21 @@ const CDM = () => {
 								},
 							],
 						},
+						{
+							title: 'TELEX',
+							key: 'view',
+							render: (text, record) => (
+								<ButtonComponent
+									title="MSG"
+									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+									type="text"
+									className="view_map_button"
+									onClick={() => {
+										setTelexModal({ isOpen: true, data: record?.parsedMessage });
+									}}
+								/>
+							),
+						},
 					];
 
 	const items = [
@@ -669,6 +721,7 @@ const CDM = () => {
 
 	return (
 		<>
+			<TelexDrawer isOpen={telexModal?.isOpen} onClose={closeTelexModal} data={telexModal?.data} />
 			<div className="container-style">
 				<div className="cdm--Container">
 					<CustomTabs

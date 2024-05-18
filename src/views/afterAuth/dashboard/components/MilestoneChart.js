@@ -22,7 +22,7 @@ const MilestoneChart = ({ data = [], hasNextPage, fetchNextPage, type, labels = 
 				goals.push(markObj);
 			}
 			return {
-				x: `${list.airline ?? ''} ${list.flightNumber ?? ''}`,
+				x: `${list?.flight?.airline?.twoLetterCode ?? ''} ${list.flight?.flightNo ?? ''}`,
 				y: list.progress * labels.length + 100,
 				fillColor: '#196CFD',
 				goals,

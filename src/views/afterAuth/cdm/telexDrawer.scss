@@ -1,0 +1,21 @@
+.telex_message {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	.telex_message_container {
+		width: 90%;
+		margin: auto;
+		display: flex;
+		justify-content: space-between;
+
+		.message_key {
+			display: flex;
+			justify-content: end;
+		}
+
+		.message_value {
+			display: flex;
+			justify-content: start;
+		}
+	}
+}

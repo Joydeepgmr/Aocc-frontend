@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import gmrLogo from '../../assets/logo/gmr-logo.png';
 import line from '../../assets/logo/line.svg';
 import setting from '../../assets/logo/setting.svg';
+import windLogo from '../../assets/logo/wind.svg';
 import temperatureLogo from '../../assets/logo/sun.svg';
 import CustomTypography from '../../components/typographyComponent/typographyComponent';
 import { localStorageKey } from '../../keys';
@@ -14,7 +15,7 @@ import Alerts from '../alerts/Alerts';
 import { roleBasedNav } from './navData';
 import './topNav.scss';
 
-const TopNav = ({ data }) => {
+const TopNav = ({ data, weatherData }) => {
 	const queryClient = useQueryClient();
 	const logo = localStorage.getItem(localStorageKey.LOGO);
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
@@ -85,19 +86,19 @@ const TopNav = ({ data }) => {
 					{(data?.role?.name === userType.PLANNER || data?.role?.name === userType.CDM) && (
 						<div className="weather_details">
 							<div className="temperature_details">
-								<img src={temperatureLogo} />
+								<img src={weatherData?.current?.condition?.icon ?? temperatureLogo} />
 								<div>
-									<div>Sunny</div>
-									<div>19*C</div>
+									<div>{weatherData?.current?.condition?.text}</div>
+									<div>{weatherData?.current?.temp_c}*C</div>
 								</div>
 							</div>
-							{/* <div className="wind_details">
+							<div className="wind_details">
 								<img src={windLogo} />
 								<div>
 									<div>Wind Speed</div>
-									<div>85*3.7 kts</div>
+									<div>{weatherData?.current?.wind_mph} mph</div>
 								</div>
-							</div> */}
+							</div>
 						</div>
 					)}
 					<div className="vertical_separation">
