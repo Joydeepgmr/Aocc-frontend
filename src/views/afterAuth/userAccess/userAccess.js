@@ -297,7 +297,7 @@ const UserAccess = () => {
 				closeModal={closeAddUserModal}
 				title={`Add ${isModalOpen?.type}`}
 			>
-				<Form layout="vertical" form={form} onFinish={onFinishHandler}>
+				<Form autoComplete='off' layout="vertical" form={form} onFinish={onFinishHandler}>
 					<div className="user_form_container">
 						<div className="user_form_inputfields">
 							<InputField

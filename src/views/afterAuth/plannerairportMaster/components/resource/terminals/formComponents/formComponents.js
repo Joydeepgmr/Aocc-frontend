@@ -72,7 +72,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	}, [form, initialValues]);
 
 	return (
-		<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+		<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 			<div className="terminal_form_container">
 				<div className="terminal_form_inputfields">
 					<InputField

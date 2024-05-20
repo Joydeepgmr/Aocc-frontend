@@ -288,7 +288,7 @@ const AircraftRegistrationTable = ({
 				width="80%"
 				className="custom_modal"
 			>
-				<Form layout="vertical" form={initial} onFinish={onFinishHandler}>
+				<Form autoComplete='off' layout="vertical" form={initial} onFinish={onFinishHandler}>
 					<AircraftRegistrationForm
 						isReadOnly={aircraftRegistrationModal.type === 'view'}
 						type={aircraftRegistrationModal.type}

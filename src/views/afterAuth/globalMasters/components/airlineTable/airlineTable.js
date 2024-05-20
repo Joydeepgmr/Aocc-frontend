@@ -261,7 +261,7 @@ const AirlineTable = ({
 				width="80%"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
+				<Form autoComplete='off' layout="vertical" onFinish={onFinishHandler} form={initial}>
 					<AirlineForm
 						isReadOnly={airlineRegistrationModal.type === 'view'}
 						type={airlineRegistrationModal.type}

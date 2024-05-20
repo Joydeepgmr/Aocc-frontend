@@ -112,7 +112,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+			<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className='taxiway_form_container'>
 					<div className="taxiway_form_inputFields">
 						<InputField

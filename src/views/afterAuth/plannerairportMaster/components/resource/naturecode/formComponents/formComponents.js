@@ -47,7 +47,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 	}, [form, initialValues]);
 
 	return (
-		<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+		<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 			<div className="nature_code_form_container">
 				<div className="nature_code_form_inputfields">
 					<InputField

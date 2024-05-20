@@ -273,7 +273,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				width="80%"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
+				<Form autoComplete='off' layout="vertical" onFinish={onFinishHandler} form={initial}>
 					<AirportForm fileList={fileList} setFileList={setFileList} form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && (
 						<>

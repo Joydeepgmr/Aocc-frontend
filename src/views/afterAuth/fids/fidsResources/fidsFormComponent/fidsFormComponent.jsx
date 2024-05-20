@@ -97,6 +97,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 	}, [initialValue]);
 	return (
 		<Form
+			autoComplete="off"
 			form={form}
 			layout="vertical"
 			onFinish={onFinishHandler}

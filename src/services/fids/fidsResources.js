@@ -103,3 +103,12 @@ export const useUpdateFidsResource = (id, props) => {
 
 	return { ...response, data, message: statusMessage };
 };
+
+export const useGetAllFidsScreens = (props) => {
+	const response = useQuery({
+		queryKey: 'get-all-fids-screens',
+		queryFn: async (data) => await Post(`${GET_FIDS_RESOURCES}?bulk=true`),
+		...props
+	})
+	return response;
+}

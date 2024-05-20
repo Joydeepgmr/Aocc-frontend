@@ -253,7 +253,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				width="80%"
 				className="custom_modal"
 			>
-				<Form layout="vertical" onFinish={onFinishHandler} form={initial}>
+				<Form autoComplete='off' layout="vertical" onFinish={onFinishHandler} form={initial}>
 					<AircraftTypeForm
 						isReadOnly={aircraftTypeModal.type === 'view'}
 						type={aircraftTypeModal.type}

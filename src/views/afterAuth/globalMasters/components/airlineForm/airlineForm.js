@@ -12,7 +12,6 @@ import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAcce
 import './airlineForm.scss';
 
 const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
-	const [isUploadDisable, setIsUploadDisable] = useState(false);
 	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
 		response: {
@@ -29,7 +28,6 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					file: airlineImage,
 				});
 				setIsDefault(true);
-				setIsUploadDisable(true);
 			} else {
 				setFileList([]);
 				form.setFieldsValue({ file: null });
@@ -64,7 +62,6 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 		if (Array.isArray(watchOtp) ? watchOtp?.join('')?.length < 3 : watchOtp?.length < 3) {
 			setFileList([]);
 			setIsDefault(false);
-			setIsUploadDisable(true);
 		}
 	}, [watchOtp]);
 	return (
@@ -102,7 +99,7 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 							isDefault: isDefault,
 							required: true,
 							name: 'file',
-							disabled: isUploadDisable,
+							disabled: isDefault,
 							label: 'Airline logo',
 						}}
 					/>

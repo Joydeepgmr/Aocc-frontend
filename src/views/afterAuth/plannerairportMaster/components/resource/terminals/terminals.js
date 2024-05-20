@@ -255,16 +255,16 @@ const Terminal = () => {
 			value: 'create',
 			key: '0',
 		},
-		{
-			label: 'Upload CSV',
-			value: 'uploadCSV',
-			key: '1',
-		},
-		{
-			label: 'Download CSV Template',
-			value: 'downloadCSVTemplate',
-			key: '2',
-		},
+		// {
+		// 	label: 'Upload CSV',
+		// 	value: 'uploadCSV',
+		// 	key: '1',
+		// },
+		// {
+		// 	label: 'Download CSV Template',
+		// 	value: 'downloadCSVTemplate',
+		// 	key: '2',
+		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
