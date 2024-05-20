@@ -200,7 +200,7 @@ const FlightSchedule = () => {
 				dataIndex: 'flightType',
 				key: 'flightType',
 				align: 'center',
-				render: (text) => text ?? '-',
+				render: (text) => <div style={{ textTransform: 'capitalize' }}>{text ?? '-'}</div>,
 			},
 			{
 				title: 'REG',
