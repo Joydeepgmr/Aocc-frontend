@@ -19,7 +19,7 @@ const FormComponent = () => {
 
 	return (
 		<div className="main_form">
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+			<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="form_section">
 					<div className="form_content">
 						<InputField

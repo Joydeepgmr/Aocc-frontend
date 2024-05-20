@@ -121,7 +121,7 @@ const FormComponent = ({
 	return (
 		<div key={initialValue?.id}>
 			<PageLoader loading={isGetImageLoading} />
-			<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+			<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="airline_form_container">
 					<div className="airline_form_inputfields">
 						<OtpField

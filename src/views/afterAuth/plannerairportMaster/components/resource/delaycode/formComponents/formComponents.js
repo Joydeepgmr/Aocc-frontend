@@ -71,7 +71,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 	}, [form, initialValues]);
 
 	return (
-		<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+		<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 			<div className="delay_code_form_container">
 				<div className="delay_code_form_inputfields">
 					<InputField

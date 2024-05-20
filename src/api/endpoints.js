@@ -142,6 +142,8 @@ export const POST_FIDS_RESOURCES = '/screen';
 export const DELETE_FIDS_RESOURCES = '/screen';
 export const UPDATE_FIDS_RESOURCES = '/screen';
 
+/*------------------------- FIDS Dashboard----------------------------------*/
+
 /*------------------------- Notification ----------------------------------*/
 export const GET_ALL_NOTIFICATION = '/notification/paginated';
 export const UPDATE_NOTIFICATION = '/notification';

@@ -114,7 +114,7 @@ const Wrapper = ({ title, width, tableComponent, action, data, isLoading }) => {
 				width={width ?? 'auto'}
 				className="custom_modal"
 			>
-				<Form form={form} layout="vertical" onFinish={onFinishHandler}>
+				<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 					<LicenseSetupForm form={form} />
 					<Divider />
 					<div className="custom_buttons">
