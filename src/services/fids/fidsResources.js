@@ -7,8 +7,9 @@ import {
 	GET_FIDS_RESOURCES,
 	GET_TERMINAL,
 	POST_FIDS_RESOURCES,
+	GET_FIDS_DASHBOARD,
 } from '../../api';
-import { Post, Delete, Patch } from '../HttpServices/HttpServices';
+import { Post, Delete, Patch, Get } from '../HttpServices/HttpServices';
 
 export const useCheckInDropdown = (props) => {
 	const response = useQuery({
@@ -110,5 +111,14 @@ export const useGetAllFidsScreens = (props) => {
 		queryFn: async (data) => await Post(`${GET_FIDS_RESOURCES}?bulk=true`),
 		...props
 	})
+	return response;
+}
+
+export const useGetFidsDashboard = (props) => {
+	const response = useMutation({
+		mutationKey: 'get-fids-dashboard-screen',
+		mutationFn: async (id) => await Get(`${GET_FIDS_DASHBOARD}?id=${id}`),
+		...props
+	});
 	return response;
 }

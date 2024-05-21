@@ -6,15 +6,15 @@ import './style.scss';
 const Widgets = () => {
 	const airlineData = [
 		{
-			name: 'Airline 1',
+			name: 'Air India',
 			percent: 80,
 		},
 		{
-			name: 'Airline 2',
+			name: 'Vistara',
 			percent: 60,
 		},
 		{
-			name: 'Airline 3',
+			name: 'Indigo',
 			percent: 50,
 		},
 	];

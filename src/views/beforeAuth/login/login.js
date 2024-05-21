@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import loginPageImage from '../../../assets/login_page_image.png';
-import gmrLogo from '../../../assets/logo/gmr-logo.png';
+import gmrLogo from '../../../assets/logo/gmr-logo1.svg';
 import InputField from '../../../components/input/field/field';
 import CheckboxField from '../../../components/checkbox/checkbox';
 import { Form, Image } from 'antd';
@@ -142,9 +142,6 @@ export const Login = () => {
 
 			<div className="image_container">
 				<img className="login_image" src={imageUrl[nextImage].url} alt="airport image" />
-				<div className="change_login_page_image">
-					<p>{imageUrl[nextImage].name}</p>
-				</div>
 			</div>
 		</div>
 	);
