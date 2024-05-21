@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { io } from 'socket.io-client';
 
@@ -19,7 +19,7 @@ export function App() {
 			},
 		},
 	});
-	useEffect(() => {
+	useLayoutEffect(() => {
 		socket.on('connect', () => {
 			console.log('socket is connected');
 		});
@@ -36,7 +36,7 @@ export function App() {
 			}
 		};
 	}, []);
-	
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Toaster

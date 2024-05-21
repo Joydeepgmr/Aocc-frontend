@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import gmrLogo from '../../assets/logo/gmr-logo.png';
+import gmrLogo from '../../assets/logo/gmr-logo.svg';
 import line from '../../assets/logo/line.svg';
 import setting from '../../assets/logo/setting.svg';
 import windLogo from '../../assets/logo/wind.svg';

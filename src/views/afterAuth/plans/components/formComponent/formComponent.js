@@ -140,7 +140,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 
 	return (
 		<div key={initialValues?.id}>
-			<Form form={form} layout="vertical" initialValues={initialValues} onFinish={onFinish}>
+			<Form form={form} autoComplete='off' layout="vertical" initialValues={initialValues} onFinish={onFinish}>
 				<div className="seasonal_form_container">
 					<div className="seasonal_form_inputfields">
 						<CustomSelect
