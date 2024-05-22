@@ -401,7 +401,7 @@ const Seasonal = () => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: Boolean(seasonalData?.length) ? (
+			children: Boolean(seasonalData?.length) || searchedValue ? (
 				<Arrival data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()
@@ -410,7 +410,7 @@ const Seasonal = () => {
 		{
 			key: '2',
 			label: 'Departure',
-			children: Boolean(seasonalData?.length) ? (
+			children: Boolean(seasonalData?.length) || searchedValue ? (
 				<Departure data={seasonalData} columns={columns} fetchData={fetchNextPage} pagination={hasNextPage} />
 			) : (
 				noDataHandler()

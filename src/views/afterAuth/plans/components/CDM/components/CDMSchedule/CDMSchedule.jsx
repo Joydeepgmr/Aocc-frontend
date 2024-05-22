@@ -390,32 +390,34 @@ const DailySchedule = () => {
 		{
 			key: '1',
 			label: 'Arrival',
-			children: Boolean(seasonalData?.length) ? (
-				<Arrival
-					data={seasonalData}
-					columns={columns}
-					loading={isFetchLoading}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-				/>
-			) : (
-				noDataHandler()
-			),
+			children:
+				Boolean(seasonalData?.length) || searchedValue || dateRangeValue?.length ? (
+					<Arrival
+						data={seasonalData}
+						columns={columns}
+						loading={isFetchLoading}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
+				) : (
+					noDataHandler()
+				),
 		},
 		{
 			key: '2',
 			label: 'Departure',
-			children: Boolean(seasonalData?.length) ? (
-				<Departure
-					data={seasonalData}
-					columns={columns}
-					loading={isFetchLoading}
-					fetchData={fetchNextPage}
-					pagination={hasNextPage}
-				/>
-			) : (
-				noDataHandler()
-			),
+			children:
+				Boolean(seasonalData?.length) || searchedValue || dateRangeValue?.length ? (
+					<Departure
+						data={seasonalData}
+						columns={columns}
+						loading={isFetchLoading}
+						fetchData={fetchNextPage}
+						pagination={hasNextPage}
+					/>
+				) : (
+					noDataHandler()
+				),
 		},
 	];
 	useEffect(() => {
