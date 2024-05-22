@@ -279,7 +279,7 @@ const CDM = () => {
 								type="text"
 								className="view_map_button"
 								onClick={() => {
-									setTelexModal({ isOpen: true, data: null });
+									setTelexModal({ isOpen: true, data: record?.parsedMessage });
 								}}
 							/>
 						),
