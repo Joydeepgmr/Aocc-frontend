@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { Form, Image } from 'antd';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import loginPageImage from '../../../assets/login_page_image.png';
 import gmrLogo from '../../../assets/logo/gmr-logo1.svg';
-import InputField from '../../../components/input/field/field';
-import CheckboxField from '../../../components/checkbox/checkbox';
-import { Form, Image } from 'antd';
 import ButtonComponent from '../../../components/button/button';
-import { useNavigate } from 'react-router-dom';
+import InputField from '../../../components/input/field/field';
+import PageLoader from '../../../components/pageLoader/pageLoader';
+import { roleBasedNav } from '../../../layouts/topNav/navData';
 import { Pathname } from '../../../pathname';
 import { useGetUserDetails, useLoginUser } from '../../../services/userLoginServices/LoginServices';
 import * as userType from '../../../utils/roles';
 import './login.scss';
-import toast from 'react-hot-toast';
-import PageLoader from '../../../components/pageLoader/pageLoader';
-import { roleBasedNav } from '../../../layouts/topNav/navData';
 
 export const Login = () => {
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
