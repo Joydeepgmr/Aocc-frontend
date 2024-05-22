@@ -48,7 +48,6 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 10px;
 }
 
 .close-button {
@@ -56,6 +55,8 @@
 	border: none;
 	cursor: pointer;
 	font-size: 18px;
+	position: absolute;
+	right: 2rem;
 }
 
 //   .custom-modal-content {

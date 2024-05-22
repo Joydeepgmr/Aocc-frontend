@@ -100,7 +100,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 						label="Airline"
 						placeholder={'Select Airline'}
 						name="airlineId"
-						disabled={isReadOnly || isEdit}
+						disabled={isReadOnly}
 						className="select"
 						required
 					/>
