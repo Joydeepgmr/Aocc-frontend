@@ -1,15 +1,16 @@
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import {
-	UPDATE_FIDS_RESOURCES,
 	DELETE_FIDS_RESOURCES,
 	GET_BAGGAGE_BELT,
 	GET_CHECKIN_COUNTER,
+	GET_FIDS_DASHBOARD,
 	GET_FIDS_RESOURCES,
 	GET_TERMINAL,
+	POST_FIDS_ACCESS,
 	POST_FIDS_RESOURCES,
-	GET_FIDS_DASHBOARD,
+	UPDATE_FIDS_RESOURCES,
 } from '../../api';
-import { Post, Delete, Patch, Get } from '../HttpServices/HttpServices';
+import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
 
 export const useCheckInDropdown = (props) => {
 	const response = useQuery({
@@ -118,6 +119,31 @@ export const useGetFidsDashboard = (props) => {
 	const response = useMutation({
 		mutationKey: 'get-fids-dashboard-screen',
 		mutationFn: async (id) => await Get(`${GET_FIDS_DASHBOARD}?id=${id}`),
+		...props
+	});
+	return response;
+}
+
+export const useGetFidsAccessData = (props) => {
+	const response = useQuery({
+		queryKey: 'get-fids-access-data',
+		queryFn: async (data) => await Post(`${GET_FIDS_RESOURCES}?bulk=true`),
+		...props
+	})
+	return response;
+}
+export const useAddFidsAccessData = (props) => {
+	const response = useMutation({
+		mutationKey: 'add-fids-access-data',
+		mutationFn: async (data) => await Post(`${POST_FIDS_ACCESS}`, data),
+		...props
+	});
+	return response;
+}
+export const useEditFidsAccessData = (props) => {
+	const response = useMutation({
+		mutationKey: 'edit-fids-access-data',
+		mutationFn: async ({ id, data }) => await Get(`${GET_FIDS_DASHBOARD}?id=${id}`, data),
 		...props
 	});
 	return response;

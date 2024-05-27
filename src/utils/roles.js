@@ -5,3 +5,4 @@ export const ACCESS_MANAGER = 'accessmanager';
 export const SECURITY_OFFICER = 'Security Officer';
 export const CDM = 'Cdm';
 export const FIDS = 'Fids Manager';
+export const AIRLINE_FIDS = 'Airline Crew';

@@ -1,6 +1,7 @@
 import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
 import { PARKING_STAND, GET_PARKING_STAND, UPLOAD_CSV_BULK_PARKING_STAND } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../../../utils';
 
 export const useGetParkingStand = (props) => {
 	const response = useInfiniteQuery({
@@ -62,8 +63,8 @@ export const useUploadCSVParkingStand = (props) => {
 		mutationKey: ['upload-csv-parking-stand'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK_PARKING_STAND}`, data);
-			// const downloadUrl = GenerateDownloadUrl(resp);
-			// DownloadFileByUrl(downloadUrl);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl, 'Parking_stand_uploaded');
 			return resp;
 		},
 		...props,

@@ -74,15 +74,23 @@ export const roleBasedNav = (role = 'Planner') => {
 		navItems = [
 			{
 				key: '0',
-				label: 'Dashboard',
-				children: Pathname.FIDS_DASHBOARD,
-			},
-			{
-				key: '1',
 				label: 'Resources',
 				children: Pathname.FIDS_RESOURCES,
 			},
+			{
+				key: '1',
+				label: 'Manage Access',
+				children: Pathname.FIDS_ACCESS,
+			},
 		];
+	} else if (role === userType.AIRLINE_FIDS) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Dashboard',
+				children: Pathname.FIDS_ACCESS,
+			}
+		]
 	}
 
 	return navItems;

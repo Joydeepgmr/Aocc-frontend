@@ -17,6 +17,7 @@ import {
 } from '../../../../../services/globalMasters/globalMaster';
 import AircraftTypeForm from '../aircraftTypeForm/aircraftTypeForm';
 import './aircraftTypeTable.scss';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your aircraft type' }; // type could be 'new' | 'view' | 'edit'
@@ -112,6 +113,8 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 
 	function onFinishHandler(values) {
 		values = getFormValues(values);
+		values.iataCode = values?.iataCode ? CapitaliseFirstLetter(values.iataCode) : undefined;
+		values.icaoCode = values?.icaoCode ? CapitaliseFirstLetter(values.icaoCode) : undefined;
 		values.validFrom = values?.validFrom && dayjs(values?.validFrom).format('YYYY-MM-DD');
 		values.validTill = values?.validTill && dayjs(values?.validTill).format('YYYY-MM-DD');
 		delete values.totalSeats;
@@ -218,7 +221,7 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				dataIndex: 'bodyType',
 				key: 'bodyType',
 				align: 'center',
-				render: (text) => text || '-',
+				render: (text) => <div style={{ textTransform: 'capitalize' }}>{text || '-'}</div>,
 			},
 			{
 				title: 'DETAIL',

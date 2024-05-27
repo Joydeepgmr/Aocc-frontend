@@ -64,7 +64,7 @@ export const useUploadCSVGates = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${GATE_UPLOAD_CSV}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl);
+			DownloadFileByUrl(downloadUrl, 'Gate_uploaded');
 			return resp;
 		},
 		...props,

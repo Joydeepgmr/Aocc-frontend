@@ -132,6 +132,8 @@ const AircraftRegistrationTable = ({
 	function onFinishHandler(values) {
 		values = getFormValues(values);
 		values.mainDeck = values?.mainDeck ? CapitaliseFirstLetter(values.mainDeck) : undefined;
+		values.iataCode = values?.iataCode ? CapitaliseFirstLetter(values.iataCode) : undefined;
+		values.icaoCode = values?.icaoCode ? CapitaliseFirstLetter(values.icaoCode) : undefined;
 		values.remark = values?.remark ? CapitaliseFirstLetter(values.remark) : undefined;
 		values.annex = values?.annex ? CapitaliseFirstLetter(values.annex) : undefined;
 		values.ownerName = values?.ownerName ? CapitaliseFirstLetter(values.ownerName) : undefined;

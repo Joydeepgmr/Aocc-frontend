@@ -16,5 +16,6 @@ export let Pathname = {
 	VENDOR: '/vendor',
 	FIDS_DASHBOARD: '/fids-dashboard',
 	FIDS_RESOURCES: '/fids-resources',
+	FIDS_ACCESS: '/fids-manage-access',
 	DASHBOARD_CHARTS: '/dashboard-charts',
 };
