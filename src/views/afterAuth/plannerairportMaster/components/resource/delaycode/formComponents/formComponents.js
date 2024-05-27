@@ -5,7 +5,7 @@ import InputField from '../../../../../../../components/input/field/field';
 import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
-import { ConvertIstToUtc } from '../../../../../../../utils';
+import { CapitaliseFirstLetter, ConvertIstToUtc } from '../../../../../../../utils';
 import { useAirlineDropdown } from '../../../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import toast from 'react-hot-toast';
 import './formComponents.scss';
@@ -52,6 +52,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 
 		changedValues = {
 			...changedValues,
+			delayCode: CapitaliseFirstLetter(changedValues?.delayCode),
 			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 		};

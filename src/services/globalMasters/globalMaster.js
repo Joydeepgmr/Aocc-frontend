@@ -321,7 +321,7 @@ export const useUploadCSVGlobalAirline = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${BULK_UPLOAD_GLOBAL_AIRLINE}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl);
+			DownloadFileByUrl(downloadUrl, 'airline_uploaded');
 			return resp;
 		},
 		...props,
@@ -340,7 +340,7 @@ export const useUploadCSVGlobalAircraftType = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${BULK_UPLOAD_GLOBAL_AIRCRAFT_TYPE}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl);
+			DownloadFileByUrl(downloadUrl, 'aircraft_type_uploaded');
 			return resp;
 		},
 		...props,
@@ -359,7 +359,7 @@ export const useUploadCSVGlobalAirport = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${BULK_UPLOAD_GLOBAL_AIRPORT}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl);
+			DownloadFileByUrl(downloadUrl, 'airport_uploaded');
 			return resp;
 		},
 		...props,

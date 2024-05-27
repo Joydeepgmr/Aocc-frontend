@@ -85,8 +85,8 @@ export const useUploadCSVBelt = (props) => {
 		mutationKey: ['belt-upload-csv'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK_BELT}`, data);
-			// const downloadUrl = GenerateDownloadUrl(resp);
-			// DownloadFileByUrl(downloadUrl);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl, 'Uploaded_Baggage_belt');
 			return resp;
 		},
 		...props,

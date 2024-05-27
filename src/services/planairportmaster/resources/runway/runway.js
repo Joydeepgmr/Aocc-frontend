@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQueryClient, useQuery } from 'react-query';
 import { GET_RUNWAY, RUNWAY, UPLOAD_CSV_BULK_RUNWAY } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../../../utils';
 
 export const useGetRunway = (props) => {
 	const response = useInfiniteQuery({
@@ -77,8 +78,8 @@ export const useUploadCSVRunway = (props) => {
 		mutationKey: ['upload-csv-runway'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK_RUNWAY}`, data);
-			// const downloadUrl = GenerateDownloadUrl(resp);
-			// DownloadFileByUrl(downloadUrl);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl, 'Runway_uploaded');
 			return resp;
 		},
 		...props,

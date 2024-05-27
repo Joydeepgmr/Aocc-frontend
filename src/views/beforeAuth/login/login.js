@@ -59,7 +59,11 @@ export const Login = () => {
 				navigate(Pathname.CDM);
 				break;
 			case userType.FIDS:
-				navigate(Pathname.FIDS_DASHBOARD);
+				navigate(Pathname.FIDS_RESOURCES);
+				break;
+			case userType.AIRLINE_FIDS:
+				console.log("pathname is ",Pathname.FIDS_ACCESS)
+				navigate(Pathname.FIDS_ACCESS);
 				break;
 			default:
 				navigate(Pathname[404]);

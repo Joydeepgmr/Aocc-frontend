@@ -1,6 +1,7 @@
 import { useMutation, useInfiniteQuery, useQuery } from 'react-query';
 import { CHECKIN_COUNTER, GET_CHECKIN_COUNTER, UPLOAD_CSV_BULK_CHECKIN } from '../../../../api';
 import { Post, Patch, Delete } from '../../../HttpServices/HttpServices';
+import { DownloadFileByUrl, GenerateDownloadUrl } from '../../../../utils';
 
 export const useGetCheckIn = (props) => {
 	const response = useInfiniteQuery({
@@ -62,8 +63,8 @@ export const useUploadCSVCheckIn = (props) => {
 		mutationKey: ['upload-csv-check-in'],
 		mutationFn: async (data) => {
 			const resp = await Post(`${UPLOAD_CSV_BULK_CHECKIN}`, data);
-			// const downloadUrl = GenerateDownloadUrl(resp);
-			// DownloadFileByUrl(downloadUrl);
+			const downloadUrl = GenerateDownloadUrl(resp);
+			DownloadFileByUrl(downloadUrl, 'check_in_uploaded');
 			return resp;
 		},
 		...props,

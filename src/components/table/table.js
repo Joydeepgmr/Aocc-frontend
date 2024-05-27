@@ -4,13 +4,12 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './table.scss';
 import dayjs from 'dayjs';
-import { isOpera } from 'react-device-detect';
 
 const TableComponent = ({
 	columns,
 	data = [],
 	loading = false,
-	onChange = () => {},
+	onChange = () => { },
 	tableTitle = '',
 	emptyText = 'No data available',
 	fetchData,

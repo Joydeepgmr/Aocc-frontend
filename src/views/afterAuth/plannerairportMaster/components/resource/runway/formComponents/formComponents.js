@@ -6,7 +6,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import InputField from '../../../../../../../components/input/field/field';
 import CustomRadioGroup from '../../../../../../../components/radioButton/radioButton';
 import CustomTypography from '../../../../../../../components/typographyComponent/typographyComponent';
-import { ConvertIstToUtc } from '../../../../../../../utils';
+import { CapitaliseFirstLetter, ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss';
 
 
@@ -71,6 +71,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 		changedValues = {
 			...changedValues,
+			name: CapitaliseFirstLetter(changedValues?.name),
 			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 			unavailableFrom: changedValues?.unavailableFrom ? ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,

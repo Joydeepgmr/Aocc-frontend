@@ -1,14 +1,10 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { io } from 'socket.io-client';
 
 import { Toaster } from 'react-hot-toast';
 import './app.scss';
 import Router from './routes/routes';
-
-const socketUrl = process.env.baseURL.split('/').slice(0, 3).join('/');
-const socket = io(socketUrl, { timeout: 10000, transports: ['websocket'] });
-
+import socket from './socket/server';
 export function App() {
 	const token = localStorage.getItem('_tid');
 	const userRole = localStorage.getItem('role');
@@ -20,17 +16,7 @@ export function App() {
 			},
 		},
 	});
-	useLayoutEffect(() => {
-		socket.on('connect', () => {
-			console.log('socket is connected');
-		});
-		socket.on('connect_error', (error) => {
-			console.error('Socket connection error:', error);
-		});
-		socket.on('UPDATE_API', (data) => console.log('Socket is listing...'));
-		socket.on('disconnect', (reason) => {
-			console.log(reason);
-		});
+	useEffect(() => {
 		return () => {
 			if (socket.connected) {
 				socket.disconnect();

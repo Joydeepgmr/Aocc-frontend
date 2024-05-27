@@ -8,7 +8,7 @@ import Date from '../../../../../../../components/datapicker/datepicker';
 import { useStandDropdown } from '../../../../../../../services/planairportmaster/resources/parkingstand/parkingstand';
 import { useTaxiwayDropdown } from '../../../../../../../services/planairportmaster/resources/taxiway/taxiway';
 import { useRunwayDropdown } from '../../../../../../../services/planairportmaster/resources/runway/runway';
-import { ConvertIstToUtc } from '../../../../../../../utils';
+import { CapitaliseFirstLetter, ConvertIstToUtc } from '../../../../../../../utils';
 import './formComponents.scss';
 
 const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValues, isEdit, isReadOnly }) => {
@@ -55,6 +55,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 
 		changedValues = {
 			...changedValues,
+			name: CapitaliseFirstLetter(changedValues?.name),
 			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 			unavailableFrom: changedValues?.unavailableFrom ? ConvertIstToUtc(changedValues?.unavailableFrom) : undefined,

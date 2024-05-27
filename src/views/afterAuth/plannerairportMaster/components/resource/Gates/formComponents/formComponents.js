@@ -7,7 +7,7 @@ import Button from '../../../../../../../components/button/button';
 import Date from '../../../../../../../components/datapicker/datepicker';
 import CustomSelect from '../../../../../../../components/select/select';
 import CheckBoxField from '../../../../../../../components/checkbox/checkbox';
-import { ConvertIstToUtc } from '../../../../../../../utils';
+import { CapitaliseFirstLetter, ConvertIstToUtc } from '../../../../../../../utils';
 import { useTerminalDropdown } from '../../../../../../../services/planairportmaster/resources/terminal/terminal';
 import './formComponents.scss';
 
@@ -100,6 +100,7 @@ const FormComponent = ({
 
 		changedValues = {
 			...changedValues,
+			name: CapitaliseFirstLetter(changedValues?.name),
 			validFrom: changedValues?.validFrom ? ConvertIstToUtc(changedValues?.validFrom) : undefined,
 			validTill: changedValues?.validTill ? ConvertIstToUtc(changedValues?.validTill) : undefined,
 			unavailableFrom: changedValues?.unavailableFrom

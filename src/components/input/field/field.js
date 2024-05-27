@@ -25,7 +25,7 @@ const InputField = ({
 	defaultValue,
 	isArticle = true,
 }) => {
-	const numberPattern = /^[0-9]*$/;
+	const numberPattern = /^\d+(\.\d{1,2})?$/;
 	const Regex_CheckSpace = /^\S/;
 	const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/;
 	const inputs = [];
@@ -101,7 +101,7 @@ const InputField = ({
 						},
 						{
 							pattern: type === 'number' ? numberPattern : null,
-							message: type === 'number' ? 'Please enter only numbers' : 'Enter the valid format',
+							message: type === 'number' ? 'Please enter valid numbers' : 'Enter the valid format',
 						},
 						{ validator: validator ?? validateRange },
 					]}

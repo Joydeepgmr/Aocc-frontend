@@ -184,14 +184,14 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					max={999}
 					placeholder={!isReadOnly && "Enter the MTOW"}
 					className="custom_input"
-					suffixText="t"
+					suffixText="T"
 					disabled={isReadOnly}
 				/>
 				<InputField
 					label="MOW"
 					name="mow"
-					max={32}
-					pattern='^(?!\s).*$'
+					max={6}
+					pattern='^\d+(\.\d{1,2})?$'
 					placeholder={!isReadOnly && "Enter the MOW"}
 					className="custom_input"
 					suffixText="t"

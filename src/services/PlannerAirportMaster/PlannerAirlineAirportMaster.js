@@ -88,7 +88,7 @@ export const useUploadCSVPlannerAirline = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${BULK_IMPORT_PLANNER_AIRLINE}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl);
+			DownloadFileByUrl(downloadUrl, 'Airline_uploaded');
 			return resp;
 		},
 		...props,
