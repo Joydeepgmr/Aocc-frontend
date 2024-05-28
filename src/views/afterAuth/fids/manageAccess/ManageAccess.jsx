@@ -13,7 +13,7 @@ import DropdownButton from '../../../../components/dropdownButton/dropdownButton
 import './manageAccess.scss';
 import { useAirlineDropdown } from '../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import dayjs from 'dayjs';
-import { useAddFidsAccessData } from '../../../../services/fids/fidsResources';
+import { useAddFidsAccessData, useGetFidsAccessData } from '../../../../services/fids/fidsResources';
 import toast from 'react-hot-toast';
 
 const ManageFidsAccess = () => {
@@ -28,6 +28,15 @@ const ManageFidsAccess = () => {
 			data: { message },
 		},
 	}) => toast.error(message);
+	const getAccessApiProps = {
+		onSuccess: (data) => {
+			console.log('data is ', data);
+			if (data?.length) {
+				setFidsData(data);
+			}
+		},
+		onError,
+	};
 	const createAccessApiProps = {
 		onSuccess: ({ message, data }) => {
 			toast.success(message);
@@ -36,6 +45,7 @@ const ManageFidsAccess = () => {
 		onError,
 	};
 	const { mutate: createAccess, isLoading: isCreateLoading } = useAddFidsAccessData(createAccessApiProps);
+	const { isLoading: isGetAllLoading } = useGetFidsAccessData(getAccessApiProps);
 	const { data: airlineDropdownData } = useAirlineDropdown({ onError });
 	const SelectAirlineData = useMemo(() => {
 		return airlineDropdownData?.map((data) => {
@@ -46,28 +56,28 @@ const ManageFidsAccess = () => {
 		() => [
 			{
 				title: 'AIRLINE',
-				dataIndex: ['globalAirport', 'name'],
+				dataIndex: ['airline', 'name'],
 				key: 'airportName',
 				render: (text) => text || '-',
 			},
 			{
 				title: '2L',
-				dataIndex: ['globalAirport', 'iataCode'],
-				key: 'iataCode',
+				dataIndex: ['airline', 'twoLetterCode'],
+				key: 'twoLetterCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: '3L',
-				dataIndex: ['globalAirport', 'icaoCode'],
-				key: 'icaoCode',
+				dataIndex: ['airline', 'threeLetterCode'],
+				key: 'threeLetterCode',
 				align: 'center',
 				render: (text) => text || '-',
 			},
 			{
 				title: 'Email',
-				dataIndex: ['globalAirport', 'icaoCode'],
-				key: 'icaoCode',
+				dataIndex: ['userId', 'email'],
+				key: 'email',
 				align: 'center',
 				render: (text) => text || '-',
 			},
@@ -76,14 +86,14 @@ const ManageFidsAccess = () => {
 				dataIndex: 'validFrom',
 				key: 'validFrom',
 				align: 'center',
-				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
+				render: (text) => text && ConvertUtcToIst(text, 'DD/MM/YYYY'),
 			},
 			{
 				title: 'VALID TILL',
 				dataIndex: 'validTill',
 				key: 'validTill',
 				align: 'center',
-				render: (text) => ConvertUtcToIst(text, 'DD/MM/YYYY') || '-',
+				render: (text) => text && ConvertUtcToIst(text, 'DD/MM/YYYY'),
 			},
 			{
 				title: 'ACTIONS',
@@ -94,14 +104,19 @@ const ManageFidsAccess = () => {
 						<ButtonComponent
 							type={'iconWithBorderEdit'}
 							onClick={() => {
+								const airline = record?.airline?.id;
+								const email = record?.userId?.email;
+								const validFrom = record?.validFrom && dayjs(record?.validFrom);
+								const validTill = record?.validTill && dayjs(record?.validTill);
 								setFidsModal({
 									isOpen: true,
 									type: 'edit',
 									data: record,
 									title: 'Edit Fids License',
 								});
+								form.setFieldsValue({ airline, email, validFrom, validTill });
 							}}
-						></ButtonComponent>
+						/>
 					</div>
 				),
 			},
@@ -143,11 +158,12 @@ const ManageFidsAccess = () => {
 		setFidsModal({ isOpen: true, data: null, title: 'New Fids License', type: 'add' });
 	};
 	const closeAddModal = () => {
+		form.resetFields();
 		setFidsModal({ isOpen: false, data: null, title: 'New Fids License', type: 'add' });
 	};
 	return (
 		<>
-			<PageLoader loading={false} />
+			<PageLoader loading={isGetAllLoading || isCreateLoading} />
 			<ModalComponent
 				isModalOpen={fidsModal.isOpen}
 				closeModal={closeAddModal}

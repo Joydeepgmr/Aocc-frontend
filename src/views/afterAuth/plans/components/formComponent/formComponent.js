@@ -14,7 +14,7 @@ import { useAirlineDropdown } from '../../../../../services/PlannerAirportMaster
 import { useNatureCodeDropdown } from '../../../../../services/planairportmaster/resources/naturecode/naturecode';
 import './formComponent.scss';
 
-const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit, isDaily }) => {
+const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initialValues, isEdit, isDaily, isReadOnly }) => {
 	const [tohChecked, setTohChecked] = useState(false);
 	const [isDate, setIsDate] = useState(false);
 	const [isStart, setIsStart] = useState(false);
@@ -150,6 +150,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							name="airlineId"
 							placeholder={'Select Airline'}
 							className="select"
+							disabled={isReadOnly}
 						/>
 						<InputField
 							label="Flight Number"
@@ -161,6 +162,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							placeholder="Enter the airport name"
 							className="custom_input"
 							patternWarning={'Please enter only numbers'}
+							disabled={isReadOnly}
 						/>
 						<Date
 							label="Date"
@@ -179,6 +181,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							required
 							placeholder={'Select Nature Code'}
 							className="select"
+							disabled={isReadOnly}
 						/>
 					</div>
 					<div className="seasonal_form_inputfields">
@@ -190,6 +193,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							placeholder="Filled Text"
 							pattern="^[a-zA-Z]+$"
 							className="custom_input"
+							disabled={isReadOnly}
 						/>
 
 						{type == 1 ? (
@@ -200,7 +204,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type == 1}
 								className="custom_input"
-								disabled={isEdit}
+								disabled={isEdit || isReadOnly}
 							/>
 						) : (
 							<InputField
@@ -210,7 +214,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								placeholder="Filled Text"
 								required={type != 1}
 								className="custom_input"
-								disabled={isEdit}
+								disabled={isReadOnly || isEdit}
 							/>
 						)}
 						<CustomSelect
@@ -220,6 +224,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							required
 							placeholder={'Select Aircraft'}
 							className="select"
+							disabled={isReadOnly}
 						/>
 						<CheckBoxField
 							name="toh"
@@ -227,6 +232,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							checked={tohChecked}
 							type="custom"
 							onChange={handleCheckboxChange}
+							disabled={isReadOnly}
 						/>
 					</div>
 					<div className="seasonal_form_inputfields">
@@ -237,6 +243,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							required
 							label="Flight Type"
 							name="type"
+							disabled={isReadOnly}
 						/>
 						<InputField
 							label="Duration"
@@ -245,6 +252,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							className="custom_input"
 							pattern="^[0-9]+$"
 							patternWarning={'Please enter only numbers'}
+							disabled={isReadOnly}
 						/>
 						{!isEdit && !isDate && !isDaily ?
 							<WeeklySelect
@@ -275,24 +283,28 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									name="flightNumber"
 									placeholder="Enter the airport name"
 									className="custom_input"
+									disabled={isReadOnly}
 								/>
 								<InputField
 									label="Call Sign"
 									name="callSign"
 									placeholder="Filled Text"
 									className="custom_input"
+									disabled={isReadOnly}
 								/>
 								<InputField
 									label="Registration"
 									name="registration"
 									placeholder="Filled Text"
 									className="custom_input"
+									disabled={isReadOnly}
 								/>
 								<InputField
 									label="Destination"
 									name="destination"
 									placeholder="Filled Text"
 									className="custom_input"
+									disabled={isReadOnly}
 								/>
 							</div>
 							<Divider />
@@ -317,6 +329,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									placeholder="From"
 									className="custom_date"
 									disabledFor="past"
+									disabled={isReadOnly}
 									onChange={handleStartDate}
 								/>
 								<Date
@@ -325,7 +338,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 									placeholder="To"
 									className="custom_date"
 									onChange={(date) => setEndDate(date)}
-									disabled={!isStart}
+									disabled={!isStart || isReadOnly}
 									isDisabledDate={true}
 									disabledDate={(current) => {
 										let prevDate = dayjs(startDate).format('YYYY-MM-DD');
@@ -347,18 +360,20 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 						</div>
 					)}
 				</div>
-				<div className="seasonal_form_inputfields">
-					<div className="form_bottomButton">
-						<Button
-							id="btn"
-							title="Discard"
-							className="custom_svgButton"
-							type="filledText"
-							onClick={handleButtonClose}
-						/>
-						<Button id="btn" title="Save" type="filledText" isSubmit="submit" />
+				{!isReadOnly &&
+					<div className="seasonal_form_inputfields">
+						<div className="form_bottomButton">
+							<Button
+								id="btn"
+								title="Discard"
+								className="custom_svgButton"
+								type="filledText"
+								onClick={handleButtonClose}
+							/>
+							<Button id="btn" title={isEdit ? 'Update' : "Save"} type="filledText" isSubmit="submit" />
+						</div>
 					</div>
-				</div>
+				}
 			</Form>
 		</div>
 	);

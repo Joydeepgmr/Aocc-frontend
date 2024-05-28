@@ -24,14 +24,9 @@ import CapitaliseFirstLetter from '../../../../../../utils/CapitaliseFirstLetter
 const Terminal = () => {
 	const queryClient = useQueryClient();
 	const [terminalData, setTerminalData] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [isReadOnly, setIsReadOnly] = useState(false);
-	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const [openCSVModal, setOpenCSVModal] = useState(false);
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
-
 	const getTerminalHandler = {
 		onSuccess: (data) => handleGetTerminalSuccess(data),
 		onError: (error) => handleGetTerminalError(error),
@@ -59,43 +54,10 @@ const Terminal = () => {
 		refetch: getTerminalRefetch
 	} = useGetTerminal(getTerminalHandler);
 
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-
-	const closeModal = () => {
-		setRowData({});
-		setIsModalOpen(false);
-		form.resetFields();
-	};
-
-	const openEditModal = () => {
-		setIsEditModalOpen(true);
-		form.resetFields();
-	};
-
-	const closeEditModal = () => {
-		setRowData({});
-		setIsEditModalOpen(false);
-		setIsReadOnly(false);
-		form.resetFields();
-	};
-
-	const openDeleteModal = (record) => {
-		setRowData(record);
-		setIsDeleteConfirm(true);
-	}
-
-	const closeDeleteModal = () => {
-		setRowData({});
-		setIsDeleteConfirm(false);
-
-	}
-
 	//CREATE
 	const handleAddTerminalSuccess = (data) => {
 		setTerminalData([])
-		closeModal();
+		handleDetailModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-terminal');
 	}
@@ -116,23 +78,16 @@ const Terminal = () => {
 		value && postTerminal(value);
 	}, [postTerminal]);
 
-	const handleCloseButton = () => {
-		setRowData({});
-		setIsModalOpen(false);
-		setIsEditModalOpen(false);
-		form.resetFields();
-	};
-
 	//EDIT 
 	const editTerminalHandler = {
 		onSuccess: (data) => handleEditTerminalSuccess(data),
 		onError: (error) => handleEditTerminalError(error),
 	};
 
-	const { mutate: editTerminal, isLoading: isEditLoading } = useEditTerminal(rowData?.id, editTerminalHandler)
+	const { mutate: editTerminal, isLoading: isEditLoading } = useEditTerminal(detailModal?.record?.id, editTerminalHandler)
 
 	const handleEditTerminalSuccess = (data) => {
-		closeEditModal();
+		handleDetailModalClose();
 		setTerminalData([]);
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-terminal');
@@ -141,16 +96,6 @@ const Terminal = () => {
 	const handleEditTerminalError = (error) => {
 		toast.error(error?.response?.data?.message)
 	}
-
-	const handleEdit = (record) => {
-		record = {
-			...record,
-			validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-			validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-		}
-		setRowData(record);
-		openEditModal();
-	};
 
 	const handleEditSave = (value) => {
 		editTerminal(value);
@@ -163,7 +108,7 @@ const Terminal = () => {
 	};
 
 	const handleDeleteTerminalSuccess = (data) => {
-		closeDeleteModal();
+		handleDeleteModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-terminal');
 	}
@@ -174,48 +119,44 @@ const Terminal = () => {
 
 	const { mutate: deleteTerminal } = useDeleteTerminal(deleteTerminalHandler);
 	const handleDelete = () => {
-		deleteTerminal(rowData.id);
+		deleteTerminal(openDeleteModal?.record?.id);
 	}
 
-	const handleUpload = (file) => {
-		if (file && file.length > 0) {
-			const formData = new FormData();
-			formData.append('file', file[0].originFileObj);
-			console.log(file);
-			setOpenCSVModal(false);
-			// onUploadCSV(formData);
-		} else {
-			console.error('No file provided for upload.');
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+			};
 		}
-	};
+		setDetailModal({ isOpen: true, record, isEdit });
+	}
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	}
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+			};
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	}
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
+	}
 
 	const columns = [
-		{
-			title: 'ACTIONS',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
-					<Button
-						onClick={() => handleEdit(record)}
-						type="iconWithBorderEdit"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<Button
-						onClick={() => openDeleteModal(record)}
-						type="iconWithBorderDelete"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
 		{
 			title: 'TERM',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (terminalName) => terminalName ?? '-',
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'POS',
@@ -231,22 +172,6 @@ const Terminal = () => {
 			align: 'center',
 			render: (runway) => runway?.name ?? '-',
 		},
-		{
-			title: 'DETAIL',
-			key: 'viewDetails',
-			render: (record) => (
-				<>
-					<Button
-						style={{ margin: 'auto' }}
-						onClick={() => {
-							setIsReadOnly(true);
-							handleEdit(record)
-						}}
-						title="View"
-						type="text" />
-				</>
-			),
-		},
 	];
 
 	const dropdownItems = [
@@ -254,24 +179,12 @@ const Terminal = () => {
 			label: 'Add Terminal',
 			value: 'create',
 			key: '0',
-		},
-		// {
-		// 	label: 'Upload CSV',
-		// 	value: 'uploadCSV',
-		// 	key: '1',
-		// },
-		// {
-		// 	label: 'Download CSV Template',
-		// 	value: 'downloadCSVTemplate',
-		// 	key: '2',
-		// },
+		}
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
-			openModal();
-		} else if (value === 'uploadCSV') {
-			setOpenCSVModal(true);
+			handleDetailModalOpen();
 		}
 	};
 
@@ -286,13 +199,10 @@ const Terminal = () => {
 					btnCondition={true}
 					Heading={'Add Terminal'}
 					formComponent={<FormComponent
-						form={form}
 						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-
+						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={openModal}
-					openCSVModal={() => setOpenCSVModal(true)}
+					openModal={handleDetailModalOpen}
 				/>
 			) : (
 				<>
@@ -315,54 +225,33 @@ const Terminal = () => {
 				</>
 			)}
 
-
-
 			{/* modals */}
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={detailModal?.isOpen}
 				width="80%"
-				closeModal={closeModal}
-				title={'Add Terminal'}
+				record={detailModal?.record}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onDelete={handleDeleteModalOpen}
+				closeModal={handleDetailModalClose}
+				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
 				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						form={form}
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-					/>
-				</div>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="80%"
-				closeModal={closeEditModal}
-				title={`${isReadOnly ? '' : 'Edit'} Terminal`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						form={form}
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit={true}
-						initialValues={rowData}
-						isReadOnly={isReadOnly}
+						handleSaveButton={detailModal?.isEdit ? handleEditSave : handleSaveButton}
+						handleButtonClose={handleDetailModalClose}
+						isEdit={detailModal?.isEdit}
+						initialValues={detailModal?.record}
+						isReadOnly={detailModal?.record && !detailModal?.isEdit}
 					/>
 				</div>
 			</ModalComponent>
 			<ConfirmationModal
-				isOpen={isDeleteConfirm}
-				onClose={closeDeleteModal}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDelete}
-				content={`You want to delete ${rowData?.name}?`}
-			/>
-			<UploadCsvModal
-				isModalOpen={openCSVModal}
-				width="72rem"
-				closeModal={() => setOpenCSVModal(false)}
-				handleUpload={handleUpload}
+				content={`You want to delete ${openDeleteModal?.record?.name}?`}
 			/>
 		</>
 	);

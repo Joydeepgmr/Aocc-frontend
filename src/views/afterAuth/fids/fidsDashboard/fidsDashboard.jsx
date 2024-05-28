@@ -7,10 +7,14 @@ import './fidsDashboard.scss';
 import { useGetAllFidsScreens, useGetFidsDashboard } from '../../../../services/fids/fidsResources';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
 import toast from 'react-hot-toast';
+import ButtonComponent from '../../../../components/button/button';
+import dayjs from 'dayjs';
 
 const FidsDashboard = () => {
 	const [allScreenArr, setAllScreenArr] = useState([]);
 	const [dashboardScreen, setDashboardScreen] = useState([]);
+	const [airlineLogo, setAirlineLogo] = useState([]);
+	const [publishModal, setPublishModal] = useState({ isOpen: false, status: null });
 	const allScreenApiProps = {
 		onSuccess: ({ data }) => {
 			const arr = data.map((data) => ({ label: data?.screenName, value: data.id }));
@@ -22,8 +26,11 @@ const FidsDashboard = () => {
 		},
 	};
 	const DashboardScreenApiProps = {
-		onSuccess: (data) => {
-			setDashboardScreen([data]);
+		onSuccess: ({ result, airlineLogo }) => {
+			setDashboardScreen(result ?? []);
+			if (airlineLogo?.value) {
+				setAirlineLogo(airlineLogo?.value);
+			}
 		},
 		onError: (error) => {
 			toast.error(error?.response?.data?.message);
@@ -40,6 +47,13 @@ const FidsDashboard = () => {
 	};
 	console.log('dashboard screen is', dashboardScreen);
 	const columns = [
+		{
+			title: 'Airline',
+			dataIndex: 'logo',
+			key: 'logo',
+			align: 'center',
+			render: () => airlineLogo && <img className="fids_airline_logo" src={airlineLogo} alt="logo" />,
+		},
 		{
 			title: 'Screen Name',
 			dataIndex: 'screen_name',
@@ -81,30 +95,23 @@ const FidsDashboard = () => {
 			dataIndex: 'start_time',
 			key: 'start_time',
 			align: 'center',
+			render: (time) => (time ? dayjs(time).format('HH:mm') : null),
 		},
 		{
 			title: 'End Time',
 			dataIndex: 'end_time',
 			key: 'end_time',
 			align: 'center',
+			render: (time) => (time ? dayjs(time).format('HH:mm') : null),
 		},
 		{
 			title: 'Terminal',
 		},
 		{
-			title: 'Status',
-		},
-		{
 			title: 'Action',
+			render: () => <ButtonComponent style={{ margin: 'auto' }} title="Publish" type="text" />,
 		},
 	];
-	// const columns = data?.map((item) => ({
-	// 	title: Object.values(item)[0],
-	// 	dataIndex: Object.keys(item)[0],
-	// 	key: `${Object.keys(item)[0]}`,
-	// 	align: 'center',
-	// 	render: (text) => text ?? '-',
-	// }));
 	return (
 		<>
 			<PageLoader loading={isAllFIdsScreenLoading} />
