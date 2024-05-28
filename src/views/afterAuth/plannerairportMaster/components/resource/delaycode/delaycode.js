@@ -1,35 +1,26 @@
-import React, { useCallback, useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import Button from '../../../../../../components/button/button';
-import editIcon from '../../../../../../assets/logo/edit.svg';
-import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import Common_Card from '../../../common_wrapper/common_card.js/common_card';
-import PageLoader from '../../../../../../components/pageLoader/pageLoader';
-import ModalComponent from '../../../../../../components/modal/modal';
-import FormComponent from './formComponents/formComponents';
-import TableComponent from '../../../../../../components/table/table';
+import { useQueryClient } from 'react-query';
+import { GET_DELAY_CODE } from '../../../../../../api';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
-import CustomTypography from '../../../../../../components/typographyComponent/typographyComponent';
-import { useEditDelayCode, useGetDelayCode, usePostDelayCode, useDeleteDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
+import ModalComponent from '../../../../../../components/modal/modal';
+import PageLoader from '../../../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../../../components/table/table';
+import { useDeleteDelayCode, useEditDelayCode, useGetDelayCode, usePostDelayCode } from '../../../../../../services/planairportmaster/resources/delaycode/delaycode';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
-import { GET_DELAY_CODE } from '../../../../../../api';
-import { Form } from 'antd';
-import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
-import './delaycode.scss';
 import { CapitaliseFirstLetter } from '../../../../../../utils';
+import Common_Card from '../../../common_wrapper/common_card.js/common_card';
+import './delaycode.scss';
+import FormComponent from './formComponents/formComponents';
 
 const DelayCode = () => {
 	const queryClient = useQueryClient();
 	const [delayCodeData, setDelayCodeData] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [isReadOnly, setIsReadOnly] = useState(false);
-	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
-	const [openCSVModal, setOpenCSVModal] = useState(false);
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
 
 	const getDelayCodeHandler = {
@@ -58,43 +49,11 @@ const DelayCode = () => {
 		fetchNextPage,
 		refetch: getDelayCodeRefetch
 	} = useGetDelayCode(getDelayCodeHandler);
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-
-	const closeModal = () => {
-		setIsModalOpen(false);
-		setRowData({});
-		form.resetFields();
-	};
-
-	const openEditModal = () => {
-		setIsEditModalOpen(true);
-		form.resetFields();
-	};
-
-	const closeEditModal = () => {
-		setRowData({});
-		setIsEditModalOpen(false);
-		setIsReadOnly(false);
-		form.resetFields();
-	};
-
-	const openDeleteModal = (record) => {
-		setRowData(record);
-		setIsDeleteConfirm(true);
-	}
-
-	const closeDeleteModal = () => {
-		setRowData({});
-		setIsDeleteConfirm(false);
-
-	}
 
 	//CREATE
 	const handleAddDelayCodeSuccess = (data) => {
 		setDelayCodeData([])
-		closeModal();
+		handleDetailModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-delay-code');
 	}
@@ -116,12 +75,6 @@ const DelayCode = () => {
 		value && postDelayCode(value);
 	}, []);
 
-	const handleCloseButton = () => {
-		setRowData({});
-		setIsModalOpen(false);
-		setIsEditModalOpen(false);
-		form.resetFields();
-	};
 
 	//EDIT 
 	const editDelayCodeHandler = {
@@ -129,10 +82,10 @@ const DelayCode = () => {
 		onError: (error) => handleEditDelayCodeError(error),
 	};
 
-	const { mutate: editDelayCode, isLoading: isEditLoading } = useEditDelayCode(rowData?.id, editDelayCodeHandler)
+	const { mutate: editDelayCode, isLoading: isEditLoading } = useEditDelayCode(detailModal?.record?.id, editDelayCodeHandler)
 
 	const handleEditDelayCodeSuccess = (data) => {
-		closeEditModal();
+		handleDetailModalClose();
 		setDelayCodeData([]);
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-delay-code');
@@ -141,16 +94,6 @@ const DelayCode = () => {
 	const handleEditDelayCodeError = (error) => {
 		toast.error(error?.response?.data?.message)
 	}
-
-	const handleEdit = (record) => {
-		record = {
-			...record,
-			validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
-			validTill: record?.validTill ? dayjs(record?.validTill) : "",
-		}
-		setRowData(record);
-		openEditModal();
-	};
 
 	const handleEditSave = (value) => {
 		value.group = CapitaliseFirstLetter(value.group);
@@ -164,7 +107,7 @@ const DelayCode = () => {
 	};
 
 	const handleDeleteDelayCodeSuccess = (data) => {
-		closeDeleteModal();
+		handleDeleteModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-delay-code');
 	}
@@ -175,48 +118,43 @@ const DelayCode = () => {
 
 	const { mutate: deleteDelayCode } = useDeleteDelayCode(deleteDelayCodeHandler);
 	const handleDelete = () => {
-		deleteDelayCode(rowData.id);
+		deleteDelayCode(openDeleteModal?.record?.id);
 	}
 
-	const handleUpload = (file) => {
-		if (file && file.length > 0) {
-			const formData = new FormData();
-			formData.append('file', file[0].originFileObj);
-			console.log(file);
-			setOpenCSVModal(false);
-			// onUploadCSV(formData);
-		} else {
-			console.error('No file provided for upload.');
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
+				validTill: record?.validTill ? dayjs(record?.validTill) : "",
+			};
 		}
-	};
-
+		setDetailModal({ isOpen: true, record, isEdit });
+	}
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	}
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : "",
+				validTill: record?.validTill ? dayjs(record?.validTill) : "",
+			};
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	}
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
+	}
 	const columns = [
-		{
-			title: 'ACTIONS',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
-					<Button
-						onClick={() => handleEdit(record)}
-						type="iconWithBorderEdit"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<Button
-						onClick={() => openDeleteModal(record)}
-						type="iconWithBorderDelete"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
 		{
 			title: 'DEL',
 			dataIndex: 'delayCode',
 			key: 'delayCode',
 			align: 'center',
-			render: (delayCode) => delayCode ?? '-',
+			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'GRP',
@@ -231,23 +169,7 @@ const DelayCode = () => {
 			key: 'airline',
 			align: 'center',
 			render: (airline) => airline?.name ?? '-',
-		},
-		{
-			title: 'DETAIL',
-			key: 'viewDetails',
-			render: (record) => (
-				<>
-					<Button
-						style={{ margin: 'auto' }}
-						onClick={() => {
-							setIsReadOnly(true);
-							handleEdit(record)
-						}}
-						title="View"
-						type="text" />
-				</>
-			),
-		},
+		}
 	];
 
 	const dropdownItems = [
@@ -256,23 +178,11 @@ const DelayCode = () => {
 			value: 'create',
 			key: '0',
 		},
-		// {
-		// 	label: 'Upload CSV',
-		// 	value: 'uploadCSV',
-		// 	key: '1',
-		// },
-		// {
-		// 	label: 'Download CSV Template',
-		// 	value: 'downloadCSVTemplate',
-		// 	key: '2',
-		// },
 	];
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
-			openModal();
-		} else if (value === 'uploadCSV') {
-			setOpenCSVModal(true);
+			handleDetailModalOpen();
 		}
 	};
 
@@ -287,12 +197,10 @@ const DelayCode = () => {
 					btnCondition={true}
 					Heading={'DelayCode'}
 					formComponent={<FormComponent
-						form={form}
 						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
+						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={openModal}
-					openCSVModal={() => setOpenCSVModal(true)}
+					openModal={handleDetailModalOpen}
 				/>
 			) : (
 				<>
@@ -312,57 +220,37 @@ const DelayCode = () => {
 							<TableComponent data={delayCodeData} columns={columns} loading={isFetching} fetchData={fetchNextPage} pagination={hasNextPage} />
 						</div>
 					</div>
-
-					{/* modals */}
 				</>
 			)}
 
 
+			{/* modals */}
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={detailModal?.isOpen}
 				width="80%"
-				closeModal={closeModal}
-				title={' Add Delay Code'}
+				record={detailModal?.record}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onDelete={handleDeleteModalOpen}
+				closeModal={handleDetailModalClose}
+				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
 				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						form={form}
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-					/>
-				</div>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="80%"
-				closeModal={closeEditModal}
-				title={`${isReadOnly ? '' : 'Edit'} Delay Code`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						form={form}
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit={true}
-						initialValues={rowData}
-						isReadOnly={isReadOnly}
+						handleSaveButton={detailModal?.isEdit ? handleEditSave : handleSaveButton}
+						handleButtonClose={handleDetailModalClose}
+						isEdit={detailModal?.isEdit}
+						initialValues={detailModal?.record}
+						isReadOnly={detailModal?.record && !detailModal?.isEdit}
 					/>
 				</div>
 			</ModalComponent>
 			<ConfirmationModal
-				isOpen={isDeleteConfirm}
-				onClose={closeDeleteModal}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDelete}
-				content={`You want to delete ${rowData?.delayCode}?`}
-			/>
-			<UploadCsvModal
-				isModalOpen={openCSVModal}
-				width="72rem"
-				closeModal={() => setOpenCSVModal(false)}
-				handleUpload={handleUpload}
+				content={`You want to delete ${openDeleteModal?.record?.delayCode}?`}
 			/>
 		</>
 	);

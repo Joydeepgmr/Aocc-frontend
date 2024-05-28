@@ -88,7 +88,7 @@ export const roleBasedNav = (role = 'Planner') => {
 			{
 				key: '0',
 				label: 'Dashboard',
-				children: Pathname.FIDS_ACCESS,
+				children: Pathname.FIDS_DASHBOARD,
 			}
 		]
 	}

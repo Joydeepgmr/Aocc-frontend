@@ -1,9 +1,8 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import editIcon from '../../../../../../../assets/logo/edit.svg';
 import Button from '../../../../../../../components/button/button';
 import CustomTabs from '../../../../../../../components/customTabs/customTabs';
 import DropdownButton from '../../../../../../../components/dropdownButton/dropdownButton';
@@ -31,11 +30,9 @@ import './CDMSchedule.scss';
 const DailySchedule = () => {
 	const queryClient = useQueryClient();
 	const [seasonalData, setSeasonalData] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [filter, setFilter] = useState({ date: null, search: null });
-	const [rowData, setRowData] = useState(null);
 	const [index, setIndex] = useState('1');
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
@@ -49,15 +46,16 @@ const DailySchedule = () => {
 	};
 
 	const handleGetSeasonalSuccess = (data) => {
-		if (data?.pages) {
+		console.log('all pages are ', data);
+		if (data?.pages?.length) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-
 			setSeasonalData([...newData]);
+			console.log('under if fun ', newData);
 		}
 	};
-
+	console.log('seasonal data is ', seasonalData);
 	const handleGetSeasonalError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
@@ -70,32 +68,12 @@ const DailySchedule = () => {
 		refetch,
 	} = useGetFlightSchedulePlans(flightType, filter, getSeasonalHandler);
 
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-
 	const openCsvModal = () => {
 		setIsCsvModalOpen(true);
 	};
 
 	const closeCsvModal = () => {
 		setIsCsvModalOpen(false);
-	};
-
-	const closeModal = () => {
-		setIsModalOpen(false);
-		setRowData({});
-		form.resetFields();
-	};
-
-	const openEditModal = () => {
-		setIsEditModalOpen(true);
-	};
-
-	const closeEditModal = () => {
-		setIsEditModalOpen(false);
-		setRowData({});
-		form.resetFields();
 	};
 
 	const handleChange = (key) => {
@@ -106,7 +84,7 @@ const DailySchedule = () => {
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
-			openModal();
+			handleDetailModalOpen();
 		} else if (value === 'uploadCSV') {
 			openCsvModal();
 		}
@@ -119,10 +97,9 @@ const DailySchedule = () => {
 	};
 
 	const handleAddSeasonalSuccess = (data) => {
-		setSeasonalData([]);
-		closeModal();
-		toast.success(data?.message);
+		handleDetailModalClose();
 		queryClient.invalidateQueries('get-seasonal-plans');
+		toast.success(data?.message);
 	};
 
 	const handleAddSeasonalError = (error) => {
@@ -147,26 +124,8 @@ const DailySchedule = () => {
 		data && postSeasonalPlans(data);
 	};
 
-	const handleCloseButton = () => {
-		setIsModalOpen(false);
-		setIsEditModalOpen(false);
-	};
-
-	//EDIT
-	const handleEdit = (record) => {
-		record = {
-			...record,
-			date: record?.date ? dayjs(record?.date) : '',
-			sta: record?.sta ? dayjs(record?.sta, 'HH:mm') : '',
-			std: record?.std ? dayjs(record?.std, 'HH:mm') : '',
-		};
-		setRowData(record);
-		openEditModal();
-	};
-
 	const handleSeasonalEditSuccess = (data) => {
-		closeEditModal();
-		setSeasonalData([]);
+		handleDetailModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-seasonal-plans');
 	};
@@ -181,10 +140,13 @@ const DailySchedule = () => {
 	};
 
 	const { mutate: editSeasonalPlanArrival, isLoading: isEditLoading } = useEditSeasonalPlanArrival(
-		rowData?.id,
+		detailModal?.record?.id,
 		editSeasonalPlansHandler
 	);
-	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(rowData?.id, editSeasonalPlansHandler);
+	const { mutate: editSeasonalPlanDeparture } = useEditSeasonalPlanDeparture(
+		detailModal?.record?.id,
+		editSeasonalPlansHandler
+	);
 	const handleEditSave = (value) => {
 		const data = {
 			flightNo: value.flightNo,
@@ -193,8 +155,6 @@ const DailySchedule = () => {
 			airline: value?.airlineId,
 			natureCode: value?.natureCodeId,
 			sector: value.origin,
-			// sta: value.sta,
-			// std: value.std,
 			duration: value.duration,
 			aircraftId: value?.aircraftId,
 			type: value?.type,
@@ -209,16 +169,6 @@ const DailySchedule = () => {
 			value: 'create',
 			key: '0',
 		},
-		// {
-		// 	label: 'Upload CSV',
-		// 	value: 'uploadCSV',
-		// 	key: '1',
-		// },
-		// {
-		// 	label: 'Download CSV Template',
-		// 	value: 'downloadCSVTemplate',
-		// 	key: '2',
-		// },
 	];
 
 	console.log(index, flightType);
@@ -275,114 +225,109 @@ const DailySchedule = () => {
 			console.error('No file provided for upload.');
 		}
 	};
-	const columns = [
-		{
-			title: '2L',
-			dataIndex: 'airline',
-			key: 'airline',
-			align: 'center',
-			render: (airline) => airline?.twoLetterCode ?? '-',
-		},
-		{
-			title: '3L',
-			dataIndex: 'airline',
-			key: 'airline',
-			align: 'center',
-			render: (airline) => airline?.threeLetterCode ?? '-',
-		},
-		{
-			title: 'FLNR',
-			dataIndex: 'flightNo',
-			key: 'flightNo',
-			align: 'center',
-			render: (flightNo) => flightNo ?? '-',
-		},
-		{
-			title: 'FLDT',
-			dataIndex: 'date',
-			key: 'date',
-			align: 'center',
-			render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
-		},
-		{
-			title: 'CSGN',
-			dataIndex: 'callSign',
-			key: 'callSign',
-			align: 'center',
-			render: (callSign) => callSign ?? '-',
-		},
-		{
-			title: 'NAT',
-			dataIndex: 'natureCode',
-			key: 'natureCode',
-			align: 'center',
-			render: (natureCode) => natureCode?.natureCode ?? '-',
-		},
-		{
-			title: 'REG',
-			dataIndex: 'aircraft',
-			key: 'aircraft',
-			align: 'center',
-			render: (aircraft) => aircraft?.registration ?? '-',
-		},
-		{
-			title: flightType == 'arrival' ? 'ORG' : 'DES',
-			dataIndex: 'origin',
-			key: 'origin',
-			align: 'center',
-			render: (origin) => origin ?? '-',
-		},
-		index === '1'
-			? {
-					title: 'STA',
-					dataIndex: 'sta',
-					key: 'sta',
-					align: 'center',
-					render: (sta) => sta ?? '-',
-				}
-			: {
-					title: 'STD',
-					dataIndex: 'std',
-					key: 'std',
-					align: 'center',
-					render: (std) => std ?? '-',
-				},
-		{
-			title: 'ACTIONS',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
-					<Button
-						onClick={() => handleEdit(record)}
-						type="iconWithBorderEdit"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
-	];
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				date: record?.date ? dayjs(record?.date) : '',
+				sta: record?.sta ? dayjs(record?.sta, 'HH:mm') : '',
+				std: record?.std ? dayjs(record?.std, 'HH:mm') : '',
+			};
+		}
+		setDetailModal({ isOpen: true, record, isEdit });
+	};
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	};
+	const columns = useMemo(
+		() => [
+			{
+				title: '2L',
+				dataIndex: ['airline', 'twoLetterCode'],
+				key: 'airline',
+				align: 'center',
+				render: (text, record) => (
+					<div
+						style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+						onClick={() => handleDetailModalOpen(record)}
+					>
+						{text ?? '-'}
+					</div>
+				),
+			},
+			{
+				title: '3L',
+				dataIndex: 'airline',
+				key: 'airline',
+				align: 'center',
+				render: (airline) => airline?.threeLetterCode ?? '-',
+			},
+			{
+				title: 'FLNR',
+				dataIndex: 'flightNo',
+				key: 'flightNo',
+				align: 'center',
+				render: (flightNo) => flightNo ?? '-',
+			},
+			{
+				title: 'FLDT',
+				dataIndex: 'date',
+				key: 'date',
+				align: 'center',
+				render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
+			},
+			{
+				title: 'CSGN',
+				dataIndex: 'callSign',
+				key: 'callSign',
+				align: 'center',
+				render: (callSign) => callSign ?? '-',
+			},
+			{
+				title: 'NAT',
+				dataIndex: 'natureCode',
+				key: 'natureCode',
+				align: 'center',
+				render: (natureCode) => natureCode?.natureCode ?? '-',
+			},
+			{
+				title: 'REG',
+				dataIndex: 'aircraft',
+				key: 'aircraft',
+				align: 'center',
+				render: (aircraft) => aircraft?.registration ?? '-',
+			},
+			{
+				title: flightType == 'arrival' ? 'ORG' : 'DES',
+				dataIndex: 'origin',
+				key: 'origin',
+				align: 'center',
+				render: (origin) => origin ?? '-',
+			},
+			index === '1'
+				? {
+						title: 'STA',
+						dataIndex: 'sta',
+						key: 'sta',
+						align: 'center',
+						render: (sta) => sta ?? '-',
+					}
+				: {
+						title: 'STD',
+						dataIndex: 'std',
+						key: 'std',
+						align: 'center',
+						render: (std) => std ?? '-',
+					},
+		],
+		[seasonalData]
+	);
 
 	const noDataHandler = () => {
 		return (
 			<div className="seasonal_container">
-				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-				{/* <Button
-							id="btn"
-							title="Upload CSV"
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							onClick={openCsvModal}
-						/>
-						<Button
-							id="btn"
-							title="Download CSV Template"
-							className="custom_svgButton"
-							type="filledText"
-							isSubmit="submit"
-							onClick={openCsvModal}
-						/> */}
+				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={handleDetailModalOpen} />
 			</div>
 		);
 	};
@@ -433,7 +378,6 @@ const DailySchedule = () => {
 			setFilter({ ...filter, date: dateRangeValue });
 		}
 	}, [dateRangeValue]);
-	console.log('date filter is', filter);
 	useEffect(() => {
 		let debounceTimer;
 		clearTimeout(debounceTimer);
@@ -467,19 +411,24 @@ const DailySchedule = () => {
 
 			{/* modals */}
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={detailModal?.isOpen}
 				width="80%"
-				closeModal={closeModal}
-				title={`Add New ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
-				className="custom_modal_cdm"
+				closeModal={handleDetailModalClose}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				record={detailModal?.record}
+				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Check-in Counters`}
+				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						form={form}
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-						type={index}
+						handleSaveButton={detailModal?.isEdit ? handleEditSave : handleSaveButton}
+						handleButtonClose={handleDetailModalClose}
 						isDaily={true}
+						type={index}
+						isEdit={detailModal?.isEdit}
+						initialValues={detailModal?.record}
+						isReadOnly={detailModal?.record && !detailModal?.isEdit}
 					/>
 				</div>
 			</ModalComponent>
@@ -489,25 +438,6 @@ const DailySchedule = () => {
 				closeModal={closeCsvModal}
 				handleUpload={handleUpload}
 			/>
-			<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="80%"
-				closeModal={closeEditModal}
-				title={`Edit ${index === '1' ? 'Inbound' : 'Outbound'} Flight`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						form={form}
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						type={index}
-						initialValues={rowData}
-						isEdit={true}
-						isDaily={true}
-					/>
-				</div>
-			</ModalComponent>
 		</>
 	);
 };

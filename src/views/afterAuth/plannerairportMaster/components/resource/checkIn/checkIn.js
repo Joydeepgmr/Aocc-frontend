@@ -4,16 +4,13 @@ import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { GET_CHECKIN_COUNTER } from '../../../../../../api';
-import deleteIcon from '../../../../../../assets/logo/delete.svg';
-import editIcon from '../../../../../../assets/logo/edit.svg';
-import Button from '../../../../../../components/button/button';
 import ConfirmationModal from '../../../../../../components/confirmationModal/confirmationModal';
 import DropdownButton from '../../../../../../components/dropdownButton/dropdownButton';
 import ModalComponent from '../../../../../../components/modal/modal';
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../../components/table/table';
 import UploadCsvModal from '../../../../../../components/uploadCsvModal/uploadCsvModal';
-import { CapitaliseFirstLetter } from '../../../../../../utils';
+import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 import {
 	useDeleteCheckin,
 	useEditCheckin,
@@ -22,19 +19,16 @@ import {
 	useUploadCSVCheckIn,
 } from '../../../../../../services/planairportmaster/resources/checkin/checkin';
 import SocketEventListener from '../../../../../../socket/listner/socketListner';
+import { CapitaliseFirstLetter } from '../../../../../../utils';
 import Common_Card from '../../../common_wrapper/common_card.js/common_card';
 import './checkIn.scss';
 import FormComponent from './formComponents/formComponents';
-import { useDownloadCSV } from '../../../../../../services/SeasonalPlanServices/seasonalPlan';
 
 const CheckIn = () => {
 	const queryClient = useQueryClient();
 	const [checkinData, setCheckinData] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [rowData, setRowData] = useState(null);
-	const [isReadOnly, setIsReadOnly] = useState(false);
-	const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
 
@@ -65,43 +59,10 @@ const CheckIn = () => {
 		refetch: getCheckInRefetch,
 	} = useGetCheckIn(getCheckinHandler);
 
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-
-	const closeModal = () => {
-		form.resetFields();
-		setRowData({});
-		setIsModalOpen(false);
-		setIsEditModalOpen(false);
-	};
-
-	const openEditModal = () => {
-		setIsEditModalOpen(true);
-	};
-
-	const closeEditModal = () => {
-		console.log('under close modal edit');
-		setRowData({});
-		setIsEditModalOpen(false);
-		setIsReadOnly(false);
-		form.resetFields();
-	};
-
-	const openDeleteModal = (record) => {
-		setRowData(record);
-		setIsDeleteConfirm(true);
-	};
-
-	const closeDeleteModal = () => {
-		setRowData({});
-		setIsDeleteConfirm(false);
-	};
-
 	//CREATE
 	const handleAddCheckinSuccess = (data) => {
 		setCheckinData([]);
-		closeModal();
+		handleDetailModalClose();
 		toast.success(data?.message);
 		queryClient.invalidateQueries('get-check-in');
 	};
@@ -131,45 +92,24 @@ const CheckIn = () => {
 		value && postCheckIn(value);
 	}, []);
 
-	const handleCloseButton = () => {
-		setRowData({});
-		setIsModalOpen(false);
-		setIsEditModalOpen(false);
-		form.resetFields();
-	};
-
 	//EDIT
 	const editCheckinHandler = {
 		onSuccess: (data) => handleEditCheckinSuccess(data),
 		onError: (error) => handleEditCheckinError(error),
 	};
 
-	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(rowData?.id, editCheckinHandler);
+	const { mutate: editCheckin, isLoading: isEditLoading } = useEditCheckin(detailModal?.record?.id, editCheckinHandler);
 	const { refetch, isLoading: isDownloading } = useDownloadCSV('check-in', { onError: (error) => toast.error(error?.response?.data?.message) });
 	const handleEditCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
 		setCheckinData([]);
-		closeEditModal();
+		handleDetailModalClose();
 		toast.success(data?.message);
 	};
 
 	const handleEditCheckinError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
-
-	const handleEdit = (record) => {
-		record = {
-			...record,
-			validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
-			validTill: record?.validTill ? dayjs(record?.validTill) : '',
-			unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
-			unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
-			terminalId: record?.terminal?.id,
-		};
-		setRowData(record);
-		openEditModal();
-	};
-     
 	const handleEditSave = (value) => {
 		value.reason = CapitaliseFirstLetter(value?.reason);
 		value.group = CapitaliseFirstLetter(value?.group);
@@ -193,7 +133,7 @@ const CheckIn = () => {
 
 	const handleDeleteCheckinSuccess = (data) => {
 		queryClient.invalidateQueries('get-check-in');
-		closeDeleteModal();
+		handleDeleteModalClose();
 		toast.success(data?.message);
 	};
 
@@ -203,7 +143,7 @@ const CheckIn = () => {
 	const { mutate: onUploadCSV } = useUploadCSVCheckIn(uploadCsvHandler);
 	const { mutate: deleteCheckin } = useDeleteCheckin(deleteCheckinHandler);
 	const handleDelete = () => {
-		deleteCheckin(rowData.id);
+		deleteCheckin(openDeleteModal?.record?.id);
 	};
 
 	const handleUpload = (file) => {
@@ -216,34 +156,46 @@ const CheckIn = () => {
 			console.error('No file provided for upload.');
 		}
 	};
-
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
+				validTill: record?.validTill ? dayjs(record?.validTill) : '',
+				unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
+				unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
+				terminalId: record?.terminal?.id,
+			};
+		}
+		setDetailModal({ isOpen: true, record, isEdit });
+	}
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	}
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : '',
+				validTill: record?.validTill ? dayjs(record?.validTill) : '',
+				unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : '',
+				unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : '',
+				terminalId: record?.terminal?.id,
+			};
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	}
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
+	}
 	const columns = [
-		{
-			title: 'ACTIONS',
-			key: 'actions',
-			render: (text, record) => (
-				<div className="action_buttons">
-					<Button
-						onClick={() => handleEdit(record)}
-						type="iconWithBorderEdit"
-						icon={editIcon}
-						className="custom_icon_buttons"
-					/>
-					<Button
-						onClick={() => openDeleteModal(record)}
-						type="iconWithBorderDelete"
-						icon={deleteIcon}
-						className="custom_icon_buttons"
-					/>
-				</div>
-			),
-		},
 		{
 			title: 'CNTR',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (counterName) => counterName ?? '-',
+			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'GRP',
@@ -314,23 +266,6 @@ const CheckIn = () => {
 				}
 			},
 		},
-		{
-			title: 'DETAIL',
-			key: 'viewDetails',
-			render: (record) => (
-				<>
-					<Button
-						style={{ margin: 'auto' }}
-						onClick={() => {
-							setIsReadOnly(true);
-							handleEdit(record);
-						}}
-						title="View"
-						type="text"
-					/>
-				</>
-			),
-		},
 	];
 
 	const dropdownItems = [
@@ -358,7 +293,7 @@ const CheckIn = () => {
 
 	const handleDropdownItemClick = (value) => {
 		if (value === 'create') {
-			openModal();
+			handleDetailModalOpen();
 		} else if (value === 'uploadCSV') {
 			setOpenCSVModal(true);
 		} else {
@@ -378,9 +313,9 @@ const CheckIn = () => {
 					btnCondition={true}
 					Heading={'Add Check-in Counters'}
 					formComponent={
-						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleCloseButton} />
+						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleDetailModalClose} />
 					}
-					openModal={openModal}
+					openModal={handleDetailModalOpen}
 					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (
@@ -409,47 +344,32 @@ const CheckIn = () => {
 					</div>
 				</>
 			)}
-
 			<ModalComponent
-				isModalOpen={isModalOpen}
+				isModalOpen={detailModal?.isOpen}
 				width="80%"
-				closeModal={closeModal}
-				title={'Add Check-in Counters'}
+				closeModal={handleDetailModalClose}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onDelete={handleDeleteModalOpen}
+				record={detailModal?.record}
+				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Check-in Counters`}
 				className="custom_modal"
 			>
 				<div className="modal_content">
 					<FormComponent
 						form={form}
-						initialValues={rowData}
-						handleSaveButton={handleSaveButton}
-						handleButtonClose={handleCloseButton}
-					/>
-				</div>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isEditModalOpen}
-				width="80%"
-				closeModal={closeEditModal}
-				title={`${isReadOnly ? '' : 'Edit'} Check-in Counters`}
-				className="custom_modal"
-			>
-				<div className="modal_content">
-					<FormComponent
-						form={form}
-						handleSaveButton={handleEditSave}
-						handleButtonClose={handleCloseButton}
-						isEdit={true}
-						initialValues={rowData}
-						isReadOnly={isReadOnly}
+						handleSaveButton={detailModal?.isEdit ? handleEditSave : handleSaveButton}
+						handleButtonClose={handleDetailModalClose}
+						isEdit={detailModal?.isEdit}
+						initialValues={detailModal?.record}
+						isReadOnly={detailModal?.record && !detailModal?.isEdit}
 					/>
 				</div>
 			</ModalComponent>
 			<ConfirmationModal
-				isOpen={isDeleteConfirm}
-				onClose={closeDeleteModal}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDelete}
-				content={`You want to delete ${rowData?.name}?`}
+				content={`You want to delete ${openDeleteModal?.record?.name}?`}
 			/>
 			<UploadCsvModal
 				isModalOpen={openCSVModal}

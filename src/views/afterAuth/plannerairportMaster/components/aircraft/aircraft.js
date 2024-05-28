@@ -1,39 +1,32 @@
-import React, { useState } from 'react';
-import Common_Card from '../../common_wrapper/common_card.js/common_card';
-import Common_table from '../../common_wrapper/common_table/common_table';
 import { Form } from 'antd';
-import FormComponent from './formComponent/formComponent';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
+import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
+import ModalComponent from '../../../../../components/modal/modal';
+import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import {
 	useDeletePlannerAircraft,
 	useGetAllPlannerAircraft,
 	usePostPlannerAircraft,
 	useUpdatePlannerAircraft,
 } from '../../../../../services';
-import ButtonComponent from '../../../../../components/button/button';
-import Delete from '../../../../../assets/Delete.svg';
-import Edit from '../../../../../assets/Edit.svg';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
-import ModalComponent from '../../../../../components/modal/modal';
-import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
-import dayjs from 'dayjs';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
-import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
-import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import SocketEventListener from '../../../../../socket/listner/socketListner';
-import { GET_PLANNER_AIRCRAFT } from '../../../../../api';
-import './aircraft.scss';
 import { CapitaliseFirstLetter } from '../../../../../utils';
+import ConvertIstToUtc from '../../../../../utils/ConvertIstToUtc';
+import Common_Card from '../../common_wrapper/common_card.js/common_card';
+import Common_table from '../../common_wrapper/common_table/common_table';
+import './aircraft.scss';
+import FormComponent from './formComponent/formComponent';
 
 
 const Aircrafts = () => {
 	const queryClient = useQueryClient();
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [aircraftData, setAircraftData] = useState([]);
-	const [openDeleteModal, setOpenDeleteModal] = useState(false);
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [detailModal, setDetailModal] = useState(false);
-	const [rowData, setRowData] = useState({});
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
 
 	const getAircraftHandler = {
@@ -71,8 +64,7 @@ const Aircrafts = () => {
 	const handleDeleteAircraftSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-aircraft');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenDeleteModal(false);
+		handleDeleteModalClose();
 	};
 
 	const handleDeleteAircraftError = (error) => {
@@ -82,9 +74,7 @@ const Aircrafts = () => {
 	const handleAddAircraftSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-aircraft');
 		toast.success(data?.message);
-		setRowData({});
-		form.resetFields();
-		setIsAddModalOpen(false);
+		handleDetailModalClose();
 	};
 
 	const handleAddAircraftError = (error) => {
@@ -93,8 +83,7 @@ const Aircrafts = () => {
 	const handleEditAircraftSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-aircraft');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenEditModal(false);
+		handleDetailModalClose();
 	};
 
 	const handleEditAircraftError = (error) => {
@@ -115,12 +104,12 @@ const Aircrafts = () => {
 
 	const { mutate: onAddAircraft, isLoading: isAddAircraftLoading } = usePostPlannerAircraft(addAircraftHandler);
 	const { mutate: onUpdateAircraft, isLoading: isUpdateAircraftLoading } = useUpdatePlannerAircraft(
-		rowData?.id,
+		detailModal?.record?.id,
 		editAircraftHandler
 	);
 
 	const handleDeleteAircraft = () => {
-		onDeleteAircraft(rowData?.id);
+		onDeleteAircraft(openDeleteModal?.record?.id);
 	};
 
 	const handleAddAircraft = (value) => {
@@ -159,49 +148,61 @@ const Aircrafts = () => {
 		onUpdateAircraft(data);
 	};
 
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+				aircraft_id: record?.globalAircraftType?.identifier,
+			}
+		}
+		setDetailModal({ isOpen: true, record, isEdit });
+	}
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	}
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+				aircraft_id: record?.globalAircraftType?.identifier,
+			}
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	}
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
+	}
+
 	const columns = [
-		{
-			title: 'ACTIONS',
-			dataIndex: 'edit',
-			key: 'edit',
-			render: (text, record) => (
-				<div className="custom-button">
-					<ButtonComponent
-						type={'iconWithBorderEdit'}
-						icon={Edit}
-						onClick={() => {
-							setOpenEditModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-								aircraft_id: record?.globalAircraftType?.identifier,
-							});
-						}}
-					// id="edit_button"
-					></ButtonComponent>
-					<ButtonComponent
-						type={'iconWithBorderDelete'}
-						icon={Delete}
-						// id="delete_button"
-						onClick={() => {
-							setOpenDeleteModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-								aircraft_id: record?.globalAircraftType?.identifier,
-							});
-						}}
-					></ButtonComponent>
-				</div>
-			),
-		},
+		// {
+		// 	title: 'ACTIONS',
+		// 	dataIndex: 'edit',
+		// 	key: 'edit',
+		// 	render: (text, record) => (
+		// 		<div className="custom-button">
+		// 			<ButtonComponent
+		// 				type={'iconWithBorderEdit'}
+		// 				icon={Edit}
+		// 				onClick={() => handleDetailModalOpen(record, true)}
+		// 			></ButtonComponent>
+		// 			<ButtonComponent
+		// 				type={'iconWithBorderDelete'}
+		// 				icon={Delete}
+		// 				onClick={() => handleDeleteModalOpen(record)}
+		// 			></ButtonComponent>
+		// 		</div>
+		// 	),
+		// },
 		{
 			title: 'A/C REG',
 			dataIndex: 'registration',
 			key: 'registration',
-			render: (registration) => registration ?? '-',
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 			align: 'center',
 		},
 		// {
@@ -240,28 +241,20 @@ const Aircrafts = () => {
 			align: 'center',
 		},
 		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
-		{
-			title: 'DETAIL',
-			dataIndex: 'viewDetails',
-			key: 'viewDetails',
-			render: (text, record) => (
-				<ButtonComponent
-					onClick={() => {
-						setDetailModal(true);
-						setRowData({
-							...record,
-							validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-							aircraft_id: record?.globalAircraftType?.identifier,
-						});
-					}}
-					title="View"
-					type="text"
-					style={{ margin: 'auto' }}
-				/>
-			),
-			align: 'center',
-		},
+		// {
+		// 	title: 'DETAIL',
+		// 	dataIndex: 'viewDetails',
+		// 	key: 'viewDetails',
+		// 	render: (text, record) => (
+		// 		<ButtonComponent
+		// 			onClick={() => handleDetailModalOpen(record)}
+		// 			title="View"
+		// 			type="text"
+		// 			style={{ margin: 'auto' }}
+		// 		/>
+		// 	),
+		// 	align: 'center',
+		// },
 	];
 
 	return (
@@ -275,7 +268,7 @@ const Aircrafts = () => {
 					pagination={hasNextPage}
 					loading={isPlannerAircraftLoading || isPlannerAircraftFetching}
 					title={'Aircraft Registration'}
-					openModal={() => setIsAddModalOpen(true)}
+					openModal={() => handleDetailModalOpen()}
 					type="aircraft"
 					title1="New Aircraft Registration"
 				/>
@@ -283,96 +276,37 @@ const Aircrafts = () => {
 				<Common_Card
 					title1="New Aircraft Registration"
 					btnCondition={false}
-					openModal={() => setIsAddModalOpen(true)}
+					openModal={() => handleDetailModalOpen()}
 					loading={isPlannerAircraftFetching || isPlannerAircraftLoading}
 				/>
 			)}
 
 			<ConfirmationModal
-				isOpen={openDeleteModal}
-				onClose={() => {
-					setOpenDeleteModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDeleteAircraft}
 				isLoading={isDeleteAircraftLoading}
-				content={`You want to delete this ${rowData?.registration} record`}
+				content={`You want to delete this ${openDeleteModal?.record?.registration} record`}
 			/>
 			<ModalComponent
-				isModalOpen={openEditModal}
-				closeModal={() => {
-					setOpenEditModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Setup aircraft registration"
+				isModalOpen={detailModal?.isOpen}
+				closeModal={handleDetailModalClose}
+				title='Setup aircraft registration'
 				width="80vw"
+				record={detailModal?.record}
+				onDelete={handleDeleteModalOpen}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
 				className="custom_modal"
 			>
 				<FormComponent
 					form={form}
-					type={'edit'}
-					closeModal={() => {
-						setOpenEditModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-					handleSubmit={handleUpdateAircraft}
-					isLoading={isUpdateAircraftLoading}
+					type={detailModal?.isEdit && 'edit'}
+					closeModal={handleDetailModalClose}
+					initialValue={detailModal?.record}
+					handleSubmit={detailModal?.isEdit ? handleUpdateAircraft : handleAddAircraft}
+					isLoading={detailModal?.isEdit ? isUpdateAircraftLoading : isAddAircraftLoading}
+					isReadOnly={detailModal?.record && !detailModal?.isEdit ? true : false}
 				/>
-			</ModalComponent>
-			<ModalComponent
-				isModalOpen={detailModal}
-				closeModal={() => {
-					setDetailModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Setup aircraft registration"
-				width="80vw"
-				className="custom_modal"
-			>
-				<FormComponent
-					form={form}
-					isReadOnly={true}
-					closeModal={() => {
-						setOpenEditModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-				/>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isAddModalOpen}
-				width="80vw"
-				closeModal={() => {
-					setIsAddModalOpen(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title={
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Setup aircraft registration
-					</CustomTypography>
-				}
-				className="custom_modal"
-			>
-				<div className={`modal_content`}>
-					<FormComponent
-						form={form}
-						closeModal={() => {
-							setIsAddModalOpen(false);
-							form.resetFields();
-							setRowData({});
-						}}
-						handleSubmit={handleAddAircraft}
-						isLoading={isAddAircraftLoading}
-					/>
-				</div>
 			</ModalComponent>
 		</>
 	);

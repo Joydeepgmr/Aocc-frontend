@@ -29,14 +29,11 @@ import FormComponent from './formComponent/formComponent';
 
 const Airlines = () => {
 	const queryClient = useQueryClient();
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [airlineData, setAirlineData] = useState([]);
-	const [openDeleteModal, setOpenDeleteModal] = useState(false);
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [detailModal, setDetailModal] = useState(false);
-	const [rowData, setRowData] = useState({});
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [fileList, setFileList] = useState([]);
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
 
 	const getAirlineHandler = {
@@ -80,8 +77,7 @@ const Airlines = () => {
 	const handleDeleteAirlineSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-airline');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenDeleteModal(false);
+		handleDeleteModalClose();
 	};
 
 	const handleDeleteAirlineError = (error) => {
@@ -91,9 +87,7 @@ const Airlines = () => {
 	const handleAddAirlineSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-airline');
 		toast.success(data?.message);
-		form.resetFields();
-		setRowData({});
-		setIsAddModalOpen(false);
+		handleDetailModalClose();
 		setFileList([]);
 	};
 
@@ -103,8 +97,7 @@ const Airlines = () => {
 	const handleEditAirlineSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-planner-airline');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenEditModal(false);
+		handleDetailModalClose();
 	};
 
 	const handleEditAirlineError = (error) => {
@@ -135,7 +128,7 @@ const Airlines = () => {
 
 	const { mutate: onAddAirline, isLoading: isAddAirlineLoading } = usePostPlannerAirline(addAirlineHandler);
 	const { mutate: onUpdateAirline, isLoading: isUpdateAirlineLoading } = useUpdatePlannerAirline(
-		rowData?.id,
+		detailModal?.record?.id,
 		editAirlineHandler
 	);
 
@@ -155,7 +148,7 @@ const Airlines = () => {
 	};
 
 	const handleDeleteAirline = () => {
-		onDeleteAirline(rowData?.id);
+		onDeleteAirline(openDeleteModal?.record?.id);
 	};
 
 	const handleAddAirline = (value) => {
@@ -197,47 +190,40 @@ const Airlines = () => {
 		}
 	};
 
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+			}
+		}
+		setDetailModal({ isOpen: true, record, isEdit });
+	}
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	}
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+			}
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	}
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
+	};
+
 	const columns = [
-		{
-			title: 'ACTIONS',
-			dataIndex: 'edit',
-			key: 'edit',
-			render: (text, record) => (
-				<div className="custom-button">
-					<ButtonComponent
-						type={'iconWithBorderEdit'}
-						icon={Edit}
-						onClick={() => {
-							setOpenEditModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-							});
-						}}
-						// id="edit_button"
-					></ButtonComponent>
-					<ButtonComponent
-						type={'iconWithBorderDelete'}
-						icon={Delete}
-						onClick={() => {
-							setOpenDeleteModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-							});
-						}}
-						// id="delete_button"
-					></ButtonComponent>
-				</div>
-			),
-		},
 		{
 			title: 'AL',
 			dataIndex: 'name',
 			key: 'name',
-			render: (name) => name ?? '-',
+			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 			align: 'center',
 		},
 		{
@@ -254,20 +240,6 @@ const Airlines = () => {
 			render: (threeLetterCode) => threeLetterCode ?? '-',
 			align: 'center',
 		},
-		// {
-		// 	title: '3L',
-		// 	dataIndex: 'homeAirport',
-		// 	key: 'homeAirport',
-		// 	render: (homeAirport) => homeAirport?.iataCode ?? '-',
-		// 	align: 'center',
-		// },
-		// {
-		// 	title: '4L',
-		// 	dataIndex: 'homeAirport',
-		// 	key: 'homeAirport',
-		// 	render: (homeAirport) => homeAirport?.icaoCode ?? '-',
-		// 	align: 'center',
-		// },
 		{
 			title: 'CNTRY',
 			dataIndex: 'country',
@@ -280,27 +252,6 @@ const Airlines = () => {
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
 			render: (homeAirport) => homeAirport?.name ?? '-',
-			align: 'center',
-		},
-		{
-			title: 'DETAIL',
-			dataIndex: 'viewdetails',
-			key: 'viewdetails',
-			render: (text, record) => (
-				<ButtonComponent
-					onClick={() => {
-						setDetailModal(true);
-						setRowData({
-							...record,
-							validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-						});
-					}}
-					title="View"
-					type="text"
-					style={{ margin: 'auto' }}
-				/>
-			),
 			align: 'center',
 		},
 	];
@@ -316,7 +267,7 @@ const Airlines = () => {
 					pagination={hasNextPage}
 					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
 					title={'Airlines'}
-					openModal={() => setIsAddModalOpen(true)}
+					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setIsCsvModalOpen(true)}
 					type="airline"
 					downloadCSV={handleDownloadCSV}
@@ -328,7 +279,7 @@ const Airlines = () => {
 					title2={'Upload CSV'}
 					title3="Download CSV Template"
 					btnCondition={false}
-					openModal={() => setIsAddModalOpen(true)}
+					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setIsCsvModalOpen(true)}
 					downloadCSV={handleDownloadCSV}
 					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
@@ -336,92 +287,33 @@ const Airlines = () => {
 			)}
 
 			<ConfirmationModal
-				isOpen={openDeleteModal}
-				onClose={() => {
-					setOpenDeleteModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDeleteAirline}
 				isLoading={isDeleteAirlineLoading}
-				content={`You want to delete this ${rowData?.name} record`}
+				content={`You want to delete this ${openDeleteModal?.record?.name} record`}
 			/>
 			<ModalComponent
-				isModalOpen={openEditModal}
-				closeModal={() => {
-					setOpenEditModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Edit your airline"
+				isModalOpen={detailModal?.isOpen}
+				closeModal={handleDetailModalClose}
+				title={detailModal?.isEdit ? "Edit your airline" : 'Add Your airline'}
+				record={detailModal?.record}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onDelete={handleDeleteModalOpen}
 				width="80vw"
 				className="custom_modal"
 			>
 				<FormComponent
 					form={form}
-					type={'edit'}
-					closeModal={() => {
-						setOpenEditModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-					isLoading={isUpdateAirlineLoading}
-					handleSubmit={handleUpdateAirline}
+					type={detailModal?.isEdit && 'edit'}
+					closeModal={handleDetailModalClose}
+					initialValue={detailModal?.record}
+					isReadOnly={detailModal?.record && !detailModal?.isEdit}
+					isLoading={detailModal?.isEdit ? isUpdateAirlineLoading : isAddAirlineLoading}
+					handleSubmit={detailModal?.isEdit ? handleUpdateAirline : handleAddAirline}
+					fileList={fileList}
+					setFileList={setFileList}
 				/>
-			</ModalComponent>
-			<ModalComponent
-				isModalOpen={detailModal}
-				closeModal={() => {
-					setDetailModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Airline"
-				width="80vw"
-				className="custom_modal"
-			>
-				<FormComponent
-					form={form}
-					isReadOnly={true}
-					closeModal={() => {
-						setOpenEditModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-				/>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isAddModalOpen}
-				closeModal={() => {
-					setFileList([])
-					setIsAddModalOpen(false);
-					setRowData({});
-					form.resetFields();
-				}}
-				title={
-					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Setup your airline
-					</CustomTypography>
-				}
-				className="custom_modal"
-			>
-				<div className={`modal_content`}>
-					<FormComponent
-						form={form}
-						isLoading={isAddAirlineLoading}
-						closeModal={() => {
-							setIsAddModalOpen(false);
-							setRowData({});
-							form.resetFields();
-						}}
-						handleSubmit={handleAddAirline}
-						fileList={fileList}
-						setFileList={setFileList}
-					/>
-				</div>
 			</ModalComponent>
 			<UploadCsvModal
 				isModalOpen={isCsvModalOpen}

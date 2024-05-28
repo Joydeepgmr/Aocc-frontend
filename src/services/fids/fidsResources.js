@@ -127,7 +127,7 @@ export const useGetFidsDashboard = (props) => {
 export const useGetFidsAccessData = (props) => {
 	const response = useQuery({
 		queryKey: 'get-fids-access-data',
-		queryFn: async (data) => await Post(`${GET_FIDS_RESOURCES}?bulk=true`),
+		queryFn: async () => await Get(`${POST_FIDS_ACCESS}`),
 		...props
 	})
 	return response;

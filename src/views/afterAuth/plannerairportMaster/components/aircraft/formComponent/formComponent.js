@@ -16,6 +16,7 @@ import { useGetAircraftSyncData } from '../../../../../../services/PlannerAirpor
 import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
+	console.log("initial values are ", initialValue)
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const watchRegistration = Form.useWatch('registration', form);
