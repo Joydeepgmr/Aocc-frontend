@@ -9,15 +9,14 @@ import ConfirmationModal from '../../../../../components/confirmationModal/confi
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
 	useDeleteGlobalAirport,
 	usePatchGlobalAirport,
 	usePostGlobalAirport,
 } from '../../../../../services/globalMasters/globalMaster';
+import { CapitaliseFirstLetter } from '../../../../../utils';
 import AirportForm from '../airportForm/airportForm';
 import './airportTable.scss';
-import { CapitaliseFirstLetter } from '../../../../../utils';
 
 const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData, loading }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup your airport' };
@@ -71,20 +70,20 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	const { mutate: deleteAirport, isLoading: isDeleteLoading } = useDeleteGlobalAirport(deleteApiProps);
 	const [initial] = Form.useForm();
 
-	function handleDetails(data) {
-		setAirportModal({ isOpen: true, type: 'view', data, title: 'Your Airport' });
-	}
-	function handleEdit(data) {
-		setAirportModal({ isOpen: true, type: 'edit', data, title: 'Update your airport' });
+	function handleDetails(data, isEdit) {
+		const type = data ? isEdit ? 'edit' : 'view' : 'new'
+		setAirportModal({ isOpen: true, type, data, title: 'Your Airport' });
 	}
 	function handleDelete() {
 		deleteAirport(deleteModal.id);
 	}
-
 	function closeAddModal() {
 		initial.resetFields();
 		setFileList([]);
 		setAirportModal(defaultModalParams);
+	}
+	function openDeleteModal(data) {
+		setDeleteModal({ isOpen: true, id: data.id });
 	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
@@ -169,30 +168,10 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'ACTIONS',
-				key: 'actions',
-				render: (text, record) => (
-					<div className="action_buttons">
-						<ButtonComponent
-							onClick={() => handleEdit(record)}
-							type="iconWithBorderEdit"
-							icon={editIcon}
-							className="custom_icon_buttons"
-						/>
-						<ButtonComponent
-							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="iconWithBorderDelete"
-							icon={deleteIcon}
-							className="custom_icon_buttons"
-						/>
-					</div>
-				),
-			},
-			{
 				title: 'NAME',
 				dataIndex: 'name',
 				key: 'name',
-				render: (text) => text || '-',
+				render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetails(record)}>{text ?? '-'}</div>,
 				align: 'center',
 			},
 			{
@@ -236,24 +215,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				key: 'timeChange',
 				align: 'center',
 				render: (text) => text || '-',
-			},
-			{
-				title: 'DETAIL',
-				key: 'viewDetails',
-				render: (
-					text,
-					record // Use the render function to customize the content of the cell
-				) => (
-					<ButtonComponent
-						style={{ margin: 'auto' }}
-						title="View"
-						type="text"
-						onClick={() => {
-							handleDetails(record);
-						}}
-					/>
-				),
-			},
+			}
 		];
 	}, [airportData]);
 
@@ -270,6 +232,9 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 				isModalOpen={airportModal?.isOpen}
 				closeModal={closeAddModal}
 				title={airportModal?.title}
+				record={airportModal.data}
+				onEdit={airportModal.type !== 'edit' && handleDetails}
+				onDelete={openDeleteModal}
 				width="80%"
 				className="custom_modal"
 			>
@@ -295,7 +260,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 						</>
 					)}
 				</Form>
-			</ModalComponent>
+			</ModalComponent >
 			<div>
 				<div className="create_wrapper_table">
 					<div className="table_container">

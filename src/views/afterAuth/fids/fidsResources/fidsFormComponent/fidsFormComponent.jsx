@@ -14,13 +14,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const watch = Form.useWatch('resourceType', form);
-	const checkInDisplay = [
-		{ label: 'With logo', value: 'logo' },
-		{ label: 'With Flights details', value: 'flight details' },
-	];
 	const terminalDisplay = [
-		{ label: 'Arrival Information', value: 'arrival' },
-		{ label: 'Departure Information', value: 'departure' },
+		{ label: 'Arrival Display', value: 'arrival' },
+		{ label: 'Departure Display', value: 'departure' },
 	];
 	const onError = ({
 		response: {
@@ -118,8 +114,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 					<CustomSelect
 						SelectData={[
 							{ label: 'Check In', value: 'check_in' },
-							{ label: 'Terminal', value: 'terminal' },
+							{ label: 'Gate', value: 'gate' },
 							{ label: 'Baggage Belt', value: 'baggage_belt' },
+							{ label: 'Terminal', value: 'terminal' },
 						]}
 						label="Resource Type"
 						name="resourceType"
@@ -128,14 +125,16 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						disabled={isReadOnly}
 						required
 					/>
-					<CustomRadioGroup
-						options={watch === 'terminal' ? terminalDisplay : checkInDisplay}
-						label="Display Type"
-						name="displayType"
-						className="custom_input"
-						required
-						disabled={isReadOnly}
-					/>
+					{watch === 'terminal' && (
+						<CustomRadioGroup
+							options={terminalDisplay}
+							label="Display Type"
+							name="displayType"
+							className="custom_input"
+							required
+							disabled={isReadOnly}
+						/>
+					)}
 				</div>
 
 				<div className="fids_resources_inputfields">
@@ -157,7 +156,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						required
 					/>
 					<InputField
-						label="MAC address"
+						label="IP address"
 						name="MacAddress"
 						max={32}
 						placeholder={!isReadOnly && 'MAC address'}
@@ -218,18 +217,6 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 					/>
 				</div>
 				<div className="fids_resources_inputfields">
-					<CustomSelect
-						SelectData={[
-							{ label: 'Active', value: 'Active' },
-							{ label: 'InActive', value: 'Inactive' },
-						]}
-						label="Status"
-						name="status"
-						placeholder={!isReadOnly && 'Status'}
-						className="custom_input"
-						disabled={isReadOnly}
-						required={true}
-					/>
 					<Date
 						label="Valid From"
 						placeholder={!isReadOnly && 'Select valid from date'}

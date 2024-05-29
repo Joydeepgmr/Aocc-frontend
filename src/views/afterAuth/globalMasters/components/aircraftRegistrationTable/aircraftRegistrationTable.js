@@ -79,16 +79,16 @@ const AircraftRegistrationTable = ({
 	const [initial] = Form.useForm();
 	const aircraftIdWatch = Form.useWatch('aircraft_id', initial);
 
-	function handleDetails(data) {
-		setAircraftRegistrationModal({ isOpen: true, type: 'view', data, title: 'Aircraft registration' });
-	}
-	function handleEdit(data) {
-		setAircraftRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft registration' });
+	function handleDetails(data, isEdit) {
+		const type = data ? isEdit ? 'edit' : 'view' : 'new'
+		setAircraftRegistrationModal({ isOpen: true, type, data, title: 'Aircraft registration' });
 	}
 	function handleDelete() {
 		deleteAircraftRegistration(deleteModal.id);
 	}
-
+	function openDeleteModal(data) {
+		setDeleteModal({ isOpen: true, id: data.id });
+	}
 	function closeAddModal() {
 		initial.resetFields();
 		setAircraftRegistrationModal(defaultModalParams);
@@ -193,31 +193,11 @@ const AircraftRegistrationTable = ({
 	const columns = useMemo(
 		() => [
 			{
-				title: 'ACTIONS',
-				key: 'actions',
-				render: (text, record) => (
-					<div className="action_buttons">
-						<ButtonComponent
-							onClick={() => handleEdit(record)}
-							type="iconWithBorderEdit"
-							icon={editIcon}
-							className="custom_icon_buttons"
-						/>
-						<ButtonComponent
-							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="iconWithBorderDelete"
-							icon={deleteIcon}
-							className="custom_icon_buttons"
-						/>
-					</div>
-				),
-			},
-			{
 				title: 'REG',
 				dataIndex: 'registration',
 				key: 'registration',
 				align: 'center',
-				render: (text) => text || '-',
+				render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetails(record)}>{text ?? '-'}</div>,
 			},
 			{
 				title: 'INTERNAL',
@@ -253,24 +233,7 @@ const AircraftRegistrationTable = ({
 				key: 'globalAirportId',
 				align: 'center',
 				render: (text) => text?.name || '-',
-			},
-			{
-				title: 'DETAIL',
-				key: 'viewDetails',
-				render: (
-					text,
-					record // Use the render function to customize the content of the cell
-				) => (
-					<ButtonComponent
-						style={{ margin: 'auto' }}
-						title="View"
-						type="text"
-						onClick={() => {
-							handleDetails(record);
-						}}
-					/>
-				),
-			},
+			}
 		],
 		[aircraftRegistrationData]
 	);
@@ -285,6 +248,9 @@ const AircraftRegistrationTable = ({
 			/>
 			<ModalComponent
 				isModalOpen={aircraftRegistrationModal.isOpen}
+				onEdit={aircraftRegistrationModal.type !== 'edit' && handleDetails}
+				onDelete={openDeleteModal}
+				record={aircraftRegistrationModal.data}
 				closeModal={closeAddModal}
 				title={aircraftRegistrationModal.title}
 				width="80%"

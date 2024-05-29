@@ -27,11 +27,8 @@ import PageLoader from '../../../../components/pageLoader/pageLoader';
 
 const FidsResources = () => {
 	const queryClient = useQueryClient();
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const [openDeleteModal, setOpenDeleteModal] = useState(false);
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [detailModal, setDetailModal] = useState(false);
-	const [rowData, setRowData] = useState({});
+	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
+	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [resourceData, setResourceData] = useState([]);
 
@@ -67,15 +64,14 @@ const FidsResources = () => {
 
 	const { mutate: onAddResource, isLoading: isAddResourceLoading } = usePostFidsResource(addResourceHandler);
 	const { mutate: onUpdateResource, isLoading: isUpdateResourceLoading } = useUpdateFidsResource(
-		rowData?.id,
+		detailModal?.record?.id,
 		updateResourceHandler
 	);
 
 	const handleDeleteResourceSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-fids-resources');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenDeleteModal(false);
+		handleDeleteModalClose();
 	};
 
 	const handleDeleteResourceError = (error) => {
@@ -99,9 +95,7 @@ const FidsResources = () => {
 	const handleAddResourceSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-fids-resources');
 		toast.success(data?.message);
-		setRowData({});
-		setIsAddModalOpen(false);
-		form.resetFields();
+		handleDetailModalClose();
 	};
 
 	const handleAddResourceError = (error) => {
@@ -111,9 +105,7 @@ const FidsResources = () => {
 	const handleUpdateResourceSuccess = (data) => {
 		queryClient.invalidateQueries('get-all-fids-resources');
 		toast.success(data?.message);
-		setRowData({});
-		setOpenEditModal(false);
-		form.resetFields();
+		handleDetailModalClose();
 	};
 
 	const handleUpdateResourceError = (error) => {
@@ -143,55 +135,54 @@ const FidsResources = () => {
 	};
 
 	const handleDeleteResource = () => {
-		onDeleteResource(rowData?.id);
+		onDeleteResource(openDeleteModal?.record?.id);
+	};
+
+	const handleDetailModalOpen = (record, isEdit = false) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+				aircraft_id: record?.globalAircraftType?.identifier,
+			};
+		}
+		setDetailModal({ isOpen: true, record, isEdit });
+	};
+	const handleDetailModalClose = () => {
+		setDetailModal({ isOpen: false, record: null });
+		form.resetFields();
+	};
+	const handleDeleteModalOpen = (record) => {
+		if (record) {
+			record = {
+				...record,
+				validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
+				validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
+				unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
+				unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
+			};
+		}
+		setOpenDeleteModal({ isOpen: true, record });
+	};
+	const handleDeleteModalClose = () => {
+		setOpenDeleteModal({ isOpen: false, record: null });
 	};
 
 	const columns = [
-		{
-			title: 'Actions',
-			dataIndex: 'edit',
-			key: 'edit',
-			render: (text, record) => (
-				<div className="custom-button">
-					<ButtonComponent
-						type={'iconWithBorderDelete'}
-						icon={Delete}
-						onClick={() => {
-							setOpenDeleteModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-								unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
-								unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
-							});
-						}}
-						id="delete_button"
-					></ButtonComponent>
-					<ButtonComponent
-						type={'iconWithBorderEdit'}
-						icon={Edit}
-						onClick={() => {
-							setOpenEditModal(true);
-							setRowData({
-								...record,
-								validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-								validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-								unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
-								unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
-							});
-						}}
-						id="edit_button"
-					></ButtonComponent>
-				</div>
-			),
-		},
 		{
 			title: 'SCRN',
 			dataIndex: 'screenName',
 			key: 'screenName',
 			align: 'center',
-			render: (screenName) => screenName ?? '-',
+			render: (text, record) => (
+				<div
+					style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+					onClick={() => handleDetailModalOpen(record)}
+				>
+					{text ?? '-'}
+				</div>
+			),
 		},
 		{
 			title: 'RES TYPE',
@@ -235,33 +226,10 @@ const FidsResources = () => {
 			align: 'center',
 			render: (width) => width ?? '-',
 		},
-		{
-			title: 'View Details',
-			dataIndex: 'viewdetails',
-			key: 'viewdetails',
-			render: (text, record) => (
-				<ButtonComponent
-					onClick={() => {
-						setDetailModal(true);
-						setRowData({
-							...record,
-							validFrom: record?.validFrom ? dayjs(record?.validFrom) : undefined,
-							validTill: record?.validTill ? dayjs(record?.validTill) : undefined,
-							unavailableFrom: record?.unavailableFrom ? dayjs(record?.unavailableFrom) : undefined,
-							unavailableTo: record?.unavailableTo ? dayjs(record?.unavailableTo) : undefined,
-						});
-					}}
-					title="View Details"
-					type="text"
-					style={{ margin: 'auto' }}
-				/>
-			),
-			align: 'center',
-		},
 	];
 	const handleDropdownChange = (value) => {
 		if (value === 'NewResource') {
-			setIsAddModalOpen(true);
+			handleDetailModalOpen();
 		}
 		if (value === 'UploadCSV') {
 			setIsCsvModalOpen(true);
@@ -325,7 +293,7 @@ const FidsResources = () => {
 									id="btn"
 									type="filledText"
 									isSubmit="submit"
-									onClick={() => setIsAddModalOpen(true)}
+									onClick={() => handleDetailModalOpen}
 								/>
 								{/* <Button
 									id="btn"
@@ -350,88 +318,34 @@ const FidsResources = () => {
 				)}
 			</div>
 			<ConfirmationModal
-				isOpen={openDeleteModal}
-				onClose={() => {
-					setOpenDeleteModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
+				isOpen={openDeleteModal?.isOpen}
+				onClose={handleDeleteModalClose}
 				onSave={handleDeleteResource}
 				isLoading={isDeleteResourceLoading}
-				content={`You want to delete this ${rowData?.screenName} record`}
+				content={`You want to delete this ${openDeleteModal?.record?.screenName} record`}
 			/>
 			<ModalComponent
-				form={form}
-				isModalOpen={openEditModal}
-				closeModal={() => {
-					setOpenEditModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Edit your resource"
-				width="80vw"
-				className="custom_modal"
-			>
-				<FidsFormComponent
-					form={form}
-					type={'edit'}
-					closeModal={() => {
-						setOpenEditModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-					isLoading={isUpdateResourceLoading}
-					handleSubmit={handleUpdateResource}
-				/>
-			</ModalComponent>
-			<ModalComponent
-				isModalOpen={detailModal}
-				closeModal={() => {
-					setDetailModal(false);
-					form.resetFields();
-					setRowData({});
-				}}
-				title="Resource"
-				width="80vw"
-				className="custom_modal"
-			>
-				<FidsFormComponent
-					form={form}
-					isReadOnly={true}
-					closeModal={() => {
-						setDetailModal(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					initialValue={rowData}
-				/>
-			</ModalComponent>
-
-			<ModalComponent
-				isModalOpen={isAddModalOpen}
-				width="80vw"
-				closeModal={() => {
-					setRowData({});
-					form.resetFields();
-					setIsAddModalOpen(false);
-				}}
+				isModalOpen={detailModal?.isOpen}
+				closeModal={handleDetailModalClose}
 				title={
 					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-						Add Resource
+						Fids Resource
 					</CustomTypography>
 				}
+				width="80vw"
+				record={detailModal?.record}
+				onDelete={handleDeleteModalOpen}
+				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
 				className="custom_modal"
 			>
 				<FidsFormComponent
 					form={form}
-					isLoading={isAddResourceLoading}
-					closeModal={() => {
-						setIsAddModalOpen(false);
-						form.resetFields();
-						setRowData({});
-					}}
-					handleSubmit={handleAddResource}
+					type={detailModal?.isEdit && 'edit'}
+					closeModal={handleDetailModalClose}
+					initialValue={detailModal?.record}
+					isReadOnly={detailModal?.record && !detailModal?.isEdit ? true : false}
+					isLoading={detailModal?.isEdit ? isUpdateResourceLoading : isAddResourceLoading}
+					handleSubmit={detailModal?.isEdit ? handleUpdateResource : handleAddResource}
 				/>
 			</ModalComponent>
 			<UploadCsvModal
