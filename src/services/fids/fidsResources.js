@@ -116,9 +116,9 @@ export const useGetAllFidsScreens = (props) => {
 }
 
 export const useGetFidsDashboard = (props) => {
-	const response = useMutation({
-		mutationKey: 'get-fids-dashboard-screen',
-		mutationFn: async (id) => await Get(`${GET_FIDS_DASHBOARD}?id=${id}`),
+	const response = useQuery({
+		queryKey: 'get-fids-dashboard-screen',
+		queryFn: async () => await Get(`${GET_FIDS_DASHBOARD}?id=52ebf2ce-c7c3-4853-82a9-98f822a5d92b`),
 		...props
 	});
 	return response;

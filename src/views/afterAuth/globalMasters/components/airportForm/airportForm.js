@@ -52,6 +52,7 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 				<ImageUpload
 					{...{
 						fileList,
+						disabled: isReadOnly,
 						setFileList,
 						required: true,
 						name: 'file',

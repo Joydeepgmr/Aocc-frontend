@@ -1,121 +1,39 @@
-import React, { useState } from 'react';
-import TopHeader from '../../../../components/topHeader/topHeader';
-import CustomSelect from '../../../../components/select/select';
-import TableComponent from '../../../../components/table/table';
+import React from 'react';
 
+import CustomTabs from '../../../../components/customTabs/customTabs';
+import BaggageBeltTab from './baggageBeltTab/baggageBeltTab';
+import CheckInTab from './checkInTab/checkInTab';
 import './fidsDashboard.scss';
-import { useGetAllFidsScreens, useGetFidsDashboard } from '../../../../services/fids/fidsResources';
-import PageLoader from '../../../../components/pageLoader/pageLoader';
-import toast from 'react-hot-toast';
-import ButtonComponent from '../../../../components/button/button';
-import dayjs from 'dayjs';
+import GateTab from './gateTab/gateTab';
 
 const FidsDashboard = () => {
-	const [allScreenArr, setAllScreenArr] = useState([]);
-	const [dashboardScreen, setDashboardScreen] = useState([]);
-	const [airlineLogo, setAirlineLogo] = useState([]);
-	const [publishModal, setPublishModal] = useState({ isOpen: false, status: null });
-	const allScreenApiProps = {
-		onSuccess: ({ data }) => {
-			const arr = data.map((data) => ({ label: data?.screenName, value: data.id }));
-			getDashboardScreen(arr?.[3]?.value);
-			setAllScreenArr(arr);
-		},
-		onError: (error) => {
-			toast.error(error?.response?.data?.message);
-		},
-	};
-	const DashboardScreenApiProps = {
-		onSuccess: ({ result, airlineLogo }) => {
-			setDashboardScreen(result ?? []);
-			if (airlineLogo?.value) {
-				setAirlineLogo(airlineLogo?.value);
-			}
-		},
-		onError: (error) => {
-			toast.error(error?.response?.data?.message);
-		},
-	};
-	const { isLoading: isAllFIdsScreenLoading } = useGetAllFidsScreens(allScreenApiProps);
-	const { mutate: getDashboardScreen, isLoading: isDashboardScreenLoading } =
-		useGetFidsDashboard(DashboardScreenApiProps);
-	const onSelectScreen = (value) => {
-		console.log('value is ', value);
-		if (value) {
-			getDashboardScreen(value);
-		}
-	};
-	console.log('dashboard screen is', dashboardScreen);
-	const columns = [
+	const items = [
 		{
-			title: 'Airline',
-			dataIndex: 'logo',
-			key: 'logo',
-			align: 'center',
-			render: () => airlineLogo && <img className="fids_airline_logo" src={airlineLogo} alt="logo" />,
+			key: '1',
+			label: 'CheckIn',
+			children: <CheckInTab />,
 		},
 		{
-			title: 'Screen Name',
-			dataIndex: 'screen_name',
-			key: 'screen_name',
-			align: 'center',
+			key: '2',
+			label: 'Gate',
+			children: <GateTab />,
 		},
 		{
-			title: 'Resource Type',
-			dataIndex: 'resource_type',
-			key: 'resource_type',
-			align: 'center',
-		},
-		{
-			title: 'Call Sign',
-			dataIndex: 'call_sign',
-			key: 'call_sign',
-			align: 'center',
-		},
-		{
-			title: 'Sector',
-			dataIndex: 'sector',
-			key: 'sector',
-			align: 'center',
-		},
-		{
-			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
-			align: 'center',
-		},
-		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
-			align: 'center',
-		},
-		{
-			title: 'Start Time',
-			dataIndex: 'start_time',
-			key: 'start_time',
-			align: 'center',
-			render: (time) => (time ? dayjs(time).format('HH:mm') : null),
-		},
-		{
-			title: 'End Time',
-			dataIndex: 'end_time',
-			key: 'end_time',
-			align: 'center',
-			render: (time) => (time ? dayjs(time).format('HH:mm') : null),
-		},
-		{
-			title: 'Terminal',
-		},
-		{
-			title: 'Action',
-			render: () => <ButtonComponent style={{ margin: 'auto' }} title="Publish" type="text" />,
+			key: '4',
+			label: 'Baggage Belt',
+			children: <BaggageBeltTab />,
 		},
 	];
+
 	return (
 		<>
-			<PageLoader loading={isAllFIdsScreenLoading} />
-			<div className="fidsDashboard--Container">
+			
+			<div className="container-div">
+				<div className="main-container">
+					<CustomTabs defaultActiveKey={'1'} items={items} type="card" />
+				</div>
+			</div>
+			{/* <div className="fidsDashboard--Container">
 				<TopHeader heading="Flight Information">
 					<CustomSelect
 						defaultValue={allScreenArr?.[3]?.value}
@@ -131,7 +49,7 @@ const FidsDashboard = () => {
 					// fetchData={fetchData}
 					// pagination={pagination}
 				/>
-			</div>
+			</div> */}
 		</>
 	);
 };

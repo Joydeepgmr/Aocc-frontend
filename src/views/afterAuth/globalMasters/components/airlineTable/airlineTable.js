@@ -25,8 +25,6 @@ const AirlineTable = ({
 	data,
 	fetchData,
 	pagination,
-	airportDropdownData,
-	countryDropdownData,
 	loading,
 }) => {
 	const defaultModalParams = { isOpen: false, type: 'new', data: null, title: 'Setup airline registration' };
@@ -78,11 +76,9 @@ const AirlineTable = ({
 	const { mutate: deleteAirline, isLoading: isDeleteLoading } = useDeleteGlobalAirline(deleteApiProps);
 	const [initial] = Form.useForm();
 
-	function handleDetails(data) {
-		setAirlineRegistrationModal({ isOpen: true, type: 'view', data, title: 'Airline registration' });
-	}
-	function handleEdit(data) {
-		setAirlineRegistrationModal({ isOpen: true, type: 'edit', data, title: 'Update airline registration' });
+	function handleDetails(data, isEdit) {
+		const type = data ? isEdit ? 'edit' : 'view' : 'new'
+		setAirlineRegistrationModal({ isOpen: true, type, data, title: 'Airline registration' });
 	}
 	function handleDelete() {
 		deleteAirline(deleteModal.id);
@@ -91,6 +87,9 @@ const AirlineTable = ({
 	function closeAddModal() {
 		setAirlineRegistrationModal(defaultModalParams);
 		initial.resetFields();
+	}
+	function openDeleteModal(data) {
+		setDeleteModal({ isOpen: true, id: data.id });
 	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
@@ -164,30 +163,10 @@ const AirlineTable = ({
 	const columns = useMemo(
 		() => [
 			{
-				title: 'ACTIONS',
-				key: 'actions',
-				render: (text, record) => (
-					<div className="action_buttons">
-						<ButtonComponent
-							onClick={() => handleEdit(record)}
-							type="iconWithBorderEdit"
-							icon={editIcon}
-							className="custom_icon_buttons"
-						/>
-						<ButtonComponent
-							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="iconWithBorderDelete"
-							icon={deleteIcon}
-							className="custom_icon_buttons"
-						/>
-					</div>
-				),
-			},
-			{
 				title: 'AL',
 				dataIndex: 'name',
 				key: 'name',
-				render: (text) => text || '-',
+				render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetails(record)}>{text ?? '-'}</div>,
 				align: 'center',
 			},
 			{
@@ -225,23 +204,6 @@ const AirlineTable = ({
 			// 	align: 'center',
 			// 	render: (text) => text || '-',
 			// },
-			{
-				title: 'DETAIL',
-				key: 'viewDetails',
-				render: (
-					text,
-					record // Use the render function to customize the content of the cell
-				) => (
-					<ButtonComponent
-						style={{ margin: 'auto' }}
-						title="View"
-						type="text"
-						onClick={() => {
-							handleDetails(record);
-						}}
-					/>
-				),
-			},
 		],
 		[airlineData]
 	);
@@ -258,6 +220,9 @@ const AirlineTable = ({
 				isModalOpen={airlineRegistrationModal.isOpen}
 				closeModal={closeAddModal}
 				title={airlineRegistrationModal.title}
+				record={airlineRegistrationModal.data}
+				onEdit={airlineRegistrationModal.type !== 'edit' && handleDetails}
+				onDelete={openDeleteModal}
 				width="80%"
 				className="custom_modal"
 			>

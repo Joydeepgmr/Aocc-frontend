@@ -68,19 +68,19 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 	const { mutate: deleteAircraftType, isLoading: isDeleteLoading } = useDeleteGlobalAircraftType(deleteApiProps);
 	const [initial] = Form.useForm();
 
-	function handleDetails(data) {
-		setAircraftTypeModal({ isOpen: true, type: 'view', data, title: 'Aircraft type' });
-	}
-	function handleEdit(data) {
-		setAircraftTypeModal({ isOpen: true, type: 'edit', data, title: 'Update aircraft type' });
+	const handleDetails = (data, isEdit) => {
+		const type = data ? isEdit ? 'edit' : 'view' : 'new'
+		setAircraftTypeModal({ isOpen: true, type, data, title: 'Aircraft type' });
 	}
 	function handleDelete() {
 		deleteAircraftType(deleteModal.id);
 	}
-
 	function closeAddModal() {
 		initial.resetFields();
 		setAircraftTypeModal(defaultModalParams);
+	}
+	function openDeleteModal(data) {
+		setDeleteModal({ isOpen: true, id: data.id });
 	}
 	function closeDeleteModal() {
 		setDeleteModal({ isOpen: false, id: null });
@@ -155,30 +155,10 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 	const columns = useMemo(() => {
 		return [
 			{
-				title: 'ACTIONS',
-				key: 'actions',
-				render: (text, record) => (
-					<div className="action_buttons">
-						<ButtonComponent
-							onClick={() => handleEdit(record)}
-							type="iconWithBorderEdit"
-							icon={editIcon}
-							className="custom_icon_buttons"
-						/>
-						<ButtonComponent
-							onClick={() => setDeleteModal({ isOpen: true, id: record.id })}
-							type="iconWithBorderDelete"
-							icon={deleteIcon}
-							className="custom_icon_buttons"
-						/>
-					</div>
-				),
-			},
-			{
 				title: 'IDENTIFIER',
 				dataIndex: 'identifier',
 				key: 'identifier',
-				render: (text) => text || '-',
+				render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetails(record)}>{text ?? '-'}</div>,
 				align: 'center',
 			},
 			{
@@ -223,20 +203,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 				align: 'center',
 				render: (text) => <div style={{ textTransform: 'capitalize' }}>{text || '-'}</div>,
 			},
-			{
-				title: 'DETAIL',
-				key: 'viewDetails',
-				render: (text, record) => (
-					<ButtonComponent
-						style={{ margin: 'auto' }}
-						title="View"
-						type="text"
-						onClick={() => {
-							handleDetails(record);
-						}}
-					/>
-				),
-			},
 		];
 	}, [aircraftTypeData]);
 
@@ -252,6 +218,9 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 			<ModalComponent
 				isModalOpen={aircraftTypeModal.isOpen}
 				closeModal={closeAddModal}
+				record={aircraftTypeModal.data}
+				onEdit={aircraftTypeModal.type !== 'edit' && handleDetails}
+				onDelete={openDeleteModal}
 				title={aircraftTypeModal.title}
 				width="80%"
 				className="custom_modal"
