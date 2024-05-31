@@ -1,32 +1,67 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import ButtonComponent from '../../../../../components/button/button';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
+import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
-import { useGetFidsDashboard } from '../../../../../services/fids/fidsResources';
+import { useGetFidsDashboard, usePublishScreen, useUpdateFidsStatus } from '../../../../../services/fids/fidsResources';
+import FidsPreview from '../fidsPreview';
+import BeltFids from '../beltPreview';
+import { useQueryClient } from 'react-query';
 
-const BaggageBeltTab = () => {
+const BaggageBeltTab = ({ airlineLogo }) => {
+	const queryClient = useQueryClient();
+	const [isPublishLoading, setIsPublishLoading] = useState(false);
 	const [statusModal, setStatusModal] = useState({ isOpen: false, record: null });
 	const [dashboardScreen, setDashboardScreen] = useState([]);
-	const [airlineLogo, setAirlineLogo] = useState([]);
+	const beltStatusOptions = ['Belt Open', 'Belt Closed'];
 	const [form] = Form.useForm();
 	const DashboardScreenApiProps = {
-		onSuccess: ({ result, airlineLogo }) => {
-			setDashboardScreen(result ?? []);
-			if (airlineLogo?.value) {
-				setAirlineLogo(airlineLogo?.value);
-			}
+		onSuccess: (data) => {
+			setDashboardScreen(data ?? []);
 		},
 		onError: (error) => {
 			toast.error(error?.response?.data?.message);
 		},
 	};
-	const { isLoading: isDashboardScreenLoading } = useGetFidsDashboard(DashboardScreenApiProps);
-
-	const handlePublish = (values) => {
-		closeStatusModal();
+	const updateFidsStatusApiProps = {
+		onSuccess: ({ data, message }) => {
+			toast.success(message);
+			queryClient.invalidateQueries('get-fids-dashboard-screen');
+			closeStatusModal();
+		},
+		onError: (error) => {
+			toast.error(error?.response?.data?.message);
+		},
+	};
+	const { isLoading: isDashboardScreenLoading, isRefetching } = useGetFidsDashboard('belt', DashboardScreenApiProps);
+	const { mutate: updateFidsStatus, isLoading: isFidsStatusLoading } = useUpdateFidsStatus(updateFidsStatusApiProps);
+	const handlePublish = async () => {
+		if (!statusModal?.record?.terminal_status) {
+			try {
+				const params = {
+					id: statusModal?.record?.screen_id,
+					data: {},
+				};
+				setIsPublishLoading(true);
+				await usePublishScreen(params);
+				setIsPublishLoading(false);
+				params.id = statusModal?.record?.flight_id;
+				params.data.status = beltStatusOptions[0];
+				updateFidsStatus(params);
+			} catch (error) {
+				setIsPublishLoading(false);
+			}
+		} else {
+			const status = beltStatusOptions[1];
+			const params = {
+				id: statusModal?.record?.flight_id,
+				data: { status },
+			};
+			updateFidsStatus(params);
+		}
 	};
 	const openStatusModal = (record) => {
 		setStatusModal({ isOpen: true, record });
@@ -35,10 +70,6 @@ const BaggageBeltTab = () => {
 		setStatusModal({ isOpen: false, record: null });
 		form.resetFields();
 	};
-	const checkInDisplayOptions = [
-		{ label: 'Screen With airline logo', value: 'logo' },
-		{ label: 'Screen With airline logo and Flights details', value: 'flight details' },
-	];
 	const columns = [
 		{
 			title: 'Airline',
@@ -66,15 +97,15 @@ const BaggageBeltTab = () => {
 			align: 'center',
 		},
 		{
-			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
+			title: 'Sta',
+			dataIndex: 'sta',
+			key: 'sta',
 			align: 'center',
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
+			title: 'Type',
+			dataIndex: 'type',
+			key: 'type',
 			align: 'center',
 		},
 		{
@@ -95,27 +126,59 @@ const BaggageBeltTab = () => {
 			title: 'Terminal',
 		},
 		{
+			title: 'Status',
+			dataIndex: 'terminal_status',
+			key: 'terminal_status',
+			align: 'center',
+		},
+		{
 			title: 'Action',
-			render: (_, record) => (
-				<ButtonComponent
-					onClick={() => openStatusModal(record)}
-					style={{ margin: 'auto' }}
-					title="Publish"
-					type="text"
-				/>
-			),
+			render: (_, record) =>
+				record?.terminal_status !== beltStatusOptions[1] && (
+					<ButtonComponent
+						onClick={() => openStatusModal(record)}
+						style={{ margin: 'auto' }}
+						title={record?.terminal_status === beltStatusOptions[0] ? beltStatusOptions[1] : 'Publish'}
+						type="text"
+					/>
+				),
 		},
 	];
 	return (
 		<>
-			<PageLoader loading={isDashboardScreenLoading} />
-			<ConfirmationModal
-				isOpen={statusModal?.isOpen}
-				onClose={closeStatusModal}
-				onSave={handlePublish}
-				content={`You want to publish ${statusModal?.record?.screen_name}`}
-				buttonTitle2="Publish"
-			/>
+			<PageLoader loading={isDashboardScreenLoading || isFidsStatusLoading || isPublishLoading || isRefetching} />
+			<ModalComponent
+				isModalOpen={statusModal?.isOpen}
+				closeModal={closeStatusModal}
+				title={`Please Select template for the ${statusModal?.record?.screen_name}`}
+				width="40vw"
+			>
+				<Form form={form} onFinish={handlePublish} layout="vertical" style={{ marginTop: '1rem' }}>
+					<BeltFids
+						flightNo={statusModal?.record?.call_sign}
+						origin={statusModal?.record?.sector}
+						airlineLogo={airlineLogo}
+					/>
+					<div className="form_bottomButton">
+						<ButtonComponent
+							title="Cancel"
+							type="filledText"
+							className="custom_button_cancel"
+							onClick={closeStatusModal}
+						/>
+						<ButtonComponent
+							title={
+								statusModal?.record?.terminal_status === beltStatusOptions[0]
+									? beltStatusOptions[1]
+									: 'Publish'
+							}
+							type="filledText"
+							className="custom_button_save"
+							isSubmit={true}
+						/>
+					</div>
+				</Form>
+			</ModalComponent>
 			<TableComponent
 				columns={columns}
 				data={dashboardScreen}

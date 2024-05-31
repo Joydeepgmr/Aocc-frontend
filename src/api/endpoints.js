@@ -144,6 +144,9 @@ export const UPDATE_FIDS_RESOURCES = '/screen';
 
 /*------------------------- FIDS Dashboard----------------------------------*/
 export const GET_FIDS_DASHBOARD = '/screen/getScreen'
+export const UPDATE_FIDS_STATUS = '/screen/terminal'
+export const PUBLISH_SCREEN = '/screen'
+export const GET_AIRLINE_LOGO = '/screen/getAirlineLogo'
 /*------------------------- FIDS Access Management----------------------------------*/
 export const POST_FIDS_ACCESS = '/screen/access'
 /*------------------------- Notification ----------------------------------*/

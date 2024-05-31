@@ -9,6 +9,7 @@ import './fidsFormComponent.scss';
 import { useBaggageBeltDropdown, useCheckInDropdown, useTerminalDropdown } from '../../../../../services';
 import toast from 'react-hot-toast';
 import CustomRadioGroup from '../../../../../components/radioButton/radioButton';
+import { useGateDropdown } from '../../../../../services/fids/fidsResources';
 
 const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
@@ -27,6 +28,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 	const { data: checkInDropdownData, refetch: refetchCheckInDropdownData } = useCheckInDropdown({ onError });
 	const { data: terminalDropdownData, refetch: refetchTerminalDropdownData } = useTerminalDropdown({ onError });
 	const { data: baggageBeltDropdownData, refetch: refetchBaggageBeltDropdownData } = useBaggageBeltDropdown({
+		onError,
+	});
+	const { data: gateDropdownData, refetch: refetchGateDropdownData } = useGateDropdown({
 		onError,
 	});
 
@@ -54,6 +58,14 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 			})
 		);
 	}, [baggageBeltDropdownData]);
+	const SelectGateData = useMemo(() => {
+		return (
+			gateDropdownData &&
+			gateDropdownData?.map((data) => {
+				return { label: data?.name, value: data?.id, id: data?.id };
+			})
+		);
+	}, [gateDropdownData]);
 
 	const handleValidFrom = (dateString) => {
 		if (form.getFieldValue('validTill') < form.getFieldValue('validFrom')) {
@@ -85,6 +97,8 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 			refetchCheckInDropdownData();
 		} else if (watch === 'baggage_belt') {
 			refetchBaggageBeltDropdownData();
+		} else if (watch === 'gate') {
+			refetchGateDropdownData();
 		}
 	}, [watch]);
 
@@ -146,7 +160,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 									? SelectTerminalData
 									: watch === 'baggage_belt'
 										? SelectBaggageBeltData
-										: []
+										: watch === 'gate'
+											? SelectGateData
+											: []
 						}
 						label="Resource"
 						name="resourceId"
@@ -159,7 +175,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						label="IP address"
 						name="MacAddress"
 						max={32}
-						placeholder={!isReadOnly && 'MAC address'}
+						placeholder={!isReadOnly && 'IP address'}
 						className="custom_input"
 						disabled={isReadOnly}
 						required={true}
@@ -171,10 +187,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 							type="number"
 							min={100}
 							max={999}
-							required
 							placeholder={!isReadOnly && 'Enter the Height'}
 							className="custom_number_input"
-							suffixText="cm"
+							suffixText="pixel"
 							disabled={isReadOnly}
 						/>
 						<InputField
@@ -183,10 +198,9 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 							type="number"
 							min={100}
 							max={999}
-							required
 							placeholder={!isReadOnly && 'Enter the Width'}
 							className="custom_number_input"
-							suffixText="cm"
+							suffixText="pixel"
 							disabled={isReadOnly}
 						/>
 					</div>

@@ -1,4 +1,5 @@
 import { Form } from 'antd';
+import { useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import ButtonComponent from '../../../../../components/button/button';
@@ -6,28 +7,74 @@ import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import CustomRadioGroup from '../../../../../components/radioButton/radioButton';
 import TableComponent from '../../../../../components/table/table';
-import { useGetFidsDashboard } from '../../../../../services/fids/fidsResources';
+import { useGetFidsDashboard, usePublishScreen, useUpdateFidsStatus } from '../../../../../services/fids/fidsResources';
+import toast from 'react-hot-toast';
+import FidsPreview from '../fidsPreview';
 
-const CheckInTab = () => {
+const CheckInTab = ({ airlineLogo }) => {
+	const queryClient = useQueryClient();
 	const [statusModal, setStatusModal] = useState({ isOpen: false, record: null });
 	const [dashboardScreen, setDashboardScreen] = useState([]);
-	const [airlineLogo, setAirlineLogo] = useState([]);
+	const [isPublishLoading, setIsPublishLoading] = useState(false);
 	const [form] = Form.useForm();
+	const watchDisplay = Form.useWatch('displayType', form);
+	const checkInStatusOptions = ['Check-In Open', 'Check-In Closed'];
+	const checkInDisplayOptions = [
+		{ label: 'Screen With airline logo', value: 'logo' },
+		{ label: 'Screen With airline logo and Flights details', value: 'flight details' },
+	];
 	const DashboardScreenApiProps = {
-		onSuccess: ({ result, airlineLogo }) => {
-			setDashboardScreen(result ?? []);
-			if (airlineLogo?.value) {
-				setAirlineLogo(airlineLogo?.value);
-			}
+		onSuccess: (data) => {
+			setDashboardScreen(data ?? []);
 		},
 		onError: (error) => {
 			toast.error(error?.response?.data?.message);
 		},
 	};
-	const { isLoading: isDashboardScreenLoading } = useGetFidsDashboard(DashboardScreenApiProps);
-
-	const handlePublish = (values) => {
-		closeStatusModal();
+	const updateFidsStatusApiProps = {
+		onSuccess: ({ data, message }) => {
+			toast.success(message);
+			queryClient.invalidateQueries('get-fids-dashboard-screen');
+			closeStatusModal();
+		},
+		onError: (error) => {
+			toast.error(error?.response?.data?.message);
+		},
+	};
+	const { isLoading: isDashboardScreenLoading, isRefetching } = useGetFidsDashboard(
+		'checkin',
+		DashboardScreenApiProps
+	);
+	const { mutate: updateFidsStatus, isLoading: isFidsStatusLoading } = useUpdateFidsStatus(updateFidsStatusApiProps);
+	const handlePublish = async () => {
+		if (!statusModal?.record?.terminal_status) {
+			try {
+				const params = {
+					id: statusModal?.record?.screen_id,
+					data: {
+						displayType: watchDisplay,
+					},
+				};
+				setIsPublishLoading(true);
+				await usePublishScreen(params);
+				setIsPublishLoading(false);
+				delete params.data.displayType;
+				params.id = statusModal?.record?.flight_id;
+				params.data.status = checkInStatusOptions[0];
+				updateFidsStatus(params);
+			} catch (error) {
+				toast.error(error?.response?.data?.message);
+				setIsPublishLoading(false);
+			}
+		} else {
+			const params = {
+				id: statusModal?.record?.flight_id,
+				data: {
+					status: checkInStatusOptions[1],
+				},
+			};
+			updateFidsStatus(params);
+		}
 	};
 	const openStatusModal = (record) => {
 		setStatusModal({ isOpen: true, record });
@@ -36,10 +83,6 @@ const CheckInTab = () => {
 		setStatusModal({ isOpen: false, record: null });
 		form.resetFields();
 	};
-	const checkInDisplayOptions = [
-		{ label: 'Screen With airline logo', value: 'logo' },
-		{ label: 'Screen With airline logo and Flights details', value: 'flight details' },
-	];
 	const columns = [
 		{
 			title: 'Airline',
@@ -67,15 +110,15 @@ const CheckInTab = () => {
 			align: 'center',
 		},
 		{
-			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
+			title: 'Std',
+			dataIndex: 'std',
+			key: 'std',
 			align: 'center',
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
+			title: 'Type',
+			dataIndex: 'type',
+			key: 'type',
 			align: 'center',
 		},
 		{
@@ -96,33 +139,78 @@ const CheckInTab = () => {
 			title: 'Terminal',
 		},
 		{
+			title: 'Status',
+			dataIndex: 'terminal_status',
+			key: 'terminal_status',
+			align: 'center',
+		},
+		{
 			title: 'Action',
-			render: (_, record) => (
-				<ButtonComponent
-					onClick={() => openStatusModal(record)}
-					style={{ margin: 'auto' }}
-					title="Publish"
-					type="text"
-				/>
-			),
+			render: (_, record) =>
+				record?.terminal_status !== checkInStatusOptions[1] ? (
+					<ButtonComponent
+						onClick={() => openStatusModal(record)}
+						style={{ margin: 'auto' }}
+						title={record?.terminal_status === checkInStatusOptions[0] ? 'Check-In Closed' : 'Publish'}
+						type="text"
+					/>
+				) : null,
 		},
 	];
 	return (
 		<>
-			<PageLoader loading={isDashboardScreenLoading} />
+			<PageLoader loading={isDashboardScreenLoading || isFidsStatusLoading || isRefetching||isPublishLoading} />
 			<ModalComponent
 				isModalOpen={statusModal?.isOpen}
 				closeModal={closeStatusModal}
-				title={`Please Select template for the ${statusModal?.record?.screen_name}`}
+				title={`${statusModal?.record?.terminal_status === checkInStatusOptions[0] ? 'Preview ' : 'Please Select '}template for the ${statusModal?.record?.screen_name}`}
 				width="40vw"
 			>
 				<Form form={form} onFinish={handlePublish} layout="vertical" style={{ marginTop: '1rem' }}>
-					<CustomRadioGroup
-						options={checkInDisplayOptions}
-						name="displayType"
-						className="custom_input"
-						required
-					/>
+					{statusModal?.record?.terminal_status === checkInStatusOptions[0] ? (
+						<FidsPreview
+							counter={statusModal?.record?.resource_name}
+							flightNo={statusModal?.record?.display_type !== 'logo' && statusModal?.record?.call_sign}
+							std={statusModal?.record?.std}
+							etd={statusModal?.record?.etd}
+							destination={statusModal?.record?.sector}
+							status={checkInStatusOptions[1]}
+							airlineLogo={airlineLogo}
+						/>
+					) : (
+						<>
+							<CustomRadioGroup
+								options={checkInDisplayOptions}
+								name="displayType"
+								className="custom_input"
+								required
+							/>
+
+							{watchDisplay ? (
+								watchDisplay === 'logo' ? (
+									<FidsPreview
+										counter={statusModal?.record?.resource_name}
+										airlineLogo={airlineLogo}
+										status={
+											statusModal?.record?.terminal_status !== checkInStatusOptions[0]
+												? checkInStatusOptions[0]
+												: checkInStatusOptions[1]
+										}
+									/>
+								) : (
+									<FidsPreview
+										counter={statusModal?.record?.resource_name}
+										flightNo={statusModal?.record?.call_sign}
+										std={statusModal?.record?.std}
+										etd={statusModal?.record?.etd}
+										destination={statusModal?.record?.sector}
+										status="Check-In Open"
+										airlineLogo={airlineLogo}
+									/>
+								)
+							) : null}
+						</>
+					)}
 					<div className="form_bottomButton">
 						<ButtonComponent
 							title="Cancel"
@@ -131,7 +219,9 @@ const CheckInTab = () => {
 							onClick={closeStatusModal}
 						/>
 						<ButtonComponent
-							title="Publish"
+							title={
+								statusModal?.record?.terminal_status === checkInStatusOptions[0] ? 'Update' : 'Publish'
+							}
 							type="filledText"
 							className="custom_button_save"
 							isSubmit={true}

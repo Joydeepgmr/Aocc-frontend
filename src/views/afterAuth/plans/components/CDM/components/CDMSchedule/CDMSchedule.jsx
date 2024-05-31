@@ -327,7 +327,7 @@ const DailySchedule = () => {
 	const noDataHandler = () => {
 		return (
 			<div className="seasonal_container">
-				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={handleDetailModalOpen} />
+				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={()=>handleDetailModalOpen()} />
 			</div>
 		);
 	};

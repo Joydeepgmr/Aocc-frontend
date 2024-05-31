@@ -202,7 +202,7 @@ const Terminal = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={handleDetailModalOpen}
+					openModal={() => handleDetailModalOpen()}
 				/>
 			) : (
 				<>
