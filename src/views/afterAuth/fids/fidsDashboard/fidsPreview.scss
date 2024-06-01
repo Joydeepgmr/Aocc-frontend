@@ -1,0 +1,111 @@
+.card {
+	width: 100%;
+	height: 30rem;
+	display: flex;
+	flex-direction: column;
+	background: black;
+	font-weight: 500;
+	margin-bottom: 3rem;
+	.header {
+		padding: 0% 0.5rem;
+		height: 20%;
+		color: yellow;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 0.1rem solid white;
+		.counter_name {
+			font-size: 2.5rem;
+		}
+	}
+	.main_body {
+		color: white;
+		height: 70%;
+		width: 100%;
+		.only_logo {
+			background: white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			img {
+				width: 90%;
+				height: 95%;
+				object-fit: contain;
+			}
+		}
+		.flight_info {
+			height: 80%;
+			width: 100%;
+			display: flex;
+			border: 0.1rem solid white;
+			.flightNo {
+				font-size: 2rem;
+				height: 100%;
+				width: 20%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				border: 0.1rem solid white;
+			}
+			.airline {
+				border: 0.1rem solid white;
+				height: 100%;
+				width: 55%;
+				display: flex;
+				justify-content: center;
+				img {
+					object-fit: contain;
+					height: 100%;
+					width: 90%;
+				}
+			}
+			.departure_time {
+				border-left: 0.1rem solid white;
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+				justify-content: space-between;
+				width: 25%;
+				font-size: 2rem;
+				.std_time {
+					border: 0.1rem solid white;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					height: 50%;
+				}
+			}
+		}
+		.destination {
+			font-size: 3rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 20%;
+			border: 0.1rem solid white;
+		}
+	}
+	.status_header {
+		border: 0.1rem solid white;
+		height: 20%;
+		color: white;
+		position: relative;
+		.status {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			font-size: 3rem;
+			z-index: 100;
+		}
+		.counter_time {
+			position: absolute;
+			bottom: 0;
+			font-size: 1rem;
+			padding: 0 0.1rem 0rem 0.1rem;
+		}
+	}
+}

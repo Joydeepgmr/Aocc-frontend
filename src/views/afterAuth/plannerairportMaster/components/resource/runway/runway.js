@@ -291,7 +291,7 @@ const Runway = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={handleDetailModalOpen}
+					openModal={()=>handleDetailModalOpen()}
 					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (

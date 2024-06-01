@@ -24,7 +24,7 @@ const TimelineDesign = (props) => {
 		editable: {
 			remove: false,
 			updateGroup: editable,
-			updateTime: editable,
+			updateTime: false,
 		},
 		showTooltips: true,
 		itemsAlwaysDraggable: {
@@ -73,7 +73,7 @@ const TimelineDesign = (props) => {
 			time === '12'
 				? new Date().setHours(new Date().getHours() + 12)
 				: new Date().setHours(new Date().getHours() + 24),
-		rollingMode: { offset: '0.2', follow: true },
+		rollingMode: { offset: 0.2, follow: true },
 	};
 
 	return (

@@ -227,6 +227,20 @@ const Aircrafts = () => {
 			align: 'center',
 		},
 		{
+			title: 'MOW',
+			dataIndex: 'mow',
+			key: 'mow',
+			render: (mow) => mow ?? '-',
+			align: 'center',
+		},
+		{
+			title: 'ANNEX',
+			dataIndex: 'annex',
+			key: 'annex',
+			render: (annex) => annex ?? '-',
+			align: 'center',
+		},
+		{
 			title: 'HOPO',
 			dataIndex: 'airportId',
 			key: 'airportId',

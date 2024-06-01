@@ -340,7 +340,9 @@ export const useUploadCSVGlobalAircraftType = (props) => {
 		mutationFn: async (data) => {
 			const resp = await Post(`${BULK_UPLOAD_GLOBAL_AIRCRAFT_TYPE}`, data);
 			const downloadUrl = GenerateDownloadUrl(resp);
-			DownloadFileByUrl(downloadUrl, 'aircraft_type_uploaded');
+			if (downloadUrl) {
+				DownloadFileByUrl(downloadUrl, 'aircraft_type_uploaded');
+			}
 			return resp;
 		},
 		...props,

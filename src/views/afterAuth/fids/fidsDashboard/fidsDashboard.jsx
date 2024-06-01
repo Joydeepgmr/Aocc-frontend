@@ -1,55 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import CustomTabs from '../../../../components/customTabs/customTabs';
 import BaggageBeltTab from './baggageBeltTab/baggageBeltTab';
 import CheckInTab from './checkInTab/checkInTab';
 import './fidsDashboard.scss';
 import GateTab from './gateTab/gateTab';
+import { useGetAirlineLogo } from '../../../../services/fids/fidsResources';
+import PageLoader from '../../../../components/pageLoader/pageLoader';
+import toast from 'react-hot-toast';
 
 const FidsDashboard = () => {
+	const [airlineLogo, setAirlineLogo] = useState('');
+	const AirlineLogoApiProps = {
+		onSuccess: (data) => {
+			if (data?.value) {
+				setAirlineLogo(data.value);
+			}
+		},
+		onError: (error) => {
+			toast.error(error?.response?.data?.message);
+		},
+	};
+	const { isLoading: isAirlineLogoLoading } = useGetAirlineLogo(AirlineLogoApiProps);
 	const items = [
 		{
 			key: '1',
 			label: 'CheckIn',
-			children: <CheckInTab />,
+			children: <CheckInTab airlineLogo={airlineLogo} />,
 		},
 		{
 			key: '2',
 			label: 'Gate',
-			children: <GateTab />,
+			children: <GateTab airlineLogo={airlineLogo} />,
 		},
 		{
 			key: '4',
 			label: 'Baggage Belt',
-			children: <BaggageBeltTab />,
+			children: <BaggageBeltTab airlineLogo={airlineLogo} />,
 		},
 	];
 
 	return (
 		<>
-			
+			<PageLoader loading={isAirlineLogoLoading} />
 			<div className="container-div">
 				<div className="main-container">
 					<CustomTabs defaultActiveKey={'1'} items={items} type="card" />
 				</div>
 			</div>
-			{/* <div className="fidsDashboard--Container">
-				<TopHeader heading="Flight Information">
-					<CustomSelect
-						defaultValue={allScreenArr?.[3]?.value}
-						onChange={onSelectScreen}
-						SelectData={allScreenArr}
-						placeholder={'Select Screens'}
-					/>
-				</TopHeader>
-				<TableComponent
-					columns={columns}
-					data={dashboardScreen}
-					// loading={loading}
-					// fetchData={fetchData}
-					// pagination={pagination}
-				/>
-			</div> */}
 		</>
 	);
 };

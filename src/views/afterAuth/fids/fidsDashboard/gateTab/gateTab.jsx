@@ -1,35 +1,76 @@
 import { Form } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
 import ButtonComponent from '../../../../../components/button/button';
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import CustomRadioGroup from '../../../../../components/radioButton/radioButton';
 import TableComponent from '../../../../../components/table/table';
-import { useGetFidsDashboard } from '../../../../../services/fids/fidsResources';
-import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
-import CustomSelect from '../../../../../components/select/select';
+import { useGetFidsDashboard, usePublishScreen, useUpdateFidsStatus } from '../../../../../services/fids/fidsResources';
+import FidsPreview from '../fidsPreview';
 
-const GateTab = () => {
+const GateTab = ({ airlineLogo }) => {
+	const queryClient = useQueryClient();
+	const [isPublishLoading, setIsPublishLoading] = useState(false);
 	const [statusModal, setStatusModal] = useState({ isOpen: false, record: null });
 	const [dashboardScreen, setDashboardScreen] = useState([]);
-	const [airlineLogo, setAirlineLogo] = useState([]);
 	const [form] = Form.useForm();
+	const previousStatus = ['Check-In Closed', 'Gate Open', 'Boarding Start', 'Final call'];
+	const gateStatusOptions = ['Gate Open', 'Boarding Start', 'Final call', 'Gate Closed'];
 	const DashboardScreenApiProps = {
-		onSuccess: ({ result, airlineLogo }) => {
-			setDashboardScreen(result ?? []);
-			if (airlineLogo?.value) {
-				setAirlineLogo(airlineLogo?.value);
-			}
+		onSuccess: (data) => {
+			setDashboardScreen(data ?? []);
 		},
 		onError: (error) => {
 			toast.error(error?.response?.data?.message);
 		},
 	};
-	const { isLoading: isDashboardScreenLoading } = useGetFidsDashboard(DashboardScreenApiProps);
-
-	const handlePublish = (values) => {
-		closeStatusModal();
+	const updateFidsStatusApiProps = {
+		onSuccess: ({ data, message }) => {
+			toast.success(message);
+			queryClient.invalidateQueries('get-fids-dashboard-screen');
+			closeStatusModal();
+		},
+		onError: (error) => {
+			toast.error(error?.response?.data?.message);
+		},
+	};
+	const { isLoading: isDashboardScreenLoading, isRefetching: isDashboardScreenRefetch } = useGetFidsDashboard(
+		'gate',
+		DashboardScreenApiProps
+	);
+	const { mutate: updateFidsStatus, isLoading: isFidsStatusLoading } = useUpdateFidsStatus(updateFidsStatusApiProps);
+	const handlePublish = async () => {
+		if (statusModal?.record?.terminal_status === previousStatus[0]) {
+			try {
+				const params = {
+					id: statusModal?.record?.screen_id,
+					data: {},
+				};
+				setIsPublishLoading(true);
+				await usePublishScreen(params);
+				setIsPublishLoading(false);
+				params.id = statusModal?.record?.flight_id;
+				params.data.status = gateStatusOptions[0];
+				updateFidsStatus(params);
+			} catch (error) {
+				setIsPublishLoading(false);
+			}
+		} else {
+			const { terminal_status } = statusModal?.record;
+			const status =
+				terminal_status === gateStatusOptions[0]
+					? gateStatusOptions[1]
+					: terminal_status === gateStatusOptions[1]
+						? gateStatusOptions[2]
+						: gateStatusOptions[3];
+			const params = {
+				id: statusModal?.record?.flight_id,
+				data: { status },
+			};
+			updateFidsStatus(params);
+		}
 	};
 	const openStatusModal = (record) => {
 		setStatusModal({ isOpen: true, record });
@@ -38,10 +79,6 @@ const GateTab = () => {
 		setStatusModal({ isOpen: false, record: null });
 		form.resetFields();
 	};
-	const gateStatusOptions = [
-		{ label: 'Boarding', value: 'Boarding' },
-		{ label: 'Final call', value: 'final_call' },
-	];
 	const columns = [
 		{
 			title: 'Airline',
@@ -69,15 +106,15 @@ const GateTab = () => {
 			align: 'center',
 		},
 		{
-			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
+			title: 'Std',
+			dataIndex: 'std',
+			key: 'std',
 			align: 'center',
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
-			key: 'status',
+			title: 'Type',
+			dataIndex: 'type',
+			key: 'type',
 			align: 'center',
 		},
 		{
@@ -98,40 +135,63 @@ const GateTab = () => {
 			title: 'Terminal',
 		},
 		{
+			title: 'Status',
+			dataIndex: 'terminal_status',
+			key: 'terminal_status',
+			align: 'center',
+		},
+		{
 			title: 'Action',
-			render: (_, record) => (
-				<ButtonComponent
-					onClick={() => openStatusModal(record)}
-					style={{ margin: 'auto' }}
-					title="Update Status"
-					type="text"
-				/>
-			),
+			render: (_, record) =>
+				previousStatus.includes(record?.terminal_status) ? (
+					<ButtonComponent
+						onClick={() => openStatusModal(record)}
+						style={{ margin: 'auto' }}
+						title={
+							record?.terminal_status === gateStatusOptions[0]
+								? gateStatusOptions[1]
+								: record?.terminal_status === gateStatusOptions[1]
+									? gateStatusOptions[2]
+									: record?.terminal_status === gateStatusOptions[2]
+										? gateStatusOptions[3]
+										: 'Publish'
+						}
+						type="text"
+					/>
+				) : null,
 		},
 	];
 	return (
 		<>
-			<PageLoader loading={isDashboardScreenLoading} />
-			{/* <ConfirmationModal
-				isOpen={statusModal?.isOpen}
-				onClose={closeStatusModal}
-				onSave={handlePublish}
-				content={`You want to publish ${statusModal?.record?.screen_name}`}
-				buttonTitle2="Publish"
-			/> */}
+			<PageLoader
+				loading={
+					isDashboardScreenLoading || isFidsStatusLoading || isDashboardScreenRefetch || isPublishLoading
+				}
+			/>
 			<ModalComponent
 				isModalOpen={statusModal?.isOpen}
 				closeModal={closeStatusModal}
-				title={`Please Select status for the ${statusModal?.record?.screen_name}`}
-				width="30vw"
+				title={`${statusModal?.record?.screen_name}`}
+				width="32vw"
 			>
 				<Form form={form} onFinish={handlePublish} layout="vertical" style={{ marginTop: '1rem' }}>
-					<CustomSelect
-						name="status"
-						required
-						placeholder="Select Status"
-						SelectData={gateStatusOptions}
-						className="custom_input"
+					<FidsPreview
+						flightNo={statusModal?.record?.call_sign}
+						std={statusModal?.record?.std}
+						etd={statusModal?.record?.etd}
+						destination={statusModal?.record?.sector}
+						status={
+							statusModal?.record?.terminal_status === gateStatusOptions[0]
+								? gateStatusOptions[1]
+								: statusModal?.record?.terminal_status === gateStatusOptions[1]
+									? gateStatusOptions[2]
+									: statusModal?.record?.terminal_status === gateStatusOptions[2]
+										? gateStatusOptions[3]
+										: gateStatusOptions[0]
+						}
+						airlineLogo={airlineLogo}
+						counter="G7"
+						isGate
 					/>
 					<div className="form_bottomButton" style={{ marginTop: '1rem' }}>
 						<ButtonComponent
@@ -141,10 +201,10 @@ const GateTab = () => {
 							onClick={closeStatusModal}
 						/>
 						<ButtonComponent
-							title="Update"
+							title={statusModal?.record?.terminal_status === previousStatus[0] ? 'Publish' : 'Update'}
 							type="filledText"
 							className="custom_button_save"
-							isSubmit={true}
+							isSubmit
 						/>
 					</div>
 				</Form>

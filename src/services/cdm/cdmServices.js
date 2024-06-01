@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation } from 'react-query';
-import { CDM_GET_ARRIVAL_DEPARTURE, CDM_GET_TURN_AROUND, UPDATE_CDM_DATA, UPDATE_CDM_TURN_AROUND } from '../../api';
+import { CDM_GET_ARRIVAL_DEPARTURE, CDM_GET_TURN_AROUND, UPDATE_CDM_DATA, UPDATE_CDM_TURN_AROUND, UPDATE_FLIGHT_CANCEL } from '../../api';
 import { Patch, Post } from '../HttpServices/HttpServices';
 
 export const useGetAllCdmArrivalDeparture = (type, format, props) => {
@@ -32,6 +32,19 @@ export const useUpdateCdmTypes = (props) => {
 	const response = useMutation({
 		mutationKey: ['update-cdm-types'],
 		mutationFn: async ({ id, data }) => await Patch(`${UPDATE_CDM_DATA}/${id}`, data),
+		...props,
+	});
+
+	const { data, isSuccess } = response;
+
+	const statusMessage = isSuccess ? data?.message : data?.error;
+
+	return { ...response, data, message: statusMessage };
+};
+export const useUpdateFlightCancel = (props) => {
+	const response = useMutation({
+		mutationKey: ['update-flight-cancel'],
+		mutationFn: async (id) => await Patch(`${UPDATE_FLIGHT_CANCEL}/${id}`),
 		...props,
 	});
 

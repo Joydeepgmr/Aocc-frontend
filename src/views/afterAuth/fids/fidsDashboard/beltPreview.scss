@@ -1,0 +1,79 @@
+.card {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	.header {
+		border: none;
+		padding: 0% 1rem;
+		height: 20%;
+		color: yellow;
+		background: black;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: 500;
+		.counter_name {
+			font-size: 3rem;
+		}
+	}
+	.belt-table {
+		height: 85%;
+		width: 100%;
+		background-color: black;
+		overflow: hidden;
+		padding: 0%;
+		margin: 0%;
+		border-radius: 0;
+		border: none;
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			border: none;
+			overflow: hidden;
+			background-color: white;
+			.rotate {
+				animation: rotateX 1.5s ease-in-out;
+				animation: scaleText 1s ease-in-out;
+			}
+			.align-left {
+				text-align: left;
+				width: auto;
+			}
+			thead {
+				height: 12%;
+				font-size: 2rem;
+				background-color: blue;
+				color: white;
+				th {
+					padding: 0.4rem 0;
+					border: none;
+				}
+			}
+			tbody {
+				tr {
+					font-size: 3rem;
+					background-color: black;
+					color: white;
+					border-bottom: 0.1rem solid white;
+					td {
+						border: none;
+						text-align: center;
+						.airline_column {
+							display: flex;
+							align-items: center;
+							gap: 0.5rem;
+							img {
+								height: 5rem;
+								width: 10rem;
+								object-fit: cover;
+							}
+						}
+					}
+				}
+				.noBorder {
+					border-bottom: none;
+				}
+			}
+		}
+	}
+}

@@ -1,16 +1,21 @@
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import {
 	DELETE_FIDS_RESOURCES,
+	GET_AIRLINE_LOGO,
 	GET_BAGGAGE_BELT,
 	GET_CHECKIN_COUNTER,
 	GET_FIDS_DASHBOARD,
 	GET_FIDS_RESOURCES,
+	GET_GATE,
 	GET_TERMINAL,
 	POST_FIDS_ACCESS,
 	POST_FIDS_RESOURCES,
+	PUBLISH_SCREEN,
 	UPDATE_FIDS_RESOURCES,
+	UPDATE_FIDS_STATUS,
 } from '../../api';
 import { Delete, Get, Patch, Post } from '../HttpServices/HttpServices';
+import toast from 'react-hot-toast';
 
 export const useCheckInDropdown = (props) => {
 	const response = useQuery({
@@ -23,6 +28,16 @@ export const useCheckInDropdown = (props) => {
 	return { ...response, data };
 };
 
+export const useGateDropdown = (props) => {
+	const response = useQuery({
+		queryKey: ['gate-dropdown'],
+		queryFn: async () => await Post(`${GET_GATE}?bulk=true`),
+		...props,
+		enabled: false,
+	});
+	const data = response?.data?.data ?? [];
+	return { ...response, data };
+};
 export const useTerminalDropdown = (props) => {
 	const response = useQuery({
 		queryKey: ['terminal-dropdown'],
@@ -115,10 +130,18 @@ export const useGetAllFidsScreens = (props) => {
 	return response;
 }
 
-export const useGetFidsDashboard = (props) => {
+export const useGetFidsDashboard = (screenType, props) => {
 	const response = useQuery({
-		queryKey: 'get-fids-dashboard-screen',
-		queryFn: async () => await Get(`${GET_FIDS_DASHBOARD}?id=52ebf2ce-c7c3-4853-82a9-98f822a5d92b`),
+		queryKey: ['get-fids-dashboard-screen', screenType],
+		queryFn: async () => await Get(`${GET_FIDS_DASHBOARD}?screenType=${screenType}`),
+		...props
+	});
+	return response;
+}
+export const useGetAirlineLogo = (props) => {
+	const response = useQuery({
+		queryKey: 'get-airline-logo',
+		queryFn: async () => await Get(`${GET_AIRLINE_LOGO}`),
 		...props
 	});
 	return response;
@@ -147,4 +170,16 @@ export const useEditFidsAccessData = (props) => {
 		...props
 	});
 	return response;
+}
+export const useUpdateFidsStatus = (props) => {
+	const response = useMutation({
+		mutationKey: 'edit-fids-status-data',
+		mutationFn: async ({ id, data }) => await Patch(`${UPDATE_FIDS_STATUS}/${id}`, data),
+		...props
+	});
+	return response;
+}
+
+export const usePublishScreen = async ({ id, data }) => {
+	return await Patch(`${PUBLISH_SCREEN}/${id}`, data);
 }

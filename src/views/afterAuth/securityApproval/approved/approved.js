@@ -52,7 +52,7 @@ const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 					return '-';
 				} else {
 					const document = documents[0];
-					return document.type ?? '-';
+					return <div style={{ textTransform: 'capitalize' }}>{document.type ?? '-'}</div>
 				}
 			},
 			align: 'center',
@@ -87,7 +87,7 @@ const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			),
 		},
 		{
-			title: '',
+			title: 'STATUS',
 			key: 'actions',
 			render: () => <div className="approved--approvedText">Approved</div>,
 			align: 'center',
@@ -102,7 +102,7 @@ const Approved = ({ data, hasNextPage, fetchNextPage, loading }) => {
 				width="auto"
 				height="auto"
 				closeModal={closeModal}
-				title={<div>Preview ({rowData?.customerDocuments[0]?.isMatched ? 'Matched' : 'Not Matched'})</div>}
+				title={<div>Preview</div>}
 				className="pending--custom_modal"
 			>
 				<div className="pending--img_container">

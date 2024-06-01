@@ -230,16 +230,17 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							max={999}
 							placeholder={!isReadOnly && 'Enter the MTOW'}
 							className="custom_input"
-							suffixText="t"
+							suffixText="T"
 							disabled={isReadOnly}
 						/>
 						<InputField
 							label="MOW"
 							name="mow"
-							max={32}
+							max={999}
+							type='number'
 							placeholder={!isReadOnly && 'Enter the MOW'}
 							className="custom_input"
-							suffixText="t"
+							suffixText="T"
 							required
 							disabled={isReadOnly}
 						/>

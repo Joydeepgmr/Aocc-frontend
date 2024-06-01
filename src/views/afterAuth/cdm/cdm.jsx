@@ -15,6 +15,8 @@ import PageLoader from '../../../components/pageLoader/pageLoader';
 import { useQueryClient } from 'react-query';
 import ButtonComponent from '../../../components/button/button';
 import TelexDrawer from './TelexDrawer';
+import ConfirmationModal from '../../../components/confirmationModal/confirmationModal';
+import { useUpdateFlightCancel } from '../../../services/cdm/cdmServices';
 
 const CDM = () => {
 	const queryClient = useQueryClient();
@@ -23,6 +25,7 @@ const CDM = () => {
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
 	const [cdmData, setCdmData] = useState([]);
 	const [telexModal, setTelexModal] = useState({ isOpen: false, data: null });
+	const [flightCancelModal, setFlightCancelModal] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState({});
 
 	const getCdmHandler = {
@@ -30,6 +33,10 @@ const CDM = () => {
 		onError: (error) => handleGetCdmError(error),
 	};
 	const editCDMHandler = {
+		onSuccess: (data) => handleEditCDMSuccess(data),
+		onError: (error) => handleEditCDMError(error),
+	};
+	const flightCancelHandler = {
 		onSuccess: (data) => handleEditCDMSuccess(data),
 		onError: (error) => handleEditCDMError(error),
 	};
@@ -55,6 +62,7 @@ const CDM = () => {
 	} = useGetAllCdmArrivalDeparture(type, selectedTimeValue?.slice(0, 2), getCdmHandler);
 
 	const { mutate: onUpdateCDM, isLoading: isUpdateCDMLoading } = useUpdateCdmTypes(editCDMHandler);
+	const { mutate: onFlightCancel, isLoading: isFlightCancelLoading } = useUpdateFlightCancel(flightCancelHandler);
 
 	const handleGetCdmSuccess = (data) => {
 		if (data?.pages) {
@@ -88,6 +96,7 @@ const CDM = () => {
 			: queryClient.invalidateQueries('get-all-cdm-arrival-departure');
 		toast.success(data?.message);
 		setRowData({});
+		setFlightCancelModal({ isOpen: false, data: null });
 	};
 
 	const handleEditCDMError = (error) => {
@@ -123,7 +132,9 @@ const CDM = () => {
 			});
 		}
 	};
-
+	const handleFlightCancel = () => {
+		onFlightCancel(flightCancelModal?.data?.flight_id);
+	};
 	const closeTelexModal = () => {
 		setTelexModal({ isOpen: false, data: null });
 	};
@@ -284,6 +295,21 @@ const CDM = () => {
 							/>
 						),
 					},
+					{
+						title: 'ACTION',
+						key: 'view',
+						render: (text, record) => (
+							<ButtonComponent
+								title="CANCEL FLIGHT"
+								style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+								type="text"
+								className="view_map_button"
+								onClick={() => {
+									setFlightCancelModal({ isOpen: true, data: record });
+								}}
+							/>
+						),
+					},
 				]
 			: activeTab === '2'
 				? [
@@ -418,6 +444,21 @@ const CDM = () => {
 									className="view_map_button"
 									onClick={() => {
 										setTelexModal({ isOpen: true, data: record?.parsedMessage });
+									}}
+								/>
+							),
+						},
+						{
+							title: 'ACTION',
+							key: 'view',
+							render: (text, record) => (
+								<ButtonComponent
+									title="CANCEL FLIGHT"
+									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+									type="text"
+									className="view_map_button"
+									onClick={() => {
+										setFlightCancelModal({ isOpen: true, data: record });
 									}}
 								/>
 							),
@@ -620,6 +661,21 @@ const CDM = () => {
 								/>
 							),
 						},
+						{
+							title: 'ACTION',
+							key: 'view',
+							render: (text, record) => (
+								<ButtonComponent
+									title="CANCEL FLIGHT"
+									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+									type="text"
+									className="view_map_button"
+									onClick={() => {
+										setFlightCancelModal({ isOpen: true, data: record });
+									}}
+								/>
+							),
+						},
 					];
 
 	const items = [
@@ -629,6 +685,7 @@ const CDM = () => {
 			children: !(
 				isPlannerCdmLoading ||
 				isUpdateCDMLoading ||
+				isFlightCancelLoading ||
 				isUpdateCDMTurnAroundLoading ||
 				isPlannerCdmTurnAroundLoading ||
 				isPlannerCdmTurnAroundFetching
@@ -721,6 +778,13 @@ const CDM = () => {
 
 	return (
 		<>
+			<ConfirmationModal
+				isOpen={flightCancelModal?.isOpen}
+				onClose={() => setFlightCancelModal({ isOpen: false, data: null })}
+				onSave={handleFlightCancel}
+				content={`You want to mark this flight as canceled`}
+				buttonTitle2="Yes"
+			/>
 			<TelexDrawer isOpen={telexModal?.isOpen} onClose={closeTelexModal} data={telexModal?.data} />
 			<div className="container-style">
 				<div className="cdm--Container">

@@ -1,29 +1,26 @@
-import React, { useState } from 'react';
-import TopHeader from '../../../../components/topHeader/topHeader';
-import Button from '../../../../components/button/button';
-import TableComponent from '../../../../components/table/table';
-import Delete from '../../../../assets/Delete.svg';
-import Edit from '../../../../assets/Edit.svg';
-import ButtonComponent from '../../../../components/button/button';
-import dayjs from 'dayjs';
-import './fidsResources.scss';
 import { Form } from 'antd';
-import DropdownButton from '../../../../components/dropdownButton/dropdownButton';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import Button from '../../../../components/button/button';
 import ConfirmationModal from '../../../../components/confirmationModal/confirmationModal';
-import FidsFormComponent from './fidsFormComponent/fidsFormComponent';
-import UploadCsvModal from '../../../../components/uploadCsvModal/uploadCsvModal';
+import DropdownButton from '../../../../components/dropdownButton/dropdownButton';
 import ModalComponent from '../../../../components/modal/modal';
+import PageLoader from '../../../../components/pageLoader/pageLoader';
+import TableComponent from '../../../../components/table/table';
+import TopHeader from '../../../../components/topHeader/topHeader';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
+import UploadCsvModal from '../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useDeleteFidsResource,
 	useGetAllFidsResources,
 	usePostFidsResource,
 	useUpdateFidsResource,
 } from '../../../../services';
-import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
 import { ConvertIstToUtc } from '../../../../utils';
-import PageLoader from '../../../../components/pageLoader/pageLoader';
+import FidsFormComponent from './fidsFormComponent/fidsFormComponent';
+import './fidsResources.scss';
 
 const FidsResources = () => {
 	const queryClient = useQueryClient();
@@ -293,7 +290,7 @@ const FidsResources = () => {
 									id="btn"
 									type="filledText"
 									isSubmit="submit"
-									onClick={() => handleDetailModalOpen}
+									onClick={() => handleDetailModalOpen()}
 								/>
 								{/* <Button
 									id="btn"
