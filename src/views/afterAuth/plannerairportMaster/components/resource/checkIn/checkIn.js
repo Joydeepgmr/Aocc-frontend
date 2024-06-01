@@ -195,7 +195,7 @@ const CheckIn = () => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'GRP',
@@ -315,7 +315,7 @@ const CheckIn = () => {
 					formComponent={
 						<FormComponent handleSaveButton={handleSaveButton} handleButtonClose={handleDetailModalClose} />
 					}
-					openModal={handleDetailModalOpen}
+					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setOpenCSVModal(true)}
 				/>
 			) : (

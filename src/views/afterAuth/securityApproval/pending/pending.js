@@ -39,7 +39,6 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 	};
 
 	const handleStatusError = (error) => {
-		setRowData(null);
 		toast.error(error?.response?.data?.message);
 	};
 
@@ -54,7 +53,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 
 	const columns = [
 		{
-			title: 'Time',
+			title: 'TIME',
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			render: (time) => {
@@ -86,7 +85,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 					return '-';
 				} else {
 					const document = documents[0];
-					return document.type ?? '-';
+					return <div style={{ textTransform: 'capitalize' }}>{document.type ?? '-'}</div>
 				}
 			},
 			align: 'center',
@@ -121,7 +120,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			),
 		},
 		{
-			title: '',
+			title: 'ACTION',
 			key: 'actions',
 			render: (record) => (
 				<div className="pending--action_buttons">
@@ -181,7 +180,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 				width="auto"
 				height="auto"
 				closeModal={closeModal}
-				title="Preview"
+				title={<div>Preview ({rowData?.customerDocuments[0]?.isMatched ? 'Matched' : 'Not Matched'})</div>}
 				className="pending--custom_modal"
 			>
 				<div className="pending--img_container">

@@ -223,7 +223,7 @@ const Airlines = () => {
 			title: 'AL',
 			dataIndex: 'name',
 			key: 'name',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 			align: 'center',
 		},
 		{
@@ -238,6 +238,13 @@ const Airlines = () => {
 			dataIndex: 'threeLetterCode',
 			key: 'threeLetterCode',
 			render: (threeLetterCode) => threeLetterCode ?? '-',
+			align: 'center',
+		},
+		{
+			title: 'TYPE',
+			dataIndex: 'airlineType',
+			key: 'airlineType',
+			render: (airlineType) => <div style={{ textTransform: 'capitalize' }}>{airlineType?.length ? airlineType.join(', ') : '-'}</div>,
 			align: 'center',
 		},
 		{

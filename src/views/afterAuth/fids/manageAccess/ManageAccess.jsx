@@ -1,22 +1,24 @@
-import React, { useMemo, useState } from 'react';
-import ButtonComponent from '../../../../components/button/button';
-import TopHeader from '../../../../components/topHeader/topHeader';
-import TableComponent from '../../../../components/table/table';
-import PageLoader from '../../../../components/pageLoader/pageLoader';
-import { ConvertUtcToIst } from '../../../../utils';
-import Date from '../../../../components/datapicker/datepicker';
-import CustomSelect from '../../../../components/select/select';
-import ModalComponent from '../../../../components/modal/modal';
-import InputField from '../../../../components/input/field/field';
 import { Divider, Form } from 'antd';
-import DropdownButton from '../../../../components/dropdownButton/dropdownButton';
-import './manageAccess.scss';
-import { useAirlineDropdown } from '../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import dayjs from 'dayjs';
-import { useAddFidsAccessData, useGetFidsAccessData } from '../../../../services/fids/fidsResources';
+import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import ButtonComponent from '../../../../components/button/button';
+import Date from '../../../../components/datapicker/datepicker';
+import DropdownButton from '../../../../components/dropdownButton/dropdownButton';
+import InputField from '../../../../components/input/field/field';
+import ModalComponent from '../../../../components/modal/modal';
+import PageLoader from '../../../../components/pageLoader/pageLoader';
+import CustomSelect from '../../../../components/select/select';
+import TableComponent from '../../../../components/table/table';
+import TopHeader from '../../../../components/topHeader/topHeader';
+import { useAirlineDropdown } from '../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
+import { useAddFidsAccessData, useGetFidsAccessData } from '../../../../services/fids/fidsResources';
+import { ConvertUtcToIst } from '../../../../utils';
+import './manageAccess.scss';
 
 const ManageFidsAccess = () => {
+	const queryClient = useQueryClient();
 	const [fidsModal, setFidsModal] = useState({ isOpen: false, data: null, title: 'New Fids License', type: 'add' });
 	const [isValidFrom, setIsValidFrom] = useState(false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
@@ -39,6 +41,7 @@ const ManageFidsAccess = () => {
 	};
 	const createAccessApiProps = {
 		onSuccess: ({ message, data }) => {
+			queryClient.invalidateQueries('get-fids-access-data');
 			toast.success(message);
 			closeAddModal();
 		},
