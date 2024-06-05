@@ -15,14 +15,14 @@
 		gap: 2.4rem;
 		.input_form_item {
 			&.custom_input {
-				width: calc(33% - 2.4rem);
+				width: calc(24% - 2.4rem);
 			}
 		}
 		.select {
-			width: calc(33% - 2.4rem);
+			width: calc(24% - 2.4rem);
 		}
 		.custom_date {
-			width: calc(33% - 2.4rem);
+			width: calc(24% - 2.4rem);
 		}
 	}
 }

@@ -2,6 +2,7 @@ import { Steps } from 'antd';
 import React from 'react';
 import PageLoader from '../../../../components/pageLoader/pageLoader';
 import './style.scss';
+import { ConvertToDateTime } from '../../../../utils';
 
 const MileStoneSteps = ({ title, data, startKey, endKey }) => {
 	const startedAt = data?.[startKey];
@@ -21,11 +22,11 @@ const MileStoneSteps = ({ title, data, startKey, endKey }) => {
 				<div className="timeContainer">
 					<div className={`${startedAt ? 'activeTime' : 'defaultTime'}`}>
 						<span>Start</span>
-						<span>{startedAt ?? '-:-'}</span>
+						<span>{ConvertToDateTime(startedAt, 'HH:mm') ?? '-:-'}</span>
 					</div>
 					<div className={`${endAt ? 'activeTime' : 'defaultTime'}`}>
 						<span>End</span>
-						<span>{endAt ?? '-:-'}</span>
+						<span>{ConvertToDateTime(endAt, 'HH:mm') ?? '-:-'}</span>
 					</div>
 				</div>
 			</div>

@@ -57,6 +57,7 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 						required: true,
 						name: 'file',
 						label: 'Airport logo',
+						description: 'Please Provide high resolution logo'
 					}}
 				/>
 			</div>
@@ -88,8 +89,6 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					max={32}
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Abbreviated Name 4"
 					name="abbreviatedName4"
@@ -99,6 +98,8 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					max={32}
 					disabled={isReadOnly}
 				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
 				<CustomSelect
 					SelectData={SelectData}
 					placeholder="Select the access type"
@@ -115,8 +116,6 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
 				<CustomSelect
 					SelectData={SelectedTimeZone}
 					placeholder={!isReadOnly && "Enter the time change"}
@@ -159,9 +158,6 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					disabled={isReadOnly}
 					required
 				/>
-			</div>
-			<Divider />
-			<div className="airport_setup_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && "Select valid from date"}

@@ -65,8 +65,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					required
 					disabled={isReadOnly || isNotEditable}
 				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
 				<CustomSelect
 					SelectData={SelectedAirlineData}
 					label="Airline"
@@ -87,6 +85,8 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					required
 					disabled={isReadOnly || isNotEditable}
 				/>
+			</div>
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="ICAO Code Modified"
 					name="icaoCodeModified"
@@ -98,8 +98,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="A/C Family"
 					name="family"
@@ -127,8 +125,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					suffixText="min"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Wingspan"
 					name="wingspan"
@@ -139,6 +135,8 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					suffixText="m"
 					disabled={isReadOnly}
 				/>
+			</div>
+			<div className="aircraft_type_form_inputfields">
 				<InputField
 					label="Length"
 					name="length"
@@ -159,8 +157,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					suffixText="m"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
 				<CustomSelect
 					SelectData={SelectEngineType}
 					label="Engine Type"
@@ -187,7 +183,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					onChange={handleCheckChange}
 				/>
 			</div>
-			<Divider />
 			<div className="customTypo">
 				<CustomTypography type="title" fontSize={14} fontWeight="600" color="#5C5F66">
 					Seats
@@ -229,8 +224,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="aircraft_type_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && 'Select valid from date'}

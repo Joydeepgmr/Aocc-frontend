@@ -15,17 +15,17 @@
 
 		.input_form_item {
 			&.custom_input {
-				width: calc(33% - 2.4rem);
+				width: calc(19% - 2.4rem);
 			}
 			&.custom_input_seat {
 				width: calc(25% - 2.4rem);
 			}
 		}
 		.select {
-			width: calc(33% - 2.4rem);
+			width: calc(19% - 2.4rem);
 		}
 		.custom_date {
-			width: calc(33% - 2.4rem);
+			width: calc(19% - 2.4rem);
 		}
 	}
 }

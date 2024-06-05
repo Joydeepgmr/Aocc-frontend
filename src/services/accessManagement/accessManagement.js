@@ -2,6 +2,39 @@ import { useInfiniteQuery, useMutation } from 'react-query';
 import { POST_MANAGE_ACCESS, GET_MANAGE_ACCESS, GET_MANAGE_ACCESS_PLANNER } from '../../api';
 import { Post } from '../HttpServices/HttpServices';
 
+export const useGetFidsAccess = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-user-fids'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
+			return false;
+		},
+		...props,
+		enabled: false,
+	});
+
+	return response;
+};
+
+export const useGetSecurityAccess = (props) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-user-security'],
+		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
+			return false;
+		},
+		...props,
+		enabled: false,
+	});
+
+	return response;
+};
 export const useGetVendorAccess = (props) => {
 	const response = useInfiniteQuery({
 		queryKey: ['get-user-vendor'],

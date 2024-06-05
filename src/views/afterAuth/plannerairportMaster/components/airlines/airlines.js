@@ -255,6 +255,13 @@ const Airlines = () => {
 			align: 'center',
 		},
 		{
+			title: 'MODE OF PAYMENT',
+			dataIndex: 'paymentMode',
+			key: 'paymentMode',
+			render: (text) => text ?? '-',
+			align: 'center',
+		},
+		{
 			title: 'HOPO',
 			dataIndex: 'homeAirport',
 			key: 'homeAirport',
