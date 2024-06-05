@@ -37,7 +37,7 @@ const BeltFids = ({ flightNo, origin, airlineLogo, counter }) => {
                 <table border="0">
                     <thead className='fids-table-header'>
                         <tr>
-                            <th className='align-left'>AIRLINE</th>
+                            <th style={{ width: '16rem' }}>AIRLINE</th>
                             <th className='align-left'>FLIGHT NO</th>
                             <th className='align-left'>ORIGIN</th>
                         </tr>

@@ -77,6 +77,15 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					disabled={isReadOnly}
 					required
 				/>
+				<CustomSelect
+					SelectData={AirlineTypeData}
+					label="Airline Type"
+					name="airlineType"
+					multiple
+					placeholder={!isReadOnly && 'Filled Text'}
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
 				<OtpField
 					otpLength={2}
 					label="Two Letter Code"
@@ -101,6 +110,7 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 							name: 'file',
 							disabled: isDefault,
 							label: 'Airline logo',
+							description: 'Please Provide high resolution logo'
 						}}
 					/>
 				)}
@@ -122,16 +132,13 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				{/* <InputField
-					label="Terminal"
-					name="terminal"
-					pattern='^(?!\s).*$'
-					placeholder={!isReadOnly && 'Filled Text'}
-					className="custom_input"
+				<CustomSelect
+					SelectData={SelectPaymentData}
+					placeholder={!isReadOnly && 'Select the access type'}
+					label="Mode of payment"
+					name="paymentMode"
 					disabled={isReadOnly}
-				/> */}
-			</div>
-			<div className="airline_setup_form_inputfields">
+				/>
 				<InputField
 					label="Remark"
 					name="remark"
@@ -141,25 +148,14 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				<CustomSelect
-					SelectData={AirlineTypeData}
-					label="Airline Type"
-					name="airlineType"
-					multiple
+				{/* <InputField
+					label="Terminal"
+					name="terminal"
+					pattern='^(?!\s).*$'
 					placeholder={!isReadOnly && 'Filled Text'}
 					className="custom_input"
 					disabled={isReadOnly}
-				/>
-			</div>
-			<Divider />
-			<div className="airline_setup_form_inputfields">
-				<CustomSelect
-					SelectData={SelectPaymentData}
-					placeholder={!isReadOnly && 'Select the access type'}
-					label="Mode of payment"
-					name="paymentMode"
-					disabled={isReadOnly}
-				/>
+				/> */}
 			</div>
 			<div className="customTypo">
 				<CustomTypography type="title" fontSize={14} fontWeight="600" color="#5C5F66">
@@ -187,10 +183,6 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-				{/* <InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" /> */}
-			</div>
-			<Divider />
-			<div className="airline_setup_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && 'Select valid from date'}
@@ -209,6 +201,7 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					format="MM-DD-YYYY"
 					disabled={isReadOnly}
 				/>
+				{/* <InputField label="Telex" name="telex" placeholder="Telex" className="custom_input" /> */}
 			</div>
 		</div>
 	);

@@ -187,13 +187,13 @@ const ParkingStand = () => {
 			align: 'center',
 			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
-		{
-			title: 'AIRPORT',
-			dataIndex: 'airport',
-			key: 'airport',
-			align: 'center',
-			render: (airport) => airport?.name ?? '-',
-		},
+		// {
+		// 	title: 'AIRPORT',
+		// 	dataIndex: 'airport',
+		// 	key: 'airport',
+		// 	align: 'center',
+		// 	render: (airport) => airport?.name ?? '-',
+		// },
 		{
 			title: 'GAT',
 			dataIndex: 'gate',

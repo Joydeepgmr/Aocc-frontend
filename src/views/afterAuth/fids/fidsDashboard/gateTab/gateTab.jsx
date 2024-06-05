@@ -16,8 +16,8 @@ const GateTab = ({ airlineLogo }) => {
 	const [statusModal, setStatusModal] = useState({ isOpen: false, record: null });
 	const [dashboardScreen, setDashboardScreen] = useState([]);
 	const [form] = Form.useForm();
-	const previousStatus = ['Check-In Closed', 'Gate Open', 'Boarding Start', 'Final call'];
-	const gateStatusOptions = ['Gate Open', 'Boarding Start', 'Final call', 'Gate Closed'];
+	const previousStatus = ['Check-In Closed', 'Gate Open', 'Now Boarding', 'Final call'];
+	const gateStatusOptions = ['Gate Open', 'Now Boarding', 'Final call', 'Gate Closed'];
 	const DashboardScreenApiProps = {
 		onSuccess: (data) => {
 			setDashboardScreen(data ?? []);

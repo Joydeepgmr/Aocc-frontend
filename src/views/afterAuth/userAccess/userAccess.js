@@ -13,7 +13,9 @@ import TableComponent from '../../../components/table/table';
 import TopHeader from '../../../components/topHeader/topHeader';
 import { useAirlineDropdown } from '../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 import {
+	useGetFidsAccess,
 	useGetPlannerAccess,
+	useGetSecurityAccess,
 	useGetVendorAccess,
 	usePostAccessManagement,
 } from '../../../services/accessManagement/accessManagement';
@@ -74,6 +76,23 @@ const UserAccess = () => {
 		toast.error(error?.message);
 	};
 	const {
+		data: fetchFidsAccess,
+		isFetching: isFetchingFids,
+		isLoading: isFetchFidsLoading,
+		hasNextPage: hasFidsNextPage,
+		fetchNextPage: fetchFidsNextPage,
+		refetch: refetchFids,
+	} = useGetFidsAccess(getVendorAccessHandler);
+	const {
+		data: fetchSecurityAccess,
+		isFetching: isFetchingSecurity,
+		isLoading: isFetchSecurityLoading,
+		hasNextPage: hasSecurityNextPage,
+		fetchNextPage: fetchSecurityNextPage,
+		refetch: refetchSecurity,
+	} = useGetSecurityAccess(getVendorAccessHandler);
+
+	const {
 		data: fetchVendorAccess,
 		isFetching: isFetchingVendor,
 		isLoading: isFetchLoading,
@@ -102,8 +121,12 @@ const UserAccess = () => {
 			toast.success(message);
 			if (tab === 'planner') {
 				refetchPlanner();
-			} else {
+			} else if (tab === 'vendor') {
 				refetchVendor();
+			} else if (tab === 'security') {
+				refetchSecurity();
+			} else if (tab === 'fids') {
+				refetchFids();
 			}
 		},
 		onError,
@@ -140,11 +163,14 @@ const UserAccess = () => {
 	];
 
 	useEffect(() => {
-		if (tab === 'vendor') {
-			refetchVendor();
-		}
 		if (tab === 'planner') {
 			refetchPlanner();
+		} else if (tab === 'vendor') {
+			refetchVendor();
+		} else if (tab === 'security') {
+			refetchSecurity();
+		} else if (tab === 'fids') {
+			refetchFids();
 		}
 	}, [tab]);
 
@@ -219,15 +245,19 @@ const UserAccess = () => {
 				title="Add Access"
 				type="filledText"
 				className="custom_button_save"
-				onClick={() => openAddUserModal(tab == 'planner' ? 'planner' : 'vendor')}
+				onClick={() => openAddUserModal(tab)}
 			/>
 		</div>
 	);
 	const handleTabChange = (key) => {
 		if (key == '1') {
 			setTab('planner');
-		} else {
+		} else if (key == '2') {
 			setTab('vendor');
+		} else if (key == '3') {
+			setTab('security');
+		} else {
+			setTab('fids');
 		}
 	};
 	const noDataHandler = () => {
@@ -239,7 +269,7 @@ const UserAccess = () => {
 						id="btn"
 						type="filledText"
 						isSubmit="submit"
-						onClick={() => openAddUserModal(tab == 'planner' ? 'planner' : 'vendor')}
+						onClick={() => openAddUserModal(tab)}
 					/>
 				</div>
 			</>
@@ -287,6 +317,48 @@ const UserAccess = () => {
 				</>
 			),
 		},
+		// {
+		// 	key: '3',
+		// 	label: 'Security Ops',
+		// 	children: (
+		// 		<>
+		// 			{Boolean(userAccessData?.length) ? (
+		// 				<div className="user_access_table">
+		// 					<TableComponent
+		// 						data={userAccessData}
+		// 						columns={columns}
+		// 						loading={isFetchSecurityLoading}
+		// 						fetchData={fetchSecurityNextPage}
+		// 						pagination={hasSecurityNextPage}
+		// 					/>
+		// 				</div>
+		// 			) : (
+		// 				noDataHandler()
+		// 			)}
+		// 		</>
+		// 	),
+		// },
+		// {
+		// 	key: '4',
+		// 	label: 'Fids Ops',
+		// 	children: (
+		// 		<>
+		// 			{Boolean(userAccessData?.length) ? (
+		// 				<div className="user_access_table">
+		// 					<TableComponent
+		// 						data={userAccessData}
+		// 						columns={columns}
+		// 						loading={isFetchFidsLoading}
+		// 						fetchData={fetchFidsNextPage}
+		// 						pagination={hasFidsNextPage}
+		// 					/>
+		// 				</div>
+		// 			) : (
+		// 				noDataHandler()
+		// 			)}
+		// 		</>
+		// 	),
+		// },
 	];
 
 	return (

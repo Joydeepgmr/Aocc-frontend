@@ -31,14 +31,13 @@ const FidsPreview = ({ counter, status, flightNo, std, etd, destination, airline
 		return `${dayOfWeek}, ${dayOfMonth} ${month} ${year} - ${hours}:${minutes}`;
 	};
 	return (
-		<div className="card">
-			<div className="header">
-				<span className="counter_name">
-					{isGate ? 'GATE NO ' : 'CHECK-IN COUNTER '} {counter}
-				</span>
-			</div>
+		<div className="checkIn_card">
 			<div className="main_body">
-				{flightNo ? (
+				{!isGate && !flightNo ? (
+					<div className="only_logo">
+						<img src={airlineLogo} alt="logo" />
+					</div>
+				) : (
 					<>
 						<div className="flight_info">
 							<div className="flightNo">
@@ -48,24 +47,18 @@ const FidsPreview = ({ counter, status, flightNo, std, etd, destination, airline
 								<img src={airlineLogo} alt="logo" />
 							</div>
 							<div className="departure_time">
-								<div className="std_time">STD: {std ?? ''}</div>
-								<div className="std_time">ETD: {etd ?? ''}</div>
+								<div className="std_time">Scheduled Time: {std ?? ''}</div>
+								<div className="std_time">Estimated Time: {etd ?? ''}</div>
 							</div>
 						</div>
 						<div className="destination">{destination}</div>
 					</>
-				) : (
-					<div className="only_logo">
-						<img src={airlineLogo} alt="logo" />
-					</div>
 				)}
 			</div>
-			{status && (
-				<div className="status_header">
-					<span className="status">{status}</span>
-					<span className="counter_time">{formatTime()}</span>
-				</div>
-			)}
+			<div className="status_header">
+				<span className="status">{status}</span>
+				<span className="counter_time">{formatTime()}</span>
+			</div>
 		</div>
 	);
 };

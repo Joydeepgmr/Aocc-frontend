@@ -66,8 +66,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					required
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="ICAO Code"
 					name="icaoCode"
@@ -89,6 +87,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					required
 					name="aircraft_id"
 				/>
+			</div>
+			<div className="airport_registration_form_inputfields">
 				<CustomSelect
 					SelectData={SelectTypeOfUse}
 					placeholder={!isReadOnly && "Type of Use"}
@@ -97,8 +97,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					label="Type of Use"
 					name="usage"
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<CustomSelect
 					SelectData={SelectAirportData}
 					label="Home Airport"
@@ -116,8 +114,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Cockpit Crew"
 					name="cockpitCrew"
@@ -146,8 +142,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					className="custom_input"
 					disabled={true}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Height"
 					name="height"
@@ -175,8 +169,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					suffixText="meters"
 					disabled={true}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="MTOW"
 					name="mtow"
@@ -187,6 +179,8 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					suffixText="T"
 					disabled={isReadOnly}
 				/>
+			</div>
+			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="MOW"
 					name="mow"
@@ -198,8 +192,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					required
 					disabled={isReadOnly}
 				/>
-			</div>
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Annex"
 					name="annex"
@@ -225,9 +217,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					placeholder={!isReadOnly && "Enter the apuInop"}
 					className="custom_input"
 					disabled={isReadOnly} /> */}
-			</div>
-			<Divider />
-			<div className="airport_registration_form_inputfields">
 				<InputField
 					label="Owner Name"
 					name="ownerName"
@@ -252,9 +241,6 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					disabled={isReadOnly} />
 				<InputField label="Remarks" pattern='^(?!\s).*$' max={32} name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
 					disabled={isReadOnly} />
-			</div>
-			<Divider />
-			<div className="airport_registration_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && "Select valid from date"}

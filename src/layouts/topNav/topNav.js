@@ -14,15 +14,20 @@ import * as userType from '../../utils/roles';
 import Alerts from '../alerts/Alerts';
 import { roleBasedNav } from './navData';
 import './topNav.scss';
+import Modal from '../../components/modal/modal';
+import InputField from '../../components/input/field/field';
+import { Form } from 'antd';
+import ButtonComponent from '../../components/button/button';
 
 const TopNav = ({ data, weatherData }) => {
 	const queryClient = useQueryClient();
 	const logo = localStorage.getItem(localStorageKey.LOGO);
 	const [isSettingCardOpen, setIsSettingCardOpen] = useState(false);
+	const [restedModal, setRestedModal] = useState(false);
 	const [navItems, setNavItems] = useState([]);
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
-
+	const [resetForm] = Form.useForm();
 	const handleTabClick = (key) => {
 		navigate(navItems[key].children);
 	};
@@ -31,6 +36,10 @@ const TopNav = ({ data, weatherData }) => {
 		setIsSettingCardOpen(!isSettingCardOpen);
 	};
 
+	const handleResetModalOpen = () => {
+		setRestedModal(true);
+		toggleSettingCard();
+	}
 	const logoutHandler = () => {
 		queryClient.clear();
 		localStorage.clear();
@@ -62,6 +71,53 @@ const TopNav = ({ data, weatherData }) => {
 
 	return (
 		<>
+			<Modal width='30vw' isModalOpen={restedModal} title='Reset Password'>
+				<Form layout='vertical' form={resetForm}>
+					<InputField
+						label='Old Password'
+						name="oldPassword"
+						isArticle={false}
+						placeholder="Enter Old Password"
+						required
+						warning="Required field"
+						className="custom_input"
+					/>
+					<InputField
+						label='New Password'
+						name="newPassword"
+						isArticle={false}
+						placeholder="Enter New Password"
+						required
+						warning="Required field"
+						className="custom_input"
+					/>
+					<InputField
+						label='Confirm Password'
+						name="confirmPassword"
+						type="password"
+						isArticle={false}
+						required
+						placeholder="Enter Confirm new password"
+						className="custom_input"
+					/>
+					<div className="user_form_inputfields">
+						<div className="form_bottomButton">
+							<ButtonComponent
+								title="Cancel"
+								type="filledText"
+								className="custom_button_cancel"
+							// onClick={closeAddUserModal}
+							/>
+							<ButtonComponent
+								title="Reset"
+								type="filledText"
+								className="custom_button_save"
+								isSubmit={true}
+							/>
+						</div>
+					</div>
+				</Form>
+			</Modal>
 			<div className="nav_container">
 				<div className="nav_left_section">
 					<div className="gmr_logo">
@@ -129,7 +185,7 @@ const TopNav = ({ data, weatherData }) => {
 						{localStorage.getItem('name') === 'Planner' && (
 							<p onClick={manageAccessHandler}>Manage Access</p>
 						)}
-						<div className="line"></div>
+						{/* <p onClick={handleResetModalOpen}>Reset Password</p> */}
 						<p onClick={logoutHandler}>Logout</p>
 					</div>
 				</>

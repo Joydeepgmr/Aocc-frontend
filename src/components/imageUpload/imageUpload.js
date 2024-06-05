@@ -31,6 +31,7 @@ const ImageUpload = ({
 	isDetailPage,
 	length = 1,
 	name,
+	description,
 }) => {
 	const { Item } = Form;
 	const [previewOpen, setPreviewOpen] = useState(false);
@@ -129,6 +130,7 @@ const ImageUpload = ({
 								? null
 								: uploadButton}
 						</Upload>
+						{description && <div style={{ fontWeight: 500 }}>{description}</div>}
 					</Item>
 				)}
 				{!fileList?.length && isDetailPage && !showUploadButton && !isUserImage ? (

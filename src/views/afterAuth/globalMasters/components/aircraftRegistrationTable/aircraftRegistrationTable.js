@@ -221,19 +221,61 @@ const AircraftRegistrationTable = ({
 				render: (text) => text || '-',
 			},
 			{
+				title: 'MTOW',
+				dataIndex: 'mtow',
+				key: 'mtow',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'MOW',
+				dataIndex: 'mow',
+				key: 'mow',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'ANNEX',
+				dataIndex: 'annex',
+				key: 'annex',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'WING SPAN',
+				dataIndex: ['globalAircraftType', 'wingspan'],
+				key: 'wingspan',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'LENGTH',
+				dataIndex: ['globalAircraftType', 'length'],
+				key: 'length',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
+				title: 'HEIGHT',
+				dataIndex: ['globalAircraftType', 'length'],
+				key: 'height',
+				align: 'center',
+				render: (text) => text || '-',
+			},
+			{
 				title: 'NAT',
 				dataIndex: 'nationality',
 				key: 'nationality',
 				align: 'center',
 				render: (text) => text || '-',
 			},
-			{
-				title: 'AIRPORT',
-				dataIndex: 'globalAirportId',
-				key: 'globalAirportId',
-				align: 'center',
-				render: (text) => text?.name || '-',
-			}
+			// {
+			// 	title: 'AIRPORT',
+			// 	dataIndex: 'globalAirportId',
+			// 	key: 'globalAirportId',
+			// 	align: 'center',
+			// 	render: (text) => text?.name || '-',
+			// }
 		],
 		[aircraftRegistrationData]
 	);

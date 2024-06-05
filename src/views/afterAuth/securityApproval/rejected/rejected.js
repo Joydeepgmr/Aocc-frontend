@@ -121,7 +121,6 @@ const Rejected = ({ data, hasNextPage, fetchNextPage, loading }) => {
 						<CustomTypography color="#909296">Biometric Image</CustomTypography>
 					</div>
 				</div>
-				<div className="pending--footer">{rowData?.matchPercentage}%</div>
 			</Modal>
 			<div className="rejected">
 				<Table data={data} columns={columns} loading={loading} fetchData={fetchNextPage} pagination={hasNextPage} />

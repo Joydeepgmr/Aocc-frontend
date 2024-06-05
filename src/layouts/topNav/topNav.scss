@@ -170,8 +170,13 @@
 			color: $white;
 			cursor: pointer;
 		}
-		&:hover:not(:first-child) {
+		&:last-child:hover {
 			border-radius: 0 0 1.2rem 1.2rem;
+			background-color: $button_color;
+			color: $white;
+			cursor: pointer;
+		}
+		&:hover:not(:first-child):not(:last-child) {
 			background-color: $button_color;
 			color: $white;
 			cursor: pointer;

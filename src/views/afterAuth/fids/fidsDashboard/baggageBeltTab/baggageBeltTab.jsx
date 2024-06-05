@@ -16,7 +16,7 @@ const BaggageBeltTab = ({ airlineLogo }) => {
 	const [isPublishLoading, setIsPublishLoading] = useState(false);
 	const [statusModal, setStatusModal] = useState({ isOpen: false, record: null });
 	const [dashboardScreen, setDashboardScreen] = useState([]);
-	const beltStatusOptions = ['Belt Open', 'Belt Closed'];
+	const beltStatusOptions = ['Bags on belt', 'Delivery ended'];
 	const [form] = Form.useForm();
 	const DashboardScreenApiProps = {
 		onSuccess: (data) => {
