@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './beltPreview.scss'
-const BeltFids = ({ flightNo, origin, airlineLogo, counter }) => {
+const BeltFids = ({ flightNo, origin, airlineLogo, counter, status }) => {
     const [data, setData] = useState([]);
     useEffect(() => {
         const beltData = {
             airline: airlineLogo,
             origin,
-            flightNo
+            flightNo,
+            status
         }
         setData([beltData])
     }, [flightNo, origin, airlineLogo]);
@@ -28,30 +29,32 @@ const BeltFids = ({ flightNo, origin, airlineLogo, counter }) => {
     };
     return (
         <div className='card'>
-            <div className='header'>
+            {/* <div className='header'>
                 <span className='counter_name'>
                     BELT NO {counter}
                 </span>
-            </div>
+            </div> */}
             <div className="belt-table">
                 <table border="0">
                     <thead className='fids-table-header'>
                         <tr>
-                            <th style={{ width: '16rem' }}>AIRLINE</th>
-                            <th className='align-left'>FLIGHT NO</th>
-                            <th className='align-left'>ORIGIN</th>
+                            <th style={{ width: '21%' }}>AIRLINE</th>
+                            <th style={{ width: '17%' }} >FLIGHT</th>
+                            <th >ORIGIN</th>
+                            <th >STATUS</th>
                         </tr>
                     </thead>
                     <tbody className='fids-table-body'>
                         {data.map((item, index) => (
                             <tr key={index}>
-                                <td className='align-left'>
+                                <td style={{ width: '20%' }}>
                                     <div className='airline_column'>
                                         <img src={item.airline} alt='airline' />
                                     </div>
                                 </td>
-                                <td className='align-left'>{item.flightNo}</td>
-                                <td className='align-left'>{item.origin}</td>
+                                <td style={{ width: '16%' }}>{item.flightNo}</td>
+                                <td >{item.origin}</td>
+                                <td >{item?.status}</td>
                             </tr>
                         ))}
                     </tbody>

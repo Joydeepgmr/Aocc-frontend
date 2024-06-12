@@ -151,14 +151,16 @@ const BaggageBeltTab = ({ airlineLogo }) => {
 				isModalOpen={statusModal?.isOpen}
 				closeModal={closeStatusModal}
 				title={`Please Select template for the ${statusModal?.record?.screen_name}`}
-				width="40vw"
+				width="60vw"
 			>
 				<Form form={form} onFinish={handlePublish} layout="vertical" style={{ marginTop: '1rem' }}>
 					<BeltFids
 						counter={statusModal?.record?.resource_name}
 						flightNo={statusModal?.record?.call_sign}
-						origin={statusModal?.record?.sector}
+						origin={'1234'}
+						// origin={statusModal?.record?.sector}
 						airlineLogo={airlineLogo}
+						status={statusModal?.record?.terminal_status}
 					/>
 					<div className="form_bottomButton">
 						<ButtonComponent

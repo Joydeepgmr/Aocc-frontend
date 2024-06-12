@@ -26,6 +26,7 @@ const Runway = () => {
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('masterAccess');
 
 	const getRunwayHandler = {
 		onSuccess: (data) => handleGetRunwaySuccess(data),
@@ -186,7 +187,7 @@ const Runway = () => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'TYP',
@@ -291,20 +292,23 @@ const Runway = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={()=>handleDetailModalOpen()}
+					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setOpenCSVModal(true)}
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<>
 					<div className="runway">
-						<div className="runway--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
+						{writeAccess &&
+							<div className="runway--dropdown">
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									buttonText="Create"
+									className="custom_dropdownButton"
+									onChange={handleDropdownItemClick}
+								/>
+							</div>
+						}
 						<div className="runway--tableContainer">
 							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Runway
@@ -321,10 +325,10 @@ const Runway = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				record={detailModal?.record}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(writeAccess && !detailModal?.isEdit) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				closeModal={handleDetailModalClose}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
+				title={`${detailModal?.isEdit ? "Edit" : !!detailModal?.record ? 'View' : 'Add'}  Runway`}
 				className="custom_modal"
 			>
 				<div className="modal_content">
@@ -337,7 +341,7 @@ const Runway = () => {
 						isReadOnly={detailModal?.record && !detailModal?.isEdit}
 					/>
 				</div>
-			</ModalComponent>
+			</ModalComponent >
 			<ConfirmationModal
 				isOpen={openDeleteModal?.isOpen}
 				onClose={handleDeleteModalClose}

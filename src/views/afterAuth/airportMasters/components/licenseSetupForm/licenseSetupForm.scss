@@ -2,22 +2,21 @@
 @import '../../../../../styles/sass/variables';
 @import '../../../../../styles/sass/utils';
 
-.airport_setup_form_container{
-    padding: 0rem 0rem 2.4rem 0rem;
-    box-sizing: content-box;
-    .airport_setup_form_inputfields{
-        @include flex(center, start, row);
-        gap: 2.4rem;
-        width: 100%;
-        .input_form_item{
-            &.custom_input{
-                width: 33%;
-            }
-        }
-        
-    }  
-    .image-input{
-        position: relative;
-        top:2.2rem;
-    }
+.airport_setup_form_container {
+	padding: 1rem 0rem 2.4rem 0rem;
+	box-sizing: content-box;
+	.airport_setup_form_inputfields {
+		@include flex(center, start, row);
+		gap: 2.4rem;
+		width: 100%;
+		.input_form_item {
+			&.custom_input {
+				width: 33%;
+			}
+		}
+	}
+	.image-input {
+		position: relative;
+		top: 2.2rem;
+	}
 }

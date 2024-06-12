@@ -208,7 +208,6 @@ const LicenseSetupTable = ({ createProps, setCreateProps, pagination, data, fetc
 							initial,
 						}}
 					/>
-					<Divider />
 					<div className="custom_buttons">
 						<ButtonComponent
 							title="Cancel"

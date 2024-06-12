@@ -28,7 +28,7 @@ const Aircrafts = () => {
 	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
-
+	const writeAccess = !!localStorage.getItem('masterAccess');
 	const getAircraftHandler = {
 		onSuccess: (data) => handleGetAircraftSuccess(data),
 		onError: (error) => handleGetAircraftError(error),
@@ -317,9 +317,10 @@ const Aircrafts = () => {
 					pagination={hasNextPage}
 					loading={isPlannerAircraftLoading || isPlannerAircraftFetching}
 					title={'Aircraft Registration'}
-					openModal={() => handleDetailModalOpen()}
+					openModal={writeAccess ? () => handleDetailModalOpen() : null}
 					type="aircraft"
 					title1="New Aircraft Registration"
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<Common_Card
@@ -327,6 +328,7 @@ const Aircrafts = () => {
 					btnCondition={false}
 					openModal={() => handleDetailModalOpen()}
 					loading={isPlannerAircraftFetching || isPlannerAircraftLoading}
+					writeAccess={writeAccess}
 				/>
 			)}
 
@@ -343,8 +345,8 @@ const Aircrafts = () => {
 				title='Setup aircraft registration'
 				width="80vw"
 				record={detailModal?.record}
-				onDelete={handleDeleteModalOpen}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
+				onEdit={(writeAccess && !detailModal?.isEdit) && handleDetailModalOpen}
 				className="custom_modal"
 			>
 				<FormComponent

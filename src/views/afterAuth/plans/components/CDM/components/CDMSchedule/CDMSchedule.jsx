@@ -37,6 +37,7 @@ const DailySchedule = () => {
 	const [flightType, setFlightType] = useState('arrival');
 	const [form] = Form.useForm();
 	const [filterForm] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('plannerAccess');
 	const searchedValue = Form.useWatch('search', filterForm);
 	const dateRangeValue = Form.useWatch('date', filterForm);
 
@@ -189,13 +190,14 @@ const DailySchedule = () => {
 				warning="Required field"
 				type="search"
 			/>
-
-			<DropdownButton
-				dropdownItems={dropdownItems}
-				buttonText="Actions"
-				className="custom_dropdownButton"
-				onChange={handleDropdownItemClick}
-			/>
+			{writeAccess && (
+				<DropdownButton
+					dropdownItems={dropdownItems}
+					buttonText="Actions"
+					className="custom_dropdownButton"
+					onChange={handleDropdownItemClick}
+				/>
+			)}
 		</Form>
 	);
 
@@ -327,7 +329,15 @@ const DailySchedule = () => {
 	const noDataHandler = () => {
 		return (
 			<div className="seasonal_container">
-				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={()=>handleDetailModalOpen()} />
+				{writeAccess && (
+					<Button
+						title="Create"
+						id="btn"
+						type="filledText"
+						isSubmit="submit"
+						onClick={() => handleDetailModalOpen()}
+					/>
+				)}
 			</div>
 		);
 	};
@@ -414,9 +424,9 @@ const DailySchedule = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				closeModal={handleDetailModalClose}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
+				onEdit={writeAccess && !detailModal?.isEdit && handleDetailModalOpen}
 				record={detailModal?.record}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Check-in Counters`}
+				title={`${!detailModal?.isEdit ? (detailModal?.record ? 'View' : 'Add') : 'Edit'} Flight`}
 				className="custom_modal"
 			>
 				<div className="modal_content">

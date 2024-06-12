@@ -22,6 +22,7 @@ const DelayCode = () => {
 	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('masterAccess');
 
 	const getDelayCodeHandler = {
 		onSuccess: (data) => handleGetDelayCodeSuccess(data),
@@ -154,7 +155,7 @@ const DelayCode = () => {
 			dataIndex: 'delayCode',
 			key: 'delayCode',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'GRP',
@@ -200,19 +201,23 @@ const DelayCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={()=>handleDetailModalOpen()}
+					openModal={() => handleDetailModalOpen()}
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<>
 					<div className="delay-code">
-						<div className="delay-code--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
+						{
+							writeAccess &&
+							<div className="delay-code--dropdown">
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									buttonText="Create"
+									className="custom_dropdownButton"
+									onChange={handleDropdownItemClick}
+								/>
+							</div>
+						}
 						<div className="delay-code--tableContainer">
 							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Delay Code
@@ -229,10 +234,10 @@ const DelayCode = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				record={detailModal?.record}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(writeAccess && !detailModal?.isEdit) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				closeModal={handleDetailModalClose}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
+				title={`${detailModal?.isEdit ? "Edit" : !!detailModal?.record ? 'View' : 'Add'}  Delay Code`}
 				className="custom_modal"
 			>
 				<div className="modal_content">

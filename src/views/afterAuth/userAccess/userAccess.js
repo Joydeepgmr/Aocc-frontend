@@ -57,14 +57,16 @@ const UserAccess = () => {
 		},
 	];
 	const getVendorAccessHandler = {
+		tab,
 		onSuccess: (data) => handleGetVendorAccessSuccess(data),
 		onError: (error) => handleGetVendorAccessError(error),
 	};
 
 	const handleGetVendorAccessSuccess = (data) => {
+		console.log('data is data', data)
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
-				return acc.concat(page.data || []);
+				return acc.concat(page.data ? page.data : page);
 			}, []);
 
 			setUserAccessData([...newData]);
@@ -95,7 +97,7 @@ const UserAccess = () => {
 	const {
 		data: fetchVendorAccess,
 		isFetching: isFetchingVendor,
-		isLoading: isFetchLoading,
+		isLoading: isFetchVendorLoading,
 		hasNextPage: hasVendorNextPage,
 		fetchNextPage: fetchVendorNextPage,
 		refetch: refetchVendor,
@@ -123,9 +125,9 @@ const UserAccess = () => {
 				refetchPlanner();
 			} else if (tab === 'vendor') {
 				refetchVendor();
-			} else if (tab === 'security') {
+			} else if (tab === 'security-officer') {
 				refetchSecurity();
-			} else if (tab === 'fids') {
+			} else if (tab === 'fids-manager') {
 				refetchFids();
 			}
 		},
@@ -167,66 +169,71 @@ const UserAccess = () => {
 			refetchPlanner();
 		} else if (tab === 'vendor') {
 			refetchVendor();
-		} else if (tab === 'security') {
+		} else if (tab === 'security-officer') {
 			refetchSecurity();
-		} else if (tab === 'fids') {
+		} else if (tab === 'fids-manager') {
 			refetchFids();
 		}
 	}, [tab]);
-
-	const columns = [
-		{
-			title: 'User Name',
-			dataIndex: tab === 'planner' ? 'userName' : 'vendorName',
-			key: 'name',
-			render: (name) => name ?? '-',
-			align: 'center',
-		},
-		{
-			title: 'Email Address',
-			dataIndex: tab === 'planner' ? 'userEmail' : 'vendorEmail',
-			key: 'email',
-			render: (email) => email ?? '-',
-			align: 'center',
-		},
-		tab === 'planner'
-			? {
-				title: 'User Type',
-				dataIndex: 'userType',
-				key: 'userType',
-				render: (userType) => userType ?? '-',
-			}
-			: {
-				title: 'Vendor Type',
-				dataIndex: 'vendorTasks',
-				key: 'vendorTasks',
-				render: (tasks) => (tasks ? tasks?.map((task) => task).join(', ') : '-'),
+	const columns = useMemo(() => {
+		console.log('under column', userAccessData)
+		let column = [
+			{
+				title: 'User Name',
+				dataIndex: tab === 'planner' ? 'userName' : tab === 'vendor' ? 'vendorName' : 'name',
+				key: 'name',
+				render: (name, record) => { return name ?? '-'; },
 				align: 'center',
 			},
-
-		{
-			title: 'Access Validity',
-			dataIndex: 'accessValidity',
-			key: 'accessValidity',
-			render: (validity) => ConvertToDateTime(validity, 'YYYY-MM-DD') ?? '-',
-			align: 'center',
-		},
-		{
-			title: 'Access Provider',
-			dataIndex: 'accessProvider',
-			key: 'accessProvider',
-			render: (provider) => provider ?? '-',
-			align: 'center',
-		},
-		{
-			title: 'Created On',
-			dataIndex: 'createdOn',
-			key: 'createdOn',
-			render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
-			align: 'center',
-		},
-	];
-
+			{
+				title: 'Email Address',
+				dataIndex: tab === 'planner' ? 'userEmail' : tab === 'vendor' ? 'vendorEmail' : 'email',
+				key: 'email',
+				render: (email) => email ?? '-',
+				align: 'center',
+			},
+			tab === 'planner'
+				? {
+					title: 'User Type',
+					dataIndex: 'userType',
+					key: 'userType',
+					render: (userType) => userType ?? '-',
+				}
+				: {
+					title: 'Vendor Type',
+					dataIndex: 'vendorTasks',
+					key: 'vendorTasks',
+					render: (tasks) => (tasks ? tasks?.map((task) => task).join(', ') : '-'),
+					align: 'center',
+				},
+			{
+				title: 'Access Validity',
+				dataIndex: tab === 'fids-manager' || tab === 'security-officer' ? 'valid_till' : 'accessValidity',
+				key: 'accessValidity',
+				render: (validity) => ConvertToDateTime(validity, 'YYYY-MM-DD') ?? '-',
+				align: 'center',
+			},
+			{
+				title: 'Access Provider',
+				dataIndex: 'accessProvider',
+				key: 'accessProvider',
+				render: (provider) => provider ?? '-',
+				align: 'center',
+			},
+			{
+				title: 'Created On',
+				dataIndex: tab === 'fids-manager' || tab === 'security-officer' ? 'created_at' : 'createdOn',
+				key: 'createdOn',
+				render: (date) => ConvertToDateTime(date, 'YYYY-MM-DD') ?? '-',
+				align: 'center',
+			},
+		];
+		if (tab === 'fids-manager' || tab === 'security-officer') {
+			column = column.filter((_, index) => index !== 2);
+		}
+		return column;
+	}, [userAccessData])
+	console.log("columns are ", columns);
 	const openAddUserModal = (type) => {
 		setIsModalOpen({ isOpen: true, type });
 	};
@@ -255,9 +262,9 @@ const UserAccess = () => {
 		} else if (key == '2') {
 			setTab('vendor');
 		} else if (key == '3') {
-			setTab('security');
+			setTab('security-officer');
 		} else {
-			setTab('fids');
+			setTab('fids-manager');
 		}
 	};
 	const noDataHandler = () => {
@@ -317,53 +324,52 @@ const UserAccess = () => {
 				</>
 			),
 		},
-		// {
-		// 	key: '3',
-		// 	label: 'Security Ops',
-		// 	children: (
-		// 		<>
-		// 			{Boolean(userAccessData?.length) ? (
-		// 				<div className="user_access_table">
-		// 					<TableComponent
-		// 						data={userAccessData}
-		// 						columns={columns}
-		// 						loading={isFetchSecurityLoading}
-		// 						fetchData={fetchSecurityNextPage}
-		// 						pagination={hasSecurityNextPage}
-		// 					/>
-		// 				</div>
-		// 			) : (
-		// 				noDataHandler()
-		// 			)}
-		// 		</>
-		// 	),
-		// },
-		// {
-		// 	key: '4',
-		// 	label: 'Fids Ops',
-		// 	children: (
-		// 		<>
-		// 			{Boolean(userAccessData?.length) ? (
-		// 				<div className="user_access_table">
-		// 					<TableComponent
-		// 						data={userAccessData}
-		// 						columns={columns}
-		// 						loading={isFetchFidsLoading}
-		// 						fetchData={fetchFidsNextPage}
-		// 						pagination={hasFidsNextPage}
-		// 					/>
-		// 				</div>
-		// 			) : (
-		// 				noDataHandler()
-		// 			)}
-		// 		</>
-		// 	),
-		// },
+		{
+			key: '3',
+			label: 'Security Officer',
+			children: (
+				<>
+					{Boolean(userAccessData?.length) ? (
+						<div className="user_access_table">
+							<TableComponent
+								data={userAccessData}
+								columns={columns}
+								loading={isFetchSecurityLoading}
+								fetchData={fetchSecurityNextPage}
+								pagination={hasSecurityNextPage}
+							/>
+						</div>
+					) : (
+						noDataHandler()
+					)}
+				</>
+			),
+		},
+		{
+			key: '4',
+			label: 'Fids Officer',
+			children: (
+				<>
+					{Boolean(userAccessData?.length) ? (
+						<div className="user_access_table">
+							<TableComponent
+								data={userAccessData}
+								columns={columns}
+								loading={isFetchFidsLoading}
+								fetchData={fetchFidsNextPage}
+								pagination={hasFidsNextPage}
+							/>
+						</div>
+					) : (
+						noDataHandler()
+					)}
+				</>
+			),
+		},
 	];
-
 	return (
 		<>
-			<PageLoader isLoading={isLoading} />
+			<PageLoader isLoading={isLoading || isFetchFidsLoading || isFetchSecurityLoading || isFetchPlannerLoading || isFetchVendorLoading || isFetchingFids || isFetchingSecurity || isFetchingPlanner || isFetchingVendor} />
 			<ModalComponent
 				isModalOpen={isModalOpen?.isOpen}
 				closeModal={closeAddUserModal}

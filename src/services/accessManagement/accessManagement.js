@@ -1,10 +1,43 @@
 import { useInfiniteQuery, useMutation } from 'react-query';
-import { POST_MANAGE_ACCESS, GET_MANAGE_ACCESS, GET_MANAGE_ACCESS_PLANNER } from '../../api';
-import { Post } from '../HttpServices/HttpServices';
+import { POST_MANAGE_ACCESS, GET_MANAGE_ACCESS, GET_MANAGE_ACCESS_PLANNER, GET_MANAGE_ACCESS_SECURITY, GET_MANAGE_ACCESS_FIDS } from '../../api';
+import { Get, Post } from '../HttpServices/HttpServices';
 
-export const useGetFidsAccess = (props) => {
+export const useGetFidsAccess = ({ tab, ...props }) => {
 	const response = useInfiniteQuery({
-		queryKey: ['get-user-fids'],
+		queryKey: ['get-user-fids', tab],
+		queryFn: async ({ pageParam: pagination = {} }) => await Get(`${GET_MANAGE_ACCESS_FIDS}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
+			return false;
+		},
+		...props,
+		enabled: false,
+	});
+
+	return response;
+};
+
+export const useGetSecurityAccess = ({ tab, ...props }) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-user-security', tab],
+		queryFn: async ({ pageParam: pagination = {} }) => await Get(`${GET_MANAGE_ACCESS_SECURITY}`, { pagination }),
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.pagination?.isMore) {
+				return lastPage?.pagination;
+			}
+			return false;
+		},
+		...props,
+		enabled: false,
+	});
+
+	return response;
+};
+export const useGetVendorAccess = ({ tab, ...props }) => {
+	const response = useInfiniteQuery({
+		queryKey: ['get-user-vendor', tab],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) {
@@ -19,42 +52,9 @@ export const useGetFidsAccess = (props) => {
 	return response;
 };
 
-export const useGetSecurityAccess = (props) => {
+export const useGetPlannerAccess = ({ tab, ...props }) => {
 	const response = useInfiniteQuery({
-		queryKey: ['get-user-security'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
-		getNextPageParam: (lastPage) => {
-			if (lastPage?.pagination?.isMore) {
-				return lastPage?.pagination;
-			}
-			return false;
-		},
-		...props,
-		enabled: false,
-	});
-
-	return response;
-};
-export const useGetVendorAccess = (props) => {
-	const response = useInfiniteQuery({
-		queryKey: ['get-user-vendor'],
-		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS}`, { pagination }),
-		getNextPageParam: (lastPage) => {
-			if (lastPage?.pagination?.isMore) {
-				return lastPage?.pagination;
-			}
-			return false;
-		},
-		...props,
-		enabled: false,
-	});
-
-	return response;
-};
-
-export const useGetPlannerAccess = (props) => {
-	const response = useInfiniteQuery({
-		queryKey: ['get-user-planner'],
+		queryKey: ['get-user-planner', tab],
 		queryFn: async ({ pageParam: pagination = {} }) => await Post(`${GET_MANAGE_ACCESS_PLANNER}`, { pagination }),
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.pagination?.isMore) {

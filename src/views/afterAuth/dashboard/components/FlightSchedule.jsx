@@ -33,6 +33,8 @@ const FlightSchedule = () => {
 	const [milestoneModal, setMilestoneModal] = useState({ isOpen: false, data: { labels: [], milestoneList: [] } });
 	const [utwModal, setUtwModal] = useState(false);
 	const [fullScreen, setFullScreen] = useState(false);
+	const writeAccess = !!localStorage.getItem('dailyOpsAccess');
+
 	const getFlightScheduleApiProps = {
 		tab,
 		onSuccess: (data) => {
@@ -235,7 +237,7 @@ const FlightSchedule = () => {
 				dataIndex: tab == 'arrival' ? 'eta' : 'etd',
 				key: tab == 'arrival' ? 'eta' : 'etd',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'time',
 				},
 				render: (text) => text ?? '-',
@@ -245,7 +247,7 @@ const FlightSchedule = () => {
 				dataIndex: 'tmo',
 				key: 'tmo',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'time',
 				},
 				render: (text) => text ?? '-',
@@ -255,7 +257,7 @@ const FlightSchedule = () => {
 				dataIndex: 'ata',
 				key: 'ata',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'time',
 				},
 				render: (text) => text ?? '-',
@@ -265,7 +267,7 @@ const FlightSchedule = () => {
 				dataIndex: 'eob',
 				key: 'eob',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'time',
 				},
 				render: (text) => text ?? '-',
@@ -275,7 +277,7 @@ const FlightSchedule = () => {
 				dataIndex: 'onBlock',
 				key: 'onBlock',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'time',
 				},
 				render: (text) => text ?? '-',
@@ -285,7 +287,7 @@ const FlightSchedule = () => {
 				dataIndex: 'parkingStandId',
 				key: 'parkingStandId',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'select',
 					dropdownData: posDropdownData,
 				},
@@ -296,7 +298,7 @@ const FlightSchedule = () => {
 				dataIndex: 'gateId',
 				key: 'gateId',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'select',
 					dropdownData: gateDropdownData,
 				},
@@ -308,7 +310,7 @@ const FlightSchedule = () => {
 						dataIndex: 'baggageBeltId',
 						key: 'baggageBeltId',
 						align: 'center',
-						editable: {
+						editable: writeAccess && {
 							type: 'select',
 							dropdownData: beltDropdownData,
 						},
@@ -316,10 +318,10 @@ const FlightSchedule = () => {
 					}
 				: {
 						title: 'CIN',
-						dataIndex: 'checkInCounterId',
-						key: 'checkInCounterId',
+						dataIndex: 'checkinCounterId',
+						key: 'checkinCounterId',
 						align: 'center',
-						editable: {
+						editable: writeAccess && {
 							type: 'select',
 							dropdownData: checkInDropdownData,
 						},
@@ -330,7 +332,7 @@ const FlightSchedule = () => {
 				dataIndex: 'runwayId',
 				key: 'runwayId',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'select',
 					dropdownData: runwayDropdownData,
 				},
@@ -341,7 +343,7 @@ const FlightSchedule = () => {
 				dataIndex: 'remarks',
 				key: 'remarks',
 				align: 'center',
-				editable: {
+				editable: writeAccess && {
 					type: 'text',
 				},
 				render: (text) => text ?? '-',

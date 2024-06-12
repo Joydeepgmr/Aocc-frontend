@@ -18,58 +18,61 @@ const Common_table = ({
 	type,
 	downloadCSV,
 	title1 = 'Create',
+	writeAccess,
 }) => {
 	const handleDropdownChange = (value) => {
 		// Add this line
 		if (value === title1) {
-			openModal();
+			!!openModal && openModal();
 		}
 
 		if (value === 'UploadCSV') {
-			openCSVModal();
+			!!openCSVModal && openCSVModal();
 		}
 		if (value === 'downloadCSVTemplate') {
-			downloadCSV();
+			!!downloadCSV && downloadCSV();
 		}
 	};
 	const items =
 		type === 'aircraft'
 			? [
-					{
-						key: '1',
-						label: title1,
-						value: title1,
-						children: '',
-					},
-				]
+				{
+					key: '1',
+					label: title1,
+					value: title1,
+					children: '',
+				},
+			]
 			: [
-					{
-						key: '1',
-						label: title1,
-						value: title1,
-						children: '',
-					},
-					{
-						key: '2',
-						label: 'Upload CSV',
-						value: 'UploadCSV',
-						children: '',
-					},
-					{
-						key: '3',
-						label: 'Download CSV Template',
-						value: 'downloadCSVTemplate',
-					},
-				];
+				{
+					key: '1',
+					label: title1,
+					value: title1,
+					children: '',
+				},
+				{
+					key: '2',
+					label: 'Upload CSV',
+					value: 'UploadCSV',
+					children: '',
+				},
+				{
+					key: '3',
+					label: 'Download CSV Template',
+					value: 'downloadCSVTemplate',
+				},
+			];
 	return (
 		<div className="airport_master_details">
 			<div className="custom_dropdown_style">
-				<DropdownButton
-					buttonText={'Create'}
-					className="custom_dropdown"
-					dropdownItems={items}
-					onChange={handleDropdownChange}
-				/>
+				{writeAccess &&
+					<DropdownButton
+						buttonText={'Create'}
+						className="custom_dropdown"
+						dropdownItems={items}
+						onChange={handleDropdownChange}
+					/>
+				}
 			</div>
 
 			<div className="custom_table">

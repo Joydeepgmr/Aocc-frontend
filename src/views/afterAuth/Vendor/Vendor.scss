@@ -2,46 +2,59 @@
 @import '../../../styles/sass/mixins';
 
 .vendor {
-    &--container{
-        max-width: 50rem;
-        height: 33rem;
-        margin: 0 auto;
-    }
-    &--header{
-        width: 100%;
-        padding: 1.4rem;
-    } 
-    &--table{
-        margin-top: 1.5rem;
-        width: 100%;
-        overflow-x: auto;
-        white-space:nowrap !important;
-    }
-    &--button-container{
-        width: 100%;
-        @include flex(center, center, row);
-        gap: 1.6rem;
-        margin-top: 2rem;
-    }
-    &--cancel{
-        color: $black !important;
-        background-color: $gray_200 !important;
-    } 
-    &--pending{
-        background-color: $button_color !important;
-        &:hover{
-            background-color: $white !important;
-            color: $button_color !important;
-        }
-    }  
-    &--in-progress{
-        background-color: $red_100 !important;
-        &:hover{
-            background-color: $white !important;
-            color: $red_100 !important;
-        }
-    }
-    &--completed{
-        background-color: $green_200 !important;
-    }
+	&--container {
+		max-width: 50rem;
+		height: 33rem;
+		margin: 0 auto;
+	}
+	&--header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	&--title {
+		width: 100%;
+		padding: 1.4rem;
+	}
+	&--search {
+		width: 60%;
+		overflow: hidden;
+		padding: 0% 1rem;
+		.input_form_item {
+			width: 100% !important;
+		}
+	}
+	&--table {
+		margin-top: 1.5rem;
+		width: 100%;
+		overflow-x: auto;
+		white-space: nowrap !important;
+	}
+	&--button-container {
+		width: 100%;
+		@include flex(center, center, row);
+		gap: 1.6rem;
+		margin-top: 2rem;
+	}
+	&--cancel {
+		color: $black !important;
+		background-color: $gray_200 !important;
+	}
+	&--pending {
+		background-color: $button_color !important;
+		&:hover {
+			background-color: $white !important;
+			color: $button_color !important;
+		}
+	}
+	&--in-progress {
+		background-color: $red_100 !important;
+		&:hover {
+			background-color: $white !important;
+			color: $red_100 !important;
+		}
+	}
+	&--completed {
+		background-color: $green_200 !important;
+	}
 }

@@ -67,7 +67,7 @@
 .nav_right_section {
 	@include flex(center, end, row);
 	gap: 2.4rem;
-	width: 54.2rem;
+	width: 45%;
 	.weather_details {
 		@include flex(center, center, row);
 		gap: 2.4rem;
@@ -107,6 +107,9 @@
 		gap: 1.4rem;
 		img {
 			cursor: pointer;
+		}
+		.setting_icon {
+			position: relative;
 		}
 	}
 
@@ -152,10 +155,10 @@
 	border: 1px solid $gray_300;
 	background-color: $gray_100;
 	@include flex(center, space-around, column);
-	position: fixed;
+	position: absolute;
 	z-index: 1000;
-	right: 12%;
-	top: 5rem;
+	// right: 12%;
+	top: 100%;
 	p {
 		width: 100%;
 		padding: 1.5rem 0;

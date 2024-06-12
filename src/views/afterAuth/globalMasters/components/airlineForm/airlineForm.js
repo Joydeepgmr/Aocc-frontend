@@ -12,40 +12,15 @@ import { AirlineTypeData, SelectPaymentData } from '../../../userAccess/userAcce
 import './airlineForm.scss';
 
 const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
-	const [isDefault, setIsDefault] = useState(false);
 	const onError = ({
 		response: {
 			data: { message },
 		},
 	}) => toast.error(message);
 
-	const watchOtp = Form?.useWatch('threeLetterCode', form);
-	const getAirlineImageHandler = {
-		onSuccess: ({ airlineImage = '' }) => {
-			if (airlineImage) {
-				setFileList([{ url: airlineImage }]);
-				form.setFieldsValue({
-					file: airlineImage,
-				});
-				setIsDefault(true);
-			} else {
-				setFileList([]);
-				form.setFieldsValue({ file: null });
-			}
-		},
-		onError: (error) => {
-			setIsDefault(false);
-		},
-	};
-
-	const { isSuccess: isGetImageSuccess, isLoading: isGetImageLoading } = useGetAirlineSyncData(
-		Array.isArray(watchOtp) && watchOtp?.join('')?.length === 3 ? watchOtp?.join('') : '',
-		getAirlineImageHandler
-	);
-
 	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
 	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
-
+	console.log('filelist is ', fileList)
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
 			return { label: data.name, value: data.id, id: data.id };
@@ -57,13 +32,6 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 		});
 	}, [countryDropdownData]);
 	const isNotEditable = type === 'edit';
-
-	useEffect(() => {
-		if (Array.isArray(watchOtp) ? watchOtp?.join('')?.length < 3 : watchOtp?.length < 3) {
-			setFileList([]);
-			setIsDefault(false);
-		}
-	}, [watchOtp]);
 	return (
 		<div className="airline_setup_form_container">
 			<div className="airline_setup_form_inputfields">
@@ -100,20 +68,18 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 					disabled={isReadOnly || isNotEditable}
 					required
 				/>
-				{type !== 'edit' && !isReadOnly && (
-					<ImageUpload
-						{...{
-							fileList,
-							setFileList,
-							isDefault: isDefault,
-							required: true,
-							name: 'file',
-							disabled: isDefault,
-							label: 'Airline logo',
-							description: 'Please Provide high resolution logo'
-						}}
-					/>
-				)}
+				<ImageUpload
+					{...{
+						fileList,
+						setFileList,
+						isDefault: isReadOnly,
+						required: !fileList?.length,
+						name: 'file',
+						disabled: isReadOnly,
+						label: 'Airline logo',
+						description: 'Please Provide high resolution logo'
+					}}
+				/>
 			</div>
 			<div className="airline_setup_form_inputfields">
 				<CustomSelect

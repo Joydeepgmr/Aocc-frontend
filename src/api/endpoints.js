@@ -50,6 +50,7 @@ export const DELETE_GLOBAL_AIRCRAFT_REGISTRATION = '/global-aircraft-register/';
 export const GET_GLOBAL_AIRLINE = '/global-airline/paginated/';
 export const POST_GLOBAL_AIRLINE = '/global-airline/';
 export const PATCH_GLOBAL_AIRLINE = '/global-airline/';
+export const PATCH_AIRLINE_IMAGE = '/global-airline/logo'
 export const DELETE_GLOBAL_AIRLINE = '/global-airline/';
 
 export const GET_COUNTRY_DATA = '/country/';
@@ -108,6 +109,8 @@ export const GET_AIRLINE_SYNC_DATA = '/global-airline/get-airline?threeLetterCod
 
 export const GET_MANAGE_ACCESS = '/access-management/paginated';
 export const GET_MANAGE_ACCESS_PLANNER = '/access-management/paginated-planner';
+export const GET_MANAGE_ACCESS_SECURITY = '/access-management/security-officer';
+export const GET_MANAGE_ACCESS_FIDS = '/access-management/fids-manager';
 export const POST_MANAGE_ACCESS = '/access-management';
 
 /*--------------------------IT Admin Bulk import ---------------------*/
@@ -156,3 +159,7 @@ export const UPDATE_NOTIFICATION = '/notification';
 
 
 export const GET_UTW = '/vendorOps/milestone'
+
+/*------------------------- KPI ----------------------------------*/
+export const KPI_DASHBOARD = '/kpi/dashboard'
+export const KPI_ON_TIME = '/kpi/on-time'

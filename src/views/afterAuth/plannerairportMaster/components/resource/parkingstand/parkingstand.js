@@ -25,7 +25,7 @@ const ParkingStand = () => {
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
-
+	const writeAccess = !!localStorage.getItem('masterAccess');
 	const getParkingStandHandler = {
 		onSuccess: (data) => handleGetParkingStandSuccess(data),
 		onError: (error) => handleGetParkingStandError(error),
@@ -185,7 +185,7 @@ const ParkingStand = () => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		// {
 		// 	title: 'AIRPORT',
@@ -289,20 +289,23 @@ const ParkingStand = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={()=>handleDetailModalOpen()}
+					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setOpenCSVModal(true)}
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<>
 					<div className="parking-stand">
-						<div className="parking-stand--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
+						{writeAccess &&
+							<div className="parking-stand--dropdown">
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									buttonText="Create"
+									className="custom_dropdownButton"
+									onChange={handleDropdownItemClick}
+								/>
+							</div>
+						}
 						<div className="parking-stand--tableContainer">
 							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Parking Stands
@@ -318,10 +321,10 @@ const ParkingStand = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				record={detailModal?.record}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(writeAccess && !detailModal?.isEdit) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				closeModal={handleDetailModalClose}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
+				title={`${detailModal?.isEdit ? "Edit" : !!detailModal?.record ? 'View' : 'Add'}  Parking Stand`}
 				className="custom_modal"
 			>
 				<div className="modal_content">

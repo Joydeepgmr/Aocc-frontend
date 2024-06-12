@@ -35,7 +35,7 @@ const Airlines = () => {
 	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
-
+	const writeAccess = !!localStorage.getItem('masterAccess');
 	const getAirlineHandler = {
 		onSuccess: (data) => handleGetAirlineSuccess(data),
 		onError: (error) => handleGetAirlineError(error),
@@ -286,6 +286,7 @@ const Airlines = () => {
 					type="airline"
 					downloadCSV={handleDownloadCSV}
 					title1="New Airline"
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<Common_Card
@@ -297,6 +298,7 @@ const Airlines = () => {
 					openCSVModal={() => setIsCsvModalOpen(true)}
 					downloadCSV={handleDownloadCSV}
 					loading={isPlannerAirlineLoading || isPlannerAirlineFetching}
+					writeAccess={writeAccess}
 				/>
 			)}
 
@@ -310,10 +312,10 @@ const Airlines = () => {
 			<ModalComponent
 				isModalOpen={detailModal?.isOpen}
 				closeModal={handleDetailModalClose}
-				title={detailModal?.isEdit ? "Edit your airline" : 'Add Your airline'}
+				title={detailModal?.isEdit ? "Edit Airline" : !!detailModal?.record ? 'View Airline' : 'Add Airline'}
 				record={detailModal?.record}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(!detailModal?.isEdit && writeAccess) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				width="80vw"
 				className="custom_modal"
 			>

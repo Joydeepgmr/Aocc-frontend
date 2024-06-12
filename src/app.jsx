@@ -4,10 +4,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
 import './app.scss';
 import Router from './routes/routes';
-import socket from './socket/server';
+import { useSocket } from './socket/socketContext';
 export function App() {
-	const token = localStorage.getItem('_tid');
-	const userRole = localStorage.getItem('role');
+	const socket = useSocket();
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -16,11 +15,15 @@ export function App() {
 			},
 		},
 	});
+
 	useEffect(() => {
+		socket.connect();
+		socket.on('connect', () => {
+			console.log('socket is connected');
+		});
+		socket.on('UPDATE_API', () => console.log('socket is listing'));
 		return () => {
-			if (socket.connected) {
-				socket.disconnect();
-			}
+			socket.off('connect');
 		};
 	}, []);
 
@@ -47,5 +50,4 @@ export function App() {
 		</QueryClientProvider>
 	);
 }
-export { socket };
 export default App;
