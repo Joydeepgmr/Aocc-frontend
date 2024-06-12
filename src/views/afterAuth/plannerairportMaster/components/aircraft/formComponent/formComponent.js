@@ -247,8 +247,9 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						<InputField
 							label="MOW"
 							name="mow"
-							max={999}
-							type='number'
+							max={5}
+							pattern={/^\d+(\.\d{1,2})?$/}
+							// type='number'
 							placeholder={!isReadOnly && 'Enter the MOW'}
 							className="custom_input"
 							suffixText="T"
