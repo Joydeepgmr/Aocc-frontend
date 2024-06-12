@@ -91,20 +91,6 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			align: 'center',
 		},
 		{
-			title: '% Match',
-			dataIndex: 'matchPercentage',
-			key: 'matchPercentage',
-			render(match) {
-				return {
-					props: {
-						style: { background: match >= 90 ? '#B2F2BB' : match < 30 ? '#FF8787' : '' },
-					},
-					children: <div>{`${match}%`}</div>,
-				};
-			},
-			align: 'center',
-		},
-		{
 			title: 'ID Match',
 			key: 'idMatch',
 			render: (record) => (

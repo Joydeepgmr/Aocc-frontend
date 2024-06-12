@@ -70,7 +70,8 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 
 	const handleDetails = (data, isEdit) => {
 		const type = data ? isEdit ? 'edit' : 'view' : 'new'
-		setAircraftTypeModal({ isOpen: true, type, data, title: 'Aircraft type' });
+		const titlePrefix = data ? isEdit ? 'Edit' : 'View' : 'Set up your'
+		setAircraftTypeModal({ isOpen: true, type, data, title: `${titlePrefix} Aircraft type` });
 	}
 	function handleDelete() {
 		deleteAircraftType(deleteModal.id);
@@ -270,7 +271,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 					/>
 					{aircraftTypeModal.type !== 'view' && (
 						<>
-							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"

@@ -89,8 +89,10 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 			if (SelectAircraftData?.length) {
 				const selectedAircraft = SelectAircraftData.find(({ id }) => id === aircraftIdWatch);
 				console.log("selectedAircraft", selectedAircraft)
-				const { length, height, wingspan, totalSeats } = selectedAircraft;
-				form.setFieldsValue({ length, height, wingspan, totalSeats });
+				if (selectedAircraft) {
+					const { length, height, wingspan, totalSeats } = selectedAircraft;
+					form.setFieldsValue({ length, height, wingspan, totalSeats });
+				}
 			}
 		}
 	}, [aircraftIdWatch]);

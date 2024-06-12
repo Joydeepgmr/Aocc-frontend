@@ -32,9 +32,9 @@ const ProgressionCard = ({ cardTitle, airlineData }) => {
 								<div key={index} className="progress-status-body">
 									<div className="progress-status-item">
 										{/* <img src={Airplane_1} alt="" /> */}
-										<div className="airline-name">{airline?.name}</div>
+										<div className="airline-name">{airline?.airlineName}</div>
 										{/* <CustomTypography className='airline-name' type="paragraph" fontSize={10} fontWeight="600" color="black" children={airline?.name}  /> */}
-										<Progress strokeWidth={5} percent={airline?.percent} />
+										<Progress strokeWidth={5} percent={airline?.percentageOnTime} />
 									</div>
 								</div>
 							);

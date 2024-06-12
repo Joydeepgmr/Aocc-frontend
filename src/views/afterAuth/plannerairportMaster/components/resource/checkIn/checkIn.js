@@ -31,6 +31,7 @@ const CheckIn = () => {
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [openCSVModal, setOpenCSVModal] = useState(false);
 	const [form] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('masterAccess');
 
 	const getCheckinHandler = {
 		onSuccess: (data) => handleGetCheckinSuccess(data),
@@ -317,18 +318,21 @@ const CheckIn = () => {
 					}
 					openModal={() => handleDetailModalOpen()}
 					openCSVModal={() => setOpenCSVModal(true)}
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<>
 					<div className="check-in">
-						<div className="check-in--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
+						{writeAccess &&
+							<div className="check-in--dropdown">
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									buttonText="Create"
+									className="custom_dropdownButton"
+									onChange={handleDropdownItemClick}
+								/>
+							</div>
+						}
 						<div className="check-in--tableContainer">
 							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Check-in Counters
@@ -348,10 +352,10 @@ const CheckIn = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				closeModal={handleDetailModalClose}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(!detailModal?.isEdit && writeAccess) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				record={detailModal?.record}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Check-in Counters`}
+				title={`${detailModal?.isEdit ? "Edit" : !!detailModal?.record ? 'View' : 'Add'}  Check-in Counters`}
 				className="custom_modal"
 			>
 				<div className="modal_content">

@@ -81,7 +81,8 @@ const AircraftRegistrationTable = ({
 
 	function handleDetails(data, isEdit) {
 		const type = data ? isEdit ? 'edit' : 'view' : 'new'
-		setAircraftRegistrationModal({ isOpen: true, type, data, title: 'Aircraft registration' });
+		const titlePrefix = data ? isEdit ? 'Edit' : 'View' : 'Set up your'
+		setAircraftRegistrationModal({ isOpen: true, type, data, title: `${titlePrefix} Aircraft registration` });
 	}
 	function handleDelete() {
 		deleteAircraftRegistration(deleteModal.id);
@@ -98,8 +99,6 @@ const AircraftRegistrationTable = ({
 	}
 
 	function getFormValues(data) {
-		console.log('data?.airportId ', data?.airportId);
-		console.log('data?.globalAirportId ', data?.globalAirportId);
 		return {
 			registration: data?.registration,
 			internal: data?.internal,
@@ -306,7 +305,6 @@ const AircraftRegistrationTable = ({
 					/>
 					{aircraftRegistrationModal.type !== 'view' && (
 						<>
-							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"

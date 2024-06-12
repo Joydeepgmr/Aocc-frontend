@@ -2,11 +2,12 @@ import { Tabs } from 'antd';
 import React from 'react';
 import './customTabs.scss';
 
-const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, extraContent, destroyInactiveTabPane = true }) => {
+const CustomTabs = ({ defaultActiveKey, activeKey, items, onChange, type, rest, className, extraContent, destroyInactiveTabPane = true }) => {
 	if (type === 'card') {
 		return (
 			<Tabs
 				defaultActiveKey={defaultActiveKey}
+				activeKey={activeKey}
 				onChange={onChange}
 				tabBarExtraContent={extraContent}
 				type="card"
@@ -29,6 +30,7 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 	return (
 		<Tabs
 			defaultActiveKey={defaultActiveKey}
+			activeKey={activeKey}
 			onChange={onChange}
 			tabBarExtraContent={extraContent}
 			className={`custom_tabs_plain ${className}`}
@@ -39,7 +41,7 @@ const CustomTabs = ({ defaultActiveKey, items, onChange, type, rest, className, 
 				return {
 					key: id,
 					label: item.label,
-					children: item.children,	
+					children: item.children,
 					//   icon: <Icon />,
 				};
 			})}

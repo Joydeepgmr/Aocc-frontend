@@ -39,6 +39,7 @@ const Alerts = () => {
 	const handleGetNotificationSuccess = (data) => {
 		if (data?.pages) {
 			const newData = data?.pages.reduce((acc, page) => {
+				page.data = page.data.filter(({ status }) => status !== 'resolved');
 				return acc.concat(page.data || []);
 			}, []);
 			setNotificationData([...newData]);
@@ -49,7 +50,7 @@ const Alerts = () => {
 		if (data?.data?.status === 'acknowledged') {
 			setOpen(false);
 			refetch();
-			navigate('/plans', { state: { tab: '3' } });
+			navigate('/plans', { state: { tab: '3', conflictType: data?.data?.conflictType } });
 		} else {
 			toast.success('Notification updated successfully');
 			queryClient.invalidateQueries('get-all-notification');
@@ -98,7 +99,7 @@ const Alerts = () => {
 									hasMore={hasNextPageNotification}
 									className="infinite-scroll"
 									scrollableTarget="progressScroll"
-									height={"80vh"}
+									height={'80vh'}
 								>
 									{/* <CustomTypography type="title" fontSize={16} fontWeight="600" color="black" children="Alerts" /> */}
 									{notificationData &&

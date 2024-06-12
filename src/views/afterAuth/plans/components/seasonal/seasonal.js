@@ -38,6 +38,8 @@ const Seasonal = () => {
 	const [form] = Form.useForm();
 	const [filterForm] = Form.useForm();
 	const searchedValue = Form.useWatch('search', filterForm);
+	const writeAccess = !!localStorage.getItem('plannerAccess');
+
 	const getSeasonalHandler = {
 		onSuccess: (data) => handleGetSeasonalSuccess(data),
 		onError: (error) => handleGetSeasonalError(error),
@@ -232,12 +234,14 @@ const Seasonal = () => {
 				warning="Required field"
 				type="search"
 			/>
-			<DropdownButton
-				dropdownItems={dropdownItems}
-				buttonText="Actions"
-				className="custom_dropdownButton"
-				onChange={handleDropdownItemClick}
-			/>
+			{writeAccess &&
+				<DropdownButton
+					dropdownItems={dropdownItems}
+					buttonText="Actions"
+					className="custom_dropdownButton"
+					onChange={handleDropdownItemClick}
+				/>
+			}
 		</Form>
 	);
 	const uploadCsvHandler = {
@@ -376,23 +380,26 @@ const Seasonal = () => {
 	const noDataHandler = () => {
 		return (
 			<div className="seasonal_container">
-				<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
-				<Button
-					id="btn"
-					title="Upload CSV"
-					className="custom_svgButton"
-					type="filledText"
-					isSubmit="submit"
-					onClick={openCsvModal}
-				/>
-				<Button
-					id="btn"
-					title="Download CSV Template"
-					className="custom_svgButton"
-					type="filledText"
-					isSubmit="submit"
-					onClick={openCsvModal}
-				/>
+				{writeAccess &&
+					<>
+						<Button title="Create" id="btn" type="filledText" isSubmit="submit" onClick={openModal} />
+						<Button
+							id="btn"
+							title="Upload CSV"
+							className="custom_svgButton"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openCsvModal}
+						/>
+						<Button
+							id="btn"
+							title="Download CSV Template"
+							className="custom_svgButton"
+							type="filledText"
+							isSubmit="submit"
+							onClick={openCsvModal}
+						/>
+					</>}
 			</div>
 		);
 	};

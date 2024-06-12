@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import Button from '../../../components/button/button';
 import TableComponent from '../../../components/table/table';
 import Modal from '../../../components/modal/modal';
+import InputField from '../../../components/input/field/field';
 import { useGetVendor, useUpdateStatusDone, useUpdateStatusInProgress } from '../../../services/Vendor/vendor';
 import './Vendor.scss';
+import { Form } from 'antd';
 
 const Vendor = () => {
 	const queryClient = useQueryClient();
 	const [rowData, setRowData] = useState({});
 	const [vendorData, setVendorData] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
+	const [form] = Form.useForm();
+	const watchFlightNo = Form.useWatch('flightNo', form);
 	const openModal = (record) => {
 		setRowData(record);
 		setIsModalOpen(true);
@@ -29,11 +32,10 @@ const Vendor = () => {
 	};
 
 	const handleGetVendorSuccess = (data) => {
-		if (data?.pages) {
+		if (data?.pages?.length) {
 			const newData = data.pages.reduce((acc, page) => {
-				return acc.concat(page.data || []);
+				return acc.concat(page || []);
 			}, []);
-
 			setVendorData([...newData]);
 		}
 	};
@@ -67,15 +69,15 @@ const Vendor = () => {
 		toast.error(error?.response?.data?.message);
 	};
 	const handleProgress = () => {
-		if(rowData?.status === "in-progress"){
-			updateStatusDone({ 
+		if (rowData?.status === "in-progress") {
+			updateStatusDone({
 				flightId: rowData?.id,
 				airlineId: rowData?.airline,
 				taskType: rowData?.task,
 			});
 		}
-		else if(rowData?.status === "pending"){
-			updateStatusInProgress({ 	
+		else if (rowData?.status === "pending") {
+			updateStatusInProgress({
 				flightId: rowData?.id,
 				airlineId: rowData?.airlineId,
 				taskType: rowData?.task,
@@ -115,20 +117,42 @@ const Vendor = () => {
 			),
 		},
 	];
-
+	useEffect(() => {
+		let debounceTimer;
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			if (watchFlightNo != undefined) {
+				const updatedVendorData = fetchVendor?.pages[0].filter((data) => data?.callSign?.includes?.(watchFlightNo));
+				setVendorData(updatedVendorData);
+			}
+		}, 300);
+		return () => clearTimeout(debounceTimer);
+	}, [watchFlightNo]);
 	return (
 		<div className="vendor--container">
-			<div className="vendor--header">
-				<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
-					Task Overview
-				</CustomTypography>
-				<CustomTypography type="text" fontSize={14} fontWeight="400" color="#909296">
-					Here is your overview
-				</CustomTypography>
+			<div className='vendor--header'>
+				<div className="vendor--title">
+					<CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
+						Task Overview
+					</CustomTypography>
+					<CustomTypography type="text" fontSize={14} fontWeight="400" color="#909296">
+						Here is your overview
+					</CustomTypography>
+				</div>
+				<Form form={form} className='vendor--search'>
+					<InputField
+						label="Flight number"
+						name="flightNo"
+						placeholder="Flight number"
+						warning="Required field"
+						type="search"
+						className='vendor-search-input'
+					/>
+				</Form>
 			</div>
 			<div className="vendor--table">
 				<TableComponent
-					data={fetchVendor?.pages[0]}
+					data={vendorData}
 					columns={columns}
 					loading={isFetching}
 					fetchData={fetchNextPage}
@@ -143,7 +167,7 @@ const Vendor = () => {
 				title={rowData.status === 'pending' ? 'Start Task?' : 'Stop Task?'}
 			>
 				<div className="vendor--button-container">
-					<Button title="Cancel" type="filledText" id="btn" className="vendor--cancel" onClick={closeModal} disabled={isStatusDoneLoading || isStatusInProgressLoading}/>
+					<Button title="Cancel" type="filledText" id="btn" className="vendor--cancel" onClick={closeModal} disabled={isStatusDoneLoading || isStatusInProgressLoading} />
 					<Button
 						title={rowData.status === 'pending' ? 'Start' : 'Stop'}
 						className={`vendor--${rowData.status}`}

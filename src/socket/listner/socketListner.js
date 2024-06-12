@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { SOCKET_EVENT_NAME } from '../../api';
-import socket from '../server';
+import { useSocket } from '../socketContext';
 
 const SocketEventListener = ({ refetch, apiName }) => {
+    const socket = useSocket();
     useEffect(() => {
         const socketEventCallback = (data) => {
-            console.log("socket is listing");
+            console.log("socket is listing.....");
             const parsedData = JSON.parse(data);
             if (parsedData?.length) {
                 parsedData.forEach((endpoint) => {

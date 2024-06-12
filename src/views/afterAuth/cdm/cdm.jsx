@@ -27,6 +27,7 @@ const CDM = () => {
 	const [telexModal, setTelexModal] = useState({ isOpen: false, data: null });
 	const [flightCancelModal, setFlightCancelModal] = useState({ isOpen: false, data: null });
 	const [rowData, setRowData] = useState({});
+	const writeAccess = !!localStorage.getItem('cdmAccess');
 
 	const getCdmHandler = {
 		onSuccess: (data) => handleGetCdmSuccess(data),
@@ -225,7 +226,7 @@ const CDM = () => {
 						key: 'eldt',
 						render: (eldt) => (eldt ? eldt : '-'),
 						align: 'center',
-						editable: { type: 'time' },
+						editable: writeAccess && { type: 'time' },
 					},
 					{
 						title: 'ALDT',
@@ -233,7 +234,7 @@ const CDM = () => {
 						key: 'aldt',
 						render: (aldt) => (aldt ? aldt : '-'),
 						align: 'center',
-						editable: { type: 'time' },
+						editable: writeAccess && { type: 'time' },
 					},
 					{
 						title: 'EIBT',
@@ -241,7 +242,7 @@ const CDM = () => {
 						key: 'eibt',
 						render: (eibt) => (eibt ? eibt : '-'),
 						align: 'center',
-						editable: { type: 'time' },
+						editable: writeAccess && { type: 'time' },
 					},
 					{
 						title: 'AIBT',
@@ -249,7 +250,7 @@ const CDM = () => {
 						key: 'aibt',
 						render: (aibt) => (aibt ? aibt : '-'),
 						align: 'center',
-						editable: { type: 'time' },
+						editable: writeAccess && { type: 'time' },
 					},
 					{
 						title: 'RWY',
@@ -271,7 +272,7 @@ const CDM = () => {
 						key: 'remark',
 						render: (remark) => remark ?? '-',
 						align: 'center',
-						editable: { type: 'text' },
+						editable: writeAccess && { type: 'text' },
 					},
 					{
 						title: 'LINK FLIGHT',
@@ -298,17 +299,18 @@ const CDM = () => {
 					{
 						title: 'ACTION',
 						key: 'view',
-						render: (text, record) => (
-							<ButtonComponent
-								title="CANCEL FLIGHT"
-								style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
-								type="text"
-								className="view_map_button"
-								onClick={() => {
-									setFlightCancelModal({ isOpen: true, data: record });
-								}}
-							/>
-						),
+						render: (text, record) =>
+							writeAccess && (
+								<ButtonComponent
+									title="CANCEL FLIGHT"
+									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+									type="text"
+									className="view_map_button"
+									onClick={() => {
+										setFlightCancelModal({ isOpen: true, data: record });
+									}}
+								/>
+							),
 					},
 				]
 			: activeTab === '2'
@@ -376,7 +378,7 @@ const CDM = () => {
 							key: 'eobt3',
 							render: (eobt3) => (eobt3 ? eobt3 : '-'),
 							align: 'center',
-							editable: { type: 'time' },
+							editable: writeAccess && { type: 'time' },
 						},
 						{
 							title: 'TOBT',
@@ -384,7 +386,7 @@ const CDM = () => {
 							key: 'tobt',
 							render: (tobt) => (tobt ? tobt : '-'),
 							align: 'center',
-							editable: { type: 'time' },
+							editable: writeAccess && { type: 'time' },
 						},
 						{
 							title: 'AOBT',
@@ -392,7 +394,7 @@ const CDM = () => {
 							key: 'aobt',
 							render: (aobt) => (aobt ? aobt : '-'),
 							align: 'center',
-							editable: { type: 'time' },
+							editable: writeAccess && { type: 'time' },
 						},
 						{
 							title: 'TSAT',
@@ -400,7 +402,7 @@ const CDM = () => {
 							key: 'tsat',
 							render: (tsat) => (tsat ? tsat : '-'),
 							align: 'center',
-							editable: { type: 'time' },
+							editable: writeAccess && { type: 'time' },
 						},
 
 						{
@@ -409,7 +411,7 @@ const CDM = () => {
 							key: 'atot',
 							render: (atot) => (atot ? atot : '-'),
 							align: 'center',
-							editable: { type: 'time' },
+							editable: writeAccess && { type: 'time' },
 						},
 						{
 							title: 'RWY',
@@ -424,7 +426,7 @@ const CDM = () => {
 							key: 'remark',
 							render: (remark) => remark ?? '-',
 							align: 'center',
-							editable: { type: 'text' },
+							editable: writeAccess && { type: 'text' },
 						},
 						{
 							title: 'POS',
@@ -451,17 +453,18 @@ const CDM = () => {
 						{
 							title: 'ACTION',
 							key: 'view',
-							render: (text, record) => (
-								<ButtonComponent
-									title="CANCEL FLIGHT"
-									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
-									type="text"
-									className="view_map_button"
-									onClick={() => {
-										setFlightCancelModal({ isOpen: true, data: record });
-									}}
-								/>
-							),
+							render: (text, record) =>
+								writeAccess && (
+									<ButtonComponent
+										title="CANCEL FLIGHT"
+										style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+										type="text"
+										className="view_map_button"
+										onClick={() => {
+											setFlightCancelModal({ isOpen: true, data: record });
+										}}
+									/>
+								),
 						},
 					]
 				: [
@@ -507,7 +510,7 @@ const CDM = () => {
 						},
 						{
 							title: 'ARR',
-							editable: true,
+							editable: writeAccess && true,
 							children: [
 								{
 									title: 'FLNR',
@@ -537,7 +540,7 @@ const CDM = () => {
 									key: 'eldt',
 									render: (eldt) => eldt ?? '-',
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'ALDT',
@@ -545,7 +548,7 @@ const CDM = () => {
 									key: 'aldt',
 									render: (aldt) => aldt ?? '-',
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'EIBT',
@@ -553,7 +556,7 @@ const CDM = () => {
 									key: 'eibt',
 									render: (eibt) => eibt ?? '-',
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'AIBT',
@@ -561,7 +564,7 @@ const CDM = () => {
 									key: 'aibt',
 									render: (aibt) => aibt ?? '-',
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'RWY',
@@ -574,7 +577,7 @@ const CDM = () => {
 						},
 						{
 							title: 'DEP',
-							editable: true,
+							editable: writeAccess && true,
 							children: [
 								{
 									title: 'FLNR',
@@ -603,7 +606,7 @@ const CDM = () => {
 									key: 'eobt3',
 									render: (eobt3) => (eobt3 ? eobt3 : '-'),
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'TOBT',
@@ -611,7 +614,7 @@ const CDM = () => {
 									key: 'tobt',
 									render: (tobt) => (tobt ? tobt : '-'),
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'AOBT',
@@ -619,7 +622,7 @@ const CDM = () => {
 									key: 'aobt',
 									render: (aobt) => (aobt ? aobt : '-'),
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'TSAT',
@@ -627,7 +630,7 @@ const CDM = () => {
 									key: 'tsat',
 									render: (tsat) => (tsat ? tsat : '-'),
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'ATOT',
@@ -635,7 +638,7 @@ const CDM = () => {
 									key: 'atot',
 									render: (atot) => (atot ? atot : '-'),
 									align: 'center',
-									editable: { type: 'time' },
+									editable: writeAccess && { type: 'time' },
 								},
 								{
 									title: 'RWY',
@@ -664,17 +667,18 @@ const CDM = () => {
 						{
 							title: 'ACTION',
 							key: 'view',
-							render: (text, record) => (
-								<ButtonComponent
-									title="CANCEL FLIGHT"
-									style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
-									type="text"
-									className="view_map_button"
-									onClick={() => {
-										setFlightCancelModal({ isOpen: true, data: record });
-									}}
-								/>
-							),
+							render: (text, record) =>
+								writeAccess && (
+									<ButtonComponent
+										title="CANCEL FLIGHT"
+										style={{ margin: 'auto', fontSize: '1.3rem', width: '5rem' }}
+										type="text"
+										className="view_map_button"
+										onClick={() => {
+											setFlightCancelModal({ isOpen: true, data: record });
+										}}
+									/>
+								),
 						},
 					];
 

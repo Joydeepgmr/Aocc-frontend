@@ -72,7 +72,8 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 
 	function handleDetails(data, isEdit) {
 		const type = data ? isEdit ? 'edit' : 'view' : 'new'
-		setAirportModal({ isOpen: true, type, data, title: 'Your Airport' });
+		const titlePrefix = data ? isEdit ? 'Edit' : 'View' : 'Set up your'
+		setAirportModal({ isOpen: true, type, data, title: `${titlePrefix} Airport` });
 	}
 	function handleDelete() {
 		deleteAirport(deleteModal.id);
@@ -249,7 +250,6 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					<AirportForm fileList={fileList} setFileList={setFileList} form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && (
 						<>
-							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"

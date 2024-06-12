@@ -24,6 +24,12 @@ export const Login = () => {
 			localStorage.setItem('name', data?.roleName);
 			localStorage.setItem('email', data?.email);
 			data?.airportImage && localStorage.setItem('logo', data?.airportImage);
+			localStorage.setItem('dailyOpsAccess', true);
+			localStorage.setItem('plannerAccess', true);
+			localStorage.setItem('cdmAccess', true);
+			localStorage.setItem('masterAccess', true);
+			localStorage.setItem('subUserAccess', true);
+
 			roleRedirectFlow(data.roleName);
 		},
 		onError: ({

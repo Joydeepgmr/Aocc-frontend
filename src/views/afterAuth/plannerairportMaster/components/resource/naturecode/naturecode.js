@@ -22,6 +22,7 @@ const NatureCode = () => {
 	const [openDeleteModal, setOpenDeleteModal] = useState({ isOpen: false, record: null });
 	const [detailModal, setDetailModal] = useState({ isOpen: false, record: null, isEdit: false });
 	const [form] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('masterAccess');
 
 	const getNatureCodeHandler = {
 		onSuccess: (data) => handleGetNatureCodeSuccess(data),
@@ -156,7 +157,7 @@ const NatureCode = () => {
 			dataIndex: 'natureCode',
 			key: 'natureCode',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer',color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'NAME',
@@ -197,19 +198,22 @@ const NatureCode = () => {
 						handleSaveButton={handleSaveButton}
 						handleButtonClose={handleDetailModalClose}
 					/>}
-					openModal={()=>handleDetailModalOpen()}
+					openModal={() => handleDetailModalOpen()}
+					writeAccess={writeAccess}
 				/>
 			) : (
 				<>
 					<div className="nature-code">
-						<div className="nature-code--dropdown">
-							<DropdownButton
-								dropdownItems={dropdownItems}
-								buttonText="Create"
-								className="custom_dropdownButton"
-								onChange={handleDropdownItemClick}
-							/>
-						</div>
+						{writeAccess &&
+							<div className="nature-code--dropdown">
+								<DropdownButton
+									dropdownItems={dropdownItems}
+									buttonText="Create"
+									className="custom_dropdownButton"
+									onChange={handleDropdownItemClick}
+								/>
+							</div>
+						}
 						<div className="nature-code--tableContainer">
 							{/* <CustomTypography type="title" fontSize={24} fontWeight="600" color="black">
 								Nature Code
@@ -225,10 +229,10 @@ const NatureCode = () => {
 				isModalOpen={detailModal?.isOpen}
 				width="80%"
 				record={detailModal?.record}
-				onEdit={!detailModal?.isEdit && handleDetailModalOpen}
-				onDelete={handleDeleteModalOpen}
+				onEdit={(writeAccess && !detailModal?.isEdit) && handleDetailModalOpen}
+				onDelete={writeAccess && handleDeleteModalOpen}
 				closeModal={handleDetailModalClose}
-				title={`${!detailModal?.isEdit ? 'Add' : 'Edit'} Parking Stand`}
+				title={`${detailModal?.isEdit ? "Edit" : !!detailModal?.record ? 'View' : 'Add'}  Nature Code`}
 				className="custom_modal"
 			>
 				<div className="modal_content">

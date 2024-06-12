@@ -123,6 +123,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 									options={[
 										{ label: 'Take-off', value: 'take-off' },
 										{ label: 'Landing', value: 'landing' },
+										{ label: 'Both', value: 'both' },
 									]}
 									disabled={isReadOnly}
 								/>

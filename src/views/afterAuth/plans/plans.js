@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import CustomTabs from '../../../components/customTabs/customTabs';
 import CDMSchedule from './components/CDM/components/CDMSchedule/CDMSchedule';
@@ -24,18 +24,25 @@ const Plans = () => {
 		{
 			key: '3',
 			label: 'Resource Allocation',
-			children: <ResourceAllocation />,
+			children: <ResourceAllocation conflictType={state?.conflictType} />,
 		},
 	];
 
 	const handleChange = (key) => {
 		setIndex(key);
 	};
+	useEffect(() => {
+		if (state?.tab) {
+			setIndex(state.tab);
+		}
+	}, [state])
+	console.log("state is ", state);
 	return (
 		<>
 			<div className="box">
 				<CustomTabs
-					defaultActiveKey={state?.tab ?? index}
+					defaultActiveKey={index}
+					activeKey={index}
 					items={planTabItems}
 					onChange={handleChange}
 					type="card"

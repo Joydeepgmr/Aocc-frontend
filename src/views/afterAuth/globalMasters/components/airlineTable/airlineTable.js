@@ -11,6 +11,7 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import {
+	patchAirlineImage,
 	useDeleteGlobalAirline,
 	usePatchGlobalAirline,
 	usePostGlobalAirline,
@@ -18,6 +19,7 @@ import {
 import AirlineForm from '../airlineForm/airlineForm';
 import { CapitaliseFirstLetter } from '../../../../../utils';
 import './airlineTable.scss';
+import { useGetAirlineSyncData } from '../../../../../services/PlannerAirportMaster/PlannerAirlineAirportMaster';
 
 const AirlineTable = ({
 	createProps,
@@ -32,6 +34,9 @@ const AirlineTable = ({
 	const [airlineData, setAirlineData] = useState([]);
 	const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 	const [fileList, setFileList] = useState([]);
+	const [previousImage, setPreviousImage] = useState('');
+	const [icaoCode, setIcaoCode] = useState('');
+	const [airlineImageLoader, setAirlineImageLoader] = useState(false);
 	const onError = ({
 		response: {
 			data: { message },
@@ -74,11 +79,40 @@ const AirlineTable = ({
 		onError,
 	};
 	const { mutate: deleteAirline, isLoading: isDeleteLoading } = useDeleteGlobalAirline(deleteApiProps);
+	const getAirlineImageHandler = {
+		onSuccess: ({ airlineData = {}, airlineImage = '' }) => {
+			if (airlineData) {
+				airlineData.validTill = airlineData?.validTill ? dayjs(airlineData?.validTill) : undefined;
+				airlineData.validFrom = airlineData?.validFrom ? dayjs(airlineData?.validFrom) : undefined;
+			}
+			if (airlineImage) {
+				setFileList([{ url: airlineImage }]);
+				setPreviousImage(airlineImage);
+			} else {
+				setFileList([]);
+				setPreviousImage('');
+			}
+			setAirlineRegistrationModal({ isOpen: true, type: 'view', data: airlineData, title: `Airline registration` });
+		},
+		onError: (error) => {
+			setFileList([]);
+			setPreviousImage('');
+		},
+	};
+	const { isLoading: isGetAirline } = useGetAirlineSyncData(
+		icaoCode,
+		getAirlineImageHandler
+	);
 	const [initial] = Form.useForm();
 
 	function handleDetails(data, isEdit) {
 		const type = data ? isEdit ? 'edit' : 'view' : 'new'
-		setAirlineRegistrationModal({ isOpen: true, type, data, title: 'Airline registration' });
+		const titlePrefix = data ? isEdit ? 'Edit' : 'View' : 'Set up your'
+		if (type !== 'view') {
+			setAirlineRegistrationModal({ isOpen: true, type, data, title: `${titlePrefix} Airline registration` });
+		} else {
+			setIcaoCode(data?.threeLetterCode);
+		}
 	}
 	function handleDelete() {
 		deleteAirline(deleteModal.id);
@@ -86,6 +120,9 @@ const AirlineTable = ({
 
 	function closeAddModal() {
 		setAirlineRegistrationModal(defaultModalParams);
+		setFileList([]);
+		setPreviousImage('');
+		setIcaoCode('');
 		initial.resetFields();
 	}
 	function openDeleteModal(data) {
@@ -112,7 +149,7 @@ const AirlineTable = ({
 			validTill: data?.validTill && dayjs(data?.validTill),
 		};
 	}
-	function onFinishHandler(values) {
+	const onFinishHandler = async (values) => {
 		values = getFormValues(values);
 		values.name = values?.name ? CapitaliseFirstLetter(values.name) : undefined;
 		values.remark = values?.remark ? CapitaliseFirstLetter(values.remark) : undefined
@@ -124,12 +161,24 @@ const AirlineTable = ({
 		}
 
 		if (airlineRegistrationModal.type === 'edit') {
+			const url = fileList?.[0]?.url;
 			const id = airlineRegistrationModal.data.id;
 			delete values.twoLetterCode;
 			delete values.threeLetterCode;
 			delete values.validFrom;
 			values.id = airlineRegistrationModal.data.id;
-			patchAirline(values);
+			try {
+				setAirlineImageLoader(true);
+				console.log('image is ', previousImage, url, previousImage === url);
+				if (previousImage !== url) {
+					await patchAirlineImage({ id, url });
+				}
+			} catch (error) {
+
+			} finally {
+				setAirlineImageLoader(false);
+				patchAirline(values);
+			}
 		} else {
 			values.url = fileList[0]?.url ?? '';
 			values.twoLetterCode = values.twoLetterCode.join('');
@@ -137,7 +186,6 @@ const AirlineTable = ({
 			postGlobalAirLineRegistration(values);
 		}
 	}
-
 	useEffect(() => {
 		const { data } = airlineRegistrationModal;
 		if (data) {
@@ -216,7 +264,7 @@ const AirlineTable = ({
 	);
 	return (
 		<>
-			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading} />
+			<PageLoader loading={isCreateNewLoading || isEditLoading || isDeleteLoading || isGetAirline || airlineImageLoader} />
 			<ConfirmationModal
 				isOpen={deleteModal.isOpen}
 				onClose={closeDeleteModal}
@@ -243,7 +291,6 @@ const AirlineTable = ({
 					/>
 					{airlineRegistrationModal.type !== 'view' && (
 						<>
-							<Divider />
 							<div className="custom_buttons">
 								<ButtonComponent
 									title="Cancel"

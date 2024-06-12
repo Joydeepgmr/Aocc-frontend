@@ -1,6 +1,6 @@
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { GET_ALL_TIMELINE_DATA, GET_TIMELINE_GROUP_DATA } from '../../../../../../../api';
@@ -18,7 +18,7 @@ import SocketEventListener from '../../../../../../../socket/listner/socketListn
 import { CombineUtcDateAndIstTime } from '../../../../../../../utils';
 import './resourceAllocation.scss';
 
-const ResourceAllocation = () => {
+const ResourceAllocation = ({ conflictType }) => {
 	const queryClient = useQueryClient();
 	const divRef = useRef(null);
 	const [activeTab, setActiveTab] = useState('1');
@@ -26,6 +26,8 @@ const ResourceAllocation = () => {
 	const [isEditable, setIsEditable] = useState(false);
 	const [selectedTimeValue, setSelectedTimeValue] = useState('24hrs');
 	const [fullScreen, setFullScreen] = useState(false);
+	const writeAccess = !!localStorage.getItem('plannerAccess');
+
 	const handleTimeValueChange = (value) => {
 		setSelectedTimeValue(value);
 	};
@@ -323,9 +325,15 @@ const ResourceAllocation = () => {
 		setIsEditable(false);
 		setActiveTab(key);
 		setTabValue(
-			key === '1' ? 'counter' : key === '2' ? 'gate' : key === '3' ? 'stand' : key === '4' ? 'belt' : 'taxi'
+			key === '1' ? 'counter' : key === '2' ? 'gate' : key === '3' ? 'stand' : key === '4' ? 'belt' : 'counter'
 		);
 	};
+
+	useEffect(() => {
+		handleChange(conflictType === '"check-in-counter' ? '1' : conflictType === 'gate' ? '2' : conflictType === 'stand' ? '3' : conflictType === 'belt' ? '4' : '1')
+		console.log('conflict type inn useEffect is ', conflictType)
+	}, [conflictType])
+	console.log('conflict type is ', conflictType, activeTab, tabValue)
 
 	const SelectTime = [
 		{
@@ -339,7 +347,7 @@ const ResourceAllocation = () => {
 			value: '24hrs',
 		},
 	];
-
+	console.log('run one more time ', activeTab)
 	return (
 		<div className={`resourceAllocation--Container ${fullScreen && 'resourceAllocation--FullScreen'}`} ref={divRef}>
 			<SocketEventListener
@@ -353,31 +361,36 @@ const ResourceAllocation = () => {
 
 			<CustomTabs
 				defaultActiveKey={activeTab}
+				activeKey={activeTab}
 				items={items}
 				onChange={handleChange}
 				extraContent={
 					<div className="resourceAllocation--SideTabContent">
-						<Button
-							id="btn"
-							title={'Run Rule Engine'}
-							className={'resourceAllocation--Button'}
-							type="filledText"
-							isSubmit="submit"
-							onClick={() => refetchRunRuleEngine()}
-						/>
-						<Button
-							id="btn"
-							title={isEditable ? `Stop Editing` : `Edit`}
-							className={
-								isEditable
-									? 'resourceAllocation--Button'
-									: 'custom_svgButton resourceAllocation--Button'
-							}
-							type="filledText"
-							isSubmit="submit"
-							onClick={() => setIsEditable(!isEditable)}
-							disabled={!Boolean(timelineItems?.length)}
-						/>
+						{writeAccess &&
+							<>
+								<Button
+									id="btn"
+									title={'Run Rule Engine'}
+									className={'resourceAllocation--Button'}
+									type="filledText"
+									isSubmit="submit"
+									onClick={() => refetchRunRuleEngine()}
+								/>
+								<Button
+									id="btn"
+									title={isEditable ? `Stop Editing` : `Edit`}
+									className={
+										isEditable
+											? 'resourceAllocation--Button'
+											: 'custom_svgButton resourceAllocation--Button'
+									}
+									type="filledText"
+									isSubmit="submit"
+									onClick={() => setIsEditable(!isEditable)}
+									disabled={!Boolean(timelineItems?.length)}
+								/>
+							</>
+						}
 						<CustomSelect
 							SelectData={SelectTime}
 							placeholder={'Select Format'}

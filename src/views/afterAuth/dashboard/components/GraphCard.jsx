@@ -7,7 +7,7 @@ import Performance from '../../../../assets/performance.svg';
 import RightArrow from '../../../../assets/RightArrow.svg';
 import { useNavigate } from 'react-router-dom';
 
-const DonutChart = ({ cardTitle }) => {
+const DonutChart = ({ cardTitle, chartData }) => {
 	const navigate = useNavigate();
 	const navigateTOMilestone = () => {
 		navigate('/dashboard', { state: { tab: '2' } });
@@ -20,7 +20,7 @@ const DonutChart = ({ cardTitle }) => {
 		legend: {
 			position: 'bottom',
 		},
-		labels: ['Domestic', 'International'],
+		labels: chartData?.label ?? [],
 		dataLabels: {
 			enabled: false,
 		},
@@ -35,7 +35,7 @@ const DonutChart = ({ cardTitle }) => {
 		colors: ['#ff682d', '#196cfd'],
 	};
 
-	const series = [45, 100];
+	const series = [1, 34] ?? chartData?.data;
 
 	return (
 		<Card className="progress-card">

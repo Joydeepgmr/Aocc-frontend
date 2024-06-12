@@ -13,6 +13,7 @@ import {
 	GET_GLOBAL_AIRCRAFT_TYPE,
 	GET_GLOBAL_AIRLINE,
 	GET_GLOBAL_AIRPORT,
+	PATCH_AIRLINE_IMAGE,
 	PATCH_GLOBAL_AIRCRAFT_REGISTRATION,
 	PATCH_GLOBAL_AIRCRAFT_TYPE,
 	PATCH_GLOBAL_AIRLINE,
@@ -107,6 +108,10 @@ export const usePatchGlobalAirline = (props) => {
 	});
 	return { ...response };
 };
+export const patchAirlineImage = async ({ id, url }) => {
+	const response = await Patch(`${PATCH_AIRLINE_IMAGE}/${id}`, { url });
+	return response;
+}
 export const useDeleteGlobalAirline = (props) => {
 	const response = useMutation({
 		mutationKey: ['delete-global-airline'],

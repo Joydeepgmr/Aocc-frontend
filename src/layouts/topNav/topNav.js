@@ -28,6 +28,8 @@ const TopNav = ({ data, weatherData }) => {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const [resetForm] = Form.useForm();
+	const writeAccess = !!localStorage.getItem('subUserAccess');
+
 	const handleTabClick = (key) => {
 		navigate(navItems[key].children);
 	};
@@ -161,7 +163,21 @@ const TopNav = ({ data, weatherData }) => {
 						<img src={line}></img>
 					</div>
 					<div className="setting_bell">
-						<img src={setting} onClick={toggleSettingCard} />
+						<div className='setting_icon'>
+							<img src={setting} onClick={toggleSettingCard} />
+							{isSettingCardOpen && (
+								<div className='setting_card'>
+									<div className="setting_card--BackDrop" onClick={() => setIsSettingCardOpen(false)}></div>
+									<div className="setting_card">
+										{localStorage.getItem('name') === 'Planner' && writeAccess ? (
+											<p onClick={manageAccessHandler}>Manage Access</p>
+										) : null}
+										{/* <p onClick={handleResetModalOpen}>Reset Password</p> */}
+										<p onClick={logoutHandler}>Logout</p>
+									</div>
+								</div>
+							)}
+						</div>
 						{data?.role?.name === userType.PLANNER && (
 							<div>
 								<Alerts />
@@ -178,18 +194,6 @@ const TopNav = ({ data, weatherData }) => {
 					</div>
 				</div>
 			</div>
-			{isSettingCardOpen && (
-				<>
-					<div className="setting_card--BackDrop" onClick={() => setIsSettingCardOpen(false)}></div>
-					<div className="setting_card">
-						{localStorage.getItem('name') === 'Planner' && (
-							<p onClick={manageAccessHandler}>Manage Access</p>
-						)}
-						{/* <p onClick={handleResetModalOpen}>Reset Password</p> */}
-						<p onClick={logoutHandler}>Logout</p>
-					</div>
-				</>
-			)}
 		</>
 	);
 };
