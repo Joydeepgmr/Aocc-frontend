@@ -262,7 +262,7 @@ function TelexMessage() {
 						items={items}
 						onChange={handleTabChange}
 						extraContent={
-							<div style={{ marginBottom: '1rem' }} className="top-bar">
+							<Form form={form} style={{ marginBottom: '1rem' }} className="top-bar">
 								<InputField
 									label="Flight number"
 									name="flightNo"
@@ -282,7 +282,7 @@ function TelexMessage() {
 										className="fullScreen--FullScreenIcon"
 									/>
 								)}
-							</div>
+							</Form>
 						}
 					/>
 				</div>

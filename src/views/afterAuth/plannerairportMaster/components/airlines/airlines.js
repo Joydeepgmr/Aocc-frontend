@@ -258,7 +258,7 @@ const Airlines = () => {
 			title: 'MODE OF PAYMENT',
 			dataIndex: 'paymentMode',
 			key: 'paymentMode',
-			render: (text) => text ?? '-',
+			render: (text) => text && <div style={{ textTransform: 'capitalize' }}>{text ?? '-'}</div>,
 			align: 'center',
 		},
 		{

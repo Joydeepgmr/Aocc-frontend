@@ -42,6 +42,9 @@ const TopNav = ({ data, weatherData }) => {
 		setRestedModal(true);
 		toggleSettingCard();
 	}
+	const handleResetModalClose = () => {
+		setRestedModal(false);
+	}
 	const logoutHandler = () => {
 		queryClient.clear();
 		localStorage.clear();
@@ -73,7 +76,7 @@ const TopNav = ({ data, weatherData }) => {
 
 	return (
 		<>
-			<Modal width='30vw' isModalOpen={restedModal} title='Reset Password'>
+			<Modal width='30vw' isModalOpen={restedModal} closeModal={handleResetModalClose} title='Reset Password'>
 				<Form layout='vertical' form={resetForm}>
 					<InputField
 						label='Old Password'
@@ -102,13 +105,13 @@ const TopNav = ({ data, weatherData }) => {
 						placeholder="Enter Confirm new password"
 						className="custom_input"
 					/>
-					<div className="user_form_inputfields">
+					<div style={{ marginTop: '1rem' }} className="user_form_inputfields">
 						<div className="form_bottomButton">
 							<ButtonComponent
 								title="Cancel"
 								type="filledText"
 								className="custom_button_cancel"
-							// onClick={closeAddUserModal}
+								onClick={handleResetModalClose}
 							/>
 							<ButtonComponent
 								title="Reset"
@@ -172,7 +175,7 @@ const TopNav = ({ data, weatherData }) => {
 										{localStorage.getItem('name') === 'Planner' && writeAccess ? (
 											<p onClick={manageAccessHandler}>Manage Access</p>
 										) : null}
-										{/* <p onClick={handleResetModalOpen}>Reset Password</p> */}
+										<p onClick={handleResetModalOpen}>Reset Password</p>
 										<p onClick={logoutHandler}>Logout</p>
 									</div>
 								</div>
