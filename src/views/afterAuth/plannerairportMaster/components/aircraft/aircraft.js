@@ -113,6 +113,10 @@ const Aircrafts = () => {
 	};
 
 	const handleAddAircraft = (value) => {
+		delete value.totalSeats;
+		delete value.wingspan;
+		delete value.length;
+		delete value.height;
 		const data = {
 			...value,
 			remark: value?.remark ? CapitaliseFirstLetter(value.remark) : undefined,
@@ -289,7 +293,7 @@ const Aircrafts = () => {
 			render: (nationality) => nationality ?? '-',
 			align: 'center',
 		},
-		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage ?? '-', align: 'center' },
+		{ title: 'TYPE OF USE', dataIndex: 'usage', key: 'usage', render: (usage) => usage && <div style={{ textTransform: 'capitalize' }}>{usage ?? '-'}</div>, align: 'center' },
 		// {
 		// 	title: 'DETAIL',
 		// 	dataIndex: 'viewDetails',

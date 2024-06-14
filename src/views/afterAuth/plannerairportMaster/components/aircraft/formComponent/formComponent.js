@@ -46,6 +46,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 				data.validTill = data?.validTill ? dayjs(data?.validTill) : undefined;
 				data.validFrom = data?.validFrom ? dayjs(data?.validFrom) : undefined;
 				data.aircraft_id = data?.globalAircraftType?.id ?? null;
+				data.cockpitCrew = data.cockpitCrew && `${data.cockpitCrew}`
+				data.cabinCrew = data.cabinCrew && `${data.cabinCrew}`
 				form.setFieldsValue(data);
 			}
 		},
