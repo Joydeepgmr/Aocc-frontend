@@ -143,7 +143,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						<CustomRadioGroup
 							options={terminalDisplay}
 							label="Display Type"
-							name="displayType"
+							name="flightType"
 							className="custom_input"
 							required
 							disabled={isReadOnly}
