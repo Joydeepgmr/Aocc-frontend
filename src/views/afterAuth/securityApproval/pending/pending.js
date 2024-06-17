@@ -91,7 +91,28 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			align: 'center',
 		},
 		{
-			title: 'ID Match',
+			title: 'ID MATCH',
+			dataIndex: 'isMatched',
+			key: 'isMatched',
+			align: 'center',
+			render: (isMatched) => isMatched ? 'Matched' : 'Not Matched'
+		},
+		{
+			title: 'DOCUMENT ID',
+			dataIndex: 'documentUrl',
+			key: 'documentUrl',
+			align: 'center',
+			render: (_, record) => {
+				console.log("record is ", record)
+				return record?.customerDocuments?.[0]?.documentUrl ?
+					<div onClick={() => openModal(record)} >
+						<img style={{ height: '5rem', width: '5rem' }} src={record?.customerDocuments?.[0]?.documentUrl} alt='document_id' />
+						<img style={{ height: '5rem', width: '5rem' }} src={record?.image} alt='user_id' />
+					</div> : 'No Img found'
+			},
+		},
+		{
+			title: 'PREVIEW',
 			key: 'idMatch',
 			render: (record) => (
 				<>

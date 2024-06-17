@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Timeline from 'react-visjs-timeline';
 import CustomTypography from '../typographyComponent/typographyComponent';
 import './timeline.scss';
 
 const TimelineDesign = (props) => {
 	const { items, groups, editable = true, height = '400px', label, handleMove, time } = props;
-
+	const [showCurrentTime, setShowCurrentTime] = useState(true);
+	useEffect(() => {
+		setTimeout(() => {
+			setShowCurrentTime(false);
+		}, 1000)
+	}, [])
 	const options = {
 		// timeAxis: { scale: 'minute', step: 60 },
 		orientation: 'top',
@@ -24,7 +29,7 @@ const TimelineDesign = (props) => {
 		editable: {
 			remove: false,
 			updateGroup: editable,
-			updateTime: false,
+			updateTime: editable,
 		},
 		showTooltips: true,
 		itemsAlwaysDraggable: {
@@ -65,7 +70,7 @@ const TimelineDesign = (props) => {
 				year: '',
 			},
 		},
-		zoomMax: time === '24' ? 1000 * 60 * 200 : 1000 * 60 * 200,
+		zoomMax: time === '24' ? 1000 * 60 * 550 : 1000 * 60 * 550,
 		zoomMin: time === '24' ? 1000 * 60 * 100 : 1000 * 60 * 100,
 		onMove: (item) => handleMove(item),
 		min: new Date().setHours(new Date().getHours() - 3),
@@ -73,8 +78,11 @@ const TimelineDesign = (props) => {
 			time === '12'
 				? new Date().setHours(new Date().getHours() + 12)
 				: new Date().setHours(new Date().getHours() + 24),
-		rollingMode: { offset: 0.2, follow: true },
+		// rollingMode: showCurrentTime ? { offset: 0.2, follow: true } : null,
 	};
+	if (showCurrentTime) {
+		options.rollingMode = { offset: 0.2, follow: true };
+	}
 
 	return (
 		<>

@@ -54,7 +54,7 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 						fileList,
 						disabled: isReadOnly,
 						setFileList,
-						required: true,
+						required: !fileList?.length,
 						name: 'file',
 						label: 'Airport logo',
 						description: 'Please Provide high resolution logo'
