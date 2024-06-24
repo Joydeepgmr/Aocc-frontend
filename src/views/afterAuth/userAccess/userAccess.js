@@ -55,6 +55,11 @@ const UserAccess = () => {
 			label: 'Daily Ops',
 			value: 'daily Ops',
 		},
+		{
+			id: '3',
+			label: 'CDM Ops',
+			value: 'Cdm',
+		},
 	];
 	const getVendorAccessHandler = {
 		tab,

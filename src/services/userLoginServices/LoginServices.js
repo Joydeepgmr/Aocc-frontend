@@ -1,5 +1,5 @@
 import { useMutation, useQueries, useQuery } from 'react-query';
-import { GET_ADMIN_DETAILS, GET_WEATHER_DETAILS, USER_LOGIN } from '../../api/endpoints';
+import { GET_ADMIN_DETAILS, GET_WEATHER_DETAILS, POST_RESET_PASSWORD, USER_LOGIN } from '../../api/endpoints';
 
 import { Get, Post } from '../HttpServices/HttpServices';
 
@@ -29,6 +29,15 @@ export const useGetWeatherDetails = (props) => {
     const response = useMutation({
         mutationKey: ['get-weather-detail'],
         mutationFn: () => Get(GET_WEATHER_DETAILS),
+        ...props
+    })
+    return { ...response }
+}
+
+export const usePostResetPassword = (props) => {
+    const response = useMutation({
+        mutationKey: ['reset-password'],
+        mutationFn: (data) => Post(POST_RESET_PASSWORD, data),
         ...props
     })
     return { ...response }

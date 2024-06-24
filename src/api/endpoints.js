@@ -13,6 +13,7 @@ export const USER_LOGIN = '/user/login';
 /*--------------Admin details -----------*/
 export const GET_ADMIN_DETAILS = '/user/userinfo';
 export const GET_WEATHER_DETAILS = '/airport/weather';
+export const POST_RESET_PASSWORD = '/user/reset-password'
 
 /*------------- IT admin airport Master --------------*/
 export const POST_LICENSE = '/airport-license';

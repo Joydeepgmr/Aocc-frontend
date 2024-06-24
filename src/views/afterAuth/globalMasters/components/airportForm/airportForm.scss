@@ -3,7 +3,7 @@
 @import '../../../../../styles/sass/utils';
 
 .airport_setup_form_container {
-	padding: 0rem 0rem 2.4rem 0rem;
+	padding: 0rem 0rem 0rem 0rem;
 	box-sizing: content-box;
 	display: flex;
 	flex-direction: column;
@@ -12,6 +12,7 @@
 	.airport_setup_form_inputfields {
 		display: flex;
 		flex-wrap: wrap;
+		align-content: center;
 		gap: 2.4rem;
 		.input_form_item {
 			&.custom_input {
@@ -22,7 +23,8 @@
 			width: calc(24% - 2.4rem);
 		}
 		.custom_date {
-			width: calc(24% - 2.4rem);
+			margin-top: 2rem;
+			width: calc(33% - 2.4rem);
 		}
 	}
 }

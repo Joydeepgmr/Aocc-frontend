@@ -25,6 +25,7 @@ import SocketEventListener from '../../../../socket/listner/socketListner';
 import MilestoneChart from './MilestoneChart';
 import VendorMileStone from './VendorMileStone';
 import './style.scss';
+import { ConvertToDateTime } from '../../../../utils';
 const FlightSchedule = () => {
 	const divRef = useRef(null);
 	const [tab, setTab] = useState('arrival');
@@ -226,6 +227,13 @@ const FlightSchedule = () => {
 				render: (text) => text ?? '-',
 			},
 			{
+				title: 'DATE',
+				dataIndex: 'date',
+				key: 'date',
+				align: 'center',
+				render: (date) => date && ConvertToDateTime(date),
+			},
+			{
 				title: tab == 'arrival' ? 'STA' : 'STD',
 				dataIndex: tab == 'arrival' ? 'sta' : 'std',
 				key: tab == 'arrival' ? 'sta' : 'std',
@@ -282,28 +290,40 @@ const FlightSchedule = () => {
 				},
 				render: (text) => text ?? '-',
 			},
-			{
-				title: 'POS',
-				dataIndex: 'parkingStandId',
-				key: 'parkingStandId',
-				align: 'center',
-				editable: writeAccess && {
-					type: 'select',
-					dropdownData: posDropdownData,
-				},
-				render: (_, record) => record?.parkingStandName ?? '-',
-			},
-			{
-				title: 'GAT',
-				dataIndex: 'gateId',
-				key: 'gateId',
-				align: 'center',
-				editable: writeAccess && {
-					type: 'select',
-					dropdownData: gateDropdownData,
-				},
-				render: (_, record) => record?.gateName ?? '-',
-			},
+			tab === 'arrival'
+				? {
+						title: 'POS',
+						dataIndex: 'parkingStandId',
+						key: 'parkingStandId',
+						align: 'center',
+						editable: writeAccess && {
+							type: 'select',
+							dropdownData: posDropdownData,
+						},
+						render: (_, record) => record?.parkingStandName ?? '-',
+					}
+				: {
+						title: 'GAT',
+						dataIndex: 'gateId',
+						key: 'gateId',
+						align: 'center',
+						editable: writeAccess && {
+							type: 'select',
+							dropdownData: gateDropdownData,
+						},
+						render: (_, record) => record?.gateName ?? '-',
+					},
+			// {
+			// 	title: 'GAT',
+			// 	dataIndex: 'gateId',
+			// 	key: 'gateId',
+			// 	align: 'center',
+			// 	editable: writeAccess && {
+			// 		type: 'select',
+			// 		dropdownData: gateDropdownData,
+			// 	},
+			// 	render: (_, record) => record?.gateName ?? '-',
+			// },
 			tab === 'arrival'
 				? {
 						title: 'BLT',
@@ -327,17 +347,17 @@ const FlightSchedule = () => {
 						},
 						render: (_, record) => record?.checkInCounterName ?? '-',
 					},
-			{
-				title: 'RWY',
-				dataIndex: 'runwayId',
-				key: 'runwayId',
-				align: 'center',
-				editable: writeAccess && {
-					type: 'select',
-					dropdownData: runwayDropdownData,
-				},
-				render: (_, record) => record?.runwayName ?? '-',
-			},
+			// {
+			// 	title: 'RWY',
+			// 	dataIndex: 'runwayId',
+			// 	key: 'runwayId',
+			// 	align: 'center',
+			// 	editable: writeAccess && {
+			// 		type: 'select',
+			// 		dropdownData: runwayDropdownData,
+			// 	},
+			// 	render: (_, record) => record?.runwayName ?? '-',
+			// },
 			{
 				title: 'REM',
 				dataIndex: 'remarks',

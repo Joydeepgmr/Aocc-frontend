@@ -24,11 +24,24 @@ export const Login = () => {
 			localStorage.setItem('name', data?.roleName);
 			localStorage.setItem('email', data?.email);
 			data?.airportImage && localStorage.setItem('logo', data?.airportImage);
-			localStorage.setItem('dailyOpsAccess', true);
-			localStorage.setItem('plannerAccess', true);
-			localStorage.setItem('cdmAccess', true);
-			localStorage.setItem('masterAccess', true);
-			localStorage.setItem('subUserAccess', true);
+			if (data?.permission) {
+				if (data?.permission?.DAILY_OPS_MGMNT?.CREATE) {
+					localStorage.setItem('dailyOpsAccess', true);
+				}
+				if (data?.permission?.CDM_MGMNT?.CREATE) {
+					localStorage.setItem('cdmAccess', true);
+				}
+				if (data?.permission?.PLANNING_MGMNT?.CREATE) {
+					localStorage.setItem('masterAccess', true);
+					localStorage.setItem('plannerAccess', true);
+					localStorage.setItem('subUserAccess', true);
+				}
+			}
+			// localStorage.setItem('dailyOpsAccess', true);
+			// localStorage.setItem('plannerAccess', true);
+			// localStorage.setItem('cdmAccess', true);
+			// localStorage.setItem('masterAccess', true);
+			// localStorage.setItem('subUserAccess', true);
 
 			roleRedirectFlow(data.roleName);
 		},
@@ -51,6 +64,9 @@ export const Login = () => {
 				break;
 			case userType.PLANNER:
 				navigate(Pathname.PLANAIRPORTMASTER);
+				break;
+			case userType.DAILY_OPS:
+				navigate(Pathname.DASHBOARD)
 				break;
 			case userType.VENDOR:
 				navigate(Pathname.VENDOR);
