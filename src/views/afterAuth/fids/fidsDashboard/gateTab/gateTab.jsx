@@ -9,6 +9,7 @@ import PageLoader from '../../../../../components/pageLoader/pageLoader';
 import TableComponent from '../../../../../components/table/table';
 import { useGetFidsDashboard, usePublishScreen, useUpdateFidsStatus } from '../../../../../services/fids/fidsResources';
 import FidsPreview from '../fidsPreview';
+import { isAfterNow, isBeforeNow } from '../utills';
 
 const GateTab = ({ airlineLogo }) => {
 	const queryClient = useQueryClient();
@@ -42,6 +43,11 @@ const GateTab = ({ airlineLogo }) => {
 	);
 	const { mutate: updateFidsStatus, isLoading: isFidsStatusLoading } = useUpdateFidsStatus(updateFidsStatusApiProps);
 	const handlePublish = async () => {
+		if (isBeforeNow(statusModal?.record?.end_time) || isAfterNow(statusModal?.record?.start_time)) {
+			toast.dismiss();
+			toast.error('you are not allowed to update screen status before/after the allocated time');
+			return;
+		}
 		if (statusModal?.record?.terminal_status === previousStatus[0]) {
 			try {
 				const params = {
@@ -172,7 +178,7 @@ const GateTab = ({ airlineLogo }) => {
 				isModalOpen={statusModal?.isOpen}
 				closeModal={closeStatusModal}
 				title={`${statusModal?.record?.screen_name}`}
-				width="32vw"
+				width="45vw"
 			>
 				<Form form={form} onFinish={handlePublish} layout="vertical" style={{ marginTop: '1rem' }}>
 					<FidsPreview

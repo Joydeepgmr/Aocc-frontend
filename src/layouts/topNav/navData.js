@@ -18,7 +18,7 @@ export const roleBasedNav = (role = 'Planner') => {
 				children: Pathname.AIRPORTMASTERS,
 			},
 		];
-	} else if (role === userType.PLANNER) {
+	} else if (role === userType.PLANNER || role === userType.DAILY_OPS || role === userType.CDM) {
 		navItems = [
 			{
 				key: '0',
@@ -52,6 +52,14 @@ export const roleBasedNav = (role = 'Planner') => {
 				key: '0',
 				label: 'CDM',
 				children: Pathname.CDM,
+			},
+		];
+	} else if (role === userType.DAILY_OPS) {
+		navItems = [
+			{
+				key: '0',
+				label: 'Daily Ops',
+				children: Pathname.DASHBOARD,
 			},
 		];
 	} else if (role === userType.SECURITY_OFFICER) {

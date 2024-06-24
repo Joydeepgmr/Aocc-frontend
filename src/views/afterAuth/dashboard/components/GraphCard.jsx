@@ -35,7 +35,7 @@ const DonutChart = ({ cardTitle, chartData }) => {
 		colors: ['#ff682d', '#196cfd'],
 	};
 
-	const series = [1, 34] ?? chartData?.data;
+	const series = chartData?.data ?? [];
 
 	return (
 		<Card className="progress-card">

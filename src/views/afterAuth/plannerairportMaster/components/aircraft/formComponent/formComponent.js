@@ -53,7 +53,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 		},
 	};
 	const { isLoading: isSyncedDataLoading } = useGetAircraftSyncData(
-		watchRegistration?.length === 5 ? watchRegistration : '',
+		watchRegistration?.length === 5 && !isReadOnly && !isNotEditable ? watchRegistration : '',
 		getAircraftSyncedData
 	);
 	const onFinishHandler = (value) => {

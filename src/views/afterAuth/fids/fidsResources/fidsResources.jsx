@@ -186,7 +186,9 @@ const FidsResources = () => {
 			dataIndex: 'resourceType',
 			key: 'resourceType',
 			align: 'center',
-			render: (resourceType) => resourceType ?? '-',
+			render: (resourceType) => (
+				<div style={{ textTransform: 'capitalize' }}>{resourceType?.replace('_', ' ') ?? '-'}</div>
+			),
 		},
 		{
 			title: 'RES',

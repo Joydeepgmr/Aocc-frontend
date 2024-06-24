@@ -102,6 +102,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 			abbreviatedName4: data?.abbreviatedName4,
 			airportType: data?.airportType,
 			country: data?.country,
+			city: data?.city,
 			standardFlightTime: data?.standardFlightTime,
 			timeChange: data?.timeChange,
 			latitude: data?.latitude,
@@ -250,7 +251,7 @@ const AirportTable = ({ createProps, setCreateProps, pagination, data, fetchData
 					<AirportForm fileList={fileList} setFileList={setFileList} form={form} isReadOnly={airportModal.type === 'view'} type={airportModal.type} />
 					{airportModal.type !== 'view' && (
 						<>
-							<div className="custom_buttons">
+							<div className="custom_button_airport">
 								<ButtonComponent
 									title="Cancel"
 									type="filledText"

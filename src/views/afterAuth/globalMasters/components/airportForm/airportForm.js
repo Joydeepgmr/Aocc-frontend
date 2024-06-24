@@ -116,6 +116,16 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					className="custom_input"
 					disabled={isReadOnly}
 				/>
+				<InputField
+					label="City"
+					name="city"
+					pattern='^(?!\s).*$'
+					placeholder={!isReadOnly && "Enter the City"}
+					className="custom_input"
+					max={32}
+					required
+					disabled={isReadOnly}
+				/>
 				<CustomSelect
 					SelectData={SelectedTimeZone}
 					placeholder={!isReadOnly && "Enter the time change"}
@@ -124,6 +134,8 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					disabled={isReadOnly}
 					required
 				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Standard Flight Time"
 					name="standardFlightTime"
@@ -134,8 +146,6 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					disabled={isReadOnly}
 					type='number'
 				/>
-			</div>
-			<div className="airport_setup_form_inputfields">
 				<InputField
 					label="Latitude"
 					name="latitude"
@@ -158,6 +168,8 @@ const AirportForm = ({ isReadOnly, type, fileList, setFileList }) => {
 					disabled={isReadOnly}
 					required
 				/>
+			</div>
+			<div className="airport_setup_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && "Select valid from date"}

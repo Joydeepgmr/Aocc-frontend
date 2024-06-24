@@ -8,6 +8,7 @@ import setting from '../../assets/logo/setting.svg';
 import windLogo from '../../assets/logo/wind.svg';
 import temperatureLogo from '../../assets/logo/sun.svg';
 import CustomTypography from '../../components/typographyComponent/typographyComponent';
+import toast from 'react-hot-toast';
 import { localStorageKey } from '../../keys';
 import { Pathname } from '../../pathname';
 import * as userType from '../../utils/roles';
@@ -16,6 +17,7 @@ import { roleBasedNav } from './navData';
 import './topNav.scss';
 import Modal from '../../components/modal/modal';
 import InputField from '../../components/input/field/field';
+import { usePostResetPassword } from '../../services/userLoginServices/LoginServices';
 import { Form } from 'antd';
 import ButtonComponent from '../../components/button/button';
 
@@ -29,7 +31,7 @@ const TopNav = ({ data, weatherData }) => {
 	const { pathname } = useLocation();
 	const [resetForm] = Form.useForm();
 	const writeAccess = !!localStorage.getItem('subUserAccess');
-
+	const { mutate: postResetPassword } = usePostResetPassword();
 	const handleTabClick = (key) => {
 		navigate(navItems[key].children);
 	};
@@ -50,6 +52,19 @@ const TopNav = ({ data, weatherData }) => {
 		localStorage.clear();
 		navigate(Pathname.LOGIN);
 	};
+	const handleResetPassword = (values) => {
+		toast.dismiss();
+		if (values.oldPassword === values.newPassword) {
+			toast.error('New password cannot be same as old password');
+			return;
+		}
+		if (values.newPassword !== values.confirmPassword) {
+			toast.error('Password does not matched');
+			return;
+		}
+		delete values.confirmPassword;
+		postResetPassword(values);
+	}
 
 	const manageAccessHandler = () => {
 		setIsSettingCardOpen(!isSettingCardOpen);
@@ -77,7 +92,7 @@ const TopNav = ({ data, weatherData }) => {
 	return (
 		<>
 			<Modal width='30vw' isModalOpen={restedModal} closeModal={handleResetModalClose} title='Reset Password'>
-				<Form layout='vertical' form={resetForm}>
+				<Form layout='vertical' form={resetForm} onFinish={handleResetPassword}>
 					<InputField
 						label='Old Password'
 						name="oldPassword"
@@ -117,7 +132,7 @@ const TopNav = ({ data, weatherData }) => {
 								title="Reset"
 								type="filledText"
 								className="custom_button_save"
-								isSubmit={true}
+								isSubmit
 							/>
 						</div>
 					</div>

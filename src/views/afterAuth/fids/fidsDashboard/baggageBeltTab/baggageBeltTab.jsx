@@ -10,6 +10,7 @@ import { useGetFidsDashboard, usePublishScreen, useUpdateFidsStatus } from '../.
 import FidsPreview from '../fidsPreview';
 import BeltFids from '../beltPreview';
 import { useQueryClient } from 'react-query';
+import { isAfterNow, isBeforeNow } from '../utills';
 
 const BaggageBeltTab = ({ airlineLogo }) => {
 	const queryClient = useQueryClient();
@@ -39,6 +40,11 @@ const BaggageBeltTab = ({ airlineLogo }) => {
 	const { isLoading: isDashboardScreenLoading, isRefetching } = useGetFidsDashboard('belt', DashboardScreenApiProps);
 	const { mutate: updateFidsStatus, isLoading: isFidsStatusLoading } = useUpdateFidsStatus(updateFidsStatusApiProps);
 	const handlePublish = async () => {
+		if (isBeforeNow(statusModal?.record?.end_time) || isAfterNow(statusModal?.record?.start_time)) {
+			toast.dismiss();
+			toast.error('you are not allowed to update screen status before/after the allocated time');
+			return;
+		}
 		if (!statusModal?.record?.terminal_status) {
 			try {
 				const params = {
@@ -160,7 +166,11 @@ const BaggageBeltTab = ({ airlineLogo }) => {
 						origin={'1234'}
 						// origin={statusModal?.record?.sector}
 						airlineLogo={airlineLogo}
-						status={statusModal?.record?.terminal_status}
+						status={
+							statusModal?.record?.terminal_status === beltStatusOptions[0]
+								? beltStatusOptions[1]
+								: beltStatusOptions[0]
+						}
 					/>
 					<div className="form_bottomButton">
 						<ButtonComponent

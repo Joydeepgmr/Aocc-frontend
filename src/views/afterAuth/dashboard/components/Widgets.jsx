@@ -28,7 +28,6 @@ const Widgets = () => {
 	};
 	const { data } = useGetDashboardData(dashboardApiProps);
 	const { data: onTimeData } = useGetOnTimeData(onTimeApiProps);
-	console.log('on time data is ', data);
 	const SelectFormat = [
 		{
 			label: 'Monthly',
@@ -72,7 +71,7 @@ const Widgets = () => {
 				<GraphCard cardTitle="Number of flights on Ground" chartData={chartData?.onGround} />
 				<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
 				<GraphCard cardTitle="Runway Utilization" chartData={chartData?.runway} />
-				<GraphCard cardTitle="CO2 Emission" />
+				<GraphCard cardTitle="CO2 Emission" chartData={{ ...chartData?.runway, data: [0, 0] }} />
 			</div>
 		</div>
 	);
