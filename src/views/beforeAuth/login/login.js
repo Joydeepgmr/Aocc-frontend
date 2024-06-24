@@ -32,6 +32,8 @@ export const Login = () => {
 					localStorage.setItem('cdmAccess', true);
 				}
 				if (data?.permission?.PLANNING_MGMNT?.CREATE) {
+					localStorage.setItem('dailyOpsAccess', true);
+					localStorage.setItem('cdmAccess', true);
 					localStorage.setItem('masterAccess', true);
 					localStorage.setItem('plannerAccess', true);
 					localStorage.setItem('subUserAccess', true);
