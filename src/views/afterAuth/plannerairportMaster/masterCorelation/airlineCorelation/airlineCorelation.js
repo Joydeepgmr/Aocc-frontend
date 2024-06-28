@@ -4,6 +4,7 @@ import TableComponent from '../../../../../components/table/table';
 import { useGetAirlinesCorelation, useUpdateAirlineCorelation } from '../../../../../services/planairportmaster/mastercorelation/mastercorelation';
 import toast from 'react-hot-toast';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
+
 const ResourceCorelation = () => {
 	const [airlineData, setAirlineData] = useState([]);
 	const writeAccess = !!localStorage.getItem('masterAccess');
