@@ -205,7 +205,7 @@ const FidsResources = () => {
 			render: (status) => status ?? '-',
 		},
 		{
-			title: 'MAC',
+			title: 'SCRN CODE',
 			dataIndex: 'MacAddress',
 			key: 'MacAddress',
 			align: 'center',

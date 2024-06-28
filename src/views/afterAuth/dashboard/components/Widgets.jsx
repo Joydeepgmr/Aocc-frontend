@@ -57,14 +57,14 @@ const Widgets = () => {
 	};
 	return (
 		<div>
-			<Form form={form}>
+			{/* <Form form={form}>
 				<CustomSelect
 					SelectData={SelectFormat}
 					placeholder="Select Format"
 					onChange={handleFormatValueChange}
 					value={formatValue}
 				/>
-			</Form>
+			</Form> */}
 			<div className="widgets-containers">
 				<ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
 				<GraphCard cardTitle="Air Traffic Movement" chartData={chartData?.airTraffic} />

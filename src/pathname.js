@@ -1,5 +1,5 @@
 export let Pathname = {
-	LOGIN: '/login',
+	LOGIN: '/',
 	NAVBAR: '/nav',
 	USERACCESS: '/user-access',
 	GLOBALMASTERS: '/global-masters',

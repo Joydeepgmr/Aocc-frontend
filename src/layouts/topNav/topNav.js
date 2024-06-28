@@ -31,7 +31,18 @@ const TopNav = ({ data, weatherData }) => {
 	const { pathname } = useLocation();
 	const [resetForm] = Form.useForm();
 	const writeAccess = !!localStorage.getItem('subUserAccess');
-	const { mutate: postResetPassword } = usePostResetPassword();
+
+	const resetPassApiProps = {
+		onSuccess: () => {
+			toast.success('Password is changed successfully');
+			handleResetModalClose();
+		},
+		onError: (error) => {
+			toast.dismiss();
+			toast.error(error?.response?.data?.message);
+		}
+	}
+	const { mutate: postResetPassword } = usePostResetPassword(resetPassApiProps);
 	const handleTabClick = (key) => {
 		navigate(navItems[key].children);
 	};

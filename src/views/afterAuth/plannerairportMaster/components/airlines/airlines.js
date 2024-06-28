@@ -4,13 +4,9 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { GET_PLANNER_AIRLINE } from '../../../../../api';
-import Delete from '../../../../../assets/Delete.svg';
-import Edit from '../../../../../assets/Edit.svg';
-import ButtonComponent from '../../../../../components/button/button';
 import ConfirmationModal from '../../../../../components/confirmationModal/confirmationModal';
 import ModalComponent from '../../../../../components/modal/modal';
 import PageLoader from '../../../../../components/pageLoader/pageLoader';
-import CustomTypography from '../../../../../components/typographyComponent/typographyComponent';
 import UploadCsvModal from '../../../../../components/uploadCsvModal/uploadCsvModal';
 import {
 	useDeletePlannerAirline,

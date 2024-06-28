@@ -95,7 +95,7 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			dataIndex: 'isMatched',
 			key: 'isMatched',
 			align: 'center',
-			render: (isMatched) => isMatched ? 'Matched' : 'Not Matched'
+			render: (_, record) => record?.customerDocuments[0]?.isMatched ? 'Matched' : 'Not Matched'
 		},
 		{
 			title: 'DOCUMENT ID',

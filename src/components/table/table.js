@@ -1,4 +1,4 @@
-import { Empty, Form, Input, Select, Table, TimePicker } from 'antd';
+import { Empty, Form, Input, InputNumber, Select, Table, TimePicker } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -118,7 +118,9 @@ const TableComponent = ({
 								onBlur={toggleEdit}
 							/>
 						) : (
-							<Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+							inputType === 'number' ?
+								<InputNumber ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+								: <Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
 						)}
 					</Form.Item>
 				)
@@ -198,6 +200,7 @@ const TableComponent = ({
 					locale={{
 						emptyText: <Empty description={emptyText} />,
 					}}
+					className={`${'color_table'}`}
 					pagination={false}
 					components={components}
 					{...rest}

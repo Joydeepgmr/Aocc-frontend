@@ -172,10 +172,10 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						required
 					/>
 					<InputField
-						label="IP address"
+						label="Screen Code"
 						name="MacAddress"
 						max={32}
-						placeholder={!isReadOnly && 'IP address'}
+						placeholder={!isReadOnly && 'Screen Code'}
 						className="custom_input"
 						disabled={isReadOnly}
 						required={true}
@@ -220,6 +220,7 @@ const FidsFormComponent = ({ isReadOnly, type, closeModal, initialValue, handleS
 						name="unavailableTo"
 						format="MM-DD-YYYY"
 						className="custom_date"
+						disabled={isReadOnly}
 					/>
 					<InputField
 						label="Reason"
