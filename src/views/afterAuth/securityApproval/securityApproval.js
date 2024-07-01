@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import CustomTypography from '../../../components/typographyComponent/typographyComponent';
 import CustomTabs from '../../../components/customTabs/customTabs';
+import CustomTypography from '../../../components/typographyComponent/typographyComponent';
+import { useGetUser } from '../../../services/securityApproval/securityApproval';
+import Approved from './approved/approved';
 import Pending from './pending/pending';
 import Rejected from './rejected/rejected';
-import Approved from './approved/approved';
-import { useGetUser } from '../../../services/securityApproval/securityApproval';
 import './securityApproval.scss';
-import Input from '../../../components/input/field/field';
 
 const SecurityApproval = () => {
 	const [userData, setUserData] = useState([]);
@@ -36,6 +35,7 @@ const SecurityApproval = () => {
 		isLoading: isFetchLoading,
 		hasNextPage,
 		fetchNextPage,
+		refetch
 	} = useGetUser(tab, getUserHandler);
 
 	const approvalTabItems = [
@@ -82,6 +82,12 @@ const SecurityApproval = () => {
 		key === '2' && setTab('approved');
 		key === '3' && setTab('rejected');
 	};
+
+	useEffect(() => {
+		setInterval(() => {
+			refetch();
+		}, 200000)
+	}, [])
 
 	return (
 		<div className="tabs--box">
