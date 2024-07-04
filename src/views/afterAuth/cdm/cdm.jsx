@@ -804,6 +804,7 @@ const CDM = () => {
 									placeholder={'Select Format'}
 									onChange={handleTimeValueChange}
 									value={selectedTimeValue}
+									allowClear={false}
 								/>
 							</div>
 						}

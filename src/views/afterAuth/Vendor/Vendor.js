@@ -127,7 +127,7 @@ const Vendor = () => {
 			}
 		}, 300);
 		return () => clearTimeout(debounceTimer);
-	}, [watchFlightNo]);
+	}, [watchFlightNo, fetchVendor]);
 	return (
 		<div className="vendor--container">
 			<div className='vendor--header'>

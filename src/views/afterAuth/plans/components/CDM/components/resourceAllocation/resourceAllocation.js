@@ -100,13 +100,21 @@ const ResourceAllocation = ({ conflictType }) => {
 	};
 
 	const handleResourceMove = (data) => {
+		const time = dayjs(data.start).format('YYYY-MM-DD HH:mm:ss');
+		const currentTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
 		const item = {
 			type: tabValue,
-			time: dayjs(data.start).format('YYYY-MM-DD HH:mm:ss'),
+			time,
 			mainSlotId: data?.id,
 			resourceId: data?.group,
 		};
-		updateResource(item);
+		if (time < currentTime) {
+			toast.dismiss();
+			toast.error('The resource cannot be allocated before the current time.');
+			queryClient.invalidateQueries('get-all-timeline-data');
+		} else {
+			updateResource(item);
+		}
 	};
 
 	const timelineLabel = [
@@ -393,6 +401,7 @@ const ResourceAllocation = ({ conflictType }) => {
 						}
 						<CustomSelect
 							SelectData={SelectTime}
+							allowClear={false}
 							placeholder={'Select Format'}
 							onChange={handleTimeValueChange}
 							value={selectedTimeValue}

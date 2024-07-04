@@ -13,7 +13,7 @@ const Widgets = () => {
 	const dashboardApiProps = {
 		duration: formatValue,
 		onSuccess: ({ data }) => {
-			const label = ['International', 'Domestic'];
+			const label = ['Domestic', 'International'];
 			const onGround = { data: [], label };
 			onGround.data = data?.onGroundStats?.reduce((acc, { count }) => [...acc, +count], []);
 			const runway = { data: [], label };

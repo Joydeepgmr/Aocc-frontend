@@ -10,6 +10,7 @@ const CustomSelect = ({
 	className,
 	name,
 	disabled,
+	allowClear = true,
 	onChange,
 	multiple,
 	defaultValue,
@@ -52,7 +53,7 @@ const CustomSelect = ({
 					mode={multiple && 'multiple'}
 					showSearch
 					className="select_wrapper"
-					allowClear
+					allowClear={allowClear}
 					disabled={disabled}
 					placeholder={placeholder}
 					onChange={handleSelectChange}

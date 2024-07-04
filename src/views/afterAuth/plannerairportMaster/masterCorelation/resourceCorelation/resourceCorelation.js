@@ -162,7 +162,7 @@ const ResourceCorelation = ({ type }) => {
 			},
 		},
 		{
-			title: 'Weight',
+			title: 'Priority',
 			dataIndex: 'weight',
 			key: 'ata',
 			align: 'center',
@@ -218,7 +218,7 @@ const ResourceCorelation = ({ type }) => {
 			},
 		},
 		{
-			title: 'Weight',
+			title: 'Priority',
 			dataIndex: 'weight',
 			key: 'ata',
 			align: 'center',
