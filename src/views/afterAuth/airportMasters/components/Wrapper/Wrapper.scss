@@ -38,8 +38,6 @@
 .custom_buttons {
 	@include flex(center, end, row);
 	gap: 2rem;
-	margin-top: 2.4rem;
-	margin-bottom: 1.4rem;
 }
 
 .button{

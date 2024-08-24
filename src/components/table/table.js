@@ -1,4 +1,4 @@
-import { Empty, Form, Input, InputNumber, Select, Table, TimePicker } from 'antd';
+import { Empty, Form, Input, InputNumber, Select, Table, TimePicker, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -44,6 +44,7 @@ const TableComponent = ({
 	};
 	const EditableCell = ({ title, editable, children, dataIndex, record, handleSave, ...restProps }) => {
 		const [editing, setEditing] = useState(false);
+		const [multiSelectValues, setMultiSelectValues] = useState([]);
 		const inputRef = useRef();
 		const form = useContext(EditableContext);
 		useEffect(() => {
@@ -52,10 +53,25 @@ const TableComponent = ({
 			}
 		}, [editing]);
 		const toggleEdit = () => {
+			console.log('editable type is ', editable)
+			if (editable.type === 'multi-select') {
+				if (editing) {
+					setEditing(false);
+					save();
+				}
+			}
 			setEditing(!editing);
-			form.setFieldsValue({
-				[dataIndex]: record[dataIndex],
-			});
+			if (editable.type === 'multi-select') {
+				const selectedValues = record[dataIndex].reduce((acc, data) => [...acc, data?.[editable.selectedValue]], []);
+				setMultiSelectValues(selectedValues);
+				form.setFieldsValue({
+					[editable.selectedValue]: selectedValues,
+				});
+			} else {
+				form.setFieldsValue({
+					[dataIndex]: record[dataIndex],
+				});
+			}
 		};
 		const handleTimeChange = (name, value) => {
 			if (value) {
@@ -70,15 +86,26 @@ const TableComponent = ({
 		const save = async () => {
 			try {
 				const values = await form.validateFields();
-				toggleEdit();
-				handleSave({
-					...record,
-					values,
-				});
+				if (editable.type !== 'multi-select') {
+					handleSave({
+						...record,
+						values,
+					});
+					toggleEdit();
+				} else {
+					handleSave({
+						...record,
+						values: { [editable.selectedValue]: multiSelectValues }
+					});
+				}	
 			} catch (errInfo) {
 				console.log('Save failed:', errInfo);
 			}
 		};
+		let tooltipText = ''
+		if (record?.[dataIndex] && editable.type === 'multi-select') {
+			tooltipText = record[dataIndex].reduce((acc, data) => [...acc, data?.[editable.selectedName]], [])?.join(', ');
+		}
 		let childNode = children;
 		if (editable) {
 			const inputType = editable.type || 'text';
@@ -104,7 +131,7 @@ const TableComponent = ({
 								message: 'First character cannot be blank.',
 							},
 						]}
-						name={dataIndex}
+						name={inputType === 'multi-select' ? editable.selectedValue : dataIndex}
 					>
 						{inputType === 'select' ? (
 							<Select
@@ -117,17 +144,38 @@ const TableComponent = ({
 								placeholder="Select a value"
 								onBlur={toggleEdit}
 							/>
-						) : (
-							inputType === 'number' ?
-								<InputNumber ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
-								: <Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
-						)}
-					</Form.Item>
+						) : inputType === 'multi-select' ?
+							<Select
+								options={editable?.dropdownData ?? []}
+								ref={inputRef}
+								style={{ width: '15rem' }}
+								autoFocus={true}
+								onPressEnter={save}
+								onChange={(values) => setMultiSelectValues(values)}
+								placeholder="Select a value"
+								onBlur={toggleEdit}
+								mode='multiple'
+							/> : (
+								inputType === 'number' ?
+									<InputNumber ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+									: <Input ref={inputRef} onPressEnter={save} onBlur={toggleEdit} />
+							)
+						}
+					</Form.Item >
 				)
 			) : (
-				<div className="editable-cell-value-wrap" onClick={toggleEdit}>
-					{children}
-				</div>
+				<>
+					{editable.type !== 'multi-select' ?
+						<div className="editable-cell-value-wrap" onClick={toggleEdit}>
+							{children}
+						</div> :
+						<Tooltip placement="topLeft" title={tooltipText}>
+							<div className="editable-cell-value-wrap" onClick={toggleEdit}>
+								{children}
+							</div>
+						</Tooltip>
+					}
+				</>
 			);
 		}
 		return <td {...restProps}>{childNode}</td>;

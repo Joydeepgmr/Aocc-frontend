@@ -44,7 +44,7 @@ const ResourceCorelation = ({ type }) => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div  onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'GRP',
@@ -109,7 +109,7 @@ const ResourceCorelation = ({ type }) => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div  onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		// {
 		// 	title: 'AIRPORT',
@@ -179,7 +179,7 @@ const ResourceCorelation = ({ type }) => {
 			dataIndex: 'name',
 			key: 'name',
 			align: 'center',
-			render: (text, record) => <div style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
+			render: (text, record) => <div  onClick={() => handleDetailModalOpen(record)}>{text ?? '-'}</div>,
 		},
 		{
 			title: 'TERM',

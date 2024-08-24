@@ -327,25 +327,51 @@ const FlightSchedule = () => {
 			tab === 'arrival'
 				? {
 						title: 'BLT',
-						dataIndex: 'baggageBeltId',
-						key: 'baggageBeltId',
+						dataIndex: 'baggageBelts',
+						key: 'baggageBelts',
 						align: 'center',
 						editable: writeAccess && {
-							type: 'select',
+							type: 'multi-select',
+							selectedValue: 'baggageBeltId',
+							selectedName: 'baggageBeltName',
 							dropdownData: beltDropdownData,
 						},
-						render: (_, record) => record?.baggageBeltName ?? '-',
+						render: (_, record) => {
+							const beltData = record?.baggageBelts?.reduce(
+								(acc, { baggageBeltName }) => [...acc, baggageBeltName],
+								[]
+							);
+							const textToShow = beltData?.length
+								? beltData?.length > 1
+									? `${beltData[0]}, +${beltData.length - 1}`
+									: beltData[0]
+								: '-';
+							return textToShow;
+						},
 					}
 				: {
 						title: 'CIN',
-						dataIndex: 'checkinCounterId',
-						key: 'checkinCounterId',
+						dataIndex: 'checkInCounters',
+						key: 'checkInCounters',
 						align: 'center',
 						editable: writeAccess && {
-							type: 'select',
+							type: 'multi-select',
+							selectedValue: 'checkInCounterId',
+							selectedName: 'checkInCounterName',
 							dropdownData: checkInDropdownData,
 						},
-						render: (_, record) => record?.checkInCounterName ?? '-',
+						render: (_, record) => {
+							const beltData = record?.checkInCounters?.reduce(
+								(acc, { checkInCounterName }) => [...acc, checkInCounterName],
+								[]
+							);
+							const textToShow = beltData?.length
+								? beltData?.length > 1
+									? `${beltData[0]}, +${beltData.length - 1}`
+									: beltData[0]
+								: '-';
+							return textToShow;
+						},
 					},
 			// {
 			// 	title: 'RWY',

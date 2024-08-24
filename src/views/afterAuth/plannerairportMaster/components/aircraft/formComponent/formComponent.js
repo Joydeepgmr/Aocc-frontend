@@ -270,6 +270,22 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							disabled={isReadOnly}
 						/>
 						<InputField
+							label="No. of Baggage-belt"
+							name="checkinCounterCount"
+							type='number'
+							placeholder={!isReadOnly && "No. of check-in counter"}
+							className="custom_input"
+							disabled={isReadOnly}
+						/>
+						<InputField
+							label="No. of Check-in Counter"
+							name="baggageBeltCount"
+							type='number'
+							placeholder={!isReadOnly && "No. of check-in counter"}
+							className="custom_input"
+							disabled={isReadOnly}
+						/>
+						<InputField
 							label="Main Deck"
 							name="mainDeck"
 							max={32}
@@ -285,6 +301,8 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
+					</div>
+					<div className="airport_form_inputfields">
 						<CustomSelect
 							SelectData={SelectCountryData}
 							label="Country"
@@ -293,48 +311,27 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 							className="custom_input"
 							disabled={isReadOnly}
 						/>
-						<InputField
-							label="Remarks"
-							max={32}
-							name="remark"
-							placeholder={!isReadOnly && 'Enter remarks'}
-							className="custom_input"
-							disabled={isReadOnly}
-						/>
-					</div>
-					<div className="airport_form_inputfields">
-						<InputField
-							label="Address"
-							max={32}
-							name="address"
-							placeholder={!isReadOnly && 'Enter the address'}
-							className="custom_input"
-							disabled={isReadOnly}
-						/>
+						<InputField label="Address" pattern='^(?!\s).*$' max={32} name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
+							disabled={isReadOnly} />
+						<InputField label="Remarks" pattern='^(?!\s).*$' max={32} name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
+							disabled={isReadOnly} />
 						<Date
 							label="Valid From"
-							placeholder={!isReadOnly && 'Select valid from date'}
+							placeholder={!isReadOnly && "Select valid from date"}
 							name="validFrom"
 							className="custom_date"
 							format="MM-DD-YYYY"
+							disabledFor='future'
 							required
 							disabled={isReadOnly || isNotEditable}
-							defaultValue={initialValue?.validFrom ? dayjs(initialValue?.validFrom) : undefined}
-							onChange={handleValidFrom}
 						/>
 						<Date
 							label="Valid To"
-							placeholder={!isReadOnly && 'Select valid to date'}
+							placeholder={!isReadOnly && "Select valid to date"}
 							name="validTill"
-							format="MM-DD-YYYY"
 							className="custom_date"
-							disabled={isReadOnly || isNotEditable}
-							defaultValue={initialValue?.validTill ? dayjs(initialValue?.validTill) : undefined}
-							isDisabledDate={true}
-							disabledDate={(current) => {
-								let prevDate = dayjs(currentValidFrom).format('YYYY-MM-DD');
-								return current && current < dayjs(prevDate, 'YYYY-MM-DD');
-							}}
+							format="MM-DD-YYYY"
+							disabled={isReadOnly}
 						/>
 					</div>
 				</div>

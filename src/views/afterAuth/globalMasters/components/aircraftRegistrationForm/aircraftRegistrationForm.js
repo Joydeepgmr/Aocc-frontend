@@ -237,10 +237,28 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 				/>
 			</div>
 			<div className="airport_registration_form_inputfields">
+				<InputField
+					label="No. of Baggage-belt"
+					name="checkinCounterCount"
+					type='number'
+					placeholder={!isReadOnly && "No. of check-in counter"}
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
+				<InputField
+					label="No. of Check-in Counter"
+					name="baggageBeltCount"
+					type='number'
+					placeholder={!isReadOnly && "No. of check-in counter"}
+					className="custom_input"
+					disabled={isReadOnly}
+				/>
 				<InputField label="Address" pattern='^(?!\s).*$' max={32} name="address" placeholder={!isReadOnly && "Enter the address"} className="custom_input"
 					disabled={isReadOnly} />
 				<InputField label="Remarks" pattern='^(?!\s).*$' max={32} name="remark" placeholder={!isReadOnly && "Enter remarks"} className="custom_input"
 					disabled={isReadOnly} />
+			</div>
+			<div className="airport_registration_form_inputfields">
 				<Date
 					label="Valid From"
 					placeholder={!isReadOnly && "Select valid from date"}
