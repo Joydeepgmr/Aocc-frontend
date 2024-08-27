@@ -22,7 +22,6 @@ export const airportMastersSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(addAirportLicenseAction.fulfilled, (state, action) => {
-            console.log(action);
             state.loading = false;
             state.error = '';
             state.airportLicenseData = action.payload;

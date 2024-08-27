@@ -134,7 +134,6 @@ const AircraftTable = ({ createProps, setCreateProps, data, pagination, fetchDat
 		const { data } = aircraftTypeModal;
 		setDockignSystemCheck(data?.isUsingDockingSystem);
 		if (data) {
-			console.log("data data is ", getFormValues(data));
 			const initialValuesObj = getFormValues(data);
 			initial.setFieldsValue(initialValuesObj);
 		}

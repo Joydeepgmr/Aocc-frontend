@@ -37,7 +37,6 @@ const PlannerAirportMaster = () => {
 		setIndex(key);
 	};
 	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
 	};
 
 	return (

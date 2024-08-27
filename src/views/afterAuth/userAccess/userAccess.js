@@ -68,7 +68,6 @@ const UserAccess = () => {
 	};
 
 	const handleGetVendorAccessSuccess = (data) => {
-		console.log('data is data', data)
 		if (data?.pages) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data ? page.data : page);
@@ -181,7 +180,6 @@ const UserAccess = () => {
 		}
 	}, [tab]);
 	const columns = useMemo(() => {
-		console.log('under column', userAccessData)
 		let column = [
 			{
 				title: 'User Name',
@@ -238,7 +236,6 @@ const UserAccess = () => {
 		}
 		return column;
 	}, [userAccessData])
-	console.log("columns are ", columns);
 	const openAddUserModal = (type) => {
 		setIsModalOpen({ isOpen: true, type });
 	};

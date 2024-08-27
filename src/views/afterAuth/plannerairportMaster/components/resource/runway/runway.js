@@ -137,7 +137,6 @@ const Runway = () => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-			console.log(file);
 			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');

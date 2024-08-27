@@ -28,7 +28,6 @@ const AircraftTypeForm = ({ isReadOnly, type, isCheck, setIsCheck, form }) => {
 		form.setFieldValue('isUsingDockingSystem', !isCheck);
 		setIsCheck(!isCheck);
 	};
-	console.log(" data is SelectedAirlineData", SelectedAirlineData)
 	const isNotEditable = type === 'edit';
 	return (
 		<div className="aircraft_type_form_container">

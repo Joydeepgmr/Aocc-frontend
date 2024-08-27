@@ -16,7 +16,6 @@ export const planSlice = createSlice({
 			state.loading = true;
 		});
 		builder.addCase(addArrivalAction.fulfilled, (state, action) => {
-			console.log(action);
 			state.loading = false;
 			state.error = '';
 			state.arrivalData = action.payload;

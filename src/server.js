@@ -13,13 +13,10 @@
 
 // 		if (isAuth) {
 // 			let token = localStorage.getItem('_tid');
-// 			console.log(token);
 // 			requestOptions.headers['Authorization'] = `Bearer ${token}`;
 // 			requestOptions.headers['x-auth-token'] = `Bearer ${token}`;
-// 			console.log('yesnext');
 // 		}
 // 		const response = await fetch(BASE_URL + url, requestOptions);
-// 		console.log(response);
 // 		return await response.json();
 // 	},
 
@@ -59,7 +56,6 @@
 // 		try {
 // 			jsonResponse = await response.json();
 // 		} catch (e) {
-// 			console.log('unable to parse as json', e);
 // 		}
 // 		return jsonResponse;
 // 		// } else {
@@ -90,7 +86,6 @@
 // 		try {
 // 			jsonResponse = await response.json();
 // 		} catch (e) {
-// 			console.log('unable to parse as json', e);
 // 		}
 // 		return jsonResponse;
 // 		// } else {

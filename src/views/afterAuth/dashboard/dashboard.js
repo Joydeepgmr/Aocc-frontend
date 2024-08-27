@@ -12,7 +12,6 @@ import './dashboard.scss';
 export const Dashboard = () => {
 	const { state } = useLocation();
 	const handleChange = () => {
-		console.log('Tab switch');
 	};
 
 	const items = [

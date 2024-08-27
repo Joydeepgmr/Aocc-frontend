@@ -36,7 +36,6 @@ const Plans = () => {
 			setIndex(state.tab);
 		}
 	}, [state])
-	console.log("state is ", state);
 	return (
 		<>
 			<div className="box">

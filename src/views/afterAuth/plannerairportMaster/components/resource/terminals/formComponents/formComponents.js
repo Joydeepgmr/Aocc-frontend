@@ -45,7 +45,6 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 	}, [runwayDropdownData]);
 
 	const onFinishHandler = (values) => {
-		console.log(values, 'valuessss');
 		let changedValues = isEdit ? {} : values;
 		Object.keys(values).forEach((key) => {
 			if (!isEdit || values[key] !== initialValues[key]) {

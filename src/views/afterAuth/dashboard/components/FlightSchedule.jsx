@@ -58,7 +58,6 @@ const FlightSchedule = () => {
 	});
 	const getMapViewApiProps = {
 		onSuccess: (data) => {
-			console.log('data is ', data);
 			if (data?.isMap) {
 				setMapModalOpen({ isOpen: true, base64Img: `data:image/png;base64,${data.map}` });
 			}
@@ -72,13 +71,11 @@ const FlightSchedule = () => {
 	const { mutate: getViewMap, isLoading: isMapLoading } = useGetViewMap({ ...getMapViewApiProps });
 	const getMilestoneApiProps = {
 		onSuccess: ({ data }) => {
-			console.log('data is ', data);
 			const labels = data.milestones.map((milestoneObj) => {
 				const [key] = Object.keys(milestoneObj);
 				const value = milestoneObj[key];
 				return { key: key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`), value };
 			});
-			console.log('labels are', labels);
 			setMilestoneModal({ isOpen: true, milestoneList: data.milestoneList, labels });
 			if (data?.isMap) {
 				setMapModalOpen({ isOpen: true, base64Img: `data:image/png;base64,${data.map}` });

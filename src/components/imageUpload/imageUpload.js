@@ -33,7 +33,6 @@ const ImageUpload = ({
 	name,
 	description,
 }) => {
-	console.log('filelist is ...', fileList);
 	const { Item } = Form;
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewTitle, setPreviewTitle] = useState('');

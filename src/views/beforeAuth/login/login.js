@@ -93,7 +93,6 @@ export const Login = () => {
 
 	useEffect(() => {
 		if (localStorage.getItem('_tid')) {
-			console.log(localStorage.getItem('_tid'));
 			getUserDetails();
 		}
 	}, []);

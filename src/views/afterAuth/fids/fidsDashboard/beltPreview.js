@@ -11,7 +11,6 @@ const BeltFids = ({ flightNo, origin, airlineLogo, counter, status }) => {
         }
         setData([beltData])
     }, [flightNo, origin, airlineLogo]);
-    console.log("data is ", data)
     const formatTime = () => {
         const currentTime = new Date();
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

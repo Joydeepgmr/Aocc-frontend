@@ -68,7 +68,6 @@ const Wrapper = ({ title, width, tableComponent, action, data, isLoading }) => {
 	};
 
 	const onFinishHandler = (values) => {
-		console.log('These are the Airport masters values', values);
 		values.validFrom = values?.validFrom?.toISOString();
 		values.validTo = values?.validTo?.toISOString();
 		values.iataCode = values?.iataCode?.join('');

@@ -32,7 +32,6 @@ const ManageFidsAccess = () => {
 	}) => toast.error(message);
 	const getAccessApiProps = {
 		onSuccess: (data) => {
-			console.log('data is ', data);
 			if (data?.length) {
 				setFidsData(data);
 			}

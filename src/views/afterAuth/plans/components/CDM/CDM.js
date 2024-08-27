@@ -19,7 +19,6 @@ const CDM = () => {
 	];
 
 	const handleChange = () => {
-		console.log('Tab switch');
 	};
 
 	return (

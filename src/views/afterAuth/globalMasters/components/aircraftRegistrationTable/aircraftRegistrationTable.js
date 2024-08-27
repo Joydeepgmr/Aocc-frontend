@@ -123,6 +123,8 @@ const AircraftRegistrationTable = ({
 			country: data?.country,
 			address: data?.address,
 			remark: data?.remark,
+			checkinCounterCount: data?.checkinCounterCount,
+			baggageBeltCount: data?.baggageBeltCount,
 			validFrom: data?.validFrom && dayjs(data?.validFrom),
 			validTill: data?.validTill && dayjs(data?.validTill),
 		};

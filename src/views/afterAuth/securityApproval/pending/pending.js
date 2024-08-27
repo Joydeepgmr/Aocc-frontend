@@ -103,7 +103,6 @@ const Pending = ({ data, hasNextPage, fetchNextPage, loading }) => {
 			key: 'documentUrl',
 			align: 'center',
 			render: (_, record) => {
-				console.log("record is ", record)
 				return record?.customerDocuments?.[0]?.documentUrl ?
 					<div onClick={() => openModal(record)} >
 						<img style={{ height: '5rem', width: '5rem' }} src={record?.customerDocuments?.[0]?.documentUrl} alt='document_id' />

@@ -169,7 +169,6 @@ const AirlineTable = ({
 			values.id = airlineRegistrationModal.data.id;
 			try {
 				setAirlineImageLoader(true);
-				console.log('image is ', previousImage, url, previousImage === url);
 				if (previousImage !== url) {
 					await patchAirlineImage({ id, url });
 				}

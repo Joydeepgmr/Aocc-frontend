@@ -339,9 +339,7 @@ const ResourceAllocation = ({ conflictType }) => {
 
 	useEffect(() => {
 		handleChange(conflictType === '"check-in-counter' ? '1' : conflictType === 'gate' ? '2' : conflictType === 'stand' ? '3' : conflictType === 'belt' ? '4' : '1')
-		console.log('conflict type inn useEffect is ', conflictType)
 	}, [conflictType])
-	console.log('conflict type is ', conflictType, activeTab, tabValue)
 
 	const SelectTime = [
 		{
@@ -355,7 +353,6 @@ const ResourceAllocation = ({ conflictType }) => {
 			value: '24hrs',
 		},
 	];
-	console.log('run one more time ', activeTab)
 	return (
 		<div className={`resourceAllocation--Container ${fullScreen && 'resourceAllocation--FullScreen'}`} ref={divRef}>
 			<SocketEventListener

@@ -103,7 +103,6 @@ const ResourceCorelation = () => {
 		const hasNonNullValue = Object.values(items?.values).some(
 			(value) => value !== null && value !== undefined && value !== ''
 		);
-		console.log('items are ', items);
 		hasNonNullValue && editAirlineWeight({ id: items.id, data: items.values });
 	};
 	return (

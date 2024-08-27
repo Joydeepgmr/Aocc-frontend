@@ -5,7 +5,6 @@ import TableComponent from '../../../../../../../components/table/table';
 const Arrival = ({ data, columns, fetchData, pagination, loading }) => {
 
     const handleTableChange = (pagination, filters, sorter) => {
-        console.log('Table changed:', pagination, filters, sorter);
     };
 
     return (

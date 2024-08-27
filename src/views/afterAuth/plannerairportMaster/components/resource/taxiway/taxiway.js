@@ -187,7 +187,6 @@ const Taxiway = () => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-			console.log(file);
 			setOpenCSVModal(false);
 			// onUploadCSV(formData);
 		} else {

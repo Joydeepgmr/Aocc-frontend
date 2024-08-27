@@ -7,7 +7,6 @@ const MasterCorelation = () => {
 	const [tab, setTab] = useState('1');
 	const handleChange = (key) => {
 		setTab(key);
-		console.log('Tab switch');
 	};
 	const items = [
 		{

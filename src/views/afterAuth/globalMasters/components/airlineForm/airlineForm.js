@@ -20,7 +20,6 @@ const AirlineForm = ({ isReadOnly, type, form, fileList, setFileList }) => {
 
 	const { data: countryDropdownData = [] } = useCountriesDropdown({ onError });
 	const { data: airportDropdownData = [] } = useGlobalAirportDropdown({ onError });
-	console.log('filelist is ', fileList)
 	const SelectAirportData = useMemo(() => {
 		return airportDropdownData.map((data) => {
 			return { label: data.name, value: data.id, id: data.id };

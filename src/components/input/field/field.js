@@ -63,7 +63,6 @@ const InputField = ({
 
 	const handleCodeChange = (index, value) => {
 		const updatedCodeValue = codeValue.substring(0, index) + value + codeValue.substring(index + 1);
-		console.log(codeValue, 'codeValue');
 		return updatedCodeValue;
 	};
 

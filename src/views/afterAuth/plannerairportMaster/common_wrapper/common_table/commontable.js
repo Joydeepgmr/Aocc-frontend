@@ -26,10 +26,8 @@ const Commontable = ({ Heading }) => {
 	};
 
 	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
 	};
 	const handleButtonChange = (label) => {
-		console.log('hdbhbdhbd', label);
 	};
 	const handleDropdownChange = (value) => {
 		// Add this line

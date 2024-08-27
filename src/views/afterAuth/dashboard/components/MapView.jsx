@@ -27,7 +27,6 @@ function MapView() {
   ];
 
   const handleChange = () => {
-    console.log('Tab switch');
   };
   return (
     <div className='body-container'>

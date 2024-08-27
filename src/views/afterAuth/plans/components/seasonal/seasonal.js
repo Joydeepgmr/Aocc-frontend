@@ -435,7 +435,6 @@ const Seasonal = () => {
 				} else {
 					setFilter({ ...filter, search: undefined });
 				}
-				console.log('search filter is ', searchedValue);
 			}
 		}, 300);
 		return () => clearTimeout(debounceTimer);

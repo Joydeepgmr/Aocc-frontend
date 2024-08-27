@@ -12,7 +12,6 @@ import SocketEventListener from '../../../../socket/listner/socketListner';
 import './style.scss';
 
 const ParsedMessageComponent = ({ data = {}, maxLength = 30 }) => {
-	console.log(data);
 
 	const formatNestedData = (data) => {
 		if (Array.isArray(data)) {
@@ -54,7 +53,6 @@ function TelexMessage() {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
-			console.log([...newData]);
 			setTelexMessageData([...newData]);
 		}
 	};

@@ -30,7 +30,6 @@ export const Components = () => {
 	const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const handleTableChange = (pagination, filters, sorter) => {
-		console.log('Table changed:', pagination, filters, sorter);
 	};
 	const [form] = Form.useForm(); // Use the useForm hook to create a form instance
 
@@ -87,11 +86,9 @@ export const Components = () => {
 	};
 
 	const handleChange = () => {
-		console.log('Tab switch');
 	};
 
 	const onFinish = (values) => {
-		console.log('Form values:', values); // Output form values to console
 	};
 
 	const dummyData = [
@@ -113,7 +110,6 @@ export const Components = () => {
 	];
 
 	const handleSelectChange = (selectedValues) => {
-		console.log('Selected values:', selectedValues);
 	};
 
 	const timelineItems = [

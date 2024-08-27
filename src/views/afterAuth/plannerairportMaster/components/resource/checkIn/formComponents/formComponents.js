@@ -117,12 +117,11 @@ const FormComponent = ({
 		}
 	}, [initialValues]);
 	useEffect(() => {
-		console.log('under form component');
 	}, [])
 
 	return (
 		<div key={initialValues?.id}>
-			<Form  autoComplete='off'form={form} layout="vertical" onFinish={onFinishHandler}>
+			<Form autoComplete='off' form={form} layout="vertical" onFinish={onFinishHandler}>
 				<div className="checkin_form_container">
 					<div className="checkin_form_inputfields">
 						<InputField

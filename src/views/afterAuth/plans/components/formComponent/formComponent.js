@@ -110,7 +110,6 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 	};
 
 	const onFinish = (values) => {
-		console.log(values, 'valueeee');
 		values['toh'] = tohChecked;
 		const { days, ...otherValues } = values;
 		handleSaveButton(otherValues);

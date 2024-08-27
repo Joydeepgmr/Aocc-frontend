@@ -80,7 +80,6 @@ const CheckIn = () => {
 	const { mutate: postCheckIn, isLoading: isPostLoading } = usePostCheckIn(addCheckinHandler);
 
 	const handleSaveButton = useCallback((value) => {
-		console.log(value, 'groupppp');
 		value['isAllocatedToLounge'] = false;
 		value['row'] = value?.row?.toString();
 		value['phoneNumber'] = value?.phoneNumber?.toString();
@@ -151,7 +150,6 @@ const CheckIn = () => {
 		if (file && file.length > 0) {
 			const formData = new FormData();
 			formData.append('file', file[0].originFileObj);
-			console.log(file);
 			onUploadCSV(formData);
 		} else {
 			console.error('No file provided for upload.');

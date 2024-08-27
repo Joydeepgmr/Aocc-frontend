@@ -47,16 +47,13 @@ const DailySchedule = () => {
 	};
 
 	const handleGetSeasonalSuccess = (data) => {
-		console.log('all pages are ', data);
 		if (data?.pages?.length) {
 			const newData = data.pages.reduce((acc, page) => {
 				return acc.concat(page.data || []);
 			}, []);
 			setSeasonalData([...newData]);
-			console.log('under if fun ', newData);
 		}
 	};
-	console.log('seasonal data is ', seasonalData);
 	const handleGetSeasonalError = (error) => {
 		toast.error(error?.response?.data?.message);
 	};
@@ -172,8 +169,6 @@ const DailySchedule = () => {
 		},
 	];
 
-	console.log(index, flightType);
-
 	const operations = (
 		<Form form={filterForm} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
 			<DateRange
@@ -224,7 +219,6 @@ const DailySchedule = () => {
 			formData.append('file', file[0].originFileObj);
 			onUploadCSV(formData);
 		} else {
-			console.error('No file provided for upload.');
 		}
 	};
 	const handleDetailModalOpen = (record, isEdit = false) => {
@@ -381,7 +375,6 @@ const DailySchedule = () => {
 				let [startDate, endDate] = dateRangeValue;
 				startDate = ConvertToDateTime(startDate);
 				endDate = ConvertToDateTime(endDate);
-				console.log('date filter is ', startDate, endDate);
 				setFilter({ ...filter, date: [startDate, endDate] });
 			}
 		} else {
@@ -398,7 +391,6 @@ const DailySchedule = () => {
 				} else {
 					setFilter({ ...filter, search: undefined });
 				}
-				console.log('search filter is ', searchedValue);
 			}
 		}, 300);
 		return () => clearTimeout(debounceTimer);

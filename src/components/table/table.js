@@ -53,7 +53,6 @@ const TableComponent = ({
 			}
 		}, [editing]);
 		const toggleEdit = () => {
-			console.log('editable type is ', editable)
 			if (editable.type === 'multi-select') {
 				if (editing) {
 					setEditing(false);
@@ -81,7 +80,6 @@ const TableComponent = ({
 					values: { [name]: value },
 				});
 			}
-			console.log('value is ', value);
 		};
 		const save = async () => {
 			try {
@@ -97,9 +95,8 @@ const TableComponent = ({
 						...record,
 						values: { [editable.selectedValue]: multiSelectValues }
 					});
-				}	
+				}
 			} catch (errInfo) {
-				console.log('Save failed:', errInfo);
 			}
 		};
 		let tooltipText = ''

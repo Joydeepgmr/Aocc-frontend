@@ -17,7 +17,6 @@ import PageLoader from '../../../../../../components/pageLoader/pageLoader';
 
 const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmit, isLoading, form }) => {
 	const aircraftIdWatch = Form.useWatch('aircraft_id', form);
-	console.log("initial values are ", initialValue)
 	const [isValidFrom, setIsValidFrom] = useState(type === 'edit' ? true : false);
 	const [currentValidFrom, setCurrentValidFrom] = useState('');
 	const watchRegistration = Form.useWatch('registration', form);
@@ -90,7 +89,6 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 		if (aircraftIdWatch) {
 			if (SelectAircraftData?.length) {
 				const selectedAircraft = SelectAircraftData.find(({ id }) => id === aircraftIdWatch);
-				console.log("selectedAircraft", selectedAircraft)
 				if (selectedAircraft) {
 					const { length, height, wingspan, totalSeats } = selectedAircraft;
 					form.setFieldsValue({ length, height, wingspan, totalSeats });
@@ -271,7 +269,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						/>
 						<InputField
 							label="No. of Baggage-belt"
-							name="checkinCounterCount"
+							name="baggageBeltCount"
 							type='number'
 							placeholder={!isReadOnly && "No. of check-in counter"}
 							className="custom_input"
@@ -279,7 +277,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						/>
 						<InputField
 							label="No. of Check-in Counter"
-							name="baggageBeltCount"
+							name="checkinCounterCount"
 							type='number'
 							placeholder={!isReadOnly && "No. of check-in counter"}
 							className="custom_input"

@@ -148,6 +148,8 @@ const Aircrafts = () => {
 			annex: value?.annex ? CapitaliseFirstLetter(value.annex) : undefined,
 			address: value?.address ? CapitaliseFirstLetter(value.address) : undefined,
 			ownerName: value?.ownerName ? CapitaliseFirstLetter(value.ownerName) : undefined,
+			checkinCounterCount: value?.checkinCounterCount,
+			baggageBeltCount: value?.baggageBeltCount,
 		};
 		onUpdateAircraft(data);
 	};
