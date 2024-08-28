@@ -4,8 +4,7 @@ import { localStorageKey } from '../keys';
 let retryCount = 0;
 
 export const axiosInstance = Axios.create({
-	// baseURL: process.env.baseURL,
-	baseURL: 'https://api.airport-in-a-box.com/frmsnew/api/v1',
+	baseURL: process.env.baseURL,
 });
 
 axiosInstance.interceptors.request.use(
