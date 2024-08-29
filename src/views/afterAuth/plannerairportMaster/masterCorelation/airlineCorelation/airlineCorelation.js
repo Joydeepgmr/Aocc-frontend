@@ -74,8 +74,8 @@ const ResourceCorelation = () => {
 			key: 'airline_type',
 			render: (airline_type) => {
 				let airlineString = airline_type;
-				airlineString = airlineString.replace('{', '');
-				airlineString = airlineString.replace('}', '');
+				airlineString = airlineString?.replace?.('{', '');
+				airlineString = airlineString?.replace?.('}', '');
 				return <div style={{ textTransform: 'capitalize' }}>{airlineString ?? '-'}</div>
 			},
 			align: 'center',
