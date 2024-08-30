@@ -106,7 +106,7 @@ const ResourceAllocation = ({ conflictType }) => {
 			type: tabValue,
 			time,
 			mainSlotId: data?.id,
-			resourceId: data?.group,
+			resourceIds: [data?.group],
 		};
 		if (time < currentTime) {
 			toast.dismiss();
@@ -338,8 +338,18 @@ const ResourceAllocation = ({ conflictType }) => {
 	};
 
 	useEffect(() => {
-		handleChange(conflictType === '"check-in-counter' ? '1' : conflictType === 'gate' ? '2' : conflictType === 'stand' ? '3' : conflictType === 'belt' ? '4' : '1')
-	}, [conflictType])
+		handleChange(
+			conflictType === '"check-in-counter'
+				? '1'
+				: conflictType === 'gate'
+					? '2'
+					: conflictType === 'stand'
+						? '3'
+						: conflictType === 'belt'
+							? '4'
+							: '1'
+		);
+	}, [conflictType]);
 
 	const SelectTime = [
 		{
@@ -371,7 +381,7 @@ const ResourceAllocation = ({ conflictType }) => {
 				onChange={handleChange}
 				extraContent={
 					<div className="resourceAllocation--SideTabContent">
-						{writeAccess &&
+						{writeAccess && (
 							<>
 								<Button
 									id="btn"
@@ -395,7 +405,7 @@ const ResourceAllocation = ({ conflictType }) => {
 									disabled={!Boolean(timelineItems?.length)}
 								/>
 							</>
-						}
+						)}
 						<CustomSelect
 							SelectData={SelectTime}
 							allowClear={false}
