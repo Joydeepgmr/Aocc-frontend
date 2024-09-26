@@ -68,11 +68,12 @@ const ImageUpload = ({
 		fileType = fileType?.[fileType?.length - 1];
 		if (!acceptedImages?.includes?.(fileType)) {
 			toast.error(`File format is not accepted please upload (pdf, png, jpg, jpeg, svg, webp, jfif) only`);
-			return false;
+			return Upload.LIST_IGNORE;
 		}
 		const isLt1M = file.size / 1024 / 1024 < 3;
 		if (!isLt1M) {
 			message.error('Image must be less than 3MB! Upload image less than 3Mb');
+			return Upload.LIST_IGNORE;
 		}
 		return isLt1M;
 	};

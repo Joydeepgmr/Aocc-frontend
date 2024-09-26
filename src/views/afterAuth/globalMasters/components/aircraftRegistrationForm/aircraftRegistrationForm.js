@@ -36,7 +36,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 					name="registration"
 					pattern='^(?!\s).*\S(?<!\s)$'
 					patternWarning='Space not allowed'
-					placeholder={!isReadOnly && "Enter the airport name"}
+					placeholder={!isReadOnly && "Enter the registration name"}
 					min={5}
 					max={5}
 					className="custom_input"
@@ -195,7 +195,7 @@ const AircraftRegistrationForm = ({ isReadOnly, type, aircraftTypeDropdownData }
 				<InputField
 					label="Annex"
 					name="annex"
-					pattern='^(?!\s).*$'
+					pattern='^\d+$'
 					max={32}
 					placeholder={!isReadOnly && "Enter the annex"}
 					className="custom_input"

@@ -53,7 +53,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					<InputField
 						label="Nature Code"
 						name="natureCode"
-						placeholder="Enter the airport name"
+						placeholder="Enter the nature code"
 						warning="Required field"
 						required
 						className="custom_input"
@@ -76,7 +76,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					<Date
 						label="Valid From"
 						name="validFrom"
-						placeholder="Enter the airport name"
+						placeholder="Enter the valid from"
 						required
 						className="custom_date"
 						disabled={isReadOnly || isEdit}
@@ -85,7 +85,7 @@ const FormComponent = ({ handleSaveButton, handleButtonClose, initialValues, isE
 					<Date
 						label="Valid To"
 						name="validTill"
-						placeholder="Enter the airport name"
+						placeholder="Enter the valid to"
 						className="custom_date"
 						disabled={isReadOnly || !isValidFrom}
 						isDisabledDate={true}

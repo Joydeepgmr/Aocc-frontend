@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import GraphCard from './GraphCard';
 import ProgressionCard from './ProgressionCard';
-import './style.scss';
 import { Form } from 'antd';
 import CustomSelect from '../../../../components/select/select';
 import { useGetDashboardData, useGetOnTimeData } from '../../../../services/kpi/kpiService';
+import './style.scss';
+import FlightBarChart from './FlightBarChart';
 
 const Widgets = () => {
 	const [form] = Form.useForm();
@@ -55,6 +56,8 @@ const Widgets = () => {
 	const handleFormatValueChange = (value) => {
 		setFormatValue(value);
 	};
+
+	
 	return (
 		<div>
 			{/* <Form form={form}>
@@ -66,12 +69,16 @@ const Widgets = () => {
 				/>
 			</Form> */}
 			<div className="widgets-containers">
-				<ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
+				<FlightBarChart cardTitle="Arrival Flights" chartData={chartData?.airTraffic} />
+				<FlightBarChart cardTitle="Departure Flights" chartData={chartData?.airTraffic} />
+				<FlightBarChart cardTitle="Delay Flights" chartData={chartData?.airTraffic} />
+				<FlightBarChart cardTitle="Parking Stand" chartData={chartData?.airTraffic} />
+				{/* <ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
 				<GraphCard cardTitle="Air Traffic Movement" chartData={chartData?.airTraffic} />
 				<GraphCard cardTitle="Number of flights on Ground" chartData={chartData?.onGround} />
 				<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
 				<GraphCard cardTitle="Runway Utilization" chartData={chartData?.runway} />
-				<GraphCard cardTitle="CO2 Emission" chartData={{ ...chartData?.runway, data: [0, 0] }} />
+				<GraphCard cardTitle="CO2 Emission" chartData={{ ...chartData?.runway, data: [0, 0] }} /> */}
 			</div>
 		</div>
 	);

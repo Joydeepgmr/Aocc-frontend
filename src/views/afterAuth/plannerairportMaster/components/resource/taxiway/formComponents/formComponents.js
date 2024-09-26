@@ -118,7 +118,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						<InputField
 							label="Taxiway Name"
 							name="name"
-							placeholder={!isReadOnly && "Enter the airport name"}
+							placeholder={!isReadOnly && "Enter the taxiway name"}
 							warning="Required field"
 							required
 							disabled={isReadOnly || isEdit}
@@ -148,7 +148,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						<Date
 							label="Unavailable from"
 							name="unavailableFrom"
-							placeholder={!isReadOnly && "Enter the airport name"}
+							placeholder={!isReadOnly && "Enter the Unavailable From"}
 							disabled={isReadOnly || !isValidFrom}
 							format="MM-DD-YYYY"
 							className='custom_date'
@@ -166,7 +166,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						<Date
 							label="Unavailable to"
 							name="unavailableTo"
-							placeholder={!isReadOnly && "Enter the airport name"}
+							placeholder={!isReadOnly && "Enter the Unavailable To"}
 							format="MM-DD-YYYY"
 							disabled={isReadOnly || !isValidFrom || !isUnavailableFrom}
 							className='custom_date'
@@ -186,7 +186,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						<Date
 							label="Valid From"
 							name="validFrom"
-							placeholder={!isReadOnly && "Enter the airport name"}
+							placeholder={!isReadOnly && "Enter the valid from"}
 							required
 							disabled={isReadOnly || isEdit}
 							format="MM-DD-YYYY"
@@ -196,7 +196,7 @@ const FormComponent = ({ handleSaveButton, form, handleButtonClose, initialValue
 						<Date
 							label="Valid To"
 							name="validTill"
-							placeholder={!isReadOnly && "Enter the airport name"}
+							placeholder={!isReadOnly && "Enter the valid to"}
 							format="MM-DD-YYYY"
 							disabled={isReadOnly || !isValidFrom}
 							className='custom_date'

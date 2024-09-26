@@ -158,7 +158,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							required
 							min={2}
 							max={5}
-							placeholder="Enter the airport name"
+							placeholder="Enter the flight number"
 							className="custom_input"
 							patternWarning={'Please enter only numbers'}
 							disabled={isReadOnly}
@@ -171,7 +171,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 							disabledFor="past"
 							onChange={handleDateChange}
 							disabled={isDaily}
-							required={!startDate || !endDate}
+							// required={!startDate || !endDate}
 						/>
 						<CustomSelect
 							SelectData={SelectNatureCodeData}
@@ -280,7 +280,7 @@ const FormComponent = ({ form, handleButtonClose, handleSaveButton, type, initia
 								<InputField
 									label="Flight Number"
 									name="flightNumber"
-									placeholder="Enter the airport name"
+									placeholder="Enter the flight number"
 									className="custom_input"
 									disabled={isReadOnly}
 								/>

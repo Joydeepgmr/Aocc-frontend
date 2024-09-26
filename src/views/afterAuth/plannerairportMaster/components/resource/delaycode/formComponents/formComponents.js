@@ -78,7 +78,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 					<InputField
 						label="Delay Code"
 						name="delayCode"
-						placeholder="Enter the airport name"
+						placeholder="Enter the delay code"
 						warning="Required field"
 						required
 						className="custom_input"
@@ -112,7 +112,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 					<Date
 						label="Valid From"
 						name="validFrom"
-						placeholder="Enter the airport name"
+						placeholder="Enter the valid from"
 						required
 						className="custom_date"
 						disabled={isReadOnly || isEdit}
@@ -121,7 +121,7 @@ const FormComponent = ({ form, handleSaveButton, handleButtonClose, initialValue
 					<Date
 						label="Valid To"
 						name="validTill"
-						placeholder="Enter the airport name"
+						placeholder="Enter the valid to"
 						className="custom_date"
 						disabled={isReadOnly || !isValidFrom}
 						isDisabledDate={true}

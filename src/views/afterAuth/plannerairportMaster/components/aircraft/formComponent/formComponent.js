@@ -261,6 +261,7 @@ const FormComponent = ({ isReadOnly, type, closeModal, initialValue, handleSubmi
 						<InputField
 							label="Annex"
 							name="annex"
+							pattern='^\d+$'
 							max={32}
 							placeholder={!isReadOnly && 'Enter the annex'}
 							className="custom_input"

@@ -23,7 +23,7 @@ const FormComponent = () => {
 						<InputField
 							label="Group Name"
 							name="GroupName"
-							placeholder="Enter the airport name"
+							placeholder="Enter the group name"
 							warning="Required field"
 							required
 						/>
@@ -38,7 +38,7 @@ const FormComponent = () => {
 						<InputField
 							label="Resource Type A"
 							name="ResourceTypeA"
-							placeholder="Enter the airport name"
+							placeholder="Enter the Resource type"
 							warning="Required field"
 							required
 						/>
@@ -54,7 +54,7 @@ const FormComponent = () => {
 						<InputField
 							label="Resource Type B"
 							name="ResourceTypeB"
-							placeholder="Enter the airport name"
+							placeholder="Enter the Resource Type B"
 							warning="Required field"
 							required
 						/>
@@ -70,8 +70,8 @@ const FormComponent = () => {
 				<Divider />
 				<div className="form_section">
 					<div className="form_content">
-						<Date label="Valid From" name="ValidFrom" placeholder="Enter the airport name" required />
-						<Date label="Valid To" name="ValidTo" placeholder="Enter the airport name" required />
+						<Date label="Valid From" name="ValidFrom" placeholder="Enter the valid from" required />
+						<Date label="Valid To" name="ValidTo" placeholder="Enter the valid to" required />
 					</div>
 				</div>
 				<div className="form_section">

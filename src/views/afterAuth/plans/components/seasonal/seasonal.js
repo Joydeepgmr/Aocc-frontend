@@ -436,7 +436,7 @@ const Seasonal = () => {
 					setFilter({ ...filter, search: undefined });
 				}
 			}
-		}, 300);
+		}, 900);
 		return () => clearTimeout(debounceTimer);
 	}, [searchedValue]);
 	return (

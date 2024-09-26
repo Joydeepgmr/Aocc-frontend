@@ -239,7 +239,7 @@ const FormComponent = ({
 					<Date
 						label="Unavailable from"
 						name="unavailableFrom"
-						placeholder={!isReadOnly && 'Enter the airport name'}
+						placeholder={!isReadOnly && 'Enter the Unavailable From'}
 						format="MM-DD-YYYY"
 						disabled={isReadOnly || !isValidFrom}
 						className="custom_date"
@@ -258,7 +258,7 @@ const FormComponent = ({
 					<Date
 						label="Unavailable to"
 						name="unavailableTo"
-						placeholder={!isReadOnly && 'Enter the airport name'}
+						placeholder={!isReadOnly && 'Enter the Unavailable To'}
 						format="MM-DD-YYYY"
 						disabled={isReadOnly || !isValidFrom || !isUnavailableFrom}
 						className="custom_date"
@@ -277,7 +277,7 @@ const FormComponent = ({
 					<Date
 						label="Valid From"
 						name="validFrom"
-						placeholder={!isReadOnly && 'Enter the parking stand name'}
+						placeholder={!isReadOnly && 'Enter the valid from'}
 						required
 						format="MM-DD-YYYY"
 						disabled={isReadOnly || isEdit}
@@ -287,7 +287,7 @@ const FormComponent = ({
 					<Date
 						label="Valid To"
 						name="validTill"
-						placeholder={!isReadOnly && 'Enter the airport name'}
+						placeholder={!isReadOnly && 'Enter the valid to'}
 						format="MM-DD-YYYY"
 						disabled={isReadOnly || !isValidFrom}
 						className="custom_date"
