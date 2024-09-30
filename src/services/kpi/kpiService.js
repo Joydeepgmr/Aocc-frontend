@@ -1,6 +1,6 @@
-import { useQuery } from "react-query"
+import { useMutation, useQuery } from "react-query"
 import { Get, Post } from "../HttpServices/HttpServices"
-import { GET_AIRLINE_SYNC_DATA, KPI_DASHBOARD, KPI_ON_TIME } from "../../api"
+import { GET_AIRLINE_SYNC_DATA, KPI_DASHBOARD, KPI_DETAILS, KPI_ON_TIME } from "../../api"
 
 export const useGetDashboardData = ({ duration, ...props }) => {
     return useQuery({
@@ -17,4 +17,14 @@ export const useGetOnTimeData = ({ duration, ...props }) => {
         enabled: !!duration,
         ...props,
     });
+}
+
+export const useGetKpiDetails = ({ ...props }) => {
+    const response = useMutation({
+        mutationKey: ['get-kpi-details'],
+        mutationFn: async (data) => await Post(KPI_DETAILS, data),
+        ...props
+    })
+    const data = response?.data?.data?.result;
+    return { ...response, data };
 }

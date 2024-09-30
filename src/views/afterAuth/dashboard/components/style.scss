@@ -454,3 +454,26 @@
 		gap: 1rem;
 	}
 }
+
+.chart_table-container {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	width: 100%;
+	.table-header {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.table-filters{
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+}
+
+.table-title {
+	font-size: 20px;
+}

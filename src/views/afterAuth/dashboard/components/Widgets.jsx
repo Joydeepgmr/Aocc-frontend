@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import GraphCard from './GraphCard';
 import ProgressionCard from './ProgressionCard';
 import { Form } from 'antd';
@@ -9,10 +9,12 @@ import FlightBarChart from './FlightBarChart';
 
 const Widgets = () => {
 	const [form] = Form.useForm();
-	const [formatValue, setFormatValue] = useState('monthly');
 	const [chartData, setChartData] = useState([]);
+	const [filter1, setFilter1] = useState('Arrival');
+	const [filter2, setFilter2] = useState('Domestic');
+
 	const dashboardApiProps = {
-		duration: formatValue,
+		duration: 'monthly',
 		onSuccess: ({ data }) => {
 			const label = ['Domestic', 'International'];
 			const onTime = {
@@ -98,7 +100,6 @@ const Widgets = () => {
 				label: Object.keys(data.airTrafic.flightTypeSlotTraffic),
 				yLabelName: 'Number of Flights',
 			};
-			console.log('on traffic is', onAirTrafficFlightType);
 			const onGround = { data: [], label };
 			onGround.data = data?.onGroundStats?.reduce((acc, { count }) => [...acc, +count], []);
 			const runway = { data: [], label };
@@ -117,60 +118,117 @@ const Widgets = () => {
 			});
 		},
 	};
-	const onTimeApiProps = {
-		duration: formatValue,
-	};
-	const { data } = useGetDashboardData(dashboardApiProps);
-	const { data: onTimeData } = useGetOnTimeData(onTimeApiProps);
-	const SelectFormat = [
-		{
-			label: 'Monthly',
-			value: 'monthly',
-		},
-	];
-	const airlineData = [
-		{
-			airlineName: 'Air India',
-			percentageOnTime: 80,
-		},
-		{
-			airlineName: 'Vistara',
-			percentageOnTime: 60,
-		},
-		{
-			airlineName: 'Indigo',
-			percentageOnTime: 50,
-		},
-		{
-			airlineName: 'Indigo',
-			percentageOnTime: 50,
-		},
-	];
-	const handleFormatValueChange = (value) => {
-		setFormatValue(value);
-	};
+	useGetDashboardData(dashboardApiProps);
+
+	const onTimeColumns = useMemo(() => {
+		const column = [
+			{ title: 'Flight Number', dataIndex: ['flight', 'flight', 'callSign'], align: 'center', key: 'callSign' },
+			filter1 === 'Arrival'
+				? { title: 'STA', dataIndex: ['flight', 'flight', 'sta'], align: 'center', key: 'sta' }
+				: { title: 'STD', dataIndex: ['flight', 'flight', 'std'], align: 'center', key: 'std' },
+			filter1 === 'Arrival'
+				? { title: 'ETA', dataIndex: ['flight', 'eta'], align: 'center', key: 'eta' }
+				: { title: 'ETD', dataIndex: ['flight', 'etd'], align: 'center', key: 'etd' },
+			{ title: 'Date', dataIndex: ['flight', 'flight', 'date'], align: 'center', key: 'date' },
+			{ title: 'Sector', dataIndex: ['flight', 'flight', 'sector'], align: 'center', key: 'sector' },
+			{ title: 'Type', dataIndex: ['flight', 'flight', 'type'], align: 'center', key: 'type' },
+		];
+		return column;
+	}, [filter1]);
+
+	const onDelayColumns = useMemo(() => {
+		const column = [
+			{ title: 'Flight Number', dataIndex: ['flight', 'flight', 'callSign'], align: 'center', key: 'callSign' },
+			filter1 === 'Arrival'
+				? { title: 'STA', dataIndex: ['flight', 'flight', 'sta'], align: 'center', key: 'sta' }
+				: { title: 'STD', dataIndex: ['flight', 'flight', 'std'], align: 'center', key: 'std' },
+			filter1 === 'Arrival'
+				? { title: 'ETA', dataIndex: ['flight', 'eta'], align: 'center', key: 'eta' }
+				: { title: 'ETD', dataIndex: ['flight', 'etd'], align: 'center', key: 'etd' },
+			{ title: 'Date', dataIndex: ['flight', 'flight', 'date'], align: 'center', key: 'date' },
+			{ title: 'Sector', dataIndex: ['flight', 'flight', 'sector'], align: 'center', key: 'sector' },
+			{ title: 'Type', dataIndex: ['flight', 'flight', 'type'], align: 'center', key: 'type' },
+		];
+		return column;
+	}, [filter1]);
+
+	const trafficColumnFlightType = useMemo(() => {
+		const column = [
+			{ title: 'Flight Number', dataIndex: 'callSign', align: 'center', key: 'callSign' },
+			filter1 === 'Arrival'
+				? { title: 'STA', dataIndex: 'sta', align: 'center', key: 'sta' }
+				: { title: 'STD', dataIndex: 'std', align: 'center', key: 'std' },
+			{ title: 'Date', dataIndex: 'date', align: 'center', key: 'date' },
+			{ title: 'Sector', dataIndex: 'sector', align: 'center', key: 'sector' },
+			{ title: 'Type', dataIndex: 'type', align: 'center', key: 'type' },
+		];
+		return column;
+	}, [filter1]);
+
+	const trafficColumnType = useMemo(() => {
+		const column = [
+			{ title: 'Flight Number', dataIndex: 'callSign', align: 'center', key: 'callSign' },
+			{ title: 'Type', dataIndex: 'flightType', align: 'center', key: 'flightType' },
+			{
+				title: 'STA/STD',
+				dataIndex: 'sta',
+				align: 'center',
+				key: 'sta',
+				render: (text, rcd) => rcd?.sta ?? rcd?.std,
+			},
+			{ title: 'Date', dataIndex: 'date', align: 'center', key: 'date' },
+			{ title: 'Sector', dataIndex: 'sector', align: 'center', key: 'sector' },	
+		];
+		return column;
+	}, [filter2]);
 
 	return (
 		<div>
-			{/* <Form form={form}>
-				<CustomSelect
-					SelectData={SelectFormat}
-					placeholder="Select Format"
-					onChange={handleFormatValueChange}
-					value={formatValue}
-				/>
-			</Form> */}
 			<div className="widgets-containers">
-				<FlightBarChart cardTitle="On Time Performance" chartData={chartData?.onTime} />
-				<FlightBarChart cardTitle="Delay Flights" chartData={chartData?.onDelay} />
-				<FlightBarChart cardTitle="Air Traffic (Arrival/Departure)" chartData={chartData?.onAirTraffic} />
+				<FlightBarChart
+					cardTitle="On Time Performance"
+					chartData={chartData?.onTime}
+					apiFilterName="onTime"
+					data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
+					columns={onTimeColumns}
+					filter1={filter1}
+					setFilter1={setFilter1}
+					showFilter1
+				/>
+				<FlightBarChart
+					cardTitle="Delay Flights"
+					chartData={chartData?.onDelay}
+					apiFilterName="delay"
+					data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
+					columns={onDelayColumns}
+					filter1={filter1}
+					setFilter1={setFilter1}
+					showFilter1
+				/>
+				<FlightBarChart
+					cardTitle="Air Traffic (Arrival/Departure)"
+					chartData={chartData?.onAirTraffic}
+					apiFilterName="traffic"
+					data={filter1 === 'Arrival' ? 'arrival' : 'departure'}
+					columns={trafficColumnFlightType}
+					filter1={filter1}
+					setFilter1={setFilter1}
+					showFilter1
+				/>
 				<FlightBarChart
 					cardTitle="Air Traffic (Domestic/International)"
 					chartData={chartData?.onAirTrafficFlightType}
 					isFilters={false}
+					apiFilterName="traffic"
+					data={filter2 === 'Domestic' ? 'domestic' : 'international'}
+					columns={trafficColumnType}
+					filter2={filter2}
+					setFilter2={setFilter2}
+					showFilter2
 				/>
 				<FlightBarChart cardTitle="Parking Utilization" chartData={chartData?.onParking} isFilters={false} />
 				<FlightBarChart cardTitle="Flight Status" chartData={chartData?.onCount} isFilters={false} />
+
 				{/* <FlightBarChart cardTitle="Departure Flights" chartData={chartData?.airTraffic} />
 				<FlightBarChart cardTitle="Delay Flights" chartData={chartData?.airTraffic} />
 				<FlightBarChart cardTitle="Parking Stand" chartData={chartData?.airTraffic} /> */}

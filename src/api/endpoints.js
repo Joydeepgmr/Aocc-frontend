@@ -164,6 +164,7 @@ export const GET_UTW = '/vendorOps/milestone'
 /*------------------------- KPI ----------------------------------*/
 export const KPI_DASHBOARD = '/kpi/dashboard'
 export const KPI_ON_TIME = '/kpi/on-time'
+export const KPI_DETAILS = '/kpi/detail'
 
 /*------------------------- Master Corelation ----------------------------------*/
 export const RESOURCE_CORELATION = '/master-correlation/resources'
