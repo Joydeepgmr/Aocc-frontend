@@ -317,6 +317,11 @@
 		color: white;
 	}
 }
+.card-fields {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
 
 .alert-button-body {
 	display: flex;

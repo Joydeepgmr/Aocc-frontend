@@ -6,46 +6,49 @@ import CustomSelect from '../../../../components/select/select';
 import './style.scss';
 import ReactApexChart from 'react-apexcharts';
 
-const FlightBarChart = ({ cardTitle, chartData }) => {
-	const [chartType, setChartType] = useState('Domestic');
-	const allSeries = [
-		{
-			name: 'International Flights',
-			data: [5, 10, 8, 12, 7, 15, 20, 18, 9, 11, 6, 13],
-		},
-		{
-			name: 'Domestic Flights',
-			data: [8, 15, 10, 18, 12, 20, 25, 22, 14, 17, 9, 16],
-		},
-	];
+const FlightBarChart = ({ cardTitle, chartData, isFilters = true }) => {
+	const [chartType, setChartType] = useState('Arrival');
+	const allSeries = useMemo(() => {
+		if (chartData?.data?.length) {
+			return chartData.data;
+		}
+		return [];
+	}, [chartData]);
 
+	console.log('chart data is ', allSeries);
 	const series = useMemo(() => {
-		return chartType === 'Both' ? allSeries : chartType === 'Domestic' ? [allSeries[1]] : [allSeries[0]];
-	}, [chartType]);
+		return isFilters
+			? chartType === 'Both'
+				? allSeries
+				: chartType === 'Arrival'
+					? [allSeries[0]]
+					: [allSeries[1]]
+			: allSeries;
+	}, [chartType, allSeries]);
 
 	const options = useMemo(() => {
 		return {
 			chart: {
 				type: 'bar',
 				height: 330,
-				stacked: chartType === 'Both',
+				stacked: isFilters ? chartType === 'Both' : true,
 			},
 			plotOptions: {
 				bar: {
 					horizontal: false,
-					columnWidth: '55%',
+					columnWidth: '65%',
 					endingShape: 'rounded',
 				},
 			},
 			dataLabels: {
 				enabled: true,
-				formatter: function (val, opts) {
-					return `${val}`;
-				},
-				offsetY: -10,
-				style: {
-					colors: ['#fff'],
-				},
+				// formatter: function (val, opts) {
+				// 	return `${val}`;
+				// },
+				// offsetY: -10,
+				// style: {
+				// 	colors: ['#fff'],
+				// },
 			},
 			stroke: {
 				show: true,
@@ -53,46 +56,33 @@ const FlightBarChart = ({ cardTitle, chartData }) => {
 				colors: ['transparent'],
 			},
 			xaxis: {
-				categories: [
-					'00:00-02:00',
-					'02:00-04:00',
-					'04:00-06:00',
-					'06:00-08:00',
-					'08:00-10:00',
-					'10:00-12:00',
-					'12:00-14:00',
-					'14:00-16:00',
-					'16:00-18:00',
-					'18:00-20:00',
-					'20:00-22:00',
-					'22:00-00:00',
-				], // 2-hour intervals for the last 24 hours
+				categories: chartData?.label ?? [],
 			},
 			yaxis: {
 				title: {
-					text: 'Number of Flights',
+					text: chartData?.yLabelName ?? '',
 				},
 			},
 			fill: {
 				opacity: 1,
 			},
 			title: {
-				text: cardTitle,
+				text: isFilters ? chartType : cardTitle,
 				align: 'center',
 			},
 		};
-	}, [chartType]);
+	}, [chartType, chartData]);
 
 	const selectChartType = [
 		{
 			id: '1',
-			label: 'Domestic',
-			value: 'Domestic',
+			label: 'Arrival',
+			value: 'Arrival',
 		},
 		{
 			id: '2',
-			label: 'International',
-			value: 'International',
+			label: 'Departure',
+			value: 'Departure',
 		},
 		{
 			id: '3',
@@ -113,20 +103,24 @@ const FlightBarChart = ({ cardTitle, chartData }) => {
 							color="black"
 							children={cardTitle}
 						/>
-						<CustomSelect
-							SelectData={selectChartType}
-							onChange={(value) => setChartType(value)}
-							value={chartType}
-							allowClear={false}
-							className="chart-select-field"
-						/>
+						{isFilters && (
+							<CustomSelect
+								SelectData={selectChartType}
+								onChange={(value) => setChartType(value)}
+								value={chartType}
+								allowClear={false}
+								className="chart-select-field"
+							/>
+						)}
 					</div>
-					<ReactApexChart
-						options={options}
-						series={series}
-						type="bar"
-						height={chartType === 'Both' ? 350 : 370}
-					/>
+					{!!chartData?.data && (
+						<ReactApexChart
+							options={options}
+							series={series}
+							type="bar"
+							height={chartType === 'Both' ? 350 : 370}
+						/>
+					)}
 				</div>
 				<div className="view-details">
 					<CustomTypography
