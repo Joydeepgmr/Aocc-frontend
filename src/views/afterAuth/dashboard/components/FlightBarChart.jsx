@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CustomTypography from '../../../../components/typographyComponent/typographyComponent';
 import RightArrow from '../../../../assets/RightArrow.svg';
 import CustomSelect from '../../../../components/select/select';
@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import './style.scss';
 import dayjs from 'dayjs';
 import { useGetKpiDetails } from '../../../../services/kpi/kpiService';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 const FlightBarChart = ({
 	cardTitle,
@@ -25,12 +26,14 @@ const FlightBarChart = ({
 	showFilter2,
 	apiFilterName,
 }) => {
+	const divRef = useRef(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [chartType, setChartType] = useState('Arrival');
 	const [dateFilter, setDateFilter] = useState({
 		startDate: null,
 		endDate: null,
 	});
+	const [fullScreen, setFullScreen] = useState(false);
 	const allSeries = useMemo(() => {
 		if (chartData?.data?.length) {
 			return chartData.data;
@@ -58,7 +61,7 @@ const FlightBarChart = ({
 		return {
 			chart: {
 				type: 'bar',
-				height: 330,
+				height: 230,
 				stacked: isFilters ? chartType === 'Both' : true,
 			},
 			plotOptions: {
@@ -97,6 +100,23 @@ const FlightBarChart = ({
 			title: {
 				text: isFilters ? chartType : cardTitle,
 				align: 'center',
+			},
+			tooltip: {
+				enabled: true,
+				shared: true,
+				intersect: false,
+				y: {
+					formatter: (val) => {
+						return `${val} ${chartData?.tooltipUnit ?? ''}`;
+					},
+					title: {
+						formatter: (seriesName) => `${seriesName}`,
+					},
+				},
+				style: {
+					fontSize: '12px',
+					fontFamily: 'inherit',
+				},
 			},
 		};
 	}, [chartType, chartData]);
@@ -150,6 +170,31 @@ const FlightBarChart = ({
 		},
 	];
 
+	const toggleFullscreen = () => {
+		setFullScreen(!fullScreen);
+		if (document.fullscreenElement === null) {
+			if (divRef.current?.requestFullscreen) {
+				divRef.current.requestFullscreen();
+			} else if (divRef.current?.mozRequestFullScreen) {
+				divRef.current.mozRequestFullScreen();
+			} else if (divRef.current?.webkitRequestFullscreen) {
+				divRef.current.webkitRequestFullscreen();
+			} else if (divRef.current?.msRequestFullscreen) {
+				divRef.current.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document?.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document?.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document?.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+		}
+	};
+
 	useEffect(() => {
 		const payload = {
 			filter: apiFilterName,
@@ -160,7 +205,7 @@ const FlightBarChart = ({
 	}, [apiFilterName, dateFilter]);
 
 	return (
-		<>
+		<div ref={divRef} className={fullScreen && 'widgets-fullscreen-container'}>
 			<ModalComponent
 				isModalOpen={isModalOpen}
 				closeModal={() => setIsModalOpen(false)}
@@ -223,13 +268,19 @@ const FlightBarChart = ({
 									className="chart-select-field"
 								/>
 							)}
+							{!fullScreen && (
+								<FullscreenOutlined style={{ cursor: 'pointer' }} onClick={toggleFullscreen} />
+							)}
+							{fullScreen && (
+								<FullscreenExitOutlined style={{ cursor: 'pointer' }} onClick={toggleFullscreen} />
+							)}
 						</div>
 						{!!chartData?.data && (
 							<ReactApexChart
 								options={options}
 								series={series}
 								type="bar"
-								height={chartType === 'Both' ? 350 : 370}
+								height={fullScreen ? 600 : chartType === 'Both' ? 230 : 230}
 							/>
 						)}
 					</div>
@@ -247,7 +298,7 @@ const FlightBarChart = ({
 					) : null}
 				</div>
 			</Card>
-		</>
+		</div>
 	);
 };
 

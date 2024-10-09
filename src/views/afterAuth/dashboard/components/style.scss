@@ -87,10 +87,10 @@
 }
 
 .progress-body {
-	height: 40rem;
+	height: auto;
 	padding: 0.75rem;
 	overflow: hidden;
-	margin-bottom: 1rem;
+	// margin-bottom: 1rem;
 	display: flex;
 	flex-direction: column;
 }
@@ -108,7 +108,7 @@
 // }
 .widgets-containers {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	gap: 0.5rem;
 	margin-bottom: 2rem;
 }
@@ -467,7 +467,7 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-	.table-filters{
+	.table-filters {
 		display: flex;
 		align-items: center;
 		gap: 12px;
@@ -476,4 +476,12 @@
 
 .table-title {
 	font-size: 20px;
+}
+
+.widgets-fullscreen-container {
+	background-color: white;
+	width: 100vw;
+	height: 100vh;
+	padding: 6rem;
+	position: relative;
 }

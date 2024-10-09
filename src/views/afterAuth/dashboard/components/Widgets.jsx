@@ -6,6 +6,7 @@ import CustomSelect from '../../../../components/select/select';
 import { useGetDashboardData, useGetOnTimeData } from '../../../../services/kpi/kpiService';
 import './style.scss';
 import FlightBarChart from './FlightBarChart';
+import PageLoader from '../../../../components/pageLoader/pageLoader';
 
 const Widgets = () => {
 	const [form] = Form.useForm();
@@ -23,7 +24,7 @@ const Widgets = () => {
 					{ name: 'Departure', data: Object.values(data?.ontime?.departureOnTimeCounts ?? {}) },
 				],
 				label: Object.keys(data?.ontime?.arrivalOnTimeCounts ?? {}),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Flights',
 			};
 			const onDelay = {
 				data: [
@@ -31,7 +32,7 @@ const Widgets = () => {
 					{ name: 'Departure', data: Object.values(data?.delay?.departureDelayCounts ?? {}) },
 				],
 				label: Object.keys(data?.ontime?.arrivalOnTimeCounts ?? {}),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Flights',
 			};
 
 			const onParking = {
@@ -45,7 +46,7 @@ const Widgets = () => {
 					},
 				],
 				label: data.parkingStandUtilization.reduce((acc, { airlineName }) => [...acc, airlineName], []),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Hours',
 			};
 
 			const onCount = {
@@ -56,7 +57,7 @@ const Widgets = () => {
 					},
 				],
 				label: data.counts.reduce((acc, { status }) => [...acc, status], []),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Flights',
 			};
 
 			const onAirTraffic = {
@@ -77,7 +78,7 @@ const Widgets = () => {
 					},
 				],
 				label: Object.keys(data.airTrafic.timeSlotTraffic),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Flights',
 			};
 
 			const onAirTrafficFlightType = {
@@ -98,7 +99,7 @@ const Widgets = () => {
 					},
 				],
 				label: Object.keys(data.airTrafic.flightTypeSlotTraffic),
-				yLabelName: 'Number of Flights',
+				yLabelName: 'No. of Flights',
 			};
 			const onGround = { data: [], label };
 			onGround.data = data?.onGroundStats?.reduce((acc, { count }) => [...acc, +count], []);
@@ -118,7 +119,7 @@ const Widgets = () => {
 			});
 		},
 	};
-	useGetDashboardData(dashboardApiProps);
+	const { isLoading } = useGetDashboardData(dashboardApiProps);
 
 	const onTimeColumns = useMemo(() => {
 		const column = [
@@ -177,68 +178,75 @@ const Widgets = () => {
 				render: (text, rcd) => rcd?.sta ?? rcd?.std,
 			},
 			{ title: 'Date', dataIndex: 'date', align: 'center', key: 'date' },
-			{ title: 'Sector', dataIndex: 'sector', align: 'center', key: 'sector' },	
+			{ title: 'Sector', dataIndex: 'sector', align: 'center', key: 'sector' },
 		];
 		return column;
 	}, [filter2]);
 
 	return (
 		<div>
-			<div className="widgets-containers">
-				<FlightBarChart
-					cardTitle="On Time Performance"
-					chartData={chartData?.onTime}
-					apiFilterName="onTime"
-					data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
-					columns={onTimeColumns}
-					filter1={filter1}
-					setFilter1={setFilter1}
-					showFilter1
-				/>
-				<FlightBarChart
-					cardTitle="Delay Flights"
-					chartData={chartData?.onDelay}
-					apiFilterName="delay"
-					data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
-					columns={onDelayColumns}
-					filter1={filter1}
-					setFilter1={setFilter1}
-					showFilter1
-				/>
-				<FlightBarChart
-					cardTitle="Air Traffic (Arrival/Departure)"
-					chartData={chartData?.onAirTraffic}
-					apiFilterName="traffic"
-					data={filter1 === 'Arrival' ? 'arrival' : 'departure'}
-					columns={trafficColumnFlightType}
-					filter1={filter1}
-					setFilter1={setFilter1}
-					showFilter1
-				/>
-				<FlightBarChart
-					cardTitle="Air Traffic (Domestic/International)"
-					chartData={chartData?.onAirTrafficFlightType}
-					isFilters={false}
-					apiFilterName="traffic"
-					data={filter2 === 'Domestic' ? 'domestic' : 'international'}
-					columns={trafficColumnType}
-					filter2={filter2}
-					setFilter2={setFilter2}
-					showFilter2
-				/>
-				<FlightBarChart cardTitle="Parking Utilization" chartData={chartData?.onParking} isFilters={false} />
-				<FlightBarChart cardTitle="Flight Status" chartData={chartData?.onCount} isFilters={false} />
+			{!isLoading && (
+				<div className="widgets-containers">
+					<FlightBarChart
+						cardTitle="On Time Performance"
+						chartData={chartData?.onTime}
+						apiFilterName="onTime"
+						data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
+						columns={onTimeColumns}
+						filter1={filter1}
+						setFilter1={setFilter1}
+						showFilter1
+					/>
+					<FlightBarChart
+						cardTitle="Delay Flights"
+						chartData={chartData?.onDelay}
+						apiFilterName="delay"
+						data={filter1 === 'Arrival' ? 'filteredArrivals' : 'filteredDepartures'}
+						columns={onDelayColumns}
+						filter1={filter1}
+						setFilter1={setFilter1}
+						showFilter1
+					/>
+					<FlightBarChart
+						cardTitle="Air Traffic (Arrival/Departure)"
+						chartData={chartData?.onAirTraffic}
+						apiFilterName="traffic"
+						data={filter1 === 'Arrival' ? 'arrival' : 'departure'}
+						columns={trafficColumnFlightType}
+						filter1={filter1}
+						setFilter1={setFilter1}
+						showFilter1
+					/>
+					<FlightBarChart
+						cardTitle="Air Traffic (Domestic/International)"
+						chartData={chartData?.onAirTrafficFlightType}
+						isFilters={false}
+						apiFilterName="traffic"
+						data={filter2 === 'Domestic' ? 'domestic' : 'international'}
+						columns={trafficColumnType}
+						filter2={filter2}
+						setFilter2={setFilter2}
+						showFilter2
+					/>
+					<FlightBarChart
+						cardTitle="Parking Utilization"
+						chartData={chartData?.onParking}
+						isFilters={false}
+					/>
+					<FlightBarChart cardTitle="Flight Status" chartData={chartData?.onCount} isFilters={false} />
 
-				{/* <FlightBarChart cardTitle="Departure Flights" chartData={chartData?.airTraffic} />
+					{/* <FlightBarChart cardTitle="Departure Flights" chartData={chartData?.airTraffic} />
 				<FlightBarChart cardTitle="Delay Flights" chartData={chartData?.airTraffic} />
 				<FlightBarChart cardTitle="Parking Stand" chartData={chartData?.airTraffic} /> */}
-				{/* <ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
+					{/* <ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
 				<GraphCard cardTitle="Air Traffic Movement" chartData={chartData?.airTraffic} />
 				<GraphCard cardTitle="Number of flights on Ground" chartData={chartData?.onGround} />
 				<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
 				<GraphCard cardTitle="Runway Utilization" chartData={chartData?.runway} />
 				<GraphCard cardTitle="CO2 Emission" chartData={{ ...chartData?.runway, data: [0, 0] }} /> */}
-			</div>
+				</div>
+			)}
+			{isLoading && <PageLoader loading={isLoading} />}
 		</div>
 	);
 };

@@ -9,13 +9,13 @@
 		margin-bottom: 1.5rem;
 	}
 	&--SideTabContent {
-		.ant-form-item {
-			margin-top: 0.5rem;
-		}
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
+		.ant-form-item {
+			margin-top: 0.5rem;
+		}
 	}
 	&--FullScreenIcon {
 		cursor: pointer;
