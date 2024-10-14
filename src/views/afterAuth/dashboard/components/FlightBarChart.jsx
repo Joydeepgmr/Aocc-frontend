@@ -25,6 +25,7 @@ const FlightBarChart = ({
 	showFilter1,
 	showFilter2,
 	apiFilterName,
+	isViewDetail = false,
 }) => {
 	const divRef = useRef(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -284,7 +285,7 @@ const FlightBarChart = ({
 							/>
 						)}
 					</div>
-					{showFilter1 || showFilter2 ? (
+					{showFilter1 || showFilter2 || isViewDetail ? (
 						<div onClick={() => setIsModalOpen(true)} className="view-details">
 							<CustomTypography
 								type="title"

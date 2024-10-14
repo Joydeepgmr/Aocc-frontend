@@ -39,13 +39,13 @@ const Widgets = () => {
 				data: [
 					{
 						name: 'parking',
-						data: data.parkingStandUtilization.reduce(
-							(acc, { slotCount }) => [...acc, parseInt(slotCount)],
+						data: data.results.reduce(
+							(acc, { total_occupied_time_minutes }) => [...acc, parseInt(total_occupied_time_minutes)],
 							[]
 						),
 					},
 				],
-				label: data.parkingStandUtilization.reduce((acc, { airlineName }) => [...acc, airlineName], []),
+				label: data.results.reduce((acc, { parking_stand_name }) => [...acc, parking_stand_name], []),
 				yLabelName: 'No. of Hours',
 			};
 
@@ -183,6 +183,24 @@ const Widgets = () => {
 		return column;
 	}, [filter2]);
 
+	const parkingColumn = useMemo(() => {
+		const column = [
+			{ title: 'Stand Name', dataIndex: ['resourceId', 'name'], align: 'center', key: 'name' },
+			{ title: 'Flight Number', dataIndex: ['flight', 'callSign'], align: 'center', key: 'callSign' },
+			{ title: 'Type', dataIndex: ['flight', 'flightType'], align: 'center', key: 'flightType' },
+			{
+				title: 'STA/STD',
+				dataIndex: 'flight',
+				align: 'center',
+				key: 'sta',
+				render: (data) => data?.sta ?? data?.std,
+			},
+			{ title: 'Date', dataIndex: 'date', align: 'center', key: 'date' },
+			{ title: 'Sector', dataIndex: ['flight', 'sector'], align: 'center', key: 'sector' },
+		];
+		return column;
+	}, []);
+
 	return (
 		<div>
 			{!isLoading && (
@@ -232,18 +250,12 @@ const Widgets = () => {
 						cardTitle="Parking Utilization"
 						chartData={chartData?.onParking}
 						isFilters={false}
+						data={'parkingStandSlots'}
+						apiFilterName="parking"
+						columns={parkingColumn}
+						isViewDetail
 					/>
 					<FlightBarChart cardTitle="Flight Status" chartData={chartData?.onCount} isFilters={false} />
-
-					{/* <FlightBarChart cardTitle="Departure Flights" chartData={chartData?.airTraffic} />
-				<FlightBarChart cardTitle="Delay Flights" chartData={chartData?.airTraffic} />
-				<FlightBarChart cardTitle="Parking Stand" chartData={chartData?.airTraffic} /> */}
-					{/* <ProgressionCard cardTitle="On Time Performer" airlineData={onTimeData?.data?.statistics ?? []} />
-				<GraphCard cardTitle="Air Traffic Movement" chartData={chartData?.airTraffic} />
-				<GraphCard cardTitle="Number of flights on Ground" chartData={chartData?.onGround} />
-				<ProgressionCard cardTitle="Aircraft parking stand" airlineData={airlineData} />
-				<GraphCard cardTitle="Runway Utilization" chartData={chartData?.runway} />
-				<GraphCard cardTitle="CO2 Emission" chartData={{ ...chartData?.runway, data: [0, 0] }} /> */}
 				</div>
 			)}
 			{isLoading && <PageLoader loading={isLoading} />}
